@@ -6688,7 +6688,7 @@ public class XQueryParser implements PsiParser {
     result_ = pinned_ && report_error_(builder_, consumeToken(builder_, K_IN)) && result_;
     result_ = pinned_ && report_error_(builder_, ExprSingle(builder_, level_ + 1)) && result_;
     result_ = pinned_ && report_error_(builder_, QuantifiedExpr_6(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, "satisfies")) && result_;
+    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, K_SATISFIES)) && result_;
     result_ = pinned_ && ExprSingle(builder_, level_ + 1) && result_;
     LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
     if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), QUANTIFIED_EXPR)) {

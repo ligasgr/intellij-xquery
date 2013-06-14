@@ -308,6 +308,7 @@ public interface XQueryTypes {
   IElementType K_PI = new XQueryTokenType("processing-instruction");
   IElementType K_PRESERVE = new XQueryTokenType("preserve");
   IElementType K_RETURN = new XQueryTokenType("return");
+  IElementType K_SATISFIES = new XQueryTokenType("satisfies");
   IElementType K_SCHEMA = new XQueryTokenType("schema");
   IElementType K_SOME = new XQueryTokenType("some");
   IElementType K_STRIP = new XQueryTokenType("strip");

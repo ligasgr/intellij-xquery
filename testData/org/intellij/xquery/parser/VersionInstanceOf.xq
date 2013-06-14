@@ -1,0 +1,1 @@
+if ($fgh/@version instance of element()) then "x" else "y"

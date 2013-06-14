@@ -150,6 +150,7 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType == XQueryTypes.K_MAP
                 || tokenType == XQueryTypes.K_INSTANCE
                 || tokenType == XQueryTypes.K_OF
+                || tokenType == XQueryTypes.K_SATISFIES
                 ) {
             return KEYWORDS;
         }

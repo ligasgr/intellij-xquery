@@ -141,6 +141,7 @@
   K_MAP         = "map"
   K_INSTANCE    = "instance"
   K_OF          = "of"
+  K_SATISFIES   = "satisfies"
 //  IntegerLiteral = "regexp:[0-9]+"
 //  DecimalLiteral = "regexp:(\.[0-9]+|[0-9]+\.[0-9]*)"
 //  DoubleLiteral  = "regexp:(\.[0-9]+|[0-9]+(\.[0-9]*)?)[eE][+-]?[0-9]+"

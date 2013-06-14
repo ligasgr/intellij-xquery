@@ -210,6 +210,7 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "map"                                     {return XQueryTypes.K_MAP;}
 "instance"                                {return XQueryTypes.K_INSTANCE;}
 "of"                                      {return XQueryTypes.K_OF;}
+"satisfies"                               {return XQueryTypes.K_SATISFIES;}
 {NCName}                                  {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 }
 
@@ -278,7 +279,6 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 }
 
 <QNAME> {
-{S}                                       {return TokenType.WHITE_SPACE;}
 {NCName} ":" {NameStartCharWithoutFirst}  {yypushback(2); return XQueryTypes.NCNAME;}
 {NCName}                                  {popState(); return XQueryTypes.NCNAME;}
 ":"                                       {return XQueryTypes.COLON;}
