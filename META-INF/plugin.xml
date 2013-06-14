@@ -1,0 +1,45 @@
+<idea-plugin version="2">
+    <id>org.intellij.xquery</id>
+    <name>XQuery Support</name>
+    <version>0.0.1</version>
+    <vendor email="ligasgr@gmail.com" url="https://github.com/ligasgr/intellij-xquery">Grzegorz Ligas</vendor>
+
+    <description>Provides support for XQuery language in version 3.0</description>
+
+    <change-notes>
+        <![CDATA[
+            <p>0.0.1</p>
+            <ul>
+              <li>Basic syntax highlighting.</li>
+              <li>Variable reference resolution inside of a file.</li>
+            </ul>
+        ]]>
+    </change-notes>
+
+    <idea-version since-build="107.105"/>
+
+    <depends>com.intellij.modules.lang</depends>
+
+
+    <application-components>
+    </application-components>
+
+    <project-components>
+    </project-components>
+
+    <actions>
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileTypeFactory implementation="org.intellij.xquery.XQueryFileTypeFactory"/>
+        <lang.parserDefinition language="XQuery" implementationClass="org.intellij.xquery.XQueryParserDefinition"/>
+        <lang.syntaxHighlighterFactory key="XQuery"
+                                       implementationClass="org.intellij.xquery.XQuerySyntaxHighlighterFactory"/>
+        <lang.namesValidator language="XQuery" implementationClass="org.intellij.xquery.XQueryNamesValidator" />
+        <psi.referenceContributor implementation="org.intellij.xquery.reference.XQueryReferenceContributor"/>
+        <lang.elementManipulator forClass="org.intellij.xquery.psi.impl.XQueryVarRefNameImpl"
+                                 implementationClass="org.intellij.xquery.reference.XQueryVarRefNameManipulator"/>
+        <lang.refactoringSupport language="XQuery"
+                                 implementationClass="org.intellij.xquery.reference.XQueryVarNameRefactoringSupportProvider"/>
+    </extensions>
+</idea-plugin>

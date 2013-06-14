@@ -4,3 +4,10 @@
 *.jar
 *.war
 *.ear
+
+# Idea specific ones
+.idea/workspace.xml
+.idea/dictionaries
+out/
+system-test/
+config-test/
