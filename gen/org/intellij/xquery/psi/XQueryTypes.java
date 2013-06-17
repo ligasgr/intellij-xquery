@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013 Grzegorz Ligas
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // This is a generated file. Not intended for manual editing.
 package org.intellij.xquery.psi;
 
@@ -254,6 +270,7 @@ public interface XQueryTypes {
   IElementType K_AS = new XQueryTokenType("as");
   IElementType K_ASCENDING = new XQueryTokenType("ascending");
   IElementType K_AT = new XQueryTokenType("at");
+  IElementType K_ATTRIBUTE = new XQueryTokenType("attribute");
   IElementType K_BASE_URI = new XQueryTokenType("base-uri");
   IElementType K_BOUNDARY_SPACE = new XQueryTokenType("boundary-space");
   IElementType K_BY = new XQueryTokenType("by");
@@ -269,9 +286,12 @@ public interface XQueryTypes {
   IElementType K_DEFAULT = new XQueryTokenType("default");
   IElementType K_DESCENDING = new XQueryTokenType("descending");
   IElementType K_DIGIT = new XQueryTokenType("digit");
+  IElementType K_DOCUMENT = new XQueryTokenType("document");
+  IElementType K_DOCUMENT_NODE = new XQueryTokenType("document-node");
   IElementType K_ELEMENT = new XQueryTokenType("element");
   IElementType K_ELSE = new XQueryTokenType("else");
   IElementType K_EMPTY = new XQueryTokenType("empty");
+  IElementType K_EMPTY_SEQUENCE = new XQueryTokenType("empty-sequence");
   IElementType K_ENCODING = new XQueryTokenType("encoding");
   IElementType K_EVERY = new XQueryTokenType("every");
   IElementType K_FOR = new XQueryTokenType("for");
@@ -292,6 +312,7 @@ public interface XQueryTypes {
   IElementType K_MINUS_SIGN = new XQueryTokenType("minus-sign");
   IElementType K_MODULE = new XQueryTokenType("module");
   IElementType K_NAMESPACE = new XQueryTokenType("namespace");
+  IElementType K_NAMESPACE_NODE = new XQueryTokenType("namespace-node");
   IElementType K_NAN = new XQueryTokenType("NaN");
   IElementType K_NODE = new XQueryTokenType("node");
   IElementType K_NO_INHERIT = new XQueryTokenType("no-inherit");
@@ -310,6 +331,8 @@ public interface XQueryTypes {
   IElementType K_RETURN = new XQueryTokenType("return");
   IElementType K_SATISFIES = new XQueryTokenType("satisfies");
   IElementType K_SCHEMA = new XQueryTokenType("schema");
+  IElementType K_SCHEMA_ATTRIBUTE = new XQueryTokenType("schema-attribute");
+  IElementType K_SCHEMA_ELEMENT = new XQueryTokenType("schema-element");
   IElementType K_SOME = new XQueryTokenType("some");
   IElementType K_STRIP = new XQueryTokenType("strip");
   IElementType K_SWITCH = new XQueryTokenType("switch");

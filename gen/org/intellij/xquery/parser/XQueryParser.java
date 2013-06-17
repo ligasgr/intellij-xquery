@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013 Grzegorz Ligas
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // This is a generated file. Not intended for manual editing.
 package org.intellij.xquery.parser;
 
@@ -1301,10 +1317,10 @@ public class XQueryParser implements PsiParser {
   // "attribute" "(" (AttribNameOrWildcard ("," TypeName)?)? ")"
   public static boolean AttributeTest(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "AttributeTest")) return false;
+    if (!nextTokenIs(builder_, K_ATTRIBUTE)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<attribute test>");
-    result_ = consumeToken(builder_, "attribute");
+    result_ = consumeToken(builder_, K_ATTRIBUTE);
     result_ = result_ && consumeToken(builder_, L_PAR);
     result_ = result_ && AttributeTest_2(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, R_PAR);
@@ -1314,7 +1330,6 @@ public class XQueryParser implements PsiParser {
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -1779,10 +1794,10 @@ public class XQueryParser implements PsiParser {
   // "attribute" (EQName | ("{" Expr "}")) "{" Expr? "}"
   public static boolean CompAttrConstructor(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CompAttrConstructor")) return false;
+    if (!nextTokenIs(builder_, K_ATTRIBUTE)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<comp attr constructor>");
-    result_ = consumeToken(builder_, "attribute");
+    result_ = consumeToken(builder_, K_ATTRIBUTE);
     result_ = result_ && CompAttrConstructor_1(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, L_C_BRACE);
     result_ = result_ && CompAttrConstructor_3(builder_, level_ + 1);
@@ -1793,7 +1808,6 @@ public class XQueryParser implements PsiParser {
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -1861,10 +1875,10 @@ public class XQueryParser implements PsiParser {
   // "document" "{" Expr "}"
   public static boolean CompDocConstructor(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CompDocConstructor")) return false;
+    if (!nextTokenIs(builder_, K_DOCUMENT)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<comp doc constructor>");
-    result_ = consumeToken(builder_, "document");
+    result_ = consumeToken(builder_, K_DOCUMENT);
     result_ = result_ && consumeToken(builder_, L_C_BRACE);
     result_ = result_ && Expr(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, R_C_BRACE);
@@ -1874,7 +1888,6 @@ public class XQueryParser implements PsiParser {
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -3151,10 +3164,10 @@ public class XQueryParser implements PsiParser {
   // "document-node" "(" (ElementTest | SchemaElementTest)? ")"
   public static boolean DocumentTest(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DocumentTest")) return false;
+    if (!nextTokenIs(builder_, K_DOCUMENT_NODE)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<document test>");
-    result_ = consumeToken(builder_, "document-node");
+    result_ = consumeToken(builder_, K_DOCUMENT_NODE);
     result_ = result_ && consumeToken(builder_, L_PAR);
     result_ = result_ && DocumentTest_2(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, R_PAR);
@@ -3164,7 +3177,6 @@ public class XQueryParser implements PsiParser {
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -3841,7 +3853,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ForwardAxis_2")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, "attribute");
+    result_ = consumeToken(builder_, K_ATTRIBUTE);
     result_ = result_ && consumeToken(builder_, COLON_COLON);
     if (!result_) {
       marker_.rollbackTo();
@@ -5404,10 +5416,10 @@ public class XQueryParser implements PsiParser {
   // "namespace-node" "(" ")"
   public static boolean NamespaceNodeTest(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "NamespaceNodeTest")) return false;
+    if (!nextTokenIs(builder_, K_NAMESPACE_NODE)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<namespace node test>");
-    result_ = consumeToken(builder_, "namespace-node");
+    result_ = consumeToken(builder_, K_NAMESPACE_NODE);
     result_ = result_ && consumeToken(builder_, L_PAR);
     result_ = result_ && consumeToken(builder_, R_PAR);
     if (result_) {
@@ -5416,7 +5428,6 @@ public class XQueryParser implements PsiParser {
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -6595,13 +6606,13 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, AT_SIGN);
     if (!result_) result_ = consumeToken(builder_, "ancestor");
     if (!result_) result_ = consumeToken(builder_, "ancestor-or-self");
-    if (!result_) result_ = consumeToken(builder_, "attribute");
+    if (!result_) result_ = consumeToken(builder_, K_ATTRIBUTE);
     if (!result_) result_ = consumeToken(builder_, "child");
     if (!result_) result_ = consumeToken(builder_, K_COMMENT);
     if (!result_) result_ = consumeToken(builder_, "descendant");
     if (!result_) result_ = consumeToken(builder_, "descendant-or-self");
-    if (!result_) result_ = consumeToken(builder_, "document");
-    if (!result_) result_ = consumeToken(builder_, "document-node");
+    if (!result_) result_ = consumeToken(builder_, K_DOCUMENT);
+    if (!result_) result_ = consumeToken(builder_, K_DOCUMENT_NODE);
     if (!result_) result_ = consumeToken(builder_, K_ELEMENT);
     if (!result_) result_ = consumeToken(builder_, K_EVERY);
     if (!result_) result_ = consumeToken(builder_, "following");
@@ -6612,15 +6623,15 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, K_LET);
     if (!result_) result_ = consumeToken(builder_, K_MAP);
     if (!result_) result_ = consumeToken(builder_, K_NAMESPACE);
-    if (!result_) result_ = consumeToken(builder_, "namespace-node");
+    if (!result_) result_ = consumeToken(builder_, K_NAMESPACE_NODE);
     if (!result_) result_ = consumeToken(builder_, K_NODE);
     if (!result_) result_ = consumeToken(builder_, K_ORDERED);
     if (!result_) result_ = consumeToken(builder_, "parent");
     if (!result_) result_ = consumeToken(builder_, "preceding");
     if (!result_) result_ = consumeToken(builder_, "preceding-sibling");
     if (!result_) result_ = consumeToken(builder_, K_PI);
-    if (!result_) result_ = consumeToken(builder_, "schema-attribute");
-    if (!result_) result_ = consumeToken(builder_, "schema-element");
+    if (!result_) result_ = consumeToken(builder_, K_SCHEMA_ATTRIBUTE);
+    if (!result_) result_ = consumeToken(builder_, K_SCHEMA_ELEMENT);
     if (!result_) result_ = consumeToken(builder_, "self");
     if (!result_) result_ = consumeToken(builder_, K_SOME);
     if (!result_) result_ = consumeToken(builder_, K_SWITCH);
@@ -7134,10 +7145,10 @@ public class XQueryParser implements PsiParser {
   // "schema-attribute" "(" AttributeDeclaration ")"
   public static boolean SchemaAttributeTest(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SchemaAttributeTest")) return false;
+    if (!nextTokenIs(builder_, K_SCHEMA_ATTRIBUTE)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<schema attribute test>");
-    result_ = consumeToken(builder_, "schema-attribute");
+    result_ = consumeToken(builder_, K_SCHEMA_ATTRIBUTE);
     result_ = result_ && consumeToken(builder_, L_PAR);
     result_ = result_ && AttributeDeclaration(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, R_PAR);
@@ -7147,7 +7158,6 @@ public class XQueryParser implements PsiParser {
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -7155,10 +7165,10 @@ public class XQueryParser implements PsiParser {
   // "schema-element" "(" ElementDeclaration ")"
   public static boolean SchemaElementTest(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SchemaElementTest")) return false;
+    if (!nextTokenIs(builder_, K_SCHEMA_ELEMENT)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<schema element test>");
-    result_ = consumeToken(builder_, "schema-element");
+    result_ = consumeToken(builder_, K_SCHEMA_ELEMENT);
     result_ = result_ && consumeToken(builder_, L_PAR);
     result_ = result_ && ElementDeclaration(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, R_PAR);
@@ -7168,7 +7178,6 @@ public class XQueryParser implements PsiParser {
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -7372,7 +7381,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "SequenceType_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, "empty-sequence");
+    result_ = consumeToken(builder_, K_EMPTY_SEQUENCE);
     result_ = result_ && consumeToken(builder_, L_PAR);
     result_ = result_ && consumeToken(builder_, R_PAR);
     if (!result_) {
@@ -8912,14 +8921,14 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, AT_SIGN);
     if (!result_) result_ = consumeToken(builder_, "ancestor");
     if (!result_) result_ = consumeToken(builder_, "ancestor-or-self");
-    if (!result_) result_ = consumeToken(builder_, "attribute");
+    if (!result_) result_ = consumeToken(builder_, K_ATTRIBUTE);
     if (!result_) result_ = consumeToken(builder_, "child");
     if (!result_) result_ = consumeToken(builder_, K_COMMENT);
     if (!result_) result_ = consumeToken(builder_, K_DECLARE);
     if (!result_) result_ = consumeToken(builder_, "descendant");
     if (!result_) result_ = consumeToken(builder_, "descendant-or-self");
-    if (!result_) result_ = consumeToken(builder_, "document");
-    if (!result_) result_ = consumeToken(builder_, "document-node");
+    if (!result_) result_ = consumeToken(builder_, K_DOCUMENT);
+    if (!result_) result_ = consumeToken(builder_, K_DOCUMENT_NODE);
     if (!result_) result_ = consumeToken(builder_, K_ELEMENT);
     if (!result_) result_ = consumeToken(builder_, K_EVERY);
     if (!result_) result_ = consumeToken(builder_, "following");
@@ -8931,15 +8940,15 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, K_LET);
     if (!result_) result_ = consumeToken(builder_, K_MODULE);
     if (!result_) result_ = consumeToken(builder_, K_NAMESPACE);
-    if (!result_) result_ = consumeToken(builder_, "namespace-node");
+    if (!result_) result_ = consumeToken(builder_, K_NAMESPACE_NODE);
     if (!result_) result_ = consumeToken(builder_, K_NODE);
     if (!result_) result_ = consumeToken(builder_, K_ORDERED);
     if (!result_) result_ = consumeToken(builder_, "parent");
     if (!result_) result_ = consumeToken(builder_, "preceding");
     if (!result_) result_ = consumeToken(builder_, "preceding-sibling");
     if (!result_) result_ = consumeToken(builder_, K_PI);
-    if (!result_) result_ = consumeToken(builder_, "schema-attribute");
-    if (!result_) result_ = consumeToken(builder_, "schema-element");
+    if (!result_) result_ = consumeToken(builder_, K_SCHEMA_ATTRIBUTE);
+    if (!result_) result_ = consumeToken(builder_, K_SCHEMA_ELEMENT);
     if (!result_) result_ = consumeToken(builder_, "self");
     if (!result_) result_ = consumeToken(builder_, K_SOME);
     if (!result_) result_ = consumeToken(builder_, K_SWITCH);

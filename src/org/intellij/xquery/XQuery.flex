@@ -190,8 +190,6 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "pattern-separator"                       {return XQueryTypes.K_PATTERN_SEPARATOR;}
 "namespace"                               {return XQueryTypes.K_NAMESPACE;}
 "context"                                 {return XQueryTypes.K_CONTEXT;}
-"item"                                    {return XQueryTypes.K_ITEM;}
-"element"                                 {return XQueryTypes.K_ELEMENT;}
 "import"                                  {return XQueryTypes.K_IMPORT;}
 "schema"                                  {return XQueryTypes.K_SCHEMA;}
 "module"                                  {return XQueryTypes.K_MODULE;}
@@ -206,11 +204,8 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "some"                                    {return XQueryTypes.K_SOME;}
 "every"                                   {return XQueryTypes.K_EVERY;}
 "in"                                      {return XQueryTypes.K_IN;}
-"if"                                      {return XQueryTypes.K_IF;}
 "then"                                    {return XQueryTypes.K_THEN;}
 "else"                                    {return XQueryTypes.K_ELSE;}
-"typeswitch"                              {return XQueryTypes.K_TYPESWITCH;}
-"switch"                                  {return XQueryTypes.K_SWITCH;}
 "case"                                    {return XQueryTypes.K_CASE;}
 "and"                                     {return XQueryTypes.K_AND;}
 "or"                                      {return XQueryTypes.K_OR;}
@@ -219,13 +214,28 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "where"                                   {return XQueryTypes.K_WHERE;}
 "group"                                   {return XQueryTypes.K_GROUP;}
 "by"                                      {return XQueryTypes.K_BY;}
-"node"                                    {return XQueryTypes.K_NODE;}
-"order"                                   {return XQueryTypes.K_ORDER;}
-"map:map"                                 {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
-"map"                                     {return XQueryTypes.K_MAP;}
 "instance"                                {return XQueryTypes.K_INSTANCE;}
 "of"                                      {return XQueryTypes.K_OF;}
 "satisfies"                               {return XQueryTypes.K_SATISFIES;}
+"order"                                   {return XQueryTypes.K_ORDER;}
+"map" / {S}? ("("|"{")                    {return XQueryTypes.K_MAP;}
+"attribute" / {S}? ("("|"{"|{NCName})     {return XQueryTypes.K_ATTRIBUTE;}
+"comment" / {S}? ("("|"{")                {return XQueryTypes.K_COMMENT;}
+"document-node" / {S}? ("(")              {return XQueryTypes.K_DOCUMENT_NODE;}
+"element" / {S}? ("("|"{"|{NCName})       {return XQueryTypes.K_ELEMENT;}
+"empty-sequence" / {S}? ("(")             {return XQueryTypes.K_EMPTY_SEQUENCE;}
+"function" / {S}? ("(")                   {return XQueryTypes.K_FUNCTION;}
+"if" / {S}? ("(")                         {return XQueryTypes.K_IF;}
+"item" / {S}? ("(")                       {return XQueryTypes.K_ITEM;}
+"namespace-node" / {S}? ("(")             {return XQueryTypes.K_NAMESPACE_NODE;}
+"node" / {S}? ("(")                       {return XQueryTypes.K_NODE;}
+"processing-instruction" / {S}? ("("|"{"|{NCName}) {return XQueryTypes.K_PI;}
+"schema-attribute" / {S}? ("(")           {return XQueryTypes.K_SCHEMA_ATTRIBUTE;}
+"schema-element" / {S}? ("(")             {return XQueryTypes.K_SCHEMA_ELEMENT;}
+"switch" / {S}? ("(")                     {return XQueryTypes.K_SWITCH;}
+"text" / {S}? ("("|"{")                   {return XQueryTypes.K_TEXT;}
+"typeswitch" / {S}? ("(")                 {return XQueryTypes.K_TYPESWITCH;}
+"document" / {S}? ("{")                   {return XQueryTypes.K_DOCUMENT;}
 {NCName}                                  {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 }
 
