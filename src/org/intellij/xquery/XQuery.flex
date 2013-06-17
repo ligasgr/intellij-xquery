@@ -201,8 +201,8 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "at"                                      {return XQueryTypes.K_AT;}
 "for"                                     {return XQueryTypes.K_FOR;}
 "let"                                     {return XQueryTypes.K_LET;}
-"some"                                    {return XQueryTypes.K_SOME;}
-"every"                                   {return XQueryTypes.K_EVERY;}
+"some" / {S} "$"                          {return XQueryTypes.K_SOME;}
+"every" / {S} "$"                         {return XQueryTypes.K_EVERY;}
 "in"                                      {return XQueryTypes.K_IN;}
 "then"                                    {return XQueryTypes.K_THEN;}
 "else"                                    {return XQueryTypes.K_ELSE;}
@@ -217,12 +217,12 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "instance"                                {return XQueryTypes.K_INSTANCE;}
 "of"                                      {return XQueryTypes.K_OF;}
 "satisfies"                               {return XQueryTypes.K_SATISFIES;}
-"order"                                   {return XQueryTypes.K_ORDER;}
+"order" / {S} "by"                                    {return XQueryTypes.K_ORDER;}
 "map" / {S}? ("("|"{")                    {return XQueryTypes.K_MAP;}
-"attribute" / {S}? ("("|"{"|{NCName})     {return XQueryTypes.K_ATTRIBUTE;}
+"attribute" / ({S}?"("|{S}?"{"|{S}{NCName})     {return XQueryTypes.K_ATTRIBUTE;}
 "comment" / {S}? ("("|"{")                {return XQueryTypes.K_COMMENT;}
 "document-node" / {S}? ("(")              {return XQueryTypes.K_DOCUMENT_NODE;}
-"element" / {S}? ("("|"{"|{NCName})       {return XQueryTypes.K_ELEMENT;}
+"element" / ({S}?"("|{S}?"{"| {S}{NCName})       {return XQueryTypes.K_ELEMENT;}
 "empty-sequence" / {S}? ("(")             {return XQueryTypes.K_EMPTY_SEQUENCE;}
 "function" / {S}? ("(")                   {return XQueryTypes.K_FUNCTION;}
 "if" / {S}? ("(")                         {return XQueryTypes.K_IF;}
@@ -236,6 +236,7 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "text" / {S}? ("("|"{")                   {return XQueryTypes.K_TEXT;}
 "typeswitch" / {S}? ("(")                 {return XQueryTypes.K_TYPESWITCH;}
 "document" / {S}? ("{")                   {return XQueryTypes.K_DOCUMENT;}
+"stable" / {S} "order"                    {return XQueryTypes.K_STABLE;}
 {NCName}                                  {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 }
 
@@ -307,7 +308,8 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 {NCName} ":" {NameStartCharWithoutFirst}  {yypushback(2); return XQueryTypes.NCNAME;}
 {NCName}                                  {popState(); return XQueryTypes.NCNAME;}
 ":"                                       {return XQueryTypes.COLON;}
-.                                         {yypushback(yylength()); popState();}
+{S}                                       {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+.                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 <ALLOWING> {

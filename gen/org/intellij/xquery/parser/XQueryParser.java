@@ -3657,7 +3657,7 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, K_LET);
     if (!result_) result_ = consumeToken(builder_, K_ORDER);
     if (!result_) result_ = consumeToken(builder_, K_RETURN);
-    if (!result_) result_ = consumeToken(builder_, "stable");
+    if (!result_) result_ = consumeToken(builder_, K_STABLE);
     if (!result_) result_ = consumeToken(builder_, K_WHERE);
     if (!result_) {
       marker_.rollbackTo();
@@ -5690,7 +5690,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "OrderByClause_0_1")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, "stable");
+    result_ = consumeToken(builder_, K_STABLE);
     result_ = result_ && consumeToken(builder_, K_ORDER);
     result_ = result_ && consumeToken(builder_, K_BY);
     if (!result_) {
@@ -6681,7 +6681,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ("some" | "every") "$" VarRefName TypeDeclaration? "in" ExprSingle ("," "$" VarName TypeDeclaration? "in" ExprSingle)* "satisfies" ExprSingle
+  // ("some" | "every") "$" VarName TypeDeclaration? "in" ExprSingle ("," "$" VarName TypeDeclaration? "in" ExprSingle)* "satisfies" ExprSingle
   public static boolean QuantifiedExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "QuantifiedExpr")) return false;
     if (!nextTokenIs(builder_, K_EVERY) && !nextTokenIs(builder_, K_SOME)
@@ -6694,7 +6694,7 @@ public class XQueryParser implements PsiParser {
     result_ = QuantifiedExpr_0(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, consumeToken(builder_, DOLLAR_SIGN));
-    result_ = pinned_ && report_error_(builder_, VarRefName(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && report_error_(builder_, VarName(builder_, level_ + 1)) && result_;
     result_ = pinned_ && report_error_(builder_, QuantifiedExpr_3(builder_, level_ + 1)) && result_;
     result_ = pinned_ && report_error_(builder_, consumeToken(builder_, K_IN)) && result_;
     result_ = pinned_ && report_error_(builder_, ExprSingle(builder_, level_ + 1)) && result_;

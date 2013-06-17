@@ -334,6 +334,7 @@ public interface XQueryTypes {
   IElementType K_SCHEMA_ATTRIBUTE = new XQueryTokenType("schema-attribute");
   IElementType K_SCHEMA_ELEMENT = new XQueryTokenType("schema-element");
   IElementType K_SOME = new XQueryTokenType("some");
+  IElementType K_STABLE = new XQueryTokenType("stable");
   IElementType K_STRIP = new XQueryTokenType("strip");
   IElementType K_SWITCH = new XQueryTokenType("switch");
   IElementType K_TEXT = new XQueryTokenType("text");

@@ -152,6 +152,7 @@
   K_SCHEMA_ATTRIBUTE = "schema-attribute"
   K_SCHEMA_ELEMENT = "schema-element"
   K_DOCUMENT    = "document"
+  K_STABLE      = "stable"
 //  IntegerLiteral = "regexp:[0-9]+"
 //  DecimalLiteral = "regexp:(\.[0-9]+|[0-9]+\.[0-9]*)"
 //  DoubleLiteral  = "regexp:(\.[0-9]+|[0-9]+(\.[0-9]*)?)[eE][+-]?[0-9]+"
@@ -253,7 +254,7 @@ OrderSpecList	   ::=   	OrderSpec ("," OrderSpec)*
 OrderSpec	   ::=   	ExprSingle OrderModifier
 OrderModifier	   ::=   	("ascending" | "descending")? ("empty" ("greatest" | "least"))? ("collation" URILiteral)?
 ReturnClause	   ::=   	"return" ExprSingle {pin=1}
-QuantifiedExpr	   ::=   	("some" | "every") "$" VarRefName TypeDeclaration? "in" ExprSingle ("," "$" VarName TypeDeclaration? "in" ExprSingle)* "satisfies" ExprSingle {pin=1}
+QuantifiedExpr	   ::=   	("some" | "every") "$" VarName TypeDeclaration? "in" ExprSingle ("," "$" VarName TypeDeclaration? "in" ExprSingle)* "satisfies" ExprSingle {pin=1}
 SwitchExpr	   ::=   	"switch" "(" Expr ")" SwitchCaseClause+ "default" "return" ExprSingle {pin=1}
 SwitchCaseClause	   ::=   	("case" SwitchCaseOperand)+ "return" ExprSingle
 SwitchCaseOperand	   ::=   	ExprSingle
