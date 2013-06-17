@@ -1,3 +1,6 @@
+/*
+ * Grammar originally taken from http://www.w3.org/TR/xquery-30/#nt-bnf
+ */
 {
   parserClass="org.intellij.xquery.parser.XQueryParser"
   parserUtilClass="org.intellij.xquery.parser.GeneratedParserUtilBase"
