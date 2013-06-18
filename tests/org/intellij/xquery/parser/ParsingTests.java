@@ -74,6 +74,22 @@ public class ParsingTests extends ParsingTestCase {
         doTest(true);
     }
 
+    public void testKeywordsAsVarNames() {
+        doTest(true);
+    }
+
+    public void testKeywordsAsTagNames() {
+        doTest(true);
+    }
+
+    public void testKeywordsAsPathSteps() {
+        doTest(true);
+    }
+
+    public void testKeywordsAsPrefixedFnNames() {
+        doTest(true);
+    }
+
     @Override
     protected String getTestDataPath() {
         return "testData/org/intellij/xquery";
