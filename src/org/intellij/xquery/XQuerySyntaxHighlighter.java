@@ -43,6 +43,7 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey COMMENT = createTextAttributesKey("XQUERY_COMMENT", DefaultLanguageHighlighterColors.BLOCK_COMMENT);
     private static final TextAttributesKey NUMBER = createTextAttributesKey("XQUERY_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
     private static final TextAttributesKey NAME = createTextAttributesKey("XQUERY_NAME", DefaultLanguageHighlighterColors.NUMBER);
+    private static final TextAttributesKey OPERATION_SIGN = createTextAttributesKey("XQUERY_OPERATION", DefaultLanguageHighlighterColors.OPERATION_SIGN);
     private static final TextAttributesKey[] BAD_CHAR_KEYS = pack(BAD_CHARACTER);
     private static final TextAttributesKey[] KEYWORDS = pack(KEYWORD);
     private static final TextAttributesKey[] STRINGS = pack(STRING);
@@ -51,6 +52,7 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] COMMENTS = pack(COMMENT);
     private static final TextAttributesKey[] NUMBERS = pack(NUMBER);
     private static final TextAttributesKey[] NAMES = pack(NAME);
+    private static final TextAttributesKey[] OPERATION_SIGNS = pack(OPERATION_SIGN);
 
     @NotNull
     @Override
@@ -91,6 +93,15 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
         }
         if (tokenType == TokenType.BAD_CHARACTER) {
             return BAD_CHAR_KEYS;
+        }
+        if (tokenType == XQueryTypes.EQ
+                || tokenType == XQueryTypes.GE
+                || tokenType == XQueryTypes.GT
+                || tokenType == XQueryTypes.LE
+                || tokenType == XQueryTypes.LT
+                || tokenType == XQueryTypes.NE
+                ) {
+            return OPERATION_SIGNS;
         }
         if (tokenType == XQueryTypes.K_IMPORT
                 || tokenType == XQueryTypes.K_DEFAULT
@@ -167,6 +178,48 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType == XQueryTypes.K_INSTANCE
                 || tokenType == XQueryTypes.K_OF
                 || tokenType == XQueryTypes.K_SATISFIES
+                || tokenType == XQueryTypes.K_CHILD
+                || tokenType == XQueryTypes.K_DESCENDANT
+                || tokenType == XQueryTypes.K_SELF
+                || tokenType == XQueryTypes.K_DESCENDANT_OR_SELF
+                || tokenType == XQueryTypes.K_FOLLOWING_SIBLING
+                || tokenType == XQueryTypes.K_FOLLOWING
+                || tokenType == XQueryTypes.K_PARENT
+                || tokenType == XQueryTypes.K_ANCESTOR
+                || tokenType == XQueryTypes.K_PRECEDING_SIBLING
+                || tokenType == XQueryTypes.K_PRECEDING
+                || tokenType == XQueryTypes.K_ANCESTOR_OR_SELF
+                || tokenType == XQueryTypes.K_TUMBLING
+                || tokenType == XQueryTypes.K_SLIDING
+                || tokenType == XQueryTypes.K_WINDOW
+                || tokenType == XQueryTypes.K_START
+                || tokenType == XQueryTypes.K_WHEN
+                || tokenType == XQueryTypes.K_ONLY
+                || tokenType == XQueryTypes.K_END
+                || tokenType == XQueryTypes.K_WHEN
+                || tokenType == XQueryTypes.K_PREVIOUS
+                || tokenType == XQueryTypes.K_NEXT
+                || tokenType == XQueryTypes.K_COUNT
+                || tokenType == XQueryTypes.K_TRY
+                || tokenType == XQueryTypes.K_CATCH
+                || tokenType == XQueryTypes.K_DIV
+                || tokenType == XQueryTypes.K_IDIV
+                || tokenType == XQueryTypes.K_MOD
+                || tokenType == XQueryTypes.K_UNION
+                || tokenType == XQueryTypes.K_INTERSECT
+                || tokenType == XQueryTypes.K_EXCEPT
+                || tokenType == XQueryTypes.K_TREAT
+                || tokenType == XQueryTypes.K_CASTABLE
+                || tokenType == XQueryTypes.K_CAST
+                || tokenType == XQueryTypes.K_IS
+                || tokenType == XQueryTypes.K_TYPE
+                || tokenType == XQueryTypes.K_LAX
+                || tokenType == XQueryTypes.K_STRICT
+                || tokenType == XQueryTypes.K_DOCUMENT
+                || tokenType == XQueryTypes.K_EMPTY
+                || tokenType == XQueryTypes.K_EVERY
+                || tokenType == XQueryTypes.K_EXTERNAL
+                || tokenType == XQueryTypes.K_STABLE
                 ) {
             return KEYWORDS;
         }

@@ -154,7 +154,7 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "default"                                 {return XQueryTypes.K_DEFAULT;}
 "base-uri"                                {return XQueryTypes.K_BASE_URI;}
 "option"                                  {return XQueryTypes.K_OPTION;}
-"variable"                                {pushState(QNAME); return XQueryTypes.K_VARIABLE;}
+"variable" / {S} "$"                      {return XQueryTypes.K_VARIABLE;}
 "function" / {S} "namespace" {S} {StringLiteral} {return XQueryTypes.K_FUNCTION;}
 "function"                                {pushState(QNAME); return XQueryTypes.K_FUNCTION;}
 "construction"                            {return XQueryTypes.K_CONSTRUCTION;}
@@ -217,6 +217,45 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "instance"                                {return XQueryTypes.K_INSTANCE;}
 "of"                                      {return XQueryTypes.K_OF;}
 "satisfies"                               {return XQueryTypes.K_SATISFIES;}
+"child"                                   {return XQueryTypes.K_CHILD;}
+"descendant"                              {return XQueryTypes.K_DESCENDANT;}
+"self"                                    {return XQueryTypes.K_SELF;}
+"descendant-or-self"                      {return XQueryTypes.K_DESCENDANT_OR_SELF;}
+"following-sibling"                       {return XQueryTypes.K_FOLLOWING_SIBLING;}
+"following"                               {return XQueryTypes.K_FOLLOWING;}
+"parent"                                  {return XQueryTypes.K_PARENT;}
+"ancestor"                                {return XQueryTypes.K_ANCESTOR;}
+"preceding-sibling"                       {return XQueryTypes.K_PRECEDING_SIBLING;}
+"preceding"                               {return XQueryTypes.K_PRECEDING;}
+"ancestor-or-self"                        {return XQueryTypes.K_ANCESTOR_OR_SELF;}
+"tumbling"                                {return XQueryTypes.K_TUMBLING;}
+"sliding"                                 {return XQueryTypes.K_SLIDING;}
+"window"                                  {return XQueryTypes.K_WINDOW;}
+"start"                                   {return XQueryTypes.K_START;}
+"when"                                    {return XQueryTypes.K_WHEN;}
+"only"                                    {return XQueryTypes.K_ONLY;}
+"end"                                     {return XQueryTypes.K_END;}
+"when"                                    {return XQueryTypes.K_WHEN;}
+"previous"                                {return XQueryTypes.K_PREVIOUS;}
+"next"                                    {return XQueryTypes.K_NEXT;}
+"count" / {S} "$"                         {return XQueryTypes.K_COUNT;}
+"try"                                     {return XQueryTypes.K_TRY;}
+"catch"                                   {return XQueryTypes.K_CATCH;}
+"div"                                     {return XQueryTypes.K_DIV;}
+"idiv"                                    {return XQueryTypes.K_IDIV;}
+"mod"                                     {return XQueryTypes.K_MOD;}
+"union"                                   {return XQueryTypes.K_UNION;}
+"intersect"                               {return XQueryTypes.K_INTERSECT;}
+"except"                                  {return XQueryTypes.K_EXCEPT;}
+"treat"                                   {return XQueryTypes.K_TREAT;}
+"castable"                                {return XQueryTypes.K_CASTABLE;}
+"cast"                                    {return XQueryTypes.K_CAST;}
+"is"                                      {return XQueryTypes.K_IS;}
+"type"                                    {return XQueryTypes.K_TYPE;}
+"lax"                                     {return XQueryTypes.K_LAX;}
+"strict"                                  {return XQueryTypes.K_STRICT;}
+"external"                                {return XQueryTypes.K_EXTERNAL;}
+"validate"                                {return XQueryTypes.K_VALIDATE;}
 "order" / {S} "by"                                    {return XQueryTypes.K_ORDER;}
 "map" / {S}? ("("|"{")                    {return XQueryTypes.K_MAP;}
 "attribute" / ({S}?"("|{S}?"{"|{S}{NCName})     {return XQueryTypes.K_ATTRIBUTE;}
