@@ -171,7 +171,6 @@
   K_WHEN                 =  "when"
   K_ONLY                 =  "only"
   K_END                  =  "end"
-  K_WHEN                 =  "when"
   K_PREVIOUS             =  "previous"
   K_NEXT                 =  "next"
   K_COUNT                =  "count"

@@ -91,8 +91,9 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 %state APOS_STRING
 %state URIQUALIFIED
 %state QNAME
-%state ALLOWING
 %state DIR_COMMENT
+// helper states
+%state XQUERY_RECOGNITION
 %%
 
 
@@ -151,56 +152,54 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "gt"                                      {return XQueryTypes.GT;}
 "ge"                                      {return XQueryTypes.GE;}
 "declare"                                 {return XQueryTypes.K_DECLARE;}
-"default"                                 {return XQueryTypes.K_DEFAULT;}
-"base-uri"                                {return XQueryTypes.K_BASE_URI;}
-"option"                                  {return XQueryTypes.K_OPTION;}
+"default" / {S} ("collation"|"order"|"decimal-format"|"element"|"function") {return XQueryTypes.K_DEFAULT;}
+"base-uri" / {S} ("\""|"'")               {return XQueryTypes.K_BASE_URI;}
+"option" / {S} {NCName}                   {return XQueryTypes.K_OPTION;}
 "variable" / {S} "$"                      {return XQueryTypes.K_VARIABLE;}
 "function" / {S} "namespace" {S} {StringLiteral} {return XQueryTypes.K_FUNCTION;}
 "function"                                {pushState(QNAME); return XQueryTypes.K_FUNCTION;}
 "construction"                            {return XQueryTypes.K_CONSTRUCTION;}
-"boundary-space"                          {return XQueryTypes.K_BOUNDARY_SPACE;}
-"preserve"                                {return XQueryTypes.K_PRESERVE;}
-"strip"                                   {return XQueryTypes.K_STRIP;}
-"collation"                               {return XQueryTypes.K_COLLATION;}
-"construction"                            {return XQueryTypes.K_CONSTRUCTION;}
-"ordering"                                {return XQueryTypes.K_ORDERING;}
-"ordered"                                 {return XQueryTypes.K_ORDERED;}
-"unordered"                               {return XQueryTypes.K_UNORDERED;}
-"empty" / {S} "greatest"                  {return XQueryTypes.K_EMPTY;}
-"empty" / {S} "least"                     {return XQueryTypes.K_EMPTY;}
-"allowing"                                {pushState(ALLOWING);return XQueryTypes.K_ALLOWING;}
-"greatest"                                {return XQueryTypes.K_GREATEST;}
-"least"                                   {return XQueryTypes.K_LEAST;}
-"ascending"                               {return XQueryTypes.K_ASCENDING;}
-"descending"                              {return XQueryTypes.K_DESCENDING;}
-"copy-namespaces"                         {return XQueryTypes.K_COPY_NAMESPACES;}
-"no-preserve"                             {return XQueryTypes.K_NO_PRESERVE;}
-"inherit"                                 {return XQueryTypes.K_INHERIT;}
-"no-inherit"                              {return XQueryTypes.K_NO_INHERIT;}
-"decimal-format"                          {return XQueryTypes.K_DECIMAL_FORMAT;}
-"decimal-separator"                       {return XQueryTypes.K_DECIMAL_SEPARATOR;}
-"grouping-separator"                      {return XQueryTypes.K_GROUPING_SEPARATOR;}
-"infinity"                                {return XQueryTypes.K_INFINITY;}
-"minus-sign"                              {return XQueryTypes.K_MINUS_SIGN;}
-"NaN"                                     {return XQueryTypes.K_NAN;}
-"percent"                                 {return XQueryTypes.K_PERCENT;}
-"per-mille"                               {return XQueryTypes.K_PER_MILLE;}
-"zero-digit"                              {return XQueryTypes.K_ZERO_DIGIT;}
-"digit"                                   {return XQueryTypes.K_DIGIT;}
-"pattern-separator"                       {return XQueryTypes.K_PATTERN_SEPARATOR;}
-"namespace"                               {return XQueryTypes.K_NAMESPACE;}
-"context"                                 {return XQueryTypes.K_CONTEXT;}
-"import"                                  {return XQueryTypes.K_IMPORT;}
-"schema"                                  {return XQueryTypes.K_SCHEMA;}
-"module"                                  {return XQueryTypes.K_MODULE;}
-"at"                                      {return XQueryTypes.K_AT;}
-"xquery"                                  {return XQueryTypes.K_XQUERY;}
-"version"                                 {return XQueryTypes.K_VERSION;}
-"encoding"                                {return XQueryTypes.K_ENCODING;}
+"boundary-space" / {S} ("preserve"|"strip") {return XQueryTypes.K_BOUNDARY_SPACE;}
+"preserve" / {S}? (";"|",")               {return XQueryTypes.K_PRESERVE;}
+"strip" / {S}? ";"                        {return XQueryTypes.K_STRIP;}
+"collation" / {S} ("\""|"'")              {return XQueryTypes.K_COLLATION;}
+"construction" / {S} ("preserve"|"strip") {return XQueryTypes.K_CONSTRUCTION;}
+"ordering" / {S} ("ordered"|"unordered")  {return XQueryTypes.K_ORDERING;}
+"ordered" / {S}? (";"|"{")                {return XQueryTypes.K_ORDERED;}
+"unordered" / {S}? (";"|"{")              {return XQueryTypes.K_UNORDERED;}
+"empty" / {S} ("greatest"|"least"|"at"|"in") {return XQueryTypes.K_EMPTY;}
+"allowing" / {S} "empty"                  {return XQueryTypes.K_ALLOWING;}
+"greatest" / {S}? (";"|",")               {return XQueryTypes.K_GREATEST;}
+"greatest" / {S} ("for"|"let"|"order"|"stable"|"group"|"count"|"return") {return XQueryTypes.K_GREATEST;}
+"least"/ {S}? (";"|",")                   {return XQueryTypes.K_LEAST;}
+"least" / {S} ("for"|"let"|"order"|"stable"|"group"|"count"|"return") {return XQueryTypes.K_LEAST;}
+"ascending" / {S} ("empty"|"collation")   {return XQueryTypes.K_ASCENDING;}
+"descending" / {S} ("empty"|"collation")  {return XQueryTypes.K_DESCENDING;}
+"copy-namespaces" / {S} ("preserve"|"no-preserve") {return XQueryTypes.K_COPY_NAMESPACES;}
+"no-preserve" / {S}? ","                  {return XQueryTypes.K_NO_PRESERVE;}
+"inherit" / {S}? ";"                      {return XQueryTypes.K_INHERIT;}
+"no-inherit" / {S}? ";"                   {return XQueryTypes.K_NO_INHERIT;}
+"decimal-format" / {S} ({NCName} | "decimal-separator" | "grouping-separator" | "infinity" | "minus-sign" | "NaN" | "percent" | "per-mille" | "zero-digit" | "digit" | "pattern-separator")                          {return XQueryTypes.K_DECIMAL_FORMAT;}
+"decimal-separator" / {S}? "="            {return XQueryTypes.K_DECIMAL_SEPARATOR;}
+"grouping-separator" / {S}? "="           {return XQueryTypes.K_GROUPING_SEPARATOR;}
+"infinity" / {S}? "="                     {return XQueryTypes.K_INFINITY;}
+"minus-sign" / {S}? "="                   {return XQueryTypes.K_MINUS_SIGN;}
+"NaN" / {S}? "="                          {return XQueryTypes.K_NAN;}
+"percent" / {S}? "="                      {return XQueryTypes.K_PERCENT;}
+"per-mille" / {S}? "="                    {return XQueryTypes.K_PER_MILLE;}
+"zero-digit" / {S}? "="                   {return XQueryTypes.K_ZERO_DIGIT;}
+"digit" / {S}? "="                        {return XQueryTypes.K_DIGIT;}
+"pattern-separator" / {S}? "="            {return XQueryTypes.K_PATTERN_SEPARATOR;}
+"namespace" / {S} ({NCName}|"\""|"'"|"{")       {return XQueryTypes.K_NAMESPACE;}
+"context" / {S} "item"                    {return XQueryTypes.K_CONTEXT;}
+"import" / {S} ("schema"|"module")        {return XQueryTypes.K_IMPORT;}
+"schema" / {S} ("namespace"|"default"|"\"") {return XQueryTypes.K_SCHEMA;}
+"module" / {S} ("namespace"|"\"")         {return XQueryTypes.K_MODULE;}
+"at" / {S} ("\""|"'"|"$")                     {return XQueryTypes.K_AT;}
+"xquery"                                  {yypushback(yylength()); pushState(XQUERY_RECOGNITION); return TokenType.WHITE_SPACE;}
 "return"                                  {return XQueryTypes.K_RETURN;}
-"at"                                      {return XQueryTypes.K_AT;}
-"for"                                     {return XQueryTypes.K_FOR;}
-"let"                                     {return XQueryTypes.K_LET;}
+"for" / {S} ("$"|"tumbling"|"sliding")    {return XQueryTypes.K_FOR;}
+"let" / {S} "$"                           {return XQueryTypes.K_LET;}
 "some" / {S} "$"                          {return XQueryTypes.K_SOME;}
 "every" / {S} "$"                         {return XQueryTypes.K_EVERY;}
 "in"                                      {return XQueryTypes.K_IN;}
@@ -212,51 +211,51 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "as"                                      {return XQueryTypes.K_AS;}
 "to"                                      {return XQueryTypes.K_TO;}
 "where"                                   {return XQueryTypes.K_WHERE;}
-"group"                                   {return XQueryTypes.K_GROUP;}
+"group" / {S} "by"                        {return XQueryTypes.K_GROUP;}
 "by"                                      {return XQueryTypes.K_BY;}
-"instance"                                {return XQueryTypes.K_INSTANCE;}
+"instance" / {S} "of"                     {return XQueryTypes.K_INSTANCE;}
 "of"                                      {return XQueryTypes.K_OF;}
 "satisfies"                               {return XQueryTypes.K_SATISFIES;}
-"child"                                   {return XQueryTypes.K_CHILD;}
-"descendant"                              {return XQueryTypes.K_DESCENDANT;}
-"self"                                    {return XQueryTypes.K_SELF;}
-"descendant-or-self"                      {return XQueryTypes.K_DESCENDANT_OR_SELF;}
-"following-sibling"                       {return XQueryTypes.K_FOLLOWING_SIBLING;}
-"following"                               {return XQueryTypes.K_FOLLOWING;}
-"parent"                                  {return XQueryTypes.K_PARENT;}
-"ancestor"                                {return XQueryTypes.K_ANCESTOR;}
-"preceding-sibling"                       {return XQueryTypes.K_PRECEDING_SIBLING;}
-"preceding"                               {return XQueryTypes.K_PRECEDING;}
-"ancestor-or-self"                        {return XQueryTypes.K_ANCESTOR_OR_SELF;}
-"tumbling"                                {return XQueryTypes.K_TUMBLING;}
-"sliding"                                 {return XQueryTypes.K_SLIDING;}
-"window"                                  {return XQueryTypes.K_WINDOW;}
-"start"                                   {return XQueryTypes.K_START;}
+"child" / {S}? "::"                       {return XQueryTypes.K_CHILD;}
+"descendant" / {S}? "::"                  {return XQueryTypes.K_DESCENDANT;}
+"self" / {S}? "::"                        {return XQueryTypes.K_SELF;}
+"descendant-or-self" / {S}? "::"          {return XQueryTypes.K_DESCENDANT_OR_SELF;}
+"following-sibling" / {S}? "::"           {return XQueryTypes.K_FOLLOWING_SIBLING;}
+"following" / {S}? "::"                   {return XQueryTypes.K_FOLLOWING;}
+"parent" / {S}? "::"                      {return XQueryTypes.K_PARENT;}
+"ancestor" / {S}? "::"                    {return XQueryTypes.K_ANCESTOR;}
+"preceding-sibling" / {S}? "::"           {return XQueryTypes.K_PRECEDING_SIBLING;}
+"preceding" / {S}? "::"                   {return XQueryTypes.K_PRECEDING;}
+"ancestor-or-self" / {S}? "::"            {return XQueryTypes.K_ANCESTOR_OR_SELF;}
+"tumbling" / {S} "window"                 {return XQueryTypes.K_TUMBLING;}
+"sliding" / {S} "window"                  {return XQueryTypes.K_SLIDING;}
+"window" / {S} "$"                        {return XQueryTypes.K_WINDOW;}
+"start" / {S} ("$"|"when"|"at"|"previous"|"next") {return XQueryTypes.K_START;}
 "when"                                    {return XQueryTypes.K_WHEN;}
-"only"                                    {return XQueryTypes.K_ONLY;}
-"end"                                     {return XQueryTypes.K_END;}
+"only" / {S} "end"                        {return XQueryTypes.K_ONLY;}
+"end" / {S} ("$"|"when"|"at"|"previous"|"next") {return XQueryTypes.K_END;}
 "when"                                    {return XQueryTypes.K_WHEN;}
-"previous"                                {return XQueryTypes.K_PREVIOUS;}
-"next"                                    {return XQueryTypes.K_NEXT;}
+"previous" / {S} "$"                      {return XQueryTypes.K_PREVIOUS;}
+"next" / {S} "$"                          {return XQueryTypes.K_NEXT;}
 "count" / {S} "$"                         {return XQueryTypes.K_COUNT;}
-"try"                                     {return XQueryTypes.K_TRY;}
-"catch"                                   {return XQueryTypes.K_CATCH;}
+"try" / {S} "{"                           {return XQueryTypes.K_TRY;}
+"catch" / {S} ("Q{"|"*"|{NCName})         {return XQueryTypes.K_CATCH;}
 "div"                                     {return XQueryTypes.K_DIV;}
 "idiv"                                    {return XQueryTypes.K_IDIV;}
 "mod"                                     {return XQueryTypes.K_MOD;}
 "union"                                   {return XQueryTypes.K_UNION;}
 "intersect"                               {return XQueryTypes.K_INTERSECT;}
 "except"                                  {return XQueryTypes.K_EXCEPT;}
-"treat"                                   {return XQueryTypes.K_TREAT;}
-"castable"                                {return XQueryTypes.K_CASTABLE;}
-"cast"                                    {return XQueryTypes.K_CAST;}
+"treat" / {S} "as"                        {return XQueryTypes.K_TREAT;}
+"castable" / {S} "as"                     {return XQueryTypes.K_CASTABLE;}
+"cast" / {S} "as"                         {return XQueryTypes.K_CAST;}
 "is"                                      {return XQueryTypes.K_IS;}
-"type"                                    {return XQueryTypes.K_TYPE;}
-"lax"                                     {return XQueryTypes.K_LAX;}
-"strict"                                  {return XQueryTypes.K_STRICT;}
-"external"                                {return XQueryTypes.K_EXTERNAL;}
-"validate"                                {return XQueryTypes.K_VALIDATE;}
-"order" / {S} "by"                                    {return XQueryTypes.K_ORDER;}
+"type" / {S} ({NCName}|"Q{")              {return XQueryTypes.K_TYPE;}
+"lax" / {S}? "{"                          {return XQueryTypes.K_LAX;}
+"strict" / {S}? "{"                       {return XQueryTypes.K_STRICT;}
+"external" / {S}? (":="|";")              {return XQueryTypes.K_EXTERNAL;}
+"validate" / {S} ("lax"|"strict"|"type")  {return XQueryTypes.K_VALIDATE;}
+"order" / {S} "by"                        {return XQueryTypes.K_ORDER;}
 "map" / {S}? ("("|"{")                    {return XQueryTypes.K_MAP;}
 "attribute" / ({S}?"("|{S}?"{"|{S}{NCName})     {return XQueryTypes.K_ATTRIBUTE;}
 "comment" / {S}? ("("|"{")                {return XQueryTypes.K_COMMENT;}
@@ -351,10 +350,13 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 .                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
-<ALLOWING> {
+<XQUERY_RECOGNITION> {
 {S}                                       {return TokenType.WHITE_SPACE;}
-"empty"                                   {return XQueryTypes.K_EMPTY;}
-.                                         {yypushback(yylength()); popState();}
+"xquery" / {S} ("encoding"|"version")     {return XQueryTypes.K_XQUERY;}
+"version" / {S} ("\""|"'")                {return XQueryTypes.K_VERSION;}
+"encoding" / {S} ("\""|"'")               {return XQueryTypes.K_ENCODING;}
+{NCName}                                  {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
+.                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 .                                         {return TokenType.BAD_CHARACTER;}
