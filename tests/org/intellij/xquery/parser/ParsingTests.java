@@ -90,6 +90,18 @@ public class ParsingTests extends ParsingTestCase {
         doTest(true);
     }
 
+    public void testIncompleteTestOfKeywordsAsFunctionNames() {
+        doTest(true);
+    }
+
+    public void testNamespace() {
+        doTest(true);
+    }
+
+    public void testTypeswitch() {
+        doTest(true);
+    }
+
     @Override
     protected String getTestDataPath() {
         return "testData/org/intellij/xquery";
