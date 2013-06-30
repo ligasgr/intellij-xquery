@@ -78,7 +78,7 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
 
         if (referenceNamespace != null && referenceNamespace.equals(varDeclNamespace) && referenceLocalName.equals(varDeclLocalName)) {
             results.put(key, new PsiElementResolveResult(referenceTarget));
-        } else if (varDeclNamespace == null && varDeclLocalName.equals(referenceLocalName)) {
+        } else if (referenceNamespace == null && varDeclNamespace == null && varDeclLocalName.equals(referenceLocalName)) {
             results.put(key, new PsiElementResolveResult(referenceTarget));
         }
     }
