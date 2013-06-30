@@ -53,7 +53,7 @@ public class VariableReferenceTest extends LightCodeInsightFixtureTestCase {
 
     public void testReferenceOfGlobalVariable() {
         myFixture.configureByFiles("VariableReferenceInTheSameFile_Global.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent();
+        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
         PsiReference[] references = element.getReferences();
         PsiReference reference = references[0];
         PsiElement resolvedReference = reference.resolve();
@@ -64,7 +64,7 @@ public class VariableReferenceTest extends LightCodeInsightFixtureTestCase {
 
     public void testReferenceOfFunctionArgument() {
         myFixture.configureByFiles("VariableReferenceInTheSameFile_FunctionArgument.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent();
+        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
         PsiReference[] references = element.getReferences();
         PsiReference reference = references[0];
         PsiElement resolvedReference = reference.resolve();
@@ -74,7 +74,7 @@ public class VariableReferenceTest extends LightCodeInsightFixtureTestCase {
 
     public void testReferenceOfFlworExpressionReference() {
         myFixture.configureByFiles("VariableReferenceInTheSameFile_Flwor.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent();
+        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
         PsiReference[] references = element.getReferences();
         PsiReference reference = references[0];
         PsiElement resolvedReference = reference.resolve();

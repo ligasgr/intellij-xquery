@@ -21,20 +21,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryVarName extends XQueryNamedElement {
-
-  @Nullable
-  XQueryVarLocalName getVarLocalName();
-
-  @Nullable
-  XQueryVarNamespace getVarNamespace();
-
-  String getName();
-
-  PsiElement setName(String newName);
-
-  PsiElement getNameIdentifier();
-
-  int getTextOffset();
+public interface XQueryVarLocalName extends XQueryElement {
 
 }

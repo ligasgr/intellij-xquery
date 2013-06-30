@@ -20,11 +20,13 @@ package org.intellij.xquery.psi;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryFileType;
 import org.intellij.xquery.XQueryLanguage;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.util.Collection;
 
 /**
  * User: ligasgr
@@ -50,5 +52,10 @@ public class XQueryFile extends PsiFileBase {
     @Override
     public Icon getIcon(int flags) {
         return super.getIcon(flags);
+    }
+
+    public Collection<XQueryVarDecl> getVariableDeclarations() {
+        Collection<XQueryVarDecl> variableDeclarations = PsiTreeUtil.findChildrenOfType(this, XQueryVarDecl.class);
+        return variableDeclarations;
     }
 }

@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.reference;
+// This is a generated file. Not intended for manual editing.
+package org.intellij.xquery.psi;
 
-import com.intellij.lang.refactoring.RefactoringSupportProvider;
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import org.intellij.xquery.psi.XQueryVarDecl;
-import org.intellij.xquery.psi.XQueryVarName;
 
-/**
- * User: ligasgr
- * Date: 08/06/13
- * Time: 22:08
- */
-public class XQueryVarNameRefactoringSupportProvider extends RefactoringSupportProvider {
-    @Override
-    public boolean isMemberInplaceRenameAvailable(PsiElement element, PsiElement context) {
-        return element instanceof XQueryVarName;
-    }
+public interface XQueryVarNamespace extends XQueryElement {
+
 }

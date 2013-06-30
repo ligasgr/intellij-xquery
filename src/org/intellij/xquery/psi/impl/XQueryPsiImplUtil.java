@@ -16,12 +16,15 @@
 
 package org.intellij.xquery.psi.impl;
 
-import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import org.intellij.xquery.psi.XQueryElementFactory;
-import org.intellij.xquery.psi.XQueryTypes;
-import org.intellij.xquery.psi.XQueryVarName;
-import org.intellij.xquery.psi.XQueryVarRefName;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.util.PsiTreeUtil;
+import org.intellij.xquery.psi.*;
+import org.intellij.xquery.reference.XQueryVariableReference;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * User: ligasgr
@@ -30,16 +33,65 @@ import org.intellij.xquery.psi.XQueryVarRefName;
  */
 public class XQueryPsiImplUtil {
 
+    private static final int DOLLAR_CHAR_LENGTH = 1;
+    private static final int SEPARATOR_LENGTH = 1;
+
+    public static String getName(XQueryModuleDecl element) {
+        return element.getNameIdentifier().getText();
+    }
+
+    public static PsiElement setName(XQueryModuleDecl element, String newName) {
+        XQueryModuleDeclName name = element.getModuleDeclName();
+        if (name != null) {
+            name.replace(XQueryElementFactory.createModuleDeclarationName(element.getProject(), newName));
+        }
+        return element;
+    }
+
+    public static PsiElement getNameIdentifier(XQueryModuleDecl element) {
+        return PsiTreeUtil.findChildOfType(element, XQueryModuleDeclName.class);
+    }
+
+
+    public static PsiReference getReference(XQueryVarRef element) {
+        int localNameOffset = DOLLAR_CHAR_LENGTH;
+        if (element.getVarName().getVarNamespace() != null) {
+            localNameOffset += element.getVarName().getVarNamespace().getTextLength() + SEPARATOR_LENGTH;
+        }
+        return new XQueryVariableReference(element, new TextRange(localNameOffset, element.getTextLength()));
+    }
+
     public static String getName(XQueryVarName element) {
-        return element.getText();
+        if (element.getNameIdentifier() != null) {
+            return element.getNameIdentifier().getText();
+        } else {
+            return null;
+        }
     }
 
     public static PsiElement setName(XQueryVarName element, String newName) {
-        XQueryVarName newNameElement = XQueryElementFactory.createVariableDeclaration(element.getProject(), newName);
-        return element.replace(newNameElement);
+        XQueryVarName name = element;
+        if (name != null) {
+            XQueryVarLocalName localName = name.getVarLocalName();
+            if (localName != null) {
+                XQueryVarName newNameElement = XQueryElementFactory.createVariableReference(element.getProject(), newName);
+                localName.replace(newNameElement.getVarLocalName());
+            }
+        }
+        return element;
     }
 
     public static PsiElement getNameIdentifier(XQueryVarName element) {
-        return element;
+        if (element == null) return null;
+        return element.getVarLocalName();
+    }
+
+    public static int getTextOffset(XQueryVarName element) {
+        if (element == null || element.getVarLocalName() == null) return 0;
+        return getNameIdentifier(element).getTextOffset();
+    }
+
+    public static boolean processDeclarations(XQueryProlog module, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+        return processor.execute(module, state);
     }
 }

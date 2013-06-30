@@ -375,6 +375,9 @@ public class XQueryParser implements PsiParser {
     else if (root_ == MODULE_DECL) {
       result_ = ModuleDecl(builder_, level_ + 1);
     }
+    else if (root_ == MODULE_DECL_NAME) {
+      result_ = ModuleDeclName(builder_, level_ + 1);
+    }
     else if (root_ == MODULE_IMPORT) {
       result_ = ModuleImport(builder_, level_ + 1);
     }
@@ -630,14 +633,17 @@ public class XQueryParser implements PsiParser {
     else if (root_ == VAR_DEFAULT_VALUE) {
       result_ = VarDefaultValue(builder_, level_ + 1);
     }
+    else if (root_ == VAR_LOCAL_NAME) {
+      result_ = VarLocalName(builder_, level_ + 1);
+    }
     else if (root_ == VAR_NAME) {
       result_ = VarName(builder_, level_ + 1);
     }
+    else if (root_ == VAR_NAMESPACE) {
+      result_ = VarNamespace(builder_, level_ + 1);
+    }
     else if (root_ == VAR_REF) {
       result_ = VarRef(builder_, level_ + 1);
-    }
-    else if (root_ == VAR_REF_NAME) {
-      result_ = VarRefName(builder_, level_ + 1);
     }
     else if (root_ == VAR_VALUE) {
       result_ = VarValue(builder_, level_ + 1);
@@ -1532,7 +1538,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "case" ("$" VarRefName "as")? SequenceTypeUnion "return" ExprSingle
+  // "case" ("$" VarName "as")? SequenceTypeUnion "return" ExprSingle
   public static boolean CaseClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CaseClause")) return false;
     if (!nextTokenIs(builder_, K_CASE)) return false;
@@ -1556,20 +1562,20 @@ public class XQueryParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // ("$" VarRefName "as")?
+  // ("$" VarName "as")?
   private static boolean CaseClause_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CaseClause_1")) return false;
     CaseClause_1_0(builder_, level_ + 1);
     return true;
   }
 
-  // "$" VarRefName "as"
+  // "$" VarName "as"
   private static boolean CaseClause_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CaseClause_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, DOLLAR_SIGN);
-    result_ = result_ && VarRefName(builder_, level_ + 1);
+    result_ = result_ && VarName(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, K_AS);
     if (!result_) {
       marker_.rollbackTo();
@@ -4386,14 +4392,14 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "$" VarRefName
+  // "$" VarName
   public static boolean GroupingVariable(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "GroupingVariable")) return false;
     if (!nextTokenIs(builder_, DOLLAR_SIGN)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, DOLLAR_SIGN);
-    result_ = result_ && VarRefName(builder_, level_ + 1);
+    result_ = result_ && VarName(builder_, level_ + 1);
     if (result_) {
       marker_.done(GROUPING_VARIABLE);
     }
@@ -5111,7 +5117,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "module" "namespace" NCName "=" URILiteral Separator
+  // "module" "namespace" ModuleDeclName "=" URILiteral Separator
   public static boolean ModuleDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleDecl")) return false;
     boolean result_ = false;
@@ -5121,7 +5127,7 @@ public class XQueryParser implements PsiParser {
     result_ = consumeToken(builder_, K_MODULE);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, consumeToken(builder_, K_NAMESPACE));
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, NCNAME)) && result_;
+    result_ = pinned_ && report_error_(builder_, ModuleDeclName(builder_, level_ + 1)) && result_;
     result_ = pinned_ && report_error_(builder_, consumeToken(builder_, EQUAL)) && result_;
     result_ = pinned_ && report_error_(builder_, URILiteral(builder_, level_ + 1)) && result_;
     result_ = pinned_ && Separator(builder_, level_ + 1) && result_;
@@ -5133,6 +5139,23 @@ public class XQueryParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_RECOVER_, ModuleDeclRecover_parser_);
     return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // NCName
+  public static boolean ModuleDeclName(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ModuleDeclName")) return false;
+    if (!nextTokenIs(builder_, NCNAME)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, NCNAME);
+    if (result_) {
+      marker_.done(MODULE_DECL_NAME);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
   }
 
   /* ********************************************************** */
@@ -8188,7 +8211,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "typeswitch" "(" Expr ")" CaseClause+ "default" ("$" VarRefName)? "return" ExprSingle
+  // "typeswitch" "(" Expr ")" CaseClause+ "default" ("$" VarName)? "return" ExprSingle
   public static boolean TypeswitchExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeswitchExpr")) return false;
     if (!nextTokenIs(builder_, K_TYPESWITCH)) return false;
@@ -8241,20 +8264,20 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ("$" VarRefName)?
+  // ("$" VarName)?
   private static boolean TypeswitchExpr_6(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeswitchExpr_6")) return false;
     TypeswitchExpr_6_0(builder_, level_ + 1);
     return true;
   }
 
-  // "$" VarRefName
+  // "$" VarName
   private static boolean TypeswitchExpr_6_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeswitchExpr_6_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, DOLLAR_SIGN);
-    result_ = result_ && VarRefName(builder_, level_ + 1);
+    result_ = result_ && VarName(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -8722,7 +8745,24 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // EQName
+  // NCName
+  public static boolean VarLocalName(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarLocalName")) return false;
+    if (!nextTokenIs(builder_, NCNAME)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, NCNAME);
+    if (result_) {
+      marker_.done(VAR_LOCAL_NAME);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // VarNamespace ':' VarLocalName | VarLocalName | URIQualifiedName
   public static boolean VarName(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarName")) return false;
     if (!nextTokenIs(builder_, NCNAME) && !nextTokenIs(builder_, URIQUALIFIEDNAME)
@@ -8730,7 +8770,9 @@ public class XQueryParser implements PsiParser {
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<var name>");
-    result_ = EQName(builder_, level_ + 1);
+    result_ = VarName_0(builder_, level_ + 1);
+    if (!result_) result_ = VarLocalName(builder_, level_ + 1);
+    if (!result_) result_ = consumeToken(builder_, URIQUALIFIEDNAME);
     if (result_) {
       marker_.done(VAR_NAME);
     }
@@ -8741,17 +8783,33 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  /* ********************************************************** */
-  // "$" VarRefName
-  public static boolean VarRef(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "VarRef")) return false;
-    if (!nextTokenIs(builder_, DOLLAR_SIGN)) return false;
+  // VarNamespace ':' VarLocalName
+  private static boolean VarName_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarName_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, DOLLAR_SIGN);
-    result_ = result_ && VarRefName(builder_, level_ + 1);
+    result_ = VarNamespace(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, COLON);
+    result_ = result_ && VarLocalName(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // NCName
+  public static boolean VarNamespace(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarNamespace")) return false;
+    if (!nextTokenIs(builder_, NCNAME)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, NCNAME);
     if (result_) {
-      marker_.done(VAR_REF);
+      marker_.done(VAR_NAMESPACE);
     }
     else {
       marker_.rollbackTo();
@@ -8760,22 +8818,20 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // EQName
-  public static boolean VarRefName(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "VarRefName")) return false;
-    if (!nextTokenIs(builder_, NCNAME) && !nextTokenIs(builder_, URIQUALIFIEDNAME)
-        && replaceVariants(builder_, 2, "<var ref name>")) return false;
+  // "$" VarName
+  public static boolean VarRef(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarRef")) return false;
+    if (!nextTokenIs(builder_, DOLLAR_SIGN)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<var ref name>");
-    result_ = EQName(builder_, level_ + 1);
+    result_ = consumeToken(builder_, DOLLAR_SIGN);
+    result_ = result_ && VarName(builder_, level_ + 1);
     if (result_) {
-      marker_.done(VAR_REF_NAME);
+      marker_.done(VAR_REF);
     }
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 

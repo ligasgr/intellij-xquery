@@ -136,6 +136,7 @@ public interface XQueryTypes {
   IElementType MAP_TEST = new XQueryElementType("MAP_TEST");
   IElementType MODULE = new XQueryElementType("MODULE");
   IElementType MODULE_DECL = new XQueryElementType("MODULE_DECL");
+  IElementType MODULE_DECL_NAME = new XQueryElementType("MODULE_DECL_NAME");
   IElementType MODULE_IMPORT = new XQueryElementType("MODULE_IMPORT");
   IElementType MULTIPLICATIVE_EXPR = new XQueryElementType("MULTIPLICATIVE_EXPR");
   IElementType NAMED_FUNCTION_REF = new XQueryElementType("NAMED_FUNCTION_REF");
@@ -221,9 +222,10 @@ public interface XQueryTypes {
   IElementType VALUE_EXPR = new XQueryElementType("VALUE_EXPR");
   IElementType VAR_DECL = new XQueryElementType("VAR_DECL");
   IElementType VAR_DEFAULT_VALUE = new XQueryElementType("VAR_DEFAULT_VALUE");
+  IElementType VAR_LOCAL_NAME = new XQueryElementType("VAR_LOCAL_NAME");
   IElementType VAR_NAME = new XQueryElementType("VAR_NAME");
+  IElementType VAR_NAMESPACE = new XQueryElementType("VAR_NAMESPACE");
   IElementType VAR_REF = new XQueryElementType("VAR_REF");
-  IElementType VAR_REF_NAME = new XQueryElementType("VAR_REF_NAME");
   IElementType VAR_VALUE = new XQueryElementType("VAR_VALUE");
   IElementType VERSION_DECL = new XQueryElementType("VERSION_DECL");
   IElementType VERSION_DECL_ENCODING = new XQueryElementType("VERSION_DECL_ENCODING");
@@ -759,6 +761,9 @@ public interface XQueryTypes {
       else if (type == MODULE_DECL) {
         return new XQueryModuleDeclImpl(node);
       }
+      else if (type == MODULE_DECL_NAME) {
+        return new XQueryModuleDeclNameImpl(node);
+      }
       else if (type == MODULE_IMPORT) {
         return new XQueryModuleImportImpl(node);
       }
@@ -1014,14 +1019,17 @@ public interface XQueryTypes {
       else if (type == VAR_DEFAULT_VALUE) {
         return new XQueryVarDefaultValueImpl(node);
       }
+      else if (type == VAR_LOCAL_NAME) {
+        return new XQueryVarLocalNameImpl(node);
+      }
       else if (type == VAR_NAME) {
         return new XQueryVarNameImpl(node);
       }
+      else if (type == VAR_NAMESPACE) {
+        return new XQueryVarNamespaceImpl(node);
+      }
       else if (type == VAR_REF) {
         return new XQueryVarRefImpl(node);
-      }
-      else if (type == VAR_REF_NAME) {
-        return new XQueryVarRefNameImpl(node);
       }
       else if (type == VAR_VALUE) {
         return new XQueryVarValueImpl(node);

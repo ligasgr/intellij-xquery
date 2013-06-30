@@ -29,21 +29,8 @@ import org.jetbrains.annotations.Nullable;
  * Date: 08/06/13
  * Time: 21:31
  */
-public abstract class XQueryNamedElementImpl extends ASTWrapperPsiElement implements XQueryNamedElement {
+public abstract class XQueryNamedElementImpl extends XQueryElementImpl implements XQueryNamedElement {
     public XQueryNamedElementImpl(@NotNull ASTNode node) {
         super(node);
-    }
-
-    @Nullable
-    public PsiReference getReference() {
-        PsiReference[] references = getReferences();
-        return references.length == 0 ? null : references[0];
-    }
-
-
-    @NotNull
-
-    public PsiReference[] getReferences() {
-        return ReferenceProvidersRegistry.getReferencesFromProviders(this);
     }
 }

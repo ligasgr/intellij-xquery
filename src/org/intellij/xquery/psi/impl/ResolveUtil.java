@@ -16,31 +16,27 @@
 
 package org.intellij.xquery.psi.impl;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import org.intellij.xquery.psi.XQueryElement;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.util.PsiTreeUtil;
 
 /**
  * User: ligasgr
- * Date: 11/06/13
- * Time: 00:04
+ * Date: 30/06/13
+ * Time: 22:09
  */
-public class XQueryElementImpl extends ASTWrapperPsiElement implements XQueryElement {
-
-    public XQueryElementImpl(@NotNull ASTNode node) {
-        super(node);
-    }
-
-    @Override
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-        if (!processor.execute(this, state)) {
-            return false;
-        } else {
-            return ResolveUtil.processChildren(this, processor, state, lastParent, place);
+public class ResolveUtil {
+    public static boolean processChildren(PsiElement element, PsiScopeProcessor processor,
+                                          ResolveState substitutor, PsiElement lastParent, PsiElement place) {
+        PsiElement run = lastParent == null ? element.getLastChild() : lastParent.getPrevSibling();
+        while (run != null) {
+            if (PsiTreeUtil.findCommonParent(place, run) != run && !run.processDeclarations(processor, substitutor, null, place)) {
+                return false;
+            }
+            run = run.getPrevSibling();
         }
+
+        return true;
     }
 }

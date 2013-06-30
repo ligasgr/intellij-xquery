@@ -199,6 +199,8 @@
   ]
 
   extends(".+Expr")=ExprSingle
+  implements("ModuleDecl|VarName")="org.intellij.xquery.psi.XQueryNamedElement"
+  extends("ModuleDecl|VarName")="org.intellij.xquery.psi.impl.XQueryNamedElementImpl"
 }
 
 xqueryFile ::= Module {pin(".*")=1}
@@ -210,9 +212,10 @@ VersionDeclEncoding ::= "encoding" StringLiteral {pin=1}
 VersionDeclVersion ::= "version" StringLiteral ("encoding" StringLiteral)? {pin=1}
 MainModule	   ::=   	Prolog QueryBody {pin=1}
 LibraryModule	   ::=   	ModuleDecl Prolog {pin=1}
-ModuleDecl	   ::=   	"module" "namespace" NCName "=" URILiteral Separator {pin=1 recoverUntil=ModuleDeclRecover}
+ModuleDecl	   ::=   	"module" "namespace" ModuleDeclName "=" URILiteral Separator {pin=1 recoverUntil=ModuleDeclRecover methods=[getName setName getNameIdentifier]}
+ModuleDeclName ::= NCName
 private ModuleDeclRecover ::= !('declare' | 'import')
-Prolog	   ::=   	FirstDecl* SecondDecl* //{recoverUntil=PrologRecover}
+Prolog	   ::=   	FirstDecl* SecondDecl* {methods=[processDeclarations]} //{recoverUntil=PrologRecover}
 private PrologRecover ::= !('$' | '%' | '(#' | '(' | '*' | '+' | '-' | '.' | '..' | '/' | '//' | '<!--' | '<' | '<?' | '@' | 'ancestor' | 'ancestor-or-self' | 'attribute' | 'child' | 'comment' | 'descendant' | 'descendant-or-self' | 'document' | 'document-node' | 'element' | 'every' | 'following' | 'following-sibling' | 'for' | 'function' | 'if' | 'let' | 'map' | 'namespace' | 'namespace-node' | 'node' | 'ordered' | 'parent' | 'preceding' | 'preceding-sibling' | 'processing-instruction' | 'schema-attribute' | 'schema-element' | 'self' | 'some' | 'switch' | 'text' | 'try' | 'typeswitch' | 'unordered' | 'validate' | -eof- | BracedURILiteral | DecimalLiteral | DoubleLiteral | IntegerLiteral | NCName | StringLiteral | URIQualifiedName)
 private FirstDecl ::= DefaultNamespaceDecl | Setter | NamespaceDecl | Import
 private SecondDecl ::= ContextItemDecl | OptionDecl | AnnotatedDecl
@@ -239,7 +242,6 @@ private AnnotatedDecl	   ::=   (VarDecl | FunctionDecl) Separator {pin=1}
 Annotation	   ::=   	"%" AnnotationName ("(" Literal ("," Literal)* ")")?
 AnnotationName   ::= EQName
 VarDecl	   ::=   	"declare" Annotation* "variable" "$" VarName TypeDeclaration? ((":=" VarValue) | ("external" (":=" VarDefaultValue)?)) {pin=3}
-VarName    ::=      EQName {mixin="org.intellij.xquery.psi.impl.XQueryNamedElementImpl" implements="org.intellij.xquery.psi.XQueryNamedElement" methods=[getName setName getNameIdentifier]}
 VarValue	   ::=   	ExprSingle
 VarDefaultValue	   ::=   	ExprSingle
 ContextItemDecl	   ::=   	"declare" "context" "item" ("as" ItemType)? ((":=" VarValue) | ("external" (":=" VarDefaultValue)?)) Separator {pin=2}
@@ -285,7 +287,7 @@ WhereClause	   ::=   	"where" ExprSingle {pin=1 recoverUntil=FLWORExprRecover}
 GroupByClause	   ::=   	"group" "by" GroupingSpecList {pin=2 recoverUntil=FLWORExprRecover}
 GroupingSpecList	   ::=   	GroupingSpec ("," GroupingSpec)*
 GroupingSpec	   ::=   	GroupingVariable (TypeDeclaration? ":=" ExprSingle)? ("collation" URILiteral)?
-GroupingVariable	   ::=   	"$" VarRefName
+GroupingVariable	   ::=   	"$" VarName
 OrderByClause	   ::=   	(("order" "by") | ("stable" "order" "by")) OrderSpecList {pin=1 recoverUntil=FLWORExprRecover}
 OrderSpecList	   ::=   	OrderSpec ("," OrderSpec)*
 OrderSpec	   ::=   	ExprSingle OrderModifier
@@ -295,8 +297,8 @@ QuantifiedExpr	   ::=   	("some" | "every") "$" VarName TypeDeclaration? "in" Ex
 SwitchExpr	   ::=   	"switch" "(" Expr ")" SwitchCaseClause+ "default" "return" ExprSingle {pin=1}
 SwitchCaseClause	   ::=   	("case" SwitchCaseOperand)+ "return" ExprSingle
 SwitchCaseOperand	   ::=   	ExprSingle
-TypeswitchExpr	   ::=   	"typeswitch" "(" Expr ")" CaseClause+ "default" ("$" VarRefName)? "return" ExprSingle {pin=1}
-CaseClause	   ::=   	"case" ("$" VarRefName "as")? SequenceTypeUnion "return" ExprSingle {pin=1}
+TypeswitchExpr	   ::=   	"typeswitch" "(" Expr ")" CaseClause+ "default" ("$" VarName)? "return" ExprSingle {pin=1}
+CaseClause	   ::=   	"case" ("$" VarName "as")? SequenceTypeUnion "return" ExprSingle {pin=1}
 SequenceTypeUnion	   ::=   	SequenceType ("|" SequenceType)*
 IfExpr	   ::=   	"if" "(" Expr ")" "then" ExprSingle "else" ExprSingle {pin=1}
 TryCatchExpr	   ::=   	TryClause CatchClause+
@@ -377,8 +379,7 @@ PrimaryExpr	   ::=   	Literal
  | FunctionItemExpr {pin=1}
 Literal	   ::=   	NumericLiteral | StringLiteral
 NumericLiteral	   ::=   	IntegerLiteral | DecimalLiteral | DoubleLiteral
-VarRef	   ::=   	"$" VarRefName
-VarRefName	   ::=   	EQName
+VarRef	   ::=   	"$" VarName {methods=[getReference]}
 ParenthesizedExpr	   ::=   	"(" Expr? ")"
 ContextItemExpr	   ::=   	"."
 OrderedExpr	   ::=   	"ordered" "{" Expr "}"
@@ -493,4 +494,7 @@ private PrefixedName	   ::=   	Prefix ':' LocalPart
 private UnprefixedName	   ::=   	LocalPart
 Prefix	   ::=   	NCName
 LocalPart	   ::=   	NCName
+VarName ::= VarNamespace ':' VarLocalName | VarLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset]}
+VarNamespace	   ::=   	NCName
+VarLocalName	   ::=   	NCName
 //URIQualifiedName ::= "Q" "{" NCName "}"
