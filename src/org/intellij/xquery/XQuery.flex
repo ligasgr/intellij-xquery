@@ -161,8 +161,8 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "greatest" / {S} ("for"|"let"|"order"|"stable"|"group"|"count"|"return") {return XQueryTypes.K_GREATEST;}
 "least"/ {S}? (";"|",")                   {return XQueryTypes.K_LEAST;}
 "least" / {S} ("for"|"let"|"order"|"stable"|"group"|"count"|"return") {return XQueryTypes.K_LEAST;}
-"ascending" / {S} ("empty"|"collation")   {return XQueryTypes.K_ASCENDING;}
-"descending" / {S} ("empty"|"collation")  {return XQueryTypes.K_DESCENDING;}
+"ascending" / {S} ("empty"|"collation"|"for"|"let"|"order"|"stable"|"group"|"count"|"return")   {return XQueryTypes.K_ASCENDING;}
+"descending" / {S} ("empty"|"collation"|"for"|"let"|"order"|"stable"|"group"|"count"|"return")  {return XQueryTypes.K_DESCENDING;}
 "inherit" / {S}? ";"                      {return XQueryTypes.K_INHERIT;}
 "no-inherit" / {S}? ";"                   {return XQueryTypes.K_NO_INHERIT;}
 "import"                                  {yypushback(yylength()); pushState(IMPORT_RECOGNITION); return TokenType.WHITE_SPACE;}
