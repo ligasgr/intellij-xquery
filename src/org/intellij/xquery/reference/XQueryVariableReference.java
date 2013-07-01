@@ -47,7 +47,6 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         XQueryFile file = (XQueryFile) myElement.getContainingFile();
         if (myElement.getVarName() != null) {
-
             VariableReferenceScopeProcessor processor = new VariableReferenceScopeProcessor();
             PsiTreeUtil.treeWalkUp(processor, myElement, null, ResolveState.initial());
             Map<String, ResolveResult> results = processor.getResults();
@@ -60,14 +59,22 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
     private ResolveResult[] getVariableDeclarationReferences(XQueryFile file, Map<String, ResolveResult> results) {
 
         for (XQueryVarDecl varDecl : file.getVariableDeclarations()) {
-            if (varDecl.getVarName() != null) {
-                String key = varDecl.getVarName().getText();
-                if (!results.containsKey(key)) {
-                    addElementToResultsIfMatching(results, varDecl.getVarName(), varDecl.getVarName(), key);
-                }
+            if (variableNameExists(varDecl)) {
+                addReferenceIfNotAlreadyAdded(results, varDecl);
             }
         }
         return results.values().toArray(new ResolveResult[results.size()]);
+    }
+
+    private boolean variableNameExists(XQueryVarDecl varDecl) {
+        return varDecl.getVarName() != null && varDecl.getVarName().getTextLength() > 0;
+    }
+
+    private void addReferenceIfNotAlreadyAdded(Map<String, ResolveResult> results, XQueryVarDecl varDecl) {
+        String key = varDecl.getVarName().getText();
+        if (!results.containsKey(key)) {
+            addElementToResultsIfMatching(results, varDecl.getVarName(), varDecl.getVarName(), key);
+        }
     }
 
     private void addElementToResultsIfMatching(Map<String, ResolveResult> results, PsiElement referenceTarget, XQueryVarName comparedVarName, String key) {
@@ -75,10 +82,12 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
         final String referenceNamespace = myElement.getVarName().getVarNamespace() != null ? myElement.getVarName().getVarNamespace().getText() : null;
         final String varDeclLocalName = comparedVarName.getVarLocalName().getText();
         final String referenceLocalName = myElement.getVarName().getVarLocalName().getText();
+        boolean namespacesAndLocalNamesMatch = referenceNamespace != null && referenceNamespace.equals(varDeclNamespace) && referenceLocalName.equals(varDeclLocalName);
+        boolean namespacesAreEmptyAndLocalNamesMatch = referenceNamespace == null && varDeclNamespace == null && varDeclLocalName.equals(referenceLocalName);
 
-        if (referenceNamespace != null && referenceNamespace.equals(varDeclNamespace) && referenceLocalName.equals(varDeclLocalName)) {
+        if (namespacesAndLocalNamesMatch) {
             results.put(key, new PsiElementResolveResult(referenceTarget));
-        } else if (referenceNamespace == null && varDeclNamespace == null && varDeclLocalName.equals(referenceLocalName)) {
+        } else if (namespacesAreEmptyAndLocalNamesMatch) {
             results.put(key, new PsiElementResolveResult(referenceTarget));
         }
     }
@@ -104,18 +113,22 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
 
     private Object[] getVariantsFromVariableDeclarations(XQueryFile file, Map<String, LookupElement> variants) {
         for (final XQueryVarDecl varDecl : file.getVariableDeclarations()) {
-            if (varDecl.getVarName() != null && varDecl.getVarName().getText().length() > 0) {
-                String key = varDecl.getVarName().getText();
-                if (!variants.containsKey(key)) {
-                    variants.put(key, LookupElementBuilder.create(varDecl.getVarName(), key).
-                            withIcon(XQueryIcons.FILE).
-                            withTypeText(varDecl.getContainingFile().getName())
-
-                    );
-                }
+            if (variableNameExists(varDecl)) {
+                addVariantIfNotAlreadyAdded(variants, varDecl);
             }
         }
         return variants.values().toArray();
+    }
+
+    private void addVariantIfNotAlreadyAdded(Map<String, LookupElement> variants, XQueryVarDecl varDecl) {
+        String key = varDecl.getVarName().getText();
+        if (!variants.containsKey(key)) {
+            variants.put(key, LookupElementBuilder.create(varDecl.getVarName(), key).
+                    withIcon(XQueryIcons.FILE).
+                    withTypeText(varDecl.getContainingFile().getName())
+
+            );
+        }
     }
 
     @Override
@@ -142,15 +155,23 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
 
         @Override
         public boolean execute(@NotNull PsiElement psiElement, ResolveState resolveState) {
-            if (!psiElement.equals(myElement) && psiElement instanceof XQueryVarName) {
-                String key = psiElement.getText();
-                if (isNotVariableReference(psiElement) && !myResult.containsKey(key)) {
-                    myResult.put(key, LookupElementBuilder.create(key).
-                            withIcon(XQueryIcons.FILE).
-                            withTypeText(psiElement.getContainingFile().getName()));
-                }
+            boolean elementIsAGoodCandidate = !psiElement.equals(myElement)
+                    && psiElement instanceof XQueryVarName
+                    && isNotVariableReference(psiElement);
+
+            if (elementIsAGoodCandidate) {
+                addElementIfNotAlreadyAdded(psiElement);
             }
             return true;
+        }
+
+        private void addElementIfNotAlreadyAdded(PsiElement psiElement) {
+            String key = psiElement.getText();
+            if (!myResult.containsKey(key)) {
+                myResult.put(key, LookupElementBuilder.create(key).
+                        withIcon(XQueryIcons.FILE).
+                        withTypeText(psiElement.getContainingFile().getName()));
+            }
         }
     }
 
@@ -163,13 +184,18 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
 
         @Override
         public boolean execute(@NotNull PsiElement element, ResolveState state) {
-            if (!element.equals(myElement) && element instanceof XQueryVarName) {
-                String key = element.getText();
-                if (isNotVariableReference(element) && !results.containsKey(key)) {
-                    addElementToResultsIfMatching(results, element, (XQueryVarName) element, key);
-                }
+            boolean elementIsGoodCandidate = !element.equals(myElement) && element instanceof XQueryVarName && isNotVariableReference(element);
+            if (elementIsGoodCandidate) {
+                addElementIfNotAlreadyAdded(element);
             }
             return true;
+        }
+
+        private void addElementIfNotAlreadyAdded(PsiElement element) {
+            String key = element.getText();
+            if (!results.containsKey(key)) {
+                addElementToResultsIfMatching(results, element, (XQueryVarName) element, key);
+            }
         }
     }
 }
