@@ -34,8 +34,8 @@ public class XQueryModuleDeclImpl extends XQueryNamedElementImpl implements XQue
 
   @Override
   @Nullable
-  public XQueryModuleDeclName getModuleDeclName() {
-    return findChildByClass(XQueryModuleDeclName.class);
+  public XQueryNamespaceName getNamespaceName() {
+    return findChildByClass(XQueryNamespaceName.class);
   }
 
   @Override

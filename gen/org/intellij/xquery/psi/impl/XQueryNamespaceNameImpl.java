@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryModuleDeclNameImpl extends XQueryElementImpl implements XQueryModuleDeclName {
+public class XQueryNamespaceNameImpl extends XQueryElementImpl implements XQueryNamespaceName {
 
-  public XQueryModuleDeclNameImpl(ASTNode node) {
+  public XQueryNamespaceNameImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitModuleDeclName(this);
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitNamespaceName(this);
     else super.accept(visitor);
   }
 

@@ -27,6 +27,9 @@ public interface XQueryModuleImport extends XQueryElement {
   List<XQueryModuleImportPath> getModuleImportPathList();
 
   @Nullable
+  XQueryNamespaceName getNamespaceName();
+
+  @Nullable
   XQuerySeparator getSeparator();
 
   @Nullable

@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery;
+// This is a generated file. Not intended for manual editing.
+package org.intellij.xquery.psi;
 
-import com.intellij.lang.refactoring.NamesValidator;
-import com.intellij.openapi.project.Project;
+import java.util.List;
+import org.jetbrains.annotations.*;
+import com.intellij.psi.PsiElement;
 
-/**
- * User: ligasgr
- * Date: 12/06/13
- * Time: 17:30
- */
-public class XQueryNamesValidator implements NamesValidator {
-    @Override
-    public boolean isKeyword(String name, Project project) {
-        return false;
-    }
+public interface XQueryNamespaceName extends XQueryElement {
 
-    @Override
-    public boolean isIdentifier(String name, Project project) {
-        return true;
-    }
 }

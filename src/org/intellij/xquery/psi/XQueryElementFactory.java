@@ -37,9 +37,9 @@ public class XQueryElementFactory {
         return PsiTreeUtil.findChildOfType(file, XQueryVarName.class);
     }
 
-    public static XQueryModuleDeclName createModuleDeclarationName(Project project, String name) {
+    public static XQueryNamespaceName createModuleDeclarationName(Project project, String name) {
         final XQueryFile file = createFile(project, "module namespace " + name + " = 'dummy';");
-        return PsiTreeUtil.findChildOfType(file, XQueryModuleDeclName.class);
+        return PsiTreeUtil.findChildOfType(file, XQueryNamespaceName.class);
     }
 
     public static XQueryFile createFile(Project project, String text) {

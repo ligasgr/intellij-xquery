@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface XQueryModuleDecl extends XQueryNamedElement {
 
   @Nullable
-  XQueryModuleDeclName getModuleDeclName();
+  XQueryNamespaceName getNamespaceName();
 
   @Nullable
   XQuerySeparator getSeparator();

@@ -375,9 +375,6 @@ public class XQueryParser implements PsiParser {
     else if (root_ == MODULE_DECL) {
       result_ = ModuleDecl(builder_, level_ + 1);
     }
-    else if (root_ == MODULE_DECL_NAME) {
-      result_ = ModuleDeclName(builder_, level_ + 1);
-    }
     else if (root_ == MODULE_IMPORT) {
       result_ = ModuleImport(builder_, level_ + 1);
     }
@@ -395,6 +392,9 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == NAMESPACE_DECL) {
       result_ = NamespaceDecl(builder_, level_ + 1);
+    }
+    else if (root_ == NAMESPACE_NAME) {
+      result_ = NamespaceName(builder_, level_ + 1);
     }
     else if (root_ == NAMESPACE_NODE_TEST) {
       result_ = NamespaceNodeTest(builder_, level_ + 1);
@@ -5120,7 +5120,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "module" "namespace" ModuleDeclName "=" URILiteral Separator
+  // "module" "namespace" NamespaceName "=" URILiteral Separator
   public static boolean ModuleDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleDecl")) return false;
     boolean result_ = false;
@@ -5130,7 +5130,7 @@ public class XQueryParser implements PsiParser {
     result_ = consumeToken(builder_, K_MODULE);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, consumeToken(builder_, K_NAMESPACE));
-    result_ = pinned_ && report_error_(builder_, ModuleDeclName(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && report_error_(builder_, NamespaceName(builder_, level_ + 1)) && result_;
     result_ = pinned_ && report_error_(builder_, consumeToken(builder_, EQUAL)) && result_;
     result_ = pinned_ && report_error_(builder_, URILiteral(builder_, level_ + 1)) && result_;
     result_ = pinned_ && Separator(builder_, level_ + 1) && result_;
@@ -5142,23 +5142,6 @@ public class XQueryParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_RECOVER_, ModuleDeclRecover_parser_);
     return result_ || pinned_;
-  }
-
-  /* ********************************************************** */
-  // NCName
-  public static boolean ModuleDeclName(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ModuleDeclName")) return false;
-    if (!nextTokenIs(builder_, NCNAME)) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, NCNAME);
-    if (result_) {
-      marker_.done(MODULE_DECL_NAME);
-    }
-    else {
-      marker_.rollbackTo();
-    }
-    return result_;
   }
 
   /* ********************************************************** */
@@ -5191,7 +5174,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "import" "module" ("namespace" NCName "=")? URILiteral ("at" ModuleImportPath ("," ModuleImportPath)*)? Separator
+  // "import" "module" ("namespace" NamespaceName "=")? URILiteral ("at" ModuleImportPath ("," ModuleImportPath)*)? Separator
   public static boolean ModuleImport(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleImport")) return false;
     if (!nextTokenIs(builder_, K_IMPORT)) return false;
@@ -5216,20 +5199,20 @@ public class XQueryParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // ("namespace" NCName "=")?
+  // ("namespace" NamespaceName "=")?
   private static boolean ModuleImport_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleImport_2")) return false;
     ModuleImport_2_0(builder_, level_ + 1);
     return true;
   }
 
-  // "namespace" NCName "="
+  // "namespace" NamespaceName "="
   private static boolean ModuleImport_2_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleImport_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, K_NAMESPACE);
-    result_ = result_ && consumeToken(builder_, NCNAME);
+    result_ = result_ && NamespaceName(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, EQUAL);
     if (!result_) {
       marker_.rollbackTo();
@@ -5429,7 +5412,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "declare" "namespace" NCName "=" URILiteral Separator
+  // "declare" "namespace" NamespaceName "=" URILiteral Separator
   public static boolean NamespaceDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "NamespaceDecl")) return false;
     if (!nextTokenIs(builder_, K_DECLARE)) return false;
@@ -5440,7 +5423,7 @@ public class XQueryParser implements PsiParser {
     result_ = consumeToken(builder_, K_DECLARE);
     result_ = result_ && consumeToken(builder_, K_NAMESPACE);
     pinned_ = result_; // pin = 2
-    result_ = result_ && report_error_(builder_, consumeToken(builder_, NCNAME));
+    result_ = result_ && report_error_(builder_, NamespaceName(builder_, level_ + 1));
     result_ = pinned_ && report_error_(builder_, consumeToken(builder_, EQUAL)) && result_;
     result_ = pinned_ && report_error_(builder_, URILiteral(builder_, level_ + 1)) && result_;
     result_ = pinned_ && Separator(builder_, level_ + 1) && result_;
@@ -5452,6 +5435,23 @@ public class XQueryParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // NCName
+  public static boolean NamespaceName(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "NamespaceName")) return false;
+    if (!nextTokenIs(builder_, NCNAME)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, NCNAME);
+    if (result_) {
+      marker_.done(NAMESPACE_NAME);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
   }
 
   /* ********************************************************** */
@@ -7224,7 +7224,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "import" "schema" (("namespace" NCName "=") | ("default" "element" "namespace"))? URILiteral ("at" URILiteral ("," URILiteral)*)? Separator
+  // "import" "schema" (("namespace" NamespaceName "=") | ("default" "element" "namespace"))? URILiteral ("at" URILiteral ("," URILiteral)*)? Separator
   public static boolean SchemaImport(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SchemaImport")) return false;
     if (!nextTokenIs(builder_, K_IMPORT)) return false;
@@ -7249,14 +7249,14 @@ public class XQueryParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // (("namespace" NCName "=") | ("default" "element" "namespace"))?
+  // (("namespace" NamespaceName "=") | ("default" "element" "namespace"))?
   private static boolean SchemaImport_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SchemaImport_2")) return false;
     SchemaImport_2_0(builder_, level_ + 1);
     return true;
   }
 
-  // ("namespace" NCName "=") | ("default" "element" "namespace")
+  // ("namespace" NamespaceName "=") | ("default" "element" "namespace")
   private static boolean SchemaImport_2_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SchemaImport_2_0")) return false;
     boolean result_ = false;
@@ -7272,13 +7272,13 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // "namespace" NCName "="
+  // "namespace" NamespaceName "="
   private static boolean SchemaImport_2_0_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SchemaImport_2_0_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, K_NAMESPACE);
-    result_ = result_ && consumeToken(builder_, NCNAME);
+    result_ = result_ && NamespaceName(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, EQUAL);
     if (!result_) {
       marker_.rollbackTo();

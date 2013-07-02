@@ -135,4 +135,16 @@ public class VariableReferenceTest extends LightCodeInsightFixtureTestCase {
         XQueryLetBinding letBinding = (XQueryLetBinding) resolvedReference.getParent();
         assertEquals("\"argLocal\"", letBinding.getExprSingle().getText());
     }
+
+    public void testReferenceFromAnotherFile() {
+        myFixture.configureByFiles("VariableReferenceFromAnotherFile.xq","VariableReferencedFile.xq");
+        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
+        PsiReference[] references = element.getReferences();
+        PsiReference reference = references[0];
+        PsiElement resolvedReference = reference.resolve();
+        XQueryVarDecl varDecl = (XQueryVarDecl) resolvedReference.getParent();
+        XQueryVarValue varValue = varDecl.getVarValue();
+        assertEquals("\"yeah\"", varValue.getText());
+        assertEquals("VariableReferencedFile.xq", varDecl.getContainingFile().getName());
+    }
 }

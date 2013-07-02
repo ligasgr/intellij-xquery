@@ -58,4 +58,13 @@ public class XQueryFile extends PsiFileBase {
         Collection<XQueryVarDecl> variableDeclarations = PsiTreeUtil.findChildrenOfType(this, XQueryVarDecl.class);
         return variableDeclarations;
     }
+
+    public Collection<XQueryModuleImport> getModuleImports() {
+        Collection<XQueryModuleImport> moduleImports = PsiTreeUtil.findChildrenOfType(this, XQueryModuleImport.class);
+        return moduleImports;
+    }
+
+    public XQueryNamespaceName getModuleNamespaceName() {
+        return PsiTreeUtil.findChildOfType(this, XQueryModuleDecl.class).getNamespaceName();
+    }
 }

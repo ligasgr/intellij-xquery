@@ -43,7 +43,7 @@ public class XQueryPsiImplUtil {
     }
 
     public static PsiElement setName(XQueryModuleDecl element, String newName) {
-        XQueryModuleDeclName name = element.getModuleDeclName();
+        XQueryNamespaceName name = element.getNamespaceName();
         if (name != null) {
             name.replace(XQueryElementFactory.createModuleDeclarationName(element.getProject(), newName));
         }
@@ -51,7 +51,7 @@ public class XQueryPsiImplUtil {
     }
 
     public static PsiElement getNameIdentifier(XQueryModuleDecl element) {
-        return PsiTreeUtil.findChildOfType(element, XQueryModuleDeclName.class);
+        return PsiTreeUtil.findChildOfType(element, XQueryNamespaceName.class);
     }
 
 

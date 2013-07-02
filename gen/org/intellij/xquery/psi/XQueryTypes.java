@@ -136,12 +136,12 @@ public interface XQueryTypes {
   IElementType MAP_TEST = new XQueryElementType("MAP_TEST");
   IElementType MODULE = new XQueryElementType("MODULE");
   IElementType MODULE_DECL = new XQueryElementType("MODULE_DECL");
-  IElementType MODULE_DECL_NAME = new XQueryElementType("MODULE_DECL_NAME");
   IElementType MODULE_IMPORT = new XQueryElementType("MODULE_IMPORT");
   IElementType MODULE_IMPORT_PATH = new XQueryElementType("MODULE_IMPORT_PATH");
   IElementType MULTIPLICATIVE_EXPR = new XQueryElementType("MULTIPLICATIVE_EXPR");
   IElementType NAMED_FUNCTION_REF = new XQueryElementType("NAMED_FUNCTION_REF");
   IElementType NAMESPACE_DECL = new XQueryElementType("NAMESPACE_DECL");
+  IElementType NAMESPACE_NAME = new XQueryElementType("NAMESPACE_NAME");
   IElementType NAMESPACE_NODE_TEST = new XQueryElementType("NAMESPACE_NODE_TEST");
   IElementType NAME_TEST = new XQueryElementType("NAME_TEST");
   IElementType NEXT_ITEM = new XQueryElementType("NEXT_ITEM");
@@ -762,9 +762,6 @@ public interface XQueryTypes {
       else if (type == MODULE_DECL) {
         return new XQueryModuleDeclImpl(node);
       }
-      else if (type == MODULE_DECL_NAME) {
-        return new XQueryModuleDeclNameImpl(node);
-      }
       else if (type == MODULE_IMPORT) {
         return new XQueryModuleImportImpl(node);
       }
@@ -779,6 +776,9 @@ public interface XQueryTypes {
       }
       else if (type == NAMESPACE_DECL) {
         return new XQueryNamespaceDeclImpl(node);
+      }
+      else if (type == NAMESPACE_NAME) {
+        return new XQueryNamespaceNameImpl(node);
       }
       else if (type == NAMESPACE_NODE_TEST) {
         return new XQueryNamespaceNodeTestImpl(node);

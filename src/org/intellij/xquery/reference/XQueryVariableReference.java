@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,8 +39,11 @@ import java.util.Map;
  */
 public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> implements PsiPolyVariantReference {
 
+    private final String checkedNamespace;
+
     public XQueryVariableReference(@NotNull XQueryVarRef element, TextRange textRange) {
         super(element, textRange);
+        checkedNamespace = myElement.getVarName().getVarNamespace() != null ? myElement.getVarName().getVarNamespace().getText() : null;
     }
 
     @NotNull
@@ -49,37 +53,70 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
         if (myElement.getVarName() != null) {
             VariableReferenceScopeProcessor processor = new VariableReferenceScopeProcessor();
             PsiTreeUtil.treeWalkUp(processor, myElement, null, ResolveState.initial());
-            Map<String, ResolveResult> results = processor.getResults();
+            Map<String, ResolveResult> scopeProcessorResults = processor.getResults();
 
-            return getVariableDeclarationReferences(file, results);
+            Map<String, ResolveResult> variableDeclarationResults = getVariableDeclarationReferences(file, scopeProcessorResults, checkedNamespace);
+
+            Map<String, ResolveResult> externalVariableDeclarationResults = getExternalVariableDeclarationReferences(file, variableDeclarationResults);
+
+            return externalVariableDeclarationResults.values().toArray(new ResolveResult[externalVariableDeclarationResults.size()]);
         }
         return new ResolveResult[0];
     }
 
-    private ResolveResult[] getVariableDeclarationReferences(XQueryFile file, Map<String, ResolveResult> results) {
+    private Map<String, ResolveResult> getExternalVariableDeclarationReferences(XQueryFile file, Map<String, ResolveResult> results) {
+        final String referenceNamespace = myElement.getVarName().getVarNamespace() != null ? myElement.getVarName().getVarNamespace().getText() : null;
+
+        if (referenceNamespace != null) {
+            addReferencesFromImportedModules(file, results, referenceNamespace);
+        }
+        return results;
+    }
+
+    private void addReferencesFromImportedModules(XQueryFile file, Map<String, ResolveResult> results, String referenceNamespace) {
+        for (XQueryModuleImport moduleImport : file.getModuleImports()) {
+            if (referenceNamespace.equals(moduleImport.getNamespaceName().getText())) {
+                addReferencesFromAllFilesInImport(moduleImport, results);
+            }
+        }
+    }
+
+    private void addReferencesFromAllFilesInImport(XQueryModuleImport moduleImport, Map<String, ResolveResult> results) {
+        List<XQueryModuleImportPath> importPaths = moduleImport.getModuleImportPathList();
+        for (XQueryModuleImportPath path : importPaths) {
+            if (path.getReference() != null) {
+                XQueryFile xQueryFile = (XQueryFile) path.getReference().resolve();
+                if (xQueryFile != null) {
+                    getVariableDeclarationReferences(xQueryFile, results, xQueryFile.getModuleNamespaceName().getText());
+                }
+            }
+        }
+    }
+
+    private Map<String, ResolveResult> getVariableDeclarationReferences(XQueryFile file, Map<String, ResolveResult> results, String checkedNamespace) {
 
         for (XQueryVarDecl varDecl : file.getVariableDeclarations()) {
             if (variableNameExists(varDecl)) {
-                addReferenceIfNotAlreadyAdded(results, varDecl);
+                addReferenceIfNotAlreadyAdded(results, varDecl, checkedNamespace);
             }
         }
-        return results.values().toArray(new ResolveResult[results.size()]);
+        return results;
     }
 
     private boolean variableNameExists(XQueryVarDecl varDecl) {
         return varDecl.getVarName() != null && varDecl.getVarName().getTextLength() > 0;
     }
 
-    private void addReferenceIfNotAlreadyAdded(Map<String, ResolveResult> results, XQueryVarDecl varDecl) {
+    private void addReferenceIfNotAlreadyAdded(Map<String, ResolveResult> results, XQueryVarDecl varDecl, String checkedNamespace) {
         String key = varDecl.getVarName().getText();
         if (!results.containsKey(key)) {
-            addElementToResultsIfMatching(results, varDecl.getVarName(), varDecl.getVarName(), key);
+            addElementToResultsIfMatching(results, varDecl.getVarName(), varDecl.getVarName(), key, checkedNamespace);
         }
     }
 
-    private void addElementToResultsIfMatching(Map<String, ResolveResult> results, PsiElement referenceTarget, XQueryVarName comparedVarName, String key) {
+    private void addElementToResultsIfMatching(Map<String, ResolveResult> results, PsiElement referenceTarget, XQueryVarName comparedVarName, String key, String checkedNamespace) {
         final String varDeclNamespace = comparedVarName.getVarNamespace() != null ? comparedVarName.getVarNamespace().getText() : null;
-        final String referenceNamespace = myElement.getVarName().getVarNamespace() != null ? myElement.getVarName().getVarNamespace().getText() : null;
+        final String referenceNamespace = checkedNamespace;
         final String varDeclLocalName = comparedVarName.getVarLocalName().getText();
         final String referenceLocalName = myElement.getVarName().getVarLocalName().getText();
         boolean namespacesAndLocalNamesMatch = referenceNamespace != null && referenceNamespace.equals(varDeclNamespace) && referenceLocalName.equals(varDeclLocalName);
@@ -194,7 +231,7 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
         private void addElementIfNotAlreadyAdded(PsiElement element) {
             String key = element.getText();
             if (!results.containsKey(key)) {
-                addElementToResultsIfMatching(results, element, (XQueryVarName) element, key);
+                addElementToResultsIfMatching(results, element, (XQueryVarName) element, key, checkedNamespace);
             }
         }
     }
