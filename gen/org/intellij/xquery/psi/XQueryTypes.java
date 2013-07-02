@@ -138,6 +138,7 @@ public interface XQueryTypes {
   IElementType MODULE_DECL = new XQueryElementType("MODULE_DECL");
   IElementType MODULE_DECL_NAME = new XQueryElementType("MODULE_DECL_NAME");
   IElementType MODULE_IMPORT = new XQueryElementType("MODULE_IMPORT");
+  IElementType MODULE_IMPORT_PATH = new XQueryElementType("MODULE_IMPORT_PATH");
   IElementType MULTIPLICATIVE_EXPR = new XQueryElementType("MULTIPLICATIVE_EXPR");
   IElementType NAMED_FUNCTION_REF = new XQueryElementType("NAMED_FUNCTION_REF");
   IElementType NAMESPACE_DECL = new XQueryElementType("NAMESPACE_DECL");
@@ -766,6 +767,9 @@ public interface XQueryTypes {
       }
       else if (type == MODULE_IMPORT) {
         return new XQueryModuleImportImpl(node);
+      }
+      else if (type == MODULE_IMPORT_PATH) {
+        return new XQueryModuleImportPathImpl(node);
       }
       else if (type == MULTIPLICATIVE_EXPR) {
         return new XQueryMultiplicativeExprImpl(node);

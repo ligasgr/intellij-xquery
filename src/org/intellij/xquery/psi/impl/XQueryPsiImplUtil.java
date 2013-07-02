@@ -17,12 +17,14 @@
 package org.intellij.xquery.psi.impl;
 
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.psi.*;
+import org.intellij.xquery.reference.XQueryModuleReference;
 import org.intellij.xquery.reference.XQueryVariableReference;
 import org.jetbrains.annotations.NotNull;
 
@@ -93,5 +95,19 @@ public class XQueryPsiImplUtil {
 
     public static boolean processDeclarations(XQueryProlog module, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
         return processor.execute(module, state);
+    }
+
+    public static PsiReference getReference(XQueryModuleImportPath element) {
+        if (element.getURILiteral() != null) {
+            String filename = stripApostrophes(element.getURILiteral().getText());
+            if (!StringUtil.isEmptyOrSpaces(filename)) {
+                return new XQueryModuleReference(element, filename, new TextRange(1, element.getURILiteral().getTextLength() - 1));
+            }
+        }
+        return null;
+    }
+
+    private static String stripApostrophes(String text) {
+        return text.replaceAll("\"", "").replaceAll("'", "");
     }
 }

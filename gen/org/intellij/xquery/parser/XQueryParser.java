@@ -381,6 +381,9 @@ public class XQueryParser implements PsiParser {
     else if (root_ == MODULE_IMPORT) {
       result_ = ModuleImport(builder_, level_ + 1);
     }
+    else if (root_ == MODULE_IMPORT_PATH) {
+      result_ = ModuleImportPath(builder_, level_ + 1);
+    }
     else if (root_ == MULTIPLICATIVE_EXPR) {
       result_ = MultiplicativeExpr(builder_, level_ + 1);
     }
@@ -5188,7 +5191,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "import" "module" ("namespace" NCName "=")? URILiteral ("at" URILiteral ("," URILiteral)*)? Separator
+  // "import" "module" ("namespace" NCName "=")? URILiteral ("at" ModuleImportPath ("," ModuleImportPath)*)? Separator
   public static boolean ModuleImport(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleImport")) return false;
     if (!nextTokenIs(builder_, K_IMPORT)) return false;
@@ -5237,20 +5240,20 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ("at" URILiteral ("," URILiteral)*)?
+  // ("at" ModuleImportPath ("," ModuleImportPath)*)?
   private static boolean ModuleImport_4(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleImport_4")) return false;
     ModuleImport_4_0(builder_, level_ + 1);
     return true;
   }
 
-  // "at" URILiteral ("," URILiteral)*
+  // "at" ModuleImportPath ("," ModuleImportPath)*
   private static boolean ModuleImport_4_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleImport_4_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, K_AT);
-    result_ = result_ && URILiteral(builder_, level_ + 1);
+    result_ = result_ && ModuleImportPath(builder_, level_ + 1);
     result_ = result_ && ModuleImport_4_0_2(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -5261,7 +5264,7 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ("," URILiteral)*
+  // ("," ModuleImportPath)*
   private static boolean ModuleImport_4_0_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleImport_4_0_2")) return false;
     int offset_ = builder_.getCurrentOffset();
@@ -5277,18 +5280,35 @@ public class XQueryParser implements PsiParser {
     return true;
   }
 
-  // "," URILiteral
+  // "," ModuleImportPath
   private static boolean ModuleImport_4_0_2_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleImport_4_0_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, COMA);
-    result_ = result_ && URILiteral(builder_, level_ + 1);
+    result_ = result_ && ModuleImportPath(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
     else {
       marker_.drop();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // URILiteral
+  public static boolean ModuleImportPath(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ModuleImportPath")) return false;
+    if (!nextTokenIs(builder_, STRINGLITERAL)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = URILiteral(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(MODULE_IMPORT_PATH);
+    }
+    else {
+      marker_.rollbackTo();
     }
     return result_;
   }

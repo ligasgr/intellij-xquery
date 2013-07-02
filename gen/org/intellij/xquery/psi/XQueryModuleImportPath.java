@@ -20,16 +20,13 @@ package org.intellij.xquery.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 
-public interface XQueryModuleImport extends XQueryElement {
+public interface XQueryModuleImportPath extends XQueryElement {
 
   @NotNull
-  List<XQueryModuleImportPath> getModuleImportPathList();
-
-  @Nullable
-  XQuerySeparator getSeparator();
-
-  @Nullable
   XQueryURILiteral getURILiteral();
+
+  PsiReference getReference();
 
 }

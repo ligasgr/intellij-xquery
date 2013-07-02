@@ -478,6 +478,10 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
+  public void visitModuleImportPath(@NotNull XQueryModuleImportPath o) {
+    visitElement(o);
+  }
+
   public void visitMultiplicativeExpr(@NotNull XQueryMultiplicativeExpr o) {
     visitExprSingle(o);
   }
