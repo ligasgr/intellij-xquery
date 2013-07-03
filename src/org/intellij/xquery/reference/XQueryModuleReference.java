@@ -18,6 +18,8 @@ package org.intellij.xquery.reference;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
+import com.intellij.util.IncorrectOperationException;
+import org.intellij.xquery.psi.XQueryElementFactory;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryModuleImportPath;
 import org.intellij.xquery.psi.XQueryUtil;
@@ -62,5 +64,27 @@ public class XQueryModuleReference extends PsiReferenceBase<XQueryModuleImportPa
     @Override
     public Object[] getVariants() {
         return new Object[0];
+    }
+
+    @Override
+    public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+        String wholePath = createPathWithNewNameAndOriginalAposOrQuote(newElementName);
+        XQueryModuleImportPath path = XQueryElementFactory.createImport(myElement.getProject(), wholePath);
+        myElement.replace(path);
+        return myElement;
+    }
+
+    private String createPathWithNewNameAndOriginalAposOrQuote(String newElementName) {
+        String originalPath = myElement.getText();
+        String firstChar = originalPath.substring(0, 1);
+        String lastChar = originalPath.substring(originalPath.length()-1, originalPath.length());
+        String path = originalPath.substring(1, originalPath.length() - 1);
+        int lastIndexOfSlash = path.lastIndexOf("/");
+        int lastIndexOfBackSlash = path.lastIndexOf("\\");
+        int indexBeforeFileName = Math.max(lastIndexOfSlash, lastIndexOfBackSlash);
+        String dirPath = path.substring(0, indexBeforeFileName + 1);
+
+        String finalPath = firstChar + dirPath + newElementName + lastChar;
+        return finalPath;
     }
 }

@@ -18,8 +18,12 @@ package org.intellij.xquery.reference;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import org.intellij.xquery.XQueryFileType;
 import org.intellij.xquery.psi.XQueryFile;
 
 import java.util.List;
@@ -52,5 +56,21 @@ public class ModuleReferenceTest extends LightCodeInsightFixtureTestCase {
         PsiElement resolvedReference = reference.resolve();
         XQueryFile referencedModule = (XQueryFile) resolvedReference;
         assertEquals("ModuleReference_ReferencedModule.xq", referencedModule.getName());
+    }
+
+
+    public void testRenameOfTheFileWithReference() {
+        myFixture.configureByFiles("ModuleReference.xq", "ModuleReference_ReferencedModule.xq");
+        PsiFile[] files = FilenameIndex.getFilesByName(myFixture.getProject(), "ModuleReference_ReferencedModule.xq",
+                GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(myFixture.getProject()), XQueryFileType
+                        .INSTANCE));
+
+        myFixture.renameElement(files[0], "ModuleReference_RenamedFile.xq");
+        myFixture.checkResultByFile("ModuleReference.xq", "ModuleReferenceAfterRenameOfReferencedFile.xq", false);
+        PsiFile[] filesAfterRename = FilenameIndex.getFilesByName(myFixture.getProject(), "ModuleReference_RenamedFile.xq",
+                GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(myFixture.getProject()), XQueryFileType
+                        .INSTANCE));
+        assertEquals(1, files.length);
+        assertNotNull(filesAfterRename[0]);
     }
 }

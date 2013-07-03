@@ -47,4 +47,9 @@ public class XQueryElementFactory {
         return (XQueryFile) PsiFileFactory.getInstance(project).
                 createFileFromText(name, XQueryFileType.INSTANCE, text);
     }
+
+    public static XQueryModuleImportPath createImport(Project project, String wholePathWithAposOrQuote) {
+        final XQueryFile file = createFile(project, "import module namespace dummy = 'dummy' at " + wholePathWithAposOrQuote +";");
+        return PsiTreeUtil.findChildOfType(file, XQueryModuleImportPath.class);
+    }
 }
