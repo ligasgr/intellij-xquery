@@ -15,18 +15,31 @@
  */
 
 // This is a generated file. Not intended for manual editing.
-package org.intellij.xquery.psi;
+package org.intellij.xquery.psi.impl;
 
 import java.util.List;
 import org.jetbrains.annotations.*;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
+import static org.intellij.xquery.psi.XQueryTypes.*;
+import org.intellij.xquery.psi.*;
+import com.intellij.psi.PsiReference;
 
-public interface XQueryFunctionName extends XQueryElement {
+public class XQueryFunctionNamespaceImpl extends XQueryElementImpl implements XQueryFunctionNamespace {
 
-  @Nullable
-  XQueryFunctionLocalName getFunctionLocalName();
+  public XQueryFunctionNamespaceImpl(ASTNode node) {
+    super(node);
+  }
 
-  @Nullable
-  XQueryFunctionNamespace getFunctionNamespace();
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitFunctionNamespace(this);
+    else super.accept(visitor);
+  }
+
+  public PsiReference getReference() {
+    return XQueryPsiImplUtil.getReference(this);
+  }
 
 }

@@ -20,13 +20,10 @@ package org.intellij.xquery.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 
-public interface XQueryFunctionName extends XQueryElement {
+public interface XQueryFunctionNamespace extends XQueryElement {
 
-  @Nullable
-  XQueryFunctionLocalName getFunctionLocalName();
-
-  @Nullable
-  XQueryFunctionNamespace getFunctionNamespace();
+  PsiReference getReference();
 
 }

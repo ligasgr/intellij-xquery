@@ -248,10 +248,8 @@ VarDefaultValue	   ::=   	ExprSingle
 ContextItemDecl	   ::=   	"declare" "context" "item" ("as" ItemType)? ((":=" VarValue) | ("external" (":=" VarDefaultValue)?)) Separator {pin=2}
 FunctionDecl	   ::=   	"declare" Annotation* "function" FunctionName "(" ParamList? ")" ("as" SequenceType)? (FunctionBody | "external") 	/* xgc: reserved-function-names */ {pin=3 recoverUntil=FunctionDeclRec}
 private FunctionDeclRec ::= !(';')
-FunctionName    ::= EQName
 ParamList	   ::=   	Param ("," Param)*
 Param	   ::=   	"$" VarName TypeDeclaration?
-ParamName   ::=     EQName
 FunctionBody	   ::=   	EnclosedExpr
 EnclosedExpr	   ::=   	"{" Expr "}" {pin=1}
 OptionDecl	   ::=   	"declare" "option" EQName StringLiteral Separator {pin=2}
@@ -498,4 +496,7 @@ LocalPart	   ::=   	NCName
 VarName ::= VarNamespace ':' VarLocalName | VarLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset]}
 VarNamespace	   ::=   	NCName {methods=[getReference]}
 VarLocalName	   ::=   	NCName
+FunctionName ::= FunctionNamespace ':' FunctionLocalName | FunctionLocalName | URIQualifiedName //{methods=[getName setName getNameIdentifier getTextOffset]}
+FunctionNamespace	   ::=   	NCName {methods=[getReference]}
+FunctionLocalName	   ::=   	NCName
 //URIQualifiedName ::= "Q" "{" NCName "}"

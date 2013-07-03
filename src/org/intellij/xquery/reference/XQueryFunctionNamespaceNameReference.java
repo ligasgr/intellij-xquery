@@ -30,8 +30,8 @@ import java.util.*;
  * Date: 03/07/13
  * Time: 13:11
  */
-public class XQueryNamespaceNameReference extends PsiReferenceBase<XQueryVarNamespace> implements PsiPolyVariantReference {
-    public XQueryNamespaceNameReference(XQueryVarNamespace element, TextRange textRange) {
+public class XQueryFunctionNamespaceNameReference extends PsiReferenceBase<XQueryFunctionNamespace> implements PsiPolyVariantReference {
+    public XQueryFunctionNamespaceNameReference(XQueryFunctionNamespace element, TextRange textRange) {
         super(element, textRange);
     }
 
@@ -98,12 +98,12 @@ public class XQueryNamespaceNameReference extends PsiReferenceBase<XQueryVarName
 
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        myElement.replace(getUpdatedRef(newElementName).getVarNamespace());
+        myElement.replace(getUpdatedRef(newElementName).getFunctionNamespace());
         return myElement;
     }
 
-    private XQueryVarName getUpdatedRef(String newName) {
-        XQueryVarName varName = XQueryElementFactory.createVariableReference(myElement.getProject(), newName, "dummy");
-        return varName;
+    private XQueryFunctionName getUpdatedRef(String newName) {
+        XQueryFunctionName functionName = XQueryElementFactory.createFunctionReference(myElement.getProject(), newName, "dummy");
+        return functionName;
     }
 }

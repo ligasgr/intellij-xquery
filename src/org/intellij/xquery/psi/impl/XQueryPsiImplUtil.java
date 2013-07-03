@@ -23,8 +23,9 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.intellij.xquery.psi.*;
+import org.intellij.xquery.reference.XQueryFunctionNamespaceNameReference;
 import org.intellij.xquery.reference.XQueryModuleReference;
-import org.intellij.xquery.reference.XQueryNamespaceNameReference;
+import org.intellij.xquery.reference.XQueryVariableNamespaceNameReference;
 import org.intellij.xquery.reference.XQueryVariableReference;
 import org.jetbrains.annotations.NotNull;
 
@@ -112,6 +113,10 @@ public class XQueryPsiImplUtil {
     }
 
     public static PsiReference getReference(XQueryVarNamespace element) {
-        return new XQueryNamespaceNameReference(element, new TextRange(0, element.getTextLength()));
+        return new XQueryVariableNamespaceNameReference(element, new TextRange(0, element.getTextLength()));
+    }
+
+    public static PsiReference getReference(XQueryFunctionNamespace element) {
+        return new XQueryFunctionNamespaceNameReference(element, new TextRange(0, element.getTextLength()));
     }
 }

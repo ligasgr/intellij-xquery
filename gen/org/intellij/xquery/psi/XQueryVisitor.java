@@ -358,7 +358,15 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitExprSingle(o);
   }
 
+  public void visitFunctionLocalName(@NotNull XQueryFunctionLocalName o) {
+    visitElement(o);
+  }
+
   public void visitFunctionName(@NotNull XQueryFunctionName o) {
+    visitElement(o);
+  }
+
+  public void visitFunctionNamespace(@NotNull XQueryFunctionNamespace o) {
     visitElement(o);
   }
 
@@ -563,10 +571,6 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitParamList(@NotNull XQueryParamList o) {
-    visitElement(o);
-  }
-
-  public void visitParamName(@NotNull XQueryParamName o) {
     visitElement(o);
   }
 

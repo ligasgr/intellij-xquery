@@ -108,7 +108,9 @@ public interface XQueryTypes {
   IElementType FUNCTION_CALL = new XQueryElementType("FUNCTION_CALL");
   IElementType FUNCTION_DECL = new XQueryElementType("FUNCTION_DECL");
   IElementType FUNCTION_ITEM_EXPR = new XQueryElementType("FUNCTION_ITEM_EXPR");
+  IElementType FUNCTION_LOCAL_NAME = new XQueryElementType("FUNCTION_LOCAL_NAME");
   IElementType FUNCTION_NAME = new XQueryElementType("FUNCTION_NAME");
+  IElementType FUNCTION_NAMESPACE = new XQueryElementType("FUNCTION_NAMESPACE");
   IElementType FUNCTION_TEST = new XQueryElementType("FUNCTION_TEST");
   IElementType GENERAL_COMP = new XQueryElementType("GENERAL_COMP");
   IElementType GROUPING_SPEC = new XQueryElementType("GROUPING_SPEC");
@@ -159,7 +161,6 @@ public interface XQueryTypes {
   IElementType OR_EXPR = new XQueryElementType("OR_EXPR");
   IElementType PARAM = new XQueryElementType("PARAM");
   IElementType PARAM_LIST = new XQueryElementType("PARAM_LIST");
-  IElementType PARAM_NAME = new XQueryElementType("PARAM_NAME");
   IElementType PARENTHESIZED_EXPR = new XQueryElementType("PARENTHESIZED_EXPR");
   IElementType PARENTHESIZED_ITEM_TYPE = new XQueryElementType("PARENTHESIZED_ITEM_TYPE");
   IElementType PATH_EXPR = new XQueryElementType("PATH_EXPR");
@@ -678,8 +679,14 @@ public interface XQueryTypes {
       else if (type == FUNCTION_ITEM_EXPR) {
         return new XQueryFunctionItemExprImpl(node);
       }
+      else if (type == FUNCTION_LOCAL_NAME) {
+        return new XQueryFunctionLocalNameImpl(node);
+      }
       else if (type == FUNCTION_NAME) {
         return new XQueryFunctionNameImpl(node);
+      }
+      else if (type == FUNCTION_NAMESPACE) {
+        return new XQueryFunctionNamespaceImpl(node);
       }
       else if (type == FUNCTION_TEST) {
         return new XQueryFunctionTestImpl(node);
@@ -830,9 +837,6 @@ public interface XQueryTypes {
       }
       else if (type == PARAM_LIST) {
         return new XQueryParamListImpl(node);
-      }
-      else if (type == PARAM_NAME) {
-        return new XQueryParamNameImpl(node);
       }
       else if (type == PARENTHESIZED_EXPR) {
         return new XQueryParenthesizedExprImpl(node);

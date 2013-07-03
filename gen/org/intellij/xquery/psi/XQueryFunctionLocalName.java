@@ -21,12 +21,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryFunctionName extends XQueryElement {
-
-  @Nullable
-  XQueryFunctionLocalName getFunctionLocalName();
-
-  @Nullable
-  XQueryFunctionNamespace getFunctionNamespace();
+public interface XQueryFunctionLocalName extends XQueryElement {
 
 }

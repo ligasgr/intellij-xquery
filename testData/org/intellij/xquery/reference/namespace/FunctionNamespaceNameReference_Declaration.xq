@@ -2,6 +2,6 @@ module namespace xxx = "xxx";
 import module namespace yyy = "yyy" at "yyy";
 declare namespace zzz = "zzz";
 
-declare function xxx:xxx() {
-    $x<caret>xx:any
+declare function z<caret>zz:xxx() {
+    $zzz:any
 };

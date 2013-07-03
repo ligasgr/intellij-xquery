@@ -43,7 +43,7 @@ public class XQueryElementFactory {
     }
 
     public static XQueryFile createFile(Project project, String text) {
-        String name = "dummy.simple";
+        String name = "dummy.xq";
         return (XQueryFile) PsiFileFactory.getInstance(project).
                 createFileFromText(name, XQueryFileType.INSTANCE, text);
     }
@@ -51,5 +51,10 @@ public class XQueryElementFactory {
     public static XQueryModuleImportPath createImport(Project project, String wholePathWithAposOrQuote) {
         final XQueryFile file = createFile(project, "import module namespace dummy = 'dummy' at " + wholePathWithAposOrQuote +";");
         return PsiTreeUtil.findChildOfType(file, XQueryModuleImportPath.class);
+    }
+
+    public static XQueryFunctionName createFunctionReference(Project project, String namespaceName, String functionaName) {
+        final XQueryFile file = createFile(project, namespaceName + ":" + functionaName + "()");
+        return PsiTreeUtil.findChildOfType(file, XQueryFunctionName.class);
     }
 }

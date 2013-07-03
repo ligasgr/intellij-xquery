@@ -291,8 +291,14 @@ public class XQueryParser implements PsiParser {
     else if (root_ == FUNCTION_ITEM_EXPR) {
       result_ = FunctionItemExpr(builder_, level_ + 1);
     }
+    else if (root_ == FUNCTION_LOCAL_NAME) {
+      result_ = FunctionLocalName(builder_, level_ + 1);
+    }
     else if (root_ == FUNCTION_NAME) {
       result_ = FunctionName(builder_, level_ + 1);
+    }
+    else if (root_ == FUNCTION_NAMESPACE) {
+      result_ = FunctionNamespace(builder_, level_ + 1);
     }
     else if (root_ == FUNCTION_TEST) {
       result_ = FunctionTest(builder_, level_ + 1);
@@ -446,9 +452,6 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == PARAM_LIST) {
       result_ = ParamList(builder_, level_ + 1);
-    }
-    else if (root_ == PARAM_NAME) {
-      result_ = ParamName(builder_, level_ + 1);
     }
     else if (root_ == PARENTHESIZED_EXPR) {
       result_ = ParenthesizedExpr(builder_, level_ + 1);
@@ -4152,7 +4155,24 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // EQName
+  // NCName
+  public static boolean FunctionLocalName(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FunctionLocalName")) return false;
+    if (!nextTokenIs(builder_, NCNAME)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, NCNAME);
+    if (result_) {
+      marker_.done(FUNCTION_LOCAL_NAME);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // FunctionNamespace ':' FunctionLocalName | FunctionLocalName | URIQualifiedName
   public static boolean FunctionName(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionName")) return false;
     if (!nextTokenIs(builder_, NCNAME) && !nextTokenIs(builder_, URIQUALIFIEDNAME)
@@ -4160,7 +4180,9 @@ public class XQueryParser implements PsiParser {
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<function name>");
-    result_ = EQName(builder_, level_ + 1);
+    result_ = FunctionName_0(builder_, level_ + 1);
+    if (!result_) result_ = FunctionLocalName(builder_, level_ + 1);
+    if (!result_) result_ = consumeToken(builder_, URIQUALIFIEDNAME);
     if (result_) {
       marker_.done(FUNCTION_NAME);
     }
@@ -4168,6 +4190,40 @@ public class XQueryParser implements PsiParser {
       marker_.rollbackTo();
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    return result_;
+  }
+
+  // FunctionNamespace ':' FunctionLocalName
+  private static boolean FunctionName_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FunctionName_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = FunctionNamespace(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, COLON);
+    result_ = result_ && FunctionLocalName(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // NCName
+  public static boolean FunctionNamespace(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FunctionNamespace")) return false;
+    if (!nextTokenIs(builder_, NCNAME)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, NCNAME);
+    if (result_) {
+      marker_.done(FUNCTION_NAMESPACE);
+    }
+    else {
+      marker_.rollbackTo();
+    }
     return result_;
   }
 
@@ -6095,26 +6151,6 @@ public class XQueryParser implements PsiParser {
     else {
       marker_.drop();
     }
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // EQName
-  public static boolean ParamName(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ParamName")) return false;
-    if (!nextTokenIs(builder_, NCNAME) && !nextTokenIs(builder_, URIQUALIFIEDNAME)
-        && replaceVariants(builder_, 2, "<param name>")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<param name>");
-    result_ = EQName(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(PARAM_NAME);
-    }
-    else {
-      marker_.rollbackTo();
-    }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
