@@ -32,7 +32,7 @@ import java.util.List;
 public class ModuleReferenceTest extends LightCodeInsightFixtureTestCase {
     @Override
     protected String getTestDataPath() {
-        return "testData/org/intellij/xquery/reference";
+        return "testData/org/intellij/xquery/reference/module";
     }
 
 
@@ -45,12 +45,12 @@ public class ModuleReferenceTest extends LightCodeInsightFixtureTestCase {
 
 
     public void testModuleReference() {
-        myFixture.configureByFiles("ModuleReference.xq","Module_ReferencedModule.xq");
+        myFixture.configureByFiles("ModuleReference.xq","ModuleReference_ReferencedModule.xq");
         PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent();
         PsiReference[] references = element.getReferences();
         PsiReference reference = references[0];
         PsiElement resolvedReference = reference.resolve();
         XQueryFile referencedModule = (XQueryFile) resolvedReference;
-        assertEquals("Module_ReferencedModule.xq", referencedModule.getName());
+        assertEquals("ModuleReference_ReferencedModule.xq", referencedModule.getName());
     }
 }

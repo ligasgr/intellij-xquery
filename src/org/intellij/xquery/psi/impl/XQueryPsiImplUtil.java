@@ -22,9 +22,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.psi.*;
 import org.intellij.xquery.reference.XQueryModuleReference;
+import org.intellij.xquery.reference.XQueryNamespaceNameReference;
 import org.intellij.xquery.reference.XQueryVariableReference;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,20 +38,20 @@ public class XQueryPsiImplUtil {
     private static final int DOLLAR_CHAR_LENGTH = 1;
     private static final int SEPARATOR_LENGTH = 1;
 
-    public static String getName(XQueryModuleDecl element) {
+    public static String getName(XQueryNamespaceName element) {
         return element.getNameIdentifier().getText();
     }
 
-    public static PsiElement setName(XQueryModuleDecl element, String newName) {
-        XQueryNamespaceName name = element.getNamespaceName();
+    public static PsiElement setName(XQueryNamespaceName element, String newName) {
+        XQueryNamespaceName name = element;
         if (name != null) {
             name.replace(XQueryElementFactory.createModuleDeclarationName(element.getProject(), newName));
         }
         return element;
     }
 
-    public static PsiElement getNameIdentifier(XQueryModuleDecl element) {
-        return PsiTreeUtil.findChildOfType(element, XQueryNamespaceName.class);
+    public static PsiElement getNameIdentifier(XQueryNamespaceName element) {
+        return element;
     }
 
 
@@ -109,5 +109,9 @@ public class XQueryPsiImplUtil {
 
     private static String stripApostrophes(String text) {
         return text.replaceAll("\"", "").replaceAll("'", "");
+    }
+
+    public static PsiReference getReference(XQueryVarNamespace element) {
+        return new XQueryNamespaceNameReference(element, new TextRange(0, element.getTextLength()));
     }
 }

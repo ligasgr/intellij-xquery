@@ -26,7 +26,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryNamespaceNameImpl extends XQueryElementImpl implements XQueryNamespaceName {
+public class XQueryNamespaceNameImpl extends XQueryNamedElementImpl implements XQueryNamespaceName {
 
   public XQueryNamespaceNameImpl(ASTNode node) {
     super(node);
@@ -35,6 +35,18 @@ public class XQueryNamespaceNameImpl extends XQueryElementImpl implements XQuery
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitNamespaceName(this);
     else super.accept(visitor);
+  }
+
+  public String getName() {
+    return XQueryPsiImplUtil.getName(this);
+  }
+
+  public PsiElement setName(String newName) {
+    return XQueryPsiImplUtil.setName(this, newName);
+  }
+
+  public PsiElement getNameIdentifier() {
+    return XQueryPsiImplUtil.getNameIdentifier(this);
   }
 
 }

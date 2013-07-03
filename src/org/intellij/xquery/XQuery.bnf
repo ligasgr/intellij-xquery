@@ -199,8 +199,8 @@
   ]
 
   extends(".+Expr")=ExprSingle
-  implements("ModuleDecl|VarName")="org.intellij.xquery.psi.XQueryNamedElement"
-  extends("ModuleDecl|VarName")="org.intellij.xquery.psi.impl.XQueryNamedElementImpl"
+  implements("NamespaceName|VarName")="org.intellij.xquery.psi.XQueryNamedElement"
+  extends("NamespaceName|VarName")="org.intellij.xquery.psi.impl.XQueryNamedElementImpl"
 }
 
 xqueryFile ::= Module {pin(".*")=1}
@@ -212,8 +212,8 @@ VersionDeclEncoding ::= "encoding" StringLiteral {pin=1}
 VersionDeclVersion ::= "version" StringLiteral ("encoding" StringLiteral)? {pin=1}
 MainModule	   ::=   	Prolog QueryBody {pin=1}
 LibraryModule	   ::=   	ModuleDecl Prolog {pin=1}
-ModuleDecl	   ::=   	"module" "namespace" NamespaceName "=" URILiteral Separator {pin=1 recoverUntil=ModuleDeclRecover methods=[getName setName getNameIdentifier]}
-NamespaceName ::= NCName
+ModuleDecl	   ::=   	"module" "namespace" NamespaceName "=" URILiteral Separator {pin=1 recoverUntil=ModuleDeclRecover}
+NamespaceName ::= NCName  {methods=[getName setName getNameIdentifier]}
 private ModuleDeclRecover ::= !('declare' | 'import')
 Prolog	   ::=   	FirstDecl* SecondDecl* {methods=[processDeclarations]} //{recoverUntil=PrologRecover}
 private PrologRecover ::= !('$' | '%' | '(#' | '(' | '*' | '+' | '-' | '.' | '..' | '/' | '//' | '<!--' | '<' | '<?' | '@' | 'ancestor' | 'ancestor-or-self' | 'attribute' | 'child' | 'comment' | 'descendant' | 'descendant-or-self' | 'document' | 'document-node' | 'element' | 'every' | 'following' | 'following-sibling' | 'for' | 'function' | 'if' | 'let' | 'map' | 'namespace' | 'namespace-node' | 'node' | 'ordered' | 'parent' | 'preceding' | 'preceding-sibling' | 'processing-instruction' | 'schema-attribute' | 'schema-element' | 'self' | 'some' | 'switch' | 'text' | 'try' | 'typeswitch' | 'unordered' | 'validate' | -eof- | BracedURILiteral | DecimalLiteral | DoubleLiteral | IntegerLiteral | NCName | StringLiteral | URIQualifiedName)
@@ -496,6 +496,6 @@ private UnprefixedName	   ::=   	LocalPart
 Prefix	   ::=   	NCName
 LocalPart	   ::=   	NCName
 VarName ::= VarNamespace ':' VarLocalName | VarLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset]}
-VarNamespace	   ::=   	NCName
+VarNamespace	   ::=   	NCName {methods=[getReference]}
 VarLocalName	   ::=   	NCName
 //URIQualifiedName ::= "Q" "{" NCName "}"

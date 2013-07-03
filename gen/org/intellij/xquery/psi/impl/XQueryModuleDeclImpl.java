@@ -26,7 +26,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryModuleDeclImpl extends XQueryNamedElementImpl implements XQueryModuleDecl {
+public class XQueryModuleDeclImpl extends XQueryElementImpl implements XQueryModuleDecl {
 
   public XQueryModuleDeclImpl(ASTNode node) {
     super(node);
@@ -53,18 +53,6 @@ public class XQueryModuleDeclImpl extends XQueryNamedElementImpl implements XQue
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitModuleDecl(this);
     else super.accept(visitor);
-  }
-
-  public String getName() {
-    return XQueryPsiImplUtil.getName(this);
-  }
-
-  public PsiElement setName(String newName) {
-    return XQueryPsiImplUtil.setName(this, newName);
-  }
-
-  public PsiElement getNameIdentifier() {
-    return XQueryPsiImplUtil.getNameIdentifier(this);
   }
 
 }

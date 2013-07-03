@@ -27,13 +27,13 @@ import org.intellij.xquery.XQueryFileType;
  * Time: 22:01
  */
 public class XQueryElementFactory {
-    public static XQueryVarName createVariableReference(Project project, String name) {
-        final XQueryFile file = createFile(project, "$" + name);
+    public static XQueryVarName createVariableReference(Project project, String localVariableName) {
+        final XQueryFile file = createFile(project, "$" + localVariableName);
         return PsiTreeUtil.findChildOfType(file, XQueryVarName.class);
     }
 
-    public static XQueryVarName createVariableDeclaration(Project project, String name) {
-        final XQueryFile file = createFile(project, "declare variable $" + name + " := 'dummy';a");
+    public static XQueryVarName createVariableReference(Project project, String namespaceName, String localVariableName) {
+        final XQueryFile file = createFile(project, "$" + namespaceName + ":" + localVariableName);
         return PsiTreeUtil.findChildOfType(file, XQueryVarName.class);
     }
 

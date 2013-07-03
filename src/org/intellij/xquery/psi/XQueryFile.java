@@ -65,6 +65,12 @@ public class XQueryFile extends PsiFileBase {
     }
 
     public XQueryNamespaceName getModuleNamespaceName() {
-        return PsiTreeUtil.findChildOfType(this, XQueryModuleDecl.class).getNamespaceName();
+        XQueryModuleDecl moduleDecl = PsiTreeUtil.findChildOfType(this, XQueryModuleDecl.class);
+        return moduleDecl != null ? moduleDecl.getNamespaceName() : null;
+    }
+
+    public Collection<XQueryNamespaceDecl> getNamespaceDeclarations() {
+        Collection<XQueryNamespaceDecl> moduleImports = PsiTreeUtil.findChildrenOfType(this, XQueryNamespaceDecl.class);
+        return moduleImports;
     }
 }

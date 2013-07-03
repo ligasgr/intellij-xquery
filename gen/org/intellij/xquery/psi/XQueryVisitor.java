@@ -467,7 +467,7 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitModuleDecl(@NotNull XQueryModuleDecl o) {
-    visitNamedElement(o);
+    visitElement(o);
   }
 
   public void visitModuleImport(@NotNull XQueryModuleImport o) {
@@ -495,7 +495,7 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitNamespaceName(@NotNull XQueryNamespaceName o) {
-    visitElement(o);
+    visitNamedElement(o);
   }
 
   public void visitNamespaceNodeTest(@NotNull XQueryNamespaceNodeTest o) {
