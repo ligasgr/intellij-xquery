@@ -18,15 +18,13 @@ package org.intellij.xquery.reference;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.FilenameIndex;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-import org.intellij.xquery.XQueryFileType;
-import org.intellij.xquery.psi.XQueryFile;
+import org.intellij.xquery.psi.XQueryFunctionDecl;
 
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 /**
  * User: ligasgr
@@ -40,37 +38,58 @@ public class FunctionReferenceTest extends LightCodeInsightFixtureTestCase {
     }
 
 
-    public void testModuleCompletion() {
-        myFixture.configureByFiles("FunctionCompletion.xq");
+    public void testFunctionCompletionInTheSameFile() {
+        myFixture.configureByFiles("FunctionCompletionInTheSameFile.xq");
         myFixture.complete(CompletionType.BASIC, 1);
         List<String> strings = myFixture.getLookupElementStrings();
-        assertEquals(0, strings.size());
+        assertTrue(strings.containsAll(asList("example")));
+        assertEquals(1, strings.size());
     }
 
+    public void testFunctionRenameInTheSameFile() {
+        myFixture.configureByFiles("FunctionRenameInTheSameFile.xq");
+        myFixture.renameElementAtCaret("renamed");
+        myFixture.checkResultByFile("FunctionRenameInTheSameFile.xq", "FunctionRenameInTheSameFileAfter.xq", false);
+    }
 
-    public void testModuleReference() {
-        myFixture.configureByFiles("ModuleReference.xq","ModuleReference_ReferencedModule.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent();
+    public void testFunctionReferenceFromVariableDeclaration() {
+        myFixture.configureByFiles("FunctionReferenceInTheSameFile_Global.xq");
+        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
         PsiReference[] references = element.getReferences();
         PsiReference reference = references[0];
         PsiElement resolvedReference = reference.resolve();
-        XQueryFile referencedModule = (XQueryFile) resolvedReference;
-        assertEquals("ModuleReference_ReferencedModule.xq", referencedModule.getName());
+        XQueryFunctionDecl functionDecl = (XQueryFunctionDecl) resolvedReference.getParent();
+        assertEquals("$functionArgumentScopeVar", functionDecl.getParamList().getText());
     }
 
+    public void testFunctionReferenceFromFunctionArgument() {
+        myFixture.configureByFiles("FunctionReferenceInTheSameFile_FunctionArgument.xq");
+        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
+        PsiReference[] references = element.getReferences();
+        PsiReference reference = references[0];
+        PsiElement resolvedReference = reference.resolve();
+        XQueryFunctionDecl functionDecl = (XQueryFunctionDecl) resolvedReference.getParent();
+        assertEquals("example", functionDecl.getFunctionName().getText());
+    }
 
-    public void testRenameOfTheFileWithReference() {
-        myFixture.configureByFiles("ModuleReference.xq", "ModuleReference_ReferencedModule.xq");
-        PsiFile[] files = FilenameIndex.getFilesByName(myFixture.getProject(), "ModuleReference_ReferencedModule.xq",
-                GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(myFixture.getProject()), XQueryFileType
-                        .INSTANCE));
+    public void testFunctionReferenceFromFlworExpression() {
+        myFixture.configureByFiles("FunctionReferenceInTheSameFile_Flwor.xq");
+        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
+        PsiReference[] references = element.getReferences();
+        PsiReference reference = references[0];
+        PsiElement resolvedReference = reference.resolve();
+        XQueryFunctionDecl functionDecl = (XQueryFunctionDecl) resolvedReference.getParent();
+        assertEquals("example", functionDecl.getFunctionName().getText());
+    }
 
-        myFixture.renameElement(files[0], "ModuleReference_RenamedFile.xq");
-        myFixture.checkResultByFile("ModuleReference.xq", "ModuleReferenceAfterRenameOfReferencedFile.xq", false);
-        PsiFile[] filesAfterRename = FilenameIndex.getFilesByName(myFixture.getProject(), "ModuleReference_RenamedFile.xq",
-                GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(myFixture.getProject()), XQueryFileType
-                        .INSTANCE));
-        assertEquals(1, files.length);
-        assertNotNull(filesAfterRename[0]);
+    public void testFunctionReferenceFromAnotherFile() {
+        myFixture.configureByFiles("FunctionReferenceFromAnotherFile.xq","FunctionReferencedFile.xq");
+        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
+        PsiReference[] references = element.getReferences();
+        PsiReference reference = references[0];
+        PsiElement resolvedReference = reference.resolve();
+        XQueryFunctionDecl varDecl = (XQueryFunctionDecl) resolvedReference.getParent();
+        assertEquals("$xxx", varDecl.getParamList().getText());
+        assertEquals("FunctionReferencedFile.xq", varDecl.getContainingFile().getName());
     }
 }

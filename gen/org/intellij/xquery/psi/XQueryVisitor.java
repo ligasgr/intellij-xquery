@@ -363,7 +363,7 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitFunctionName(@NotNull XQueryFunctionName o) {
-    visitElement(o);
+    visitNamedElement(o);
   }
 
   public void visitFunctionNamespace(@NotNull XQueryFunctionNamespace o) {

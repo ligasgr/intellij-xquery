@@ -23,10 +23,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.intellij.xquery.psi.*;
-import org.intellij.xquery.reference.XQueryFunctionNamespaceNameReference;
-import org.intellij.xquery.reference.XQueryModuleReference;
-import org.intellij.xquery.reference.XQueryVariableNamespaceNameReference;
-import org.intellij.xquery.reference.XQueryVariableReference;
+import org.intellij.xquery.reference.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -118,5 +115,43 @@ public class XQueryPsiImplUtil {
 
     public static PsiReference getReference(XQueryFunctionNamespace element) {
         return new XQueryFunctionNamespaceNameReference(element, new TextRange(0, element.getTextLength()));
+    }
+
+    public static PsiReference getReference(XQueryFunctionCall element) {
+        int localNameOffset = 0;
+        if (element.getFunctionName().getFunctionNamespace() != null) {
+            localNameOffset += element.getFunctionName().getFunctionNamespace().getTextLength() + SEPARATOR_LENGTH;
+        }
+        return new XQueryFunctionReference(element, new TextRange(localNameOffset, element.getTextLength()));
+    }
+
+    public static String getName(XQueryFunctionName element) {
+        if (element.getNameIdentifier() != null) {
+            return element.getNameIdentifier().getText();
+        } else {
+            return null;
+        }
+    }
+
+    public static PsiElement setName(XQueryFunctionName element, String newName) {
+        XQueryFunctionName name = element;
+        if (name != null) {
+            XQueryFunctionLocalName localName = name.getFunctionLocalName();
+            if (localName != null) {
+                XQueryFunctionName newNameElement = XQueryElementFactory.createFunctionReference(element.getProject(), "dummy", newName);
+                localName.replace(newNameElement.getFunctionLocalName());
+            }
+        }
+        return element;
+    }
+
+    public static PsiElement getNameIdentifier(XQueryFunctionName element) {
+        if (element == null) return null;
+        return element.getFunctionLocalName();
+    }
+
+    public static int getTextOffset(XQueryFunctionName element) {
+        if (element == null || element.getFunctionLocalName() == null) return 0;
+        return getNameIdentifier(element).getTextOffset();
     }
 }

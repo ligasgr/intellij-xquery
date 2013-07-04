@@ -199,8 +199,8 @@
   ]
 
   extends(".+Expr")=ExprSingle
-  implements("NamespaceName|VarName")="org.intellij.xquery.psi.XQueryNamedElement"
-  extends("NamespaceName|VarName")="org.intellij.xquery.psi.impl.XQueryNamedElementImpl"
+  implements("NamespaceName|VarName|FunctionName")="org.intellij.xquery.psi.XQueryNamedElement"
+  extends("NamespaceName|VarName|FunctionName")="org.intellij.xquery.psi.impl.XQueryNamedElementImpl"
 }
 
 xqueryFile ::= Module {pin(".*")=1}
@@ -383,7 +383,7 @@ ParenthesizedExpr	   ::=   	"(" Expr? ")"
 ContextItemExpr	   ::=   	"."
 OrderedExpr	   ::=   	"ordered" "{" Expr "}"
 UnorderedExpr	   ::=   	"unordered" "{" Expr "}"
-FunctionCall	   ::=   	FunctionName ArgumentList	/* xgc: reserved-function-names */
+FunctionCall	   ::=   	FunctionName ArgumentList {methods=[getReference]}	/* xgc: reserved-function-names */
 				/* gn: parens */
 Argument	   ::=   	ExprSingle | ArgumentPlaceholder
 ArgumentPlaceholder	   ::=   	"?"
@@ -496,7 +496,7 @@ LocalPart	   ::=   	NCName
 VarName ::= VarNamespace ':' VarLocalName | VarLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset]}
 VarNamespace	   ::=   	NCName {methods=[getReference]}
 VarLocalName	   ::=   	NCName
-FunctionName ::= FunctionNamespace ':' FunctionLocalName | FunctionLocalName | URIQualifiedName //{methods=[getName setName getNameIdentifier getTextOffset]}
+FunctionName ::= FunctionNamespace ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset]}
 FunctionNamespace	   ::=   	NCName {methods=[getReference]}
 FunctionLocalName	   ::=   	NCName
 //URIQualifiedName ::= "Q" "{" NCName "}"
