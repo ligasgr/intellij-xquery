@@ -51,5 +51,6 @@
         <lang.parserDefinition language="XQuery" implementationClass="org.intellij.xquery.XQueryParserDefinition"/>
         <lang.syntaxHighlighterFactory key="XQuery"
                                        implementationClass="org.intellij.xquery.XQuerySyntaxHighlighterFactory"/>
+        <lang.findUsagesProvider language="XQuery" implementationClass="org.intellij.xquery.XQueryFindUsageProvider"/>
     </extensions>
 </idea-plugin>
