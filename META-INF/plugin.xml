@@ -17,14 +17,26 @@
 <idea-plugin version="2">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <vendor email="ligasgr@gmail.com" url="https://github.com/ligasgr/intellij-xquery">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0</description>
 
     <change-notes>
         <![CDATA[
-            <p>0.0.1</p>
+            <p>0.0.2:</p>
+            <ul>
+              <li>Highlighting improvements and bugfixes.</li>
+              <li>Variable reference resolution across files (scopes taken into account; no support for access modifiers).</li>
+              <li>Variable name completion inside of the file.</li>
+              <li>Function reference resolution across files (no support for access modifiers)</li>
+              <li>Function name completion inside of the file (still has place for improvement - completes only if shortcut used in front of ())</li>
+              <li>Namespace reference resolution inside of the file.</li>
+              <li>Navigation between modules via file location and namespace (if includes file path) in module imports.</li>
+              <li>Rename functionality for all references.</li>
+              <li>Basic find usage.</li>
+            </ul>
+            <p>0.0.1:</p>
             <ul>
               <li>Basic syntax highlighting.</li>
               <li>Variable reference resolution inside of a file.</li>
