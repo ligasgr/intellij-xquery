@@ -1,6 +1,25 @@
 # XQuery plugin
 Provides support in [IntelliJ IDEA](http://www.jetbrains.com/idea/) for [XQuery](http://www.w3schools.com/xquery/) language in version 3.0
 
+#XQuery - useful links
+1. [XQuery 3.0: An XML Query Language - W3C Candidate Recommendation](http://www.w3.org/TR/xquery-30/)
+1. [XQuery 3.0 Grammar](http://www.w3.org/TR/xquery-30/#nt-bnf)
+1. [Building a Tokenizer for XPath or XQuery - Draft for XQuery 1.0](http://www.w3.org/TR/xquery-xpath-parsing/)
+1. [XML Query Use Cases](http://www.w3.org/TR/xquery-use-cases/)
+1. [XML Query Use Cases - all in one file version](http://www.w3.org/TR/2007/NOTE-xquery-use-cases-20070323/xquery-use-case-queries.txt)
+1. [XQuery 3.0 compatiblity test suite](http://dev.w3.org/cvsweb/2011/QT3-test-suite/)
+1. [Guidelines for Running the QT3 Test Suite](http://dev.w3.org/2011/QT3-test-suite/guide/running.html)
+
+#Plugin development - useful links
+1. [Developing Custom Language Plugins for IntelliJ IDEA](http://confluence.jetbrains.com/display/IDEADEV/Developing+Custom+Language+Plugins+for+IntelliJ+IDEA)
+1. [Custom Language Support - Tutorial](http://confluence.jetbrains.com/display/IntelliJIDEA/Custom+Language+Support)
+1. [Testing IntelliJ IDEA Plugins](http://confluence.jetbrains.com/display/IDEADEV/Testing+IntelliJ+IDEA+Plugins)
+1. [Writing Tests for Plugins - Tutorial](http://confluence.jetbrains.com/display/IntelliJIDEA/Writing+Tests+for+Plugins)
+1. [IntelliJ IDEA Architectural Overview](http://confluence.jetbrains.com/display/IDEADEV/IntelliJ+IDEA+Architectural+Overview)
+1. [Open API and Plugin Development - Developer Community Forum](http://devnet.jetbrains.com/community/idea/open_api_and_plugin_development)
+1. [Erlang support plugin for IntelliJ IDEA - source code on github](https://github.com/ignatov/intellij-erlang/)
+1. [Developing a plugin for IntelliJ IDEA – some useful tips and links](http://tomaszdziurko.pl/2011/09/developing-plugin-intellij-idea-some-tips-and-links/)
+
 ## Change log
 
 ### Version 0.0.2
