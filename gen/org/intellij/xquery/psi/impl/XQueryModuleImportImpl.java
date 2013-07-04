@@ -50,12 +50,6 @@ public class XQueryModuleImportImpl extends XQueryElementImpl implements XQueryM
     return findChildByClass(XQuerySeparator.class);
   }
 
-  @Override
-  @Nullable
-  public XQueryURILiteral getURILiteral() {
-    return findChildByClass(XQueryURILiteral.class);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitModuleImport(this);
     else super.accept(visitor);

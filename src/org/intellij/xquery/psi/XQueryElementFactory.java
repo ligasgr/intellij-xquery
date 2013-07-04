@@ -49,7 +49,7 @@ public class XQueryElementFactory {
     }
 
     public static XQueryModuleImportPath createImport(Project project, String wholePathWithAposOrQuote) {
-        final XQueryFile file = createFile(project, "import module namespace dummy = 'dummy' at " + wholePathWithAposOrQuote +";");
+        final XQueryFile file = createFile(project, "import module namespace dummy = " + wholePathWithAposOrQuote +";");
         return PsiTreeUtil.findChildOfType(file, XQueryModuleImportPath.class);
     }
 

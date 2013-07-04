@@ -5230,7 +5230,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "import" "module" ("namespace" NamespaceName "=")? URILiteral ("at" ModuleImportPath ("," ModuleImportPath)*)? Separator
+  // "import" "module" ("namespace" NamespaceName "=")? ModuleImportPath ("at" ModuleImportPath ("," ModuleImportPath)*)? Separator
   public static boolean ModuleImport(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleImport")) return false;
     if (!nextTokenIs(builder_, K_IMPORT)) return false;
@@ -5242,7 +5242,7 @@ public class XQueryParser implements PsiParser {
     result_ = result_ && consumeToken(builder_, K_MODULE);
     pinned_ = result_; // pin = 2
     result_ = result_ && report_error_(builder_, ModuleImport_2(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, URILiteral(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && report_error_(builder_, ModuleImportPath(builder_, level_ + 1)) && result_;
     result_ = pinned_ && report_error_(builder_, ModuleImport_4(builder_, level_ + 1)) && result_;
     result_ = pinned_ && Separator(builder_, level_ + 1) && result_;
     if (result_ || pinned_) {

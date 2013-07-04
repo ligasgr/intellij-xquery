@@ -32,7 +32,4 @@ public interface XQueryModuleImport extends XQueryElement {
   @Nullable
   XQuerySeparator getSeparator();
 
-  @Nullable
-  XQueryURILiteral getURILiteral();
-
 }

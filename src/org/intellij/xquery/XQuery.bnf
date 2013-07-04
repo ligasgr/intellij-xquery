@@ -234,7 +234,7 @@ DecimalFormatDecl	   ::=   	"declare" (("decimal-format" EQName) | ("default" "d
 DFPropertyName	   ::=   	"decimal-separator" | "grouping-separator" | "infinity" | "minus-sign" | "NaN" | "percent" | "per-mille" | "zero-digit" | "digit" | "pattern-separator"
 Import	   ::=   	SchemaImport | ModuleImport
 SchemaImport	   ::=   	"import" "schema" (("namespace" NamespaceName "=") | ("default" "element" "namespace"))? URILiteral ("at" URILiteral ("," URILiteral)*)? Separator {pin=2}
-ModuleImport	   ::=   	"import" "module" ("namespace" NamespaceName "=")? URILiteral ("at" ModuleImportPath ("," ModuleImportPath)*)? Separator {pin=2}
+ModuleImport	   ::=   	"import" "module" ("namespace" NamespaceName "=")? ModuleImportPath ("at" ModuleImportPath ("," ModuleImportPath)*)? Separator {pin=2}
 ModuleImportPath ::= URILiteral {methods=[getReference]}
 NamespaceDecl	   ::=   	"declare" "namespace" NamespaceName "=" URILiteral Separator {pin=2}
 
