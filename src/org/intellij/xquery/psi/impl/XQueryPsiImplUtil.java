@@ -125,7 +125,7 @@ public class XQueryPsiImplUtil {
         if (element.getFunctionName().getFunctionNamespace() != null) {
             localNameOffset += element.getFunctionName().getFunctionNamespace().getTextLength() + SEPARATOR_LENGTH;
         }
-        return new XQueryFunctionReference(element, new TextRange(localNameOffset, element.getTextLength()));
+        return new XQueryFunctionReference(element, new TextRange(localNameOffset, element.getFunctionName().getTextLength()));
     }
 
     public static String getName(XQueryFunctionName element) {
