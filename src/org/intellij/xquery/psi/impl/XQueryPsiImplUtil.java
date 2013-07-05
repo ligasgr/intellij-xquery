@@ -55,10 +55,13 @@ public class XQueryPsiImplUtil {
 
     public static PsiReference getReference(XQueryVarRef element) {
         int localNameOffset = DOLLAR_CHAR_LENGTH;
-        if (element.getVarName().getVarNamespace() != null) {
-            localNameOffset += element.getVarName().getVarNamespace().getTextLength() + SEPARATOR_LENGTH;
+        if (element.getVarName() != null) {
+            if (element.getVarName().getVarNamespace() != null) {
+                localNameOffset += element.getVarName().getVarNamespace().getTextLength() + SEPARATOR_LENGTH;
+            }
+            return new XQueryVariableReference(element, new TextRange(localNameOffset, element.getTextLength()));
         }
-        return new XQueryVariableReference(element, new TextRange(localNameOffset, element.getTextLength()));
+        return null;
     }
 
     public static String getName(XQueryVarName element) {
