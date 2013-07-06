@@ -64,5 +64,6 @@
         <lang.syntaxHighlighterFactory key="XQuery"
                                        implementationClass="org.intellij.xquery.XQuerySyntaxHighlighterFactory"/>
         <lang.findUsagesProvider language="XQuery" implementationClass="org.intellij.xquery.XQueryFindUsageProvider"/>
+        <lang.commenter language="XQuery" implementationClass="org.intellij.xquery.comment.XQueryCommenter"/>
     </extensions>
 </idea-plugin>
