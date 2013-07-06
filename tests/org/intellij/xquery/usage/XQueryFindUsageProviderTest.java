@@ -16,12 +16,10 @@
 
 package org.intellij.xquery.usage;
 
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import com.intellij.usageView.UsageInfo;
-import org.intellij.xquery.psi.XQueryFunctionDecl;
-import org.intellij.xquery.psi.XQueryNamespaceDecl;
-import org.intellij.xquery.psi.XQueryQueryBody;
-import org.intellij.xquery.psi.XQueryVarDecl;
+import org.intellij.xquery.psi.*;
 
 import java.util.Collection;
 
@@ -39,30 +37,38 @@ public class XQueryFindUsageProviderTest extends LightCodeInsightFixtureTestCase
 
     public void testFindFunctionUsages() {
         Collection<UsageInfo> foundUsages = myFixture.testFindUsages("Function.xq");
-        assertEquals(1, foundUsages.size());
+
         UsageInfo usageInfo = foundUsages.iterator().next();
-        assertTrue(usageInfo.getElement().getParent().getParent().getParent() instanceof XQueryQueryBody);
-        String referencedFunctionBodyText = ((XQueryFunctionDecl)usageInfo.getReference().resolve().getParent()).getFunctionBody().getEnclosedExpr().getExpr().getText();
+        assertEquals(1, foundUsages.size());
+        XQueryQueryBody query = PsiTreeUtil.getParentOfType(usageInfo.getElement(), XQueryQueryBody.class);
+        assertNotNull(query);
+        XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) usageInfo.getReference().resolve().getParent();
+        XQueryExpr functionBody = functionDeclaration.getFunctionBody().getEnclosedExpr().getExpr();
+        String referencedFunctionBodyText = functionBody.getText();
         assertEquals("$local:var", referencedFunctionBodyText);
     }
 
-
     public void testFindVariableUsages() {
         Collection<UsageInfo> foundUsages = myFixture.testFindUsages("Variable.xq");
+
         assertEquals(1, foundUsages.size());
         UsageInfo usageInfo = foundUsages.iterator().next();
-        assertTrue(usageInfo.getElement().getParent().getParent().getParent().getParent().getParent() instanceof XQueryFunctionDecl);
-        String referencedVarValue = ((XQueryVarDecl)usageInfo.getReference().resolve().getParent()).getVarValue().getText();
+        XQueryFunctionDecl functionDeclaration = PsiTreeUtil.getParentOfType(usageInfo.getElement(), XQueryFunctionDecl.class);
+        assertNotNull(functionDeclaration);
+        XQueryVarDecl variableDeclaration = (XQueryVarDecl) usageInfo.getReference().resolve().getParent();
+        String referencedVarValue = variableDeclaration.getVarValue().getText();
         assertEquals("\"value\"", referencedVarValue);
     }
 
-
     public void testFindNamespaceNameUsages() {
         Collection<UsageInfo> foundUsages = myFixture.testFindUsages("Namespace.xq");
+
         assertEquals(1, foundUsages.size());
         UsageInfo usageInfo = foundUsages.iterator().next();
-        assertTrue(usageInfo.getElement().getParent().getParent().getParent().getParent().getParent().getParent().getParent() instanceof XQueryFunctionDecl);
-        String referencedVarValue = ((XQueryNamespaceDecl)usageInfo.getReference().resolve().getParent()).getURILiteral().getText();
+        XQueryFunctionDecl functionDeclaration = PsiTreeUtil.getParentOfType(usageInfo.getElement(), XQueryFunctionDecl.class);
+        assertNotNull(functionDeclaration);
+        XQueryNamespaceDecl namespaceDeclaration = (XQueryNamespaceDecl) usageInfo.getReference().resolve().getParent();
+        String referencedVarValue = namespaceDeclaration.getURILiteral().getText();
         assertEquals("\"zzz\"", referencedVarValue);
     }
 }

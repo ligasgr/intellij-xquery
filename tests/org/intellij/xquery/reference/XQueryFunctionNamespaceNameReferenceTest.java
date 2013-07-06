@@ -23,7 +23,6 @@ import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCa
 import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryModuleImport;
 import org.intellij.xquery.psi.XQueryNamespaceDecl;
-import org.intellij.xquery.psi.XQueryNamespaceName;
 
 import java.util.List;
 
@@ -45,7 +44,6 @@ public class XQueryFunctionNamespaceNameReferenceTest extends LightPlatformCodeI
         List<String> strings = myFixture.getLookupElementStrings();
         assertEquals(0, strings.size());
     }
-
 
     public void testFunctionNamespaceReferenceForModuleDeclaration() {
         myFixture.configureByFiles("FunctionNamespaceNameReference_Module.xq");
