@@ -89,6 +89,8 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 %state ELEMENT_CONTENT
 %state QUOT_STRING
 %state APOS_STRING
+%state QUOT_STRING_SIMPLE
+%state APOS_STRING_SIMPLE
 %state URIQUALIFIED
 %state QNAME
 %state DIR_COMMENT
@@ -105,7 +107,8 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 {DecimalLiteral}                          {return XQueryTypes.DECIMALLITERAL;}
 {DoubleLiteral}                           {return XQueryTypes.DOUBLELITERAL;}
 {IntegerLiteral}                          {return XQueryTypes.INTEGERLITERAL;}
-{StringLiteral}                           {return XQueryTypes.STRINGLITERAL;}
+"\""                                      {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"'"                                       {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
 "Q{"                                      {pushState(URIQUALIFIED); yypushback(2);}
 "(:"                                      {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
 "<<"                                      {return XQueryTypes.NODECOMP_LT;}
@@ -388,6 +391,21 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "module" / {S} ("namespace"|"\"")         {return XQueryTypes.K_MODULE;}
 "namespace" / {S} {NCName}                {return XQueryTypes.K_NAMESPACE;}
 {NCName}                                  {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
+.                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+}
+
+
+<QUOT_STRING_SIMPLE> {
+"\""                                      {return XQueryTypes.QUOT;}
+{StringLiteral}                           {popState(); return XQueryTypes.STRINGLITERAL;}
+{Char}                                    {return XQueryTypes.CHAR;}
+.                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+}
+
+<APOS_STRING_SIMPLE> {
+"\""                                      {return XQueryTypes.APOSTROPHE;}
+{StringLiteral}                           {popState(); return XQueryTypes.STRINGLITERAL;}
+{Char}                                    {return XQueryTypes.CHAR;}
 .                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 

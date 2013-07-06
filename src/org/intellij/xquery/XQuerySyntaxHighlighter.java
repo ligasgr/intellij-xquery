@@ -82,7 +82,9 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
         if (tokenType == XQueryTypes.STRINGLITERAL
                 || tokenType == XQueryTypes.CHAR
                 || tokenType == XQueryTypes.ELEMENTCONTENTCHAR
-                || tokenType == XQueryTypes.PREDEFINEDENTITYREF) {
+                || tokenType == XQueryTypes.PREDEFINEDENTITYREF
+                || tokenType == XQueryTypes.APOSTROPHE
+                || tokenType == XQueryTypes.QUOT) {
             return STRINGS;
         }
         if (tokenType == XQueryTypes.SEMICOLON) {
