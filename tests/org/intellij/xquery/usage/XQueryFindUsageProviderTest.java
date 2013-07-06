@@ -38,9 +38,9 @@ public class XQueryFindUsageProviderTest extends LightCodeInsightFixtureTestCase
     }
 
     public void testFindFunctionUsages() {
-        Collection<UsageInfo> usageInfos = myFixture.testFindUsages("Function.xq");
-        assertEquals(1, usageInfos.size());
-        UsageInfo usageInfo = usageInfos.iterator().next();
+        Collection<UsageInfo> foundUsages = myFixture.testFindUsages("Function.xq");
+        assertEquals(1, foundUsages.size());
+        UsageInfo usageInfo = foundUsages.iterator().next();
         assertTrue(usageInfo.getElement().getParent().getParent().getParent() instanceof XQueryQueryBody);
         String referencedFunctionBodyText = ((XQueryFunctionDecl)usageInfo.getReference().resolve().getParent()).getFunctionBody().getEnclosedExpr().getExpr().getText();
         assertEquals("$local:var", referencedFunctionBodyText);
@@ -48,9 +48,9 @@ public class XQueryFindUsageProviderTest extends LightCodeInsightFixtureTestCase
 
 
     public void testFindVariableUsages() {
-        Collection<UsageInfo> usageInfos = myFixture.testFindUsages("Variable.xq");
-        assertEquals(1, usageInfos.size());
-        UsageInfo usageInfo = usageInfos.iterator().next();
+        Collection<UsageInfo> foundUsages = myFixture.testFindUsages("Variable.xq");
+        assertEquals(1, foundUsages.size());
+        UsageInfo usageInfo = foundUsages.iterator().next();
         assertTrue(usageInfo.getElement().getParent().getParent().getParent().getParent().getParent() instanceof XQueryFunctionDecl);
         String referencedVarValue = ((XQueryVarDecl)usageInfo.getReference().resolve().getParent()).getVarValue().getText();
         assertEquals("\"value\"", referencedVarValue);
@@ -58,9 +58,9 @@ public class XQueryFindUsageProviderTest extends LightCodeInsightFixtureTestCase
 
 
     public void testFindNamespaceNameUsages() {
-        Collection<UsageInfo> usageInfos = myFixture.testFindUsages("Namespace.xq");
-        assertEquals(1, usageInfos.size());
-        UsageInfo usageInfo = usageInfos.iterator().next();
+        Collection<UsageInfo> foundUsages = myFixture.testFindUsages("Namespace.xq");
+        assertEquals(1, foundUsages.size());
+        UsageInfo usageInfo = foundUsages.iterator().next();
         assertTrue(usageInfo.getElement().getParent().getParent().getParent().getParent().getParent().getParent().getParent() instanceof XQueryFunctionDecl);
         String referencedVarValue = ((XQueryNamespaceDecl)usageInfo.getReference().resolve().getParent()).getURILiteral().getText();
         assertEquals("\"zzz\"", referencedVarValue);

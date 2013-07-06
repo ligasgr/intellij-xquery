@@ -90,7 +90,7 @@ public class XQueryVariableReferenceTest extends LightCodeInsightFixtureTestCase
         PsiReference reference = references[0];
         PsiElement resolvedReference = reference.resolve();
         XQueryLetBinding letBinding = (XQueryLetBinding) resolvedReference.getParent();
-        assertEquals("\"sdfsd\"", letBinding.getExprSingle().getText());
+        assertEquals("\"anything\"", letBinding.getExprSingle().getText());
     }
 
 

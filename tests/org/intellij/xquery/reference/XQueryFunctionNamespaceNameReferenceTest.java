@@ -53,7 +53,7 @@ public class XQueryFunctionNamespaceNameReferenceTest extends LightPlatformCodeI
         PsiReference[] references = element.getReferences();
         PsiReference reference = references[0];
         PsiElement resolvedReference = reference.resolve();
-        XQueryModuleDecl referencedModule = (XQueryModuleDecl) ((XQueryNamespaceName) resolvedReference).getParent();
+        XQueryModuleDecl referencedModule = (XQueryModuleDecl) resolvedReference.getParent();
         assertEquals("xxx", referencedModule.getNamespaceName().getName());
     }
 
@@ -63,7 +63,7 @@ public class XQueryFunctionNamespaceNameReferenceTest extends LightPlatformCodeI
         PsiReference[] references = element.getReferences();
         PsiReference reference = references[0];
         PsiElement resolvedReference = reference.resolve();
-        XQueryModuleImport referencedModuleImport = (XQueryModuleImport) ((XQueryNamespaceName) resolvedReference).getParent();
+        XQueryModuleImport referencedModuleImport = (XQueryModuleImport) resolvedReference.getParent();
         assertEquals("yyy", referencedModuleImport.getNamespaceName().getName());
     }
 
@@ -73,7 +73,7 @@ public class XQueryFunctionNamespaceNameReferenceTest extends LightPlatformCodeI
         PsiReference[] references = element.getReferences();
         PsiReference reference = references[0];
         PsiElement resolvedReference = reference.resolve();
-        XQueryNamespaceDecl referencedDeclaration = (XQueryNamespaceDecl) ((XQueryNamespaceName) resolvedReference).getParent();
+        XQueryNamespaceDecl referencedDeclaration = (XQueryNamespaceDecl) resolvedReference.getParent();
         assertEquals("zzz", referencedDeclaration.getNamespaceName().getName());
     }
 

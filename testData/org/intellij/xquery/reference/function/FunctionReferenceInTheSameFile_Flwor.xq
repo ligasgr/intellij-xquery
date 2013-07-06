@@ -2,5 +2,5 @@ declare function example($functionArgumentScopeVar) {
     "x"
 };
 
-let $flworScopeVar := "sdfsd"
+let $flworScopeVar := "anything"
 return ex<caret>ample($flworScopeVar)
