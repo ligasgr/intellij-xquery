@@ -30,7 +30,7 @@ import java.util.Collection;
  * Date: 04/07/13
  * Time: 13:46
  */
-public class FindUsageTest extends LightCodeInsightFixtureTestCase {
+public class XQueryFindUsageProviderTest extends LightCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {

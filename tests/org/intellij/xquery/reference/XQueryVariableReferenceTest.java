@@ -34,7 +34,7 @@ import static java.util.Arrays.asList;
  * Date: 28/06/13
  * Time: 13:25
  */
-public class VariableReferenceTest extends LightCodeInsightFixtureTestCase {
+public class XQueryVariableReferenceTest extends LightCodeInsightFixtureTestCase {
     @Override
     protected String getTestDataPath() {
         return "testData/org/intellij/xquery/reference/variable";

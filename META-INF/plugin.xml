@@ -63,7 +63,7 @@
         <lang.parserDefinition language="XQuery" implementationClass="org.intellij.xquery.XQueryParserDefinition"/>
         <lang.syntaxHighlighterFactory key="XQuery"
                                        implementationClass="org.intellij.xquery.XQuerySyntaxHighlighterFactory"/>
-        <lang.findUsagesProvider language="XQuery" implementationClass="org.intellij.xquery.XQueryFindUsageProvider"/>
+        <lang.findUsagesProvider language="XQuery" implementationClass="org.intellij.xquery.usage.XQueryFindUsageProvider"/>
         <lang.commenter language="XQuery" implementationClass="org.intellij.xquery.comment.XQueryCommenter"/>
     </extensions>
 </idea-plugin>

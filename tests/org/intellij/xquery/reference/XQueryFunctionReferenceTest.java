@@ -31,7 +31,7 @@ import static java.util.Arrays.asList;
  * Date: 03/07/13
  * Time: 21:44
  */
-public class FunctionReferenceTest extends LightCodeInsightFixtureTestCase {
+public class XQueryFunctionReferenceTest extends LightCodeInsightFixtureTestCase {
     @Override
     protected String getTestDataPath() {
         return "testData/org/intellij/xquery/reference/function";

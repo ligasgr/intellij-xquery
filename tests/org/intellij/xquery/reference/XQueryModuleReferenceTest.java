@@ -33,7 +33,7 @@ import java.util.List;
  * Date: 02/07/13
  * Time: 21:00
  */
-public class ModuleReferenceTest extends LightCodeInsightFixtureTestCase {
+public class XQueryModuleReferenceTest extends LightCodeInsightFixtureTestCase {
     @Override
     protected String getTestDataPath() {
         return "testData/org/intellij/xquery/reference/module";

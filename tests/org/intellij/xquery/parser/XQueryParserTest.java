@@ -24,9 +24,9 @@ import org.intellij.xquery.XQueryParserDefinition;
  * Date: 14/06/13
  * Time: 21:01
  */
-public class ParsingTests extends ParsingTestCase {
+public class XQueryParserTest extends ParsingTestCase {
 
-    public ParsingTests() {
+    public XQueryParserTest() {
         super("parser", "xq", new XQueryParserDefinition());
     }
 

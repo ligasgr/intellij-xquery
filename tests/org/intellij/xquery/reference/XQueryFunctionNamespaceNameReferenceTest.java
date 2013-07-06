@@ -19,7 +19,7 @@ package org.intellij.xquery.reference;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryModuleImport;
 import org.intellij.xquery.psi.XQueryNamespaceDecl;
@@ -29,59 +29,15 @@ import java.util.List;
 
 /**
  * User: ligasgr
- * Date: 03/07/13
- * Time: 13:49
+ * Date: 06/07/13
+ * Time: 01:13
  */
-public class NamespaceNameReferenceTest extends LightCodeInsightFixtureTestCase {
+public class XQueryFunctionNamespaceNameReferenceTest extends LightPlatformCodeInsightFixtureTestCase {
+
     @Override
     protected String getTestDataPath() {
         return "testData/org/intellij/xquery/reference/namespace";
     }
-
-    public void testVariableNamespaceCompletion() {
-        myFixture.configureByFiles("VariableNamespaceNameCompletion.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
-        assertEquals(0, strings.size());
-    }
-
-
-    public void testVariableNamespaceReferenceForModuleDeclaration() {
-        myFixture.configureByFiles("VariableNamespaceNameReference_Module.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryModuleDecl referencedModule = (XQueryModuleDecl) ((XQueryNamespaceName) resolvedReference).getParent();
-        assertEquals("xxx", referencedModule.getNamespaceName().getName());
-    }
-
-    public void testVariableNamespaceReferenceForModuleImport() {
-        myFixture.configureByFiles("VariableNamespaceNameReference_Import.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryModuleImport referencedModuleImport = (XQueryModuleImport) ((XQueryNamespaceName) resolvedReference).getParent();
-        assertEquals("yyy", referencedModuleImport.getNamespaceName().getName());
-    }
-
-    public void testVariableNamespaceReferenceForNamespaceDeclaration() {
-        myFixture.configureByFiles("VariableNamespaceNameReference_Declaration.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryNamespaceDecl referencedDeclaration = (XQueryNamespaceDecl) ((XQueryNamespaceName) resolvedReference).getParent();
-        assertEquals("zzz", referencedDeclaration.getNamespaceName().getName());
-    }
-
-    public void testVariableNamespaceRename() {
-        myFixture.configureByFiles("VariableNamespaceNameRename.xq");
-        myFixture.renameElementAtCaret("aaa");
-        myFixture.checkResultByFile("VariableNamespaceNameRename.xq", "VariableNamespaceNameRenameAfter.xq", false);
-    }
-
 
     public void testFunctionNamespaceCompletion() {
         myFixture.configureByFiles("FunctionNamespaceNameCompletion.xq");
