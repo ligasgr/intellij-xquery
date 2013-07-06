@@ -65,5 +65,6 @@
                                        implementationClass="org.intellij.xquery.XQuerySyntaxHighlighterFactory"/>
         <lang.findUsagesProvider language="XQuery" implementationClass="org.intellij.xquery.usage.XQueryFindUsageProvider"/>
         <lang.commenter language="XQuery" implementationClass="org.intellij.xquery.comment.XQueryCommenter"/>
+        <lang.braceMatcher language="XQuery" implementationClass="org.intellij.xquery.XQueryBraceMatcher"/>
     </extensions>
 </idea-plugin>
