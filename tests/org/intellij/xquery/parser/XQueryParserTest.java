@@ -102,6 +102,14 @@ public class XQueryParserTest extends ParsingTestCase {
         doTest(true);
     }
 
+    public void testIncompleteQuotString() {
+        doTest(true);
+    }
+
+    public void testIncompleteAposString() {
+        doTest(true);
+    }
+
     @Override
     protected String getTestDataPath() {
         return "testData/org/intellij/xquery";
