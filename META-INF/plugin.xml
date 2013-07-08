@@ -69,7 +69,7 @@
         <lang.namesValidator language="XQuery" implementationClass="org.intellij.xquery.XQueryNamesValidator" />
         <codeInsight.wordCompletionFilter language="XQuery"
                                           implementationClass="org.intellij.xquery.XQueryWordCompletionFilter"/>
-
+        <usageTypeProvider implementation="org.intellij.xquery.usage.XQueryUsageTypeProvider"/>
         <!--<findUsagesHandlerFactory implementation="org.intellij.xquery.usage.XQueryFindUsagesHandlerFactory" />-->
     </extensions>
 </idea-plugin>
