@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery;
+package org.intellij.xquery.usage;
 
-import com.intellij.lexer.FlexAdapter;
-import com.intellij.lexer.LookAheadLexer;
-import com.intellij.lexer.MergingLexerAdapter;
-import static org.intellij.xquery.XQueryParserDefinition.COMMENTS;
+import com.intellij.find.findUsages.FindUsagesHandler;
+import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * User: ligasgr
- * Date: 25/03/13
- * Time: 21:16
+ * Date: 08/07/13
+ * Time: 01:17
  */
-public class XQueryLexer extends LookAheadLexer {
+public class XQueryFindUsagesHandler extends FindUsagesHandler {
+    public XQueryFindUsagesHandler(PsiElement element) {
+        super(element);
+    }
 
-    public XQueryLexer() {
-        super(new MergingLexerAdapter(new FlexAdapter(new _XQueryLexer()), COMMENTS));
+    protected boolean isSearchForTextOccurencesAvailable(@NotNull PsiElement psiElement, boolean isSingleFile) {
+        return true;
     }
 }

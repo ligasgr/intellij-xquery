@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 public class XQueryFindUsageProvider implements FindUsagesProvider {
     private static final DefaultWordsScanner WORDS_SCANNER =
             new DefaultWordsScanner(new XQueryLexer(),
-                    TokenSet.create(XQueryTypes.NCNAME), XQueryParserDefinition.COMMENTS, XQueryParserDefinition.STRINGS);
+                    TokenSet.EMPTY, XQueryParserDefinition.COMMENTS, XQueryParserDefinition.STRINGS);
 
     @Nullable
     @Override

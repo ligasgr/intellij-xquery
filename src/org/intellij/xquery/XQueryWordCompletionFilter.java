@@ -16,19 +16,17 @@
 
 package org.intellij.xquery;
 
-import com.intellij.lexer.FlexAdapter;
-import com.intellij.lexer.LookAheadLexer;
-import com.intellij.lexer.MergingLexerAdapter;
-import static org.intellij.xquery.XQueryParserDefinition.COMMENTS;
+import com.intellij.lang.DefaultWordCompletionFilter;
+import com.intellij.psi.tree.IElementType;
+import org.intellij.xquery.psi.XQueryTypes;
 
 /**
  * User: ligasgr
- * Date: 25/03/13
- * Time: 21:16
+ * Date: 07/07/13
+ * Time: 17:28
  */
-public class XQueryLexer extends LookAheadLexer {
-
-    public XQueryLexer() {
-        super(new MergingLexerAdapter(new FlexAdapter(new _XQueryLexer()), COMMENTS));
+public class XQueryWordCompletionFilter  extends DefaultWordCompletionFilter {
+    public boolean isWordCompletionEnabledIn(final IElementType element) {
+        return super.isWordCompletionEnabledIn(element) || element == XQueryTypes.NCNAME;
     }
 }

@@ -66,5 +66,10 @@
         <lang.findUsagesProvider language="XQuery" implementationClass="org.intellij.xquery.usage.XQueryFindUsageProvider"/>
         <lang.commenter language="XQuery" implementationClass="org.intellij.xquery.comment.XQueryCommenter"/>
         <lang.braceMatcher language="XQuery" implementationClass="org.intellij.xquery.XQueryBraceMatcher"/>
+        <lang.namesValidator language="XQuery" implementationClass="org.intellij.xquery.XQueryNamesValidator" />
+        <codeInsight.wordCompletionFilter language="XQuery"
+                                          implementationClass="org.intellij.xquery.XQueryWordCompletionFilter"/>
+
+        <!--<findUsagesHandlerFactory implementation="org.intellij.xquery.usage.XQueryFindUsagesHandlerFactory" />-->
     </extensions>
 </idea-plugin>
