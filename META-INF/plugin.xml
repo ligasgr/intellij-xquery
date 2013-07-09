@@ -73,7 +73,7 @@
         <usageTypeProvider implementation="org.intellij.xquery.usage.XQueryUsageTypeProvider"/>
         <findUsagesHandlerFactory implementation="org.intellij.xquery.usage.XQueryFindUsagesHandlerFactory"/>
         <lang.refactoringSupport language="XQuery"
-                                 implementationClass="org.intellij.xquery.refactoring.XQueryRefactoringSupportProvider"/>
-        <renameHandler implementation="org.intellij.xquery.refactoring.XQueryVariableInplaceRenameHandler"/>
+                                 implementationClass="org.intellij.xquery.reference.XQueryRefactoringSupportProvider"/>
+        <renameHandler implementation="org.intellij.xquery.reference.XQueryVariableInplaceRenameHandler"/>
     </extensions>
 </idea-plugin>

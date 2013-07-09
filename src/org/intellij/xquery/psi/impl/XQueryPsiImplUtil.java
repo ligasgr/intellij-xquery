@@ -167,6 +167,10 @@ public class XQueryPsiImplUtil {
         if (function != null) {
             return new LocalSearchScope(function);
         }
+        XQueryQueryBody queryBody = PsiTreeUtil.getParentOfType(element, XQueryQueryBody.class, true);
+        if (queryBody != null) {
+            return new LocalSearchScope(queryBody);
+        }
         return ResolveScopeManager.getElementUseScope(element);
     }
 }
