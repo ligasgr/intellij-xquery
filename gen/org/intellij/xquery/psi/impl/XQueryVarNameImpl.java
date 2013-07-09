@@ -25,6 +25,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
+import com.intellij.psi.search.SearchScope;
 
 public class XQueryVarNameImpl extends XQueryNamedElementImpl implements XQueryVarName {
 
@@ -63,6 +64,10 @@ public class XQueryVarNameImpl extends XQueryNamedElementImpl implements XQueryV
 
   public int getTextOffset() {
     return XQueryPsiImplUtil.getTextOffset(this);
+  }
+
+  public SearchScope getUseScope() {
+    return XQueryPsiImplUtil.getUseScope(this);
   }
 
 }

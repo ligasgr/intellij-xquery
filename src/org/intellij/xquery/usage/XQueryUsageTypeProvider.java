@@ -17,10 +17,12 @@
 package org.intellij.xquery.usage;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiPlainText;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usages.impl.rules.UsageType;
 import com.intellij.usages.impl.rules.UsageTypeProvider;
 import org.intellij.xquery.psi.XQueryFunctionCall;
+import org.intellij.xquery.psi.XQueryLiteral;
 import org.intellij.xquery.psi.XQueryVarRef;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,10 +37,16 @@ public class XQueryUsageTypeProvider implements UsageTypeProvider {
     public UsageType getUsageType(PsiElement element) {
         if (element == null) return null;
 
+        if (element.getParent() instanceof XQueryLiteral) {
+            return UsageType.LITERAL_USAGE;
+        }
+        if (element instanceof PsiPlainText) {
+            return UsageType.UNCLASSIFIED;
+        }
         if (PsiTreeUtil.getParentOfType(element, XQueryVarRef.class, false) != null) {
             return UsageType.READ;
         }
-        if (PsiTreeUtil.getParentOfType(element, XQueryFunctionCall.class, false) != null) {
+        if (element instanceof XQueryFunctionCall) {
             return new UsageType("Function call");
         }
         return null;

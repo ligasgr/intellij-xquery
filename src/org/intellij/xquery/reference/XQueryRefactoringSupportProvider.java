@@ -14,30 +14,22 @@
  * limitations under the License.
  */
 
-// This is a generated file. Not intended for manual editing.
-package org.intellij.xquery.psi;
+package org.intellij.xquery.reference;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
+import com.intellij.lang.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.SearchScope;
+import org.intellij.xquery.psi.XQueryFunctionName;
+import org.intellij.xquery.psi.XQueryVarName;
 
-public interface XQueryVarName extends XQueryNamedElement {
+/**
+ * User: ligasgr
+ * Date: 09/07/13
+ * Time: 13:54
+ */
+public class XQueryRefactoringSupportProvider extends RefactoringSupportProvider {
 
-  @Nullable
-  XQueryVarLocalName getVarLocalName();
-
-  @Nullable
-  XQueryVarNamespace getVarNamespace();
-
-  String getName();
-
-  PsiElement setName(String newName);
-
-  PsiElement getNameIdentifier();
-
-  int getTextOffset();
-
-  SearchScope getUseScope();
-
+    @Override
+    public boolean isMemberInplaceRenameAvailable(PsiElement element, PsiElement context) {
+        return element instanceof XQueryVarName || element instanceof XQueryFunctionName;
+    }
 }

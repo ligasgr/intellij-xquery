@@ -21,7 +21,11 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.ResolveScopeManager;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.search.LocalSearchScope;
+import com.intellij.psi.search.SearchScope;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.psi.*;
 import org.intellij.xquery.reference.*;
 import org.jetbrains.annotations.NotNull;
@@ -156,5 +160,13 @@ public class XQueryPsiImplUtil {
     public static int getTextOffset(XQueryFunctionName element) {
         if (element == null || element.getFunctionLocalName() == null) return 0;
         return getNameIdentifier(element).getTextOffset();
+    }
+
+    public static SearchScope getUseScope(XQueryVarName element) {
+        XQueryFunctionDecl function = PsiTreeUtil.getParentOfType(element, XQueryFunctionDecl.class, true);
+        if (function != null) {
+            return new LocalSearchScope(function);
+        }
+        return ResolveScopeManager.getElementUseScope(element);
     }
 }

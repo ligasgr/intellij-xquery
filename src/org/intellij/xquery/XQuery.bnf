@@ -493,7 +493,7 @@ private PrefixedName	   ::=   	Prefix ':' LocalPart
 private UnprefixedName	   ::=   	LocalPart
 Prefix	   ::=   	NCName
 LocalPart	   ::=   	NCName
-VarName ::= VarNamespace ':' VarLocalName | VarLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset]}
+VarName ::= VarNamespace ':' VarLocalName | VarLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset getUseScope]}
 VarNamespace	   ::=   	NCName {methods=[getReference]}
 VarLocalName	   ::=   	NCName
 FunctionName ::= FunctionNamespace ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset]}
