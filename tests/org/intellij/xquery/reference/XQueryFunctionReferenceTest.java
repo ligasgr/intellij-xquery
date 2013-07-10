@@ -19,7 +19,7 @@ package org.intellij.xquery.reference;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 
 import java.util.List;
@@ -31,7 +31,7 @@ import static java.util.Arrays.asList;
  * Date: 03/07/13
  * Time: 21:44
  */
-public class XQueryFunctionReferenceTest extends LightCodeInsightFixtureTestCase {
+public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixtureTestCase {
     @Override
     protected String getTestDataPath() {
         return "testData/org/intellij/xquery/reference/function";

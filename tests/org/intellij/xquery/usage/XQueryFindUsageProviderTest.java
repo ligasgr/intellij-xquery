@@ -17,7 +17,7 @@
 package org.intellij.xquery.usage;
 
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import com.intellij.usageView.UsageInfo;
 import org.intellij.xquery.psi.*;
 
@@ -28,7 +28,7 @@ import java.util.Collection;
  * Date: 04/07/13
  * Time: 13:46
  */
-public class XQueryFindUsageProviderTest extends LightCodeInsightFixtureTestCase {
+public class XQueryFindUsageProviderTest extends LightPlatformCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {

@@ -22,7 +22,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.intellij.xquery.XQueryFileType;
 import org.intellij.xquery.psi.XQueryFile;
 
@@ -33,7 +33,7 @@ import java.util.List;
  * Date: 02/07/13
  * Time: 21:00
  */
-public class XQueryModuleReferenceTest extends LightCodeInsightFixtureTestCase {
+public class XQueryModuleReferenceTest extends LightPlatformCodeInsightFixtureTestCase {
     @Override
     protected String getTestDataPath() {
         return "testData/org/intellij/xquery/reference/module";

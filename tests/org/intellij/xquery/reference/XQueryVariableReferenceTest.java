@@ -19,7 +19,7 @@ package org.intellij.xquery.reference;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryLetBinding;
 import org.intellij.xquery.psi.XQueryVarDecl;
@@ -34,7 +34,11 @@ import static java.util.Arrays.asList;
  * Date: 28/06/13
  * Time: 13:25
  */
-public class XQueryVariableReferenceTest extends LightCodeInsightFixtureTestCase {
+public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixtureTestCase {
+    public XQueryVariableReferenceTest() {
+        super();
+    }
+
     @Override
     protected String getTestDataPath() {
         return "testData/org/intellij/xquery/reference/variable";
