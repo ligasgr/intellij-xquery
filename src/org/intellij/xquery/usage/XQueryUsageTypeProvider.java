@@ -40,14 +40,8 @@ public class XQueryUsageTypeProvider implements UsageTypeProvider {
         if (element.getParent() instanceof XQueryLiteral) {
             return UsageType.LITERAL_USAGE;
         }
-        if (element instanceof PsiPlainText) {
-            return UsageType.UNCLASSIFIED;
-        }
         if (PsiTreeUtil.getParentOfType(element, XQueryVarRef.class, false) != null) {
             return UsageType.READ;
-        }
-        if (element instanceof XQueryFunctionCall) {
-            return new UsageType("Function call");
         }
         return null;
     }
