@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.reference;
+package org.intellij.xquery.refactoring;
 
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
