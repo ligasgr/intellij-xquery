@@ -34,7 +34,7 @@ import java.util.List;
 public class XQueryVariableNamespaceNameReferenceTest extends LightPlatformCodeInsightFixtureTestCase {
     @Override
     protected String getTestDataPath() {
-        return "testData/org/intellij/xquery/reference/namespace";
+        return "src/test/testData/org/intellij/xquery/reference/namespace";
     }
 
     public void testVariableNamespaceCompletion() {

@@ -36,7 +36,7 @@ import java.util.List;
 public class XQueryModuleReferenceTest extends LightPlatformCodeInsightFixtureTestCase {
     @Override
     protected String getTestDataPath() {
-        return "testData/org/intellij/xquery/reference/module";
+        return "src/test/testData/org/intellij/xquery/reference/module";
     }
 
 

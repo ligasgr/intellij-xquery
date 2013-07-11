@@ -11,3 +11,6 @@
 out/
 system-test/
 config-test/
+
+# Maven specific ones
+target/

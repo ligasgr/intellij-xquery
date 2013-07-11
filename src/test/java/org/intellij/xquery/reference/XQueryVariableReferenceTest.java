@@ -41,7 +41,7 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
 
     @Override
     protected String getTestDataPath() {
-        return "testData/org/intellij/xquery/reference/variable";
+        return "src/test/testData/org/intellij/xquery/reference/variable";
     }
 
     public void testVariableCompletionInTheSameFile() {

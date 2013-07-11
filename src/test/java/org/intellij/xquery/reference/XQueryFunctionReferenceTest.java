@@ -34,7 +34,7 @@ import static java.util.Arrays.asList;
 public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixtureTestCase {
     @Override
     protected String getTestDataPath() {
-        return "testData/org/intellij/xquery/reference/function";
+        return "src/test/testData/org/intellij/xquery/reference/function";
     }
 
 

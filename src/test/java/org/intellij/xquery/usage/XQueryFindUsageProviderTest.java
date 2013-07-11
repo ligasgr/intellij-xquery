@@ -32,7 +32,7 @@ public class XQueryFindUsageProviderTest extends LightPlatformCodeInsightFixture
 
     @Override
     protected String getTestDataPath() {
-        return "testData/org/intellij/xquery/usage";
+        return "src/test/testData/org/intellij/xquery/usage";
     }
 
     public void testFindFunctionUsages() {

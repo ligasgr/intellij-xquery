@@ -35,7 +35,7 @@ public class XQueryFunctionNamespaceNameReferenceTest extends LightPlatformCodeI
 
     @Override
     protected String getTestDataPath() {
-        return "testData/org/intellij/xquery/reference/namespace";
+        return "src/test/testData/org/intellij/xquery/reference/namespace";
     }
 
     public void testFunctionNamespaceCompletion() {
