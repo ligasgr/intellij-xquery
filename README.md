@@ -22,6 +22,18 @@ Provides support in [IntelliJ IDEA](http://www.jetbrains.com/idea/) for [XQuery]
 
 ## Change log
 
+### Version 0.0.3
+* Bug fix - Usage type always unclassified.
+* Bug fix - String highlighting didn't work while typing in some cases.
+* Bug fix - Whole function invocation is highlighted instead of name only.
+* Bug fix - Identifier while renamed doesn't accept - or .
+* Inline rename for local variables (code, comments, strings references and optionally text files usage renamed).
+* Code commenter.
+* Brace matching.
+* Word completion contributor for variable and function names (works after you've typed at least one character in fun/var name in new fun/var declaration; based on all words in current file).
+* Find usages in text files (as an option).
+
+
 ### Version 0.0.2
 * Highlighting improvements and bugfixes.
 * Variable reference resolution across files (scopes taken into account; no support for access modifiers).
@@ -32,7 +44,6 @@ Provides support in [IntelliJ IDEA](http://www.jetbrains.com/idea/) for [XQuery]
 * Navigation between modules via file location and namespace (if includes file path) in module imports.
 * Rename functionality for all references.
 * Basic find usage.
-
 
 ### Version 0.0.1
 * Basic syntax highlighting.
