@@ -18,16 +18,18 @@ package org.intellij.xquery.reference;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
-import org.intellij.xquery.psi.XQueryFunctionDecl;
-import org.intellij.xquery.psi.XQueryLetBinding;
-import org.intellij.xquery.psi.XQueryVarDecl;
-import org.intellij.xquery.psi.XQueryVarValue;
+import org.intellij.xquery.psi.*;
 
 import java.util.List;
 
+import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.intellij.xquery.reference.ReferenceUtil.assertChildOf;
+import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: ligasgr
@@ -68,87 +70,67 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
 
     public void testVariableReferenceOfGlobalVariable() {
         myFixture.configureByFiles("VariableReferenceInTheSameFile_Global.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryVarDecl varDecl = (XQueryVarDecl) resolvedReference.getParent();
-        XQueryVarValue varValue = varDecl.getVarValue();
-        assertEquals(".", varValue.getText());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertChildOf(resolvedReference, XQueryVarDecl.class);
     }
 
     public void testVariableReferenceOfFunctionArgument() {
         myFixture.configureByFiles("VariableReferenceInTheSameFile_FunctionArgument.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryFunctionDecl functionDecl = (XQueryFunctionDecl) resolvedReference.getParent().getParent().getParent();
-        assertEquals("example", functionDecl.getFunctionName().getText());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
     }
 
     public void testVariableReferenceOfFlworExpressionReference() {
         myFixture.configureByFiles("VariableReferenceInTheSameFile_Flwor.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryLetBinding letBinding = (XQueryLetBinding) resolvedReference.getParent();
-        assertEquals("\"anything\"", letBinding.getExprSingle().getText());
-    }
 
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertChildOf(resolvedReference, XQueryLetBinding.class);
+    }
 
     public void testVariableReferenceScopeOfGlobalVariableFromQueryBody() {
         myFixture.configureByFiles("VariableReferenceScopes_Global.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryVarDecl varDecl = (XQueryVarDecl) resolvedReference.getParent();
-        XQueryVarValue varValue = varDecl.getVarValue();
-        assertEquals("\"argGlobal\"", varValue.getText());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertChildOf(resolvedReference, XQueryVarDecl.class);
     }
 
     public void testVariableReferenceScopeOfGlobalVariableFromAnotherGlobalVariable() {
         myFixture.configureByFiles("VariableReferenceScopes_GlobalVar.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryVarDecl varDecl = (XQueryVarDecl) resolvedReference.getParent();
-        XQueryVarValue varValue = varDecl.getVarValue();
-        assertEquals("\"argGlobal\"", varValue.getText());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertChildOf(resolvedReference, XQueryVarDecl.class);
     }
+
 
     public void testVariableReferenceScopeOfFunctionArgument() {
         myFixture.configureByFiles("VariableReferenceScopes_Function.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryFunctionDecl functionDecl = (XQueryFunctionDecl) resolvedReference.getParent().getParent().getParent();
-        assertEquals("example", functionDecl.getFunctionName().getText());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
     }
 
     public void testVariableReferenceScopeOfLocalVariableReference() {
         myFixture.configureByFiles("VariableReferenceScopes_Local.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryLetBinding letBinding = (XQueryLetBinding) resolvedReference.getParent();
-        assertEquals("\"argLocal\"", letBinding.getExprSingle().getText());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertChildOf(resolvedReference, XQueryLetBinding.class);
     }
 
     public void testVariableReferenceFromAnotherFile() {
-        myFixture.configureByFiles("VariableReferenceFromAnotherFile.xq","VariableReferencedFile.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryVarDecl varDecl = (XQueryVarDecl) resolvedReference.getParent();
-        XQueryVarValue varValue = varDecl.getVarValue();
-        assertEquals("\"yeah\"", varValue.getText());
+        myFixture.configureByFiles("VariableReferenceFromAnotherFile.xq", "VariableReferencedFile.xq");
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertChildOf(resolvedReference, XQueryVarDecl.class);
+        XQueryVarDecl varDecl = getParentOfType(resolvedReference, XQueryVarDecl.class);
         assertEquals("VariableReferencedFile.xq", varDecl.getContainingFile().getName());
     }
 }

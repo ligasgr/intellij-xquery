@@ -20,11 +20,16 @@ import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import org.intellij.xquery.psi.XQueryFunctionCall;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
+import org.intellij.xquery.psi.XQueryVarDecl;
+import org.intellij.xquery.psi.XQueryVarRef;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.intellij.xquery.reference.ReferenceUtil.assertChildOf;
+import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
 /**
  * User: ligasgr
@@ -54,42 +59,35 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
 
     public void testFunctionReferenceFromVariableDeclaration() {
         myFixture.configureByFiles("FunctionReferenceInTheSameFile_Global.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryFunctionDecl functionDecl = (XQueryFunctionDecl) resolvedReference.getParent();
-        assertEquals("$functionArgumentScopeVar", functionDecl.getParamList().getText());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
     }
 
     public void testFunctionReferenceFromFunctionArgument() {
         myFixture.configureByFiles("FunctionReferenceInTheSameFile_FunctionArgument.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryFunctionDecl functionDecl = (XQueryFunctionDecl) resolvedReference.getParent();
-        assertEquals("example", functionDecl.getFunctionName().getText());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
     }
 
     public void testFunctionReferenceFromFlworExpression() {
         myFixture.configureByFiles("FunctionReferenceInTheSameFile_Flwor.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryFunctionDecl functionDecl = (XQueryFunctionDecl) resolvedReference.getParent();
-        assertEquals("example", functionDecl.getFunctionName().getText());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
     }
 
     public void testFunctionReferenceFromAnotherFile() {
         myFixture.configureByFiles("FunctionReferenceFromAnotherFile.xq","FunctionReferencedFile.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent().getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
         XQueryFunctionDecl varDecl = (XQueryFunctionDecl) resolvedReference.getParent();
-        assertEquals("$xxx", varDecl.getParamList().getText());
         assertEquals("FunctionReferencedFile.xq", varDecl.getContainingFile().getName());
     }
 }
