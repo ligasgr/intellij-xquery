@@ -19,14 +19,17 @@ package org.intellij.xquery.reference;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.intellij.xquery.XQueryFileType;
 import org.intellij.xquery.psi.XQueryFile;
+import org.intellij.xquery.psi.XQueryModuleImportPath;
 
 import java.util.List;
+
+import static org.intellij.xquery.reference.ReferenceUtil.assertChildOf;
+import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
 /**
  * User: ligasgr
@@ -50,12 +53,11 @@ public class XQueryModuleReferenceTest extends LightPlatformCodeInsightFixtureTe
 
     public void testModuleReference() {
         myFixture.configureByFiles("ModuleReference.xq","ModuleReference_ReferencedModule.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent().getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryFile referencedModule = (XQueryFile) resolvedReference;
-        assertEquals("ModuleReference_ReferencedModule.xq", referencedModule.getName());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryModuleImportPath.class);
+
+        assertChildOf(resolvedReference, XQueryFile.class);
+        assertEquals("ModuleReference_ReferencedModule.xq", ((XQueryFile) resolvedReference).getName());
     }
 
 

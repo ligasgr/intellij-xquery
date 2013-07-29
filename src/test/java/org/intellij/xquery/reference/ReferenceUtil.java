@@ -21,7 +21,6 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
 import org.hamcrest.CoreMatchers;
-import org.intellij.xquery.psi.XQueryVarRef;
 import org.junit.Assert;
 
 public class ReferenceUtil {
@@ -29,8 +28,13 @@ public class ReferenceUtil {
     }
 
     public static <T extends PsiElement> void assertChildOf(PsiElement element, Class<T> classOfParent) {
-        T parent = PsiTreeUtil.getParentOfType(element, classOfParent);
+        T parent = PsiTreeUtil.getParentOfType(element, classOfParent, false);
         Assert.assertThat(parent, CoreMatchers.is(CoreMatchers.notNullValue()));
+    }
+
+    public static <T extends PsiElement> void assertNotChildOf(PsiElement element, Class<T> classOfParent) {
+        T parent = PsiTreeUtil.getParentOfType(element, classOfParent, false);
+        Assert.assertThat(parent, CoreMatchers.is(CoreMatchers.nullValue()));
     }
 
     public static <T extends PsiElement> PsiElement getTargetOfReferenceAtCaret(CodeInsightTestFixture myFixture, Class<T> classOfSourceOfReference) {

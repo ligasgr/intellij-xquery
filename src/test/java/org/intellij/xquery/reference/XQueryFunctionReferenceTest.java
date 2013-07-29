@@ -18,12 +18,9 @@ package org.intellij.xquery.reference;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.intellij.xquery.psi.XQueryFunctionCall;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
-import org.intellij.xquery.psi.XQueryVarDecl;
-import org.intellij.xquery.psi.XQueryVarRef;
 
 import java.util.List;
 
@@ -41,7 +38,6 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
     protected String getTestDataPath() {
         return "src/test/testData/org/intellij/xquery/reference/function";
     }
-
 
     public void testFunctionCompletionInTheSameFile() {
         myFixture.configureByFiles("FunctionCompletionInTheSameFile.xq");

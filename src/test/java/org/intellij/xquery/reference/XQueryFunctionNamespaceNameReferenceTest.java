@@ -18,13 +18,16 @@ package org.intellij.xquery.reference;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import org.intellij.xquery.psi.XQueryFunctionNamespace;
 import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryModuleImport;
 import org.intellij.xquery.psi.XQueryNamespaceDecl;
 
 import java.util.List;
+
+import static org.intellij.xquery.reference.ReferenceUtil.assertChildOf;
+import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
 /**
  * User: ligasgr
@@ -47,32 +50,26 @@ public class XQueryFunctionNamespaceNameReferenceTest extends LightPlatformCodeI
 
     public void testFunctionNamespaceReferenceForModuleDeclaration() {
         myFixture.configureByFiles("FunctionNamespaceNameReference_Module.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryModuleDecl referencedModule = (XQueryModuleDecl) resolvedReference.getParent();
-        assertEquals("xxx", referencedModule.getNamespaceName().getName());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionNamespace.class);
+
+        assertChildOf(resolvedReference, XQueryModuleDecl.class);
     }
 
     public void testFunctionNamespaceReferenceForModuleImport() {
         myFixture.configureByFiles("FunctionNamespaceNameReference_Import.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryModuleImport referencedModuleImport = (XQueryModuleImport) resolvedReference.getParent();
-        assertEquals("yyy", referencedModuleImport.getNamespaceName().getName());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionNamespace.class);
+
+        assertChildOf(resolvedReference, XQueryModuleImport.class);
     }
 
     public void testFunctionNamespaceReferenceForNamespaceDeclaration() {
         myFixture.configureByFiles("FunctionNamespaceNameReference_Declaration.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryNamespaceDecl referencedDeclaration = (XQueryNamespaceDecl) resolvedReference.getParent();
-        assertEquals("zzz", referencedDeclaration.getNamespaceName().getName());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionNamespace.class);
+
+        assertChildOf(resolvedReference, XQueryNamespaceDecl.class);
     }
 
     public void testFunctionNamespaceRename() {

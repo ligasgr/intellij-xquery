@@ -18,13 +18,16 @@ package org.intellij.xquery.reference;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryModuleImport;
 import org.intellij.xquery.psi.XQueryNamespaceDecl;
+import org.intellij.xquery.psi.XQueryVarNamespace;
 
 import java.util.List;
+
+import static org.intellij.xquery.reference.ReferenceUtil.assertChildOf;
+import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
 /**
  * User: ligasgr
@@ -44,35 +47,28 @@ public class XQueryVariableNamespaceNameReferenceTest extends LightPlatformCodeI
         assertEquals(0, strings.size());
     }
 
-
     public void testVariableNamespaceReferenceForModuleDeclaration() {
         myFixture.configureByFiles("VariableNamespaceNameReference_Module.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryModuleDecl referencedModule = (XQueryModuleDecl) resolvedReference.getParent();
-        assertEquals("xxx", referencedModule.getNamespaceName().getName());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarNamespace.class);
+
+        assertChildOf(resolvedReference, XQueryModuleDecl.class);
     }
 
     public void testVariableNamespaceReferenceForModuleImport() {
         myFixture.configureByFiles("VariableNamespaceNameReference_Import.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryModuleImport referencedModuleImport = (XQueryModuleImport) resolvedReference.getParent();
-        assertEquals("yyy", referencedModuleImport.getNamespaceName().getName());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarNamespace.class);
+
+        assertChildOf(resolvedReference, XQueryModuleImport.class);
     }
 
     public void testVariableNamespaceReferenceForNamespaceDeclaration() {
         myFixture.configureByFiles("VariableNamespaceNameReference_Declaration.xq");
-        PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent();
-        PsiReference[] references = element.getReferences();
-        PsiReference reference = references[0];
-        PsiElement resolvedReference = reference.resolve();
-        XQueryNamespaceDecl referencedDeclaration = (XQueryNamespaceDecl) resolvedReference.getParent();
-        assertEquals("zzz", referencedDeclaration.getNamespaceName().getName());
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarNamespace.class);
+
+        assertChildOf(resolvedReference, XQueryNamespaceDecl.class);
     }
 
     public void testVariableNamespaceRename() {

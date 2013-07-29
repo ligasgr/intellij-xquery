@@ -28,6 +28,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.intellij.xquery.reference.ReferenceUtil.assertChildOf;
+import static org.intellij.xquery.reference.ReferenceUtil.assertNotChildOf;
 import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 import static org.junit.Assert.assertThat;
 
@@ -74,6 +75,7 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
 
         assertChildOf(resolvedReference, XQueryVarDecl.class);
+        assertNotChildOf(resolvedReference, XQueryVarRef.class);
     }
 
     public void testVariableReferenceOfFunctionArgument() {
@@ -82,6 +84,7 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
 
         assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+        assertNotChildOf(resolvedReference, XQueryVarRef.class);
     }
 
     public void testVariableReferenceOfFlworExpressionReference() {
@@ -90,6 +93,7 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
 
         assertChildOf(resolvedReference, XQueryLetBinding.class);
+        assertNotChildOf(resolvedReference, XQueryVarRef.class);
     }
 
     public void testVariableReferenceScopeOfGlobalVariableFromQueryBody() {
@@ -98,6 +102,7 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
 
         assertChildOf(resolvedReference, XQueryVarDecl.class);
+        assertNotChildOf(resolvedReference, XQueryVarRef.class);
     }
 
     public void testVariableReferenceScopeOfGlobalVariableFromAnotherGlobalVariable() {
@@ -106,6 +111,7 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
 
         assertChildOf(resolvedReference, XQueryVarDecl.class);
+        assertNotChildOf(resolvedReference, XQueryVarRef.class);
     }
 
 
@@ -115,6 +121,7 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
 
         assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+        assertNotChildOf(resolvedReference, XQueryVarRef.class);
     }
 
     public void testVariableReferenceScopeOfLocalVariableReference() {
@@ -123,6 +130,7 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
 
         assertChildOf(resolvedReference, XQueryLetBinding.class);
+        assertNotChildOf(resolvedReference, XQueryVarRef.class);
     }
 
     public void testVariableReferenceFromAnotherFile() {
