@@ -34,14 +34,12 @@ import org.jetbrains.annotations.Nullable;
  * Time: 12:54
  */
 public class XQueryFindUsageProvider implements FindUsagesProvider {
-    private static final DefaultWordsScanner WORDS_SCANNER =
-            new DefaultWordsScanner(new XQueryLexer(),
-                    TokenSet.EMPTY, XQueryParserDefinition.COMMENTS, XQueryParserDefinition.STRINGS);
 
     @Nullable
     @Override
     public WordsScanner getWordsScanner() {
-        return WORDS_SCANNER;
+        return new DefaultWordsScanner(new XQueryLexer(),
+                TokenSet.EMPTY, XQueryParserDefinition.COMMENTS, XQueryParserDefinition.STRINGS);
     }
 
     @Override
