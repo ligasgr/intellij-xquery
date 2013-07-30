@@ -328,6 +328,8 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 
 <XQUERY_RECOGNITION> {
 {S}                                       {return TokenType.WHITE_SPACE;}
+"\""                                      {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"'"                                       {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
 "xquery" / {S} ("encoding"|"version")     {return XQueryTypes.K_XQUERY;}
 "version" / {S} ("\""|"'")                {return XQueryTypes.K_VERSION;}
 "encoding" / {S} ("\""|"'")               {return XQueryTypes.K_ENCODING;}

@@ -32,41 +32,14 @@ public class XQueryLexerTest extends LightPlatformTestCase {
         PlatformTestCase.initPlatformLangPrefix();
     }
 
-    private static void doTest(@NonNls String text, @NonNls String[] expectedTokens) {
-        Lexer lexer = new XQueryLexer();
-        doTest(text, expectedTokens, lexer);
-    }
-
-    private static void doTestHL(@NonNls String text, @NonNls String[] expectedTokens) {
-        Lexer lexer = new XQueryLexer();
-        doTest(text, expectedTokens, lexer);
-    }
-
-    private static void doTest(String text, String[] expectedTokens, Lexer lexer) {
-        lexer.start(text);
-        int idx = 0;
-        while (lexer.getTokenType() != null) {
-            if (idx >= expectedTokens.length) fail("Too many tokens");
-            String tokenName = lexer.getTokenType().toString();
-            String expectedTokenType = expectedTokens[idx++];
-            String expectedTokenText = expectedTokens[idx++];
-            assertEquals(expectedTokenType, tokenName);
-            String tokenText = lexer.getBufferSequence().subSequence(lexer.getTokenStart(), lexer.getTokenEnd()).toString();
-            assertEquals(expectedTokenText, tokenText);
-            lexer.advance();
-        }
-
-        if (idx < expectedTokens.length) fail("Not enough tokens");
-    }
-
     public void testNCName() throws Exception {
-        doTest("xxx", new String[]{
+        assertProducedTokens("xxx", new String[]{
                 "WHITE_SPACE", "",
                 "NCName", "xxx"});
     }
 
     public void testQName() throws Exception {
-        doTest("xxx:yyy", new String[]{
+        assertProducedTokens("xxx:yyy", new String[]{
                 "WHITE_SPACE", "",
                 "NCName", "xxx",
                 ":", ":",
@@ -74,7 +47,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testLiterals() throws Exception {
-        doTest("\"abc\",'bcd',123,456.78", new String[]{
+        assertProducedTokens("\"abc\",'bcd',123,456.78", new String[]{
                 "WHITE_SPACE", "",
                 "StringLiteral", "\"abc\"",
                 ",", ",",
@@ -88,7 +61,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testExpressionComment() throws Exception {
-        doTest("(: content :)", new String[] {
+        assertProducedTokens("(: content :)", new String[]{
                 "ExprCommentStart", "(:",
                 "ExprCommentContent", " content ",
                 "ExprCommentEnd", ":)",
@@ -96,7 +69,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testXmlContent() throws Exception {
-        doTest("<tag attr='val'>content</tag>", new String[] {
+        assertProducedTokens("<tag attr='val'>content</tag>", new String[]{
                 "<", "<",
                 "NCName", "tag",
                 "S", " ",
@@ -113,5 +86,160 @@ public class XQueryLexerTest extends LightPlatformTestCase {
                 "NCName", "tag",
                 ">", ">",
         });
+    }
+
+    public void testFlworExpression() throws Exception {
+        assertProducedTokens("for $i in 1 to 10 let $j := 'no. ' || $i return $j", new String[] {
+                "for", "for",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "in", "in",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "1",
+                "WHITE_SPACE", " ",
+                "to", "to",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "10",
+                "WHITE_SPACE", " ",
+                "let", "let",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "j",
+                "WHITE_SPACE", " ",
+                ":=", ":=",
+                "WHITE_SPACE", " ",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'no. '",
+                "WHITE_SPACE", " ",
+                "||", "||",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "return", "return",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "j"
+        });
+    }
+
+
+
+    public void testVersionDeclaration() throws Exception {
+        assertProducedTokens("xquery version '3.0';", new String[] {
+                "WHITE_SPACE", "",
+                "xquery", "xquery",
+                "WHITE_SPACE", " ",
+                "version", "version",
+                "WHITE_SPACE", " ",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'3.0'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testEncodingAndVersionDeclaration() throws Exception {
+        assertProducedTokens("xquery encoding 'UTF-8' version '3.0';", new String[] {
+                "WHITE_SPACE", "",
+                "xquery", "xquery",
+                "WHITE_SPACE", " ",
+                "encoding", "encoding",
+                "WHITE_SPACE", " ",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'UTF-8'",
+                "WHITE_SPACE", " ",
+                "version", "version",
+                "WHITE_SPACE", " ",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'3.0'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testVariableDeclaration() throws Exception {
+        assertProducedTokens("declare variable $x := 'value';", new String[] {
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "variable", "variable",
+                "WHITE_SPACE", " ",
+                "WHITE_SPACE", "",
+                "$", "$",
+                "NCName", "x",
+                "WHITE_SPACE", " ",
+                ":=", ":=",
+                "WHITE_SPACE", " ",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'value'",
+                ";", ";"
+        });
+    }
+
+    public void testVariableReference() throws Exception {
+        assertProducedTokens("$y", new String[] {
+                "$", "$",
+                "NCName", "y"
+        });
+    }
+
+    public void testFunctionDeclaration() throws Exception {
+        assertProducedTokens("declare function x() {()};", new String[] {
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "function", "function",
+                "WHITE_SPACE", "",
+                "WHITE_SPACE", " ",
+                "WHITE_SPACE", "",
+                "NCName", "x",
+                "WHITE_SPACE", "",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "(", "(",
+                ")", ")",
+                "}", "}",
+                ";", ";"
+        });
+    }
+
+    public void testFunctionCall() throws Exception {
+        assertProducedTokens("fn:empty('')", new String[] {
+                "WHITE_SPACE", "",
+                "NCName", "fn",
+                ":", ":",
+                "NCName", "empty",
+                "(", "(",
+                "WHITE_SPACE", "",
+                "StringLiteral", "''",
+                ")", ")"
+        });
+    }
+
+    private static void assertProducedTokens(@NonNls String text, @NonNls String[] expectedTokens) {
+        Lexer lexer = new XQueryLexer();
+        assertProducedTokens(text, expectedTokens, lexer);
+    }
+
+    private static void assertProducedTokens(String text, String[] expectedTokens, Lexer lexer) {
+        lexer.start(text);
+        int idx = 0;
+        while (lexer.getTokenType() != null) {
+            if (idx >= expectedTokens.length) fail("Too many tokens");
+            String tokenName = lexer.getTokenType().toString();
+            String expectedTokenType = expectedTokens[idx++];
+            String expectedTokenText = expectedTokens[idx++];
+            assertEquals(expectedTokenType, tokenName);
+            String tokenText = lexer.getBufferSequence().subSequence(lexer.getTokenStart(), lexer.getTokenEnd()).toString();
+            assertEquals(expectedTokenText, tokenText);
+            lexer.advance();
+        }
+
+        if (idx < expectedTokens.length) fail("Not enough tokens");
     }
 }
