@@ -213,6 +213,201 @@ public class XQueryLexerTest extends LightPlatformTestCase {
         });
     }
 
+    public void testQueryByElement() throws Exception {
+        assertProducedTokens("//tag", new String[] {
+                "//", "//",
+                "NCName", "tag"
+        });
+    }
+
+    public void testQueryByAttribute() throws Exception {
+        assertProducedTokens("//@attr", new String[] {
+                "//", "//",
+                "WHITE_SPACE", "",
+                "@", "@",
+                "NCName", "attr"
+        });
+    }
+
+    public void testQueryWithSelector() throws Exception {
+        assertProducedTokens("/tag[2]", new String[] {
+                "/", "/",
+                "NCName", "tag",
+                "[", "[",
+                "IntegerLiteral", "2",
+                "]", "]"
+        });
+    }
+
+    public void testGroupBy() throws Exception {
+        assertProducedTokens("for $x in 1 to 20 group by $key := $x mod 2 return $x", new String[] {
+                "for", "for",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "x",
+                "WHITE_SPACE", " ",
+                "in", "in",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "1",
+                "WHITE_SPACE", " ",
+                "to", "to",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "20",
+                "WHITE_SPACE", " ",
+                "group", "group",
+                "WHITE_SPACE", " ",
+                "by", "by",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "key",
+                "WHITE_SPACE", " ",
+                ":=", ":=",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "x",
+                "WHITE_SPACE", " ",
+                "mod", "mod",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "2",
+                "WHITE_SPACE", " ",
+                "return", "return",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "x"
+        });
+    }
+
+    public void testWhere() throws Exception {
+        assertProducedTokens("for $i in //item where $i/id = '0' return $i/name", new String[] {
+                "for", "for",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "in", "in",
+                "WHITE_SPACE", " ",
+                "//", "//",
+                "NCName", "item",
+                "WHITE_SPACE", " ",
+                "where", "where",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "/", "/",
+                "NCName", "id",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'0'",
+                "WHITE_SPACE", " ",
+                "return", "return",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "/", "/",
+                "NCName", "name"
+        });
+    }
+
+    public void testOrderBy() throws Exception {
+        assertProducedTokens("for $i in //item order by $i/id return $i/name", new String[] {
+                "for", "for",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "in", "in",
+                "WHITE_SPACE", " ",
+                "//", "//",
+                "NCName", "item",
+                "WHITE_SPACE", " ",
+                "order", "order",
+                "WHITE_SPACE", " ",
+                "by", "by",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "/", "/",
+                "NCName", "id",
+                "WHITE_SPACE", " ",
+                "return", "return",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "/", "/",
+                "NCName", "name"
+        });
+    }
+
+    public void testTypeswitch() throws Exception {
+        assertProducedTokens("typeswitch (//element) case $type1 as element(*, x:type1) return true() default return false()", new String[] {
+                "typeswitch", "typeswitch",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "//", "//",
+                "NCName", "element",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "case", "case",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "type1",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "WHITE_SPACE", " ",
+                "element", "element",
+                "(", "(",
+                "*", "*",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "NCName", "x",
+                ":", ":",
+                "NCName", "type1",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "return", "return",
+                "WHITE_SPACE", " ",
+                "NCName", "true",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "default", "default",
+                "WHITE_SPACE", " ",
+                "return", "return",
+                "WHITE_SPACE", " ",
+                "NCName", "false",
+                "(", "(",
+                ")", ")"
+        });
+    }
+
+    public void testEvery() throws Exception {
+        assertProducedTokens("every $i in //item satisfies (exists($i/subitem))", new String[] {
+                "every", "every",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "in", "in",
+                "WHITE_SPACE", " ",
+                "//", "//",
+                "NCName", "item",
+                "WHITE_SPACE", " ",
+                "satisfies", "satisfies",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "WHITE_SPACE", "",
+                "NCName", "exists",
+                "(", "(",
+                "$", "$",
+                "NCName", "i",
+                "/", "/",
+                "NCName", "subitem",
+                ")", ")",
+                ")", ")"
+        });
+    }
+
     private static void assertProducedTokens(@NonNls String text, @NonNls String[] expectedTokens) {
         Lexer lexer = new XQueryLexer();
         assertProducedTokens(text, expectedTokens, lexer);
