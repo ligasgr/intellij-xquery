@@ -20,6 +20,9 @@ import com.intellij.openapi.fileTypes.FileTypeConsumer;
 import com.intellij.openapi.fileTypes.FileTypeFactory;
 import org.jetbrains.annotations.NotNull;
 
+import static org.intellij.xquery.XQueryFileType.ALL_EXTENSIONS;
+import static org.intellij.xquery.XQueryFileType.INSTANCE;
+
 
 /**
  * User: ligasgr
@@ -28,6 +31,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class XQueryFileTypeFactory  extends FileTypeFactory {
     public void createFileTypes(@NotNull FileTypeConsumer consumer) {
-        consumer.consume(XQueryFileType.INSTANCE, XQueryFileType.DEFAULT_EXTENSION);
+        consumer.consume(INSTANCE, ALL_EXTENSIONS);
     }
 }
