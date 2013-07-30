@@ -122,7 +122,9 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "<"                                       {pushState(START_TAG); return XQueryTypes.LT_CHAR;}
 ">"                                       {return XQueryTypes.GT_CHAR;}
 "@"                                       {pushState(QNAME);return XQueryTypes.AT_SIGN;}
+"//" / {S}? ("child"|"descendant"|"attribute"|"self"|"descendant-or-self"|"following-sibling"|"following"|"parent"|"ancestor"|"preceding-sibling"|"preceding"|"ancestor-or-self") {S}? "::" {return XQueryTypes.SLASH_SLASH;}
 "//"                                      {pushState(QNAME);return XQueryTypes.SLASH_SLASH;}
+"/" / {S}? ("child"|"descendant"|"attribute"|"self"|"descendant-or-self"|"following-sibling"|"following"|"parent"|"ancestor"|"preceding-sibling"|"preceding"|"ancestor-or-self") {S}? "::" {return XQueryTypes.SLASH;}
 "/"                                       {pushState(QNAME);return XQueryTypes.SLASH;}
 "+"                                       {return XQueryTypes.OP_PLUS;}
 "-"                                       {return XQueryTypes.OP_MINUS;}

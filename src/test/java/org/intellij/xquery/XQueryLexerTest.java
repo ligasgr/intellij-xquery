@@ -239,6 +239,17 @@ public class XQueryLexerTest extends LightPlatformTestCase {
         });
     }
 
+    public void testQueryWithAxis() throws Exception {
+        assertProducedTokens("//tag/parent::*", new String[] {
+                "//", "//",
+                "NCName", "tag",
+                "/", "/",
+                "parent", "parent",
+                "::", "::",
+                "*", "*"
+        });
+    }
+
     public void testGroupBy() throws Exception {
         assertProducedTokens("for $x in 1 to 20 group by $key := $x mod 2 return $x", new String[] {
                 "for", "for",
