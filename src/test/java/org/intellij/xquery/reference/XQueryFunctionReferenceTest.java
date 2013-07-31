@@ -47,6 +47,14 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
         assertEquals(1, strings.size());
     }
 
+    public void testFunctionCompletionInTheSameFileWithoutParentheses() {
+        myFixture.configureByFiles("FunctionCompletionInTheSameFileWithoutParentheses.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        assertTrue(strings.containsAll(asList("example")));
+        assertEquals(1, strings.size());
+    }
+
     public void testFunctionRenameInTheSameFile() {
         myFixture.configureByFiles("FunctionRenameInTheSameFile.xq");
         myFixture.renameElementAtCaret("renamed");

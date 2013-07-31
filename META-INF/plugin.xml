@@ -87,5 +87,6 @@
         <lang.refactoringSupport language="XQuery"
                                  implementationClass="org.intellij.xquery.refactoring.XQueryRefactoringSupportProvider"/>
         <renameHandler implementation="org.intellij.xquery.refactoring.XQueryVariableInplaceRenameHandler"/>
+        <completion.contributor language="XQuery" implementationClass="org.intellij.xquery.completion.XQueryCompletionContributor"/>
     </extensions>
 </idea-plugin>
