@@ -55,6 +55,13 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
         assertEquals(1, strings.size());
     }
 
+    public void testFunctionCompletionWithParenthesesAddedAfterFunctionName() {
+        myFixture.configureByFile("FunctionCompletionWithParenthesesAdded.xq");
+        myFixture.completeBasic();
+        myFixture.type('\n');
+        myFixture.checkResultByFile("FunctionCompletionWithParenthesesAddedAfter.xq");
+    }
+
     public void testFunctionRenameInTheSameFile() {
         myFixture.configureByFiles("FunctionRenameInTheSameFile.xq");
         myFixture.renameElementAtCaret("renamed");

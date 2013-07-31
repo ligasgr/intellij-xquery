@@ -16,8 +16,11 @@
 
 package org.intellij.xquery.reference;
 
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.scope.BaseScopeProcessor;
@@ -156,11 +159,7 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
     private void addVariantIfNotAlreadyAdded(Map<String, LookupElement> variants, XQueryFunctionDecl functionDecl) {
         String key = functionDecl.getFunctionName().getText();
         if (!variants.containsKey(key)) {
-            variants.put(key, LookupElementBuilder.create(functionDecl.getFunctionName(), key).
-                    withIcon(XQueryIcons.FILE).
-                    withTypeText(functionDecl.getContainingFile().getName())
-
-            );
+            variants.put(key, createLookupElement(functionDecl.getFunctionName(), key));
         }
     }
 
@@ -177,6 +176,19 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
 
     private boolean isNotFunctionCall(PsiElement psiElement) {
         return !(psiElement.getParent() instanceof XQueryFunctionCall || psiElement.getParent() instanceof XQueryNamedFunctionRef);
+    }
+
+    private LookupElement createLookupElement(PsiElement psiElement, String key) {
+        return LookupElementBuilder.create(psiElement, key)
+                .withIcon(XQueryIcons.FILE)
+                .withTypeText(psiElement.getContainingFile().getName())
+                .withInsertHandler(new InsertHandler() {
+                    @Override
+                    public void handleInsert(final InsertionContext context, LookupElement item) {
+                        final Document document = context.getEditor().getDocument();
+                        document.insertString(context.getSelectionEndOffset(), "()");
+                    }
+                });
     }
 
     private class VariableVariantsScopeProcessor extends BaseScopeProcessor {
@@ -201,10 +213,9 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
         private void addElementIfNotAlreadyAdded(PsiElement psiElement) {
             String key = psiElement.getText();
             if (!myResult.containsKey(key)) {
-                myResult.put(key, LookupElementBuilder.create(key).
-                        withIcon(XQueryIcons.FILE).
-                        withTypeText(psiElement.getContainingFile().getName()));
+                myResult.put(key, createLookupElement(psiElement, key));
             }
         }
     }
+
 }
