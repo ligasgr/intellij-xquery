@@ -17,16 +17,23 @@
 package org.intellij.xquery.psi;
 
 import com.intellij.openapi.project.Project;
+
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryFileType;
-
 /**
  * User: ligasgr
  * Date: 08/06/13
  * Time: 22:01
  */
 public class XQueryElementFactory {
+
+    public static XQueryFile createFile(Project project, String text) {
+        String name = "dummy.xq";
+        return (XQueryFile) PsiFileFactory.getInstance(project).
+                createFileFromText(name, XQueryFileType.INSTANCE, text);
+    }
+
     public static XQueryVarName createVariableReference(Project project, String localVariableName) {
         final XQueryFile file = createFile(project, "$" + localVariableName);
         return PsiTreeUtil.findChildOfType(file, XQueryVarName.class);
@@ -37,15 +44,14 @@ public class XQueryElementFactory {
         return PsiTreeUtil.findChildOfType(file, XQueryVarName.class);
     }
 
+    public static XQueryVarDecl createVariableDeclaration(Project project, String namespaceName, String variableName) {
+        final XQueryFile file = createFile(project, "declare variable $" + namespaceName + ":" + variableName + " := 'value';");
+        return PsiTreeUtil.findChildOfType(file, XQueryVarDecl.class);
+    }
+
     public static XQueryNamespaceName createModuleDeclarationName(Project project, String name) {
         final XQueryFile file = createFile(project, "module namespace " + name + " = 'dummy';");
         return PsiTreeUtil.findChildOfType(file, XQueryNamespaceName.class);
-    }
-
-    public static XQueryFile createFile(Project project, String text) {
-        String name = "dummy.xq";
-        return (XQueryFile) PsiFileFactory.getInstance(project).
-                createFileFromText(name, XQueryFileType.INSTANCE, text);
     }
 
     public static XQueryModuleImportPath createImport(Project project, String wholePathWithAposOrQuote) {
@@ -53,8 +59,18 @@ public class XQueryElementFactory {
         return PsiTreeUtil.findChildOfType(file, XQueryModuleImportPath.class);
     }
 
+    public static XQueryNamespaceDecl createNamespaceDeclaration(Project project, String namespaceName) {
+        final XQueryFile file = createFile(project, "declare namespace " + namespaceName + " = 'dummy';");
+        return PsiTreeUtil.findChildOfType(file, XQueryNamespaceDecl.class);
+    }
+
     public static XQueryFunctionName createFunctionReference(Project project, String namespaceName, String functionaName) {
         final XQueryFile file = createFile(project, namespaceName + ":" + functionaName + "()");
         return PsiTreeUtil.findChildOfType(file, XQueryFunctionName.class);
+    }
+
+    public static XQueryFunctionDecl createFunctionDeclaration(Project project, String namespaceName, String functionaName) {
+        final XQueryFile file = createFile(project, "declare function " + namespaceName + ":" + functionaName + "($param) {()};");
+        return PsiTreeUtil.findChildOfType(file, XQueryFunctionDecl.class);
     }
 }

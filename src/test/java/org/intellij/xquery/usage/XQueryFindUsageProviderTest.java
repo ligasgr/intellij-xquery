@@ -16,6 +16,7 @@
 
 package org.intellij.xquery.usage;
 
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import com.intellij.usageView.UsageInfo;
@@ -29,6 +30,8 @@ import java.util.Collection;
  * Time: 13:46
  */
 public class XQueryFindUsageProviderTest extends LightPlatformCodeInsightFixtureTestCase {
+
+    private final XQueryFindUsageProvider provider = new XQueryFindUsageProvider();
 
     @Override
     protected String getTestDataPath() {
@@ -48,6 +51,15 @@ public class XQueryFindUsageProviderTest extends LightPlatformCodeInsightFixture
         assertEquals("$local:var", referencedFunctionBodyText);
     }
 
+    public void testFunctionUsagesDescription() {
+        XQueryFunctionDecl functionDeclaration = XQueryElementFactory.createFunctionDeclaration(getProject(),
+                "local", "example");
+
+        String description = provider.getNodeText(functionDeclaration, true);
+
+        assertEquals("declare function local:example($param) {()}", description);
+    }
+
     public void testFindVariableUsages() {
         Collection<UsageInfo> foundUsages = myFixture.testFindUsages("Variable.xq");
 
@@ -60,6 +72,15 @@ public class XQueryFindUsageProviderTest extends LightPlatformCodeInsightFixture
         assertEquals("\"value\"", referencedVarValue);
     }
 
+    public void testVariableUsagesDescription() {
+        XQueryVarDecl variableDeclaration = XQueryElementFactory.createVariableDeclaration(getProject(), "local",
+                "example");
+
+        String description = provider.getNodeText(variableDeclaration, true);
+
+        assertEquals("declare variable $local:example := 'value'", description);
+    }
+
     public void testFindNamespaceNameUsages() {
         Collection<UsageInfo> foundUsages = myFixture.testFindUsages("Namespace.xq");
 
@@ -70,5 +91,38 @@ public class XQueryFindUsageProviderTest extends LightPlatformCodeInsightFixture
         XQueryNamespaceDecl namespaceDeclaration = (XQueryNamespaceDecl) usageInfo.getReference().resolve().getParent();
         String referencedVarValue = namespaceDeclaration.getURILiteral().getText();
         assertEquals("\"zzz\"", referencedVarValue);
+    }
+
+    public void testNamespaceNameUsagesDescription() {
+        XQueryNamespaceDecl namespaceDeclaration = XQueryElementFactory.createNamespaceDeclaration(getProject(),
+                "example");
+
+        String description = provider.getNodeText(namespaceDeclaration, true);
+
+        assertEquals("declare namespace example = 'dummy';", description);
+    }
+
+    public void testNamespaceNameInModuleUsagesDescription() {
+        XQueryNamespaceName namespaceName = XQueryElementFactory.createModuleDeclarationName(getProject(), "example");
+
+        String description = provider.getNodeText(namespaceName.getParent(), true);
+
+        assertEquals("module namespace example = 'dummy';", description);
+    }
+
+    public void testNamespaceNameInImportUsagesDescription() {
+        XQueryModuleImportPath moduleImportPath = XQueryElementFactory.createImport(getProject(), "'path.xq'");
+
+        String description = provider.getNodeText(moduleImportPath.getParent(), true);
+
+        assertEquals("import module namespace dummy = 'path.xq';", description);
+    }
+
+    public void testFileUsagesDescription() {
+        XQueryFile file = XQueryElementFactory.createFile(getProject(), "text");
+
+        String description = provider.getNodeText(file, true);
+
+        assertEquals("text", description);
     }
 }
