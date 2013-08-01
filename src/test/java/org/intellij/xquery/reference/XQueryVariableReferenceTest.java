@@ -65,7 +65,7 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
 
     public void testVariableRenameInTheSameFile() {
         myFixture.configureByFiles("VariableRenameInTheSameFile.xq");
-        myFixture.renameElementAtCaret("endAfterChanges");
+        myFixture.renameElementAtCaret("renamed");
         myFixture.checkResultByFile("VariableRenameInTheSameFile.xq", "VariableRenameInTheSameFileAfter.xq", false);
     }
 
