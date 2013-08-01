@@ -93,12 +93,36 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
     }
 
     public void testFunctionReferenceFromAnotherFile() {
-        myFixture.configureByFiles("FunctionReferenceFromAnotherFile.xq","FunctionReferencedFile.xq");
+        myFixture.configureByFiles("FunctionReferenceFromAnotherFile.xq", "FunctionReferencedFile.xq");
 
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
 
         assertChildOf(resolvedReference, XQueryFunctionDecl.class);
         XQueryFunctionDecl varDecl = (XQueryFunctionDecl) resolvedReference.getParent();
         assertEquals("FunctionReferencedFile.xq", varDecl.getContainingFile().getName());
+    }
+
+    public void testFunctionReferenceToNotExistingFunction() {
+        myFixture.configureByFiles("FunctionReferenceToNotExistingFunction.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertNull(resolvedReference);
+    }
+
+    public void testFunctionReferenceToDuplicatedFunction() {
+        myFixture.configureByFiles("FunctionReferenceToDuplicatedFunction.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+    }
+
+    public void testFunctionReferenceToFunctionDuplicatedInImport() {
+        myFixture.configureByFiles("FunctionReferenceToFunctionDuplicatedInImport.xq", "FunctionReferencedFile.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertNull(resolvedReference);
     }
 }

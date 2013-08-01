@@ -19,18 +19,16 @@ package org.intellij.xquery.reference;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
-import org.intellij.xquery.psi.*;
+import org.intellij.xquery.psi.XQueryFunctionDecl;
+import org.intellij.xquery.psi.XQueryLetBinding;
+import org.intellij.xquery.psi.XQueryVarDecl;
+import org.intellij.xquery.psi.XQueryVarRef;
 
 import java.util.List;
 
 import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.intellij.xquery.reference.ReferenceUtil.assertChildOf;
-import static org.intellij.xquery.reference.ReferenceUtil.assertNotChildOf;
-import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
-import static org.junit.Assert.assertThat;
+import static org.intellij.xquery.reference.ReferenceUtil.*;
 
 /**
  * User: ligasgr
@@ -59,7 +57,8 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
         myFixture.configureByFiles("VariableCompletionInTheSameFileScopes.xq");
         myFixture.complete(CompletionType.BASIC, 1);
         List<String> strings = myFixture.getLookupElementStrings();
-        assertTrue(strings.containsAll(asList("anotherOne", "globalScopeVar", "scope:globalScopeVar", "functionArgumentScopeVar", "newOne", "p", "rank", "someVar")));
+        assertTrue(strings.containsAll(asList("anotherOne", "globalScopeVar", "scope:globalScopeVar",
+                "functionArgumentScopeVar", "newOne", "p", "rank", "someVar")));
         assertEquals(8, strings.size());
     }
 
@@ -114,7 +113,6 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
         assertNotChildOf(resolvedReference, XQueryVarRef.class);
     }
 
-
     public void testVariableReferenceScopeOfFunctionArgument() {
         myFixture.configureByFiles("VariableReferenceScopes_Function.xq");
 
@@ -140,5 +138,29 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
         assertChildOf(resolvedReference, XQueryVarDecl.class);
         XQueryVarDecl varDecl = getParentOfType(resolvedReference, XQueryVarDecl.class);
         assertEquals("VariableReferencedFile.xq", varDecl.getContainingFile().getName());
+    }
+
+    public void testVariableReferenceToNotExistingVariable() {
+        myFixture.configureByFiles("VariableReferenceToNotExistingVariable.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertNull(resolvedReference);
+    }
+
+    public void testVariableReferenceToDuplicatedVariable() {
+        myFixture.configureByFiles("VariableReferenceToDuplicatedVariable.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertChildOf(resolvedReference, XQueryVarDecl.class);
+    }
+
+    public void testVariableReferenceToVariableDuplicatedInImport() {
+        myFixture.configureByFiles("VariableReferenceToVariableDuplicatedInImport.xq", "VariableReferencedFile.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertNull(resolvedReference);
     }
 }
