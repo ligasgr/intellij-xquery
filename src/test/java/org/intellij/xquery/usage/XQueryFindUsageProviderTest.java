@@ -16,13 +16,13 @@
 
 package org.intellij.xquery.usage;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import com.intellij.usageView.UsageInfo;
 import org.intellij.xquery.psi.*;
 
 import java.util.Collection;
+
+import static org.intellij.xquery.Assertions.assertChildOf;
 
 /**
  * User: ligasgr
@@ -43,12 +43,8 @@ public class XQueryFindUsageProviderTest extends LightPlatformCodeInsightFixture
 
         assertEquals(1, foundUsages.size());
         UsageInfo usageInfo = foundUsages.iterator().next();
-        XQueryQueryBody query = PsiTreeUtil.getParentOfType(usageInfo.getElement(), XQueryQueryBody.class);
-        assertNotNull(query);
-        XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) usageInfo.getReference().resolve().getParent();
-        XQueryExpr functionBody = functionDeclaration.getFunctionBody().getEnclosedExpr().getExpr();
-        String referencedFunctionBodyText = functionBody.getText();
-        assertEquals("$local:var", referencedFunctionBodyText);
+        assertChildOf(usageInfo.getElement(), XQueryQueryBody.class);
+        assertChildOf(usageInfo.getReference().resolve(), XQueryFunctionDecl.class);
     }
 
     public void testFunctionUsagesDescription() {
@@ -65,11 +61,8 @@ public class XQueryFindUsageProviderTest extends LightPlatformCodeInsightFixture
 
         assertEquals(1, foundUsages.size());
         UsageInfo usageInfo = foundUsages.iterator().next();
-        XQueryFunctionDecl functionDeclaration = PsiTreeUtil.getParentOfType(usageInfo.getElement(), XQueryFunctionDecl.class);
-        assertNotNull(functionDeclaration);
-        XQueryVarDecl variableDeclaration = (XQueryVarDecl) usageInfo.getReference().resolve().getParent();
-        String referencedVarValue = variableDeclaration.getVarValue().getText();
-        assertEquals("\"value\"", referencedVarValue);
+        assertChildOf(usageInfo.getElement(), XQueryFunctionDecl.class);
+        assertChildOf(usageInfo.getReference().resolve(), XQueryVarDecl.class);
     }
 
     public void testVariableUsagesDescription() {
@@ -86,11 +79,8 @@ public class XQueryFindUsageProviderTest extends LightPlatformCodeInsightFixture
 
         assertEquals(1, foundUsages.size());
         UsageInfo usageInfo = foundUsages.iterator().next();
-        XQueryFunctionDecl functionDeclaration = PsiTreeUtil.getParentOfType(usageInfo.getElement(), XQueryFunctionDecl.class);
-        assertNotNull(functionDeclaration);
-        XQueryNamespaceDecl namespaceDeclaration = (XQueryNamespaceDecl) usageInfo.getReference().resolve().getParent();
-        String referencedVarValue = namespaceDeclaration.getURILiteral().getText();
-        assertEquals("\"zzz\"", referencedVarValue);
+        assertChildOf(usageInfo.getElement(), XQueryFunctionDecl.class);
+        assertChildOf(usageInfo.getReference().resolve(), XQueryNamespaceDecl.class);
     }
 
     public void testNamespaceNameUsagesDescription() {
@@ -119,10 +109,10 @@ public class XQueryFindUsageProviderTest extends LightPlatformCodeInsightFixture
     }
 
     public void testFileUsagesDescription() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "text");
+        XQueryFile file = XQueryElementFactory.createFile(getProject(), "example contents");
 
         String description = provider.getNodeText(file, true);
 
-        assertEquals("text", description);
+        assertEquals("example contents", description);
     }
 }
