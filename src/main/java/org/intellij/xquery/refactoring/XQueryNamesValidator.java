@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery;
+package org.intellij.xquery.refactoring;
 
 import com.intellij.lang.refactoring.NamesValidator;
 import com.intellij.openapi.project.Project;

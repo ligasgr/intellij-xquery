@@ -27,6 +27,6 @@ public class XQueryLanguage  extends Language {
     public static final XQueryLanguage INSTANCE = new XQueryLanguage();
 
     public XQueryLanguage() {
-        super("XQuery"); //, "application/xquery", "application/xquery+xml");
+        super("XQuery");
     }
 }

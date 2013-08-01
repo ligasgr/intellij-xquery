@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery;
+package org.intellij.xquery.icons;
 
 import com.intellij.openapi.util.IconLoader;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery;
+package org.intellij.xquery.braces;
 
 import com.intellij.lang.BracePair;
 import com.intellij.lang.PairedBraceMatcher;
