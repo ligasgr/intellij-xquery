@@ -1,0 +1,1 @@
+declare variable $local:variab<caret>leName := "value";

@@ -47,6 +47,34 @@ public class XQueryFindUsageProviderTest extends LightPlatformCodeInsightFixture
         assertChildOf(usageInfo.getReference().resolve(), XQueryFunctionDecl.class);
     }
 
+    public void testFindTwoFunctionUsages() {
+        Collection<UsageInfo> foundUsages = myFixture.testFindUsages("FunctionTwoUsages.xq");
+
+        assertEquals(2, foundUsages.size());
+        UsageInfo usageInfo = foundUsages.iterator().next();
+        assertChildOf(usageInfo.getElement(), XQueryQueryBody.class);
+        assertChildOf(usageInfo.getReference().resolve(), XQueryFunctionDecl.class);
+        UsageInfo secondUsageInfo = foundUsages.iterator().next();
+        assertChildOf(secondUsageInfo.getElement(), XQueryQueryBody.class);
+        assertChildOf(secondUsageInfo.getReference().resolve(), XQueryFunctionDecl.class);
+    }
+
+    public void testFindFunctionUsagesInAnotherFile() {
+        Collection<UsageInfo> foundUsages = myFixture.testFindUsages("FunctionFromAnotherFile.xq", "AnotherFile.xq");
+
+        assertEquals(1, foundUsages.size());
+        UsageInfo usageInfo = foundUsages.iterator().next();
+        assertChildOf(usageInfo.getElement(), XQueryQueryBody.class);
+        assertChildOf(usageInfo.getReference().resolve(), XQueryFunctionDecl.class);
+        assertEquals("AnotherFile.xq", usageInfo.getReference().resolve().getContainingFile().getName());
+    }
+
+    public void testFindFunctionUsagesWhenAnotherFileDoesNotExist() {
+        Collection<UsageInfo> foundUsages = myFixture.testFindUsages("FunctionFromAnotherFile.xq");
+
+        assertEquals(0, foundUsages.size());
+    }
+
     public void testFunctionUsagesDescription() {
         XQueryFunctionDecl functionDeclaration = XQueryElementFactory.createFunctionDeclaration(getProject(),
                 "local", "example");
@@ -63,6 +91,14 @@ public class XQueryFindUsageProviderTest extends LightPlatformCodeInsightFixture
         UsageInfo usageInfo = foundUsages.iterator().next();
         assertChildOf(usageInfo.getElement(), XQueryFunctionDecl.class);
         assertChildOf(usageInfo.getReference().resolve(), XQueryVarDecl.class);
+    }
+
+    public void testFindVariableTextUsages() {
+        Collection<UsageInfo> foundUsages = myFixture.testFindUsages("VariableReferencedInText.xq", "Text.txt");
+
+        assertEquals(1, foundUsages.size());
+        UsageInfo usageInfo = foundUsages.iterator().next();
+        assertEquals("Text.txt", usageInfo.getElement().getContainingFile().getName());
     }
 
     public void testVariableUsagesDescription() {
