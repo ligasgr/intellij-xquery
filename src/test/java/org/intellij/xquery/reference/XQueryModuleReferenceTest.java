@@ -28,7 +28,7 @@ import org.intellij.xquery.psi.XQueryModuleImportPath;
 
 import java.util.List;
 
-import static org.intellij.xquery.reference.ReferenceUtil.assertChildOf;
+import static org.intellij.xquery.Assertions.assertChildOf;
 import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
 /**

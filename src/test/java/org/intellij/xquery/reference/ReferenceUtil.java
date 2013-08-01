@@ -20,21 +20,14 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
 
+/**
+ * User: ligasgr
+ * Date: 15/07/13
+ * Time: 13:49
+ */
 public class ReferenceUtil {
     private ReferenceUtil() {
-    }
-
-    public static <T extends PsiElement> void assertChildOf(PsiElement element, Class<T> classOfParent) {
-        T parent = PsiTreeUtil.getParentOfType(element, classOfParent, false);
-        Assert.assertThat(parent, CoreMatchers.is(CoreMatchers.notNullValue()));
-    }
-
-    public static <T extends PsiElement> void assertNotChildOf(PsiElement element, Class<T> classOfParent) {
-        T parent = PsiTreeUtil.getParentOfType(element, classOfParent, false);
-        Assert.assertThat(parent, CoreMatchers.is(CoreMatchers.nullValue()));
     }
 
     public static <T extends PsiElement> PsiElement getTargetOfReferenceAtCaret(CodeInsightTestFixture myFixture, Class<T> classOfSourceOfReference) {

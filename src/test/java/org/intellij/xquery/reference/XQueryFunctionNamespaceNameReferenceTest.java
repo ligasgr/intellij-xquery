@@ -23,7 +23,7 @@ import org.intellij.xquery.psi.*;
 
 import java.util.List;
 
-import static org.intellij.xquery.reference.ReferenceUtil.assertChildOf;
+import static org.intellij.xquery.Assertions.assertChildOf;
 import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
 /**

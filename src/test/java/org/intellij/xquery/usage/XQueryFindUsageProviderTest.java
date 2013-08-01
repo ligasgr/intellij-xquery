@@ -41,8 +41,8 @@ public class XQueryFindUsageProviderTest extends LightPlatformCodeInsightFixture
     public void testFindFunctionUsages() {
         Collection<UsageInfo> foundUsages = myFixture.testFindUsages("Function.xq");
 
-        UsageInfo usageInfo = foundUsages.iterator().next();
         assertEquals(1, foundUsages.size());
+        UsageInfo usageInfo = foundUsages.iterator().next();
         XQueryQueryBody query = PsiTreeUtil.getParentOfType(usageInfo.getElement(), XQueryQueryBody.class);
         assertNotNull(query);
         XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) usageInfo.getReference().resolve().getParent();
