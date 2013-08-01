@@ -21,8 +21,8 @@ import com.intellij.lexer.LookAheadLexer;
 import com.intellij.lexer.MergingLexerAdapter;
 
 import static com.intellij.psi.tree.TokenSet.orSet;
-import static org.intellij.xquery.XQueryParserDefinition.COMMENTS;
-import static org.intellij.xquery.XQueryParserDefinition.WHITE_SPACES;
+import static org.intellij.xquery.parser.XQueryParserDefinition.COMMENTS;
+import static org.intellij.xquery.parser.XQueryParserDefinition.WHITE_SPACES;
 
 /**
  * User: ligasgr

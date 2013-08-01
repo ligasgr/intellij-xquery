@@ -23,7 +23,7 @@ import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.TokenSet;
 import org.intellij.xquery.lexer.XQueryLexer;
-import org.intellij.xquery.XQueryParserDefinition;
+import org.intellij.xquery.parser.XQueryParserDefinition;
 import org.intellij.xquery.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

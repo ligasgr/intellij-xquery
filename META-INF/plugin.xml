@@ -72,7 +72,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="org.intellij.xquery.XQueryFileTypeFactory"/>
-        <lang.parserDefinition language="XQuery" implementationClass="org.intellij.xquery.XQueryParserDefinition"/>
+        <lang.parserDefinition language="XQuery" implementationClass="org.intellij.xquery.parser.XQueryParserDefinition"/>
         <lang.syntaxHighlighterFactory key="XQuery"
                                        implementationClass="org.intellij.xquery.XQuerySyntaxHighlighterFactory"/>
         <lang.findUsagesProvider language="XQuery"

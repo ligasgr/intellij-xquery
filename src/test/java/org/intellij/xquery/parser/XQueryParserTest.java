@@ -17,7 +17,6 @@
 package org.intellij.xquery.parser;
 
 import com.intellij.testFramework.ParsingTestCase;
-import org.intellij.xquery.XQueryParserDefinition;
 
 /**
  * User: ligasgr
