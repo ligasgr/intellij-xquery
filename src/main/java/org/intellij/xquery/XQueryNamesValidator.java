@@ -19,7 +19,7 @@ package org.intellij.xquery;
 import com.intellij.lang.refactoring.NamesValidator;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.TokenType;
-import org.intellij.xquery.psi.XQueryTokenType;
+import org.intellij.xquery.lexer.XQueryLexer;
 import org.intellij.xquery.psi.XQueryTypes;
 
 /**

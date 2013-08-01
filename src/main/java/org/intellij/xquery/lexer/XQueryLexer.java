@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery;
+package org.intellij.xquery.lexer;
 
 import com.intellij.lexer.FlexAdapter;
 import com.intellij.lexer.LookAheadLexer;
 import com.intellij.lexer.MergingLexerAdapter;
-import com.intellij.psi.tree.TokenSet;
 
 import static com.intellij.psi.tree.TokenSet.orSet;
 import static org.intellij.xquery.XQueryParserDefinition.COMMENTS;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery;
+package org.intellij.xquery.lexer;
 
 import com.intellij.lexer.Lexer;
 import com.intellij.testFramework.LightPlatformTestCase;

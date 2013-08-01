@@ -20,7 +20,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
-import com.intellij.lexer.FlexAdapter;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
@@ -29,13 +28,12 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
+import org.intellij.xquery.lexer.XQueryLexer;
 import org.intellij.xquery.parser.XQueryParser;
 import org.intellij.xquery.psi.XQueryBasicTypes;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryTypes;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.Reader;
 
 /**
  * User: ligasgr
