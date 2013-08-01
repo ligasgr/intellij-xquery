@@ -43,7 +43,8 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
 
     public XQueryVariableReference(@NotNull XQueryVarRef element, TextRange textRange) {
         super(element, textRange);
-        checkedNamespace = myElement.getVarName().getVarNamespace() != null ? myElement.getVarName().getVarNamespace().getText() : null;
+        checkedNamespace = myElement.getVarName().getVarNamespace() != null ? myElement.getVarName().getVarNamespace
+                ().getText() : null;
     }
 
     @NotNull
@@ -55,17 +56,22 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
             PsiTreeUtil.treeWalkUp(processor, myElement, null, ResolveState.initial());
             Map<String, ResolveResult> scopeProcessorResults = processor.getResults();
 
-            Map<String, ResolveResult> variableDeclarationResults = getVariableDeclarationReferences(file, scopeProcessorResults, checkedNamespace);
+            Map<String, ResolveResult> variableDeclarationResults = getVariableDeclarationReferences(file,
+                    scopeProcessorResults, checkedNamespace);
 
-            Map<String, ResolveResult> externalVariableDeclarationResults = getExternalVariableDeclarationReferences(file, variableDeclarationResults);
+            Map<String, ResolveResult> externalVariableDeclarationResults = getExternalVariableDeclarationReferences
+                    (file, variableDeclarationResults);
 
-            return externalVariableDeclarationResults.values().toArray(new ResolveResult[externalVariableDeclarationResults.size()]);
+            return externalVariableDeclarationResults.values().toArray(new
+                    ResolveResult[externalVariableDeclarationResults.size()]);
         }
         return new ResolveResult[0];
     }
 
-    private Map<String, ResolveResult> getExternalVariableDeclarationReferences(XQueryFile file, Map<String, ResolveResult> results) {
-        final String referenceNamespace = myElement.getVarName().getVarNamespace() != null ? myElement.getVarName().getVarNamespace().getText() : null;
+    private Map<String, ResolveResult> getExternalVariableDeclarationReferences(XQueryFile file, Map<String,
+            ResolveResult> results) {
+        final String referenceNamespace = myElement.getVarName().getVarNamespace() != null ? myElement.getVarName()
+                .getVarNamespace().getText() : null;
 
         if (referenceNamespace != null) {
             addReferencesFromImportedModules(file, results, referenceNamespace);
@@ -73,7 +79,8 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
         return results;
     }
 
-    private void addReferencesFromImportedModules(XQueryFile file, Map<String, ResolveResult> results, String referenceNamespace) {
+    private void addReferencesFromImportedModules(XQueryFile file, Map<String, ResolveResult> results,
+                                                  String referenceNamespace) {
         for (XQueryModuleImport moduleImport : file.getModuleImports()) {
             if (referenceNamespace.equals(moduleImport.getNamespaceName().getText())) {
                 addReferencesFromAllFilesInImport(moduleImport, results);
@@ -81,19 +88,22 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
         }
     }
 
-    private void addReferencesFromAllFilesInImport(XQueryModuleImport moduleImport, Map<String, ResolveResult> results) {
+    private void addReferencesFromAllFilesInImport(XQueryModuleImport moduleImport, Map<String,
+            ResolveResult> results) {
         List<XQueryModuleImportPath> importPaths = moduleImport.getModuleImportPathList();
         for (XQueryModuleImportPath path : importPaths) {
             if (path.getReference() != null) {
                 XQueryFile xQueryFile = (XQueryFile) path.getReference().resolve();
                 if (xQueryFile != null) {
-                    getVariableDeclarationReferences(xQueryFile, results, xQueryFile.getModuleNamespaceName().getText());
+                    getVariableDeclarationReferences(xQueryFile, results, xQueryFile.getModuleNamespaceName().getText
+                            ());
                 }
             }
         }
     }
 
-    private Map<String, ResolveResult> getVariableDeclarationReferences(XQueryFile file, Map<String, ResolveResult> results, String checkedNamespace) {
+    private Map<String, ResolveResult> getVariableDeclarationReferences(XQueryFile file, Map<String,
+            ResolveResult> results, String checkedNamespace) {
 
         for (XQueryVarDecl varDecl : file.getVariableDeclarations()) {
             if (variableNameExists(varDecl)) {
@@ -107,20 +117,25 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
         return varDecl.getVarName() != null && varDecl.getVarName().getTextLength() > 0;
     }
 
-    private void addReferenceIfNotAlreadyAdded(Map<String, ResolveResult> results, XQueryVarDecl varDecl, String checkedNamespace) {
+    private void addReferenceIfNotAlreadyAdded(Map<String, ResolveResult> results, XQueryVarDecl varDecl,
+                                               String checkedNamespace) {
         String key = varDecl.getVarName().getText();
         if (!results.containsKey(key)) {
             addElementToResultsIfMatching(results, varDecl.getVarName(), varDecl.getVarName(), key, checkedNamespace);
         }
     }
 
-    private void addElementToResultsIfMatching(Map<String, ResolveResult> results, PsiElement referenceTarget, XQueryVarName comparedVarName, String key, String checkedNamespace) {
-        final String varDeclNamespace = comparedVarName.getVarNamespace() != null ? comparedVarName.getVarNamespace().getText() : null;
+    private void addElementToResultsIfMatching(Map<String, ResolveResult> results, PsiElement referenceTarget,
+                                               XQueryVarName comparedVarName, String key, String checkedNamespace) {
+        final String varDeclNamespace = comparedVarName.getVarNamespace() != null ? comparedVarName.getVarNamespace()
+                .getText() : null;
         final String referenceNamespace = checkedNamespace;
         final String varDeclLocalName = comparedVarName.getVarLocalName().getText();
         final String referenceLocalName = myElement.getVarName().getVarLocalName().getText();
-        boolean namespacesAndLocalNamesMatch = referenceNamespace != null && referenceNamespace.equals(varDeclNamespace) && referenceLocalName.equals(varDeclLocalName);
-        boolean namespacesAreEmptyAndLocalNamesMatch = referenceNamespace == null && varDeclNamespace == null && varDeclLocalName.equals(referenceLocalName);
+        boolean namespacesAndLocalNamesMatch = referenceNamespace != null && referenceNamespace.equals
+                (varDeclNamespace) && referenceLocalName.equals(varDeclLocalName);
+        boolean namespacesAreEmptyAndLocalNamesMatch = referenceNamespace == null && varDeclNamespace == null &&
+                varDeclLocalName.equals(referenceLocalName);
 
         if (namespacesAndLocalNamesMatch) {
             results.put(key, new PsiElementResolveResult(referenceTarget));
@@ -221,7 +236,8 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
 
         @Override
         public boolean execute(@NotNull PsiElement element, ResolveState state) {
-            boolean elementIsGoodCandidate = !element.equals(myElement) && element instanceof XQueryVarName && isNotVariableReference(element);
+            boolean elementIsGoodCandidate = !element.equals(myElement) && element instanceof XQueryVarName &&
+                    isNotVariableReference(element);
             if (elementIsGoodCandidate) {
                 addElementIfNotAlreadyAdded(element);
             }

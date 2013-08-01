@@ -25,33 +25,33 @@ import org.jetbrains.annotations.Nullable;
  * Time: 23:24
  */
 public class XQueryCommenter implements Commenter {
-        @Nullable
-        @Override
-        public String getLineCommentPrefix() {
-            return null;
-        }
+    @Nullable
+    @Override
+    public String getLineCommentPrefix() {
+        return null;
+    }
 
-        @Nullable
-        @Override
-        public String getBlockCommentPrefix() {
-            return "(:";
-        }
+    @Nullable
+    @Override
+    public String getBlockCommentPrefix() {
+        return "(:";
+    }
 
-        @Nullable
-        @Override
-        public String getBlockCommentSuffix() {
-            return ":)";
-        }
+    @Nullable
+    @Override
+    public String getBlockCommentSuffix() {
+        return ":)";
+    }
 
-        @Nullable
-        @Override
-        public String getCommentedBlockCommentPrefix() {
-            return null;
-        }
+    @Nullable
+    @Override
+    public String getCommentedBlockCommentPrefix() {
+        return null;
+    }
 
-        @Nullable
-        @Override
-        public String getCommentedBlockCommentSuffix() {
-            return null;
-        }
+    @Nullable
+    @Override
+    public String getCommentedBlockCommentSuffix() {
+        return null;
+    }
 }

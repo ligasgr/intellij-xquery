@@ -30,12 +30,14 @@ public class ReferenceUtil {
     private ReferenceUtil() {
     }
 
-    public static <T extends PsiElement> PsiElement getTargetOfReferenceAtCaret(CodeInsightTestFixture myFixture, Class<T> classOfSourceOfReference) {
+    public static <T extends PsiElement> PsiElement getTargetOfReferenceAtCaret(CodeInsightTestFixture myFixture,
+                                                                                Class<T> classOfSourceOfReference) {
         PsiReference reference = getReferenceAtCaret(myFixture, classOfSourceOfReference);
         return reference.resolve();
     }
 
-    private static <T extends PsiElement> PsiReference getReferenceAtCaret(CodeInsightTestFixture myFixture, Class<T> classOfSourceOfReference) {
+    private static <T extends PsiElement> PsiReference getReferenceAtCaret(CodeInsightTestFixture myFixture,
+                                                                           Class<T> classOfSourceOfReference) {
         PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset());
         T sourceOfReference = PsiTreeUtil.getParentOfType(element, classOfSourceOfReference);
         return sourceOfReference.getReference();

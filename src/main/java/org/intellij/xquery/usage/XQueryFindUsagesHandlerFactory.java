@@ -28,22 +28,23 @@ import org.jetbrains.annotations.NotNull;
  * Date: 08/07/13
  * Time: 01:15
  */
-public class XQueryFindUsagesHandlerFactory  extends FindUsagesHandlerFactory {
+public class XQueryFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
     @Override
     public boolean canFindUsages(@NotNull final PsiElement element) {
         if (element instanceof PsiFileSystemItem) {
-            if (((PsiFileSystemItem)element).getVirtualFile() == null) return false;
-        }
-        else if (!LanguageFindUsages.INSTANCE.forLanguage(element.getLanguage()).canFindUsagesFor(element)) {
+            if (((PsiFileSystemItem) element).getVirtualFile() == null) return false;
+        } else if (!LanguageFindUsages.INSTANCE.forLanguage(element.getLanguage()).canFindUsagesFor(element)) {
             return false;
         }
         return element.isValid();
     }
 
     @Override
-    public FindUsagesHandler createFindUsagesHandler(@NotNull final PsiElement element, final boolean forHighlightUsages) {
+    public FindUsagesHandler createFindUsagesHandler(@NotNull final PsiElement element,
+                                                     final boolean forHighlightUsages) {
         if (canFindUsages(element)) {
-            return new XQueryFindUsagesHandler(element){};
+            return new XQueryFindUsagesHandler(element) {
+            };
         }
         return null;
     }

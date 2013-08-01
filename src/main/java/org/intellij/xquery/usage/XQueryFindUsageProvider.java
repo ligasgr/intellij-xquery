@@ -77,7 +77,9 @@ public class XQueryFindUsageProvider implements FindUsagesProvider {
     @NotNull
     @Override
     public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
-        if (element.getParent() instanceof XQueryVarDecl || element.getParent() instanceof XQueryFunctionDecl || element.getParent() instanceof XQueryModuleDecl || element.getParent() instanceof XQueryModuleImport || element.getParent() instanceof XQueryNamespaceDecl) {
+        if (element.getParent() instanceof XQueryVarDecl || element.getParent() instanceof XQueryFunctionDecl ||
+                element.getParent() instanceof XQueryModuleDecl || element.getParent() instanceof XQueryModuleImport
+                || element.getParent() instanceof XQueryNamespaceDecl) {
             return element.getParent().getText();
         } else {
             return element.getText();

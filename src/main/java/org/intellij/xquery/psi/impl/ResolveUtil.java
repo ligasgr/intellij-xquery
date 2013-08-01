@@ -31,7 +31,8 @@ public class ResolveUtil {
                                           ResolveState substitutor, PsiElement lastParent, PsiElement place) {
         PsiElement run = lastParent == null ? element.getLastChild() : lastParent.getPrevSibling();
         while (run != null) {
-            if (PsiTreeUtil.findCommonParent(place, run) != run && !run.processDeclarations(processor, substitutor, null, place)) {
+            if (PsiTreeUtil.findCommonParent(place, run) != run && !run.processDeclarations(processor, substitutor,
+                    null, place)) {
                 return false;
             }
             run = run.getPrevSibling();

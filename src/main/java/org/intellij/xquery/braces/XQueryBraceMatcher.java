@@ -30,8 +30,7 @@ import org.jetbrains.annotations.Nullable;
  * Date: 06/07/13
  * Time: 23:35
  */
-public class XQueryBraceMatcher implements PairedBraceMatcher
-{
+public class XQueryBraceMatcher implements PairedBraceMatcher {
     private static final BracePair[] PAIRS = new BracePair[]{
             new BracePair(XQueryTypes.L_C_BRACE, XQueryTypes.R_C_BRACE, true),
             new BracePair(XQueryTypes.L_BRACKET, XQueryTypes.R_BRACKET, false),
@@ -44,20 +43,18 @@ public class XQueryBraceMatcher implements PairedBraceMatcher
     };
 
     @Override
-    public BracePair[] getPairs ()
-    {
+    public BracePair[] getPairs() {
         return PAIRS;
     }
 
     @Override
-    public boolean isPairedBracesAllowedBeforeType (@NotNull IElementType lbraceType, @Nullable IElementType contextType)
-    {
+    public boolean isPairedBracesAllowedBeforeType(@NotNull IElementType lbraceType,
+                                                   @Nullable IElementType contextType) {
         return true;
     }
 
     @Override
-    public int getCodeConstructStart (PsiFile file, int openingBraceOffset)
-    {
+    public int getCodeConstructStart(PsiFile file, int openingBraceOffset) {
         return openingBraceOffset;
     }
 }

@@ -50,7 +50,7 @@ public class XQueryModuleReferenceTest extends LightPlatformCodeInsightFixtureTe
     }
 
     public void testModuleReference() {
-        myFixture.configureByFiles("ModuleReference.xq","ModuleReference_ReferencedModule.xq");
+        myFixture.configureByFiles("ModuleReference.xq", "ModuleReference_ReferencedModule.xq");
 
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryModuleImportPath.class);
 
@@ -63,12 +63,14 @@ public class XQueryModuleReferenceTest extends LightPlatformCodeInsightFixtureTe
         PsiFile[] files = FilenameIndex.getFilesByName(myFixture.getProject(), "ModuleReference_ReferencedModule.xq",
                 GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(myFixture.getProject()),
                         XQueryFileType
-                        .INSTANCE));
+                                .INSTANCE));
 
         myFixture.renameElement(files[0], "ModuleReference_RenamedFile.xq");
         myFixture.checkResultByFile("ModuleReference.xq", "ModuleReferenceAfterRenameOfReferencedFile.xq", false);
-        PsiFile[] filesAfterRename = FilenameIndex.getFilesByName(myFixture.getProject(), "ModuleReference_RenamedFile.xq",
-                GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(myFixture.getProject()), XQueryFileType
+        PsiFile[] filesAfterRename = FilenameIndex.getFilesByName(myFixture.getProject(),
+                "ModuleReference_RenamedFile.xq",
+                GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(myFixture.getProject()),
+                        XQueryFileType
                         .INSTANCE));
         assertEquals(1, files.length);
         assertNotNull(filesAfterRename[0]);
@@ -83,7 +85,8 @@ public class XQueryModuleReferenceTest extends LightPlatformCodeInsightFixtureTe
     }
 
     public void testModuleReferenceToFileWhenTwoFilesWithTheSameName() {
-        myFixture.configureByFiles("ModuleReference.xq","ModuleReference_ReferencedModule.xq", "sub/ModuleReference_ReferencedModule.xq");
+        myFixture.configureByFiles("ModuleReference.xq", "ModuleReference_ReferencedModule.xq",
+                "sub/ModuleReference_ReferencedModule.xq");
 
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryModuleImportPath.class);
 

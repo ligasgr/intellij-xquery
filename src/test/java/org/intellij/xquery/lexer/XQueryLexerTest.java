@@ -89,7 +89,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testFlworExpression() throws Exception {
-        assertProducedTokens("for $i in 1 to 10 let $j := 'no. ' || $i return $j", new String[] {
+        assertProducedTokens("for $i in 1 to 10 let $j := 'no. ' || $i return $j", new String[]{
                 "for", "for",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -125,9 +125,8 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
 
-
     public void testVersionDeclaration() throws Exception {
-        assertProducedTokens("xquery version '3.0';", new String[] {
+        assertProducedTokens("xquery version '3.0';", new String[]{
                 "WHITE_SPACE", "",
                 "xquery", "xquery",
                 "WHITE_SPACE", " ",
@@ -140,7 +139,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testEncodingAndVersionDeclaration() throws Exception {
-        assertProducedTokens("xquery encoding 'UTF-8' version '3.0';", new String[] {
+        assertProducedTokens("xquery encoding 'UTF-8' version '3.0';", new String[]{
                 "WHITE_SPACE", "",
                 "xquery", "xquery",
                 "WHITE_SPACE", " ",
@@ -157,7 +156,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testVariableDeclaration() throws Exception {
-        assertProducedTokens("declare variable $x := 'value';", new String[] {
+        assertProducedTokens("declare variable $x := 'value';", new String[]{
                 "WHITE_SPACE", "",
                 "declare", "declare",
                 "WHITE_SPACE", " ",
@@ -174,14 +173,14 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testVariableReference() throws Exception {
-        assertProducedTokens("$y", new String[] {
+        assertProducedTokens("$y", new String[]{
                 "$", "$",
                 "NCName", "y"
         });
     }
 
     public void testFunctionDeclaration() throws Exception {
-        assertProducedTokens("declare function x() {()};", new String[] {
+        assertProducedTokens("declare function x() {()};", new String[]{
                 "WHITE_SPACE", "",
                 "declare", "declare",
                 "WHITE_SPACE", " ",
@@ -201,7 +200,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testFunctionCall() throws Exception {
-        assertProducedTokens("fn:empty('')", new String[] {
+        assertProducedTokens("fn:empty('')", new String[]{
                 "WHITE_SPACE", "",
                 "NCName", "fn",
                 ":", ":",
@@ -214,14 +213,14 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testQueryByElement() throws Exception {
-        assertProducedTokens("//tag", new String[] {
+        assertProducedTokens("//tag", new String[]{
                 "//", "//",
                 "NCName", "tag"
         });
     }
 
     public void testQueryByAttribute() throws Exception {
-        assertProducedTokens("//@attr", new String[] {
+        assertProducedTokens("//@attr", new String[]{
                 "//", "//",
                 "WHITE_SPACE", "",
                 "@", "@",
@@ -230,7 +229,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testQueryWithSelector() throws Exception {
-        assertProducedTokens("/tag[2]", new String[] {
+        assertProducedTokens("/tag[2]", new String[]{
                 "/", "/",
                 "NCName", "tag",
                 "[", "[",
@@ -240,7 +239,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testQueryWithAxis() throws Exception {
-        assertProducedTokens("//tag/parent::*", new String[] {
+        assertProducedTokens("//tag/parent::*", new String[]{
                 "//", "//",
                 "NCName", "tag",
                 "/", "/",
@@ -251,7 +250,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testGroupBy() throws Exception {
-        assertProducedTokens("for $x in 1 to 20 group by $key := $x mod 2 return $x", new String[] {
+        assertProducedTokens("for $x in 1 to 20 group by $key := $x mod 2 return $x", new String[]{
                 "for", "for",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -289,7 +288,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testWhere() throws Exception {
-        assertProducedTokens("for $i in //item where $i/id = '0' return $i/name", new String[] {
+        assertProducedTokens("for $i in //item where $i/id = '0' return $i/name", new String[]{
                 "for", "for",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -321,7 +320,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testOrderBy() throws Exception {
-        assertProducedTokens("for $i in //item order by $i/id return $i/name", new String[] {
+        assertProducedTokens("for $i in //item order by $i/id return $i/name", new String[]{
                 "for", "for",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -351,7 +350,8 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testTypeswitch() throws Exception {
-        assertProducedTokens("typeswitch (//element) case $type1 as element(*, x:type1) return true() default return false()", new String[] {
+        assertProducedTokens("typeswitch (//element) case $type1 as element(*, x:type1) return true() default return " +
+                "false()", new String[]{
                 "typeswitch", "typeswitch",
                 "WHITE_SPACE", " ",
                 "(", "(",
@@ -393,7 +393,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
     }
 
     public void testEvery() throws Exception {
-        assertProducedTokens("every $i in //item satisfies (exists($i/subitem))", new String[] {
+        assertProducedTokens("every $i in //item satisfies (exists($i/subitem))", new String[]{
                 "every", "every",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -433,7 +433,8 @@ public class XQueryLexerTest extends LightPlatformTestCase {
             String expectedTokenType = expectedTokens[idx++];
             String expectedTokenText = expectedTokens[idx++];
             assertEquals(expectedTokenType, tokenName);
-            String tokenText = lexer.getBufferSequence().subSequence(lexer.getTokenStart(), lexer.getTokenEnd()).toString();
+            String tokenText = lexer.getBufferSequence().subSequence(lexer.getTokenStart(),
+                    lexer.getTokenEnd()).toString();
             assertEquals(expectedTokenText, tokenText);
             lexer.advance();
         }

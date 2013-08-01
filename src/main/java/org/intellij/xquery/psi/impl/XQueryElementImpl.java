@@ -36,7 +36,8 @@ public class XQueryElementImpl extends ASTWrapperPsiElement implements XQueryEle
     }
 
     @Override
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state,
+                                       PsiElement lastParent, @NotNull PsiElement place) {
         if (!processor.execute(this, state)) {
             return false;
         } else {

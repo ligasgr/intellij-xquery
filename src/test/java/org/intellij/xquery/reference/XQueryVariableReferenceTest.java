@@ -29,7 +29,7 @@ import java.util.List;
 
 import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static java.util.Arrays.asList;
-import static org.intellij.xquery.reference.ReferenceUtil.*;
+import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
 /**
  * User: ligasgr

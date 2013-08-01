@@ -30,7 +30,8 @@ import java.util.*;
  * Date: 03/07/13
  * Time: 13:11
  */
-public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQueryVarNamespace> implements PsiPolyVariantReference {
+public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQueryVarNamespace> implements
+        PsiPolyVariantReference {
     public XQueryVariableNamespaceNameReference(XQueryVarNamespace element, TextRange textRange) {
         super(element, textRange);
     }
@@ -69,7 +70,8 @@ public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQuer
         }
     }
 
-    private Collection<ResolveResult> getReferencesFromNamespaceDeclarations(Collection<XQueryNamespaceDecl> namespaceDeclarations) {
+    private Collection<ResolveResult> getReferencesFromNamespaceDeclarations(Collection<XQueryNamespaceDecl>
+                                                                                     namespaceDeclarations) {
         if (namespaceDeclarations.size() > 0) {
             List<ResolveResult> results = new ArrayList<ResolveResult>();
             for (XQueryNamespaceDecl moduleImport : namespaceDeclarations) {

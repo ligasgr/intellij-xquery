@@ -17,11 +17,9 @@
 package org.intellij.xquery.usage;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiPlainText;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usages.impl.rules.UsageType;
 import com.intellij.usages.impl.rules.UsageTypeProvider;
-import org.intellij.xquery.psi.XQueryFunctionCall;
 import org.intellij.xquery.psi.XQueryLiteral;
 import org.intellij.xquery.psi.XQueryVarRef;
 import org.jetbrains.annotations.Nullable;

@@ -30,7 +30,8 @@ public class XQueryCompletionContributor extends CompletionContributor {
     @Override
     public void beforeCompletion(@NotNull CompletionInitializationContext context) {
         final CharSequence text = context.getEditor().getDocument().getCharsSequence();
-        if (context.getStartOffset() > 1 && !text.subSequence(context.getStartOffset() - 1, context.getStartOffset()).equals("$")) {
+        if (context.getStartOffset() > 1 && !text.subSequence(context.getStartOffset() - 1,
+                context.getStartOffset()).equals("$")) {
             context.setDummyIdentifier(CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED + "()");
         } else {
             context.setDummyIdentifier(CompletionInitializationContext.DUMMY_IDENTIFIER);

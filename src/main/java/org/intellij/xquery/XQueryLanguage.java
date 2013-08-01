@@ -23,7 +23,7 @@ import com.intellij.lang.Language;
  * Date: 10/02/13
  * Time: 17:34
  */
-public class XQueryLanguage  extends Language {
+public class XQueryLanguage extends Language {
     public static final XQueryLanguage INSTANCE = new XQueryLanguage();
 
     public XQueryLanguage() {

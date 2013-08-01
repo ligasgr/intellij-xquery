@@ -70,12 +70,14 @@ public class XQueryFile extends PsiFileBase {
     }
 
     public Collection<XQueryNamespaceDecl> getNamespaceDeclarations() {
-        Collection<XQueryNamespaceDecl> namespaceDeclarations = PsiTreeUtil.findChildrenOfType(this, XQueryNamespaceDecl.class);
+        Collection<XQueryNamespaceDecl> namespaceDeclarations = PsiTreeUtil.findChildrenOfType(this,
+                XQueryNamespaceDecl.class);
         return namespaceDeclarations;
     }
 
     public Collection<XQueryFunctionDecl> getFunctionDeclarations() {
-        Collection<XQueryFunctionDecl> functionDeclarations = PsiTreeUtil.findChildrenOfType(this, XQueryFunctionDecl.class);
+        Collection<XQueryFunctionDecl> functionDeclarations = PsiTreeUtil.findChildrenOfType(this,
+                XQueryFunctionDecl.class);
         return functionDeclarations;
     }
 }

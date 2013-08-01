@@ -46,7 +46,8 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
 
     public XQueryFunctionReference(@NotNull XQueryFunctionCall element, TextRange textRange) {
         super(element, textRange);
-        checkedNamespace = (myElement.getFunctionName() != null && myElement.getFunctionName().getFunctionNamespace() != null) ? myElement.getFunctionName().getFunctionNamespace().getText() : null;
+        checkedNamespace = (myElement.getFunctionName() != null && myElement.getFunctionName().getFunctionNamespace()
+                != null) ? myElement.getFunctionName().getFunctionNamespace().getText() : null;
     }
 
     @NotNull
@@ -54,17 +55,22 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         XQueryFile file = (XQueryFile) myElement.getContainingFile();
         if (myElement.getFunctionName() != null) {
-            Map<String, ResolveResult> functionDeclarationResults = getFunctionDeclarationReferences(file, new HashMap<String, ResolveResult>(), checkedNamespace);
+            Map<String, ResolveResult> functionDeclarationResults = getFunctionDeclarationReferences(file,
+                    new HashMap<String, ResolveResult>(), checkedNamespace);
 
-            Map<String, ResolveResult> externalFunctionDeclarationResults = getExternalFunctionDeclarationReferences(file, functionDeclarationResults);
+            Map<String, ResolveResult> externalFunctionDeclarationResults = getExternalFunctionDeclarationReferences
+                    (file, functionDeclarationResults);
 
-            return externalFunctionDeclarationResults.values().toArray(new ResolveResult[externalFunctionDeclarationResults.size()]);
+            return externalFunctionDeclarationResults.values().toArray(new
+                    ResolveResult[externalFunctionDeclarationResults.size()]);
         }
         return new ResolveResult[0];
     }
 
-    private Map<String, ResolveResult> getExternalFunctionDeclarationReferences(XQueryFile file, Map<String, ResolveResult> results) {
-        final String referenceNamespace = myElement.getFunctionName().getFunctionNamespace() != null ? myElement.getFunctionName().getFunctionNamespace().getText() : null;
+    private Map<String, ResolveResult> getExternalFunctionDeclarationReferences(XQueryFile file, Map<String,
+            ResolveResult> results) {
+        final String referenceNamespace = myElement.getFunctionName().getFunctionNamespace() != null ? myElement
+                .getFunctionName().getFunctionNamespace().getText() : null;
 
         if (referenceNamespace != null) {
             addReferencesFromImportedModules(file, results, referenceNamespace);
@@ -72,7 +78,8 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
         return results;
     }
 
-    private void addReferencesFromImportedModules(XQueryFile file, Map<String, ResolveResult> results, String referenceNamespace) {
+    private void addReferencesFromImportedModules(XQueryFile file, Map<String, ResolveResult> results,
+                                                  String referenceNamespace) {
         for (XQueryModuleImport moduleImport : file.getModuleImports()) {
             if (referenceNamespace.equals(moduleImport.getNamespaceName().getText())) {
                 addReferencesFromAllFilesInImport(moduleImport, results);
@@ -80,19 +87,22 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
         }
     }
 
-    private void addReferencesFromAllFilesInImport(XQueryModuleImport moduleImport, Map<String, ResolveResult> results) {
+    private void addReferencesFromAllFilesInImport(XQueryModuleImport moduleImport, Map<String,
+            ResolveResult> results) {
         List<XQueryModuleImportPath> importPaths = moduleImport.getModuleImportPathList();
         for (XQueryModuleImportPath path : importPaths) {
             if (path.getReference() != null) {
                 XQueryFile xQueryFile = (XQueryFile) path.getReference().resolve();
                 if (xQueryFile != null) {
-                    getFunctionDeclarationReferences(xQueryFile, results, xQueryFile.getModuleNamespaceName().getText());
+                    getFunctionDeclarationReferences(xQueryFile, results, xQueryFile.getModuleNamespaceName().getText
+                            ());
                 }
             }
         }
     }
 
-    private Map<String, ResolveResult> getFunctionDeclarationReferences(XQueryFile file, Map<String, ResolveResult> results, String checkedNamespace) {
+    private Map<String, ResolveResult> getFunctionDeclarationReferences(XQueryFile file, Map<String,
+            ResolveResult> results, String checkedNamespace) {
 
         for (XQueryFunctionDecl functionDecl : file.getFunctionDeclarations()) {
             if (functionNameExists(functionDecl)) {
@@ -106,20 +116,27 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
         return functionDecl.getFunctionName() != null && functionDecl.getFunctionName().getTextLength() > 0;
     }
 
-    private void addReferenceIfNotAlreadyAdded(Map<String, ResolveResult> results, XQueryFunctionDecl functionDecl, String checkedNamespace) {
+    private void addReferenceIfNotAlreadyAdded(Map<String, ResolveResult> results, XQueryFunctionDecl functionDecl,
+                                               String checkedNamespace) {
         String key = functionDecl.getFunctionName().getText();
         if (!results.containsKey(key)) {
-            addElementToResultsIfMatching(results, functionDecl.getFunctionName(), functionDecl.getFunctionName(), key, checkedNamespace);
+            addElementToResultsIfMatching(results, functionDecl.getFunctionName(), functionDecl.getFunctionName(),
+                    key, checkedNamespace);
         }
     }
 
-    private void addElementToResultsIfMatching(Map<String, ResolveResult> results, PsiElement referenceTarget, XQueryFunctionName compareFunctionName, String key, String checkedNamespace) {
-        final String functionDeclNamespace = compareFunctionName.getFunctionNamespace() != null ? compareFunctionName.getFunctionNamespace().getText() : null;
+    private void addElementToResultsIfMatching(Map<String, ResolveResult> results, PsiElement referenceTarget,
+                                               XQueryFunctionName compareFunctionName, String key,
+                                               String checkedNamespace) {
+        final String functionDeclNamespace = compareFunctionName.getFunctionNamespace() != null ? compareFunctionName
+                .getFunctionNamespace().getText() : null;
         final String referenceNamespace = checkedNamespace;
         final String functionDeclLocalName = compareFunctionName.getFunctionLocalName().getText();
         final String referenceLocalName = myElement.getFunctionName().getFunctionLocalName().getText();
-        boolean namespacesAndLocalNamesMatch = referenceNamespace != null && referenceNamespace.equals(functionDeclNamespace) && referenceLocalName.equals(functionDeclLocalName);
-        boolean namespacesAreEmptyAndLocalNamesMatch = referenceNamespace == null && functionDeclNamespace == null && functionDeclLocalName.equals(referenceLocalName);
+        boolean namespacesAndLocalNamesMatch = referenceNamespace != null && referenceNamespace.equals
+                (functionDeclNamespace) && referenceLocalName.equals(functionDeclLocalName);
+        boolean namespacesAreEmptyAndLocalNamesMatch = referenceNamespace == null && functionDeclNamespace == null &&
+                functionDeclLocalName.equals(referenceLocalName);
 
         if (namespacesAndLocalNamesMatch) {
             results.put(key, new PsiElementResolveResult(referenceTarget));
@@ -165,17 +182,20 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
 
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        myElement.getFunctionName().getFunctionLocalName().replace(getUpdatedRef(newElementName).getFunctionLocalName());
+        myElement.getFunctionName().getFunctionLocalName().replace(getUpdatedRef(newElementName).getFunctionLocalName
+                ());
         return myElement;
     }
 
     private XQueryFunctionName getUpdatedRef(String newName) {
-        XQueryFunctionName functionName = XQueryElementFactory.createFunctionReference(myElement.getProject(), "dummy", newName);
+        XQueryFunctionName functionName = XQueryElementFactory.createFunctionReference(myElement.getProject(),
+                "dummy", newName);
         return functionName;
     }
 
     private boolean isNotFunctionCall(PsiElement psiElement) {
-        return !(psiElement.getParent() instanceof XQueryFunctionCall || psiElement.getParent() instanceof XQueryNamedFunctionRef);
+        return !(psiElement.getParent() instanceof XQueryFunctionCall || psiElement.getParent() instanceof
+                XQueryNamedFunctionRef);
     }
 
     private LookupElement createLookupElement(PsiElement psiElement, String key) {

@@ -36,15 +36,24 @@ import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAtt
  */
 public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
 
-    private static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("XQUERY_BAD_CHARACTER", DefaultLanguageHighlighterColors.INVALID_STRING_ESCAPE);
-    private static final TextAttributesKey KEYWORD = createTextAttributesKey("XQUERY_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
-    private static final TextAttributesKey STRING = createTextAttributesKey("XQUERY_STRING", DefaultLanguageHighlighterColors.STRING);
-    private static final TextAttributesKey SEMICOLON = createTextAttributesKey("XQUERY_SEMICOLON", DefaultLanguageHighlighterColors.SEMICOLON);
-    private static final TextAttributesKey PARENTHESIS = createTextAttributesKey("XQUERY_PARENTHESIS", DefaultLanguageHighlighterColors.PARENTHESES);
-    private static final TextAttributesKey COMMENT = createTextAttributesKey("XQUERY_COMMENT", DefaultLanguageHighlighterColors.BLOCK_COMMENT);
-    private static final TextAttributesKey NUMBER = createTextAttributesKey("XQUERY_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
-    private static final TextAttributesKey NAME = createTextAttributesKey("XQUERY_NAME", DefaultLanguageHighlighterColors.NUMBER);
-    private static final TextAttributesKey OPERATION_SIGN = createTextAttributesKey("XQUERY_OPERATION", DefaultLanguageHighlighterColors.OPERATION_SIGN);
+    private static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("XQUERY_BAD_CHARACTER",
+            DefaultLanguageHighlighterColors.INVALID_STRING_ESCAPE);
+    private static final TextAttributesKey KEYWORD = createTextAttributesKey("XQUERY_KEYWORD",
+            DefaultLanguageHighlighterColors.KEYWORD);
+    private static final TextAttributesKey STRING = createTextAttributesKey("XQUERY_STRING",
+            DefaultLanguageHighlighterColors.STRING);
+    private static final TextAttributesKey SEMICOLON = createTextAttributesKey("XQUERY_SEMICOLON",
+            DefaultLanguageHighlighterColors.SEMICOLON);
+    private static final TextAttributesKey PARENTHESIS = createTextAttributesKey("XQUERY_PARENTHESIS",
+            DefaultLanguageHighlighterColors.PARENTHESES);
+    private static final TextAttributesKey COMMENT = createTextAttributesKey("XQUERY_COMMENT",
+            DefaultLanguageHighlighterColors.BLOCK_COMMENT);
+    private static final TextAttributesKey NUMBER = createTextAttributesKey("XQUERY_NUMBER",
+            DefaultLanguageHighlighterColors.NUMBER);
+    private static final TextAttributesKey NAME = createTextAttributesKey("XQUERY_NAME",
+            DefaultLanguageHighlighterColors.NUMBER);
+    private static final TextAttributesKey OPERATION_SIGN = createTextAttributesKey("XQUERY_OPERATION",
+            DefaultLanguageHighlighterColors.OPERATION_SIGN);
     private static final TextAttributesKey[] BAD_CHAR_KEYS = pack(BAD_CHARACTER);
     private static final TextAttributesKey[] KEYWORDS = pack(KEYWORD);
     private static final TextAttributesKey[] STRINGS = pack(STRING);
@@ -91,7 +100,8 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
         if (tokenType == XQueryTypes.SEMICOLON) {
             return SEMICOLONS;
         }
-        if (tokenType == XQueryTypes.L_PAR || tokenType == XQueryTypes.R_PAR || tokenType == XQueryTypes.L_C_BRACE || tokenType == XQueryTypes.R_C_BRACE) {
+        if (tokenType == XQueryTypes.L_PAR || tokenType == XQueryTypes.R_PAR || tokenType == XQueryTypes.L_C_BRACE ||
+                tokenType == XQueryTypes.R_C_BRACE) {
             return PARENTHESES;
         }
         if (tokenType == TokenType.BAD_CHARACTER) {

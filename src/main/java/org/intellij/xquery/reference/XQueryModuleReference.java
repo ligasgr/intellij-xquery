@@ -77,7 +77,7 @@ public class XQueryModuleReference extends PsiReferenceBase<XQueryModuleImportPa
     private String createPathWithNewNameAndOriginalAposOrQuote(String newElementName) {
         String originalPath = myElement.getText();
         String firstChar = originalPath.substring(0, 1);
-        String lastChar = originalPath.substring(originalPath.length()-1, originalPath.length());
+        String lastChar = originalPath.substring(originalPath.length() - 1, originalPath.length());
         String path = originalPath.substring(1, originalPath.length() - 1);
         int lastIndexOfSlash = path.lastIndexOf("/");
         int lastIndexOfBackSlash = path.lastIndexOf("\\");

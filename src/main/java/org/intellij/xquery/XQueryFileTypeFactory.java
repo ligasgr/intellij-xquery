@@ -29,7 +29,7 @@ import static org.intellij.xquery.XQueryFileType.INSTANCE;
  * Date: 10/02/13
  * Time: 17:48
  */
-public class XQueryFileTypeFactory  extends FileTypeFactory {
+public class XQueryFileTypeFactory extends FileTypeFactory {
     public void createFileTypes(@NotNull FileTypeConsumer consumer) {
         consumer.consume(INSTANCE, ALL_EXTENSIONS);
     }

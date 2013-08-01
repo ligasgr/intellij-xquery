@@ -25,7 +25,7 @@ import org.intellij.xquery.psi.XQueryTypes;
  * Date: 07/07/13
  * Time: 17:28
  */
-public class XQueryWordCompletionFilter  extends DefaultWordCompletionFilter {
+public class XQueryWordCompletionFilter extends DefaultWordCompletionFilter {
     public boolean isWordCompletionEnabledIn(final IElementType element) {
         return super.isWordCompletionEnabledIn(element) || element == XQueryTypes.NCNAME;
     }

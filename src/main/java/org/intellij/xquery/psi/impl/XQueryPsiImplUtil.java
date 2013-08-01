@@ -81,7 +81,8 @@ public class XQueryPsiImplUtil {
         if (name != null) {
             XQueryVarLocalName localName = name.getVarLocalName();
             if (localName != null) {
-                XQueryVarName newNameElement = XQueryElementFactory.createVariableReference(element.getProject(), newName);
+                XQueryVarName newNameElement = XQueryElementFactory.createVariableReference(element.getProject(),
+                        newName);
                 localName.replace(newNameElement.getVarLocalName());
             }
         }
@@ -98,7 +99,9 @@ public class XQueryPsiImplUtil {
         return getNameIdentifier(element).getTextOffset();
     }
 
-    public static boolean processDeclarations(XQueryProlog module, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    public static boolean processDeclarations(XQueryProlog module, @NotNull PsiScopeProcessor processor,
+                                              @NotNull ResolveState state, PsiElement lastParent,
+                                              @NotNull PsiElement place) {
         return processor.execute(module, state);
     }
 
@@ -106,7 +109,8 @@ public class XQueryPsiImplUtil {
         if (element.getURILiteral() != null) {
             String filename = stripApostrophes(element.getURILiteral().getText());
             if (!StringUtil.isEmptyOrSpaces(filename)) {
-                return new XQueryModuleReference(element, filename, new TextRange(1, element.getURILiteral().getTextLength() - 1));
+                return new XQueryModuleReference(element, filename, new TextRange(1,
+                        element.getURILiteral().getTextLength() - 1));
             }
         }
         return null;
@@ -129,7 +133,8 @@ public class XQueryPsiImplUtil {
         if (element.getFunctionName().getFunctionNamespace() != null) {
             localNameOffset += element.getFunctionName().getFunctionNamespace().getTextLength() + SEPARATOR_LENGTH;
         }
-        return new XQueryFunctionReference(element, new TextRange(localNameOffset, element.getFunctionName().getTextLength()));
+        return new XQueryFunctionReference(element, new TextRange(localNameOffset,
+                element.getFunctionName().getTextLength()));
     }
 
     public static String getName(XQueryFunctionName element) {
@@ -145,7 +150,8 @@ public class XQueryPsiImplUtil {
         if (name != null) {
             XQueryFunctionLocalName localName = name.getFunctionLocalName();
             if (localName != null) {
-                XQueryFunctionName newNameElement = XQueryElementFactory.createFunctionReference(element.getProject(), "dummy", newName);
+                XQueryFunctionName newNameElement = XQueryElementFactory.createFunctionReference(element.getProject()
+                        , "dummy", newName);
                 localName.replace(newNameElement.getFunctionLocalName());
             }
         }

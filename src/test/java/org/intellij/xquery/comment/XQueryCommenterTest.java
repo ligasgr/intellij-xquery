@@ -37,7 +37,8 @@ public class XQueryCommenterTest extends LightPlatformCodeInsightFixtureTestCase
     private static final String CARET = "<caret>";
     private static final String SELECTION_START = "<selection>";
     private static final String SELECTION_END = "</selection>";
-    private static final String ONE_LINE_TO_COMMENT_IN_BETWEEN_OF_TWO_OTHER_LINES = NOT_COMMENTED_LINE + CARET + TEXT_TO_COMMENT + NEW_LINE + NOT_COMMENTED_TEXT;
+    private static final String ONE_LINE_TO_COMMENT_IN_BETWEEN_OF_TWO_OTHER_LINES = NOT_COMMENTED_LINE + CARET +
+            TEXT_TO_COMMENT + NEW_LINE + NOT_COMMENTED_TEXT;
     private static final String TWO_LINES_TO_COMMENT_IN_BETWEEN_OF_TWO_OTHER_LINES = NOT_COMMENTED_LINE +
             SELECTION_START + TEXT_TO_COMMENT + NEW_LINE + TEXT_TO_COMMENT + SELECTION_END +
             NEW_LINE + NOT_COMMENTED_TEXT;
@@ -68,7 +69,8 @@ public class XQueryCommenterTest extends LightPlatformCodeInsightFixtureTestCase
 
         commentAction.actionPerformedImpl(getProject(), myFixture.getEditor());
 
-        myFixture.checkResult(NOT_COMMENTED_LINE + COMMENT_START + TEXT_TO_COMMENT + COMMENT_END + NEW_LINE + NOT_COMMENTED_TEXT);
+        myFixture.checkResult(NOT_COMMENTED_LINE + COMMENT_START + TEXT_TO_COMMENT + COMMENT_END + NEW_LINE +
+                NOT_COMMENTED_TEXT);
     }
 
     public void testUncommentByLineForSingleLineInMultipleLines() {
@@ -91,7 +93,8 @@ public class XQueryCommenterTest extends LightPlatformCodeInsightFixtureTestCase
 
         myFixture.checkResult(
                 NOT_COMMENTED_LINE +
-                        COMMENT_START + SELECTION_START + TEXT_TO_COMMENT + COMMENT_END + NEW_LINE + COMMENT_START + TEXT_TO_COMMENT + SELECTION_END + COMMENT_END +
+                        COMMENT_START + SELECTION_START + TEXT_TO_COMMENT + COMMENT_END + NEW_LINE + COMMENT_START +
+                        TEXT_TO_COMMENT + SELECTION_END + COMMENT_END +
                         NEW_LINE + NOT_COMMENTED_TEXT);
     }
 
@@ -100,7 +103,8 @@ public class XQueryCommenterTest extends LightPlatformCodeInsightFixtureTestCase
         CommentByLineCommentAction commentAction = new CommentByLineCommentAction();
         commentAction.actionPerformedImpl(getProject(), myFixture.getEditor());
         int secondLineStartOffset = NOT_COMMENTED_LINE.length();
-        int fourthLineStartOffset = (NOT_COMMENTED_LINE + COMMENT_START + TEXT_TO_COMMENT + COMMENT_END + NEW_LINE + COMMENT_START + TEXT_TO_COMMENT + COMMENT_END).length();
+        int fourthLineStartOffset = (NOT_COMMENTED_LINE + COMMENT_START + TEXT_TO_COMMENT + COMMENT_END + NEW_LINE +
+                COMMENT_START + TEXT_TO_COMMENT + COMMENT_END).length();
         myFixture.getEditor().getSelectionModel().setSelection(secondLineStartOffset, fourthLineStartOffset);
 
         commentAction.actionPerformedImpl(getProject(), myFixture.getEditor());
@@ -121,19 +125,23 @@ public class XQueryCommenterTest extends LightPlatformCodeInsightFixtureTestCase
     }
 
     public void testCommentByBlockForSingleLine() {
-        myFixture.configureByText(XQueryFileType.INSTANCE, SELECTION_START + TEXT_TO_COMMENT + SELECTION_END + NEW_LINE);
+        myFixture.configureByText(XQueryFileType.INSTANCE, SELECTION_START + TEXT_TO_COMMENT + SELECTION_END +
+                NEW_LINE);
         CommentByBlockCommentAction commentAction = new CommentByBlockCommentAction();
 
         commentAction.actionPerformedImpl(getProject(), myFixture.getEditor());
 
-        myFixture.checkResult(SELECTION_START + COMMENT_START + TEXT_TO_COMMENT + COMMENT_END + SELECTION_END + NEW_LINE);
+        myFixture.checkResult(SELECTION_START + COMMENT_START + TEXT_TO_COMMENT + COMMENT_END + SELECTION_END +
+                NEW_LINE);
     }
 
     public void testUncommentByBlockForSingleLine() {
-        myFixture.configureByText(XQueryFileType.INSTANCE, SELECTION_START + TEXT_TO_COMMENT + SELECTION_END + NEW_LINE);
+        myFixture.configureByText(XQueryFileType.INSTANCE, SELECTION_START + TEXT_TO_COMMENT + SELECTION_END +
+                NEW_LINE);
         CommentByBlockCommentAction commentAction = new CommentByBlockCommentAction();
         commentAction.actionPerformedImpl(getProject(), myFixture.getEditor());
-        myFixture.checkResult(SELECTION_START + COMMENT_START + TEXT_TO_COMMENT + COMMENT_END + SELECTION_END + NEW_LINE);
+        myFixture.checkResult(SELECTION_START + COMMENT_START + TEXT_TO_COMMENT + COMMENT_END + SELECTION_END +
+                NEW_LINE);
 
         commentAction.actionPerformedImpl(getProject(), myFixture.getEditor());
 

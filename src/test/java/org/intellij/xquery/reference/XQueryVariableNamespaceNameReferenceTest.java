@@ -19,7 +19,10 @@ package org.intellij.xquery.reference;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
-import org.intellij.xquery.psi.*;
+import org.intellij.xquery.psi.XQueryModuleDecl;
+import org.intellij.xquery.psi.XQueryModuleImport;
+import org.intellij.xquery.psi.XQueryNamespaceDecl;
+import org.intellij.xquery.psi.XQueryVarNamespace;
 
 import java.util.List;
 
