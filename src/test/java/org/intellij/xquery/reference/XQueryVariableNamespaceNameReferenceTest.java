@@ -19,10 +19,7 @@ package org.intellij.xquery.reference;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
-import org.intellij.xquery.psi.XQueryModuleDecl;
-import org.intellij.xquery.psi.XQueryModuleImport;
-import org.intellij.xquery.psi.XQueryNamespaceDecl;
-import org.intellij.xquery.psi.XQueryVarNamespace;
+import org.intellij.xquery.psi.*;
 
 import java.util.List;
 
@@ -75,5 +72,21 @@ public class XQueryVariableNamespaceNameReferenceTest extends LightPlatformCodeI
         myFixture.configureByFiles("VariableNamespaceNameRename.xq");
         myFixture.renameElementAtCaret("aaa");
         myFixture.checkResultByFile("VariableNamespaceNameRename.xq", "VariableNamespaceNameRenameAfter.xq", false);
+    }
+
+    public void testVariableNamespaceReferenceToNotExistingNamespace() {
+        myFixture.configureByFiles("VariableNamespaceReferenceToNotExistingNamespace.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarNamespace.class);
+
+        assertNull(resolvedReference);
+    }
+
+    public void testVariableNamespaceReferenceToDuplicatedNamespace() {
+        myFixture.configureByFiles("VariableNamespaceReferenceToDuplicatedNamespace.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarNamespace.class);
+
+        assertNull(resolvedReference);
     }
 }
