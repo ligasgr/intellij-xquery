@@ -74,7 +74,7 @@
         <fileTypeFactory implementation="org.intellij.xquery.XQueryFileTypeFactory"/>
         <lang.parserDefinition language="XQuery" implementationClass="org.intellij.xquery.parser.XQueryParserDefinition"/>
         <lang.syntaxHighlighterFactory key="XQuery"
-                                       implementationClass="org.intellij.xquery.XQuerySyntaxHighlighterFactory"/>
+                                       implementationClass="org.intellij.xquery.highlighting.XQuerySyntaxHighlighterFactory"/>
         <lang.findUsagesProvider language="XQuery"
                                  implementationClass="org.intellij.xquery.usage.XQueryFindUsageProvider"/>
         <lang.commenter language="XQuery" implementationClass="org.intellij.xquery.comment.XQueryCommenter"/>

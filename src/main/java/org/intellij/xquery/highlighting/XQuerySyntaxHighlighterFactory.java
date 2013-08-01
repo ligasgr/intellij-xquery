@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery;
+package org.intellij.xquery.highlighting;
 
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
