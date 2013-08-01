@@ -70,8 +70,8 @@ public class XQueryFile extends PsiFileBase {
     }
 
     public Collection<XQueryNamespaceDecl> getNamespaceDeclarations() {
-        Collection<XQueryNamespaceDecl> moduleImports = PsiTreeUtil.findChildrenOfType(this, XQueryNamespaceDecl.class);
-        return moduleImports;
+        Collection<XQueryNamespaceDecl> namespaceDeclarations = PsiTreeUtil.findChildrenOfType(this, XQueryNamespaceDecl.class);
+        return namespaceDeclarations;
     }
 
     public Collection<XQueryFunctionDecl> getFunctionDeclarations() {
