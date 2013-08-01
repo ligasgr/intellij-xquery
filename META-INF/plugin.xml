@@ -81,7 +81,7 @@
         <lang.braceMatcher language="XQuery" implementationClass="org.intellij.xquery.XQueryBraceMatcher"/>
         <lang.namesValidator language="XQuery" implementationClass="org.intellij.xquery.XQueryNamesValidator"/>
         <codeInsight.wordCompletionFilter language="XQuery"
-                                          implementationClass="org.intellij.xquery.XQueryWordCompletionFilter"/>
+                                          implementationClass="org.intellij.xquery.completion.XQueryWordCompletionFilter"/>
         <usageTypeProvider implementation="org.intellij.xquery.usage.XQueryUsageTypeProvider"/>
         <findUsagesHandlerFactory implementation="org.intellij.xquery.usage.XQueryFindUsagesHandlerFactory"/>
         <lang.refactoringSupport language="XQuery"

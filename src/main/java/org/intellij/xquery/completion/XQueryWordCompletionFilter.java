@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery;
+package org.intellij.xquery.completion;
 
 import com.intellij.lang.DefaultWordCompletionFilter;
 import com.intellij.psi.tree.IElementType;
