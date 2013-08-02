@@ -1,5 +1,5 @@
 # XQuery plugin
-Provides support in [IntelliJ IDEA](http://www.jetbrains.com/idea/) for [XQuery](http://www.w3schools.com/xquery/) language in version 3.0
+Provides support for [XQuery](http://www.w3schools.com/xquery/) language in version 3.0 in [IntelliJ IDEA](http://www.jetbrains.com/idea/)
 
 #XQuery - useful links
 1. [XQuery 3.0: An XML Query Language - W3C Candidate Recommendation](http://www.w3.org/TR/xquery-30/)
@@ -22,6 +22,15 @@ Provides support in [IntelliJ IDEA](http://www.jetbrains.com/idea/) for [XQuery]
 
 ## Change log
 
+### Version 0.0.4
+* Minor bug fixes.
+* Additional extensions added by default.
+* Updated required minimum IntelliJ version.
+* Issue #1 - Errow when trying to open file.
+* Issue #17 - Simple keyword completion.
+* Issue #16 - Function completion to have () added by default.
+* Issue #15 - Function reference based completion to work without ().
+
 ### Version 0.0.3
 * Bug fix - Usage type always unclassified.
 * Bug fix - String highlighting didn't work while typing in some cases.
@@ -32,7 +41,6 @@ Provides support in [IntelliJ IDEA](http://www.jetbrains.com/idea/) for [XQuery]
 * Brace matching.
 * Word completion contributor for variable and function names (works after you've typed at least one character in fun/var name in new fun/var declaration; based on all words in current file).
 * Find usages in text files (as an option).
-
 
 ### Version 0.0.2
 * Highlighting improvements and bugfixes.
