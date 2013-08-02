@@ -17,6 +17,7 @@
 package org.intellij.xquery.reference;
 
 import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.intellij.xquery.psi.XQueryFunctionCall;
@@ -58,7 +59,7 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
     public void testFunctionCompletionWithParenthesesAddedAfterFunctionName() {
         myFixture.configureByFile("FunctionCompletionWithParenthesesAdded.xq");
         myFixture.completeBasic();
-        myFixture.type('\n');
+        myFixture.type(Lookup.NORMAL_SELECT_CHAR);
         myFixture.checkResultByFile("FunctionCompletionWithParenthesesAddedAfter.xq");
     }
 
