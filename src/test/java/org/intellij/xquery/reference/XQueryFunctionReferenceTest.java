@@ -45,7 +45,6 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
         myFixture.complete(CompletionType.BASIC, 1);
         List<String> strings = myFixture.getLookupElementStrings();
         assertTrue(strings.containsAll(asList("example")));
-        assertEquals(1, strings.size());
     }
 
     public void testFunctionCompletionInTheSameFileWithoutParentheses() {
@@ -53,7 +52,6 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
         myFixture.complete(CompletionType.BASIC, 1);
         List<String> strings = myFixture.getLookupElementStrings();
         assertTrue(strings.containsAll(asList("example")));
-        assertEquals(1, strings.size());
     }
 
     public void testFunctionCompletionWithParenthesesAddedAfterFunctionName() {
