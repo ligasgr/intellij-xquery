@@ -2,4 +2,4 @@ declare function example() {
     "xxx"
 };
 
-example<caret>()
+example(<caret>)

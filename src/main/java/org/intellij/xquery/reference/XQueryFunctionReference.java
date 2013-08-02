@@ -18,6 +18,7 @@ package org.intellij.xquery.reference;
 
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
+import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.editor.Document;
@@ -202,11 +203,10 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
         return LookupElementBuilder.create(psiElement, key)
                 .withIcon(XQueryIcons.FILE)
                 .withTypeText(psiElement.getContainingFile().getName())
-                .withInsertHandler(new InsertHandler() {
+                .withInsertHandler(new ParenthesesInsertHandler<LookupElement>() {
                     @Override
-                    public void handleInsert(final InsertionContext context, LookupElement item) {
-                        final Document document = context.getEditor().getDocument();
-                        document.insertString(context.getSelectionEndOffset(), "()");
+                    protected boolean placeCaretInsideParentheses(InsertionContext context, LookupElement item) {
+                        return true;
                     }
                 });
     }
