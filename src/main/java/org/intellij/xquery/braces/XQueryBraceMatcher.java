@@ -39,6 +39,8 @@ public class XQueryBraceMatcher implements PairedBraceMatcher {
             new BracePair(XQueryTypes.LT_CHAR, XQueryTypes.CLOSE_TAG, false),
             new BracePair(XQueryTypes.END_TAG, XQueryTypes.GT_CHAR, false),
             new BracePair(XQueryTypes.DIR_COMMENT_BEGIN, XQueryTypes.DIR_COMMENT_END, false),
+            new BracePair(XQueryTypes.PRAGMA_BEGIN, XQueryTypes.PRAGMA_END, false),
+            new BracePair(XQueryTypes.CDATA_BEGIN, XQueryTypes.CDATA_END, false),
             new BracePair(XQueryBasicTypes.EXPR_COMMENT_START, XQueryBasicTypes.EXPR_COMMENT_END, false),
     };
 
