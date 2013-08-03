@@ -48,6 +48,8 @@
   PRAGMA_END   = "#)"
   DIR_COMMENT_BEGIN = "<!--"
   DIR_COMMENT_END = "-->"
+  CDATA_BEGIN  = "<![CDATA["
+  CDATA_END    = "]]>"
   DOT_DOT      = ".."
   DOT          = "."
   COLON_COLON  = "::"
@@ -412,7 +414,7 @@ DirCommentConstructor	   ::=   	"<!--" DirCommentContents "-->"	/* ws: explicit 
 DirPIConstructor	   ::=   	"<?" PITarget (S DirPIContents)? "?>"	/* ws: explicit */
 DirPIContents	   ::=   	(Char* - (Char* '?>' Char*))	/* ws: explicit */
 CDataSection	   ::=   	"<![CDATA[" CDataSectionContents "]]>"	/* ws: explicit */
-CDataSectionContents	   ::=   	(Char* - (Char* ']]>' Char*))	/* ws: explicit */
+CDataSectionContents	   ::=   	CDataSectionContentChar*	/* ws: explicit */
 ComputedConstructor	   ::=   	CompDocConstructor
  | CompElemConstructor
  | CompMapConstructor

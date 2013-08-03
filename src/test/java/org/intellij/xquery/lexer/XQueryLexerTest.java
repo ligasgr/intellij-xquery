@@ -498,4 +498,23 @@ public class XQueryLexerTest extends LightPlatformTestCase {
                 "}", "}"
         });
     }
+
+    public void testCData() throws Exception {
+        assertProducedTokens("<tag><![CDATA[ data ]]></tag>", new String[]{
+                "<", "<",
+                "NCName", "tag",
+                ">", ">",
+                "<![CDATA[", "<![CDATA[",
+                "CDataSectionContentChar", " ",
+                "CDataSectionContentChar", "d",
+                "CDataSectionContentChar", "a",
+                "CDataSectionContentChar", "t",
+                "CDataSectionContentChar", "a",
+                "CDataSectionContentChar", " ",
+                "]]>", "]]>",
+                "</", "</",
+                "NCName", "tag",
+                ">", ">"
+        });
+    }
 }

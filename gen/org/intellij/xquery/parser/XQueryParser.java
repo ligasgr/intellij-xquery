@@ -1494,52 +1494,39 @@ public class XQueryParser implements PsiParser {
   // "<![CDATA[" CDataSectionContents "]]>"
   public static boolean CDataSection(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CDataSection")) return false;
+    if (!nextTokenIs(builder_, CDATA_BEGIN)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<c data section>");
-    result_ = consumeToken(builder_, "<![CDATA[");
+    result_ = consumeToken(builder_, CDATA_BEGIN);
     result_ = result_ && CDataSectionContents(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, "]]>");
+    result_ = result_ && consumeToken(builder_, CDATA_END);
     if (result_) {
       marker_.done(C_DATA_SECTION);
     }
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
   /* ********************************************************** */
-  // Char* - (Char* ']]>' Char*)
+  // CDataSectionContentChar*
   public static boolean CDataSectionContents(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CDataSectionContents")) return false;
-    boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<c data section contents>");
-    if (result_) {
-      marker_.done(C_DATA_SECTION_CONTENTS);
-    }
-    else {
-      marker_.rollbackTo();
-    }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
-    return result_;
-  }
-
-  // Char*
-  private static boolean CDataSectionContents_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "CDataSectionContents_0")) return false;
     int offset_ = builder_.getCurrentOffset();
     while (true) {
-      if (!consumeToken(builder_, CHAR)) break;
+      if (!consumeToken(builder_, CDATASECTIONCONTENTCHAR)) break;
       int next_offset_ = builder_.getCurrentOffset();
       if (offset_ == next_offset_) {
-        empty_element_parsed_guard_(builder_, offset_, "CDataSectionContents_0");
+        empty_element_parsed_guard_(builder_, offset_, "CDataSectionContents");
         break;
       }
       offset_ = next_offset_;
     }
+    marker_.done(C_DATA_SECTION_CONTENTS);
+    exitErrorRecordingSection(builder_, level_, true, false, _SECTION_GENERAL_, null);
     return true;
   }
 

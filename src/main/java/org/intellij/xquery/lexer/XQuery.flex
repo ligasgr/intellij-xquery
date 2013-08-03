@@ -83,7 +83,6 @@ Name={NameStartChar} ({NameChar})*
 S=(\u20 | \u9 | \uD | \uA)+                                                                 /* xgc: xml-version */
 Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]                  /* xgc: xml-version */
 
-%state EXPR_COMMENT
 %state START_TAG
 %state END_TAG
 %state ELEMENT_CONTENT
@@ -93,10 +92,12 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 %state APOS_STRING_SIMPLE
 %state URIQUALIFIED
 %state QNAME
+%state EXPR_COMMENT
 %state DIR_COMMENT
 %state PRAGMA
 %state PRAGMA_BEFORE_CONTENT
 %state PRAGMA_CONTENT
+%state CDATA
 // helper states for better support of live syntax highlighting
 %state XQUERY_RECOGNITION
 %state DECLARATION_RECOGNITION
@@ -279,6 +280,7 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 <ELEMENT_CONTENT> {
 {S}                                       {return TokenType.WHITE_SPACE;}
 "<!--"                                    {pushState(DIR_COMMENT); return XQueryTypes.DIR_COMMENT_BEGIN;}
+"<![CDATA["                               {pushState(CDATA); return XQueryTypes.CDATA_BEGIN;}
 "{{" | "}}" | [^{}<]+                     {return XQueryTypes.ELEMENTCONTENTCHAR;}
 "{"                                       {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE; }
 "</"                                      {popState(); pushState(END_TAG); return XQueryTypes.END_TAG;}
@@ -430,6 +432,11 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 <PRAGMA_CONTENT> {
 {Char}                                    {return XQueryTypes.PRAGMACONTENTCHAR;}
 "#)"                                      {popState();return XQueryTypes.PRAGMA_END;}
+}
+
+<CDATA> {
+{Char}                                    {return XQueryTypes.CDATASECTIONCONTENTCHAR;}
+"]]>"                                     {popState();return XQueryTypes.CDATA_END;}
 }
 
 .                                         {return TokenType.BAD_CHARACTER;}

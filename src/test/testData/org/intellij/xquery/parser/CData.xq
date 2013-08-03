@@ -1,0 +1,1 @@
+<tag><![CDATA[ data ]]></tag>

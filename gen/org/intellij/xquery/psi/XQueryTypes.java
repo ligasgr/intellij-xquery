@@ -242,6 +242,9 @@ public interface XQueryTypes {
   IElementType APOSTROPHE = new XQueryTokenType("'");
   IElementType AT_SIGN = new XQueryTokenType("@");
   IElementType BRACEDURILITERAL = new XQueryTokenType("BracedURILiteral");
+  IElementType CDATASECTIONCONTENTCHAR = new XQueryTokenType("CDataSectionContentChar");
+  IElementType CDATA_BEGIN = new XQueryTokenType("<![CDATA[");
+  IElementType CDATA_END = new XQueryTokenType("]]>");
   IElementType CHAR = new XQueryTokenType("Char");
   IElementType CHARREF = new XQueryTokenType("CharRef");
   IElementType CLOSE_TAG = new XQueryTokenType("/>");
