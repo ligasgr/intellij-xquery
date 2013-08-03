@@ -32,6 +32,29 @@ public class XQueryLexerTest extends LightPlatformTestCase {
         PlatformTestCase.initPlatformLangPrefix();
     }
 
+    private static void assertProducedTokens(@NonNls String text, @NonNls String[] expectedTokens) {
+        Lexer lexer = new XQueryLexer();
+        assertProducedTokens(text, expectedTokens, lexer);
+    }
+
+    private static void assertProducedTokens(String text, String[] expectedTokens, Lexer lexer) {
+        lexer.start(text);
+        int idx = 0;
+        while (lexer.getTokenType() != null) {
+            if (idx >= expectedTokens.length) fail("Too many tokens");
+            String tokenName = lexer.getTokenType().toString();
+            String expectedTokenType = expectedTokens[idx++];
+            String expectedTokenText = expectedTokens[idx++];
+            assertEquals(expectedTokenType, tokenName);
+            String tokenText = lexer.getBufferSequence().subSequence(lexer.getTokenStart(),
+                    lexer.getTokenEnd()).toString();
+            assertEquals(expectedTokenText, tokenText);
+            lexer.advance();
+        }
+
+        if (idx < expectedTokens.length) fail("Not enough tokens");
+    }
+
     public void testNCName() throws Exception {
         assertProducedTokens("xxx", new String[]{
                 "WHITE_SPACE", "",
@@ -64,7 +87,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
         assertProducedTokens("(: content :)", new String[]{
                 "ExprCommentStart", "(:",
                 "ExprCommentContent", " content ",
-                "ExprCommentEnd", ":)",
+                "ExprCommentEnd", ":)"
         });
     }
 
@@ -84,7 +107,7 @@ public class XQueryLexerTest extends LightPlatformTestCase {
                 "ElementContentChar", "content",
                 "</", "</",
                 "NCName", "tag",
-                ">", ">",
+                ">", ">"
         });
     }
 
@@ -123,7 +146,6 @@ public class XQueryLexerTest extends LightPlatformTestCase {
                 "NCName", "j"
         });
     }
-
 
     public void testVersionDeclaration() throws Exception {
         assertProducedTokens("xquery version '3.0';", new String[]{
@@ -419,26 +441,27 @@ public class XQueryLexerTest extends LightPlatformTestCase {
         });
     }
 
-    private static void assertProducedTokens(@NonNls String text, @NonNls String[] expectedTokens) {
-        Lexer lexer = new XQueryLexer();
-        assertProducedTokens(text, expectedTokens, lexer);
-    }
-
-    private static void assertProducedTokens(String text, String[] expectedTokens, Lexer lexer) {
-        lexer.start(text);
-        int idx = 0;
-        while (lexer.getTokenType() != null) {
-            if (idx >= expectedTokens.length) fail("Too many tokens");
-            String tokenName = lexer.getTokenType().toString();
-            String expectedTokenType = expectedTokens[idx++];
-            String expectedTokenText = expectedTokens[idx++];
-            assertEquals(expectedTokenType, tokenName);
-            String tokenText = lexer.getBufferSequence().subSequence(lexer.getTokenStart(),
-                    lexer.getTokenEnd()).toString();
-            assertEquals(expectedTokenText, tokenText);
-            lexer.advance();
-        }
-
-        if (idx < expectedTokens.length) fail("Not enough tokens");
+    public void testPragma() throws Exception {
+        assertProducedTokens("(# use-magic #) " +
+                "{ //query/with[some-magic] }", new String[]{
+                "(#", "(#",
+                "WHITE_SPACE", " ",
+                "NCName", "use-magic",
+                "WHITE_SPACE", " ",
+                "#)", "#)",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "WHITE_SPACE", " ",
+                "//", "//",
+                "NCName", "query",
+                "/", "/",
+                "NCName", "with",
+                "[", "[",
+                "WHITE_SPACE", "",
+                "NCName", "some-magic",
+                "]", "]",
+                "WHITE_SPACE", " ",
+                "}", "}"
+        });
     }
 }
