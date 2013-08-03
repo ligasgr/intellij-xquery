@@ -97,6 +97,9 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 %state PRAGMA
 %state PRAGMA_BEFORE_CONTENT
 %state PRAGMA_CONTENT
+%state PI
+%state PI_BEFORE_CONTENT
+%state PI_CONTENT
 %state CDATA
 // helper states for better support of live syntax highlighting
 %state XQUERY_RECOGNITION
@@ -142,6 +145,8 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "*"                                       {return XQueryTypes.STAR_SIGN;}
 "(#"                                      {pushState(PRAGMA);return XQueryTypes.PRAGMA_BEGIN;}
 "#)"                                      {return XQueryTypes.PRAGMA_END;}
+"<?"                                      {pushState(PI);return XQueryTypes.PI_BEGIN;}
+"?>"                                      {return XQueryTypes.PI_END;}
 "("                                       {return XQueryTypes.L_PAR;}
 ")"                                       {return XQueryTypes.R_PAR;}
 "["                                       {return XQueryTypes.L_BRACKET;}
@@ -437,6 +442,22 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 <CDATA> {
 {Char}                                    {return XQueryTypes.CDATASECTIONCONTENTCHAR;}
 "]]>"                                     {popState();return XQueryTypes.CDATA_END;}
+}
+
+<PI> {
+{S}                                       {return XQueryTypes.S;}
+{Name}                                    {popState();pushState(PI_BEFORE_CONTENT);return XQueryTypes.PITARGET;}
+"?>"                                      {popState();return XQueryTypes.PRAGMA_END;}
+}
+
+<PI_BEFORE_CONTENT> {
+{S}                                       {popState();pushState(PI_CONTENT);return XQueryTypes.S;}
+"?>"                                      {popState();return XQueryTypes.PI_END;}
+}
+
+<PI_CONTENT> {
+{Char}                                    {return XQueryTypes.DIRPICONTENTCHAR;}
+"?>"                                      {popState();return XQueryTypes.PI_END;}
 }
 
 .                                         {return TokenType.BAD_CHARACTER;}

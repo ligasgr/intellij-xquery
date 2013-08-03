@@ -517,4 +517,27 @@ public class XQueryLexerTest extends LightPlatformTestCase {
                 ">", ">"
         });
     }
+
+    public void testProcessingInstruction() throws Exception {
+        assertProducedTokens("<?name content chars ?>", new String[]{
+                "<?", "<?",
+                "PITarget", "name",
+                "S", " ",
+                "DirPIContentChar", "c",
+                "DirPIContentChar", "o",
+                "DirPIContentChar", "n",
+                "DirPIContentChar", "t",
+                "DirPIContentChar", "e",
+                "DirPIContentChar", "n",
+                "DirPIContentChar", "t",
+                "DirPIContentChar", " ",
+                "DirPIContentChar", "c",
+                "DirPIContentChar", "h",
+                "DirPIContentChar", "a",
+                "DirPIContentChar", "r",
+                "DirPIContentChar", "s",
+                "DirPIContentChar", " ",
+                "?>", "?>"
+        });
+    }
 }

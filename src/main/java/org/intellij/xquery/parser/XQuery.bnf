@@ -50,6 +50,8 @@
   DIR_COMMENT_END = "-->"
   CDATA_BEGIN  = "<![CDATA["
   CDATA_END    = "]]>"
+  PI_BEGIN     = "<?"
+  PI_END       = "?>"
   DOT_DOT      = ".."
   DOT          = "."
   COLON_COLON  = "::"
@@ -412,7 +414,7 @@ CommonContent	   ::=   	PredefinedEntityRef | CharRef | "{{" | "}}" | EnclosedEx
 DirCommentContents         ::= DirCommentChar*
 DirCommentConstructor	   ::=   	"<!--" DirCommentContents "-->"	/* ws: explicit */
 DirPIConstructor	   ::=   	"<?" PITarget (S DirPIContents)? "?>"	/* ws: explicit */
-DirPIContents	   ::=   	(Char* - (Char* '?>' Char*))	/* ws: explicit */
+DirPIContents	   ::=   	DirPIContentChar*	/* ws: explicit */
 CDataSection	   ::=   	"<![CDATA[" CDataSectionContents "]]>"	/* ws: explicit */
 CDataSectionContents	   ::=   	CDataSectionContentChar*	/* ws: explicit */
 ComputedConstructor	   ::=   	CompDocConstructor

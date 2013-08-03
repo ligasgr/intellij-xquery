@@ -255,6 +255,7 @@ public interface XQueryTypes {
   IElementType DBL_R_C_BRACE = new XQueryTokenType("}}");
   IElementType DECIMALLITERAL = new XQueryTokenType("DecimalLiteral");
   IElementType DIRCOMMENTCHAR = new XQueryTokenType("DirCommentChar");
+  IElementType DIRPICONTENTCHAR = new XQueryTokenType("DirPIContentChar");
   IElementType DIR_COMMENT_BEGIN = new XQueryTokenType("<!--");
   IElementType DIR_COMMENT_END = new XQueryTokenType("-->");
   IElementType DOLLAR_SIGN = new XQueryTokenType("$");
@@ -411,6 +412,8 @@ public interface XQueryTypes {
   IElementType PIPE = new XQueryTokenType("|");
   IElementType PIPE_PIPE = new XQueryTokenType("||");
   IElementType PITARGET = new XQueryTokenType("PITarget");
+  IElementType PI_BEGIN = new XQueryTokenType("<?");
+  IElementType PI_END = new XQueryTokenType("?>");
   IElementType PRAGMACONTENTCHAR = new XQueryTokenType("PragmaContentChar");
   IElementType PRAGMA_BEGIN = new XQueryTokenType("(#");
   IElementType PRAGMA_END = new XQueryTokenType("#)");

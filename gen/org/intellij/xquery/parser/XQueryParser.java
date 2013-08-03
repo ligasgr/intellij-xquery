@@ -3063,20 +3063,19 @@ public class XQueryParser implements PsiParser {
   // "<?" PITarget (S DirPIContents)? "?>"
   public static boolean DirPIConstructor(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DirPIConstructor")) return false;
+    if (!nextTokenIs(builder_, PI_BEGIN)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<dir pi constructor>");
-    result_ = consumeToken(builder_, "<?");
+    result_ = consumeToken(builder_, PI_BEGIN);
     result_ = result_ && consumeToken(builder_, PITARGET);
     result_ = result_ && DirPIConstructor_2(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, "?>");
+    result_ = result_ && consumeToken(builder_, PI_END);
     if (result_) {
       marker_.done(DIR_PI_CONSTRUCTOR);
     }
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -3104,35 +3103,23 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Char* - (Char* '?>' Char*)
+  // DirPIContentChar*
   public static boolean DirPIContents(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DirPIContents")) return false;
-    boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<dir pi contents>");
-    if (result_) {
-      marker_.done(DIR_PI_CONTENTS);
-    }
-    else {
-      marker_.rollbackTo();
-    }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
-    return result_;
-  }
-
-  // Char*
-  private static boolean DirPIContents_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "DirPIContents_0")) return false;
     int offset_ = builder_.getCurrentOffset();
     while (true) {
-      if (!consumeToken(builder_, CHAR)) break;
+      if (!consumeToken(builder_, DIRPICONTENTCHAR)) break;
       int next_offset_ = builder_.getCurrentOffset();
       if (offset_ == next_offset_) {
-        empty_element_parsed_guard_(builder_, offset_, "DirPIContents_0");
+        empty_element_parsed_guard_(builder_, offset_, "DirPIContents");
         break;
       }
       offset_ = next_offset_;
     }
+    marker_.done(DIR_PI_CONTENTS);
+    exitErrorRecordingSection(builder_, level_, true, false, _SECTION_GENERAL_, null);
     return true;
   }
 
@@ -6655,7 +6642,7 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, SLASH_SLASH);
     if (!result_) result_ = consumeToken(builder_, DIR_COMMENT_BEGIN);
     if (!result_) result_ = consumeToken(builder_, LT_CHAR);
-    if (!result_) result_ = consumeToken(builder_, "<?");
+    if (!result_) result_ = consumeToken(builder_, PI_BEGIN);
     if (!result_) result_ = consumeToken(builder_, AT_SIGN);
     if (!result_) result_ = consumeToken(builder_, K_ANCESTOR);
     if (!result_) result_ = consumeToken(builder_, K_ANCESTOR_OR_SELF);
@@ -9005,7 +8992,7 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, SLASH_SLASH);
     if (!result_) result_ = consumeToken(builder_, DIR_COMMENT_BEGIN);
     if (!result_) result_ = consumeToken(builder_, LT_CHAR);
-    if (!result_) result_ = consumeToken(builder_, "<?");
+    if (!result_) result_ = consumeToken(builder_, PI_BEGIN);
     if (!result_) result_ = consumeToken(builder_, AT_SIGN);
     if (!result_) result_ = consumeToken(builder_, K_ANCESTOR);
     if (!result_) result_ = consumeToken(builder_, K_ANCESTOR_OR_SELF);
