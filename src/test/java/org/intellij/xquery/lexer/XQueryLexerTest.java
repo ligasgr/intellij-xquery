@@ -445,9 +445,43 @@ public class XQueryLexerTest extends LightPlatformTestCase {
         assertProducedTokens("(# use-magic #) " +
                 "{ //query/with[some-magic] }", new String[]{
                 "(#", "(#",
-                "WHITE_SPACE", " ",
+                "S", " ",
                 "NCName", "use-magic",
+                "S", " ",
+                "#)", "#)",
                 "WHITE_SPACE", " ",
+                "{", "{",
+                "WHITE_SPACE", " ",
+                "//", "//",
+                "NCName", "query",
+                "/", "/",
+                "NCName", "with",
+                "[", "[",
+                "WHITE_SPACE", "",
+                "NCName", "some-magic",
+                "]", "]",
+                "WHITE_SPACE", " ",
+                "}", "}"
+        });
+    }
+
+    public void testMoreComplicatedPragma() throws Exception {
+        assertProducedTokens("(# use-magic for query #) " +
+                "{ //query/with[some-magic] }", new String[]{
+                "(#", "(#",
+                "S", " ",
+                "NCName", "use-magic",
+                "S", " ",
+                "PragmaContentChar", "f",
+                "PragmaContentChar", "o",
+                "PragmaContentChar", "r",
+                "PragmaContentChar", " ",
+                "PragmaContentChar", "q",
+                "PragmaContentChar", "u",
+                "PragmaContentChar", "e",
+                "PragmaContentChar", "r",
+                "PragmaContentChar", "y",
+                "PragmaContentChar", " ",
                 "#)", "#)",
                 "WHITE_SPACE", " ",
                 "{", "{",

@@ -6392,35 +6392,23 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Char* - (Char* "#)" Char*)
+  // PragmaContentChar*
   public static boolean PragmaContents(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "PragmaContents")) return false;
-    boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<pragma contents>");
-    if (result_) {
-      marker_.done(PRAGMA_CONTENTS);
-    }
-    else {
-      marker_.rollbackTo();
-    }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
-    return result_;
-  }
-
-  // Char*
-  private static boolean PragmaContents_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "PragmaContents_0")) return false;
     int offset_ = builder_.getCurrentOffset();
     while (true) {
-      if (!consumeToken(builder_, CHAR)) break;
+      if (!consumeToken(builder_, PRAGMACONTENTCHAR)) break;
       int next_offset_ = builder_.getCurrentOffset();
       if (offset_ == next_offset_) {
-        empty_element_parsed_guard_(builder_, offset_, "PragmaContents_0");
+        empty_element_parsed_guard_(builder_, offset_, "PragmaContents");
         break;
       }
       offset_ = next_offset_;
     }
+    marker_.done(PRAGMA_CONTENTS);
+    exitErrorRecordingSection(builder_, level_, true, false, _SECTION_GENERAL_, null);
     return true;
   }
 

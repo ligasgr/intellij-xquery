@@ -333,7 +333,7 @@ ValidateExpr	   ::=   	"validate" (ValidationMode | ("type" TypeName))? "{" Expr
 ValidationMode	   ::=   	"lax" | "strict"
 ExtensionExpr	   ::=   	Pragma+ "{" Expr? "}"
 Pragma	   ::=   	"(#" S? EQName (S PragmaContents)? "#)"	/* ws: explicit */
-PragmaContents	   ::=   	(Char* - (Char* "#)" Char*))
+PragmaContents	   ::=   	PragmaContentChar*
 SimpleMapExpr	   ::=   	PathExpr ("!" PathExpr)*
 PathExpr	   ::=   	("/" RelativePathExpr?)
  | ("//" RelativePathExpr)

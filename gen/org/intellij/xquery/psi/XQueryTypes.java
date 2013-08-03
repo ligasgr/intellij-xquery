@@ -408,6 +408,7 @@ public interface XQueryTypes {
   IElementType PIPE = new XQueryTokenType("|");
   IElementType PIPE_PIPE = new XQueryTokenType("||");
   IElementType PITARGET = new XQueryTokenType("PITarget");
+  IElementType PRAGMACONTENTCHAR = new XQueryTokenType("PragmaContentChar");
   IElementType PRAGMA_BEGIN = new XQueryTokenType("(#");
   IElementType PRAGMA_END = new XQueryTokenType("#)");
   IElementType PREDEFINEDENTITYREF = new XQueryTokenType("PredefinedEntityRef");

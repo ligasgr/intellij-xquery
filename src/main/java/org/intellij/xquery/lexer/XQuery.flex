@@ -94,6 +94,9 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 %state URIQUALIFIED
 %state QNAME
 %state DIR_COMMENT
+%state PRAGMA
+%state PRAGMA_BEFORE_CONTENT
+%state PRAGMA_CONTENT
 // helper states for better support of live syntax highlighting
 %state XQUERY_RECOGNITION
 %state DECLARATION_RECOGNITION
@@ -136,7 +139,7 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 ".."                                      {return XQueryTypes.DOT_DOT;}
 "."                                       {return XQueryTypes.DOT;}
 "*"                                       {return XQueryTypes.STAR_SIGN;}
-"(#"                                      {return XQueryTypes.PRAGMA_BEGIN;}
+"(#"                                      {pushState(PRAGMA);return XQueryTypes.PRAGMA_BEGIN;}
 "#)"                                      {return XQueryTypes.PRAGMA_END;}
 "("                                       {return XQueryTypes.L_PAR;}
 ")"                                       {return XQueryTypes.R_PAR;}
@@ -411,6 +414,22 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 {StringLiteral}                           {popState(); return XQueryTypes.STRINGLITERAL;}
 {Char}                                    {return XQueryTypes.CHAR;}
 .                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+}
+
+<PRAGMA> {
+{S}                                       {return XQueryTypes.S;}
+{NCName}                                  {popState();pushState(PRAGMA_BEFORE_CONTENT);return XQueryTypes.NCNAME;}
+"#)"                                      {popState();return XQueryTypes.PRAGMA_END;}
+}
+
+<PRAGMA_BEFORE_CONTENT> {
+{S}                                       {popState();pushState(PRAGMA_CONTENT);return XQueryTypes.S;}
+"#)"                                      {popState();return XQueryTypes.PRAGMA_END;}
+}
+
+<PRAGMA_CONTENT> {
+{Char}                                    {return XQueryTypes.PRAGMACONTENTCHAR;}
+"#)"                                      {popState();return XQueryTypes.PRAGMA_END;}
 }
 
 .                                         {return TokenType.BAD_CHARACTER;}
