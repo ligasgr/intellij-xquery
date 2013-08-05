@@ -22,6 +22,16 @@ package org.intellij.xquery.util;
  * Time: 00:11
  */
 public class StringUtils {
+
+    public static final String EMPTY = "";
+
+    public static String removeQuotOrAposIfNeeded(String text) {
+        if ((text.startsWith("'") || text.startsWith("\"")) && (text.endsWith("'") || text.endsWith("\""))) {
+            return removeQuotOrApos(text);
+        }
+        return text;
+    }
+
     public static String removeQuotOrApos(String text) {
         return text.substring(1, text.length() - 1);
     }

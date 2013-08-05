@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="org.intellij.xquery.runner.ui.run.RunConfigurationJavaTab">
+  <grid id="27dc6" binding="editor" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="596" height="287"/>
+    </constraints>
+    <properties>
+      <minimumSize width="287" height="287"/>
+      <preferredSize width="287" height="287"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <component id="82572" class="com.intellij.execution.ui.CommonJavaParametersPanel" binding="commonJavaParametersPanel">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="76b09" class="com.intellij.openapi.ui.LabeledComponent" binding="moduleSelectorComponent">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <componentClass value="javax.swing.JComboBox"/>
+          <labelLocation value="West"/>
+          <text value="Use classpath of m&amp;odule"/>
+        </properties>
+      </component>
+      <component id="e1865" class="com.intellij.execution.ui.AlternativeJREPanel" binding="alternativeJrePanel">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <vspacer id="fddf3">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+      <vspacer id="df9c9">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+    </children>
+  </grid>
+</form>

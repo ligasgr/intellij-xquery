@@ -109,7 +109,8 @@ public class XQueryFunctionReferenceTest extends XQueryBaseTestCase {
     }
 
     public void testFunctionCompletionFromAnotherFileForPrivate() {
-        myFixture.configureByFiles("FunctionCompletionFromAnotherFileForPrivate.xq", "FunctionReferencedFileWithPrivate.xq");
+        myFixture.configureByFiles("FunctionCompletionFromAnotherFileForPrivate.xq",
+                "FunctionReferencedFileWithPrivate.xq");
 
         myFixture.complete(CompletionType.BASIC, 1);
 
@@ -314,7 +315,8 @@ public class XQueryFunctionReferenceTest extends XQueryBaseTestCase {
 
         assertChildOf(resolvedReference, XQueryFunctionDecl.class);
         XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) resolvedReference.getParent();
-        assertEquals("FunctionReferencedFileWithDefaultNamespace.xq", functionDeclaration.getContainingFile().getName());
+        assertEquals("FunctionReferencedFileWithDefaultNamespace.xq", functionDeclaration.getContainingFile().getName
+                ());
     }
 
     public void testFunctionReferenceFromAnotherFileWithoutImportedPrefixToFileWithDefaultNamespace() {
@@ -325,7 +327,8 @@ public class XQueryFunctionReferenceTest extends XQueryBaseTestCase {
 
         assertChildOf(resolvedReference, XQueryFunctionDecl.class);
         XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) resolvedReference.getParent();
-        assertEquals("FunctionReferencedFileWithDefaultNamespace.xq", functionDeclaration.getContainingFile().getName());
+        assertEquals("FunctionReferencedFileWithDefaultNamespace.xq", functionDeclaration.getContainingFile().getName
+                ());
     }
 
     public void testFunctionReferenceFromAnotherFileWhichHasDefaultNamespace() {
@@ -336,7 +339,8 @@ public class XQueryFunctionReferenceTest extends XQueryBaseTestCase {
 
         assertChildOf(resolvedReference, XQueryFunctionDecl.class);
         XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) resolvedReference.getParent();
-        assertEquals("FunctionReferencedFileWithDefaultNamespace.xq", functionDeclaration.getContainingFile().getName());
+        assertEquals("FunctionReferencedFileWithDefaultNamespace.xq", functionDeclaration.getContainingFile().getName
+                ());
     }
 
     public void testFunctionReferenceWithDifferentArity() {

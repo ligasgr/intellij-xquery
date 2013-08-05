@@ -17,8 +17,6 @@
 package org.intellij.xquery.lexer;
 
 import com.intellij.lexer.Lexer;
-import com.intellij.testFramework.PlatformTestCase;
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.intellij.xquery.XQueryBaseTestCase;
 import org.jetbrains.annotations.NonNls;
 
@@ -115,7 +113,8 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
     }
 
     public void testFlworExpression() throws Exception {
-        assertProducedTokens("for $i in 1 to 10 let $j := 'no. ' || $i order by $i ascending, $j descending return $j", new String[]{
+        assertProducedTokens("for $i in 1 to 10 let $j := 'no. ' || $i order by $i ascending, " +
+                "$j descending return $j", new String[]{
                 "for", "for",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -670,7 +669,7 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
     }
 
     public void testSimpleMapOperator() throws Exception {
-        assertProducedTokens("avg( //employee / salary ! translate(., '$','') ! number(.))", new String[] {
+        assertProducedTokens("avg( //employee / salary ! translate(., '$','') ! number(.))", new String[]{
                 "WHITE_SPACE", "",
                 "NCName", "avg",
                 "(", "(",
@@ -706,7 +705,7 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
     }
 
     public void testDecimalSeparator() throws Exception {
-        assertProducedTokens("declare default decimal-format decimal-separator = 'ds' NaN = 'nan';", new String[] {
+        assertProducedTokens("declare default decimal-format decimal-separator = 'ds' NaN = 'nan';", new String[]{
                 "WHITE_SPACE", "",
                 "declare", "declare",
                 "WHITE_SPACE", " ",
@@ -731,7 +730,7 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
     }
 
     public void testValidate() throws Exception {
-        assertProducedTokens("validate {'string'}", new String[] {
+        assertProducedTokens("validate {'string'}", new String[]{
                 "validate", "validate",
                 "WHITE_SPACE", " ",
                 "{", "{",
@@ -742,7 +741,7 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
     }
 
     public void testValidateLax() throws Exception {
-        assertProducedTokens("validate lax {'string'}", new String[] {
+        assertProducedTokens("validate lax {'string'}", new String[]{
                 "validate", "validate",
                 "WHITE_SPACE", " ",
                 "lax", "lax",

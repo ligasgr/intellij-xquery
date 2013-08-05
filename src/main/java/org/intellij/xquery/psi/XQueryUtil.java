@@ -20,7 +20,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FilenameIndex;
@@ -42,7 +41,8 @@ import static java.util.Arrays.asList;
  */
 public class XQueryUtil {
 
-    public static List<XQueryFile> findXQueryFileByName(Project project, final String filename, PsiFile containingFile) {
+    public static List<XQueryFile> findXQueryFileByName(Project project, final String filename,
+                                                        PsiFile containingFile) {
         final String name = unifyNameFormatAndRemoveProtocol(filename);
         if (isNotAbsolutePath(name)) {
             PsiFile fileFoundRelatively = getFileByRelativePath(project, filename, containingFile);

@@ -110,7 +110,8 @@ public class XQueryFunctionReferenceResolver {
         return file.getImportedFilesThatExist(new Condition<XQueryModuleImport>() {
             @Override
             public boolean value(XQueryModuleImport moduleImport) {
-                if (moduleImport.getNamespaceName() != null && myElement.getFunctionName().getFunctionNamespace() != null) {
+                if (moduleImport.getNamespaceName() != null && myElement.getFunctionName().getFunctionNamespace() !=
+                        null) {
                     String namespacePrefix = myElement.getFunctionName().getFunctionNamespace().getText();
                     return moduleImport.getNamespaceName().getText().equals(namespacePrefix);
                 } else if (moduleImport.getModuleImportNamespace() != null) {

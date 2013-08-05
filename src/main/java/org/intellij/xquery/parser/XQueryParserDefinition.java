@@ -49,7 +49,6 @@ public class XQueryParserDefinition implements ParserDefinition {
     public static final IFileElementType FILE = new IFileElementType(Language.<XQueryLanguage>findInstance
             (XQueryLanguage.class));
 
-
     @NotNull
     @Override
     public Lexer createLexer(Project project) {

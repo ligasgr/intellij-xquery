@@ -95,7 +95,8 @@ public class XQueryFormattingBlock extends AbstractBlock {
 
         if (parent == null)
             return Indent.getNoneIndent();
-        if (isExpressionAfterBrace(type, prevType) || isExpressionAfterParenthesis(type, prevType) || isXmlChild(type) || isForOrLetBinding(parentType))
+        if (isExpressionAfterBrace(type, prevType) || isExpressionAfterParenthesis(type,
+                prevType) || isXmlChild(type) || isForOrLetBinding(parentType))
             return Indent.getNormalIndent();
         if (isASingleExpression()) {
             if (parentType == IF_EXPR) {
@@ -109,7 +110,8 @@ public class XQueryFormattingBlock extends AbstractBlock {
                 return Indent.getNormalIndent();
             }
         }
-        if (type == SWITCH_RETURN_CLAUSE || type == SWITCH_DEFAULT_RETURN_CLAUSE || type == TYPESWITCH_DEFAULT_RETURN_CLAUSE || type == CASE_CLAUSE || type == SWITCH_CASE_CLAUSE) {
+        if (type == SWITCH_RETURN_CLAUSE || type == SWITCH_DEFAULT_RETURN_CLAUSE || type ==
+                TYPESWITCH_DEFAULT_RETURN_CLAUSE || type == CASE_CLAUSE || type == SWITCH_CASE_CLAUSE) {
             return Indent.getNormalIndent();
         }
         if (isParamOrArgumentList(parentType) && (type != L_PAR && type != R_PAR)) {
@@ -187,7 +189,8 @@ public class XQueryFormattingBlock extends AbstractBlock {
                 PsiElement psi = node.getPsi();
                 IElementType elementType = node.getElementType();
                 if (elementType instanceof XQueryTokenType) break;
-                if (psi instanceof LeafPsiElement || psi instanceof XQueryFunctionName || psi instanceof XQueryVarName || psi instanceof XQueryNamespaceName)
+                if (psi instanceof LeafPsiElement || psi instanceof XQueryFunctionName || psi instanceof
+                        XQueryVarName || psi instanceof XQueryNamespaceName)
                     break;
             }
             block = childBlock;

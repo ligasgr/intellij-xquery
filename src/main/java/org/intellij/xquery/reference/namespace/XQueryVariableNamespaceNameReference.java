@@ -41,7 +41,6 @@ public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQuer
         super(element, textRange);
     }
 
-
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {

@@ -264,7 +264,8 @@ DefaultElementNamespaceDecl	   ::=   	"declare" "default" "element" "namespace" 
 private AnnotatedDecl	   ::=   (VarDecl | FunctionDecl) Separator {pin=1}
 Annotation	   ::=   	"%" AnnotationName ("(" Literal ("," Literal)* ")")?
 AnnotationName   ::= EQName
-VarDecl	   ::=   	"declare" Annotation* "variable" "$" VarName TypeDeclaration? ((":=" VarValue) | ("external" (":=" VarDefaultValue)?)) {pin=3 methods=[getPresentation]}
+VarDecl	   ::=   	"declare" Annotation* "variable" "$" VarName TypeDeclaration? ((":=" VarValue) | ExternalVarPart) {pin=3 methods=[getPresentation isExternal]}
+ExternalVarPart ::= "external" (":=" VarDefaultValue)?
 VarValue	   ::=   	ExprSingle
 VarDefaultValue	   ::=   	ExprSingle
 ContextItemDecl	   ::=   	"declare" "context" "item" ("as" ItemType)? ((":=" VarValue) | ("external" (":=" VarDefaultValue)?)) Separator {pin=2}

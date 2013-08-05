@@ -63,7 +63,6 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
         return autoCompletionCollector.getReferencesForAutoCompletion();
     }
 
-
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
         myElement.getVarName().getVarLocalName().replace(getUpdatedRef(newElementName).getVarLocalName());

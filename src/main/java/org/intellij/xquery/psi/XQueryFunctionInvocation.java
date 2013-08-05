@@ -23,5 +23,6 @@ package org.intellij.xquery.psi;
  */
 public interface XQueryFunctionInvocation extends XQueryElement {
     XQueryFunctionName getFunctionName();
+
     int getArity();
 }

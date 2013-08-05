@@ -45,7 +45,8 @@ public class XQueryModuleReference extends PsiReferenceBase<XQueryModuleImportPa
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        List<XQueryFile> files = XQueryUtil.findXQueryFileByName(myElement.getProject(), filename, myElement.getContainingFile());
+        List<XQueryFile> files = XQueryUtil.findXQueryFileByName(myElement.getProject(), filename,
+                myElement.getContainingFile());
         List<ResolveResult> results = new ArrayList<ResolveResult>(files.size());
         for (PsiFile file : files) {
             results.add(new PsiElementResolveResult(file));

@@ -19,12 +19,9 @@ package org.intellij.performance;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.PlatformTestUtil;
-import com.intellij.usageView.UsageInfo;
 import com.intellij.util.ThrowableRunnable;
 import org.intellij.xquery.XQueryBaseTestCase;
 import org.intellij.xquery.psi.XQueryFunctionCall;
-
-import java.util.Collection;
 
 import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
@@ -83,7 +80,8 @@ public class FunctionReferencesPerformanceTest extends XQueryBaseTestCase {
 
     private void setupTestFiles(int numberOfProjectFiles, int numberOfImports, int numberOfFunctionsPerModule, String
             testSpecificContent) {
-        myFixture.addFileToProject(String.format(MODULE_FILENAME, MAIN_FILE), getMainFileContent(numberOfImports, testSpecificContent));
+        myFixture.addFileToProject(String.format(MODULE_FILENAME, MAIN_FILE), getMainFileContent(numberOfImports,
+                testSpecificContent));
         myFixture.configureFromTempProjectFile(String.format(MODULE_FILENAME, MAIN_FILE));
 
         for (int i = 0; i < numberOfProjectFiles; i++) {

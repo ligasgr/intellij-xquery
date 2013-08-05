@@ -16,7 +16,6 @@
 
 package org.intellij.xquery.psi;
 
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.intellij.xquery.XQueryBaseTestCase;
 
 import java.util.Collection;

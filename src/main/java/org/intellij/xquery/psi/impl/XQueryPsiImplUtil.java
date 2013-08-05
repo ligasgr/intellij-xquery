@@ -68,7 +68,6 @@ public class XQueryPsiImplUtil {
         return element;
     }
 
-
     public static PsiReference getReference(XQueryVarRef element) {
         int localNameOffset = DOLLAR_CHAR_LENGTH;
         if (element.getVarName() != null) {
@@ -282,7 +281,8 @@ public class XQueryPsiImplUtil {
         ASTNode next = node.getTreeNext();
         parentNode.removeChild(node);
         if (prev == null || prev.getElementType() == TokenType.WHITE_SPACE) {
-            while (next != null && (next.getElementType() == TokenType.WHITE_SPACE || next.getElementType() == XQueryTypes.SEPARATOR)) {
+            while (next != null && (next.getElementType() == TokenType.WHITE_SPACE || next.getElementType() ==
+                    XQueryTypes.SEPARATOR)) {
                 parentNode.removeChild(next);
                 next = node.getTreeNext();
             }
@@ -305,5 +305,9 @@ public class XQueryPsiImplUtil {
                 return false;
         }
         return result;
+    }
+
+    public static boolean isExternal(XQueryVarDecl variableDeclaration) {
+        return variableDeclaration.getExternalVarPart() != null;
     }
 }

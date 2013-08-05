@@ -16,7 +16,6 @@
 
 package org.intellij.xquery.psi;
 
-
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.util.Condition;
@@ -38,9 +37,9 @@ import java.util.Map;
 
 import static com.intellij.util.containers.ContainerUtil.findAll;
 import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInImport;
-import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.getMappingFromPrefix;
+import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
 
 /**
  * User: ligasgr
@@ -292,5 +291,10 @@ public class XQueryFile extends PsiFileBase {
         }
 
         return namespaceMapping;
+    }
+
+    public boolean isLibraryModule() {
+        XQueryModuleDecl moduleDecl = PsiTreeUtil.findChildOfType(this, XQueryModuleDecl.class);
+        return moduleDecl != null;
     }
 }

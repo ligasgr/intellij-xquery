@@ -270,6 +270,9 @@ public class XQueryParser implements PsiParser {
     else if (root_ == EXTENSION_EXPR) {
       result_ = ExtensionExpr(builder_, level_ + 1);
     }
+    else if (root_ == EXTERNAL_VAR_PART) {
+      result_ = ExternalVarPart(builder_, level_ + 1);
+    }
     else if (root_ == FLWOR_EXPR) {
       result_ = FLWORExpr(builder_, level_ + 1);
     }
@@ -3591,6 +3594,47 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ExtensionExpr_2")) return false;
     Expr(builder_, level_ + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // "external" (":=" VarDefaultValue)?
+  public static boolean ExternalVarPart(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ExternalVarPart")) return false;
+    if (!nextTokenIs(builder_, K_EXTERNAL)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, K_EXTERNAL);
+    result_ = result_ && ExternalVarPart_1(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(EXTERNAL_VAR_PART);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  // (":=" VarDefaultValue)?
+  private static boolean ExternalVarPart_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ExternalVarPart_1")) return false;
+    ExternalVarPart_1_0(builder_, level_ + 1);
+    return true;
+  }
+
+  // ":=" VarDefaultValue
+  private static boolean ExternalVarPart_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ExternalVarPart_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, OP_ASSIGN);
+    result_ = result_ && VarDefaultValue(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
   }
 
   /* ********************************************************** */
@@ -8638,7 +8682,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "declare" Annotation* "variable" "$" VarName TypeDeclaration? ((":=" VarValue) | ("external" (":=" VarDefaultValue)?))
+  // "declare" Annotation* "variable" "$" VarName TypeDeclaration? ((":=" VarValue) | ExternalVarPart)
   public static boolean VarDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarDecl")) return false;
     if (!nextTokenIs(builder_, K_DECLARE)) return false;
@@ -8687,13 +8731,13 @@ public class XQueryParser implements PsiParser {
     return true;
   }
 
-  // (":=" VarValue) | ("external" (":=" VarDefaultValue)?)
+  // (":=" VarValue) | ExternalVarPart
   private static boolean VarDecl_6(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarDecl_6")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = VarDecl_6_0(builder_, level_ + 1);
-    if (!result_) result_ = VarDecl_6_1(builder_, level_ + 1);
+    if (!result_) result_ = ExternalVarPart(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -8710,45 +8754,6 @@ public class XQueryParser implements PsiParser {
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, OP_ASSIGN);
     result_ = result_ && VarValue(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
-  }
-
-  // "external" (":=" VarDefaultValue)?
-  private static boolean VarDecl_6_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "VarDecl_6_1")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, K_EXTERNAL);
-    result_ = result_ && VarDecl_6_1_1(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
-  }
-
-  // (":=" VarDefaultValue)?
-  private static boolean VarDecl_6_1_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "VarDecl_6_1_1")) return false;
-    VarDecl_6_1_1_0(builder_, level_ + 1);
-    return true;
-  }
-
-  // ":=" VarDefaultValue
-  private static boolean VarDecl_6_1_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "VarDecl_6_1_1_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, OP_ASSIGN);
-    result_ = result_ && VarDefaultValue(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }

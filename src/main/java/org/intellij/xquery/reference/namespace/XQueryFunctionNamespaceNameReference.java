@@ -23,7 +23,10 @@ import org.intellij.xquery.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 import static java.util.Collections.emptyList;
 
@@ -37,7 +40,6 @@ public class XQueryFunctionNamespaceNameReference extends PsiReferenceBase<XQuer
     public XQueryFunctionNamespaceNameReference(XQueryFunctionNamespace element, TextRange textRange) {
         super(element, textRange);
     }
-
 
     @NotNull
     @Override

@@ -24,9 +24,6 @@ import org.intellij.xquery.psi.XQueryVarName;
 import org.intellij.xquery.psi.XQueryVarRef;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.intellij.xquery.model.XQueryQNameBuilder.aXQueryQName;
 
 /**

@@ -84,7 +84,8 @@ public class XQueryVariableReferenceTest extends XQueryBaseTestCase {
     }
 
     public void testVariableCompletionFromAnotherFileWithPrivate() {
-        myFixture.configureByFiles("VariableCompletionFromAnotherFileForPrivate.xq", "VariableReferencedFileWithPrivate.xq");
+        myFixture.configureByFiles("VariableCompletionFromAnotherFileForPrivate.xq",
+                "VariableReferencedFileWithPrivate.xq");
         myFixture.complete(CompletionType.BASIC, 1);
         List<String> strings = myFixture.getLookupElementStrings();
         List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));

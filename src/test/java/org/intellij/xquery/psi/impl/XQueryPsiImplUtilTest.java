@@ -23,7 +23,6 @@ public class XQueryPsiImplUtilTest {
         when(funcDecl.getAnnotationList()).thenReturn(annotations);
 
         assertThat(XQueryPsiImplUtil.functionIsPublic(funcDecl), is(true));
-
     }
 
     @Test
@@ -35,7 +34,6 @@ public class XQueryPsiImplUtilTest {
         assertThat(XQueryPsiImplUtil.functionIsPublic(funcDecl), is(false));
     }
 
-
     @Test
     public void variableWithoutPrivateAnnotationShouldBeRecognizedAsPublic() throws Exception {
         XQueryVarDecl varDecl = mock(XQueryVarDecl.class);
@@ -43,7 +41,6 @@ public class XQueryPsiImplUtilTest {
         when(varDecl.getAnnotationList()).thenReturn(annotations);
 
         assertThat(XQueryPsiImplUtil.variableIsPublic(varDecl), is(true));
-
     }
 
     @Test
@@ -85,8 +82,6 @@ public class XQueryPsiImplUtilTest {
         when(privateAnnocation.getAnnotationName()).thenReturn(privateName);
         annotations.add(privateAnnocation);
 
-
         return annotations;
     }
-
 }

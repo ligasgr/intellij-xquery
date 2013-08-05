@@ -22,7 +22,6 @@ import com.intellij.psi.PsiPolyVariantReference;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
-import org.intellij.xquery.psi.XQueryFunctionCall;
 import org.intellij.xquery.psi.XQueryFunctionInvocation;
 import org.intellij.xquery.psi.XQueryFunctionName;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +34,8 @@ import static org.intellij.xquery.psi.XQueryElementFactory.createFunctionReferen
  * Date: 08/06/13
  * Time: 22:16
  */
-public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionInvocation> implements PsiPolyVariantReference {
+public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionInvocation> implements
+        PsiPolyVariantReference {
 
     private XQueryFunctionReferenceResolver functionReferenceResolver;
     private XQueryFunctionReferenceForAutoCompletionCollector autoCompletionCollector;

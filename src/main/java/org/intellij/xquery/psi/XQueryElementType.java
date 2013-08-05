@@ -30,6 +30,4 @@ public class XQueryElementType extends IElementType {
     public XQueryElementType(@NotNull @NonNls String debugName) {
         super(debugName, XQueryLanguage.INSTANCE);
     }
-
-
 }

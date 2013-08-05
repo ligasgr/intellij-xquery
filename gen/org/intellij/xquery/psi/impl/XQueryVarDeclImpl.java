@@ -41,14 +41,14 @@ public class XQueryVarDeclImpl extends XQueryElementImpl implements XQueryVarDec
 
   @Override
   @Nullable
-  public XQueryTypeDeclaration getTypeDeclaration() {
-    return findChildByClass(XQueryTypeDeclaration.class);
+  public XQueryExternalVarPart getExternalVarPart() {
+    return findChildByClass(XQueryExternalVarPart.class);
   }
 
   @Override
   @Nullable
-  public XQueryVarDefaultValue getVarDefaultValue() {
-    return findChildByClass(XQueryVarDefaultValue.class);
+  public XQueryTypeDeclaration getTypeDeclaration() {
+    return findChildByClass(XQueryTypeDeclaration.class);
   }
 
   @Override
@@ -70,6 +70,10 @@ public class XQueryVarDeclImpl extends XQueryElementImpl implements XQueryVarDec
 
   public ItemPresentation getPresentation() {
     return XQueryPsiImplUtil.getPresentation(this);
+  }
+
+  public boolean isExternal() {
+    return XQueryPsiImplUtil.isExternal(this);
   }
 
 }

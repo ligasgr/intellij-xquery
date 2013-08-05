@@ -330,6 +330,10 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitExprSingle(o);
   }
 
+  public void visitExternalVarPart(@NotNull XQueryExternalVarPart o) {
+    visitElement(o);
+  }
+
   public void visitFLWORExpr(@NotNull XQueryFLWORExpr o) {
     visitExprSingle(o);
   }

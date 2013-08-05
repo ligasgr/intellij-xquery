@@ -3,6 +3,7 @@
 # Package Files #
 *.jar
 !/gradle/wrapper/gradle-wrapper.jar
+!/intellij-xquery-rt/lib/*.jar
 *.war
 *.ear
 

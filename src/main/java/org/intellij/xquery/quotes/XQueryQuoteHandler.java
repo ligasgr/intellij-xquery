@@ -17,7 +17,6 @@
 package org.intellij.xquery.quotes;
 
 import com.intellij.codeInsight.editorActions.SimpleTokenSetQuoteHandler;
-import org.intellij.xquery.psi.XQueryTypes;
 
 import static org.intellij.xquery.psi.XQueryTypes.*;
 

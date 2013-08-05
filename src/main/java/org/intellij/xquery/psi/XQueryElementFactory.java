@@ -75,7 +75,8 @@ public class XQueryElementFactory {
 
     public static XQueryFunctionDecl createFunctionDeclaration(Project project, String namespaceName,
                                                                String functionName) {
-        final XQueryFile file = createFile(project, "declare function " + namespaceName + ":" + functionName + "($param) {()};");
+        final XQueryFile file = createFile(project, "declare function " + namespaceName + ":"
+                + functionName + "" + "($param) {()};");
         return PsiTreeUtil.findChildOfType(file, XQueryFunctionDecl.class);
     }
 }

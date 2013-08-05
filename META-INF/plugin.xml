@@ -48,33 +48,20 @@
     <idea-version since-build="126.47"/>
 
     <depends>com.intellij.modules.lang</depends>
-
-
-    <application-components>
-    </application-components>
-
-    <project-components>
-    </project-components>
-
-    <actions>
-    </actions>
+    <depends optional="true" config-file="java-lang.xml">com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="org.intellij.xquery.XQueryFileTypeFactory"/>
         <lang.parserDefinition language="XQuery" implementationClass="org.intellij.xquery.parser.XQueryParserDefinition"/>
-        <lang.syntaxHighlighterFactory key="XQuery"
-                                       implementationClass="org.intellij.xquery.highlighting.XQuerySyntaxHighlighterFactory"/>
-        <lang.findUsagesProvider language="XQuery"
-                                 implementationClass="org.intellij.xquery.usage.XQueryFindUsageProvider"/>
+        <lang.syntaxHighlighterFactory key="XQuery" implementationClass="org.intellij.xquery.highlighting.XQuerySyntaxHighlighterFactory"/>
+        <lang.findUsagesProvider language="XQuery" implementationClass="org.intellij.xquery.usage.XQueryFindUsageProvider"/>
         <lang.commenter language="XQuery" implementationClass="org.intellij.xquery.comment.XQueryCommenter"/>
         <lang.braceMatcher language="XQuery" implementationClass="org.intellij.xquery.braces.XQueryBraceMatcher"/>
         <lang.namesValidator language="XQuery" implementationClass="org.intellij.xquery.refactoring.XQueryNamesValidator"/>
-        <codeInsight.wordCompletionFilter language="XQuery"
-                                          implementationClass="org.intellij.xquery.completion.XQueryWordCompletionFilter"/>
+        <codeInsight.wordCompletionFilter language="XQuery" implementationClass="org.intellij.xquery.completion.XQueryWordCompletionFilter"/>
         <usageTypeProvider implementation="org.intellij.xquery.usage.XQueryUsageTypeProvider"/>
         <findUsagesHandlerFactory implementation="org.intellij.xquery.usage.XQueryFindUsagesHandlerFactory"/>
-        <lang.refactoringSupport language="XQuery"
-                                 implementationClass="org.intellij.xquery.refactoring.XQueryRefactoringSupportProvider"/>
+        <lang.refactoringSupport language="XQuery" implementationClass="org.intellij.xquery.refactoring.XQueryRefactoringSupportProvider"/>
         <renameHandler implementation="org.intellij.xquery.refactoring.XQueryVariableInplaceRenameHandler"/>
         <completion.contributor language="XQuery" implementationClass="org.intellij.xquery.completion.XQueryCompletionContributor"/>
         <lang.psiStructureViewFactory language="XQuery" implementationClass="org.intellij.xquery.structure.XQueryStructureViewFactory"/>

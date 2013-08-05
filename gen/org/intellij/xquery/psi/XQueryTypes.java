@@ -101,6 +101,7 @@ public interface XQueryTypes {
   IElementType EXPR = new XQueryElementType("EXPR");
   IElementType EXPR_SINGLE = new XQueryElementType("EXPR_SINGLE");
   IElementType EXTENSION_EXPR = new XQueryElementType("EXTENSION_EXPR");
+  IElementType EXTERNAL_VAR_PART = new XQueryElementType("EXTERNAL_VAR_PART");
   IElementType FLWOR_EXPR = new XQueryElementType("FLWOR_EXPR");
   IElementType FORWARD_STEP = new XQueryElementType("FORWARD_STEP");
   IElementType FOR_BINDING = new XQueryElementType("FOR_BINDING");
@@ -666,6 +667,9 @@ public interface XQueryTypes {
       }
       else if (type == EXTENSION_EXPR) {
         return new XQueryExtensionExprImpl(node);
+      }
+      else if (type == EXTERNAL_VAR_PART) {
+        return new XQueryExternalVarPartImpl(node);
       }
       else if (type == FLWOR_EXPR) {
         return new XQueryFLWORExprImpl(node);

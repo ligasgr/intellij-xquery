@@ -23,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 import static org.intellij.xquery.XQueryFileType.ALL_EXTENSIONS;
 import static org.intellij.xquery.XQueryFileType.INSTANCE;
 
-
 /**
  * User: ligasgr
  * Date: 10/02/13

@@ -25,7 +25,10 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.tree.TokenSet;
 import org.intellij.xquery.lexer.XQueryLexer;
 import org.intellij.xquery.parser.XQueryParserDefinition;
-import org.intellij.xquery.psi.*;
+import org.intellij.xquery.psi.XQueryFunctionName;
+import org.intellij.xquery.psi.XQueryNamedElement;
+import org.intellij.xquery.psi.XQueryNamespaceName;
+import org.intellij.xquery.psi.XQueryVarName;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,11 +71,10 @@ public class XQueryFindUsageProvider implements FindUsagesProvider {
         }
     }
 
-
     @NotNull
     @Override
     public String getDescriptiveName(@NotNull PsiElement element) {
-        return ((PsiNamedElement)element).getName();
+        return ((PsiNamedElement) element).getName();
     }
 
     @NotNull

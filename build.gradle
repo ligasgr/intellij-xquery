@@ -17,6 +17,7 @@
 apply plugin: 'java'
 apply plugin: 'idea'
 apply from: 'idea.gradle'
+
 sourceCompatibility = 1.6
 
 // Update this path to point to your IDEA installation
@@ -42,6 +43,8 @@ sourceSets {
             srcDirs 'gen'
         }
         compileClasspath += configurations.provided
+        test.compileClasspath += configurations.provided
+        test.runtimeClasspath += configurations.provided
     }
 }
 
@@ -53,12 +56,23 @@ processResources {
 
 repositories {
     mavenCentral()
+    mavenLocal()
+
+    maven {
+        url "http://xqj.net/maven/"
+    }
 }
 
 dependencies {
-    compile fileTree(dir: project.ext.ideaInstallationPath + '/lib', include: '*.jar')
+    compile project(':intellij-xquery-rt') {
+        transitive = false
+    }
+    provided fileTree(dir: project.ext.ideaInstallationPath + '/lib', include: '*.jar')
     provided files("${System.properties['java.home']}/../lib/tools.jar")
     testCompile 'org.mockito:mockito-all:1.9.5'
+    testCompile('org.hamcrest:hamcrest-library:1.1') {
+        exclude group: 'org.hamcrest', module: 'hamcrest-core'
+    }
 }
 
 test {
@@ -72,8 +86,8 @@ task performanceTest(type: Test) {
 
 metaInf << files('/META-INF/plugin.xml')
 
-tasks.withType(Compile) { 
-    options.compilerArgs << "-Xlint:unchecked" 
+tasks.withType(Compile) {
+    options.compilerArgs << "-Xlint:unchecked"
 }
 
 task downloadSdk(type: DownloadTask) {
@@ -99,4 +113,10 @@ class DownloadTask extends DefaultTask {
     void download() {
         ant.get(src: sourceUrl, dest: target)
     }
+}
+
+task dist(type: Zip) {
+    from jar.outputs.files
+    from configurations.runtime
+    into('intellij-xquery/lib')
 }

@@ -219,6 +219,7 @@ public class XQueryFindUsageProviderTest extends XQueryBaseTestCase {
     }
 
     private XQueryModuleImport exampleImport() {
-        return (XQueryModuleImport) XQueryElementFactory.createImportPath(getProject(), "'path.xq'").getParent().getParent();
+        return (XQueryModuleImport) XQueryElementFactory.createImportPath(getProject(),
+                "'path.xq'").getParent().getParent();
     }
 }

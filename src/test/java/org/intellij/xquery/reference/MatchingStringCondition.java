@@ -19,10 +19,10 @@ package org.intellij.xquery.reference;
 import com.intellij.openapi.util.Condition;
 
 /**
-* User: ligasgr
-* Date: 15/08/13
-* Time: 00:07
-*/
+ * User: ligasgr
+ * Date: 15/08/13
+ * Time: 00:07
+ */
 public class MatchingStringCondition implements Condition<String> {
     private String matchingText;
 

@@ -22,8 +22,6 @@ import com.intellij.psi.PsiElement;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.jetbrains.annotations.NotNull;
 
-import javax.accessibility.AccessibleExtendedText;
-
 /**
  * User: ligasgr
  * Date: 10/09/13

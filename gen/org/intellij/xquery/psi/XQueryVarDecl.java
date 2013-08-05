@@ -28,10 +28,10 @@ public interface XQueryVarDecl extends XQueryElement {
   List<XQueryAnnotation> getAnnotationList();
 
   @Nullable
-  XQueryTypeDeclaration getTypeDeclaration();
+  XQueryExternalVarPart getExternalVarPart();
 
   @Nullable
-  XQueryVarDefaultValue getVarDefaultValue();
+  XQueryTypeDeclaration getTypeDeclaration();
 
   @Nullable
   XQueryVarName getVarName();
@@ -40,5 +40,7 @@ public interface XQueryVarDecl extends XQueryElement {
   XQueryVarValue getVarValue();
 
   ItemPresentation getPresentation();
+
+  boolean isExternal();
 
 }

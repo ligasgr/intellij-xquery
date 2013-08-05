@@ -99,7 +99,8 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
     private void addProposedReferencesFromImportedFile(String targetPrefix, XQueryFile file) {
         for (final XQueryVarDecl variableDeclaration : file.getVariableDeclarations()) {
             if (variableNameExists(variableDeclaration) && XQueryPsiImplUtil.variableIsPublic(variableDeclaration)) {
-                XQueryQName<XQueryVarName> qName = aXQueryQName(variableDeclaration.getVarName()).withPrefix(targetPrefix)
+                XQueryQName<XQueryVarName> qName = aXQueryQName(variableDeclaration.getVarName()).withPrefix
+                        (targetPrefix)
                         .build();
                 addProposedReferenceIfNotAlreadyAdded(qName);
             }

@@ -31,11 +31,13 @@ public class XQueryRefactoringSupportProvider extends RefactoringSupportProvider
 
     @Override
     public boolean isMemberInplaceRenameAvailable(PsiElement element, PsiElement context) {
-        return element instanceof XQueryVarName || element instanceof XQueryFunctionName || element instanceof XQueryNamespaceName;
+        return element instanceof XQueryVarName || element instanceof XQueryFunctionName || element instanceof
+                XQueryNamespaceName;
     }
 
     @Override
     public boolean isSafeDeleteAvailable(PsiElement element) {
-        return element instanceof XQueryVarName || element instanceof XQueryFunctionName || element instanceof XQueryNamespaceName;
+        return element instanceof XQueryVarName || element instanceof XQueryFunctionName || element instanceof
+                XQueryNamespaceName;
     }
 }

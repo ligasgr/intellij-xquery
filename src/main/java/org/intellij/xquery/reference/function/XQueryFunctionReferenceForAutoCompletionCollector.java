@@ -131,7 +131,8 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
     }
 
     private LookupElement createLookupElement(XQueryFunctionDecl functionDeclaration, String key) {
-        String tailText = functionDeclaration.getParamList() != null ? functionDeclaration.getParamList().getText() : "";
+        String tailText = functionDeclaration.getParamList() != null ? functionDeclaration.getParamList().getText() :
+                "";
         String typeText = functionDeclaration.getSequenceType() != null ? functionDeclaration.getSequenceType()
                 .getText() : "item()*";
         return LookupElementBuilder.create(functionDeclaration, key)

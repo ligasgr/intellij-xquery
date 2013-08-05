@@ -44,13 +44,13 @@ public class XQueryCompletionContributor extends CompletionContributor {
     public XQueryCompletionContributor() {
         extend(CompletionType.BASIC, psiElement().inFile(instanceOf(XQueryFile.class)),
                 new CompletionProvider<CompletionParameters>() {
-            @Override
-            protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context,
-                                          @NotNull CompletionResultSet result) {
-                if (positionAlreadyHasContributionFromReferences(getGrandfatherOfPosition(parameters))) return;
-                result.addAllElements(getAllKeywords());
-            }
-        });
+                    @Override
+                    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context,
+                                                  @NotNull CompletionResultSet result) {
+                        if (positionAlreadyHasContributionFromReferences(getGrandfatherOfPosition(parameters))) return;
+                        result.addAllElements(getAllKeywords());
+                    }
+                });
     }
 
     @Override

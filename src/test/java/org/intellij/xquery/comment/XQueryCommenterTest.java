@@ -43,7 +43,6 @@ public class XQueryCommenterTest extends XQueryBaseTestCase {
             SELECTION_START + TEXT_TO_COMMENT + NEW_LINE + TEXT_TO_COMMENT + SELECTION_END +
             NEW_LINE + NOT_COMMENTED_TEXT;
 
-
     public void testCommentByLineForSingleLine() {
         myFixture.configureByText(XQueryFileType.INSTANCE, CARET + TEXT_TO_COMMENT);
         CommentByLineCommentAction commentAction = new CommentByLineCommentAction();

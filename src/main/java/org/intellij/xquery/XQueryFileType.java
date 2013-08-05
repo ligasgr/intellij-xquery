@@ -16,14 +16,12 @@
 
 package org.intellij.xquery;
 
-
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import org.intellij.xquery.icons.XQueryIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-
 
 /**
  * User: ligasgr

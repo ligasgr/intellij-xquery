@@ -45,7 +45,9 @@ idea.project.ipr {
 
 
 def removeIdeaJdkDependencies(def module) {
-    module.dependencies.removeAll(module.dependencies.findAll {it.classes.url[0].contains(ideaInstallationPath)})
+    def deps = module.dependencies.findAll {!(it instanceof org.gradle.plugins.ide.idea.model.ModuleDependency) && it.classes.url[0].contains(ideaInstallationPath)}
+    if (deps)
+    	module.dependencies.removeAll(deps)
 }
 
 def changeModuleType(def module) {

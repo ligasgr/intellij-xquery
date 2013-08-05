@@ -38,8 +38,6 @@ public class XQueryIcons {
     public static final Icon VARIABLE_PRIVATE_ICON = createRowIcon(AllIcons.Nodes.Variable, PlatformIcons.PRIVATE_ICON);
     public static final Icon VARIABLE_PUBLIC_ICON = createRowIcon(AllIcons.Nodes.Variable, PlatformIcons.PUBLIC_ICON);
 
-
-
     private static Icon createRowIcon(Icon icon1, Icon icon2) {
         RowIcon rowIcon = new RowIcon(2);
         rowIcon.setIcon(icon1, 0);

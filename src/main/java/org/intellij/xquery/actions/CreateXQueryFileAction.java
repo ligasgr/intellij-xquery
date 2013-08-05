@@ -40,7 +40,8 @@ public class CreateXQueryFileAction extends CreateFileFromTemplateAction impleme
     }
 
     @Override
-    protected void buildDialog(final Project project, PsiDirectory psiDirectory, CreateFileFromTemplateDialog.Builder builder) {
+    protected void buildDialog(final Project project, PsiDirectory psiDirectory, CreateFileFromTemplateDialog.Builder
+            builder) {
         builder.
                 setTitle(NEW_XQUERY_FILE).
                 addKind("Library Module", XQueryIcons.FILE, "XQuery Library Module.xq").
