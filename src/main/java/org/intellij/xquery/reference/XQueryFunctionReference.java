@@ -16,16 +16,12 @@
 
 package org.intellij.xquery.reference;
 
-import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.scope.BaseScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.intellij.xquery.icons.XQueryIcons;
 import org.intellij.xquery.psi.*;
@@ -159,9 +155,6 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
         XQueryFile file = (XQueryFile) myElement.getContainingFile();
         Map<String, LookupElement> variants = new HashMap<String, LookupElement>();
 
-        VariableVariantsScopeProcessor processor = new VariableVariantsScopeProcessor(variants);
-        PsiTreeUtil.treeWalkUp(processor, myElement, null, ResolveState.initial());
-
         return getVariantsFromFunctionDeclarations(file, variants);
     }
 
@@ -194,11 +187,6 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
         return functionName;
     }
 
-    private boolean isNotFunctionCall(PsiElement psiElement) {
-        return !(psiElement.getParent() instanceof XQueryFunctionCall || psiElement.getParent() instanceof
-                XQueryNamedFunctionRef);
-    }
-
     private LookupElement createLookupElement(PsiElement psiElement, String key) {
         return LookupElementBuilder.create(psiElement, key)
                 .withIcon(XQueryIcons.FILE)
@@ -209,33 +197,6 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
                         return true;
                     }
                 });
-    }
-
-    private class VariableVariantsScopeProcessor extends BaseScopeProcessor {
-        private final Map<String, LookupElement> myResult;
-
-        public VariableVariantsScopeProcessor(Map<String, LookupElement> result) {
-            myResult = result;
-        }
-
-        @Override
-        public boolean execute(@NotNull PsiElement psiElement, ResolveState resolveState) {
-            boolean elementIsAGoodCandidate = !psiElement.equals(myElement)
-                    && psiElement instanceof XQueryFunctionName
-                    && isNotFunctionCall(psiElement);
-
-            if (elementIsAGoodCandidate) {
-                addElementIfNotAlreadyAdded(psiElement);
-            }
-            return true;
-        }
-
-        private void addElementIfNotAlreadyAdded(PsiElement psiElement) {
-            String key = psiElement.getText();
-            if (!myResult.containsKey(key)) {
-                myResult.put(key, createLookupElement(psiElement, key));
-            }
-        }
     }
 
 }
