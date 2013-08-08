@@ -56,7 +56,7 @@ public class XQueryFunctionReferenceVariantsCollector {
     private void addVariantIfNotAlreadyAdded(Map<String, LookupElement> variants, XQueryFunctionDecl functionDecl) {
         String key = functionDecl.getFunctionName().getText();
         if (!variants.containsKey(key)) {
-            variants.put(key, createLookupElement(functionDecl.getFunctionName(), key));
+            variants.put(key, createLookupElement(functionDecl, key));
         }
     }
 
@@ -64,10 +64,13 @@ public class XQueryFunctionReferenceVariantsCollector {
         return functionDecl.getFunctionName() != null && functionDecl.getFunctionName().getTextLength() > 0;
     }
 
-    private LookupElement createLookupElement(PsiElement psiElement, String key) {
-        return LookupElementBuilder.create(psiElement, key)
+    private LookupElement createLookupElement(XQueryFunctionDecl functionDeclaration, String key) {
+        String tailText = " (" + (functionDeclaration.getParamList() != null ? functionDeclaration.getParamList().getText() : "") + ")";
+        String typeText = functionDeclaration.getSequenceType() != null ? functionDeclaration.getSequenceType().getText() : "";
+        return LookupElementBuilder.create(functionDeclaration, key)
                 .withIcon(XQueryIcons.FILE)
-                .withTypeText(psiElement.getContainingFile().getName())
+                .withTailText(tailText, true)
+                .withTypeText(typeText)
                 .withInsertHandler(new ParenthesesInsertHandler<LookupElement>() {
                     @Override
                     protected boolean placeCaretInsideParentheses(InsertionContext context, LookupElement item) {
