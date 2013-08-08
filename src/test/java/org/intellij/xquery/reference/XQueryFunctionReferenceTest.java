@@ -47,6 +47,20 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
         assertTrue(strings.containsAll(asList("example")));
     }
 
+    public void testFunctionCompletionInTheSameFileForDuplicatedEntries() {
+        myFixture.configureByFiles("FunctionCompletionInTheSameFileForDuplicatedEntries.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        assertTrue(strings.containsAll(asList("example")));
+    }
+
+    public void testFunctionCompletionInTheSameFileForSameNameAndDifferentArity() {
+        myFixture.configureByFiles("FunctionCompletionInTheSameFileForSameNameAndDifferentArity.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        assertTrue(strings.containsAll(asList("example")));
+    }
+
     public void testFunctionCompletionInTheSameFileWithoutParentheses() {
         myFixture.configureByFiles("FunctionCompletionInTheSameFileWithoutParentheses.xq");
         myFixture.complete(CompletionType.BASIC, 1);
@@ -65,6 +79,14 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
         myFixture.configureByFiles("FunctionRenameInTheSameFile.xq");
         myFixture.renameElementAtCaret("renamed");
         myFixture.checkResultByFile("FunctionRenameInTheSameFile.xq", "FunctionRenameInTheSameFileAfter.xq", false);
+    }
+
+    public void testFunctionReferenceInLibraryModule() {
+        myFixture.configureByFiles("FunctionReferenceInTheSameFile_Library.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
     }
 
     public void testFunctionReferenceFromVariableDeclaration() {

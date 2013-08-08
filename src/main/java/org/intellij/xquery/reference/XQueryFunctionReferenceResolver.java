@@ -22,7 +22,6 @@ import com.intellij.psi.ResolveResult;
 import org.intellij.xquery.psi.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,17 +41,14 @@ public class XQueryFunctionReferenceResolver {
 
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         XQueryFile file = (XQueryFile) myElement.getContainingFile();
-        if (myElement.getFunctionName() != null) {
-            Map<String, ResolveResult> functionDeclarationResults = getFunctionDeclarationReferences(file,
-                    new HashMap<String, ResolveResult>(), checkedNamespace);
+        Map<String, ResolveResult> functionDeclarationResults = getFunctionDeclarationReferences(file,
+                new HashMap<String, ResolveResult>(), checkedNamespace);
 
-            Map<String, ResolveResult> externalFunctionDeclarationResults = getExternalFunctionDeclarationReferences
-                    (file, functionDeclarationResults);
+        Map<String, ResolveResult> externalFunctionDeclarationResults = getExternalFunctionDeclarationReferences
+                (file, functionDeclarationResults);
 
-            return externalFunctionDeclarationResults.values().toArray(new
-                    ResolveResult[externalFunctionDeclarationResults.size()]);
-        }
-        return new ResolveResult[0];
+        return externalFunctionDeclarationResults.values().toArray(new
+                ResolveResult[externalFunctionDeclarationResults.size()]);
     }
 
 
@@ -78,8 +74,7 @@ public class XQueryFunctionReferenceResolver {
 
     private void addReferencesFromAllFilesInImport(XQueryModuleImport moduleImport, Map<String,
             ResolveResult> results) {
-        List<XQueryModuleImportPath> importPaths = moduleImport.getModuleImportPathList();
-        for (XQueryModuleImportPath path : importPaths) {
+        for (XQueryModuleImportPath path : moduleImport.getModuleImportPathList()) {
             if (path.getReference() != null) {
                 XQueryFile xQueryFile = (XQueryFile) path.getReference().resolve();
                 if (xQueryFile != null) {
@@ -92,7 +87,6 @@ public class XQueryFunctionReferenceResolver {
 
     private Map<String, ResolveResult> getFunctionDeclarationReferences(XQueryFile file, Map<String,
             ResolveResult> results, String checkedNamespace) {
-
         for (XQueryFunctionDecl functionDecl : file.getFunctionDeclarations()) {
             if (functionNameExists(functionDecl)) {
                 addReferenceIfNotAlreadyAdded(results, functionDecl, checkedNamespace);

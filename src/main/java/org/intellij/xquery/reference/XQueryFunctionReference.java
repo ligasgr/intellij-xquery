@@ -17,15 +17,17 @@
 package org.intellij.xquery.reference;
 
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiPolyVariantReference;
+import com.intellij.psi.PsiReferenceBase;
+import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
-import org.intellij.xquery.psi.*;
+import org.intellij.xquery.psi.XQueryFunctionCall;
+import org.intellij.xquery.psi.XQueryFunctionName;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import static org.intellij.xquery.psi.XQueryElementFactory.createFunctionReference;
 
 /**
  * User: ligasgr
@@ -34,18 +36,22 @@ import java.util.Map;
  */
 public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall> implements PsiPolyVariantReference {
 
-    private final String checkedNamespace;
+    private String checkedNamespace;
+    private XQueryFunctionReferenceResolver functionReferenceResolver;
+    private XQueryFunctionReferenceVariantsCollector functionReferenceVariantsCollector;
 
     public XQueryFunctionReference(@NotNull XQueryFunctionCall element, TextRange textRange) {
         super(element, textRange);
-        checkedNamespace = (myElement.getFunctionName() != null && myElement.getFunctionName().getFunctionNamespace()
-                != null) ? myElement.getFunctionName().getFunctionNamespace().getText() : null;
+        if (myElement.getFunctionName().getFunctionNamespace() != null)
+            checkedNamespace = myElement.getFunctionName().getFunctionNamespace().getText();
+        functionReferenceResolver = new XQueryFunctionReferenceResolver(checkedNamespace, myElement);
+        functionReferenceVariantsCollector = new XQueryFunctionReferenceVariantsCollector(myElement);
     }
 
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        return new XQueryFunctionReferenceResolver(checkedNamespace, myElement).multiResolve(incompleteCode);
+        return functionReferenceResolver.multiResolve(incompleteCode);
     }
 
     @Nullable
@@ -58,19 +64,19 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
     @NotNull
     @Override
     public Object[] getVariants() {
-        return new XQueryFunctionReferenceVariantsCollector(myElement).getVariants();
+        return functionReferenceVariantsCollector.getVariants();
     }
 
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        myElement.getFunctionName().getFunctionLocalName().replace(getUpdatedRef(newElementName).getFunctionLocalName
-                ());
+        if (myElement.getFunctionName().getFunctionLocalName() != null)
+            myElement.getFunctionName().getFunctionLocalName()
+                    .replace(getUpdatedRef(newElementName).getFunctionLocalName());
         return myElement;
     }
 
+    @NotNull
     private XQueryFunctionName getUpdatedRef(String newName) {
-        XQueryFunctionName functionName = XQueryElementFactory.createFunctionReference(myElement.getProject(),
-                "dummy", newName);
-        return functionName;
+        return createFunctionReference(myElement.getProject(), "dummy", newName);
     }
 }
