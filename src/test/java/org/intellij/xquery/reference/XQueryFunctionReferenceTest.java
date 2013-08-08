@@ -27,7 +27,6 @@ import org.intellij.xquery.psi.XQueryFunctionDecl;
 import java.util.List;
 
 import static com.intellij.util.containers.ContainerUtil.findAll;
-import static java.util.Arrays.asList;
 import static org.intellij.xquery.Assertions.assertChildOf;
 import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
@@ -78,7 +77,8 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
         myFixture.configureByFiles("FunctionCompletionInTheSameFileWithoutParentheses.xq");
         myFixture.complete(CompletionType.BASIC, 1);
         List<String> strings = myFixture.getLookupElementStrings();
-        assertTrue(strings.containsAll(asList("example")));
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
+        assertEquals(1, referenceBasedEntries.size());
     }
 
     public void testFunctionCompletionWithParenthesesAddedAfterFunctionName() {
