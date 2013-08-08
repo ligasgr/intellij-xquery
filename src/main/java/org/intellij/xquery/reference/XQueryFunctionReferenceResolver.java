@@ -77,7 +77,7 @@ public class XQueryFunctionReferenceResolver {
         for (XQueryModuleImportPath path : moduleImport.getModuleImportPathList()) {
             if (path.getReference() != null) {
                 XQueryFile xQueryFile = (XQueryFile) path.getReference().resolve();
-                if (xQueryFile != null) {
+                if (xQueryFile != null && xQueryFile.getModuleNamespaceName() != null) {
                     getFunctionDeclarationReferences(xQueryFile, results, xQueryFile.getModuleNamespaceName().getText
                             ());
                 }

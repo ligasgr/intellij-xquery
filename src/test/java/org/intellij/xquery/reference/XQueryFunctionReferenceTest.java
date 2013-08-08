@@ -18,6 +18,7 @@ package org.intellij.xquery.reference;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.Lookup;
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.intellij.xquery.psi.XQueryFunctionCall;
@@ -25,6 +26,7 @@ import org.intellij.xquery.psi.XQueryFunctionDecl;
 
 import java.util.List;
 
+import static com.intellij.util.containers.ContainerUtil.findAll;
 import static java.util.Arrays.asList;
 import static org.intellij.xquery.Assertions.assertChildOf;
 import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
@@ -44,21 +46,32 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
         myFixture.configureByFiles("FunctionCompletionInTheSameFile.xq");
         myFixture.complete(CompletionType.BASIC, 1);
         List<String> strings = myFixture.getLookupElementStrings();
-        assertTrue(strings.containsAll(asList("example")));
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
+        assertEquals(1, referenceBasedEntries.size());
     }
 
     public void testFunctionCompletionInTheSameFileForDuplicatedEntries() {
         myFixture.configureByFiles("FunctionCompletionInTheSameFileForDuplicatedEntries.xq");
         myFixture.complete(CompletionType.BASIC, 1);
         List<String> strings = myFixture.getLookupElementStrings();
-        assertTrue(strings.containsAll(asList("example")));
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
+        assertEquals(2, referenceBasedEntries.size());
     }
 
     public void testFunctionCompletionInTheSameFileForSameNameAndDifferentArity() {
         myFixture.configureByFiles("FunctionCompletionInTheSameFileForSameNameAndDifferentArity.xq");
         myFixture.complete(CompletionType.BASIC, 1);
         List<String> strings = myFixture.getLookupElementStrings();
-        assertTrue(strings.containsAll(asList("example")));
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
+        assertEquals(2, referenceBasedEntries.size());
+    }
+
+    public void testFunctionCompletionFromAnotherFile() {
+        myFixture.configureByFiles("FunctionCompletionFromAnotherFile.xq", "FunctionReferencedFile.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
+        assertEquals(1, referenceBasedEntries.size());
     }
 
     public void testFunctionCompletionInTheSameFileWithoutParentheses() {
@@ -145,5 +158,18 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
 
         assertNull(resolvedReference);
+    }
+
+    private static class MatchingStringCondition implements Condition<String> {
+        private String matchingText;
+
+        private MatchingStringCondition(String matchingText) {
+            this.matchingText = matchingText;
+        }
+
+        @Override
+        public boolean value(String text) {
+            return matchingText.equals(text);
+        }
     }
 }
