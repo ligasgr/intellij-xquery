@@ -18,10 +18,12 @@
 
 
 
+
+
 apply plugin: 'java'
 sourceCompatibility = 1.6
 
-project.ext.ideaInstallationPath = '/opt/dev/idea'
+project.ext.ideaInstallationPath = 'sdk/idea-IC-129.713'
 
 sourceSets {
     main {
@@ -48,7 +50,32 @@ dependencies {
 }
 
 test {
-    jvmArgs = ['-Didea.home.path=build/idea_home', '-Didea.test.group=ALL_EXCLUDE_DEFINED']
+    jvmArgs = ['-Didea.home.path=sdk/idea-IC-129.713', '-Didea.test.group=ALL_EXCLUDE_DEFINED', '-Didea.platform.prefix=Idea']
 }
 
 metaInf << files('/META-INF/plugin.xml')
+
+task downloadSdk(type: DownloadTask) {
+    sourceUrl = 'http://download.jetbrains.com/idea/ideaIC-12.1.4.tar.gz'
+    target = file('sdk/ideaIC-12.1.4.tar.gz')
+}
+
+task unzipSdk << {
+    copy {
+        from tarTree(resources.gzip('sdk/ideaIC-12.1.4.tar.gz'))
+        into file('sdk/')
+    }
+}
+
+class DownloadTask extends DefaultTask {
+    @Input
+    String sourceUrl
+
+    @OutputFile
+    File target
+
+    @TaskAction
+    void download() {
+        ant.get(src: sourceUrl, dest: target)
+    }
+}
