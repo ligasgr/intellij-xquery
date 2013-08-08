@@ -149,7 +149,7 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
 
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
 
-        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+        assertNull(resolvedReference);
     }
 
     public void testFunctionReferenceToFunctionDuplicatedInImport() {

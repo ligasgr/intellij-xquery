@@ -21,8 +21,8 @@ import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.ResolveResult;
 import org.intellij.xquery.psi.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: ligasgr
@@ -41,55 +41,54 @@ public class XQueryFunctionReferenceResolver {
 
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         XQueryFile file = (XQueryFile) myElement.getContainingFile();
-        Map<String, ResolveResult> functionDeclarationResults = getFunctionDeclarationReferences(file,
-                new HashMap<String, ResolveResult>(), checkedNamespace);
-
-        Map<String, ResolveResult> externalFunctionDeclarationResults = getExternalFunctionDeclarationReferences
-                (file, functionDeclarationResults);
-
-        return externalFunctionDeclarationResults.values().toArray(new
-                ResolveResult[externalFunctionDeclarationResults.size()]);
+        List<ResolveResult> resolveResults = new ArrayList<ResolveResult>();
+        resolveResults.addAll(getFunctionDeclarationReferences(checkedNamespace, file));
+        resolveResults.addAll(getExternalFunctionDeclarationReferences(file));
+        return resolveResults.toArray(new ResolveResult[resolveResults.size()]);
     }
 
 
-    private Map<String, ResolveResult> getExternalFunctionDeclarationReferences(XQueryFile file, Map<String,
-            ResolveResult> results) {
+    private List<ResolveResult> getExternalFunctionDeclarationReferences(XQueryFile file) {
+        List<ResolveResult> results = new ArrayList<ResolveResult>();
         final String referenceNamespace = myElement.getFunctionName().getFunctionNamespace() != null ? myElement
                 .getFunctionName().getFunctionNamespace().getText() : null;
 
         if (referenceNamespace != null) {
-            addReferencesFromImportedModules(file, results, referenceNamespace);
+            results.addAll(getReferencesFromModuleImports(file, referenceNamespace));
         }
         return results;
     }
 
-    private void addReferencesFromImportedModules(XQueryFile file, Map<String, ResolveResult> results,
-                                                  String referenceNamespace) {
+    private List<ResolveResult> getReferencesFromModuleImports(XQueryFile file, String referenceNamespace) {
+        List<ResolveResult> results = new ArrayList<ResolveResult>();
         for (XQueryModuleImport moduleImport : file.getModuleImports()) {
             if (referenceNamespace.equals(moduleImport.getNamespaceName().getText())) {
-                addReferencesFromAllFilesInImport(moduleImport, results);
+                results.addAll(getReferencesFromAllFilesInImport(moduleImport));
             }
         }
+        return results;
     }
 
-    private void addReferencesFromAllFilesInImport(XQueryModuleImport moduleImport, Map<String,
-            ResolveResult> results) {
+    private List<ResolveResult> getReferencesFromAllFilesInImport(XQueryModuleImport moduleImport) {
+        List<ResolveResult> results = new ArrayList<ResolveResult>();
         for (XQueryModuleImportPath path : moduleImport.getModuleImportPathList()) {
             if (path.getReference() != null) {
                 XQueryFile xQueryFile = (XQueryFile) path.getReference().resolve();
                 if (xQueryFile != null && xQueryFile.getModuleNamespaceName() != null) {
-                    getFunctionDeclarationReferences(xQueryFile, results, xQueryFile.getModuleNamespaceName().getText
-                            ());
+                    results.addAll(getFunctionDeclarationReferences(xQueryFile.getModuleNamespaceName().getText
+                            (), xQueryFile));
                 }
             }
         }
+        return results;
     }
 
-    private Map<String, ResolveResult> getFunctionDeclarationReferences(XQueryFile file, Map<String,
-            ResolveResult> results, String checkedNamespace) {
+    private List<ResolveResult> getFunctionDeclarationReferences(String checkedNamespace, XQueryFile file) {
+        List<ResolveResult> results = new ArrayList<ResolveResult>();
         for (XQueryFunctionDecl functionDecl : file.getFunctionDeclarations()) {
             if (functionNameExists(functionDecl)) {
-                addReferenceIfNotAlreadyAdded(results, functionDecl, checkedNamespace);
+                results.addAll(getMatchingElements(functionDecl.getFunctionName(), functionDecl.getFunctionName(),
+                        checkedNamespace));
             }
         }
         return results;
@@ -99,18 +98,10 @@ public class XQueryFunctionReferenceResolver {
         return functionDecl.getFunctionName() != null && functionDecl.getFunctionName().getTextLength() > 0;
     }
 
-    private void addReferenceIfNotAlreadyAdded(Map<String, ResolveResult> results, XQueryFunctionDecl functionDecl,
-                                               String checkedNamespace) {
-        String key = functionDecl.getFunctionName().getText();
-        if (!results.containsKey(key)) {
-            addElementToResultsIfMatching(results, functionDecl.getFunctionName(), functionDecl.getFunctionName(),
-                    key, checkedNamespace);
-        }
-    }
-
-    private void addElementToResultsIfMatching(Map<String, ResolveResult> results, PsiElement referenceTarget,
-                                               XQueryFunctionName compareFunctionName, String key,
-                                               String checkedNamespace) {
+    private List<ResolveResult> getMatchingElements(PsiElement referenceTarget,
+                                                    XQueryFunctionName compareFunctionName,
+                                                    String checkedNamespace) {
+        List<ResolveResult> results = new ArrayList<ResolveResult>();
         final String functionDeclNamespace = compareFunctionName.getFunctionNamespace() != null ? compareFunctionName
                 .getFunctionNamespace().getText() : null;
         final String referenceNamespace = checkedNamespace;
@@ -122,10 +113,11 @@ public class XQueryFunctionReferenceResolver {
                 functionDeclLocalName.equals(referenceLocalName);
 
         if (namespacesAndLocalNamesMatch) {
-            results.put(key, new PsiElementResolveResult(referenceTarget));
+            results.add(new PsiElementResolveResult(referenceTarget));
         } else if (namespacesAreEmptyAndLocalNamesMatch) {
-            results.put(key, new PsiElementResolveResult(referenceTarget));
+            results.add(new PsiElementResolveResult(referenceTarget));
         }
+        return results;
     }
 
 }
