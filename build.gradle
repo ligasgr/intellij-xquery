@@ -20,6 +20,8 @@
 
 
 
+
+
 apply plugin: 'java'
 sourceCompatibility = 1.6
 
@@ -45,7 +47,6 @@ repositories {
 
 dependencies {
     compile fileTree(dir: project.ext.ideaInstallationPath + '/lib', include: '*.jar')
-    compile fileTree(dir: project.ext.ideaInstallationPath + '/plugins', include: '*.jar')
     compile files("${System.properties['java.home']}/../lib/tools.jar")
 }
 
