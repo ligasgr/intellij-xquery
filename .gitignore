@@ -10,8 +10,6 @@
 .idea/workspace.xml
 .idea/dictionaries
 out/
-system-test/
-config-test/
-
-# Maven specific ones
-target/
+build/
+sdk/
+.gradle/
