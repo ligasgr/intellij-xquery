@@ -39,12 +39,12 @@ cd intellij-xquery
 
 ### Version 0.0.4
 * Minor bug fixes.
-* Additional extensions added by default.
-* Updated required minimum IntelliJ version.
-* Issue #1 - Errow when trying to open file.
-* Issue #15 - Function reference based completion to work without ().
-* Issue #16 - Function completion to have () added by default.
-* Issue #17 - Simple keyword completion.
+* Additional file extensions added as supported by plugin.
+* Updated required IntelliJ version to reflect code dependencies.
+* Issue [#1](https://github.com/ligasgr/intellij-xquery/issues/1) - Error when trying to open file.
+* Issue [#15](https://github.com/ligasgr/intellij-xquery/issues/15) - Function reference based completion to work without ().
+* Issue [#16](https://github.com/ligasgr/intellij-xquery/issues/16) - Function completion to have () added by default.
+* Issue [#17](https://github.com/ligasgr/intellij-xquery/issues/17) - Simple keyword completion.
 
 ### Version 0.0.3
 * Bug fix - Usage type always unclassified.
@@ -58,7 +58,7 @@ cd intellij-xquery
 * Find usages in text files (as an option).
 
 ### Version 0.0.2
-* Highlighting improvements and bugfixes.
+* Highlighting improvements and bug-fixes.
 * Variable reference resolution across files (scopes taken into account; no support for access modifiers).
 * Variable name completion inside of the file.
 * Function reference resolution across files (no support for access modifiers)

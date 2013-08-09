@@ -28,11 +28,11 @@
             <ul>
                 <li>Minor bug fixes.</li>
                 <li>Additional extensions added by default.</li>
-                <li>Updated required minimum IntelliJ version.</li>
-                <li>Issue #1 - Errow when trying to open file.</li>
-                <li>Issue #15 - Function reference based completion to work without ().</li>
-                <li>Issue #16 - Function completion to have () added by default.</li>
-                <li>Issue #17 - Simple keyword completion.</li>
+                <li>Updated required IntelliJ version to reflect code dependencies.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/1">#1</a> - Error when trying to open file.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/15">#15</a> - Function reference based completion to work without ().</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/16">#16</a> - Function completion to have () added by default.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/17">#17</a> - Simple keyword completion.</li>
             </ul>
             <p>0.0.3:</p>
             <ul>
