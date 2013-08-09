@@ -20,6 +20,16 @@ Provides support for [XQuery](http://www.w3schools.com/xquery/) language in vers
 1. [Erlang support plugin for IntelliJ IDEA - source code on github](https://github.com/ignatov/intellij-erlang/)
 1. [Developing a plugin for IntelliJ IDEA – some useful tips and links](http://tomaszdziurko.pl/2011/09/developing-plugin-intellij-idea-some-tips-and-links/)
 
+#Building plugin locally
+Run:
+``` sh
+git clone git@github.com:ligasgr/intellij-xquery.git
+cd intellij-xquery
+./gradlew downloadSdk
+./gradlew unzipSdk
+./gradlew build
+```
+
 ## Change log
 
 ### Version 0.0.4
