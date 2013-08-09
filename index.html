@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>IntelliJ XQuery Support Plugin by ligasgr</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/ligasgr/intellij-xquery">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/ligasgr/intellij-xquery/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/ligasgr/intellij-xquery/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>IntelliJ XQuery Support Plugin</h1>
+          <p>XQuery support in best IDE ever!</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/ligasgr">ligasgr</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="intellij-xquery-support-plugin" class="anchor" href="#intellij-xquery-support-plugin"><span class="octicon octicon-link"></span></a>IntelliJ XQuery Support Plugin</h1>
+
+<p>Provides support for <a href="http://www.w3schools.com/xquery/">XQuery</a> language in version 3.0 in <a href="http://www.jetbrains.com/idea/">IntelliJ IDEA</a></p>
+
+<p><a href="https://github.com/ligasgr/intellij-xquery/issues">GitHub Issues</a> - please raise issues for any bugs you've found or any features that are missing</p>
+
+<p>Cloudbees Jenkins status: <a href="https://ligasgr.ci.cloudbees.com/job/intellij-xquery-master-build/"><img src="https://ligasgr.ci.cloudbees.com/buildStatus/icon?job=intellij-xquery-master-build" alt="Build Status"></a></p>
+
+<h1>
+<a name="xquery---useful-links" class="anchor" href="#xquery---useful-links"><span class="octicon octicon-link"></span></a>XQuery - useful links</h1>
+
+<ol>
+<li><a href="http://www.w3.org/TR/xquery-30/">XQuery 3.0: An XML Query Language - W3C Candidate Recommendation</a></li>
+<li><a href="http://www.w3.org/TR/xquery-30/#nt-bnf">XQuery 3.0 Grammar</a></li>
+<li><a href="http://www.w3.org/TR/xquery-xpath-parsing/">Building a Tokenizer for XPath or XQuery - Draft for XQuery 1.0</a></li>
+<li><a href="http://www.w3.org/TR/xquery-use-cases/">XML Query Use Cases</a></li>
+<li><a href="http://www.w3.org/TR/2007/NOTE-xquery-use-cases-20070323/xquery-use-case-queries.txt">XML Query Use Cases - all in one file version</a></li>
+<li><a href="http://dev.w3.org/cvsweb/2011/QT3-test-suite/">XQuery 3.0 compatiblity test suite</a></li>
+<li><a href="http://dev.w3.org/2011/QT3-test-suite/guide/running.html">Guidelines for Running the QT3 Test Suite</a></li>
+</ol><h1>
+<a name="plugin-development---useful-links" class="anchor" href="#plugin-development---useful-links"><span class="octicon octicon-link"></span></a>Plugin development - useful links</h1>
+
+<ol>
+<li><a href="http://confluence.jetbrains.com/display/IDEADEV/Developing+Custom+Language+Plugins+for+IntelliJ+IDEA">Developing Custom Language Plugins for IntelliJ IDEA</a></li>
+<li><a href="http://confluence.jetbrains.com/display/IntelliJIDEA/Custom+Language+Support">Custom Language Support - Tutorial</a></li>
+<li><a href="http://confluence.jetbrains.com/display/IDEADEV/Testing+IntelliJ+IDEA+Plugins">Testing IntelliJ IDEA Plugins</a></li>
+<li><a href="http://confluence.jetbrains.com/display/IntelliJIDEA/Writing+Tests+for+Plugins">Writing Tests for Plugins - Tutorial</a></li>
+<li><a href="http://confluence.jetbrains.com/display/IDEADEV/IntelliJ+IDEA+Architectural+Overview">IntelliJ IDEA Architectural Overview</a></li>
+<li><a href="http://devnet.jetbrains.com/community/idea/open_api_and_plugin_development">Open API and Plugin Development - Developer Community Forum</a></li>
+<li><a href="https://github.com/ignatov/intellij-erlang/">Erlang support plugin for IntelliJ IDEA - source code on github</a></li>
+<li><a href="http://tomaszdziurko.pl/2011/09/developing-plugin-intellij-idea-some-tips-and-links/">Developing a plugin for IntelliJ IDEA – some useful tips and links</a></li>
+</ol><h1>
+<a name="building-plugin-locally" class="anchor" href="#building-plugin-locally"><span class="octicon octicon-link"></span></a>Building plugin locally</h1>
+
+<p>Run:</p>
+
+<div class="highlight"><pre>git clone git@github.com:ligasgr/intellij-xquery.git
+<span class="nb">cd </span>intellij-xquery
+./gradlew downloadSdk
+./gradlew unzipSdk
+./gradlew build
+</pre></div>
+
+<h2>
+<a name="change-log" class="anchor" href="#change-log"><span class="octicon octicon-link"></span></a>Change log</h2>
+
+<h3>
+<a name="version-004" class="anchor" href="#version-004"><span class="octicon octicon-link"></span></a>Version 0.0.4</h3>
+
+<ul>
+<li>Minor bug fixes.</li>
+<li>Additional file extensions added as supported by plugin.</li>
+<li>Updated required IntelliJ version to reflect code dependencies.</li>
+<li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/1">#1</a> - Error when trying to open file.</li>
+<li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/15">#15</a> - Function reference based completion to work without ().</li>
+<li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/16">#16</a> - Function completion to have () added by default.</li>
+<li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/17">#17</a> - Simple keyword completion.</li>
+</ul><h3>
+<a name="version-003" class="anchor" href="#version-003"><span class="octicon octicon-link"></span></a>Version 0.0.3</h3>
+
+<ul>
+<li>Bug fix - Usage type always unclassified.</li>
+<li>Bug fix - String highlighting didn't work while typing in some cases.</li>
+<li>Bug fix - Whole function invocation is highlighted instead of name only.</li>
+<li>Bug fix - Identifier while renamed doesn't accept - or .</li>
+<li>Inline rename for local variables (code, comments, strings references and optionally text files usage renamed).</li>
+<li>Code commenter.</li>
+<li>Brace matching.</li>
+<li>Word completion contributor for variable and function names (works after you've typed at least one character in fun/var name in new fun/var declaration; based on all words in current file).</li>
+<li>Find usages in text files (as an option).</li>
+</ul><h3>
+<a name="version-002" class="anchor" href="#version-002"><span class="octicon octicon-link"></span></a>Version 0.0.2</h3>
+
+<ul>
+<li>Highlighting improvements and bug-fixes.</li>
+<li>Variable reference resolution across files (scopes taken into account; no support for access modifiers).</li>
+<li>Variable name completion inside of the file.</li>
+<li>Function reference resolution across files (no support for access modifiers)</li>
+<li>Function name completion inside of the file (still has place for improvement - completes only if shortcut used in front of ())</li>
+<li>Namespace reference resolution inside of the file.</li>
+<li>Navigation between modules via file location and namespace (if includes file path) in module imports.</li>
+<li>Rename functionality for all references.</li>
+<li>Basic find usage.</li>
+</ul><h3>
+<a name="version-001" class="anchor" href="#version-001"><span class="octicon octicon-link"></span></a>Version 0.0.1</h3>
+
+<ul>
+<li>Basic syntax highlighting.</li>
+<li>Variable reference resolution inside of a file.</li>
+</ul>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
