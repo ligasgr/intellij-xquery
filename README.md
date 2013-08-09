@@ -1,9 +1,9 @@
-# XQuery plugin
+# IntelliJ XQuery Support Plugin
 Provides support for [XQuery](http://www.w3schools.com/xquery/) language in version 3.0 in [IntelliJ IDEA](http://www.jetbrains.com/idea/)
 
-Cloudbees Jenkins:
-[![Build Status](https://ligasgr.ci.cloudbees.com/buildStatus/icon?job=intellij-xquery-master-build)](https://ligasgr.ci.cloudbees.com/job/intellij-xquery-master-build/)
-<a target="_blank" href="https://ligasgr.ci.cloudbees.com/job/intellij-xquery-master-build/"  title="Jenkins@CloudBees">Jenkins@CloudBees Build and Test</a>
+[GitHub Issues](https://github.com/ligasgr/intellij-xquery/issues) - please raise issues for any bugs you've found or any features that are missing
+
+Cloudbees Jenkins status: [![Build Status](https://ligasgr.ci.cloudbees.com/buildStatus/icon?job=intellij-xquery-master-build)](https://ligasgr.ci.cloudbees.com/job/intellij-xquery-master-build/)
 
 
 #XQuery - useful links

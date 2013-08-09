@@ -18,7 +18,7 @@
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
     <version>0.0.4</version>
-    <vendor email="ligasgr@gmail.com" url="https://github.com/ligasgr/intellij-xquery">Grzegorz Ligas</vendor>
+    <vendor email="ligasgr@gmail.com" url="http://ligasgr.github.io/intellij-xquery/">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0</description>
 
