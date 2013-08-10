@@ -7,9 +7,10 @@
 *.ear
 
 # Idea specific ones
-.idea/workspace.xml
-.idea/dictionaries
 out/
 build/
 sdk/
 .gradle/
+*.iml
+*.ipr
+*.iws

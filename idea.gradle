@@ -1,0 +1,45 @@
+// --- changes to idea plugin ---
+idea {
+    module {
+        iml {
+            whenMerged { module ->
+                removeIdeaJdkDependencies(module)
+            }
+            withXml {
+                def module = it.asNode()
+                changeModuleType(module)
+                removeUnnecessaryComponent(module)
+                appendRequiredComponent(module)
+            }
+        }
+    }
+}
+
+idea.project.ipr {
+    withXml {
+        it.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'Git'
+	def prm = it.node.component.find { it.@name == 'ProjectRootManager' }
+	prm.@'project-jdk-name'= project.ext.ideaSdkName
+	prm.@'project-jdk-type'='IDEA JDK'
+	prm.attributes().remove('assert-jdk-15')
+    }
+}
+
+// --- changes to idea plugin ---
+
+
+def removeIdeaJdkDependencies(def module) {
+    module.dependencies.removeAll(module.dependencies.findAll {it.classes.url[0].contains(ideaInstallationPath)})
+}
+
+def changeModuleType(def module) {
+    module.@type = 'PLUGIN_MODULE'
+}
+
+def removeUnnecessaryComponent(def module) {
+    module.remove(module.component.find { it.@name == 'ModuleRootManager'})
+}
+
+def appendRequiredComponent(def module) {
+    module.appendNode('component', ['name': 'DevKit.ModuleBuildProperties', 'url': 'file://$MODULE_DIR$/META-INF/plugin.xml'])
+}

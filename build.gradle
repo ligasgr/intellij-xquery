@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-
-
-
-
-
-
-
-
 apply plugin: 'java'
+apply plugin: 'idea'
+apply from: 'idea.gradle'
 sourceCompatibility = 1.6
 
-project.ext.ideaInstallationPath = 'sdk/idea-IC-129.713'
+project.ext.sdkDir = 'sdk'
+project.ext.sdkVersion = '129.713'
+project.ext.ideaSdk = 'idea-IC-' + project.ext.sdkVersion
+project.ext.ideaSdkName = 'IDEA IC-' + project.ext.sdkVersion
+project.ext.ideaInstallationPath = project.ext.sdkDir + "/" + project.ext.ideaSdk
+project.ext.ideaInstallationSource = 'http://download.jetbrains.com/idea/ideaIC-12.1.4.tar.gz'
+project.ext.ideaArchiveFileName = project.ext.ideaInstallationSource.substring(project.ext.ideaInstallationSource.lastIndexOf('/'))
 
 sourceSets {
     main {
@@ -51,19 +51,19 @@ dependencies {
 }
 
 test {
-    jvmArgs = ['-Didea.home.path=sdk/idea-IC-129.713', '-Didea.test.group=ALL_EXCLUDE_DEFINED', '-Didea.platform.prefix=Idea']
+    jvmArgs = ['-Didea.home.path=' + project.ext.ideaInstallationPath, '-Didea.test.group=ALL_EXCLUDE_DEFINED', '-Didea.platform.prefix=Idea']
 }
 
 metaInf << files('/META-INF/plugin.xml')
 
 task downloadSdk(type: DownloadTask) {
-    sourceUrl = 'http://download.jetbrains.com/idea/ideaIC-12.1.4.tar.gz'
-    target = file('sdk/ideaIC-12.1.4.tar.gz')
+    sourceUrl = project.ext.ideaInstallationSource
+    target = file(project.ext.sdkDir + '/' + project.ext.ideaArchiveFileName)
 }
 
 task unzipSdk << {
     copy {
-        from tarTree(resources.gzip('sdk/ideaIC-12.1.4.tar.gz'))
+        from tarTree(resources.gzip(project.ext.sdkDir + '/' + project.ext.ideaArchiveFileName))
         into file('sdk/')
     }
 }
