@@ -20,6 +20,7 @@ import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.icons.AllIcons;
 import org.intellij.xquery.icons.XQueryIcons;
 import org.intellij.xquery.psi.*;
 
@@ -100,7 +101,7 @@ public class XQueryFunctionReferenceVariantsCollector {
         String typeText = functionDeclaration.getSequenceType() != null ? functionDeclaration.getSequenceType()
                 .getText() : "";
         return LookupElementBuilder.create(functionDeclaration, key)
-                .withIcon(XQueryIcons.FILE)
+                .withIcon(AllIcons.Nodes.Function)
                 .withTailText(tailText, true)
                 .withTypeText(typeText)
                 .withInsertHandler(new ParenthesesInsertHandler<LookupElement>() {
