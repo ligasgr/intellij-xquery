@@ -19,6 +19,7 @@ package org.intellij.xquery.reference;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.ResolveResult;
+import org.intellij.xquery.model.XQueryQName;
 import org.intellij.xquery.psi.*;
 
 import java.util.ArrayList;
@@ -91,20 +92,15 @@ public class XQueryFunctionReferenceResolver {
     private void addMatchedFunction(PsiElement referenceTarget,
                                     XQueryFunctionName compareFunctionName,
                                     String checkedNamespace) {
-        final String functionDeclNamespace = compareFunctionName.getFunctionNamespace() != null ? compareFunctionName
-                .getFunctionNamespace().getText() : null;
-        final String referenceNamespace = checkedNamespace;
-        final String functionDeclLocalName = compareFunctionName.getFunctionLocalName().getText();
-        final String referenceLocalName = myElement.getFunctionName().getFunctionLocalName().getText();
-        boolean namespacesAndLocalNamesMatch = referenceNamespace != null && referenceNamespace.equals
-                (functionDeclNamespace) && referenceLocalName.equals(functionDeclLocalName);
-        boolean namespacesAreEmptyAndLocalNamesMatch = referenceNamespace == null && functionDeclNamespace == null &&
-                functionDeclLocalName.equals(referenceLocalName);
+        XQueryQName source = new XQueryQName(checkedNamespace, myElement.getFunctionName().getFunctionLocalName()
+                .getText(), null, myElement.getFunctionName());
+        XQueryQName checkedQName = new XQueryQName(compareFunctionName.getFunctionNamespace() != null ?
+                compareFunctionName
+                .getFunctionNamespace().getText() : null, compareFunctionName.getFunctionLocalName().getText(), null,
+                referenceTarget);
 
-        if (namespacesAndLocalNamesMatch) {
-            resolveResults.add(new PsiElementResolveResult(referenceTarget));
-        } else if (namespacesAreEmptyAndLocalNamesMatch) {
-            resolveResults.add(new PsiElementResolveResult(referenceTarget));
+        if (source.equals(checkedQName)) {
+            resolveResults.add(new PsiElementResolveResult((PsiElement) checkedQName.getNamedObject()));
         }
     }
 
