@@ -38,20 +38,20 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
 
     private String checkedNamespace;
     private XQueryFunctionReferenceResolver functionReferenceResolver;
-    private XQueryFunctionReferenceVariantsCollector functionReferenceVariantsCollector;
+    private XQueryFunctionReferenceForAutoCompletionCollector functionReferenceVariantsCollector;
 
     public XQueryFunctionReference(@NotNull XQueryFunctionCall element, TextRange textRange) {
         super(element, textRange);
         if (myElement.getFunctionName().getFunctionNamespace() != null)
             checkedNamespace = myElement.getFunctionName().getFunctionNamespace().getText();
         functionReferenceResolver = new XQueryFunctionReferenceResolver(checkedNamespace, myElement);
-        functionReferenceVariantsCollector = new XQueryFunctionReferenceVariantsCollector(myElement);
+        functionReferenceVariantsCollector = new XQueryFunctionReferenceForAutoCompletionCollector(myElement);
     }
 
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        return functionReferenceResolver.multiResolve(incompleteCode);
+        return functionReferenceResolver.getResolutionResults();
     }
 
     @Nullable
@@ -64,7 +64,7 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
     @NotNull
     @Override
     public Object[] getVariants() {
-        return functionReferenceVariantsCollector.getVariants();
+        return functionReferenceVariantsCollector.getReferencesForAutoCompletion();
     }
 
     @Override

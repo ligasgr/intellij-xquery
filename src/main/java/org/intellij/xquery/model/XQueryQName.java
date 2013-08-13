@@ -21,20 +21,20 @@ package org.intellij.xquery.model;
  * Date: 09/08/13
  * Time: 13:08
  */
-public class XQueryQName {
+public class XQueryQName<T> {
     private final String prefix;
     private final String localName;
     private final String namespace;
-    private final Object namedObject;
+    private final T namedObject;
 
-    public XQueryQName(String prefix, String localName, String namespace, Object namedObject) {
+    public XQueryQName(String prefix, String localName, String namespace, T namedObject) {
         this.prefix = prefix;
         this.localName = localName;
         this.namespace = namespace;
         this.namedObject = namedObject;
     }
 
-    public Object getNamedObject() {
+    public T getNamedObject() {
         return namedObject;
     }
 
@@ -61,5 +61,13 @@ public class XQueryQName {
                 localName.equals(that.localName);
 
         return namespacesAndLocalNamesMatch || namespacesAreEmptyAndLocalNamesMatch;
+    }
+
+    public String getTextRepresentation() {
+        if (prefix != null) {
+            return prefix + ":" + localName;
+        } else {
+            return localName;
+        }
     }
 }

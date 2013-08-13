@@ -16,14 +16,17 @@
 
 package org.intellij.xquery.reference;
 
-import com.intellij.psi.PsiElement;
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.ResolveResult;
 import org.intellij.xquery.model.XQueryQName;
 import org.intellij.xquery.psi.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import static org.intellij.xquery.model.XQueryQNameBuilder.aXQueryQName;
 
 /**
  * User: ligasgr
@@ -34,74 +37,73 @@ public class XQueryFunctionReferenceResolver {
 
     private XQueryFunctionCall myElement;
     private final String checkedNamespace;
-    private List<ResolveResult> resolveResults;
+    private List<XQueryFunctionName> matchingFunctionNames;
 
     public XQueryFunctionReferenceResolver(String checkedNamespace, XQueryFunctionCall myElement) {
         this.checkedNamespace = checkedNamespace;
         this.myElement = myElement;
     }
 
-    public ResolveResult[] multiResolve(boolean incompleteCode) {
+    public ResolveResult[] getResolutionResults() {
         XQueryFile file = (XQueryFile) myElement.getContainingFile();
-        resolveResults = new ArrayList<ResolveResult>();
-        addFunctionDeclarationReferences(checkedNamespace, file);
-        addExternalFunctionDeclarationReferences(file);
-        return resolveResults.toArray(new ResolveResult[resolveResults.size()]);
+        matchingFunctionNames = new ArrayList<XQueryFunctionName>();
+        addFunctionDeclarationReferencesFromFile(file, checkedNamespace);
+        addFunctionNameReferencesFromImportedFiles(file);
+        return convertToResolveResults(matchingFunctionNames);
     }
 
-
-    private void addExternalFunctionDeclarationReferences(XQueryFile file) {
-        final String referenceNamespace = myElement.getFunctionName().getFunctionNamespace() != null ? myElement
-                .getFunctionName().getFunctionNamespace().getText() : null;
-        if (referenceNamespace != null) {
-            addReferencesFromModuleImports(file, referenceNamespace);
-        }
-    }
-
-    private void addReferencesFromModuleImports(XQueryFile file, String referenceNamespace) {
-        for (XQueryModuleImport moduleImport : file.getModuleImports()) {
-            if (referenceNamespace.equals(moduleImport.getNamespaceName().getText())) {
-                addReferencesFromAllFilesInImport(moduleImport);
-            }
-        }
-    }
-
-    private void addReferencesFromAllFilesInImport(XQueryModuleImport moduleImport) {
-        for (XQueryModuleImportPath path : moduleImport.getModuleImportPathList()) {
-            if (path.getReference() != null) {
-                XQueryFile xQueryFile = (XQueryFile) path.getReference().resolve();
-                if (xQueryFile != null && xQueryFile.getModuleNamespaceName() != null) {
-                    addFunctionDeclarationReferences(xQueryFile.getModuleNamespaceName().getText(), xQueryFile);
-                }
-            }
-        }
-    }
-
-    private void addFunctionDeclarationReferences(String checkedNamespace, XQueryFile file) {
+    private void addFunctionDeclarationReferencesFromFile(XQueryFile file, String checkedNamespace) {
         for (XQueryFunctionDecl functionDecl : file.getFunctionDeclarations()) {
-            if (functionNameExists(functionDecl)) {
-                addMatchedFunction(functionDecl.getFunctionName(), functionDecl.getFunctionName(), checkedNamespace);
+            addFunctionAsTargetIfMatches(functionDecl, checkedNamespace);
+        }
+    }
+
+    private void addFunctionAsTargetIfMatches(XQueryFunctionDecl functionDecl, String checkedNamespace) {
+        if (functionDeclarationWithValidName(functionDecl)) {
+            XQueryQName<XQueryFunctionName> source = aXQueryQName(myElement.getFunctionName())
+                    .withPrefix(checkedNamespace)
+                    .build();
+            XQueryQName<XQueryFunctionName> checkedQName = aXQueryQName(functionDecl.getFunctionName())
+                    .build();
+            if (source.equals(checkedQName)) {
+                matchingFunctionNames.add(checkedQName.getNamedObject());
             }
         }
     }
 
-    private boolean functionNameExists(XQueryFunctionDecl functionDecl) {
+    private boolean functionDeclarationWithValidName(XQueryFunctionDecl functionDecl) {
         return functionDecl.getFunctionName() != null && functionDecl.getFunctionName().getTextLength() > 0;
     }
 
-    private void addMatchedFunction(PsiElement referenceTarget,
-                                    XQueryFunctionName compareFunctionName,
-                                    String checkedNamespace) {
-        XQueryQName source = new XQueryQName(checkedNamespace, myElement.getFunctionName().getFunctionLocalName()
-                .getText(), null, myElement.getFunctionName());
-        XQueryQName checkedQName = new XQueryQName(compareFunctionName.getFunctionNamespace() != null ?
-                compareFunctionName
-                .getFunctionNamespace().getText() : null, compareFunctionName.getFunctionLocalName().getText(), null,
-                referenceTarget);
-
-        if (source.equals(checkedQName)) {
-            resolveResults.add(new PsiElementResolveResult((PsiElement) checkedQName.getNamedObject()));
+    private void addFunctionNameReferencesFromImportedFiles(XQueryFile file) {
+        if (functionHasNamespacePrefix()) {
+            for (XQueryFile importedFile : getFilesFromImportWithMatchingNamespacePrefix(file)) {
+                addFunctionDeclarationReferencesFromFile(importedFile, importedFile.getModuleNamespaceName().getText());
+            }
         }
+    }
+
+    private boolean functionHasNamespacePrefix() {
+        return myElement.getFunctionName().getFunctionNamespace() != null;
+    }
+
+    private Collection<XQueryFile> getFilesFromImportWithMatchingNamespacePrefix(XQueryFile file) {
+        return file.getImportedFilesThatExist(file, new
+                Condition<XQueryModuleImport>() {
+                    @Override
+                    public boolean value(XQueryModuleImport moduleImport) {
+                        String namespacePrefix = myElement.getFunctionName().getFunctionNamespace().getText();
+                        return namespacePrefix.equals(moduleImport.getNamespaceName().getText());
+                    }
+                });
+    }
+
+    private ResolveResult[] convertToResolveResults(List<XQueryFunctionName> resolveResults) {
+        ResolveResult[] convertedResults = new ResolveResult[resolveResults.size()];
+        for (int i = 0; i < resolveResults.size(); i++) {
+            convertedResults[i] = new PsiElementResolveResult(resolveResults.get(i));
+        }
+        return convertedResults;
     }
 
 }

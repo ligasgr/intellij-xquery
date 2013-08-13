@@ -108,4 +108,15 @@ public class XQueryQNameTest {
     public void shouldReturnTheSameNamespace() {
         assertEquals("namespace", qName.getNamespace());
     }
+
+    @Test
+    public void shouldReturnTextRepresentationForFullyQualifiedName() {
+        assertEquals("prefix:localName", qName.getTextRepresentation());
+    }
+
+    @Test
+    public void shouldReturnTextRepresentationForNameWithoutPrefix() {
+        XQueryQName qName = new XQueryQName(null, "localName", null, new Object());
+        assertEquals("localName", qName.getTextRepresentation());
+    }
 }

@@ -19,6 +19,7 @@ package org.intellij.xquery.psi;
 
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryFileType;
@@ -27,6 +28,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.util.Collection;
+import java.util.LinkedList;
+
+import static com.intellij.util.containers.ContainerUtil.findAll;
 
 /**
  * User: ligasgr
@@ -79,5 +83,26 @@ public class XQueryFile extends PsiFileBase {
         Collection<XQueryFunctionDecl> functionDeclarations = PsiTreeUtil.findChildrenOfType(this,
                 XQueryFunctionDecl.class);
         return functionDeclarations;
+    }
+
+    public Collection<XQueryFile> getImportedFilesThatExist(XQueryFile file, Condition<XQueryModuleImport> condition) {
+        Collection<XQueryFile> result = new LinkedList<XQueryFile>();
+        for (XQueryModuleImport moduleImport : findAll(file.getModuleImports(), condition)) {
+            result.addAll(getReferencesToExistingFilesInImport(moduleImport));
+        }
+        return result;
+    }
+
+    private Collection<XQueryFile> getReferencesToExistingFilesInImport(XQueryModuleImport moduleImport) {
+        Collection<XQueryFile> results = new LinkedList<XQueryFile>();
+        for (XQueryModuleImportPath path : moduleImport.getModuleImportPathList()) {
+            if (path.getReference() != null) {
+                XQueryFile xQueryFile = (XQueryFile) path.getReference().resolve();
+                if (xQueryFile != null && xQueryFile.getModuleNamespaceName() != null) {
+                    results.add(xQueryFile);
+                }
+            }
+        }
+        return results;
     }
 }

@@ -21,78 +21,83 @@ import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.icons.AllIcons;
-import org.intellij.xquery.icons.XQueryIcons;
+import org.intellij.xquery.model.XQueryQName;
 import org.intellij.xquery.psi.*;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.intellij.xquery.model.XQueryQNameBuilder.aXQueryQName;
 
 /**
  * User: ligasgr
  * Date: 07/08/13
  * Time: 15:08
  */
-public class XQueryFunctionReferenceVariantsCollector {
+public class XQueryFunctionReferenceForAutoCompletionCollector {
 
-    private XQueryFunctionCall myElement;
+    private XQueryFunctionCall sourceOfReference;
+    private List<XQueryQName> proposedReferences;
 
-    public XQueryFunctionReferenceVariantsCollector(XQueryFunctionCall myElement) {
-        this.myElement = myElement;
+    public XQueryFunctionReferenceForAutoCompletionCollector(XQueryFunctionCall sourceOfReference) {
+        this.sourceOfReference = sourceOfReference;
     }
 
-    public Object[] getVariants() {
-        XQueryFile file = (XQueryFile) myElement.getContainingFile();
-        List<LookupElement> variants = new LinkedList<LookupElement>();
-        variants.addAll(getVariantsFromThisFile(file));
-        variants.addAll(getVariantsFromModuleImports(file));
-        return variants.toArray();
+    public Object[] getReferencesForAutoCompletion() {
+        XQueryFile file = (XQueryFile) sourceOfReference.getContainingFile();
+        proposedReferences = new LinkedList<XQueryQName>();
+        addProposedReferencesFromFile(file);
+        addReferencesFromModuleImports(file);
+        return convertToLookupElements(proposedReferences);
     }
 
-    private List<LookupElement> getVariantsFromThisFile(XQueryFile file) {
-        List<LookupElement> variants = new LinkedList<LookupElement>();
-        for (final XQueryFunctionDecl functionDecl : file.getFunctionDeclarations()) {
+    private void addProposedReferencesFromFile(XQueryFile file) {
+        for (XQueryFunctionDecl functionDecl : file.getFunctionDeclarations()) {
             if (functionNameExists(functionDecl)) {
-                variants.add(createLookupElement(functionDecl, functionDecl.getFunctionName().getText()));
+                proposedReferences.add(aXQueryQName(functionDecl.getFunctionName()).build());
             }
         }
-        return variants;
     }
 
-    private List<LookupElement> getVariantsFromModuleImports(XQueryFile file) {
-        List<LookupElement> variants = new LinkedList<LookupElement>();
+    private void addReferencesFromModuleImports(XQueryFile file) {
         for (XQueryModuleImport moduleImport : file.getModuleImports()) {
             if (moduleImport.getNamespaceName() != null) {
                 String targetPrefix = moduleImport.getNamespaceName().getName();
-                variants.addAll(getVariantsFromImportPaths(targetPrefix, moduleImport));
+                addVariantsFromImportPaths(targetPrefix, moduleImport);
             }
         }
-        return variants;
     }
 
-    private List<LookupElement> getVariantsFromImportPaths(String targetPrefix, XQueryModuleImport moduleImport) {
-        List<LookupElement> variants = new LinkedList<LookupElement>();
+    private void addVariantsFromImportPaths(String targetPrefix, XQueryModuleImport moduleImport) {
         for (XQueryModuleImportPath moduleImportPath : moduleImport.getModuleImportPathList()) {
             XQueryFile file = (XQueryFile) moduleImportPath.getReference().resolve();
             if (file != null) {
-                variants.addAll(getVariantsFromReferencedFile(targetPrefix, file));
+                addVariantsFromReferencedFile(targetPrefix, file);
             }
         }
-        return variants;
     }
 
-    private List<LookupElement> getVariantsFromReferencedFile(String targetPrefix, XQueryFile file) {
-        List<LookupElement> variants = new LinkedList<LookupElement>();
+    private void addVariantsFromReferencedFile(String targetPrefix, XQueryFile file) {
         for (final XQueryFunctionDecl functionDecl : file.getFunctionDeclarations()) {
             if (functionNameExists(functionDecl)) {
-                variants.add(createLookupElement(functionDecl, targetPrefix + ":" + functionDecl
-                        .getFunctionName().getFunctionLocalName().getText()));
+                proposedReferences.add(aXQueryQName(functionDecl.getFunctionName()).withPrefix(targetPrefix).build());
             }
         }
-        return variants;
     }
 
     private boolean functionNameExists(XQueryFunctionDecl functionDecl) {
         return functionDecl.getFunctionName() != null && functionDecl.getFunctionName().getTextLength() > 0;
+    }
+
+    private LookupElement[] convertToLookupElements(List<XQueryQName> proposedReferences) {
+        LookupElement[] lookupElements = new LookupElement[proposedReferences.size()];
+        for (int i = 0; i < proposedReferences.size(); i++) {
+            XQueryQName qName = proposedReferences.get(i);
+            XQueryFunctionName functionName = (XQueryFunctionName) qName.getNamedObject();
+            XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) functionName.getParent();
+            lookupElements[i] = createLookupElement(functionDeclaration, qName.getTextRepresentation());
+        }
+        return lookupElements;
     }
 
     private LookupElement createLookupElement(XQueryFunctionDecl functionDeclaration, String key) {

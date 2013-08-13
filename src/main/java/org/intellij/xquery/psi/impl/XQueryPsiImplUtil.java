@@ -106,12 +106,10 @@ public class XQueryPsiImplUtil {
     }
 
     public static PsiReference getReference(XQueryModuleImportPath element) {
-        if (element.getURILiteral() != null) {
-            String filename = stripApostrophes(element.getURILiteral().getText());
-            if (!StringUtil.isEmptyOrSpaces(filename)) {
-                return new XQueryModuleReference(element, filename, new TextRange(1,
-                        element.getURILiteral().getTextLength() - 1));
-            }
+        String filename = stripApostrophes(element.getURILiteral().getText());
+        if (!StringUtil.isEmptyOrSpaces(filename)) {
+            return new XQueryModuleReference(element, filename, new TextRange(1,
+                    element.getURILiteral().getTextLength() - 1));
         }
         return null;
     }
