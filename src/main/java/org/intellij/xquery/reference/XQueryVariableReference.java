@@ -18,16 +18,17 @@ package org.intellij.xquery.reference;
 
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.intellij.xquery.icons.XQueryIcons;
 import org.intellij.xquery.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -173,11 +174,15 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
     }
 
     private void addVariantIfNotAlreadyAdded(Map<String, LookupElement> variants, XQueryVarDecl varDecl) {
+        String typeText = "";
+        if (varDecl.getTypeDeclaration() != null) {
+            typeText = varDecl.getTypeDeclaration().getSequenceType().getText();
+        }
         String key = varDecl.getVarName().getText();
         if (!variants.containsKey(key)) {
-            variants.put(key, LookupElementBuilder.create(varDecl.getVarName(), key).
-                    withIcon(XQueryIcons.FILE).
-                    withTypeText(varDecl.getContainingFile().getName())
+            variants.put(key, LookupElementBuilder.create(varDecl.getVarName(), key)
+                    .withIcon(AllIcons.Nodes.Field)
+                    .withTypeText(typeText)
 
             );
         }
@@ -218,11 +223,20 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
         }
 
         private void addElementIfNotAlreadyAdded(PsiElement psiElement) {
+            Icon icon = AllIcons.Nodes.Variable;
+            String typeText = "";
+            if (psiElement.getParent() instanceof XQueryParam) {
+                icon = AllIcons.Nodes.Parameter;
+                XQueryParam param = (XQueryParam) psiElement.getParent();
+                if (param.getTypeDeclaration() != null) {
+                    typeText = param.getTypeDeclaration().getSequenceType().getText();
+                }
+            }
             String key = psiElement.getText();
             if (!myResult.containsKey(key)) {
-                myResult.put(key, LookupElementBuilder.create(key).
-                        withIcon(XQueryIcons.FILE).
-                        withTypeText(psiElement.getContainingFile().getName()));
+                myResult.put(key, LookupElementBuilder.create(key)
+                        .withIcon(icon)
+                        .withTypeText(typeText));
             }
         }
     }

@@ -106,7 +106,7 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
         String typeText = functionDeclaration.getSequenceType() != null ? functionDeclaration.getSequenceType()
                 .getText() : "";
         return LookupElementBuilder.create(functionDeclaration, key)
-                .withIcon(AllIcons.Nodes.Function)
+                .withIcon(AllIcons.Nodes.Method)
                 .withTailText(tailText, true)
                 .withTypeText(typeText)
                 .withInsertHandler(new ParenthesesInsertHandler<LookupElement>() {
