@@ -52,22 +52,32 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         XQueryFile file = (XQueryFile) myElement.getContainingFile();
-        if (myElement.getVarName() != null) {
-            VariableReferenceScopeProcessor processor = new VariableReferenceScopeProcessor();
-            PsiTreeUtil.treeWalkUp(processor, myElement, null, ResolveState.initial());
-            Map<String, ResolveResult> scopeProcessorResults = processor.getResults();
+        VariableReferenceScopeProcessor processor = new VariableReferenceScopeProcessor(checkedNamespace,
+                myElement);
+        PsiTreeUtil.treeWalkUp(processor, myElement, null, ResolveState.initial());
+        List<XQueryVarName> scopeProcessorResults = processor.getResults();
 
-            Map<String, ResolveResult> variableDeclarationResults = getVariableDeclarationReferences(file,
-                    scopeProcessorResults, checkedNamespace);
-
-            Map<String, ResolveResult> externalVariableDeclarationResults = getExternalVariableDeclarationReferences
-                    (file, variableDeclarationResults);
-
-            return externalVariableDeclarationResults.values().toArray(new
-                    ResolveResult[externalVariableDeclarationResults.size()]);
+        if (scopeProcessorResults.size() > 0) {
+            return convertToResolveResults(scopeProcessorResults);
         }
-        return new ResolveResult[0];
+        Map<String, ResolveResult> variableDeclarationResults = getVariableDeclarationReferences(file,
+                new HashMap<String, ResolveResult>(), checkedNamespace);
+
+        Map<String, ResolveResult> externalVariableDeclarationResults = getExternalVariableDeclarationReferences
+                (file, variableDeclarationResults);
+
+        return externalVariableDeclarationResults.values().toArray(new
+                ResolveResult[externalVariableDeclarationResults.size()]);
     }
+
+    private ResolveResult[] convertToResolveResults(List<XQueryVarName> resolveResults) {
+        ResolveResult[] convertedResults = new ResolveResult[resolveResults.size()];
+        for (int i = 0; i < resolveResults.size(); i++) {
+            convertedResults[i] = new PsiElementResolveResult(resolveResults.get(i));
+        }
+        return convertedResults;
+    }
+
 
     private Map<String, ResolveResult> getExternalVariableDeclarationReferences(XQueryFile file, Map<String,
             ResolveResult> results) {
@@ -241,28 +251,4 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
         }
     }
 
-    private class VariableReferenceScopeProcessor extends BaseScopeProcessor {
-        private Map<String, ResolveResult> results = new HashMap<String, ResolveResult>();
-
-        public Map<String, ResolveResult> getResults() {
-            return results;
-        }
-
-        @Override
-        public boolean execute(@NotNull PsiElement element, ResolveState state) {
-            boolean elementIsGoodCandidate = !element.equals(myElement) && element instanceof XQueryVarName &&
-                    isNotVariableReference(element);
-            if (elementIsGoodCandidate) {
-                addElementIfNotAlreadyAdded(element);
-            }
-            return true;
-        }
-
-        private void addElementIfNotAlreadyAdded(PsiElement element) {
-            String key = element.getText();
-            if (!results.containsKey(key)) {
-                addElementToResultsIfMatching(results, element, (XQueryVarName) element, key, checkedNamespace);
-            }
-        }
-    }
 }

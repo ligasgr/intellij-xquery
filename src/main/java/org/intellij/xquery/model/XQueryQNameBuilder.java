@@ -1,6 +1,7 @@
 package org.intellij.xquery.model;
 
 import org.intellij.xquery.psi.XQueryFunctionName;
+import org.intellij.xquery.psi.XQueryVarName;
 
 /**
  * User: ligasgr
@@ -25,6 +26,18 @@ public class XQueryQNameBuilder<T> {
             instance.localName = functionName.getFunctionLocalName().getText();
         }
         instance.namedObject = functionName;
+        return instance;
+    }
+
+    public static XQueryQNameBuilder<XQueryVarName> aXQueryQName(XQueryVarName varName) {
+        XQueryQNameBuilder<XQueryVarName> instance = new XQueryQNameBuilder<XQueryVarName>();
+        if (varName.getVarNamespace() != null) {
+            instance.prefix = varName.getVarNamespace().getText();
+        }
+        if (varName.getVarLocalName() != null) {
+            instance.localName = varName.getVarLocalName().getText();
+        }
+        instance.namedObject = varName;
         return instance;
     }
 
