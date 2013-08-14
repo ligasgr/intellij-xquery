@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.intellij.xquery.model.XQueryQNameBuilder.aXQueryQName;
+import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInImport;
 
 /**
  * User: ligasgr
@@ -22,7 +23,7 @@ import static org.intellij.xquery.model.XQueryQNameBuilder.aXQueryQName;
 public class XQueryVariableReferenceForAutoCompletionCollector {
 
     private XQueryVarRef sourceOfReference;
-    private List<XQueryQName> proposedReferences;
+    private List<XQueryQName<XQueryVarName>> proposedReferences;
 
     public XQueryVariableReferenceForAutoCompletionCollector(XQueryVarRef sourceOfReference) {
         this.sourceOfReference = sourceOfReference;
@@ -30,9 +31,10 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
 
     public Object[] getReferencesForAutoCompletion() {
         XQueryFile file = (XQueryFile) sourceOfReference.getContainingFile();
-        proposedReferences = new LinkedList<XQueryQName>();
+        proposedReferences = new LinkedList<XQueryQName<XQueryVarName>>();
         addProposedReferencesFromLocalScopes();
         addProposedReferencesFromFile(file);
+        addProposedReferencesFromModuleImports(file);
         return convertToLookupElements(proposedReferences);
     }
 
@@ -45,7 +47,8 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
     private void addProposedReferencesFromFile(XQueryFile file) {
         for (final XQueryVarDecl varDecl : file.getVariableDeclarations()) {
             if (variableNameExists(varDecl)) {
-                addProposedReferenceIfNotAlreadyAdded(varDecl);
+                XQueryQName<XQueryVarName> qName = aXQueryQName(varDecl.getVarName()).build();
+                addProposedReferenceIfNotAlreadyAdded(qName);
             }
         }
     }
@@ -54,14 +57,38 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
         return variableDeclaration.getVarName() != null && variableDeclaration.getVarName().getTextLength() > 0;
     }
 
-    private void addProposedReferenceIfNotAlreadyAdded(XQueryVarDecl varDecl) {
-        XQueryQName<XQueryVarName> qName = aXQueryQName(varDecl.getVarName()).build();
+    private void addProposedReferenceIfNotAlreadyAdded(XQueryQName<XQueryVarName> qName) {
         if (!proposedReferences.contains(qName)) {
             proposedReferences.add(qName);
         }
     }
 
-    private LookupElement[] convertToLookupElements(List<XQueryQName> proposedReferences) {
+
+    private void addProposedReferencesFromModuleImports(XQueryFile file) {
+        for (XQueryModuleImport moduleImport : file.getModuleImports()) {
+            if (moduleImport.getNamespaceName() != null) {
+                String targetPrefix = moduleImport.getNamespaceName().getName();
+                addProposedReferencesFromImport(targetPrefix, moduleImport);
+            }
+        }
+    }
+
+    private void addProposedReferencesFromImport(String targetPrefix, XQueryModuleImport moduleImport) {
+        for (XQueryFile file : getReferencesToExistingFilesInImport(moduleImport)) {
+            addProposedReferencesFromImportedFile(targetPrefix, file);
+        }
+    }
+
+    private void addProposedReferencesFromImportedFile(String targetPrefix, XQueryFile file) {
+        for (final XQueryVarDecl functionDecl : file.getVariableDeclarations()) {
+            if (variableNameExists(functionDecl)) {
+                XQueryQName<XQueryVarName> qName = aXQueryQName(functionDecl.getVarName()).withPrefix(targetPrefix).build();
+                addProposedReferenceIfNotAlreadyAdded(qName);
+            }
+        }
+    }
+
+    private LookupElement[] convertToLookupElements(List<XQueryQName<XQueryVarName>> proposedReferences) {
         LookupElement[] lookupElements = new LookupElement[proposedReferences.size()];
         for (int i = 0; i < proposedReferences.size(); i++) {
             lookupElements[i] = convertToLookupElement(proposedReferences.get(i));
@@ -69,8 +96,8 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
         return lookupElements;
     }
 
-    private LookupElement convertToLookupElement(XQueryQName qName) {
-        XQueryVarName variableName = (XQueryVarName) qName.getNamedObject();
+    private LookupElement convertToLookupElement(XQueryQName<XQueryVarName> qName) {
+        XQueryVarName variableName =  qName.getNamedObject();
         return createLookupElement(variableName, qName.getTextRepresentation());
     }
 
@@ -95,5 +122,4 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
                 .withIcon(icon)
                 .withTypeText(typeText);
     }
-
 }

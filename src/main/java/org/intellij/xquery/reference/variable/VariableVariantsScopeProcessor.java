@@ -15,9 +15,9 @@ import static org.intellij.xquery.model.XQueryQNameBuilder.aXQueryQName;
 
 public class VariableVariantsScopeProcessor extends BaseScopeProcessor {
 
-    private List<XQueryQName> proposedReferences = new LinkedList<XQueryQName>();
+    private List<XQueryQName<XQueryVarName>> proposedReferences = new LinkedList<XQueryQName<XQueryVarName>>();
 
-    public List<XQueryQName> getProposedReferences() {
+    public List<XQueryQName<XQueryVarName>> getProposedReferences() {
         return proposedReferences;
     }
 

@@ -78,6 +78,14 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
         assertEquals(1, referenceBasedEntries.size());
     }
 
+    public void testVariableCompletionFromAnotherFile() {
+        myFixture.configureByFiles("VariableCompletionFromAnotherFile.xq", "VariableReferencedFile.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
+        assertEquals(1, referenceBasedEntries.size());
+    }
+
     public void testVariableRenameInTheSameFile() {
         myFixture.configureByFiles("VariableRenameInTheSameFile.xq");
         myFixture.renameElementAtCaret("renamed");
