@@ -104,7 +104,7 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
         String tailText = " (" + (functionDeclaration.getParamList() != null ? functionDeclaration.getParamList()
                 .getText() : "") + ")";
         String typeText = functionDeclaration.getSequenceType() != null ? functionDeclaration.getSequenceType()
-                .getText() : "";
+                .getText() : "item()*";
         return LookupElementBuilder.create(functionDeclaration, key)
                 .withIcon(AllIcons.Nodes.Method)
                 .withTailText(tailText, true)

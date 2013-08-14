@@ -224,7 +224,7 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
 
         private void addElementIfNotAlreadyAdded(PsiElement psiElement) {
             Icon icon = AllIcons.Nodes.Variable;
-            String typeText = "";
+            String typeText = "item()*";
             if (psiElement.getParent() instanceof XQueryParam) {
                 icon = AllIcons.Nodes.Parameter;
                 XQueryParam param = (XQueryParam) psiElement.getParent();
