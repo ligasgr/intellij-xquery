@@ -28,7 +28,7 @@ import static junit.framework.Assert.assertFalse;
  */
 public class XQueryQNameTest {
 
-    private final XQueryQName qName = new XQueryQName("prefix", "localName", "namespace", new Object());
+    private final XQueryQName qName = new XQueryQName<Object>("prefix", "localName", "namespace", new Object());
 
     @Test
     public void shouldNotEqualWhenObjectIsNull() throws Exception {
@@ -42,56 +42,56 @@ public class XQueryQNameTest {
 
     @Test
     public void shouldEqualWhenPrefixesAndLocalNamesEqual() throws Exception {
-        XQueryQName qName1 = new XQueryQName("prefix", "localName", "namespace1", new Object());
-        XQueryQName qName2 = new XQueryQName("prefix", "localName", "namespace2", new Object());
+        XQueryQName qName1 = new XQueryQName<Object>("prefix", "localName", "namespace1", new Object());
+        XQueryQName qName2 = new XQueryQName<Object>("prefix", "localName", "namespace2", new Object());
 
         assertEquals(qName1, qName2);
     }
 
     @Test
     public void shouldNotEqualWhenPrefixesEqualAndLocalNamesDoNot() throws Exception {
-        XQueryQName qName1 = new XQueryQName("prefix", "localName1", "namespace1", new Object());
-        XQueryQName qName2 = new XQueryQName("prefix", "localName2", "namespace2", new Object());
+        XQueryQName qName1 = new XQueryQName<Object>("prefix", "localName1", "namespace1", new Object());
+        XQueryQName qName2 = new XQueryQName<Object>("prefix", "localName2", "namespace2", new Object());
 
         assertFalse(qName1.equals(qName2));
     }
 
     @Test
     public void shouldNotEqualWhenPrefixesDoNotEqualAndLocalNamesEqual() throws Exception {
-        XQueryQName qName1 = new XQueryQName("prefix1", "localName", "namespace1", new Object());
-        XQueryQName qName2 = new XQueryQName("prefix2", "localName", "namespace2", new Object());
+        XQueryQName qName1 = new XQueryQName<Object>("prefix1", "localName", "namespace1", new Object());
+        XQueryQName qName2 = new XQueryQName<Object>("prefix2", "localName", "namespace2", new Object());
 
         assertFalse(qName1.equals(qName2));
     }
 
     @Test
     public void shouldNotEqualWhenPrefixesDoNotEqualAndLocalNamesDoNotEqual() throws Exception {
-        XQueryQName qName1 = new XQueryQName("prefix1", "localName", "namespace1", new Object());
-        XQueryQName qName2 = new XQueryQName("prefix2", "localName", "namespace2", new Object());
+        XQueryQName qName1 = new XQueryQName<Object>("prefix1", "localName", "namespace1", new Object());
+        XQueryQName qName2 = new XQueryQName<Object>("prefix2", "localName", "namespace2", new Object());
 
         assertFalse(qName1.equals(qName2));
     }
 
     @Test
     public void shouldEqualWhenPrefixEmptyAndLocalNamesEqual() throws Exception {
-        XQueryQName qName1 = new XQueryQName(null, "localName", "namespace1", new Object());
-        XQueryQName qName2 = new XQueryQName(null, "localName", "namespace2", new Object());
+        XQueryQName qName1 = new XQueryQName<Object>(null, "localName", "namespace1", new Object());
+        XQueryQName qName2 = new XQueryQName<Object>(null, "localName", "namespace2", new Object());
 
         assertEquals(qName1, qName2);
     }
 
     @Test
     public void shouldNotEqualWhenPrefixEmptyAndLocalNamesDoNotEqual() throws Exception {
-        XQueryQName qName1 = new XQueryQName(null, "localName1", "namespace1", new Object());
-        XQueryQName qName2 = new XQueryQName(null, "localName2", "namespace2", new Object());
+        XQueryQName qName1 = new XQueryQName<Object>(null, "localName1", "namespace1", new Object());
+        XQueryQName qName2 = new XQueryQName<Object>(null, "localName2", "namespace2", new Object());
 
         assertFalse(qName1.equals(qName2));
     }
 
     @Test
     public void shouldNotEqualWhenPrefixEmptyAndLocalNamesEmpty() throws Exception {
-        XQueryQName qName1 = new XQueryQName(null, null, "namespace1", new Object());
-        XQueryQName qName2 = new XQueryQName(null, null, "namespace2", new Object());
+        XQueryQName qName1 = new XQueryQName<Object>(null, null, "namespace1", new Object());
+        XQueryQName qName2 = new XQueryQName<Object>(null, null, "namespace2", new Object());
 
         assertFalse(qName1.equals(qName2));
     }
@@ -99,7 +99,7 @@ public class XQueryQNameTest {
     @Test
     public void shouldReturnTheSameObject() {
         Object o = new Object();
-        final XQueryQName qName = new XQueryQName("prefix", "localName", "namespace", o);
+        final XQueryQName qName = new XQueryQName<Object>("prefix", "localName", "namespace", o);
 
         assertEquals(o, qName.getNamedObject());
     }
@@ -116,7 +116,7 @@ public class XQueryQNameTest {
 
     @Test
     public void shouldReturnTextRepresentationForNameWithoutPrefix() {
-        XQueryQName qName = new XQueryQName(null, "localName", null, new Object());
+        XQueryQName qName = new XQueryQName<Object>(null, "localName", null, new Object());
         assertEquals("localName", qName.getTextRepresentation());
     }
 }
