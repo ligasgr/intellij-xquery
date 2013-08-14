@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.reference;
+package org.intellij.xquery.reference.namespace;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;

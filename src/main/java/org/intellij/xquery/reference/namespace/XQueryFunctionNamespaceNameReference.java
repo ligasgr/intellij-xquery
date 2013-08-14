@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.reference;
+package org.intellij.xquery.reference.namespace;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -30,9 +30,9 @@ import java.util.*;
  * Date: 03/07/13
  * Time: 13:11
  */
-public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQueryVarNamespace> implements
+public class XQueryFunctionNamespaceNameReference extends PsiReferenceBase<XQueryFunctionNamespace> implements
         PsiPolyVariantReference {
-    public XQueryVariableNamespaceNameReference(XQueryVarNamespace element, TextRange textRange) {
+    public XQueryFunctionNamespaceNameReference(XQueryFunctionNamespace element, TextRange textRange) {
         super(element, textRange);
     }
 
@@ -100,12 +100,12 @@ public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQuer
 
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        myElement.replace(getUpdatedRef(newElementName).getVarNamespace());
+        myElement.replace(getUpdatedRef(newElementName).getFunctionNamespace());
         return myElement;
     }
 
-    private XQueryVarName getUpdatedRef(String newName) {
-        XQueryVarName varName = XQueryElementFactory.createVariableReference(myElement.getProject(), newName, "dummy");
-        return varName;
+    private XQueryFunctionName getUpdatedRef(String newName) {
+        XQueryFunctionName functionName = XQueryElementFactory.createFunctionReference(myElement.getProject(), newName, "dummy");
+        return functionName;
     }
 }

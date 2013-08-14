@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.reference;
+package org.intellij.xquery.reference.function;
 
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElementResolveResult;

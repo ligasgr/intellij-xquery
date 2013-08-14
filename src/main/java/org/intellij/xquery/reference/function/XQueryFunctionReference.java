@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.reference;
+package org.intellij.xquery.reference.function;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;

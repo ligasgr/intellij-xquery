@@ -27,7 +27,11 @@ import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.psi.*;
-import org.intellij.xquery.reference.*;
+import org.intellij.xquery.reference.module.XQueryModuleReference;
+import org.intellij.xquery.reference.namespace.XQueryFunctionNamespaceNameReference;
+import org.intellij.xquery.reference.function.XQueryFunctionReference;
+import org.intellij.xquery.reference.namespace.XQueryVariableNamespaceNameReference;
+import org.intellij.xquery.reference.variable.XQueryVariableReference;
 import org.jetbrains.annotations.NotNull;
 
 /**
