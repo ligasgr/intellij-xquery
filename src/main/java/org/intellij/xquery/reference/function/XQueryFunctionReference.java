@@ -37,12 +37,12 @@ import static org.intellij.xquery.psi.XQueryElementFactory.createFunctionReferen
 public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall> implements PsiPolyVariantReference {
 
     private XQueryFunctionReferenceResolver functionReferenceResolver;
-    private XQueryFunctionReferenceForAutoCompletionCollector functionReferenceVariantsCollector;
+    private XQueryFunctionReferenceForAutoCompletionCollector autoCompletionCollector;
 
     public XQueryFunctionReference(@NotNull XQueryFunctionCall element, TextRange textRange) {
         super(element, textRange);
         functionReferenceResolver = new XQueryFunctionReferenceResolver(myElement);
-        functionReferenceVariantsCollector = new XQueryFunctionReferenceForAutoCompletionCollector(myElement);
+        autoCompletionCollector = new XQueryFunctionReferenceForAutoCompletionCollector(myElement);
     }
 
     @NotNull
@@ -61,7 +61,7 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall
     @NotNull
     @Override
     public Object[] getVariants() {
-        return functionReferenceVariantsCollector.getReferencesForAutoCompletion();
+        return autoCompletionCollector.getReferencesForAutoCompletion();
     }
 
     @Override

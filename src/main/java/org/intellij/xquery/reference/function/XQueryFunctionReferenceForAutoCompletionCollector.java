@@ -48,7 +48,7 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
         XQueryFile file = (XQueryFile) sourceOfReference.getContainingFile();
         proposedReferences = new LinkedList<XQueryQName>();
         addProposedReferencesFromFile(file);
-        addReferencesFromModuleImports(file);
+        addProposedReferencesFromModuleImports(file);
         return convertToLookupElements(proposedReferences);
     }
 
@@ -60,22 +60,22 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
         }
     }
 
-    private void addReferencesFromModuleImports(XQueryFile file) {
+    private void addProposedReferencesFromModuleImports(XQueryFile file) {
         for (XQueryModuleImport moduleImport : file.getModuleImports()) {
             if (moduleImport.getNamespaceName() != null) {
                 String targetPrefix = moduleImport.getNamespaceName().getName();
-                addVariantsFromImport(targetPrefix, moduleImport);
+                addProposedReferencesFromImport(targetPrefix, moduleImport);
             }
         }
     }
 
-    private void addVariantsFromImport(String targetPrefix, XQueryModuleImport moduleImport) {
+    private void addProposedReferencesFromImport(String targetPrefix, XQueryModuleImport moduleImport) {
         for (XQueryFile file : getReferencesToExistingFilesInImport(moduleImport)) {
-            addVariantsFromReferencedFile(targetPrefix, file);
+            addProposedReferencesFromImportedFile(targetPrefix, file);
         }
     }
 
-    private void addVariantsFromReferencedFile(String targetPrefix, XQueryFile file) {
+    private void addProposedReferencesFromImportedFile(String targetPrefix, XQueryFile file) {
         for (final XQueryFunctionDecl functionDecl : file.getFunctionDeclarations()) {
             if (functionNameExists(functionDecl)) {
                 proposedReferences.add(aXQueryQName(functionDecl.getFunctionName()).withPrefix(targetPrefix).build());

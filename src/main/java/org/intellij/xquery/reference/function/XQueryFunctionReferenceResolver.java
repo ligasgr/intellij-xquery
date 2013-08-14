@@ -53,16 +53,16 @@ public class XQueryFunctionReferenceResolver {
         return convertToResolveResults(matchingFunctionNames);
     }
 
-    private void addFunctionDeclarationReferencesFromFile(XQueryFile file, String checkedNamespace) {
+    private void addFunctionDeclarationReferencesFromFile(XQueryFile file, String checkedNamespacePrefix) {
         for (XQueryFunctionDecl functionDecl : file.getFunctionDeclarations()) {
-            addFunctionAsTargetIfMatches(functionDecl, checkedNamespace);
+            addFunctionAsTargetIfMatches(functionDecl, checkedNamespacePrefix);
         }
     }
 
-    private void addFunctionAsTargetIfMatches(XQueryFunctionDecl functionDecl, String checkedNamespace) {
+    private void addFunctionAsTargetIfMatches(XQueryFunctionDecl functionDecl, String checkedNamespacePrefix) {
         if (functionDeclarationWithValidName(functionDecl)) {
             XQueryQName<XQueryFunctionName> source = aXQueryQName(myElement.getFunctionName())
-                    .withPrefix(checkedNamespace)
+                    .withPrefix(checkedNamespacePrefix)
                     .build();
             XQueryQName<XQueryFunctionName> checkedQName = aXQueryQName(functionDecl.getFunctionName())
                     .build();
@@ -89,14 +89,13 @@ public class XQueryFunctionReferenceResolver {
     }
 
     private Collection<XQueryFile> getFilesFromImportWithMatchingNamespacePrefix(XQueryFile file) {
-        return file.getImportedFilesThatExist(new
-                Condition<XQueryModuleImport>() {
-                    @Override
-                    public boolean value(XQueryModuleImport moduleImport) {
-                        String namespacePrefix = myElement.getFunctionName().getFunctionNamespace().getText();
-                        return namespacePrefix.equals(moduleImport.getNamespaceName().getText());
-                    }
-                });
+        return file.getImportedFilesThatExist(new Condition<XQueryModuleImport>() {
+            @Override
+            public boolean value(XQueryModuleImport moduleImport) {
+                String namespacePrefix = myElement.getFunctionName().getFunctionNamespace().getText();
+                return namespacePrefix.equals(moduleImport.getNamespaceName().getText());
+            }
+        });
     }
 
     private ResolveResult[] convertToResolveResults(List<XQueryFunctionName> resolveResults) {
@@ -106,5 +105,4 @@ public class XQueryFunctionReferenceResolver {
         }
         return convertedResults;
     }
-
 }

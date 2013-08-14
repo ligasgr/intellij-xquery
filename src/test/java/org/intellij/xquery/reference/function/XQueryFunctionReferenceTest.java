@@ -18,11 +18,11 @@ package org.intellij.xquery.reference.function;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.Lookup;
-import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.intellij.xquery.psi.XQueryFunctionCall;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
+import org.intellij.xquery.reference.MatchingStringCondition;
 
 import java.util.List;
 
@@ -160,16 +160,4 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
         assertNull(resolvedReference);
     }
 
-    private static class MatchingStringCondition implements Condition<String> {
-        private String matchingText;
-
-        private MatchingStringCondition(String matchingText) {
-            this.matchingText = matchingText;
-        }
-
-        @Override
-        public boolean value(String text) {
-            return matchingText.equals(text);
-        }
-    }
 }

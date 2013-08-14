@@ -14,22 +14,20 @@ import java.util.List;
 import static org.intellij.xquery.model.XQueryQNameBuilder.aXQueryQName;
 
 /**
-* User: ligasgr
-* Date: 14/08/13
-* Time: 14:41
-*/
-class VariableReferenceScopeProcessor extends BaseScopeProcessor {
-    private List<XQueryVarName> results = new ArrayList<XQueryVarName>();
+ * User: ligasgr
+ * Date: 14/08/13
+ * Time: 14:41
+ */
+public class VariableReferenceScopeProcessor extends BaseScopeProcessor {
+    private XQueryVarName result;
     private XQueryVarRef myElement;
-    private String checkedNamespace;
 
-    VariableReferenceScopeProcessor(String checkedNamespace, XQueryVarRef myElement) {
-        this.checkedNamespace = checkedNamespace;
+    public VariableReferenceScopeProcessor(XQueryVarRef myElement) {
         this.myElement = myElement;
     }
 
-    public List<XQueryVarName> getResults() {
-        return results;
+    public XQueryVarName getResult() {
+        return result;
     }
 
     @Override
@@ -37,13 +35,10 @@ class VariableReferenceScopeProcessor extends BaseScopeProcessor {
         boolean elementIsGoodCandidate = !element.equals(myElement) && element instanceof XQueryVarName &&
                 !(element.getParent() instanceof XQueryVarRef);
         if (elementIsGoodCandidate) {
-            XQueryQName<XQueryVarName> source = aXQueryQName(myElement.getVarName())
-                    .withPrefix(checkedNamespace)
-                    .build();
-            XQueryQName<XQueryVarName> checkedQName = aXQueryQName((XQueryVarName) element)
-                    .build();
+            XQueryQName<XQueryVarName> source = aXQueryQName(myElement.getVarName()).build();
+            XQueryQName<XQueryVarName> checkedQName = aXQueryQName((XQueryVarName) element).build();
             if (source.equals(checkedQName)) {
-                results.add(checkedQName.getNamedObject());
+                result = checkedQName.getNamedObject();
                 return false;
             }
         }

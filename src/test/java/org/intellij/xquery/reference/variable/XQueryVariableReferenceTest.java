@@ -21,10 +21,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.intellij.xquery.Assertions;
 import org.intellij.xquery.psi.*;
+import org.intellij.xquery.reference.MatchingStringCondition;
 
 import java.util.List;
 
 import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
+import static com.intellij.util.containers.ContainerUtil.findAll;
 import static java.util.Arrays.asList;
 import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
@@ -58,6 +60,22 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
         assertTrue(strings.containsAll(asList("anotherOne", "globalScopeVar", "scope:globalScopeVar",
                 "functionArgumentScopeVar", "newOne", "p", "rank", "someVar")));
         assertEquals(8, strings.size());
+    }
+
+    public void testVariableCompletionInTheSameFileForDuplicatedEntries() {
+        myFixture.configureByFiles("VariableCompletionInTheSameFileForDuplicatedEntries.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
+        assertEquals(1, referenceBasedEntries.size());
+    }
+
+    public void testVariableCompletionInTheSameFileForSameNameAndDifferentScope() {
+        myFixture.configureByFiles("VariableCompletionInTheSameFileForSameNameAndDifferentScope.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
+        assertEquals(1, referenceBasedEntries.size());
     }
 
     public void testVariableRenameInTheSameFile() {
@@ -159,7 +177,7 @@ public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixture
 
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
 
-        Assertions.assertChildOf(resolvedReference, XQueryVarDecl.class);
+        assertNull(resolvedReference);
     }
 
     public void testVariableReferenceToVariableDuplicatedInImport() {
