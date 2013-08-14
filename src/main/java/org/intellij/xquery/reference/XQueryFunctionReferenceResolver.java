@@ -36,18 +36,19 @@ import static org.intellij.xquery.model.XQueryQNameBuilder.aXQueryQName;
 public class XQueryFunctionReferenceResolver {
 
     private XQueryFunctionCall myElement;
-    private final String checkedNamespace;
+    private String checkedNamespacePrefix;
     private List<XQueryFunctionName> matchingFunctionNames;
 
-    public XQueryFunctionReferenceResolver(String checkedNamespace, XQueryFunctionCall myElement) {
-        this.checkedNamespace = checkedNamespace;
+    public XQueryFunctionReferenceResolver(XQueryFunctionCall myElement) {
+        if (myElement.getFunctionName().getFunctionNamespace() != null)
+            this.checkedNamespacePrefix = myElement.getFunctionName().getFunctionNamespace().getText();
         this.myElement = myElement;
     }
 
     public ResolveResult[] getResolutionResults() {
         XQueryFile file = (XQueryFile) myElement.getContainingFile();
         matchingFunctionNames = new ArrayList<XQueryFunctionName>();
-        addFunctionDeclarationReferencesFromFile(file, checkedNamespace);
+        addFunctionDeclarationReferencesFromFile(file, checkedNamespacePrefix);
         addFunctionNameReferencesFromImportedFiles(file);
         return convertToResolveResults(matchingFunctionNames);
     }
@@ -88,7 +89,7 @@ public class XQueryFunctionReferenceResolver {
     }
 
     private Collection<XQueryFile> getFilesFromImportWithMatchingNamespacePrefix(XQueryFile file) {
-        return file.getImportedFilesThatExist(file, new
+        return file.getImportedFilesThatExist(new
                 Condition<XQueryModuleImport>() {
                     @Override
                     public boolean value(XQueryModuleImport moduleImport) {

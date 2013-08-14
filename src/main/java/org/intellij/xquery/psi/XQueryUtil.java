@@ -29,10 +29,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.intellij.xquery.XQueryFileType;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: ligasgr
@@ -121,5 +118,18 @@ public class XQueryUtil {
 
     private static String unifyNameFormatAndRemoveProtocol(String filename) {
         return filename.replaceFirst("(.*):", "").replaceAll("\\\\", "/");
+    }
+
+    public static Collection<XQueryFile> getReferencesToExistingFilesInImport(XQueryModuleImport moduleImport) {
+        Collection<XQueryFile> results = new LinkedList<XQueryFile>();
+        for (XQueryModuleImportPath path : moduleImport.getModuleImportPathList()) {
+            if (path.getReference() != null) {
+                XQueryFile xQueryFile = (XQueryFile) path.getReference().resolve();
+                if (xQueryFile != null && xQueryFile.getModuleNamespaceName() != null) {
+                    results.add(xQueryFile);
+                }
+            }
+        }
+        return results;
     }
 }

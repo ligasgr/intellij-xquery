@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import static com.intellij.util.containers.ContainerUtil.findAll;
+import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInImport;
 
 /**
  * User: ligasgr
@@ -85,24 +86,12 @@ public class XQueryFile extends PsiFileBase {
         return functionDeclarations;
     }
 
-    public Collection<XQueryFile> getImportedFilesThatExist(XQueryFile file, Condition<XQueryModuleImport> condition) {
+    public Collection<XQueryFile> getImportedFilesThatExist(Condition<XQueryModuleImport> condition) {
         Collection<XQueryFile> result = new LinkedList<XQueryFile>();
-        for (XQueryModuleImport moduleImport : findAll(file.getModuleImports(), condition)) {
+        for (XQueryModuleImport moduleImport : findAll(getModuleImports(), condition)) {
             result.addAll(getReferencesToExistingFilesInImport(moduleImport));
         }
         return result;
     }
 
-    private Collection<XQueryFile> getReferencesToExistingFilesInImport(XQueryModuleImport moduleImport) {
-        Collection<XQueryFile> results = new LinkedList<XQueryFile>();
-        for (XQueryModuleImportPath path : moduleImport.getModuleImportPathList()) {
-            if (path.getReference() != null) {
-                XQueryFile xQueryFile = (XQueryFile) path.getReference().resolve();
-                if (xQueryFile != null && xQueryFile.getModuleNamespaceName() != null) {
-                    results.add(xQueryFile);
-                }
-            }
-        }
-        return results;
-    }
 }

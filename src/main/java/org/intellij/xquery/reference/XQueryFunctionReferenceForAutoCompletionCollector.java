@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.intellij.xquery.model.XQueryQNameBuilder.aXQueryQName;
+import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInImport;
 
 /**
  * User: ligasgr
@@ -63,17 +64,14 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
         for (XQueryModuleImport moduleImport : file.getModuleImports()) {
             if (moduleImport.getNamespaceName() != null) {
                 String targetPrefix = moduleImport.getNamespaceName().getName();
-                addVariantsFromImportPaths(targetPrefix, moduleImport);
+                addVariantsFromImport(targetPrefix, moduleImport);
             }
         }
     }
 
-    private void addVariantsFromImportPaths(String targetPrefix, XQueryModuleImport moduleImport) {
-        for (XQueryModuleImportPath moduleImportPath : moduleImport.getModuleImportPathList()) {
-            XQueryFile file = (XQueryFile) moduleImportPath.getReference().resolve();
-            if (file != null) {
-                addVariantsFromReferencedFile(targetPrefix, file);
-            }
+    private void addVariantsFromImport(String targetPrefix, XQueryModuleImport moduleImport) {
+        for (XQueryFile file : getReferencesToExistingFilesInImport(moduleImport)) {
+            addVariantsFromReferencedFile(targetPrefix, file);
         }
     }
 
@@ -92,12 +90,15 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
     private LookupElement[] convertToLookupElements(List<XQueryQName> proposedReferences) {
         LookupElement[] lookupElements = new LookupElement[proposedReferences.size()];
         for (int i = 0; i < proposedReferences.size(); i++) {
-            XQueryQName qName = proposedReferences.get(i);
-            XQueryFunctionName functionName = (XQueryFunctionName) qName.getNamedObject();
-            XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) functionName.getParent();
-            lookupElements[i] = createLookupElement(functionDeclaration, qName.getTextRepresentation());
+            lookupElements[i] = convertToLookupElement(proposedReferences.get(i));
         }
         return lookupElements;
+    }
+
+    private LookupElement convertToLookupElement(XQueryQName qName) {
+        XQueryFunctionName functionName = (XQueryFunctionName) qName.getNamedObject();
+        XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) functionName.getParent();
+        return createLookupElement(functionDeclaration, qName.getTextRepresentation());
     }
 
     private LookupElement createLookupElement(XQueryFunctionDecl functionDeclaration, String key) {

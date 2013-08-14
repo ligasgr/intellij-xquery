@@ -36,15 +36,12 @@ import static org.intellij.xquery.psi.XQueryElementFactory.createFunctionReferen
  */
 public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionCall> implements PsiPolyVariantReference {
 
-    private String checkedNamespace;
     private XQueryFunctionReferenceResolver functionReferenceResolver;
     private XQueryFunctionReferenceForAutoCompletionCollector functionReferenceVariantsCollector;
 
     public XQueryFunctionReference(@NotNull XQueryFunctionCall element, TextRange textRange) {
         super(element, textRange);
-        if (myElement.getFunctionName().getFunctionNamespace() != null)
-            checkedNamespace = myElement.getFunctionName().getFunctionNamespace().getText();
-        functionReferenceResolver = new XQueryFunctionReferenceResolver(checkedNamespace, myElement);
+        functionReferenceResolver = new XQueryFunctionReferenceResolver(myElement);
         functionReferenceVariantsCollector = new XQueryFunctionReferenceForAutoCompletionCollector(myElement);
     }
 
