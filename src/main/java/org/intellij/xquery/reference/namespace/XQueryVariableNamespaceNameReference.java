@@ -23,7 +23,12 @@ import org.intellij.xquery.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import static java.util.Collections.emptyList;
 
 /**
  * User: ligasgr
@@ -52,7 +57,7 @@ public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQuer
         if (moduleNamespaceName != null && myElement.getText().equals(moduleNamespaceName.getText())) {
             return Arrays.asList(new ResolveResult[]{new PsiElementResolveResult(moduleNamespaceName)});
         } else {
-            return Collections.EMPTY_LIST;
+            return emptyList();
         }
     }
 
@@ -66,7 +71,7 @@ public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQuer
             }
             return results;
         } else {
-            return Collections.EMPTY_LIST;
+            return emptyList();
         }
     }
 
@@ -81,7 +86,7 @@ public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQuer
             }
             return results;
         } else {
-            return Collections.EMPTY_LIST;
+            return emptyList();
         }
     }
 

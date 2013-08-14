@@ -41,22 +41,22 @@ public class XQueryQNameBuilder<T> {
         return instance;
     }
 
-    public XQueryQNameBuilder withPrefix(String prefix) {
+    public XQueryQNameBuilder<T> withPrefix(String prefix) {
         this.prefix = prefix;
         return this;
     }
 
-    public XQueryQNameBuilder withLocalName(String localName) {
+    public XQueryQNameBuilder<T> withLocalName(String localName) {
         this.localName = localName;
         return this;
     }
 
-    public XQueryQNameBuilder withNamespace(String namespace) {
+    public XQueryQNameBuilder<T> withNamespace(String namespace) {
         this.namespace = namespace;
         return this;
     }
 
-    public XQueryQNameBuilder withNamedObject(T namedObject) {
+    public XQueryQNameBuilder<T> withNamedObject(T namedObject) {
         this.namedObject = namedObject;
         return this;
     }

@@ -56,6 +56,10 @@ test {
 
 metaInf << files('/META-INF/plugin.xml')
 
+tasks.withType(Compile) { 
+    options.compilerArgs << "-Xlint:unchecked" 
+}
+
 task downloadSdk(type: DownloadTask) {
     sourceUrl = project.ext.ideaInstallationSource
     target = file(project.ext.sdkDir + '/' + project.ext.ideaArchiveFileName)

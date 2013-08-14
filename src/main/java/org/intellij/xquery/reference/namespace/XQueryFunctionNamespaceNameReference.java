@@ -25,6 +25,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import static java.util.Collections.emptyList;
+
 /**
  * User: ligasgr
  * Date: 03/07/13
@@ -52,7 +54,7 @@ public class XQueryFunctionNamespaceNameReference extends PsiReferenceBase<XQuer
         if (moduleNamespaceName != null && myElement.getText().equals(moduleNamespaceName.getText())) {
             return Arrays.asList(new ResolveResult[]{new PsiElementResolveResult(moduleNamespaceName)});
         } else {
-            return Collections.EMPTY_LIST;
+            return emptyList();
         }
     }
 
@@ -66,7 +68,7 @@ public class XQueryFunctionNamespaceNameReference extends PsiReferenceBase<XQuer
             }
             return results;
         } else {
-            return Collections.EMPTY_LIST;
+            return emptyList();
         }
     }
 
@@ -81,7 +83,7 @@ public class XQueryFunctionNamespaceNameReference extends PsiReferenceBase<XQuer
             }
             return results;
         } else {
-            return Collections.EMPTY_LIST;
+            return emptyList();
         }
     }
 
@@ -105,7 +107,8 @@ public class XQueryFunctionNamespaceNameReference extends PsiReferenceBase<XQuer
     }
 
     private XQueryFunctionName getUpdatedRef(String newName) {
-        XQueryFunctionName functionName = XQueryElementFactory.createFunctionReference(myElement.getProject(), newName, "dummy");
+        XQueryFunctionName functionName = XQueryElementFactory.createFunctionReference(myElement.getProject(),
+                newName, "dummy");
         return functionName;
     }
 }

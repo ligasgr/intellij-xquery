@@ -63,7 +63,6 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
         }
     }
 
-
     private void addProposedReferencesFromModuleImports(XQueryFile file) {
         for (XQueryModuleImport moduleImport : file.getModuleImports()) {
             if (moduleImport.getNamespaceName() != null) {
@@ -82,7 +81,8 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
     private void addProposedReferencesFromImportedFile(String targetPrefix, XQueryFile file) {
         for (final XQueryVarDecl functionDecl : file.getVariableDeclarations()) {
             if (variableNameExists(functionDecl)) {
-                XQueryQName<XQueryVarName> qName = aXQueryQName(functionDecl.getVarName()).withPrefix(targetPrefix).build();
+                XQueryQName<XQueryVarName> qName = aXQueryQName(functionDecl.getVarName()).withPrefix(targetPrefix)
+                        .build();
                 addProposedReferenceIfNotAlreadyAdded(qName);
             }
         }
@@ -97,7 +97,7 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
     }
 
     private LookupElement convertToLookupElement(XQueryQName<XQueryVarName> qName) {
-        XQueryVarName variableName =  qName.getNamedObject();
+        XQueryVarName variableName = qName.getNamedObject();
         return createLookupElement(variableName, qName.getTextRepresentation());
     }
 

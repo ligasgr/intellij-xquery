@@ -38,7 +38,7 @@ import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInI
 public class XQueryFunctionReferenceForAutoCompletionCollector {
 
     private XQueryFunctionCall sourceOfReference;
-    private List<XQueryQName> proposedReferences;
+    private List<XQueryQName<XQueryFunctionName>> proposedReferences;
 
     public XQueryFunctionReferenceForAutoCompletionCollector(XQueryFunctionCall sourceOfReference) {
         this.sourceOfReference = sourceOfReference;
@@ -46,7 +46,7 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
 
     public Object[] getReferencesForAutoCompletion() {
         XQueryFile file = (XQueryFile) sourceOfReference.getContainingFile();
-        proposedReferences = new LinkedList<XQueryQName>();
+        proposedReferences = new LinkedList<XQueryQName<XQueryFunctionName>>();
         addProposedReferencesFromFile(file);
         addProposedReferencesFromModuleImports(file);
         return convertToLookupElements(proposedReferences);
@@ -87,7 +87,7 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
         return functionDecl.getFunctionName() != null && functionDecl.getFunctionName().getTextLength() > 0;
     }
 
-    private LookupElement[] convertToLookupElements(List<XQueryQName> proposedReferences) {
+    private LookupElement[] convertToLookupElements(List<XQueryQName<XQueryFunctionName>> proposedReferences) {
         LookupElement[] lookupElements = new LookupElement[proposedReferences.size()];
         for (int i = 0; i < proposedReferences.size(); i++) {
             lookupElements[i] = convertToLookupElement(proposedReferences.get(i));
@@ -95,8 +95,8 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
         return lookupElements;
     }
 
-    private LookupElement convertToLookupElement(XQueryQName qName) {
-        XQueryFunctionName functionName = (XQueryFunctionName) qName.getNamedObject();
+    private LookupElement convertToLookupElement(XQueryQName<XQueryFunctionName> qName) {
+        XQueryFunctionName functionName = qName.getNamedObject();
         XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) functionName.getParent();
         return createLookupElement(functionDeclaration, qName.getTextRepresentation());
     }
