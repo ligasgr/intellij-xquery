@@ -26,38 +26,20 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryModuleImportImpl extends XQueryElementImpl implements XQueryModuleImport {
+public class XQueryModuleImportNamespaceImpl extends XQueryElementImpl implements XQueryModuleImportNamespace {
 
-  public XQueryModuleImportImpl(ASTNode node) {
+  public XQueryModuleImportNamespaceImpl(ASTNode node) {
     super(node);
   }
 
   @Override
-  @Nullable
-  public XQueryModuleImportNamespace getModuleImportNamespace() {
-    return findChildByClass(XQueryModuleImportNamespace.class);
-  }
-
-  @Override
   @NotNull
-  public List<XQueryModuleImportPath> getModuleImportPathList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryModuleImportPath.class);
-  }
-
-  @Override
-  @Nullable
-  public XQueryNamespaceName getNamespaceName() {
-    return findChildByClass(XQueryNamespaceName.class);
-  }
-
-  @Override
-  @Nullable
-  public XQuerySeparator getSeparator() {
-    return findChildByClass(XQuerySeparator.class);
+  public XQueryModuleImportPath getModuleImportPath() {
+    return findNotNullChildByClass(XQueryModuleImportPath.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitModuleImport(this);
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitModuleImportNamespace(this);
     else super.accept(visitor);
   }
 

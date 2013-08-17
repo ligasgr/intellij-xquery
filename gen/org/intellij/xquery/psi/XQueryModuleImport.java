@@ -23,6 +23,9 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryModuleImport extends XQueryElement {
 
+  @Nullable
+  XQueryModuleImportNamespace getModuleImportNamespace();
+
   @NotNull
   List<XQueryModuleImportPath> getModuleImportPathList();
 

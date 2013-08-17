@@ -75,6 +75,8 @@ public interface XQueryTypes {
   IElementType C_DATA_SECTION_CONTENTS = new XQueryElementType("C_DATA_SECTION_CONTENTS");
   IElementType DECIMAL_FORMAT_DECL = new XQueryElementType("DECIMAL_FORMAT_DECL");
   IElementType DEFAULT_COLLATION_DECL = new XQueryElementType("DEFAULT_COLLATION_DECL");
+  IElementType DEFAULT_ELEMENT_NAMESPACE_DECL = new XQueryElementType("DEFAULT_ELEMENT_NAMESPACE_DECL");
+  IElementType DEFAULT_FUNCTION_NAMESPACE_DECL = new XQueryElementType("DEFAULT_FUNCTION_NAMESPACE_DECL");
   IElementType DEFAULT_NAMESPACE_DECL = new XQueryElementType("DEFAULT_NAMESPACE_DECL");
   IElementType DF_PROPERTY_NAME = new XQueryElementType("DF_PROPERTY_NAME");
   IElementType DIRECT_CONSTRUCTOR = new XQueryElementType("DIRECT_CONSTRUCTOR");
@@ -139,6 +141,7 @@ public interface XQueryTypes {
   IElementType MODULE = new XQueryElementType("MODULE");
   IElementType MODULE_DECL = new XQueryElementType("MODULE_DECL");
   IElementType MODULE_IMPORT = new XQueryElementType("MODULE_IMPORT");
+  IElementType MODULE_IMPORT_NAMESPACE = new XQueryElementType("MODULE_IMPORT_NAMESPACE");
   IElementType MODULE_IMPORT_PATH = new XQueryElementType("MODULE_IMPORT_PATH");
   IElementType MULTIPLICATIVE_EXPR = new XQueryElementType("MULTIPLICATIVE_EXPR");
   IElementType NAMED_FUNCTION_REF = new XQueryElementType("NAMED_FUNCTION_REF");
@@ -587,6 +590,12 @@ public interface XQueryTypes {
       else if (type == DEFAULT_COLLATION_DECL) {
         return new XQueryDefaultCollationDeclImpl(node);
       }
+      else if (type == DEFAULT_ELEMENT_NAMESPACE_DECL) {
+        return new XQueryDefaultElementNamespaceDeclImpl(node);
+      }
+      else if (type == DEFAULT_FUNCTION_NAMESPACE_DECL) {
+        return new XQueryDefaultFunctionNamespaceDeclImpl(node);
+      }
       else if (type == DEFAULT_NAMESPACE_DECL) {
         return new XQueryDefaultNamespaceDeclImpl(node);
       }
@@ -778,6 +787,9 @@ public interface XQueryTypes {
       }
       else if (type == MODULE_IMPORT) {
         return new XQueryModuleImportImpl(node);
+      }
+      else if (type == MODULE_IMPORT_NAMESPACE) {
+        return new XQueryModuleImportNamespaceImpl(node);
       }
       else if (type == MODULE_IMPORT_PATH) {
         return new XQueryModuleImportPathImpl(node);

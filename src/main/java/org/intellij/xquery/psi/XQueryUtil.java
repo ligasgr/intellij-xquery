@@ -122,14 +122,26 @@ public class XQueryUtil {
 
     public static Collection<XQueryFile> getReferencesToExistingFilesInImport(XQueryModuleImport moduleImport) {
         Collection<XQueryFile> results = new LinkedList<XQueryFile>();
+        XQueryModuleImportNamespace moduleImportNamespace = moduleImport.getModuleImportNamespace();
+        if (moduleImportNamespace != null) {
+            addFileIfReferencedAndExists(results, moduleImportNamespace.getModuleImportPath());
+        }
         for (XQueryModuleImportPath path : moduleImport.getModuleImportPathList()) {
-            if (path.getReference() != null) {
-                XQueryFile xQueryFile = (XQueryFile) path.getReference().resolve();
-                if (xQueryFile != null && xQueryFile.getModuleNamespaceName() != null) {
-                    results.add(xQueryFile);
-                }
-            }
+            addFileIfReferencedAndExists(results, path);
         }
         return results;
+    }
+
+    private static void addFileIfReferencedAndExists(Collection<XQueryFile> results, XQueryModuleImportPath path) {
+        if (path.getReference() != null) {
+            XQueryFile xQueryFile = (XQueryFile) path.getReference().resolve();
+            if (xQueryFile != null && xQueryFile.getModuleNamespaceName() != null) {
+                results.add(xQueryFile);
+            }
+        }
+    }
+
+    public static String removeQuotOrApos(String text) {
+        return text.substring(1, text.length() - 1);
     }
 }

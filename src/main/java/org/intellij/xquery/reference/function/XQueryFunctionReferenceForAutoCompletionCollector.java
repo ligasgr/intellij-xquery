@@ -24,6 +24,7 @@ import com.intellij.icons.AllIcons;
 import org.intellij.xquery.model.XQueryQName;
 import org.intellij.xquery.psi.*;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,30 +56,58 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
     private void addProposedReferencesFromFile(XQueryFile file) {
         for (XQueryFunctionDecl functionDecl : file.getFunctionDeclarations()) {
             if (functionNameExists(functionDecl)) {
-                proposedReferences.add(aXQueryQName(functionDecl.getFunctionName()).build());
+                XQueryQName<XQueryFunctionName> basicQName = aXQueryQName(functionDecl.getFunctionName()).build();
+                boolean isInDefaultNamespace = file.getDefaultFunctionNamespace().equals(basicQName.getNamespace());
+                XQueryFunctionName functionName = functionDecl.getFunctionName();
+                if (functionName.getFunctionNamespace() != null && isInDefaultNamespace) {
+                    proposedReferences.add(aXQueryQName(functionDecl.getFunctionName()).withPrefix(null).build());
+                } else if (isInDefaultNamespace) {
+                    Collection<XQueryNamespaceDecl> matchingNamespaceDeclarations = file
+                            .getNamespaceDeclarationsMatchingDefaultNamespace();
+                    for (XQueryNamespaceDecl namespaceDeclaration : matchingNamespaceDeclarations) {
+                        proposedReferences.add(aXQueryQName(functionDecl.getFunctionName()).withPrefix
+                                (namespaceDeclaration.getNamespaceName().getText()).build());
+                    }
+                }
+                proposedReferences.add(basicQName);
             }
         }
     }
 
     private void addProposedReferencesFromModuleImports(XQueryFile file) {
         for (XQueryModuleImport moduleImport : file.getModuleImports()) {
+            String targetPrefix = null;
             if (moduleImport.getNamespaceName() != null) {
-                String targetPrefix = moduleImport.getNamespaceName().getName();
-                addProposedReferencesFromImport(targetPrefix, moduleImport);
+                targetPrefix = moduleImport.getNamespaceName().getName();
             }
+            addProposedReferencesFromImport(targetPrefix, moduleImport);
         }
     }
 
     private void addProposedReferencesFromImport(String targetPrefix, XQueryModuleImport moduleImport) {
         for (XQueryFile file : getReferencesToExistingFilesInImport(moduleImport)) {
-            addProposedReferencesFromImportedFile(targetPrefix, file);
+            addProposedReferencesFromImportedFile(targetPrefix, file, (XQueryFile) moduleImport.getContainingFile());
         }
     }
 
-    private void addProposedReferencesFromImportedFile(String targetPrefix, XQueryFile file) {
-        for (final XQueryFunctionDecl functionDecl : file.getFunctionDeclarations()) {
+    private void addProposedReferencesFromImportedFile(String targetPrefix, XQueryFile importedFile, XQueryFile file) {
+        for (final XQueryFunctionDecl functionDecl : importedFile.getFunctionDeclarations()) {
             if (functionNameExists(functionDecl)) {
-                proposedReferences.add(aXQueryQName(functionDecl.getFunctionName()).withPrefix(targetPrefix).build());
+
+                XQueryQName<XQueryFunctionName> basicQName = aXQueryQName(functionDecl.getFunctionName()).withPrefix
+                        (targetPrefix).build();
+                boolean isInDefaultNamespace = file.getDefaultFunctionNamespace().equals(basicQName.getNamespace());
+                if (targetPrefix != null && isInDefaultNamespace) {
+                    proposedReferences.add(aXQueryQName(functionDecl.getFunctionName()).withPrefix(null).build());
+                } else if (isInDefaultNamespace) {
+                    Collection<XQueryNamespaceDecl> matchingNamespaceDeclarations = file
+                            .getNamespaceDeclarationsMatchingDefaultNamespace();
+                    for (XQueryNamespaceDecl namespaceDeclaration : matchingNamespaceDeclarations) {
+                        proposedReferences.add(aXQueryQName(functionDecl.getFunctionName()).withPrefix
+                                (namespaceDeclaration.getNamespaceName().getText()).build());
+                    }
+                }
+                proposedReferences.add(basicQName);
             }
         }
     }

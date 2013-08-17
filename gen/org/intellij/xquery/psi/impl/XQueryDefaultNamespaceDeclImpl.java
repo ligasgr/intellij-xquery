@@ -34,14 +34,20 @@ public class XQueryDefaultNamespaceDeclImpl extends XQueryElementImpl implements
 
   @Override
   @Nullable
-  public XQuerySeparator getSeparator() {
-    return findChildByClass(XQuerySeparator.class);
+  public XQueryDefaultElementNamespaceDecl getDefaultElementNamespaceDecl() {
+    return findChildByClass(XQueryDefaultElementNamespaceDecl.class);
   }
 
   @Override
   @Nullable
-  public XQueryURILiteral getURILiteral() {
-    return findChildByClass(XQueryURILiteral.class);
+  public XQueryDefaultFunctionNamespaceDecl getDefaultFunctionNamespaceDecl() {
+    return findChildByClass(XQueryDefaultFunctionNamespaceDecl.class);
+  }
+
+  @Override
+  @NotNull
+  public XQuerySeparator getSeparator() {
+    return findNotNullChildByClass(XQuerySeparator.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.intellij.xquery.model.XQueryQNameBuilder.aXQueryQName;
+import static org.intellij.xquery.psi.XQueryUtil.removeQuotOrApos;
 
 /**
  * User: ligasgr
@@ -77,10 +78,12 @@ public class XQueryFunctionReferenceResolver {
     }
 
     private void addFunctionNameReferencesFromImportedFiles(XQueryFile file) {
-        if (functionHasNamespacePrefix()) {
-            for (XQueryFile importedFile : getFilesFromImportWithMatchingNamespacePrefix(file)) {
-                addFunctionDeclarationReferencesFromFile(importedFile, importedFile.getModuleNamespaceName().getText());
+        for (XQueryFile importedFile : getFilesFromImportWithMatchingNamespace(file)) {
+            String checkedPrefix = null;
+            if (functionHasNamespacePrefix()) {
+                checkedPrefix = importedFile.getModuleNamespaceName().getText();
             }
+            addFunctionDeclarationReferencesFromFile(importedFile, checkedPrefix);
         }
     }
 
@@ -88,12 +91,23 @@ public class XQueryFunctionReferenceResolver {
         return myElement.getFunctionName().getFunctionNamespace() != null;
     }
 
-    private Collection<XQueryFile> getFilesFromImportWithMatchingNamespacePrefix(XQueryFile file) {
+    private Collection<XQueryFile> getFilesFromImportWithMatchingNamespace(final XQueryFile file) {
         return file.getImportedFilesThatExist(new Condition<XQueryModuleImport>() {
             @Override
             public boolean value(XQueryModuleImport moduleImport) {
-                String namespacePrefix = myElement.getFunctionName().getFunctionNamespace().getText();
-                return namespacePrefix.equals(moduleImport.getNamespaceName().getText());
+                if (moduleImport.getNamespaceName() != null && myElement.getFunctionName().getFunctionNamespace() != null) {
+                    String namespacePrefix = myElement.getFunctionName().getFunctionNamespace().getText();
+                    return moduleImport.getNamespaceName().getText().equals(namespacePrefix);
+                } else if (moduleImport.getModuleImportNamespace() != null) {
+                    String namespacePrefix = null;
+                    if (myElement.getFunctionName().getFunctionNamespace() != null) {
+                        namespacePrefix = myElement.getFunctionName().getFunctionNamespace().getText();
+                    }
+                    String namespace = file.mapPrefixToNamespace(namespacePrefix);
+                    return removeQuotOrApos(moduleImport.getModuleImportNamespace().getText()).equals(namespace);
+                } else {
+                    return false;
+                }
             }
         });
     }

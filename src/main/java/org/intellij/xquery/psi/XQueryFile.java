@@ -28,10 +28,15 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import static com.intellij.util.containers.ContainerUtil.findAll;
 import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInImport;
+import static org.intellij.xquery.psi.XQueryUtil.removeQuotOrApos;
+import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;
+import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.getMappingFromPrefix;
 
 /**
  * User: ligasgr
@@ -70,8 +75,12 @@ public class XQueryFile extends PsiFileBase {
     }
 
     public XQueryNamespaceName getModuleNamespaceName() {
-        XQueryModuleDecl moduleDecl = PsiTreeUtil.findChildOfType(this, XQueryModuleDecl.class);
+        XQueryModuleDecl moduleDecl = getModuleDeclaration();
         return moduleDecl != null ? moduleDecl.getNamespaceName() : null;
+    }
+
+    private XQueryModuleDecl getModuleDeclaration() {
+        return PsiTreeUtil.findChildOfType(this, XQueryModuleDecl.class);
     }
 
     public Collection<XQueryNamespaceDecl> getNamespaceDeclarations() {
@@ -94,4 +103,59 @@ public class XQueryFile extends PsiFileBase {
         return result;
     }
 
+    public String getDefaultFunctionNamespace() {
+        XQueryDefaultFunctionNamespaceDecl defaultFunctionNamespaceDecl = getDefaultNamespaceFunctionDeclaration();
+        if (defaultFunctionNamespaceDecl != null && defaultFunctionNamespaceDecl.getURILiteral() != null)
+            return removeQuotOrApos(defaultFunctionNamespaceDecl.getURILiteral().getText());
+        return FN.getNamespace();
+    }
+
+    private XQueryDefaultFunctionNamespaceDecl getDefaultNamespaceFunctionDeclaration() {
+        return PsiTreeUtil.findChildOfType(this, XQueryDefaultFunctionNamespaceDecl.class);
+    }
+
+    public String mapPrefixToNamespace(String prefix) {
+        return getNamespaceMapping().get(prefix);
+    }
+
+    private Map<String, String> getNamespaceMapping() {
+        XQueryNamespaceName moduleNamespaceName = getModuleNamespaceName();
+        Collection<XQueryNamespaceDecl> namespaceDeclarations = getNamespaceDeclarations();
+        Collection<XQueryModuleImport> moduleImports = getModuleImports();
+        Map<String, String> namespaceMapping = new HashMap(getMappingFromPrefix());
+        namespaceMapping.put(null, getDefaultFunctionNamespace());
+        if (moduleNamespaceName != null && getModuleDeclaration().getURILiteral() != null) {
+            namespaceMapping.put(moduleNamespaceName.getName(),
+                    removeQuotOrApos(getModuleDeclaration().getURILiteral().getText()));
+        }
+        if (namespaceDeclarations != null) {
+            for (XQueryNamespaceDecl namespaceDeclaration : namespaceDeclarations) {
+                if (namespaceDeclaration.getNamespaceName() != null && namespaceDeclaration.getURILiteral() != null) {
+                    namespaceMapping.put(namespaceDeclaration.getNamespaceName().getText(),
+                            removeQuotOrApos(namespaceDeclaration.getURILiteral().getText()));
+                }
+            }
+        }
+        if (moduleImports != null) {
+            for (XQueryModuleImport moduleImport : moduleImports) {
+                if (moduleImport.getNamespaceName() != null && moduleImport.getModuleImportNamespace() != null) {
+                    namespaceMapping.put(moduleImport.getNamespaceName().getText(),
+                            removeQuotOrApos(moduleImport.getModuleImportNamespace().getText()));
+                }
+            }
+        }
+
+        return namespaceMapping;
+    }
+
+    public Collection<XQueryNamespaceDecl> getNamespaceDeclarationsMatchingDefaultNamespace() {
+        Collection<XQueryNamespaceDecl> all = getNamespaceDeclarations();
+        return findAll(all, new Condition<XQueryNamespaceDecl>() {
+            @Override
+            public boolean value(XQueryNamespaceDecl declaration) {
+                return declaration.getNamespaceName() != null && declaration.getURILiteral() != null &&
+                        getDefaultFunctionNamespace().equals(removeQuotOrApos(declaration.getURILiteral().getText()));
+            }
+        });
+    }
 }

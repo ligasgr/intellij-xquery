@@ -21,6 +21,8 @@ import com.intellij.testFramework.PlatformTestCase;
 
 import java.util.Collection;
 
+import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.*;
+
 /**
  * User: ligasgr
  * Date: 01/08/13
@@ -52,7 +54,7 @@ public class XQueryFileTest extends LightPlatformTestCase {
         assertEquals(1, imports.size());
         XQueryModuleImport moduleImport = imports.iterator().next();
         assertEquals("dummy", moduleImport.getNamespaceName().getName());
-        assertEquals("'file.xq'", moduleImport.getModuleImportPathList().iterator().next().getText());
+        assertEquals("'file.xq'", moduleImport.getModuleImportNamespace().getText());
     }
 
     public void testModuleNamespaceName() {
@@ -84,5 +86,87 @@ public class XQueryFileTest extends LightPlatformTestCase {
         assertEquals(1, namespaceDeclarations.size());
         XQueryFunctionDecl declaration = namespaceDeclarations.iterator().next();
         assertEquals("dummy", declaration.getFunctionName().getName());
+    }
+
+    public void testDefaultFunctionNamespaceWhenNotDeclared() {
+        XQueryFile file = XQueryElementFactory.createFile(getProject(), "()");
+
+        String defaultFunctionNamespace = file.getDefaultFunctionNamespace();
+
+        assertEquals(FN.getNamespace(), defaultFunctionNamespace);
+    }
+
+    public void testDefaultFunctionNamespaceWhenDeclared() {
+        XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare default function namespace 'xxx';()");
+
+        String defaultFunctionNamespace = file.getDefaultFunctionNamespace();
+
+        assertEquals("xxx", defaultFunctionNamespace);
+    }
+
+    public void testDefaultFunctionNamespaceWhenDeclaredEmpty() {
+        XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare default function namespace '';()");
+
+        String defaultFunctionNamespace = file.getDefaultFunctionNamespace();
+
+        assertEquals("", defaultFunctionNamespace);
+    }
+
+    public void testNamespaceMappingsForPredeclaredNamespaces() {
+        XQueryFile file = XQueryElementFactory.createFile(getProject(), "()");
+
+        for (String key : getMappingFromPrefix().keySet()) {
+            assertEquals(getMappingFromPrefix().get(key), file.mapPrefixToNamespace(key));
+        }
+    }
+
+    public void testNamespaceMappingsWhenDefaultFunctionNamespaceNotDeclared() {
+        XQueryFile file = XQueryElementFactory.createFile(getProject(), "()");
+
+        assertEquals(FN.getNamespace(), file.mapPrefixToNamespace(null));
+    }
+
+    public void testNamespaceMappingsWhenDefaultFunctionNamespaceDeclared() {
+        XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare default function namespace 'xxx';()");
+
+        assertEquals("xxx", file.mapPrefixToNamespace(null));
+    }
+
+    public void testNamespaceMappingsWhenNamespaceDeclared() {
+        XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare namespace ex = 'xxx';");
+
+        assertEquals("xxx", file.mapPrefixToNamespace("ex"));
+    }
+
+    public void testNamespaceMappingsWhenModuleDeclared() {
+        XQueryFile file = XQueryElementFactory.createFile(getProject(), "module namespace ex = 'xxx';");
+
+        assertEquals("xxx", file.mapPrefixToNamespace("ex"));
+    }
+
+    public void testNamespaceMappingsWhenModuleImportedWithName() {
+        XQueryFile file = XQueryElementFactory.createFile(getProject(), "import module namespace ex = 'xxx';");
+
+        assertEquals("xxx", file.mapPrefixToNamespace("ex"));
+    }
+
+    public void testNamespaceMappingsWhenModuleImportedWithoutName() {
+        XQueryFile file = XQueryElementFactory.createFile(getProject(), "import module 'xxx';");
+
+        assertNull(file.mapPrefixToNamespace("ex"));
+    }
+
+    public void testGetNamespaceDeclarationsMatchingDefaultFunctionNamespace() {
+        XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare default function namespace 'xxx';" +
+                "declare namespace yyy = '';" +
+                "declare namespace zzz = 'zzz';" +
+                "declare namespace aaa = 'xxx';" +
+                "declare namespace  = 'xxx';" +
+                "()");
+
+        Collection<XQueryNamespaceDecl> results = file.getNamespaceDeclarationsMatchingDefaultNamespace();
+
+        assertEquals(1, results.size());
+        assertEquals("aaa", results.iterator().next().getNamespaceName().getText());
     }
 }

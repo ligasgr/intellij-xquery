@@ -89,6 +89,22 @@ public class XQueryQNameTest {
     }
 
     @Test
+    public void shouldEqualWhenNamespaceAndLocalNamesEqual() throws Exception {
+        XQueryQName qName1 = new XQueryQName<Object>("prefix1", "localName", "namespace", new Object());
+        XQueryQName qName2 = new XQueryQName<Object>("prefix1", "localName", "namespace", new Object());
+
+        assertEquals(qName1, qName2);
+    }
+
+    @Test
+    public void shouldNotEqualWhenNamespaceAndLocalNamesDoNotEqual() throws Exception {
+        XQueryQName qName1 = new XQueryQName<Object>("prefix1", "localName1", "namespace1", new Object());
+        XQueryQName qName2 = new XQueryQName<Object>("prefix2", "localName2", "namespace2", new Object());
+
+        assertFalse(qName1.equals(qName2));
+    }
+
+    @Test
     public void shouldNotEqualWhenPrefixEmptyAndLocalNamesEmpty() throws Exception {
         XQueryQName qName1 = new XQueryQName<Object>(null, null, "namespace1", new Object());
         XQueryQName qName2 = new XQueryQName<Object>(null, null, "namespace2", new Object());

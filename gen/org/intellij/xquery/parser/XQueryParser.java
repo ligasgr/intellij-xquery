@@ -195,6 +195,12 @@ public class XQueryParser implements PsiParser {
     else if (root_ == DEFAULT_COLLATION_DECL) {
       result_ = DefaultCollationDecl(builder_, level_ + 1);
     }
+    else if (root_ == DEFAULT_ELEMENT_NAMESPACE_DECL) {
+      result_ = DefaultElementNamespaceDecl(builder_, level_ + 1);
+    }
+    else if (root_ == DEFAULT_FUNCTION_NAMESPACE_DECL) {
+      result_ = DefaultFunctionNamespaceDecl(builder_, level_ + 1);
+    }
     else if (root_ == DEFAULT_NAMESPACE_DECL) {
       result_ = DefaultNamespaceDecl(builder_, level_ + 1);
     }
@@ -383,6 +389,9 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == MODULE_IMPORT) {
       result_ = ModuleImport(builder_, level_ + 1);
+    }
+    else if (root_ == MODULE_IMPORT_NAMESPACE) {
+      result_ = ModuleImportNamespace(builder_, level_ + 1);
     }
     else if (root_ == MODULE_IMPORT_PATH) {
       result_ = ModuleImportPath(builder_, level_ + 1);
@@ -2657,9 +2666,9 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "declare" "default" ("element" | "function") "namespace" URILiteral Separator
-  public static boolean DefaultNamespaceDecl(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "DefaultNamespaceDecl")) return false;
+  // "declare" "default" "element" "namespace" URILiteral
+  public static boolean DefaultElementNamespaceDecl(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "DefaultElementNamespaceDecl")) return false;
     if (!nextTokenIs(builder_, K_DECLARE)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
@@ -2667,13 +2676,12 @@ public class XQueryParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, K_DECLARE);
     result_ = result_ && consumeToken(builder_, K_DEFAULT);
-    result_ = result_ && DefaultNamespaceDecl_2(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, K_ELEMENT);
     pinned_ = result_; // pin = 3
     result_ = result_ && report_error_(builder_, consumeToken(builder_, K_NAMESPACE));
-    result_ = pinned_ && report_error_(builder_, URILiteral(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && Separator(builder_, level_ + 1) && result_;
+    result_ = pinned_ && URILiteral(builder_, level_ + 1) && result_;
     if (result_ || pinned_) {
-      marker_.done(DEFAULT_NAMESPACE_DECL);
+      marker_.done(DEFAULT_ELEMENT_NAMESPACE_DECL);
     }
     else {
       marker_.rollbackTo();
@@ -2682,13 +2690,56 @@ public class XQueryParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // "element" | "function"
-  private static boolean DefaultNamespaceDecl_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "DefaultNamespaceDecl_2")) return false;
+  /* ********************************************************** */
+  // "declare" "default" "function" "namespace" URILiteral
+  public static boolean DefaultFunctionNamespaceDecl(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "DefaultFunctionNamespaceDecl")) return false;
+    if (!nextTokenIs(builder_, K_DECLARE)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
+    result_ = consumeToken(builder_, K_DECLARE);
+    result_ = result_ && consumeToken(builder_, K_DEFAULT);
+    result_ = result_ && consumeToken(builder_, K_FUNCTION);
+    pinned_ = result_; // pin = 3
+    result_ = result_ && report_error_(builder_, consumeToken(builder_, K_NAMESPACE));
+    result_ = pinned_ && URILiteral(builder_, level_ + 1) && result_;
+    if (result_ || pinned_) {
+      marker_.done(DEFAULT_FUNCTION_NAMESPACE_DECL);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // (DefaultFunctionNamespaceDecl | DefaultElementNamespaceDecl) Separator
+  public static boolean DefaultNamespaceDecl(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "DefaultNamespaceDecl")) return false;
+    if (!nextTokenIs(builder_, K_DECLARE)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, K_ELEMENT);
-    if (!result_) result_ = consumeToken(builder_, K_FUNCTION);
+    result_ = DefaultNamespaceDecl_0(builder_, level_ + 1);
+    result_ = result_ && Separator(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(DEFAULT_NAMESPACE_DECL);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  // DefaultFunctionNamespaceDecl | DefaultElementNamespaceDecl
+  private static boolean DefaultNamespaceDecl_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "DefaultNamespaceDecl_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = DefaultFunctionNamespaceDecl(builder_, level_ + 1);
+    if (!result_) result_ = DefaultElementNamespaceDecl(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -5204,7 +5255,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "import" "module" ("namespace" NamespaceName "=")? ModuleImportPath ("at" ModuleImportPath ("," ModuleImportPath)*)? Separator
+  // "import" "module" ("namespace" NamespaceName "=")? ModuleImportNamespace ("at" ModuleImportPath ("," ModuleImportPath)*)? Separator
   public static boolean ModuleImport(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleImport")) return false;
     if (!nextTokenIs(builder_, K_IMPORT)) return false;
@@ -5216,7 +5267,7 @@ public class XQueryParser implements PsiParser {
     result_ = result_ && consumeToken(builder_, K_MODULE);
     pinned_ = result_; // pin = 2
     result_ = result_ && report_error_(builder_, ModuleImport_2(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, ModuleImportPath(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && report_error_(builder_, ModuleImportNamespace(builder_, level_ + 1)) && result_;
     result_ = pinned_ && report_error_(builder_, ModuleImport_4(builder_, level_ + 1)) && result_;
     result_ = pinned_ && Separator(builder_, level_ + 1) && result_;
     if (result_ || pinned_) {
@@ -5305,6 +5356,23 @@ public class XQueryParser implements PsiParser {
     }
     else {
       marker_.drop();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // ModuleImportPath
+  public static boolean ModuleImportNamespace(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ModuleImportNamespace")) return false;
+    if (!nextTokenIs(builder_, STRINGLITERAL)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = ModuleImportPath(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(MODULE_IMPORT_NAMESPACE);
+    }
+    else {
+      marker_.rollbackTo();
     }
     return result_;
   }

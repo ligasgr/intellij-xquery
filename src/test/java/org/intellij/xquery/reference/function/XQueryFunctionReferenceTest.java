@@ -65,12 +65,68 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
         assertEquals(2, referenceBasedEntries.size());
     }
 
+    public void testFunctionCompletionInTheSameFileWithoutPrefixWithDefaultNamespace() {
+        myFixture.configureByFiles("FunctionCompletionInTheSameFileWithoutPrefixWithDefaultNamespace.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
+        assertEquals(1, referenceBasedEntries.size());
+        List<String> referenceBasedEntriesWithAdditionalNamespace = findAll(strings,
+                new MatchingStringCondition("example:example"));
+        assertEquals(1, referenceBasedEntriesWithAdditionalNamespace.size());
+    }
+
+    public void testFunctionCompletionInTheSameFileWithPrefixWithDefaultNamespace() {
+        myFixture.configureByFiles("FunctionCompletionInTheSameFileWithPrefixWithDefaultNamespace.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
+        assertEquals(1, referenceBasedEntries.size());
+        List<String> referenceBasedEntriesWithAdditionalNamespace = findAll(strings,
+                new MatchingStringCondition("example:example"));
+        assertEquals(1, referenceBasedEntriesWithAdditionalNamespace.size());
+    }
+
     public void testFunctionCompletionFromAnotherFile() {
         myFixture.configureByFiles("FunctionCompletionFromAnotherFile.xq", "FunctionReferencedFile.xq");
         myFixture.complete(CompletionType.BASIC, 1);
         List<String> strings = myFixture.getLookupElementStrings();
         List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
         assertEquals(1, referenceBasedEntries.size());
+    }
+
+    public void testFunctionCompletionFromAnotherFileWithDefaultNamespaceAndImportedNamespacePrefix() {
+        myFixture.configureByFiles("FunctionCompletionFromAnotherFileWithDefaultNamespaceAndImportedNamespacePrefix.xq",
+                "FunctionReferencedFile.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
+        assertEquals(1, referenceBasedEntries.size());
+        List<String> referenceBasedEntriesWithAdditionalNamespace = findAll(strings,
+                new MatchingStringCondition("accessible"));
+        assertEquals(1, referenceBasedEntriesWithAdditionalNamespace.size());
+    }
+
+    public void testFunctionCompletionFromAnotherFileWithDefaultNamespaceAndNotImportedNamespacePrefix() {
+        myFixture.configureByFiles("FunctionCompletionFromAnotherFileWithDefaultNamespaceAndNotImportedNamespacePrefix.xq",
+                "FunctionReferencedFile.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> referenceBasedEntriesWithAdditionalNamespace = findAll(strings,
+                new MatchingStringCondition("accessible"));
+        assertEquals(1, referenceBasedEntriesWithAdditionalNamespace.size());
+    }
+
+    public void testFunctionCompletionFromAnotherFileWithDefaultNamespaceAndDeclaredNamespace() {
+        myFixture.configureByFiles("FunctionCompletionFromAnotherFileWithDefaultNamespaceAndDeclaredNamespace.xq",
+                "FunctionReferencedFile.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
+        assertEquals(1, referenceBasedEntries.size());
+        List<String> referenceBasedEntriesWithAdditionalNamespace = findAll(strings,
+                new MatchingStringCondition("accessible"));
+        assertEquals(1, referenceBasedEntriesWithAdditionalNamespace.size());
     }
 
     public void testFunctionCompletionInTheSameFileWithoutParentheses() {
@@ -160,4 +216,82 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
         assertNull(resolvedReference);
     }
 
+    public void testFunctionReferenceFromPrefixToDefaultNamespace() {
+        myFixture.configureByFile("FunctionReferenceFromPrefixToDefaultNamespace.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+    }
+
+    public void testFunctionReferenceFromDefaultNamespaceToPrefix() {
+        myFixture.configureByFile("FunctionReferenceFromDefaultNamespaceToPrefix.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+    }
+
+    public void testFunctionReferenceFromDefaultNamespaceToDefaultNamespace() {
+        myFixture.configureByFile("FunctionReferenceFromDefaultNamespaceToDefaultNamespace.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+    }
+
+    public void testFunctionReferenceFromAnotherFileWithDefaultNamespace() {
+        myFixture.configureByFiles("FunctionReferenceFromAnotherFileWithDefaultNamespace.xq",
+                "FunctionReferencedFile.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+        XQueryFunctionDecl varDecl = (XQueryFunctionDecl) resolvedReference.getParent();
+        assertEquals("FunctionReferencedFile.xq", varDecl.getContainingFile().getName());
+    }
+
+    public void testFunctionReferenceFromAnotherFileWithoutImportedPrefix() {
+        myFixture.configureByFiles("FunctionReferenceFromAnotherFileWithoutImportedPrefix.xq",
+                "FunctionReferencedFile.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+        XQueryFunctionDecl varDecl = (XQueryFunctionDecl) resolvedReference.getParent();
+        assertEquals("FunctionReferencedFile.xq", varDecl.getContainingFile().getName());
+    }
+
+    public void testFunctionReferenceFromAnotherFileWithDefaultNamespaceToFileWithDefaultNamespace() {
+        myFixture.configureByFiles("FunctionReferenceFromAnotherFileWithDefaultNamespaceToFileWithDefaultNamespace" +
+                ".xq", "FunctionReferencedFileWithDefaultNamespace.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+        XQueryFunctionDecl varDecl = (XQueryFunctionDecl) resolvedReference.getParent();
+        assertEquals("FunctionReferencedFileWithDefaultNamespace.xq", varDecl.getContainingFile().getName());
+    }
+
+    public void testFunctionReferenceFromAnotherFileWithoutImportedPrefixToFileWithDefaultNamespace() {
+        myFixture.configureByFiles("FunctionReferenceFromAnotherFileWithoutImportedPrefixToFileWithDefaultNamespace.xq",
+                "FunctionReferencedFileWithDefaultNamespace.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+        XQueryFunctionDecl varDecl = (XQueryFunctionDecl) resolvedReference.getParent();
+        assertEquals("FunctionReferencedFileWithDefaultNamespace.xq", varDecl.getContainingFile().getName());
+    }
+
+    public void testFunctionReferenceFromAnotherFileWhichHasDefaultNamespace() {
+        myFixture.configureByFiles("FunctionReferenceFromAnotherFileWhichHasDefaultNamespace.xq",
+                "FunctionReferencedFileWithDefaultNamespace.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+        XQueryFunctionDecl varDecl = (XQueryFunctionDecl) resolvedReference.getParent();
+        assertEquals("FunctionReferencedFileWithDefaultNamespace.xq", varDecl.getContainingFile().getName());
+    }
 }

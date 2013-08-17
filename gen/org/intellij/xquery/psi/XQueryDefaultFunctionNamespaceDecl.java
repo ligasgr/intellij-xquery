@@ -21,15 +21,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryDefaultNamespaceDecl extends XQueryElement {
+public interface XQueryDefaultFunctionNamespaceDecl extends XQueryElement {
 
   @Nullable
-  XQueryDefaultElementNamespaceDecl getDefaultElementNamespaceDecl();
-
-  @Nullable
-  XQueryDefaultFunctionNamespaceDecl getDefaultFunctionNamespaceDecl();
-
-  @NotNull
-  XQuerySeparator getSeparator();
+  XQueryURILiteral getURILiteral();
 
 }

@@ -55,12 +55,14 @@ public class XQueryQName<T> {
         if (!(obj instanceof XQueryQName)) return false;
         XQueryQName that = (XQueryQName) obj;
 
-        boolean namespacesAndLocalNamesMatch = prefix != null && prefix.equals
+        boolean prefixesAndLocalNamesMatch = prefix != null && prefix.equals
                 (that.prefix) && localName.equals(that.localName);
-        boolean namespacesAreEmptyAndLocalNamesMatch = prefix == null && that.prefix == null && localName != null &&
+        boolean prefixesAreEmptyAndLocalNamesMatch = prefix == null && that.prefix == null && localName != null &&
                 localName.equals(that.localName);
+        boolean namespacesAndLocalNamesMatch = namespace != null && namespace.equals(that.namespace) && localName
+                .equals(that.localName);
 
-        return namespacesAndLocalNamesMatch || namespacesAreEmptyAndLocalNamesMatch;
+        return prefixesAndLocalNamesMatch || prefixesAreEmptyAndLocalNamesMatch || namespacesAndLocalNamesMatch;
     }
 
     public String getTextRepresentation() {

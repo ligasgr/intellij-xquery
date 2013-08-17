@@ -230,6 +230,14 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
+  public void visitDefaultElementNamespaceDecl(@NotNull XQueryDefaultElementNamespaceDecl o) {
+    visitElement(o);
+  }
+
+  public void visitDefaultFunctionNamespaceDecl(@NotNull XQueryDefaultFunctionNamespaceDecl o) {
+    visitElement(o);
+  }
+
   public void visitDefaultNamespaceDecl(@NotNull XQueryDefaultNamespaceDecl o) {
     visitElement(o);
   }
@@ -479,6 +487,10 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitModuleImport(@NotNull XQueryModuleImport o) {
+    visitElement(o);
+  }
+
+  public void visitModuleImportNamespace(@NotNull XQueryModuleImportNamespace o) {
     visitElement(o);
   }
 
