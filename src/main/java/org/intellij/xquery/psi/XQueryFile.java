@@ -122,7 +122,7 @@ public class XQueryFile extends PsiFileBase {
         XQueryNamespaceName moduleNamespaceName = getModuleNamespaceName();
         Collection<XQueryNamespaceDecl> namespaceDeclarations = getNamespaceDeclarations();
         Collection<XQueryModuleImport> moduleImports = getModuleImports();
-        Map<String, String> namespaceMapping = new HashMap(getMappingFromPrefix());
+        Map<String, String> namespaceMapping = new HashMap<String, String>(getMappingFromPrefix());
         namespaceMapping.put(null, getDefaultFunctionNamespace());
         if (moduleNamespaceName != null && getModuleDeclaration().getURILiteral() != null) {
             namespaceMapping.put(moduleNamespaceName.getName(),
