@@ -17,34 +17,24 @@
 <idea-plugin version="2">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
     <vendor email="ligasgr@gmail.com" url="http://ligasgr.github.io/intellij-xquery/">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0</description>
 
     <change-notes>
         <![CDATA[
-            <p>0.0.4:</p>
+            <p>0.0.5:</p>
             <ul>
                 <li>Minor bug fixes.</li>
-                <li>Additional extensions added by default.</li>
-                <li>Updated required IntelliJ version to reflect code dependencies.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/1">#1</a> - Error when trying to open file.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/15">#15</a> - Function reference based completion to work without ().</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/16">#16</a> - Function completion to have () added by default.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/17">#17</a> - Simple keyword completion.</li>
-            </ul>
-            <p>0.0.3:</p>
-            <ul>
-                <li>Bug fix - Usage type always unclassified.</li>
-                <li>Bug fix - String highlighting didn't work while typing in some cases.</li>
-                <li>Bug fix - Whole function invocation is highlighted instead of name only.</li>
-                <li>Bug fix - Identifier while renamed doesn't accept - or .</li>
-                <li>Inline rename for local variables (code, comments, strings references and optionally text files usage renamed).</li>
-                <li>Code commenter.</li>
-                <li>Brace matching.</li>
-                <li>Word completion contributor for variable and function names (works after you've typed at least one character in fun/var name in new fun/var declaration; based on all words in current file).</li>
-                <li>Find usages in text files (as an option).</li>
+                <li>Small code completion display changes.</li>
+                <li>Building project and generating idea project structure with gradle.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/4">#4</a> - Function completion from imported files missing.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/5">#5</a> - Lack of PI support.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/6">#6</a> - Lack of CDATA support.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/7">#7</a> - Lack of PRAGMA support.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/14">#14</a> - Reference for default function namespace doesn't work (small performance degradation for find usages introduced while fixing).</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/36">#36</a> - Variable completion from imported files missing.</li>
             </ul>
         ]]>
     </change-notes>

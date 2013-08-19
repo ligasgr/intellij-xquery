@@ -29,7 +29,7 @@ Cloudbees Jenkins status: [![Build Status](https://ligasgr.ci.cloudbees.com/buil
 1. [Erlang support plugin for IntelliJ IDEA - source code on github](https://github.com/ignatov/intellij-erlang/)
 1. [Developing a plugin for IntelliJ IDEA – some useful tips and links](http://tomaszdziurko.pl/2011/09/developing-plugin-intellij-idea-some-tips-and-links/)
 
-#Building plugin locally
+#Building plugin locally on Linux
 Run:
 ``` sh
 git clone git@github.com:ligasgr/intellij-xquery.git
@@ -40,6 +40,17 @@ cd intellij-xquery
 ```
 
 ## Change log
+
+### Version 0.0.5
+* Minor bug fixes.
+* Small code completion display changes.
+* Building project and generating idea project structure with gradle.
+* Issue [#4](https://github.com/ligasgr/intellij-xquery/issues/4) - Function completion from imported files missing.
+* Issue [#5](https://github.com/ligasgr/intellij-xquery/issues/5) - Lack of PI support.
+* Issue [#6](https://github.com/ligasgr/intellij-xquery/issues/6) - Lack of CDATA support.
+* Issue [#7](https://github.com/ligasgr/intellij-xquery/issues/7) - Lack of PRAGMA support.
+* Issue [#14](https://github.com/ligasgr/intellij-xquery/issues/14) - Reference for default function namespace doesn't work (small performance degradation for find usages introduced while fixing).
+* Issue [#36](https://github.com/ligasgr/intellij-xquery/issues/36) - Variable completion from imported files missing.
 
 ### Version 0.0.4
 * Minor bug fixes.
