@@ -391,9 +391,9 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 <IMPORT_RECOGNITION> {
 {S}                                       {return TokenType.WHITE_SPACE;}
 "import" / {S} ("schema"|"module")        {return XQueryTypes.K_IMPORT;}
-"schema" / {S} ("namespace"|"default"|"\"") {return XQueryTypes.K_SCHEMA;}
+"schema" / {S} ("namespace"|"default"|"\""|"'") {return XQueryTypes.K_SCHEMA;}
 "default" / {S} "element"                 {return XQueryTypes.K_DEFAULT;}
-"module" / {S} ("namespace"|"\"")         {return XQueryTypes.K_MODULE;}
+"module" / {S} ("namespace"|"\""|"'")         {return XQueryTypes.K_MODULE;}
 "element" / {S} "namespace"               {return XQueryTypes.K_ELEMENT;}
 "namespace" / {S} ({NCName}|"\""|"'"|"{") {return XQueryTypes.K_NAMESPACE;}
 {NCName}                                  {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
@@ -402,7 +402,7 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 
 <MODULE_RECOGNITION> {
 {S}                                       {return TokenType.WHITE_SPACE;}
-"module" / {S} ("namespace"|"\"")         {return XQueryTypes.K_MODULE;}
+"module" / {S} ("namespace"|"\""|"'")         {return XQueryTypes.K_MODULE;}
 "namespace" / {S} {NCName}                {return XQueryTypes.K_NAMESPACE;}
 {NCName}                                  {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 .                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}

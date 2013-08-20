@@ -17,8 +17,8 @@
 package org.intellij.xquery.lexer;
 
 import com.intellij.lexer.Lexer;
-import com.intellij.testFramework.LightPlatformTestCase;
 import com.intellij.testFramework.PlatformTestCase;
+import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.jetbrains.annotations.NonNls;
 
 /**
@@ -26,10 +26,10 @@ import org.jetbrains.annotations.NonNls;
  * Date: 29/07/13
  * Time: 23:28
  */
-public class XQueryLexerTest extends LightPlatformTestCase {
+public class XQueryLexerTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public XQueryLexerTest() {
-        PlatformTestCase.initPlatformLangPrefix();
+        PlatformTestCase.initPlatformPrefix("com.intellij.idea.IdeaUltimateApplication", "PlatformLangXml");
     }
 
     private static void assertProducedTokens(@NonNls String text, @NonNls String[] expectedTokens) {
@@ -538,6 +538,36 @@ public class XQueryLexerTest extends LightPlatformTestCase {
                 "DirPIContentChar", "s",
                 "DirPIContentChar", " ",
                 "?>", "?>"
+        });
+    }
+
+    public void testImportModuleWithPrefix() throws Exception {
+        assertProducedTokens("import module namespace ex = 'example';", new String[]{
+                "WHITE_SPACE", "",
+                "import", "import",
+                "WHITE_SPACE", " ",
+                "module", "module",
+                "WHITE_SPACE", " ",
+                "namespace", "namespace",
+                "WHITE_SPACE", " ",
+                "NCName", "ex",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'example'",
+                ";", ";"
+        });
+    }
+
+    public void testImportModuleWithoutPrefix() throws Exception {
+        assertProducedTokens("import module 'example';", new String[]{
+                "WHITE_SPACE", "",
+                "import", "import",
+                "WHITE_SPACE", " ",
+                "module", "module",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'example'",
+                ";", ";"
         });
     }
 }
