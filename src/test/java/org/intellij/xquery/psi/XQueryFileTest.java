@@ -16,22 +16,19 @@
 
 package org.intellij.xquery.psi;
 
-import com.intellij.testFramework.LightPlatformTestCase;
-import com.intellij.testFramework.PlatformTestCase;
+import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 
 import java.util.Collection;
 
-import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.*;
+import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;
+import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.getMappingFromPrefix;
 
 /**
  * User: ligasgr
  * Date: 01/08/13
  * Time: 13:30
  */
-public class XQueryFileTest extends LightPlatformTestCase {
-    public XQueryFileTest() {
-        PlatformTestCase.initPlatformLangPrefix();
-    }
+public class XQueryFileTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void testVariableDeclarations() {
         XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare variable $xxx := 'yyy';");
