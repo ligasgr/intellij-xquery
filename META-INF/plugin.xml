@@ -14,11 +14,11 @@
   ~ limitations under the License.
   -->
 
-<idea-plugin version="2">
+<idea-plugin url="http://ligasgr.github.io/intellij-xquery/" version="2">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
     <version>0.0.5</version>
-    <vendor email="ligasgr@gmail.com" url="http://ligasgr.github.io/intellij-xquery/">Grzegorz Ligas</vendor>
+    <vendor email="ligasgr@gmail.com">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0</description>
 
