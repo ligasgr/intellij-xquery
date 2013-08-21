@@ -20,6 +20,7 @@ package org.intellij.xquery.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.navigation.ItemPresentation;
 
 public interface XQueryVarDecl extends XQueryElement {
 
@@ -37,5 +38,7 @@ public interface XQueryVarDecl extends XQueryElement {
 
   @Nullable
   XQueryVarValue getVarValue();
+
+  ItemPresentation getPresentation();
 
 }

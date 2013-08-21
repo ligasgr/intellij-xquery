@@ -28,6 +28,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryFileType;
 import org.intellij.xquery.XQueryLanguage;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Collection;
@@ -168,7 +169,7 @@ public class XQueryFile extends PsiFileBase {
         return myDefaultFunctionNamespace.getValue();
     }
 
-    @NotNull
+    @Nullable
     public XQueryModuleDecl getModuleDeclaration() {
         if (myModuleDeclaration == null) {
             myModuleDeclaration = CachedValuesManager

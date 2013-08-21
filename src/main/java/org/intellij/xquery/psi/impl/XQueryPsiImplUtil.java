@@ -16,6 +16,8 @@
 
 package org.intellij.xquery.psi.impl;
 
+import com.intellij.icons.AllIcons;
+import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
@@ -27,12 +29,15 @@ import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.psi.*;
+import org.intellij.xquery.reference.function.XQueryFunctionReference;
 import org.intellij.xquery.reference.module.XQueryModuleReference;
 import org.intellij.xquery.reference.namespace.XQueryFunctionNamespaceNameReference;
-import org.intellij.xquery.reference.function.XQueryFunctionReference;
 import org.intellij.xquery.reference.namespace.XQueryVariableNamespaceNameReference;
 import org.intellij.xquery.reference.variable.XQueryVariableReference;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
 
 /**
  * User: ligasgr
@@ -180,5 +185,64 @@ public class XQueryPsiImplUtil {
             return new LocalSearchScope(queryBody);
         }
         return ResolveScopeManager.getElementUseScope(element);
+    }
+
+    public static ItemPresentation getPresentation(final XQueryFunctionDecl element) {
+        return new ItemPresentation() {
+            @Nullable
+            @Override
+            public String getPresentableText() {
+                String name = element.getFunctionName() != null ? element.getFunctionName().getText() : "";
+                String tailText = "(" + (element.getParamList() != null ? element
+                        .getParamList()
+                        .getText() : "") + ") as ";
+                String typeText = element.getSequenceType() != null ? element.getSequenceType()
+                        .getText() : "item()*";
+                return compressWhitespaces(name + tailText + typeText);
+            }
+
+            @Nullable
+            @Override
+            public String getLocationString() {
+                return null;
+            }
+
+            @Nullable
+            @Override
+            public Icon getIcon(boolean unused) {
+                return AllIcons.Nodes.Method;
+            }
+        };
+    }
+
+    public static ItemPresentation getPresentation(final XQueryVarDecl element) {
+        return new ItemPresentation() {
+            @Nullable
+            @Override
+            public String getPresentableText() {
+                String name = element.getVarName() != null ? element.getVarName().getText() : "";
+                String typeText = "item()*";
+                if (element.getTypeDeclaration() != null) {
+                    typeText = element.getTypeDeclaration().getText();
+                }
+                return compressWhitespaces(name + " as " + typeText);
+            }
+
+            @Nullable
+            @Override
+            public String getLocationString() {
+                return null;
+            }
+
+            @Nullable
+            @Override
+            public Icon getIcon(boolean unused) {
+                return AllIcons.Nodes.Variable;
+            }
+        };
+    }
+
+    private static String compressWhitespaces(String text) {
+        return text.replaceAll("\\s+", " ");
     }
 }
