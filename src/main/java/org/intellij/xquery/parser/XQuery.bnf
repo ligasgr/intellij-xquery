@@ -220,7 +220,6 @@ ModuleDecl	   ::=   	"module" "namespace" NamespaceName "=" URILiteral Separator
 NamespaceName ::= NCName  {methods=[getName setName getNameIdentifier]}
 private ModuleDeclRecover ::= !('declare' | 'import')
 Prolog	   ::=   	FirstDecl* SecondDecl* {methods=[processDeclarations]} //{recoverUntil=PrologRecover}
-private PrologRecover ::= !('$' | '%' | '(#' | '(' | '*' | '+' | '-' | '.' | '..' | '/' | '//' | '<!--' | '<' | '<?' | '@' | 'ancestor' | 'ancestor-or-self' | 'attribute' | 'child' | 'comment' | 'descendant' | 'descendant-or-self' | 'document' | 'document-node' | 'element' | 'every' | 'following' | 'following-sibling' | 'for' | 'function' | 'if' | 'let' | 'map' | 'namespace' | 'namespace-node' | 'node' | 'ordered' | 'parent' | 'preceding' | 'preceding-sibling' | 'processing-instruction' | 'schema-attribute' | 'schema-element' | 'self' | 'some' | 'switch' | 'text' | 'try' | 'typeswitch' | 'unordered' | 'validate' | -eof- | BracedURILiteral | DecimalLiteral | DoubleLiteral | IntegerLiteral | NCName | StringLiteral | URIQualifiedName)
 private FirstDecl ::= DefaultNamespaceDecl | Setter | NamespaceDecl | Import
 private SecondDecl ::= ContextItemDecl | OptionDecl | AnnotatedDecl
 Separator	   ::=   	";"
@@ -242,7 +241,6 @@ ModuleImport	   ::=   	"import" "module" ("namespace" NamespaceName "=")? Module
 ModuleImportNamespace ::= ModuleImportPath
 ModuleImportPath ::= URILiteral {methods=[getReference]}
 NamespaceDecl	   ::=   	"declare" "namespace" NamespaceName "=" URILiteral Separator {pin=2}
-
 DefaultNamespaceDecl	   ::=   	(DefaultFunctionNamespaceDecl | DefaultElementNamespaceDecl) Separator
 DefaultFunctionNamespaceDecl	   ::=   	"declare" "default" "function" "namespace" URILiteral {pin=3}
 DefaultElementNamespaceDecl	   ::=   	"declare" "default" "element" "namespace" URILiteral {pin=3}
@@ -253,9 +251,9 @@ VarDecl	   ::=   	"declare" Annotation* "variable" "$" VarName TypeDeclaration? 
 VarValue	   ::=   	ExprSingle
 VarDefaultValue	   ::=   	ExprSingle
 ContextItemDecl	   ::=   	"declare" "context" "item" ("as" ItemType)? ((":=" VarValue) | ("external" (":=" VarDefaultValue)?)) Separator {pin=2}
-FunctionDecl	   ::=   	"declare" Annotation* "function" FunctionName "(" ParamList? ")" ("as" SequenceType)? (FunctionBody | "external") 	/* xgc: reserved-function-names */ {pin=3 recoverUntil=FunctionDeclRec  methods=[getPresentation]}
+FunctionDecl	   ::=   	"declare" Annotation* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external")  	/* xgc: reserved-function-names */ {pin=3 methods=[getPresentation] recoverUntil=FunctionDeclRec}
 private FunctionDeclRec ::= !(';')
-ParamList	   ::=   	Param ("," Param)*
+ParamList	   ::=   	"(" (Param ("," Param)*)? ")"
 Param	   ::=   	"$" VarName TypeDeclaration?
 FunctionBody	   ::=   	EnclosedExpr
 EnclosedExpr	   ::=   	"{" Expr "}" {pin=1}
@@ -444,7 +442,7 @@ CompCommentConstructor	   ::=   	"comment" "{" Expr "}"
 CompPIConstructor	   ::=   	"processing-instruction" (NCName | ("{" Expr "}")) "{" Expr? "}"
 FunctionItemExpr	   ::=   	NamedFunctionRef | InlineFunctionExpr
 NamedFunctionRef	   ::=   	FunctionName "#" IntegerLiteral	/* xgc: reserved-function-names */
-InlineFunctionExpr	   ::=   	Annotation* "function" "(" ParamList? ")" ("as" SequenceType)? FunctionBody
+InlineFunctionExpr	   ::=   	Annotation* "function" ParamList ("as" SequenceType)? FunctionBody
 SingleType	   ::=   	SimpleTypeName "?"?
 TypeDeclaration	   ::=   	"as" SequenceType
 SequenceType	   ::=   	("empty-sequence" "(" ")")

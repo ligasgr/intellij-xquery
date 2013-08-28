@@ -72,5 +72,6 @@
         <renameHandler implementation="org.intellij.xquery.refactoring.XQueryVariableInplaceRenameHandler"/>
         <completion.contributor language="XQuery" implementationClass="org.intellij.xquery.completion.XQueryCompletionContributor"/>
         <lang.psiStructureViewFactory language="XQuery" implementationClass="org.intellij.xquery.structure.XQueryStructureViewFactory"/>
+        <lang.formatter language="XQuery" implementationClass="org.intellij.xquery.formatter.XQueryFormattingModelBuilder"/>
     </extensions>
 </idea-plugin>

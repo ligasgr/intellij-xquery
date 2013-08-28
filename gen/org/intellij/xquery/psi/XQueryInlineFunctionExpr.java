@@ -29,7 +29,7 @@ public interface XQueryInlineFunctionExpr extends XQueryExprSingle {
   @NotNull
   XQueryFunctionBody getFunctionBody();
 
-  @Nullable
+  @NotNull
   XQueryParamList getParamList();
 
   @Nullable

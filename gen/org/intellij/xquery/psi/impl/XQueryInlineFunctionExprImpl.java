@@ -45,9 +45,9 @@ public class XQueryInlineFunctionExprImpl extends XQueryExprSingleImpl implement
   }
 
   @Override
-  @Nullable
+  @NotNull
   public XQueryParamList getParamList() {
-    return findChildByClass(XQueryParamList.class);
+    return findNotNullChildByClass(XQueryParamList.class);
   }
 
   @Override

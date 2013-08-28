@@ -4038,7 +4038,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "declare" Annotation* "function" FunctionName "(" ParamList? ")" ("as" SequenceType)? (FunctionBody | "external")
+  // "declare" Annotation* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external")
   public static boolean FunctionDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionDecl")) return false;
     boolean result_ = false;
@@ -4050,11 +4050,9 @@ public class XQueryParser implements PsiParser {
     result_ = result_ && consumeToken(builder_, K_FUNCTION);
     pinned_ = result_; // pin = 3
     result_ = result_ && report_error_(builder_, FunctionName(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, L_PAR)) && result_;
+    result_ = pinned_ && report_error_(builder_, ParamList(builder_, level_ + 1)) && result_;
     result_ = pinned_ && report_error_(builder_, FunctionDecl_5(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, R_PAR)) && result_;
-    result_ = pinned_ && report_error_(builder_, FunctionDecl_7(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && FunctionDecl_8(builder_, level_ + 1) && result_;
+    result_ = pinned_ && FunctionDecl_6(builder_, level_ + 1) && result_;
     if (result_ || pinned_) {
       marker_.done(FUNCTION_DECL);
     }
@@ -4081,23 +4079,16 @@ public class XQueryParser implements PsiParser {
     return true;
   }
 
-  // ParamList?
+  // ("as" SequenceType)?
   private static boolean FunctionDecl_5(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionDecl_5")) return false;
-    ParamList(builder_, level_ + 1);
-    return true;
-  }
-
-  // ("as" SequenceType)?
-  private static boolean FunctionDecl_7(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "FunctionDecl_7")) return false;
-    FunctionDecl_7_0(builder_, level_ + 1);
+    FunctionDecl_5_0(builder_, level_ + 1);
     return true;
   }
 
   // "as" SequenceType
-  private static boolean FunctionDecl_7_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "FunctionDecl_7_0")) return false;
+  private static boolean FunctionDecl_5_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FunctionDecl_5_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, K_AS);
@@ -4112,8 +4103,8 @@ public class XQueryParser implements PsiParser {
   }
 
   // FunctionBody | "external"
-  private static boolean FunctionDecl_8(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "FunctionDecl_8")) return false;
+  private static boolean FunctionDecl_6(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FunctionDecl_6")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = FunctionBody(builder_, level_ + 1);
@@ -4583,7 +4574,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Annotation* "function" "(" ParamList? ")" ("as" SequenceType)? FunctionBody
+  // Annotation* "function" ParamList ("as" SequenceType)? FunctionBody
   public static boolean InlineFunctionExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "InlineFunctionExpr")) return false;
     if (!nextTokenIs(builder_, PERCENT) && !nextTokenIs(builder_, K_FUNCTION)
@@ -4593,10 +4584,8 @@ public class XQueryParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<inline function expr>");
     result_ = InlineFunctionExpr_0(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, K_FUNCTION);
-    result_ = result_ && consumeToken(builder_, L_PAR);
+    result_ = result_ && ParamList(builder_, level_ + 1);
     result_ = result_ && InlineFunctionExpr_3(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, R_PAR);
-    result_ = result_ && InlineFunctionExpr_5(builder_, level_ + 1);
     result_ = result_ && FunctionBody(builder_, level_ + 1);
     if (result_) {
       marker_.done(INLINE_FUNCTION_EXPR);
@@ -4624,23 +4613,16 @@ public class XQueryParser implements PsiParser {
     return true;
   }
 
-  // ParamList?
+  // ("as" SequenceType)?
   private static boolean InlineFunctionExpr_3(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "InlineFunctionExpr_3")) return false;
-    ParamList(builder_, level_ + 1);
-    return true;
-  }
-
-  // ("as" SequenceType)?
-  private static boolean InlineFunctionExpr_5(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "InlineFunctionExpr_5")) return false;
-    InlineFunctionExpr_5_0(builder_, level_ + 1);
+    InlineFunctionExpr_3_0(builder_, level_ + 1);
     return true;
   }
 
   // "as" SequenceType
-  private static boolean InlineFunctionExpr_5_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "InlineFunctionExpr_5_0")) return false;
+  private static boolean InlineFunctionExpr_3_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "InlineFunctionExpr_3_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, K_AS);
@@ -6147,14 +6129,15 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Param ("," Param)*
+  // "(" (Param ("," Param)*)? ")"
   public static boolean ParamList(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ParamList")) return false;
-    if (!nextTokenIs(builder_, DOLLAR_SIGN)) return false;
+    if (!nextTokenIs(builder_, L_PAR)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = Param(builder_, level_ + 1);
+    result_ = consumeToken(builder_, L_PAR);
     result_ = result_ && ParamList_1(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, R_PAR);
     if (result_) {
       marker_.done(PARAM_LIST);
     }
@@ -6164,15 +6147,38 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ("," Param)*
+  // (Param ("," Param)*)?
   private static boolean ParamList_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ParamList_1")) return false;
+    ParamList_1_0(builder_, level_ + 1);
+    return true;
+  }
+
+  // Param ("," Param)*
+  private static boolean ParamList_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ParamList_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = Param(builder_, level_ + 1);
+    result_ = result_ && ParamList_1_0_1(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // ("," Param)*
+  private static boolean ParamList_1_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ParamList_1_0_1")) return false;
     int offset_ = builder_.getCurrentOffset();
     while (true) {
-      if (!ParamList_1_0(builder_, level_ + 1)) break;
+      if (!ParamList_1_0_1_0(builder_, level_ + 1)) break;
       int next_offset_ = builder_.getCurrentOffset();
       if (offset_ == next_offset_) {
-        empty_element_parsed_guard_(builder_, offset_, "ParamList_1");
+        empty_element_parsed_guard_(builder_, offset_, "ParamList_1_0_1");
         break;
       }
       offset_ = next_offset_;
@@ -6181,8 +6187,8 @@ public class XQueryParser implements PsiParser {
   }
 
   // "," Param
-  private static boolean ParamList_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ParamList_1_0")) return false;
+  private static boolean ParamList_1_0_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ParamList_1_0_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, COMA);
@@ -6676,96 +6682,6 @@ public class XQueryParser implements PsiParser {
       }
       offset_ = next_offset_;
     }
-    return true;
-  }
-
-  /* ********************************************************** */
-  // !('$' | '%' | '(#' | '(' | '*' | '+' | '-' | '.' | '..' | '/' | '//' | '<!--' | '<' | '<?' | '@' | 'ancestor' | 'ancestor-or-self' | 'attribute' | 'child' | 'comment' | 'descendant' | 'descendant-or-self' | 'document' | 'document-node' | 'element' | 'every' | 'following' | 'following-sibling' | 'for' | 'function' | 'if' | 'let' | 'map' | 'namespace' | 'namespace-node' | 'node' | 'ordered' | 'parent' | 'preceding' | 'preceding-sibling' | 'processing-instruction' | 'schema-attribute' | 'schema-element' | 'self' | 'some' | 'switch' | 'text' | 'try' | 'typeswitch' | 'unordered' | 'validate' | -eof- | BracedURILiteral | DecimalLiteral | DoubleLiteral | IntegerLiteral | NCName | StringLiteral | URIQualifiedName)
-  static boolean PrologRecover(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "PrologRecover")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_NOT_, null);
-    result_ = !PrologRecover_0(builder_, level_ + 1);
-    marker_.rollbackTo();
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_NOT_, null);
-    return result_;
-  }
-
-  // '$' | '%' | '(#' | '(' | '*' | '+' | '-' | '.' | '..' | '/' | '//' | '<!--' | '<' | '<?' | '@' | 'ancestor' | 'ancestor-or-self' | 'attribute' | 'child' | 'comment' | 'descendant' | 'descendant-or-self' | 'document' | 'document-node' | 'element' | 'every' | 'following' | 'following-sibling' | 'for' | 'function' | 'if' | 'let' | 'map' | 'namespace' | 'namespace-node' | 'node' | 'ordered' | 'parent' | 'preceding' | 'preceding-sibling' | 'processing-instruction' | 'schema-attribute' | 'schema-element' | 'self' | 'some' | 'switch' | 'text' | 'try' | 'typeswitch' | 'unordered' | 'validate' | -eof- | BracedURILiteral | DecimalLiteral | DoubleLiteral | IntegerLiteral | NCName | StringLiteral | URIQualifiedName
-  private static boolean PrologRecover_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "PrologRecover_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, DOLLAR_SIGN);
-    if (!result_) result_ = consumeToken(builder_, PERCENT);
-    if (!result_) result_ = consumeToken(builder_, PRAGMA_BEGIN);
-    if (!result_) result_ = consumeToken(builder_, L_PAR);
-    if (!result_) result_ = consumeToken(builder_, STAR_SIGN);
-    if (!result_) result_ = consumeToken(builder_, OP_PLUS);
-    if (!result_) result_ = consumeToken(builder_, OP_MINUS);
-    if (!result_) result_ = consumeToken(builder_, DOT);
-    if (!result_) result_ = consumeToken(builder_, DOT_DOT);
-    if (!result_) result_ = consumeToken(builder_, SLASH);
-    if (!result_) result_ = consumeToken(builder_, SLASH_SLASH);
-    if (!result_) result_ = consumeToken(builder_, DIR_COMMENT_BEGIN);
-    if (!result_) result_ = consumeToken(builder_, LT_CHAR);
-    if (!result_) result_ = consumeToken(builder_, PI_BEGIN);
-    if (!result_) result_ = consumeToken(builder_, AT_SIGN);
-    if (!result_) result_ = consumeToken(builder_, K_ANCESTOR);
-    if (!result_) result_ = consumeToken(builder_, K_ANCESTOR_OR_SELF);
-    if (!result_) result_ = consumeToken(builder_, K_ATTRIBUTE);
-    if (!result_) result_ = consumeToken(builder_, K_CHILD);
-    if (!result_) result_ = consumeToken(builder_, K_COMMENT);
-    if (!result_) result_ = consumeToken(builder_, K_DESCENDANT);
-    if (!result_) result_ = consumeToken(builder_, K_DESCENDANT_OR_SELF);
-    if (!result_) result_ = consumeToken(builder_, K_DOCUMENT);
-    if (!result_) result_ = consumeToken(builder_, K_DOCUMENT_NODE);
-    if (!result_) result_ = consumeToken(builder_, K_ELEMENT);
-    if (!result_) result_ = consumeToken(builder_, K_EVERY);
-    if (!result_) result_ = consumeToken(builder_, K_FOLLOWING);
-    if (!result_) result_ = consumeToken(builder_, K_FOLLOWING_SIBLING);
-    if (!result_) result_ = consumeToken(builder_, K_FOR);
-    if (!result_) result_ = consumeToken(builder_, K_FUNCTION);
-    if (!result_) result_ = consumeToken(builder_, K_IF);
-    if (!result_) result_ = consumeToken(builder_, K_LET);
-    if (!result_) result_ = consumeToken(builder_, K_MAP);
-    if (!result_) result_ = consumeToken(builder_, K_NAMESPACE);
-    if (!result_) result_ = consumeToken(builder_, K_NAMESPACE_NODE);
-    if (!result_) result_ = consumeToken(builder_, K_NODE);
-    if (!result_) result_ = consumeToken(builder_, K_ORDERED);
-    if (!result_) result_ = consumeToken(builder_, K_PARENT);
-    if (!result_) result_ = consumeToken(builder_, K_PRECEDING);
-    if (!result_) result_ = consumeToken(builder_, K_PRECEDING_SIBLING);
-    if (!result_) result_ = consumeToken(builder_, K_PI);
-    if (!result_) result_ = consumeToken(builder_, K_SCHEMA_ATTRIBUTE);
-    if (!result_) result_ = consumeToken(builder_, K_SCHEMA_ELEMENT);
-    if (!result_) result_ = consumeToken(builder_, K_SELF);
-    if (!result_) result_ = consumeToken(builder_, K_SOME);
-    if (!result_) result_ = consumeToken(builder_, K_SWITCH);
-    if (!result_) result_ = consumeToken(builder_, K_TEXT);
-    if (!result_) result_ = consumeToken(builder_, K_TRY);
-    if (!result_) result_ = consumeToken(builder_, K_TYPESWITCH);
-    if (!result_) result_ = consumeToken(builder_, K_UNORDERED);
-    if (!result_) result_ = consumeToken(builder_, K_VALIDATE);
-    if (!result_) result_ = PrologRecover_0_51(builder_, level_ + 1);
-    if (!result_) result_ = consumeToken(builder_, BRACEDURILITERAL);
-    if (!result_) result_ = consumeToken(builder_, DECIMALLITERAL);
-    if (!result_) result_ = consumeToken(builder_, DOUBLELITERAL);
-    if (!result_) result_ = consumeToken(builder_, INTEGERLITERAL);
-    if (!result_) result_ = consumeToken(builder_, NCNAME);
-    if (!result_) result_ = consumeToken(builder_, STRINGLITERAL);
-    if (!result_) result_ = consumeToken(builder_, URIQUALIFIEDNAME);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
-  }
-
-  private static boolean PrologRecover_0_51(PsiBuilder builder_, int level_) {
     return true;
   }
 

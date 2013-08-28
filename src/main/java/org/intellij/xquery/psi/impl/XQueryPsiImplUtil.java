@@ -193,9 +193,7 @@ public class XQueryPsiImplUtil {
             @Override
             public String getPresentableText() {
                 String name = element.getFunctionName() != null ? element.getFunctionName().getText() : "";
-                String tailText = "(" + (element.getParamList() != null ? element
-                        .getParamList()
-                        .getText() : "") + ") as ";
+                String tailText = (element.getParamList() != null ? element.getParamList().getText() : "") + " as ";
                 String typeText = element.getSequenceType() != null ? element.getSequenceType()
                         .getText() : "item()*";
                 return compressWhitespaces(name + tailText + typeText);
