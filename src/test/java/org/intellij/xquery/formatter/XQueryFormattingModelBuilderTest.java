@@ -58,6 +58,10 @@ public class XQueryFormattingModelBuilderTest extends LightPlatformCodeInsightFi
         executeTest();
     }
 
+    public void testIndentFunctionBody() {
+        executeTest();
+    }
+
     private void executeTest() {
         myFixture.configureByFiles(getTestName(false) + ".xq");
         ApplicationManager.getApplication().runWriteAction(new Runnable() {

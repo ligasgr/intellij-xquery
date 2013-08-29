@@ -21,6 +21,9 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.formatter.common.AbstractBlock;
+import com.intellij.psi.tree.IElementType;
+import org.intellij.xquery.psi.XQueryEnclosedExpr;
+import org.intellij.xquery.psi.XQueryTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,7 +53,7 @@ public class XQueryFormattingBlock extends AbstractBlock {
         ASTNode child = myNode.getFirstChildNode();
         while (child != null) {
             if (child.getElementType() != TokenType.WHITE_SPACE && child.getTextRange().getLength() != 0) {
-                Block block = new XQueryFormattingBlock(child, Wrap.createWrap(WrapType.NONE, false), Alignment.createAlignment(), settings, spacingBuilder);
+                Block block = new XQueryFormattingBlock(child, Wrap.createWrap(WrapType.NONE, false), null, settings, spacingBuilder);
                 blocks.add(block);
             }
             child = child.getTreeNext();
@@ -60,6 +63,8 @@ public class XQueryFormattingBlock extends AbstractBlock {
 
     @Override
     public Indent getIndent() {
+        if (myNode.getElementType() == XQueryTypes.EXPR && myNode.getPsi().getParent() instanceof XQueryEnclosedExpr)
+            return Indent.getNormalIndent(false);
         return Indent.getNoneIndent();
     }
 
