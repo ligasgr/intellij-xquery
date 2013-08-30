@@ -18,8 +18,8 @@ package org.intellij.xquery.reference.variable;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.intellij.xquery.Assertions;
+import org.intellij.xquery.XQueryBaseTestCase;
 import org.intellij.xquery.psi.*;
 import org.intellij.xquery.reference.MatchingStringCondition;
 
@@ -35,10 +35,7 @@ import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAt
  * Date: 28/06/13
  * Time: 13:25
  */
-public class XQueryVariableReferenceTest extends LightPlatformCodeInsightFixtureTestCase {
-    public XQueryVariableReferenceTest() {
-        super();
-    }
+public class XQueryVariableReferenceTest extends XQueryBaseTestCase {
 
     @Override
     protected String getTestDataPath() {

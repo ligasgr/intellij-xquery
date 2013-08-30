@@ -21,7 +21,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import org.intellij.xquery.XQueryBaseTestCase;
 import org.intellij.xquery.XQueryFileType;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryModuleImportPath;
@@ -36,7 +36,7 @@ import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAt
  * Date: 02/07/13
  * Time: 21:00
  */
-public class XQueryModuleReferenceTest extends LightPlatformCodeInsightFixtureTestCase {
+public class XQueryModuleReferenceTest extends XQueryBaseTestCase {
     @Override
     protected String getTestDataPath() {
         return "src/test/testData/org/intellij/xquery/reference/module";
@@ -71,7 +71,7 @@ public class XQueryModuleReferenceTest extends LightPlatformCodeInsightFixtureTe
                 "ModuleReference_RenamedFile.xq",
                 GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(myFixture.getProject()),
                         XQueryFileType
-                        .INSTANCE));
+                                .INSTANCE));
         assertEquals(1, files.length);
         assertNotNull(filesAfterRename[0]);
     }

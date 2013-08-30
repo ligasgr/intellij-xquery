@@ -18,7 +18,7 @@ package org.intellij.xquery.reference.namespace;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import org.intellij.xquery.XQueryBaseTestCase;
 import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryModuleImport;
 import org.intellij.xquery.psi.XQueryNamespaceDecl;
@@ -34,7 +34,7 @@ import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAt
  * Date: 03/07/13
  * Time: 13:49
  */
-public class XQueryVariableNamespaceNameReferenceTest extends LightPlatformCodeInsightFixtureTestCase {
+public class XQueryVariableNamespaceNameReferenceTest extends XQueryBaseTestCase {
     @Override
     protected String getTestDataPath() {
         return "src/test/testData/org/intellij/xquery/reference/namespace";

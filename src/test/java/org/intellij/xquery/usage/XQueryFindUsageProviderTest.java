@@ -16,8 +16,8 @@
 
 package org.intellij.xquery.usage;
 
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import com.intellij.usageView.UsageInfo;
+import org.intellij.xquery.XQueryBaseTestCase;
 import org.intellij.xquery.psi.*;
 
 import java.util.Collection;
@@ -29,7 +29,7 @@ import static org.intellij.xquery.Assertions.assertChildOf;
  * Date: 04/07/13
  * Time: 13:46
  */
-public class XQueryFindUsageProviderTest extends LightPlatformCodeInsightFixtureTestCase {
+public class XQueryFindUsageProviderTest extends XQueryBaseTestCase {
 
     private final XQueryFindUsageProvider provider = new XQueryFindUsageProvider();
 

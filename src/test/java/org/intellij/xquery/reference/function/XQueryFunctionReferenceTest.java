@@ -19,7 +19,7 @@ package org.intellij.xquery.reference.function;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.psi.PsiElement;
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import org.intellij.xquery.XQueryBaseTestCase;
 import org.intellij.xquery.psi.XQueryFunctionCall;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.reference.MatchingStringCondition;
@@ -35,7 +35,7 @@ import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAt
  * Date: 03/07/13
  * Time: 21:44
  */
-public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixtureTestCase {
+public class XQueryFunctionReferenceTest extends XQueryBaseTestCase {
     @Override
     protected String getTestDataPath() {
         return "src/test/testData/org/intellij/xquery/reference/function";
@@ -108,7 +108,8 @@ public class XQueryFunctionReferenceTest extends LightPlatformCodeInsightFixture
     }
 
     public void testFunctionCompletionFromAnotherFileWithDefaultNamespaceAndNotImportedNamespacePrefix() {
-        myFixture.configureByFiles("FunctionCompletionFromAnotherFileWithDefaultNamespaceAndNotImportedNamespacePrefix.xq",
+        myFixture.configureByFiles
+                ("FunctionCompletionFromAnotherFileWithDefaultNamespaceAndNotImportedNamespacePrefix.xq",
                 "FunctionReferencedFile.xq");
         myFixture.complete(CompletionType.BASIC, 1);
         List<String> strings = myFixture.getLookupElementStrings();

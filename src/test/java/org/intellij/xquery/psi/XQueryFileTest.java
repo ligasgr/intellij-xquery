@@ -17,6 +17,7 @@
 package org.intellij.xquery.psi;
 
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import org.intellij.xquery.XQueryBaseTestCase;
 
 import java.util.Collection;
 
@@ -28,7 +29,7 @@ import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace
  * Date: 01/08/13
  * Time: 13:30
  */
-public class XQueryFileTest extends LightPlatformCodeInsightFixtureTestCase {
+public class XQueryFileTest extends XQueryBaseTestCase {
 
     public void testVariableDeclarations() {
         XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare variable $xxx := 'yyy';");

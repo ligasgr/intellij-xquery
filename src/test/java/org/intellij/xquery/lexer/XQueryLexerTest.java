@@ -19,6 +19,7 @@ package org.intellij.xquery.lexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import org.intellij.xquery.XQueryBaseTestCase;
 import org.jetbrains.annotations.NonNls;
 
 /**
@@ -26,11 +27,7 @@ import org.jetbrains.annotations.NonNls;
  * Date: 29/07/13
  * Time: 23:28
  */
-public class XQueryLexerTest extends LightPlatformCodeInsightFixtureTestCase {
-
-    public XQueryLexerTest() {
-        PlatformTestCase.initPlatformPrefix("com.intellij.idea.IdeaUltimateApplication", "PlatformLangXml");
-    }
+public class XQueryLexerTest extends XQueryBaseTestCase {
 
     private static void assertProducedTokens(@NonNls String text, @NonNls String[] expectedTokens) {
         Lexer lexer = new XQueryLexer();

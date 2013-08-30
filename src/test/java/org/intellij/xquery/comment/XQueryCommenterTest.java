@@ -18,7 +18,7 @@ package org.intellij.xquery.comment;
 
 import com.intellij.codeInsight.generation.actions.CommentByBlockCommentAction;
 import com.intellij.codeInsight.generation.actions.CommentByLineCommentAction;
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import org.intellij.xquery.XQueryBaseTestCase;
 import org.intellij.xquery.XQueryFileType;
 
 /**
@@ -26,7 +26,7 @@ import org.intellij.xquery.XQueryFileType;
  * Date: 05/07/13
  * Time: 23:57
  */
-public class XQueryCommenterTest extends LightPlatformCodeInsightFixtureTestCase {
+public class XQueryCommenterTest extends XQueryBaseTestCase {
 
     private static final String NEW_LINE = "\n";
     private static final String TEXT_TO_COMMENT = "<tag><innerTag>content</innerTag></tag>";

@@ -16,6 +16,8 @@
 
 
 
+
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply from: 'idea.gradle'
@@ -58,7 +60,7 @@ dependencies {
 }
 
 test {
-    jvmArgs = ['-Didea.home.path=' + project.ext.ideaInstallationPath, '-Didea.test.group=ALL_EXCLUDE_DEFINED', '-Didea.platform.prefix=PlatformLangXml']
+    jvmArgs = ['-Didea.home.path=' + project.ext.ideaInstallationPath, '-Didea.test.group=ALL_EXCLUDE_DEFINED']
     exclude '**/*PerformanceTest.*'
 }
 

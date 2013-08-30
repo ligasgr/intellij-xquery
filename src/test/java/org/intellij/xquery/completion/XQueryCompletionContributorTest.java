@@ -19,7 +19,7 @@ package org.intellij.xquery.completion;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import org.intellij.xquery.XQueryBaseTestCase;
 import org.intellij.xquery.XQueryFileType;
 
 import java.util.List;
@@ -31,7 +31,7 @@ import static org.intellij.xquery.lexer.XQueryLexer.KEYWORDS;
  * Date: 02/08/13
  * Time: 13:46
  */
-public class XQueryCompletionContributorTest extends LightPlatformCodeInsightFixtureTestCase {
+public class XQueryCompletionContributorTest extends XQueryBaseTestCase {
 
     public void testKeywordsCompletion() throws Exception {
         myFixture.configureByText(XQueryFileType.INSTANCE, "<caret>");
@@ -41,7 +41,7 @@ public class XQueryCompletionContributorTest extends LightPlatformCodeInsightFix
     }
 
     private void assertAllKeywords(TokenSet keywords, List<String> strings) {
-        for (IElementType keywordTokenType: keywords.getTypes()) {
+        for (IElementType keywordTokenType : keywords.getTypes()) {
             String keywordString = keywordTokenType.toString();
             assertTrue(String.format("Keyword %s missing", keywordString), strings.contains(keywordString));
         }

@@ -19,24 +19,18 @@ package org.intellij.xquery.formatter;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
-
-import static com.intellij.testFramework.PlatformTestCase.initPlatformPrefix;
+import org.intellij.xquery.XQueryBaseTestCase;
 
 /**
  * User: ligasgr
  * Date: 22/08/13
  * Time: 23:41
  */
-public class XQueryFormattingModelBuilderTest extends LightPlatformCodeInsightFixtureTestCase {
+public class XQueryFormattingModelBuilderTest extends XQueryBaseTestCase {
 
     @Override
     protected String getTestDataPath() {
         return "src/test/testData/org/intellij/xquery/formatter";
-    }
-
-    public XQueryFormattingModelBuilderTest() {
-        initPlatformPrefix("com.intellij.idea.IdeaUltimateApplication", "PlatformLangXml");
     }
 
     public void testSpaceAroundAssignmentOperators() {
