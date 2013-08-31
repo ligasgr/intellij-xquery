@@ -18,12 +18,12 @@ package org.intellij.xquery.formatter;
 
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.formatter.common.AbstractBlock;
 import com.intellij.psi.tree.IElementType;
-import org.intellij.xquery.psi.XQueryEnclosedExpr;
-import org.intellij.xquery.psi.XQueryTypes;
+import org.intellij.xquery.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,6 +64,10 @@ public class XQueryFormattingBlock extends AbstractBlock {
     @Override
     public Indent getIndent() {
         if (myNode.getElementType() == XQueryTypes.EXPR && myNode.getPsi().getParent() instanceof XQueryEnclosedExpr)
+            return Indent.getNormalIndent(false);
+        if (myNode.getElementType() == XQueryTypes.DIR_ELEM_CONTENT)
+            return Indent.getNormalIndent(false);
+        if (myNode.getPsi() instanceof XQueryExprSingle && myNode.getPsi().getParent() instanceof XQueryIfExpr)
             return Indent.getNormalIndent(false);
         return Indent.getNoneIndent();
     }

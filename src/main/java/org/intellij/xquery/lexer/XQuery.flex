@@ -286,7 +286,7 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 {S}                                       {return TokenType.WHITE_SPACE;}
 "<!--"                                    {pushState(DIR_COMMENT); return XQueryTypes.DIR_COMMENT_BEGIN;}
 "<![CDATA["                               {pushState(CDATA); return XQueryTypes.CDATA_BEGIN;}
-"{{" | "}}" | [^{}<]+                     {return XQueryTypes.ELEMENTCONTENTCHAR;}
+"{{" | "}}" | [^{}<]                      {return XQueryTypes.ELEMENTCONTENTCHAR;}
 "{"                                       {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE; }
 "</"                                      {popState(); pushState(END_TAG); return XQueryTypes.END_TAG;}
 "<"                                       {pushState(START_TAG); return XQueryTypes.LT_CHAR; }
