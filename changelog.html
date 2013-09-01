@@ -1,0 +1,124 @@
+<!doctype html>
+<!--
+  ~ Copyright 2013 Grzegorz Ligas <ligasgr@gmail.com>
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>IntelliJ XQuery Support plugin - Changelog</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+</head>
+<body>
+<div id="header">
+    <nav>
+        <li class="fork"><a href="https://github.com/ligasgr/intellij-xquery">View On GitHub</a></li>
+        <li class="downloads"><a href="http://plugins.jetbrains.com/plugin/7262?pr=">Download from plugin repository</a></li>
+        <li class="title">DOWNLOADS</li>
+    </nav>
+</div><!-- end header -->
+
+<div class="wrapper">
+
+    <section>
+        <div id="title">
+            <h1>Changelog</h1>
+        </div>
+        <h3>
+            <a name="version-005" class="anchor" href="#version-005"><span class="octicon octicon-link"></span></a>Version 0.0.5</h3>
+
+        <ul>
+            <li>Minor bug fixes.</li>
+            <li>Small code completion display changes.</li>
+            <li>Building project and generating idea project structure with gradle.</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/4">#4</a> - Function completion from imported files missing.</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/5">#5</a> - Lack of PI support.</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/6">#6</a> - Lack of CDATA support.</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/7">#7</a> - Lack of PRAGMA support.</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/14">#14</a> - Reference for default function namespace doesn't work (small performance degradation for find usages introduced while fixing).</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/36">#36</a> - Variable completion from imported files missing.</li>
+        </ul>
+        <h3>
+            <a name="version-004" class="anchor" href="#version-004"><span class="octicon octicon-link"></span></a>Version 0.0.4</h3>
+
+        <ul>
+            <li>Minor bug fixes.</li>
+            <li>Additional file extensions added as supported by plugin.</li>
+            <li>Updated required IntelliJ version to reflect code dependencies.</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/1">#1</a> - Error when trying to open file.</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/15">#15</a> - Function reference based completion to work without ().</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/16">#16</a> - Function completion to have () added by default.</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/17">#17</a> - Simple keyword completion.</li>
+        </ul><h3>
+        <a name="version-003" class="anchor" href="#version-003"><span class="octicon octicon-link"></span></a>Version 0.0.3</h3>
+
+        <ul>
+            <li>Bug fix - Usage type always unclassified.</li>
+            <li>Bug fix - String highlighting didn't work while typing in some cases.</li>
+            <li>Bug fix - Whole function invocation is highlighted instead of name only.</li>
+            <li>Bug fix - Identifier while renamed doesn't accept - or .</li>
+            <li>Inline rename for local variables (code, comments, strings references and optionally text files usage renamed).</li>
+            <li>Code commenter.</li>
+            <li>Brace matching.</li>
+            <li>Word completion contributor for variable and function names (works after you've typed at least one character in fun/var name in new fun/var declaration; based on all words in current file).</li>
+            <li>Find usages in text files (as an option).</li>
+        </ul><h3>
+        <a name="version-002" class="anchor" href="#version-002"><span class="octicon octicon-link"></span></a>Version 0.0.2</h3>
+
+        <ul>
+            <li>Highlighting improvements and bug-fixes.</li>
+            <li>Variable reference resolution across files (scopes taken into account; no support for access modifiers).</li>
+            <li>Variable name completion inside of the file.</li>
+            <li>Function reference resolution across files (no support for access modifiers)</li>
+            <li>Function name completion inside of the file (still has place for improvement - completes only if shortcut used in front of ())</li>
+            <li>Namespace reference resolution inside of the file.</li>
+            <li>Navigation between modules via file location and namespace (if includes file path) in module imports.</li>
+            <li>Rename functionality for all references.</li>
+            <li>Basic find usage.</li>
+        </ul><h3>
+        <a name="version-001" class="anchor" href="#version-001"><span class="octicon octicon-link"></span></a>Version 0.0.1</h3>
+
+        <ul>
+            <li>Basic syntax highlighting.</li>
+            <li>Variable reference resolution inside of a file.</li>
+        </ul>
+    </section>
+
+</div>
+<!--[if !IE]><script>fixScale(document);</script><![endif]-->
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-43192972-1");
+        pageTracker._trackPageview();
+    } catch(err) {}
+</script>
+
+</body>
+</html>

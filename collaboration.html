@@ -1,0 +1,141 @@
+<!doctype html>
+<!--
+  ~ Copyright 2013 Grzegorz Ligas <ligasgr@gmail.com>
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>IntelliJ XQuery Support plugin - Collaboration</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+</head>
+<body>
+<div id="header">
+    <nav>
+        <li class="fork"><a href="https://github.com/ligasgr/intellij-xquery">View On GitHub</a></li>
+        <li class="downloads"><a href="http://plugins.jetbrains.com/plugin/7262?pr=">Download from plugin repository</a>
+        </li>
+        <li class="title">DOWNLOADS</li>
+    </nav>
+</div>
+<!-- end header -->
+
+<div class="wrapper">
+
+    <section>
+        <div id="title">
+            <h1>Collaboration</h1>
+        </div>
+
+        <h1>
+            <a name="xquery---useful-links" class="anchor" href="#xquery---useful-links"><span
+                    class="octicon octicon-link"></span></a>XQuery - useful links</h1>
+
+        <ol>
+            <li><a href="http://www.w3.org/TR/xquery-30/">XQuery 3.0: An XML Query Language - W3C Candidate
+                Recommendation</a></li>
+            <li><a href="http://www.w3.org/TR/xquery-30/#nt-bnf">XQuery 3.0 Grammar</a></li>
+            <li><a href="http://www.w3.org/TR/xquery-xpath-parsing/">Building a Tokenizer for XPath or XQuery - Draft
+                for XQuery 1.0</a></li>
+            <li><a href="http://www.w3.org/TR/xquery-use-cases/">XML Query Use Cases</a></li>
+            <li><a href="http://www.w3.org/TR/2007/NOTE-xquery-use-cases-20070323/xquery-use-case-queries.txt">XML Query
+                Use Cases - all in one file version</a></li>
+            <li><a href="http://dev.w3.org/cvsweb/2011/QT3-test-suite/">XQuery 3.0 compatiblity test suite</a></li>
+            <li><a href="http://dev.w3.org/2011/QT3-test-suite/guide/running.html">Guidelines for Running the QT3 Test
+                Suite</a></li>
+        </ol>
+        <h1>
+            <a name="plugin-development---useful-links" class="anchor" href="#plugin-development---useful-links"><span
+                    class="octicon octicon-link"></span></a>Plugin development - useful links</h1>
+
+        <ol>
+            <li>
+                <a href="http://confluence.jetbrains.com/display/IDEADEV/Developing+Custom+Language+Plugins+for+IntelliJ+IDEA">Developing
+                    Custom Language Plugins for IntelliJ IDEA</a></li>
+            <li><a href="http://confluence.jetbrains.com/display/IntelliJIDEA/Custom+Language+Support">Custom Language
+                Support - Tutorial</a></li>
+            <li><a href="http://confluence.jetbrains.com/display/IDEADEV/Testing+IntelliJ+IDEA+Plugins">Testing IntelliJ
+                IDEA Plugins</a></li>
+            <li><a href="http://confluence.jetbrains.com/display/IntelliJIDEA/Writing+Tests+for+Plugins">Writing Tests
+                for Plugins - Tutorial</a></li>
+            <li><a href="http://confluence.jetbrains.com/display/IDEADEV/IntelliJ+IDEA+Architectural+Overview">IntelliJ
+                IDEA Architectural Overview</a></li>
+            <li><a href="http://devnet.jetbrains.com/community/idea/open_api_and_plugin_development">Open API and Plugin
+                Development - Developer Community Forum</a></li>
+            <li><a href="https://github.com/ignatov/intellij-erlang/">Erlang support plugin for IntelliJ IDEA - source
+                code on github</a></li>
+            <li><a href="http://tomaszdziurko.pl/2011/09/developing-plugin-intellij-idea-some-tips-and-links/">Developing
+                a plugin for IntelliJ IDEA – some useful tips and links</a></li>
+        </ol>
+        <h1>
+            <a name="building-plugin-locally" class="anchor" href="#building-plugin-locally"><span
+                    class="octicon octicon-link"></span></a>Setup for development on Linux</h1>
+        <ul>
+            <li>Fork intellij-xquery repository</li>
+            <li>Fetch repository to your machine</li>
+            <div class="highlight"><pre>git clone git@github.com:username/intellij-xquery.git</pre></div>
+            <li>Change directory to newly downloaded directory</li>
+            <div class="highlight"><pre><span class="nb">cd </span>intellij-xquery</pre></div>
+            <li>Download sdk</li>
+            <div class="highlight"><pre>./gradlew downloadSdk</pre></div>
+            <li>Extract it</li>
+            <div class="highlight"><pre>./gradlew unzipSdk</pre></div>
+            <li>Build the project</li>
+            <div class="highlight"><pre>./gradlew build</pre></div>
+            <img src="images/collaboration/01_build.png" alt="Build plugin"/>
+            <li>Generate IntelliJ Idea project structure</li>
+            <div class="highlight"><pre>./gradlew idea</pre></div>
+            <img src="images/collaboration/02_prepare_idea.png" alt="Generate project structure"/>
+            <li>Open project</li>
+            <img src="images/collaboration/03_open_idea.png" alt="Open project"/>
+            <li>In File &gt; Project Structure &gt; Platform Settings &gt; SDKs add IntelliJ Platform Plugin SDK (add JDK first if you haven't already)</li>
+            <img src="images/collaboration/04_add_sdk.png" alt="Add SDK"/>
+            <li>Select downloaded SDK (sdk sub directory of downloaded plugin sources) or your own SDK if you prefer</li>
+            <img src="images/collaboration/05_select_sdk.png" alt="Select SDK"/>
+            <li>In Project Settings &gt; Project set newly created plugin SDK as Project SDK</li>
+            <img src="images/collaboration/05_set_sdk_for_project.png" alt="Set SDK"/>
+            <li>Check <a class="anchor" href="#plugin-development---useful-links"><span
+                    class="octicon octicon-link">Plugin development useful links</span></a> for more information on plugins required for plugin development</li>
+        </ul>
+    </section>
+
+</div>
+<!--[if !IE]>
+<script>fixScale(document);</script><![endif]-->
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-43192972-1");
+        pageTracker._trackPageview();
+    } catch (err) {
+    }
+</script>
+
+</body>
+</html>
