@@ -253,7 +253,7 @@ public interface XQueryTypes {
   IElementType CLOSE_TAG = new XQueryTokenType("/>");
   IElementType COLON = new XQueryTokenType(":");
   IElementType COLON_COLON = new XQueryTokenType("::");
-  IElementType COMA = new XQueryTokenType(",");
+  IElementType COMMA = new XQueryTokenType(",");
   IElementType DBL_L_C_BRACE = new XQueryTokenType("{{");
   IElementType DBL_R_C_BRACE = new XQueryTokenType("}}");
   IElementType DECIMALLITERAL = new XQueryTokenType("DecimalLiteral");

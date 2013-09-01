@@ -55,7 +55,7 @@
   SLASH_SLASH  = "//"
   SLASH        = "/"
   AT_SIGN      = "@"
-  COMA         = ","
+  COMMA         = ","
   DOLLAR_SIGN  = "$"
   STAR_SIGN    = "*"
   QUOT         = "\""

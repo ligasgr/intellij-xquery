@@ -117,7 +117,7 @@ public class XQueryFormattingBlock extends AbstractBlock {
         }
         if (isChildOfExpressionList()) {
             IElementType prevType = getTypeOfPreviousElement(myNode);
-            if (type == COMA || prevType == COMA) {
+            if (type == COMMA || prevType == COMMA) {
                 return Indent.getContinuationIndent();
             }
         }

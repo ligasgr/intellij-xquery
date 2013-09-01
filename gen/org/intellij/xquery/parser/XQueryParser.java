@@ -1038,7 +1038,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "Annotation_2_0_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && Literal(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -1227,7 +1227,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ArgumentList_1_0_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && Argument(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -1389,7 +1389,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "AttributeTest_2_0_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && TypeName(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -2453,7 +2453,7 @@ public class XQueryParser implements PsiParser {
     result_ = result_ && consumeToken(builder_, K_COPY_NAMESPACES);
     pinned_ = result_; // pin = 2
     result_ = result_ && report_error_(builder_, PreserveMode(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, COMA)) && result_;
+    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, COMMA)) && result_;
     result_ = pinned_ && report_error_(builder_, InheritMode(builder_, level_ + 1)) && result_;
     result_ = pinned_ && Separator(builder_, level_ + 1) && result_;
     if (result_ || pinned_) {
@@ -3331,7 +3331,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ElementTest_2_0_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && TypeName(builder_, level_ + 1);
     result_ = result_ && ElementTest_2_0_1_0_2(builder_, level_ + 1);
     if (!result_) {
@@ -3493,7 +3493,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "Expr_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && ExprSingle(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -3771,7 +3771,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ForClause_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && ForBinding(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -4415,7 +4415,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "GroupingSpecList_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && GroupingSpec(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -4886,7 +4886,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "LetClause_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && LetBinding(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -5036,7 +5036,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "MapEntryList_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && MapEntry(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -5089,7 +5089,7 @@ public class XQueryParser implements PsiParser {
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = AtomicOrUnionType(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, COMA);
+    result_ = result_ && consumeToken(builder_, COMMA);
     result_ = result_ && SequenceType(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -5291,7 +5291,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ModuleImport_4_0_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && ModuleImportPath(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -5948,7 +5948,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "OrderSpecList_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && OrderSpec(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -6151,7 +6151,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ParamList_1_0_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && Param(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -6743,7 +6743,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "QuantifiedExpr_6_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && consumeToken(builder_, DOLLAR_SIGN);
     result_ = result_ && VarName(builder_, level_ + 1);
     result_ = result_ && QuantifiedExpr_6_0_3(builder_, level_ + 1);
@@ -7293,7 +7293,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "SchemaImport_4_0_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && URILiteral(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -8161,7 +8161,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "TypedFunctionTest_2_0_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMA);
+    result_ = consumeToken(builder_, COMMA);
     result_ = result_ && SequenceType(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();

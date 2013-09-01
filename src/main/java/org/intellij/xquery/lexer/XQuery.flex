@@ -155,7 +155,7 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "]"                                       {return XQueryTypes.R_BRACKET;}
 "{"                                       {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE;}
 "}"                                       {popState(); return XQueryTypes.R_C_BRACE;}
-","                                       {return XQueryTypes.COMA;}
+","                                       {return XQueryTypes.COMMA;}
 "=="                                      {return XQueryTypes.EQUAL_EQUAL;}
 "!="                                      {return XQueryTypes.NOT_EQUAL;}
 "="                                       {return XQueryTypes.EQUAL;}
