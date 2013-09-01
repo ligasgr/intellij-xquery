@@ -92,7 +92,7 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
         assertProducedTokens("<tag attr='val'>content</tag>", new String[]{
                 "<", "<",
                 "NCName", "tag",
-                "S", " ",
+                "WHITE_SPACE", " ",
                 "NCName", "attr",
                 "=", "=",
                 "'", "'",

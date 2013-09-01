@@ -64,6 +64,14 @@ public class XQueryFormattingModelBuilderTest extends XQueryBaseTestCase {
         executeTest();
     }
 
+    public void testIndentVariableValue() {
+        executeTest();
+    }
+
+    public void testIndentFunctionArgumentsAndParams() {
+        executeTest();
+    }
+
     private void executeTest() {
         myFixture.configureByFiles(getTestName(false) + ".xq");
         ApplicationManager.getApplication().runWriteAction(new Runnable() {

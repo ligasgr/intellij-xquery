@@ -1,4 +1,5 @@
-declare function example($param) {
+declare function example($param)
+{
                 "value"
 };
 

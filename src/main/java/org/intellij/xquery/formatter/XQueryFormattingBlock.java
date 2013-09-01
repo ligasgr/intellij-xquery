@@ -18,12 +18,12 @@ package org.intellij.xquery.formatter;
 
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.formatter.common.AbstractBlock;
 import com.intellij.psi.tree.IElementType;
-import org.intellij.xquery.psi.*;
+import org.intellij.xquery.psi.XQueryExprSingle;
+import org.intellij.xquery.psi.XQueryTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,7 +53,8 @@ public class XQueryFormattingBlock extends AbstractBlock {
         ASTNode child = myNode.getFirstChildNode();
         while (child != null) {
             if (child.getElementType() != TokenType.WHITE_SPACE && child.getTextRange().getLength() != 0) {
-                Block block = new XQueryFormattingBlock(child, Wrap.createWrap(WrapType.NONE, false), null, settings, spacingBuilder);
+                Block block = new XQueryFormattingBlock(child, Wrap.createWrap(WrapType.NONE, false), null, settings,
+                        spacingBuilder);
                 blocks.add(block);
             }
             child = child.getTreeNext();
@@ -63,12 +64,31 @@ public class XQueryFormattingBlock extends AbstractBlock {
 
     @Override
     public Indent getIndent() {
-        if (myNode.getElementType() == XQueryTypes.EXPR && myNode.getPsi().getParent() instanceof XQueryEnclosedExpr)
+        IElementType type = myNode.getElementType();
+        ASTNode parent = myNode.getTreeParent();
+        IElementType parentType = parent != null ? parent.getElementType() : null;
+
+        if (parent == null)
+            return Indent.getNoneIndent();
+        if (type == XQueryTypes.EXPR && parentType == XQueryTypes.ENCLOSED_EXPR)
             return Indent.getNormalIndent(false);
-        if (myNode.getElementType() == XQueryTypes.DIR_ELEM_CONTENT)
+        if (type == XQueryTypes.DIR_ELEM_CONTENT)
             return Indent.getNormalIndent(false);
-        if (myNode.getPsi() instanceof XQueryExprSingle && myNode.getPsi().getParent() instanceof XQueryIfExpr)
-            return Indent.getNormalIndent(false);
+        if (myNode.getPsi() instanceof XQueryExprSingle) {
+            if (parentType == XQueryTypes.IF_EXPR) {
+                return Indent.getNormalIndent(false);
+            }
+            if (parentType == XQueryTypes.LET_BINDING || parentType == XQueryTypes.VAR_VALUE) {
+                return Indent.getContinuationIndent(false);
+            }
+        }
+        if (parentType == XQueryTypes.PARAM_LIST || parentType == XQueryTypes.ARGUMENT_LIST) {
+            if (type == XQueryTypes.L_PAR || type == XQueryTypes.R_PAR) {
+                return Indent.getNoneIndent();
+            }
+            return Indent.getContinuationIndent(false);
+        }
+
         return Indent.getNoneIndent();
     }
 

@@ -1,4 +1,20 @@
 /*
+ * Copyright 2013 Grzegorz Ligas <ligasgr@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
  * Grammar originally taken from http://www.w3.org/TR/xquery-30/#nt-bnf
  */
 {
@@ -397,9 +413,9 @@ Constructor	   ::=   	DirectConstructor
 DirectConstructor	   ::=   	DirElemConstructor
  | DirCommentConstructor
  | DirPIConstructor
-DirElemConstructor	   ::=   	"<" TagName DirAttributeList ("/>" | (">" DirElemContent* "</" TagName S? ">"))	/* ws: explicit */ {pin=1}
+DirElemConstructor	   ::=   	"<" TagName DirAttributeList? ("/>" | (">" DirElemContent* "</" TagName ">"))	/* ws: explicit */ {pin=1}
 TagName                ::= QName
-DirAttributeList	   ::=   	(S (DirAttributeName S? "=" S? DirAttributeValue)?)*	/* ws: explicit */
+DirAttributeList	   ::=   	(DirAttributeName "=" DirAttributeValue)*	/* ws: explicit */
 DirAttributeName       ::= QName
 DirAttributeValue	   ::=   	("\"" (EscapeQuot | QuotAttrValueContent)* "\"")
  | ("'" (EscapeApos | AposAttrValueContent)* "'")	/* ws: explicit */

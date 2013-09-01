@@ -2750,7 +2750,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (S (DirAttributeName S? "=" S? DirAttributeValue)?)*
+  // (DirAttributeName "=" DirAttributeValue)*
   public static boolean DirAttributeList(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DirAttributeList")) return false;
     Marker marker_ = builder_.mark();
@@ -2770,38 +2770,13 @@ public class XQueryParser implements PsiParser {
     return true;
   }
 
-  // S (DirAttributeName S? "=" S? DirAttributeValue)?
+  // DirAttributeName "=" DirAttributeValue
   private static boolean DirAttributeList_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DirAttributeList_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, S);
-    result_ = result_ && DirAttributeList_0_1(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
-  }
-
-  // (DirAttributeName S? "=" S? DirAttributeValue)?
-  private static boolean DirAttributeList_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "DirAttributeList_0_1")) return false;
-    DirAttributeList_0_1_0(builder_, level_ + 1);
-    return true;
-  }
-
-  // DirAttributeName S? "=" S? DirAttributeValue
-  private static boolean DirAttributeList_0_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "DirAttributeList_0_1_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
     result_ = DirAttributeName(builder_, level_ + 1);
-    result_ = result_ && DirAttributeList_0_1_0_1(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, EQUAL);
-    result_ = result_ && DirAttributeList_0_1_0_3(builder_, level_ + 1);
     result_ = result_ && DirAttributeValue(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -2810,20 +2785,6 @@ public class XQueryParser implements PsiParser {
       marker_.drop();
     }
     return result_;
-  }
-
-  // S?
-  private static boolean DirAttributeList_0_1_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "DirAttributeList_0_1_0_1")) return false;
-    consumeToken(builder_, S);
-    return true;
-  }
-
-  // S?
-  private static boolean DirAttributeList_0_1_0_3(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "DirAttributeList_0_1_0_3")) return false;
-    consumeToken(builder_, S);
-    return true;
   }
 
   /* ********************************************************** */
@@ -3004,7 +2965,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "<" TagName DirAttributeList ("/>" | (">" DirElemContent* "</" TagName S? ">"))
+  // "<" TagName DirAttributeList? ("/>" | (">" DirElemContent* "</" TagName ">"))
   public static boolean DirElemConstructor(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DirElemConstructor")) return false;
     if (!nextTokenIs(builder_, LT_CHAR)) return false;
@@ -3015,7 +2976,7 @@ public class XQueryParser implements PsiParser {
     result_ = consumeToken(builder_, LT_CHAR);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, TagName(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, DirAttributeList(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && report_error_(builder_, DirElemConstructor_2(builder_, level_ + 1)) && result_;
     result_ = pinned_ && DirElemConstructor_3(builder_, level_ + 1) && result_;
     if (result_ || pinned_) {
       marker_.done(DIR_ELEM_CONSTRUCTOR);
@@ -3027,7 +2988,14 @@ public class XQueryParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // "/>" | (">" DirElemContent* "</" TagName S? ">")
+  // DirAttributeList?
+  private static boolean DirElemConstructor_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "DirElemConstructor_2")) return false;
+    DirAttributeList(builder_, level_ + 1);
+    return true;
+  }
+
+  // "/>" | (">" DirElemContent* "</" TagName ">")
   private static boolean DirElemConstructor_3(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DirElemConstructor_3")) return false;
     boolean result_ = false;
@@ -3043,7 +3011,7 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ">" DirElemContent* "</" TagName S? ">"
+  // ">" DirElemContent* "</" TagName ">"
   private static boolean DirElemConstructor_3_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DirElemConstructor_3_1")) return false;
     boolean result_ = false;
@@ -3052,7 +3020,6 @@ public class XQueryParser implements PsiParser {
     result_ = result_ && DirElemConstructor_3_1_1(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, END_TAG);
     result_ = result_ && TagName(builder_, level_ + 1);
-    result_ = result_ && DirElemConstructor_3_1_4(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, GT_CHAR);
     if (!result_) {
       marker_.rollbackTo();
@@ -3076,13 +3043,6 @@ public class XQueryParser implements PsiParser {
       }
       offset_ = next_offset_;
     }
-    return true;
-  }
-
-  // S?
-  private static boolean DirElemConstructor_3_1_4(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "DirElemConstructor_3_1_4")) return false;
-    consumeToken(builder_, S);
     return true;
   }
 
