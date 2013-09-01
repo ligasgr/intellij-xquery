@@ -37,7 +37,6 @@
 
   tokens = [
   EQUAL        = "="
-  EQUAL_EQUAL  = "=="
   NOT_EQUAL    = "!="
   QUESTIONMARK = "?"
   OP_PLUS         = "+"
@@ -348,9 +347,9 @@ CastableExpr	   ::=   	CastExpr ( "castable" "as" SingleType )?
 CastExpr	   ::=   	UnaryExpr ( "cast" "as" SingleType )?
 UnaryExpr	   ::=   	("-" | "+")* ValueExpr
 ValueExpr	   ::=   	ValidateExpr | ExtensionExpr | SimpleMapExpr
-GeneralComp	   ::=   	"=" | "!=" | "<" | "<=" | ">" | ">="
-ValueComp	   ::=   	"eq" | "ne" | "lt" | "le" | "gt" | "ge"
-NodeComp	   ::=   	"is" | "<<" | ">>"
+private GeneralComp	   ::=   	"=" | "!=" | "<" | "<=" | ">" | ">="
+private ValueComp	   ::=   	"eq" | "ne" | "lt" | "le" | "gt" | "ge"
+private NodeComp	   ::=   	"is" | "<<" | ">>"
 ValidateExpr	   ::=   	"validate" (ValidationMode | ("type" TypeName))? "{" Expr "}"
 ValidationMode	   ::=   	"lax" | "strict"
 ExtensionExpr	   ::=   	Pragma+ "{" Expr? "}"

@@ -18,6 +18,7 @@ package org.intellij.xquery.formatter;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.codeStyle.CodeStyleManager;
+import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import org.intellij.xquery.XQueryBaseTestCase;
 
@@ -34,13 +35,37 @@ public class XQueryFormattingModelBuilderTest extends XQueryBaseTestCase {
     }
 
     public void testSpaceAroundAssignmentOperators() {
-        CodeStyleSettingsManager.getSettings(getProject()).SPACE_AROUND_ASSIGNMENT_OPERATORS = true;
+        getSettings().SPACE_AROUND_ASSIGNMENT_OPERATORS = false;
         executeTest();
     }
 
+    public void testSpaceAroundEqualityOperators() {
+        getSettings().SPACE_AROUND_EQUALITY_OPERATORS = false;
+        executeTest();
+    }
+
+    public void testSpaceAroundRelationalOperators() {
+        getSettings().SPACE_AROUND_RELATIONAL_OPERATORS = false;
+        executeTest();
+    }
+
+    public void testSpaceAroundAdditiveOperators() {
+        getSettings().SPACE_AROUND_ADDITIVE_OPERATORS = false;
+        executeTest();
+    }
+
+    public void testSpaceAroundMultiplicativeOperators() {
+        getSettings().SPACE_AROUND_MULTIPLICATIVE_OPERATORS= false;
+        executeTest();
+    }
+
+    private CodeStyleSettings getSettings() {
+        return CodeStyleSettingsManager.getSettings(getProject());
+    }
+
     public void testSpaceBeforeAfterComma() {
-        CodeStyleSettingsManager.getSettings(getProject()).SPACE_BEFORE_COMMA = true;
-        CodeStyleSettingsManager.getSettings(getProject()).SPACE_AROUND_ASSIGNMENT_OPERATORS = true;
+        getSettings().SPACE_BEFORE_COMMA = true;
+        getSettings().SPACE_AROUND_ASSIGNMENT_OPERATORS = true;
         executeTest();
     }
 

@@ -73,5 +73,7 @@
         <completion.contributor language="XQuery" implementationClass="org.intellij.xquery.completion.XQueryCompletionContributor"/>
         <lang.psiStructureViewFactory language="XQuery" implementationClass="org.intellij.xquery.structure.XQueryStructureViewFactory"/>
         <lang.formatter language="XQuery" implementationClass="org.intellij.xquery.formatter.XQueryFormattingModelBuilder"/>
+        <codeStyleSettingsProvider implementation="org.intellij.xquery.formatter.settings.XQueryCodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider implementation="org.intellij.xquery.formatter.settings.XQueryLanguageCodeStyleSettingsProvider"/>
     </extensions>
 </idea-plugin>

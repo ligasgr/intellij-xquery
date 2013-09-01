@@ -26,13 +26,4 @@ public interface XQueryComparisonExpr extends XQueryExprSingle {
   @NotNull
   List<XQueryExprSingle> getExprSingleList();
 
-  @Nullable
-  XQueryGeneralComp getGeneralComp();
-
-  @Nullable
-  XQueryNodeComp getNodeComp();
-
-  @Nullable
-  XQueryValueComp getValueComp();
-
 }

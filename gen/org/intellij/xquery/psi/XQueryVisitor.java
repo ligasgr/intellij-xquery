@@ -382,10 +382,6 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
-  public void visitGeneralComp(@NotNull XQueryGeneralComp o) {
-    visitElement(o);
-  }
-
   public void visitGroupByClause(@NotNull XQueryGroupByClause o) {
     visitElement(o);
   }
@@ -523,10 +519,6 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitNextItem(@NotNull XQueryNextItem o) {
-    visitElement(o);
-  }
-
-  public void visitNodeComp(@NotNull XQueryNodeComp o) {
     visitElement(o);
   }
 
@@ -815,10 +807,6 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitValidationMode(@NotNull XQueryValidationMode o) {
-    visitElement(o);
-  }
-
-  public void visitValueComp(@NotNull XQueryValueComp o) {
     visitElement(o);
   }
 

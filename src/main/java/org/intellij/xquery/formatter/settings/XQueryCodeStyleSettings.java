@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.intellij.xquery.formatter.settings;
 
-// This is a generated file. Not intended for manual editing.
-package org.intellij.xquery.psi;
+import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
-
-public interface XQueryNodeComp extends XQueryElement {
-
+/**
+ * User: ligasgr
+ * Date: 01/09/13
+ * Time: 19:06
+ */
+public class XQueryCodeStyleSettings extends CustomCodeStyleSettings {
+    public XQueryCodeStyleSettings(CodeStyleSettings container) {
+        super("XQueryCodeStyleSettings", container);
+    }
 }

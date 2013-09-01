@@ -114,7 +114,6 @@ public interface XQueryTypes {
   IElementType FUNCTION_NAME = new XQueryElementType("FUNCTION_NAME");
   IElementType FUNCTION_NAMESPACE = new XQueryElementType("FUNCTION_NAMESPACE");
   IElementType FUNCTION_TEST = new XQueryElementType("FUNCTION_TEST");
-  IElementType GENERAL_COMP = new XQueryElementType("GENERAL_COMP");
   IElementType GROUPING_SPEC = new XQueryElementType("GROUPING_SPEC");
   IElementType GROUPING_SPEC_LIST = new XQueryElementType("GROUPING_SPEC_LIST");
   IElementType GROUPING_VARIABLE = new XQueryElementType("GROUPING_VARIABLE");
@@ -150,7 +149,6 @@ public interface XQueryTypes {
   IElementType NAMESPACE_NODE_TEST = new XQueryElementType("NAMESPACE_NODE_TEST");
   IElementType NAME_TEST = new XQueryElementType("NAME_TEST");
   IElementType NEXT_ITEM = new XQueryElementType("NEXT_ITEM");
-  IElementType NODE_COMP = new XQueryElementType("NODE_COMP");
   IElementType NODE_TEST = new XQueryElementType("NODE_TEST");
   IElementType NUMERIC_LITERAL = new XQueryElementType("NUMERIC_LITERAL");
   IElementType OCCURRENCE_INDICATOR = new XQueryElementType("OCCURRENCE_INDICATOR");
@@ -223,7 +221,6 @@ public interface XQueryTypes {
   IElementType URI_LITERAL = new XQueryElementType("URI_LITERAL");
   IElementType VALIDATE_EXPR = new XQueryElementType("VALIDATE_EXPR");
   IElementType VALIDATION_MODE = new XQueryElementType("VALIDATION_MODE");
-  IElementType VALUE_COMP = new XQueryElementType("VALUE_COMP");
   IElementType VALUE_EXPR = new XQueryElementType("VALUE_EXPR");
   IElementType VAR_DECL = new XQueryElementType("VAR_DECL");
   IElementType VAR_DEFAULT_VALUE = new XQueryElementType("VAR_DEFAULT_VALUE");
@@ -269,7 +266,6 @@ public interface XQueryTypes {
   IElementType END_TAG = new XQueryTokenType("</");
   IElementType EQ = new XQueryTokenType("eq");
   IElementType EQUAL = new XQueryTokenType("=");
-  IElementType EQUAL_EQUAL = new XQueryTokenType("==");
   IElementType EXCLAMATION_MARK = new XQueryTokenType("!");
   IElementType GE = new XQueryTokenType("ge");
   IElementType GE_CHARS = new XQueryTokenType(">=");
@@ -708,9 +704,6 @@ public interface XQueryTypes {
       else if (type == FUNCTION_TEST) {
         return new XQueryFunctionTestImpl(node);
       }
-      else if (type == GENERAL_COMP) {
-        return new XQueryGeneralCompImpl(node);
-      }
       else if (type == GROUPING_SPEC) {
         return new XQueryGroupingSpecImpl(node);
       }
@@ -815,9 +808,6 @@ public interface XQueryTypes {
       }
       else if (type == NEXT_ITEM) {
         return new XQueryNextItemImpl(node);
-      }
-      else if (type == NODE_COMP) {
-        return new XQueryNodeCompImpl(node);
       }
       else if (type == NODE_TEST) {
         return new XQueryNodeTestImpl(node);
@@ -1034,9 +1024,6 @@ public interface XQueryTypes {
       }
       else if (type == VALIDATION_MODE) {
         return new XQueryValidationModeImpl(node);
-      }
-      else if (type == VALUE_COMP) {
-        return new XQueryValueCompImpl(node);
       }
       else if (type == VALUE_EXPR) {
         return new XQueryValueExprImpl(node);

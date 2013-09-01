@@ -38,24 +38,6 @@ public class XQueryComparisonExprImpl extends XQueryExprSingleImpl implements XQ
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
   }
 
-  @Override
-  @Nullable
-  public XQueryGeneralComp getGeneralComp() {
-    return findChildByClass(XQueryGeneralComp.class);
-  }
-
-  @Override
-  @Nullable
-  public XQueryNodeComp getNodeComp() {
-    return findChildByClass(XQueryNodeComp.class);
-  }
-
-  @Override
-  @Nullable
-  public XQueryValueComp getValueComp() {
-    return findChildByClass(XQueryValueComp.class);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitComparisonExpr(this);
     else super.accept(visitor);

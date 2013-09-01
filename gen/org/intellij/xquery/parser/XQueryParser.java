@@ -309,9 +309,6 @@ public class XQueryParser implements PsiParser {
     else if (root_ == FUNCTION_TEST) {
       result_ = FunctionTest(builder_, level_ + 1);
     }
-    else if (root_ == GENERAL_COMP) {
-      result_ = GeneralComp(builder_, level_ + 1);
-    }
     else if (root_ == GROUP_BY_CLAUSE) {
       result_ = GroupByClause(builder_, level_ + 1);
     }
@@ -416,9 +413,6 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == NEXT_ITEM) {
       result_ = NextItem(builder_, level_ + 1);
-    }
-    else if (root_ == NODE_COMP) {
-      result_ = NodeComp(builder_, level_ + 1);
     }
     else if (root_ == NODE_TEST) {
       result_ = NodeTest(builder_, level_ + 1);
@@ -635,9 +629,6 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == VALIDATION_MODE) {
       result_ = ValidationMode(builder_, level_ + 1);
-    }
-    else if (root_ == VALUE_COMP) {
-      result_ = ValueComp(builder_, level_ + 1);
     }
     else if (root_ == VALUE_EXPR) {
       result_ = ValueExpr(builder_, level_ + 1);
@@ -4260,24 +4251,22 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // "=" | "!=" | "<" | "<=" | ">" | ">="
-  public static boolean GeneralComp(PsiBuilder builder_, int level_) {
+  static boolean GeneralComp(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "GeneralComp")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<general comp>");
     result_ = consumeToken(builder_, EQUAL);
     if (!result_) result_ = consumeToken(builder_, NOT_EQUAL);
     if (!result_) result_ = consumeToken(builder_, LT_CHAR);
     if (!result_) result_ = consumeToken(builder_, LE_CHARS);
     if (!result_) result_ = consumeToken(builder_, GT_CHAR);
     if (!result_) result_ = consumeToken(builder_, GE_CHARS);
-    if (result_) {
-      marker_.done(GENERAL_COMP);
-    }
-    else {
+    if (!result_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    else {
+      marker_.drop();
+    }
     return result_;
   }
 
@@ -5535,21 +5524,19 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // "is" | "<<" | ">>"
-  public static boolean NodeComp(PsiBuilder builder_, int level_) {
+  static boolean NodeComp(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "NodeComp")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<node comp>");
     result_ = consumeToken(builder_, K_IS);
     if (!result_) result_ = consumeToken(builder_, NODECOMP_LT);
     if (!result_) result_ = consumeToken(builder_, NODECOMP_GT);
-    if (result_) {
-      marker_.done(NODE_COMP);
-    }
-    else {
+    if (!result_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    else {
+      marker_.drop();
+    }
     return result_;
   }
 
@@ -8521,24 +8508,22 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // "eq" | "ne" | "lt" | "le" | "gt" | "ge"
-  public static boolean ValueComp(PsiBuilder builder_, int level_) {
+  static boolean ValueComp(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ValueComp")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<value comp>");
     result_ = consumeToken(builder_, EQ);
     if (!result_) result_ = consumeToken(builder_, NE);
     if (!result_) result_ = consumeToken(builder_, LT);
     if (!result_) result_ = consumeToken(builder_, LE);
     if (!result_) result_ = consumeToken(builder_, GT);
     if (!result_) result_ = consumeToken(builder_, GE);
-    if (result_) {
-      marker_.done(VALUE_COMP);
-    }
-    else {
+    if (!result_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    else {
+      marker_.drop();
+    }
     return result_;
   }
 
