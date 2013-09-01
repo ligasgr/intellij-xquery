@@ -124,6 +124,8 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "<" / {S}? {IntegerLiteral}               {return XQueryTypes.LT_CHAR;}
 "<" / {S}? {DecimalLiteral}               {return XQueryTypes.LT_CHAR;}
 "<" / {S}? {DoubleLiteral}                {return XQueryTypes.LT_CHAR;}
+"<" / {S}? {NCName} {S}? "("              {return XQueryTypes.LT_CHAR;}
+"<" / {S}? {NCName} {S}? ":" {NCName} {S}? "(" {return XQueryTypes.LT_CHAR;}
 "<="                                      {return XQueryTypes.LE_CHARS;}
 ">="                                      {return XQueryTypes.GE_CHARS;}
 "<"                                       {pushState(START_TAG); return XQueryTypes.LT_CHAR;}
@@ -272,7 +274,7 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 }
 
 <START_TAG> {
-{S}                                       {return XQueryTypes.S;}
+{S}                                       {return TokenType.WHITE_SPACE;}
 {NCName}                                  {return XQueryTypes.NCNAME;}
 ":"                                       {return XQueryTypes.COLON;}
 "="                                       {return XQueryTypes.EQUAL;}
@@ -299,7 +301,7 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 }
 
 <END_TAG> {
-{S}                                       {return XQueryTypes.S;}
+{S}                                       {return TokenType.WHITE_SPACE;}
 {NCName}                                  {return XQueryTypes.NCNAME;}
 ":"                                       {return XQueryTypes.COLON;}
 ">"                                       {popState(); return XQueryTypes.GT_CHAR;}

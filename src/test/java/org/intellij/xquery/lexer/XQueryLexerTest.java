@@ -573,4 +573,58 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
                 ";", ";"
         });
     }
+
+    public void testComparisonWithFunctionResult() throws Exception {
+        assertProducedTokens("if (0 < string-length('')) then 0 else 1", new String[]{
+                "if", "if",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "IntegerLiteral", "0",
+                "WHITE_SPACE", " ",
+                "<", "<",
+                "WHITE_SPACE", " ",
+                "NCName", "string-length",
+                "(", "(",
+                "WHITE_SPACE", "",
+                "StringLiteral", "''",
+                ")", ")",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "then", "then",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "0",
+                "WHITE_SPACE", " ",
+                "else", "else",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "1"
+        });
+    }
+
+    public void testComparisonWithFunctionResultWithNamespacePrefix() throws Exception {
+        assertProducedTokens("if (0 < functx:string-length('')) then 0 else 1", new String[]{
+                "if", "if",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "IntegerLiteral", "0",
+                "WHITE_SPACE", " ",
+                "<", "<",
+                "WHITE_SPACE", " ",
+                "NCName", "functx",
+                ":", ":",
+                "NCName", "string-length",
+                "(", "(",
+                "WHITE_SPACE", "",
+                "StringLiteral", "''",
+                ")", ")",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "then", "then",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "0",
+                "WHITE_SPACE", " ",
+                "else", "else",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "1"
+        });
+    }
 }
