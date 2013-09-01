@@ -115,7 +115,7 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
     }
 
     public void testFlworExpression() throws Exception {
-        assertProducedTokens("for $i in 1 to 10 let $j := 'no. ' || $i return $j", new String[]{
+        assertProducedTokens("for $i in 1 to 10 let $j := 'no. ' || $i order by $i ascending, $j descending return $j", new String[]{
                 "for", "for",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -142,6 +142,21 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
                 "WHITE_SPACE", " ",
                 "$", "$",
                 "NCName", "i",
+                "WHITE_SPACE", " ",
+                "order", "order",
+                "WHITE_SPACE", " ",
+                "by", "by",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "ascending", "ascending",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "j",
+                "WHITE_SPACE", " ",
+                "descending", "descending",
                 "WHITE_SPACE", " ",
                 "return", "return",
                 "WHITE_SPACE", " ",
