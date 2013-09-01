@@ -1,5 +1,5 @@
 declare variable $example :=
-        "value";
+    "value";
 let $letVar :=
-        "value";
+    "value";
 return $letVar

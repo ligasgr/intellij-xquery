@@ -90,6 +90,7 @@
   PERCENT      = "%"
   PIPE_PIPE    = "||"
   PIPE    = "|"
+  EXCLAMATION_MARK = "!"
   K_NAMESPACE    = "namespace"
   K_DEFAULT      = "default"
   K_IMPORT       = "import"
@@ -503,7 +504,6 @@ TypedFunctionTest	   ::=   	"function" "(" (SequenceType ("," SequenceType)*)? "
 ParenthesizedItemType	   ::=   	"(" ItemType ")"
 URILiteral	   ::=   	StringLiteral
 private EQName	   ::=   	QName | URIQualifiedName
-//| NCName
 QuotAttrContentChar	   ::=   	Char
 AposAttrContentChar	   ::=   	Char
 EscapeQuot	   ::=   	"\"\""
@@ -520,4 +520,3 @@ VarLocalName	   ::=   	NCName
 FunctionName ::= FunctionNamespace ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset]}
 FunctionNamespace	   ::=   	NCName {methods=[getReference]}
 FunctionLocalName	   ::=   	NCName
-//URIQualifiedName ::= "Q" "{" NCName "}"

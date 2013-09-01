@@ -48,7 +48,7 @@ public class XQueryFormattingModelBuilderTest extends XQueryBaseTestCase {
         executeTest();
     }
 
-    public void testOneSpaceAroundKeyword() {
+    public void testSpaceAroundKeyword() {
         executeTest();
     }
 
@@ -69,6 +69,18 @@ public class XQueryFormattingModelBuilderTest extends XQueryBaseTestCase {
     }
 
     public void testIndentFunctionArgumentsAndParams() {
+        executeTest();
+    }
+
+    public void testIndentFlwor() {
+        executeTest();
+    }
+
+    public void testIndentBinaryExpressions() {
+        executeTest();
+    }
+
+    public void testIndentExpr() {
         executeTest();
     }
 

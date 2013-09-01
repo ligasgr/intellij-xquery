@@ -270,6 +270,7 @@ public interface XQueryTypes {
   IElementType EQ = new XQueryTokenType("eq");
   IElementType EQUAL = new XQueryTokenType("=");
   IElementType EQUAL_EQUAL = new XQueryTokenType("==");
+  IElementType EXCLAMATION_MARK = new XQueryTokenType("!");
   IElementType GE = new XQueryTokenType("ge");
   IElementType GE_CHARS = new XQueryTokenType(">=");
   IElementType GT = new XQueryTokenType("gt");

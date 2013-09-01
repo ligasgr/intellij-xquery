@@ -7520,7 +7520,7 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "SimpleMapExpr_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, "!");
+    result_ = consumeToken(builder_, EXCLAMATION_MARK);
     result_ = result_ && PathExpr(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
