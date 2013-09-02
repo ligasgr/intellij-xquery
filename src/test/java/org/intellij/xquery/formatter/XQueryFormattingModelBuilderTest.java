@@ -55,7 +55,7 @@ public class XQueryFormattingModelBuilderTest extends XQueryBaseTestCase {
     }
 
     public void testSpaceAroundMultiplicativeOperators() {
-        getSettings().SPACE_AROUND_MULTIPLICATIVE_OPERATORS= false;
+        getSettings().SPACE_AROUND_MULTIPLICATIVE_OPERATORS= true;
         executeTest();
     }
 
