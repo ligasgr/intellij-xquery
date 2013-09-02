@@ -17,24 +17,20 @@
 <idea-plugin url="http://ligasgr.github.io/intellij-xquery/" version="2">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
     <vendor email="ligasgr@gmail.com">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0</description>
 
     <change-notes>
         <![CDATA[
-            <p>0.0.5:</p>
+            <p>0.0.6:</p>
             <ul>
                 <li>Minor bug fixes.</li>
-                <li>Small code completion display changes.</li>
-                <li>Building project and generating idea project structure with gradle.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/4">#4</a> - Function completion from imported files missing.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/5">#5</a> - Lack of PI support.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/6">#6</a> - Lack of CDATA support.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/7">#7</a> - Lack of PRAGMA support.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/14">#14</a> - Reference for default function namespace doesn't work (small performance degradation for find usages introduced while fixing).</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/36">#36</a> - Variable completion from imported files missing.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/8">#8</a> - Syntax errors during parsing of functx.xq.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/18">#18</a> - Introduce caching.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/28">#28</a> - Code formatter.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/37">#37</a> - Structure view.</li>
             </ul>
         ]]>
     </change-notes>
