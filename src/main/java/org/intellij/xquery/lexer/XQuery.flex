@@ -125,7 +125,7 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "<" / {S}? {DecimalLiteral}               {return XQueryTypes.LT_CHAR;}
 "<" / {S}? {DoubleLiteral}                {return XQueryTypes.LT_CHAR;}
 "<" / {S}? {NCName} {S}? "("              {return XQueryTypes.LT_CHAR;}
-"<" / {S}? {NCName} {S}? ":" {NCName} {S}? "(" {return XQueryTypes.LT_CHAR;}
+"<" / {S}? {NCName} {S}? ":" {S}? {NCName} {S}? "(" {return XQueryTypes.LT_CHAR;}
 "<="                                      {return XQueryTypes.LE_CHARS;}
 ">="                                      {return XQueryTypes.GE_CHARS;}
 "<"                                       {pushState(START_TAG); return XQueryTypes.LT_CHAR;}
