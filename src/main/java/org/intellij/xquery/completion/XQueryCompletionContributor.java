@@ -19,7 +19,6 @@ package org.intellij.xquery.completion;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ProcessingContext;
@@ -40,17 +39,15 @@ import static org.intellij.xquery.lexer.XQueryLexer.KEYWORDS;
  */
 public class XQueryCompletionContributor extends CompletionContributor {
 
+    private static final String PARENTHESES = "()";
+
     public XQueryCompletionContributor() {
         extend(CompletionType.BASIC, psiElement().inFile(instanceOf(XQueryFile.class)),
                 new CompletionProvider<CompletionParameters>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context,
                                           @NotNull CompletionResultSet result) {
-                PsiElement position = parameters.getPosition();
-                PsiElement parent = position.getParent().getParent();
-
-                if ((parent instanceof XQueryFunctionName && !(parent.getParent() instanceof XQueryFunctionCall)) || parent instanceof XQueryVarName || parent instanceof XQueryModuleImportPath) return;
-
+                if (positionAlreadyHasContributionFromReferences(getGrandfatherOfPosition(parameters))) return;
                 result.addAllElements(getAllKeywords());
             }
         });
@@ -59,12 +56,26 @@ public class XQueryCompletionContributor extends CompletionContributor {
     @Override
     public void beforeCompletion(@NotNull CompletionInitializationContext context) {
         final CharSequence text = context.getEditor().getDocument().getCharsSequence();
-        if (context.getStartOffset() > 1 && !text.subSequence(context.getStartOffset() - 1,
-                context.getStartOffset()).equals("$")) {
-            context.setDummyIdentifier(CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED + "()");
+        if (isAPositionSuitableForFunctionCall(context, text)) {
+            context.setDummyIdentifier(CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED + PARENTHESES);
         } else {
             context.setDummyIdentifier(CompletionInitializationContext.DUMMY_IDENTIFIER);
         }
+    }
+
+    private PsiElement getGrandfatherOfPosition(CompletionParameters parameters) {
+        return parameters.getPosition().getParent().getParent();
+    }
+
+    private boolean positionAlreadyHasContributionFromReferences(PsiElement parent) {
+        return (parent instanceof XQueryFunctionName && !(parent.getParent() instanceof XQueryFunctionCall))
+                || parent instanceof XQueryVarName
+                || parent instanceof XQueryModuleImportPath;
+    }
+
+    private boolean isAPositionSuitableForFunctionCall(CompletionInitializationContext context, CharSequence text) {
+        return context.getStartOffset() > 1 && !text.subSequence(context.getStartOffset() - 1,
+                context.getStartOffset()).equals("$");
     }
 
     private List<LookupElement> getAllKeywords() {

@@ -33,13 +33,7 @@ import org.jetbrains.annotations.NotNull;
 public class XQueryVariableInplaceRenameHandler extends VariableInplaceRenameHandler {
     @Override
     protected boolean isAvailable(PsiElement element, Editor editor, PsiFile file) {
-        if (!editor.getSettings().isVariableInplaceRenameEnabled()) {
-            return false;
-        } else if (element instanceof XQueryVarName) {
-            return true;
-        } else {
-            return false;
-        }
+        return editor.getSettings().isVariableInplaceRenameEnabled() && element instanceof XQueryVarName;
     }
 
     protected VariableInplaceRenamer createRenamer(@NotNull PsiElement elementToRename, Editor editor) {

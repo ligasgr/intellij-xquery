@@ -81,9 +81,6 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType == XQueryTypes.DIR_COMMENT_END) {
             return COMMENTS;
         }
-//        if (tokenType == XQueryTypes.NCNAME) {
-//            return NAMES;
-//        }
         if (tokenType == XQueryTypes.DECIMALLITERAL
                 || tokenType == XQueryTypes.DOUBLELITERAL
                 || tokenType == XQueryTypes.INTEGERLITERAL) {

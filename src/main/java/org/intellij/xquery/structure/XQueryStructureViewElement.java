@@ -83,8 +83,8 @@ public class XQueryStructureViewElement implements StructureViewTreeElement, Sor
             for (XQueryVarDecl variableDeclaration : file.getVariableDeclarations()) {
                 treeElements.add(new XQueryStructureViewElement(variableDeclaration));
             }
-            for (XQueryFunctionDecl variableDeclaration : file.getFunctionDeclarations()) {
-                treeElements.add(new XQueryStructureViewElement(variableDeclaration));
+            for (XQueryFunctionDecl functionDeclaration : file.getFunctionDeclarations()) {
+                treeElements.add(new XQueryStructureViewElement(functionDeclaration));
             }
             return treeElements.toArray(new TreeElement[treeElements.size()]);
         } else {

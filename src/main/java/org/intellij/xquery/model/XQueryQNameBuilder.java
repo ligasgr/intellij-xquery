@@ -65,21 +65,6 @@ public class XQueryQNameBuilder<T> {
         return this;
     }
 
-    public XQueryQNameBuilder<T> withLocalName(String localName) {
-        this.localName = localName;
-        return this;
-    }
-
-    public XQueryQNameBuilder<T> withNamespace(String namespace) {
-        this.namespace = namespace;
-        return this;
-    }
-
-    public XQueryQNameBuilder<T> withNamedObject(T namedObject) {
-        this.namedObject = namedObject;
-        return this;
-    }
-
     public XQueryQName<T> build() {
         return new XQueryQName<T>(prefix, localName, namespace, namedObject);
     }

@@ -68,14 +68,14 @@ public class XQueryElementFactory {
     }
 
     public static XQueryFunctionName createFunctionReference(Project project, String namespaceName,
-                                                             String functionaName) {
-        final XQueryFile file = createFile(project, namespaceName + ":" + functionaName + "()");
+                                                             String functionName) {
+        final XQueryFile file = createFile(project, namespaceName + ":" + functionName + "()");
         return PsiTreeUtil.findChildOfType(file, XQueryFunctionName.class);
     }
 
     public static XQueryFunctionDecl createFunctionDeclaration(Project project, String namespaceName,
-                                                               String functionaName) {
-        final XQueryFile file = createFile(project, "declare function " + namespaceName + ":" + functionaName + "($param) {()};");
+                                                               String functionName) {
+        final XQueryFile file = createFile(project, "declare function " + namespaceName + ":" + functionName + "($param) {()};");
         return PsiTreeUtil.findChildOfType(file, XQueryFunctionDecl.class);
     }
 }
