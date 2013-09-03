@@ -76,9 +76,9 @@ public class XQueryFunctionNamespaceNameReference extends PsiReferenceBase<XQuer
                                                                                      namespaceDeclarations) {
         if (namespaceDeclarations.size() > 0) {
             List<ResolveResult> results = new ArrayList<ResolveResult>();
-            for (XQueryNamespaceDecl moduleImport : namespaceDeclarations) {
-                if (myElement.getText().equals(moduleImport.getNamespaceName().getText())) {
-                    results.add(new PsiElementResolveResult(moduleImport.getNamespaceName()));
+            for (XQueryNamespaceDecl namespaceDeclaration : namespaceDeclarations) {
+                if (myElement.getText().equals(namespaceDeclaration.getNamespaceName().getText())) {
+                    results.add(new PsiElementResolveResult(namespaceDeclaration.getNamespaceName()));
                 }
             }
             return results;
