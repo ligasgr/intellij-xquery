@@ -21,6 +21,7 @@ import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.tree.TokenSet;
 import org.intellij.xquery.lexer.XQueryLexer;
 import org.intellij.xquery.parser.XQueryParserDefinition;
@@ -71,18 +72,12 @@ public class XQueryFindUsageProvider implements FindUsagesProvider {
     @NotNull
     @Override
     public String getDescriptiveName(@NotNull PsiElement element) {
-        return element.getText();
+        return ((PsiNamedElement)element).getName();
     }
 
     @NotNull
     @Override
     public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
-        if (element.getParent() instanceof XQueryVarDecl || element.getParent() instanceof XQueryFunctionDecl ||
-                element.getParent() instanceof XQueryModuleDecl || element.getParent() instanceof XQueryModuleImport
-                || element.getParent() instanceof XQueryNamespaceDecl) {
-            return element.getParent().getText();
-        } else {
-            return element.getText();
-        }
+        return getDescriptiveName(element);
     }
 }

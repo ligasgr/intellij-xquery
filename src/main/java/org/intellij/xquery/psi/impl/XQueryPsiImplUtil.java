@@ -34,6 +34,7 @@ import org.intellij.xquery.reference.module.XQueryModuleReference;
 import org.intellij.xquery.reference.namespace.XQueryFunctionNamespaceNameReference;
 import org.intellij.xquery.reference.namespace.XQueryVariableNamespaceNameReference;
 import org.intellij.xquery.reference.variable.XQueryVariableReference;
+import org.intellij.xquery.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -196,7 +197,7 @@ public class XQueryPsiImplUtil {
                 String tailText = (element.getParamList() != null ? element.getParamList().getText() : "") + " as ";
                 String typeText = element.getSequenceType() != null ? element.getSequenceType()
                         .getText() : "item()*";
-                return compressWhitespaces(name + tailText + typeText);
+                return StringUtils.compressWhitespaces(name + tailText + typeText);
             }
 
             @Nullable
@@ -223,7 +224,7 @@ public class XQueryPsiImplUtil {
                 if (element.getTypeDeclaration() != null) {
                     typeText = element.getTypeDeclaration().getText();
                 }
-                return compressWhitespaces(name + " as " + typeText);
+                return StringUtils.compressWhitespaces(name + " as " + typeText);
             }
 
             @Nullable
@@ -240,7 +241,17 @@ public class XQueryPsiImplUtil {
         };
     }
 
-    private static String compressWhitespaces(String text) {
-        return text.replaceAll("\\s+", " ");
+    public static ItemPresentation getPresentation(final XQueryVarName element) {
+        if (element.getParent() instanceof XQueryVarDecl) {
+            return ((XQueryVarDecl) element.getParent()).getPresentation();
+        }
+        return null;
+    }
+
+    public static ItemPresentation getPresentation(final XQueryFunctionName element) {
+        if (element.getParent() instanceof XQueryFunctionDecl) {
+            return ((XQueryFunctionDecl) element.getParent()).getPresentation();
+        }
+        return null;
     }
 }

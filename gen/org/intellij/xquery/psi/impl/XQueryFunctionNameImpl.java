@@ -25,6 +25,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
+import com.intellij.navigation.ItemPresentation;
 
 public class XQueryFunctionNameImpl extends XQueryNamedElementImpl implements XQueryFunctionName {
 
@@ -63,6 +64,10 @@ public class XQueryFunctionNameImpl extends XQueryNamedElementImpl implements XQ
 
   public int getTextOffset() {
     return XQueryPsiImplUtil.getTextOffset(this);
+  }
+
+  public ItemPresentation getPresentation() {
+    return XQueryPsiImplUtil.getPresentation(this);
   }
 
 }

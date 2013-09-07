@@ -69,7 +69,7 @@ public class XQueryModuleReference extends PsiReferenceBase<XQueryModuleImportPa
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
         String wholePath = createPathWithNewNameAndOriginalAposOrQuote(newElementName);
-        XQueryModuleImportPath path = XQueryElementFactory.createImport(myElement.getProject(), wholePath);
+        XQueryModuleImportPath path = XQueryElementFactory.createImportPath(myElement.getProject(), wholePath);
         myElement.replace(path);
         return myElement;
     }

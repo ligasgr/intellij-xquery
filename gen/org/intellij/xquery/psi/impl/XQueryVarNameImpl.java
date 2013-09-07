@@ -26,6 +26,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 import com.intellij.psi.search.SearchScope;
+import com.intellij.navigation.ItemPresentation;
 
 public class XQueryVarNameImpl extends XQueryNamedElementImpl implements XQueryVarName {
 
@@ -68,6 +69,10 @@ public class XQueryVarNameImpl extends XQueryNamedElementImpl implements XQueryV
 
   public SearchScope getUseScope() {
     return XQueryPsiImplUtil.getUseScope(this);
+  }
+
+  public ItemPresentation getPresentation() {
+    return XQueryPsiImplUtil.getPresentation(this);
   }
 
 }

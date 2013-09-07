@@ -21,6 +21,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.SearchScope;
+import com.intellij.navigation.ItemPresentation;
 
 public interface XQueryVarName extends XQueryNamedElement {
 
@@ -39,5 +40,7 @@ public interface XQueryVarName extends XQueryNamedElement {
   int getTextOffset();
 
   SearchScope getUseScope();
+
+  ItemPresentation getPresentation();
 
 }

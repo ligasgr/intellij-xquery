@@ -38,7 +38,7 @@ import java.util.Map;
 
 import static com.intellij.util.containers.ContainerUtil.findAll;
 import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInImport;
-import static org.intellij.xquery.psi.XQueryUtil.removeQuotOrApos;
+import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.getMappingFromPrefix;
 

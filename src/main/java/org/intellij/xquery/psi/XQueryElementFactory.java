@@ -56,7 +56,7 @@ public class XQueryElementFactory {
         return PsiTreeUtil.findChildOfType(file, XQueryNamespaceName.class);
     }
 
-    public static XQueryModuleImportPath createImport(Project project, String wholePathWithAposOrQuote) {
+    public static XQueryModuleImportPath createImportPath(Project project, String wholePathWithAposOrQuote) {
         final XQueryFile file = createFile(project, "import module namespace dummy = " + wholePathWithAposOrQuote +
                 ";");
         return PsiTreeUtil.findChildOfType(file, XQueryModuleImportPath.class);

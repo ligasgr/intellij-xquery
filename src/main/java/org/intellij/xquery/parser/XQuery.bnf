@@ -513,9 +513,9 @@ private PrefixedName	   ::=   	Prefix ':' LocalPart
 private UnprefixedName	   ::=   	LocalPart
 Prefix	   ::=   	NCName
 LocalPart	   ::=   	NCName
-VarName ::= VarNamespace ':' VarLocalName | VarLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset getUseScope]}
+VarName ::= VarNamespace ':' VarLocalName | VarLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset getUseScope getPresentation]}
 VarNamespace	   ::=   	NCName {methods=[getReference]}
 VarLocalName	   ::=   	NCName
-FunctionName ::= FunctionNamespace ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset]}
+FunctionName ::= FunctionNamespace ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset  getPresentation]}
 FunctionNamespace	   ::=   	NCName {methods=[getReference]}
 FunctionLocalName	   ::=   	NCName

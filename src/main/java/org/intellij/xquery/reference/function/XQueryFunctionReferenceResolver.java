@@ -27,7 +27,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.intellij.xquery.model.XQueryQNameBuilder.aXQueryQName;
-import static org.intellij.xquery.psi.XQueryUtil.removeQuotOrApos;
+import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
 
 /**
  * User: ligasgr

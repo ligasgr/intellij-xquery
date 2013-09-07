@@ -101,8 +101,4 @@ public class XQueryUtil {
             }
         }
     }
-
-    public static String removeQuotOrApos(String text) {
-        return text.substring(1, text.length() - 1);
-    }
 }

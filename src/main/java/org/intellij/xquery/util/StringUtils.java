@@ -13,31 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.intellij.xquery.util;
 
-// This is a generated file. Not intended for manual editing.
-package org.intellij.xquery.psi;
+/**
+ * Created with IntelliJ IDEA.
+ * User: ligasgr
+ * Date: 08/09/13
+ * Time: 00:11
+ * To change this template use File | Settings | File Templates.
+ */
+public class StringUtils {
+    public static String removeQuotOrApos(String text) {
+        return text.substring(1, text.length() - 1);
+    }
 
-import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.navigation.ItemPresentation;
-
-public interface XQueryFunctionName extends XQueryNamedElement {
-
-  @Nullable
-  XQueryFunctionLocalName getFunctionLocalName();
-
-  @Nullable
-  XQueryFunctionNamespace getFunctionNamespace();
-
-  String getName();
-
-  PsiElement setName(String newName);
-
-  PsiElement getNameIdentifier();
-
-  int getTextOffset();
-
-  ItemPresentation getPresentation();
-
+    public static String compressWhitespaces(String text) {
+        return text.replaceAll("\\s+", " ");
+    }
 }

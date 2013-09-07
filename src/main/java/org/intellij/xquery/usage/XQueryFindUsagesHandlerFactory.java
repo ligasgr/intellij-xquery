@@ -43,8 +43,7 @@ public class XQueryFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
     public FindUsagesHandler createFindUsagesHandler(@NotNull final PsiElement element,
                                                      final boolean forHighlightUsages) {
         if (canFindUsages(element)) {
-            return new XQueryFindUsagesHandler(element) {
-            };
+            return new XQueryFindUsagesHandler(element);
         }
         return null;
     }

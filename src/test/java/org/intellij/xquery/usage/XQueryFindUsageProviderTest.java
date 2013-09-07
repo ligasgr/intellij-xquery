@@ -76,12 +76,21 @@ public class XQueryFindUsageProviderTest extends XQueryBaseTestCase {
     }
 
     public void testFunctionUsagesDescription() {
-        XQueryFunctionDecl functionDeclaration = XQueryElementFactory.createFunctionDeclaration(getProject(),
-                "local", "example");
+        String description = provider.getNodeText(exampleFunctionDeclaration().getFunctionName(), true);
 
-        String description = provider.getNodeText(functionDeclaration, true);
+        assertEquals("example", description);
+    }
 
-        assertEquals("declare function local:example($param) {()}", description);
+    public void testFunctionUsagesDescriptiveName() {
+        String description = provider.getDescriptiveName(exampleFunctionDeclaration().getFunctionName());
+
+        assertEquals("example", description);
+    }
+
+    public void testFunctionUsageType() {
+        String type = provider.getType(exampleFunctionDeclaration().getFunctionName());
+
+        assertEquals("function", type);
     }
 
     public void testFindVariableUsages() {
@@ -102,12 +111,21 @@ public class XQueryFindUsageProviderTest extends XQueryBaseTestCase {
     }
 
     public void testVariableUsagesDescription() {
-        XQueryVarDecl variableDeclaration = XQueryElementFactory.createVariableDeclaration(getProject(), "local",
-                "example");
+        String description = provider.getNodeText(exampleVariableDeclaration().getVarName(), true);
 
-        String description = provider.getNodeText(variableDeclaration, true);
+        assertEquals("example", description);
+    }
 
-        assertEquals("declare variable $local:example := 'value'", description);
+    public void testVariableUsagesDescriptiveName() {
+        String description = provider.getNodeText(exampleVariableDeclaration().getVarName(), true);
+
+        assertEquals("example", description);
+    }
+
+    public void testVariableUsageType() {
+        String type = provider.getType(exampleVariableDeclaration().getVarName());
+
+        assertEquals("variable", type);
     }
 
     public void testFindNamespaceNameUsages() {
@@ -120,28 +138,57 @@ public class XQueryFindUsageProviderTest extends XQueryBaseTestCase {
     }
 
     public void testNamespaceNameUsagesDescription() {
-        XQueryNamespaceDecl namespaceDeclaration = XQueryElementFactory.createNamespaceDeclaration(getProject(),
-                "example");
+        String description = provider.getNodeText(exampleNamespaceDeclaration().getNamespaceName(), true);
 
-        String description = provider.getNodeText(namespaceDeclaration, true);
+        assertEquals("example", description);
+    }
 
-        assertEquals("declare namespace example = 'dummy';", description);
+    public void testNamespaceNameUsagesDescriptiveName() {
+        String description = provider.getDescriptiveName(exampleNamespaceDeclaration().getNamespaceName());
+
+        assertEquals("example", description);
+    }
+
+    public void testNamespaceNameUsageType() {
+        String type = provider.getType(exampleNamespaceDeclaration().getNamespaceName());
+
+        assertEquals("namespace name", type);
     }
 
     public void testNamespaceNameInModuleUsagesDescription() {
-        XQueryNamespaceName namespaceName = XQueryElementFactory.createModuleDeclarationName(getProject(), "example");
+        String description = provider.getNodeText(exampleModuleDeclaration(), true);
 
-        String description = provider.getNodeText(namespaceName.getParent(), true);
+        assertEquals("example", description);
+    }
 
-        assertEquals("module namespace example = 'dummy';", description);
+    public void testNamespaceNameInModuleUsagesDescriptiveName() {
+        String description = provider.getDescriptiveName(exampleModuleDeclaration());
+
+        assertEquals("example", description);
+    }
+
+    public void testNamespaceNameInModuleUsageType() {
+        String type = provider.getType(exampleModuleDeclaration());
+
+        assertEquals("namespace name", type);
     }
 
     public void testNamespaceNameInImportUsagesDescription() {
-        XQueryModuleImportPath moduleImportPath = XQueryElementFactory.createImport(getProject(), "'path.xq'");
+        String description = provider.getNodeText(exampleImport().getNamespaceName(), true);
 
-        String description = provider.getNodeText(moduleImportPath.getParent(), true);
+        assertEquals("dummy", description);
+    }
 
-        assertEquals("import module namespace dummy = 'path.xq';", description);
+    public void testNamespaceNameInImportUsagesDescriptiveName() {
+        String description = provider.getDescriptiveName(exampleImport().getNamespaceName());
+
+        assertEquals("dummy", description);
+    }
+
+    public void testNamespaceNameInImportUsageType() {
+        String type = provider.getType(exampleImport().getNamespaceName());
+
+        assertEquals("namespace name", type);
     }
 
     public void testFileUsagesDescription() {
@@ -149,6 +196,29 @@ public class XQueryFindUsageProviderTest extends XQueryBaseTestCase {
 
         String description = provider.getNodeText(file, true);
 
-        assertEquals("example contents", description);
+        assertEquals("dummy.xq", description);
+    }
+
+    private XQueryFunctionDecl exampleFunctionDeclaration() {
+        return XQueryElementFactory.createFunctionDeclaration(getProject(),
+                "local", "example");
+    }
+
+    private XQueryVarDecl exampleVariableDeclaration() {
+        return XQueryElementFactory.createVariableDeclaration(getProject(), "local",
+                "example");
+    }
+
+    private XQueryNamespaceDecl exampleNamespaceDeclaration() {
+        return XQueryElementFactory.createNamespaceDeclaration(getProject(),
+                "example");
+    }
+
+    private XQueryNamespaceName exampleModuleDeclaration() {
+        return XQueryElementFactory.createModuleDeclarationName(getProject(), "example");
+    }
+
+    private XQueryModuleImport exampleImport() {
+        return (XQueryModuleImport) XQueryElementFactory.createImportPath(getProject(), "'path.xq'").getParent().getParent();
     }
 }
