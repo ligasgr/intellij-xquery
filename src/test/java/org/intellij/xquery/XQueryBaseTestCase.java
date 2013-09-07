@@ -26,6 +26,6 @@ import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCa
  */
 public abstract class XQueryBaseTestCase extends LightPlatformCodeInsightFixtureTestCase {
     public XQueryBaseTestCase() {
-        PlatformTestCase.initPlatformPrefix("com.intellij.idea.IdeaUltimateApplication", "PlatformLangXml");
+        PlatformTestCase.initPlatformPrefix("not_existing_class", "PlatformLangXml");
     }
 }

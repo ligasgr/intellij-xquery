@@ -19,11 +19,16 @@ apply plugin: 'idea'
 apply from: 'idea.gradle'
 sourceCompatibility = 1.6
 
+// Update this path to point to your IDEA installation
+project.ext.userDefinedInstallationPath = ''
 project.ext.sdkDir = 'sdk'
 project.ext.sdkVersion = '129.713'
 project.ext.ideaSdk = 'idea-IC-' + project.ext.sdkVersion
 project.ext.ideaSdkName = 'IDEA IC-' + project.ext.sdkVersion
-project.ext.ideaInstallationPath = project.ext.sdkDir + "/" + project.ext.ideaSdk
+if (project.ext.userDefinedInstallationPath)
+    project.ext.ideaInstallationPath = project.ext.userDefinedInstallationPath
+else
+    project.ext.ideaInstallationPath = project.ext.sdkDir + "/" + project.ext.ideaSdk
 project.ext.ideaInstallationSource = 'http://download.jetbrains.com/idea/ideaIC-12.1.4.tar.gz'
 project.ext.ideaArchiveFileName = project.ext.ideaInstallationSource.substring(project.ext.ideaInstallationSource.lastIndexOf('/'))
 
@@ -56,7 +61,7 @@ dependencies {
 }
 
 test {
-    jvmArgs = ['-Didea.home.path=' + project.ext.ideaInstallationPath, '-Didea.test.group=ALL_EXCLUDE_DEFINED']
+    jvmArgs = ['-Didea.home.path=' + project.ext.ideaInstallationPath, '-Didea.test.group=ALL_EXCLUDE_DEFINED', '-Didea.config.path=sdk/config', '-Didea.system.path=sdk/system', '-ea']
     exclude '**/*PerformanceTest.*'
 }
 
