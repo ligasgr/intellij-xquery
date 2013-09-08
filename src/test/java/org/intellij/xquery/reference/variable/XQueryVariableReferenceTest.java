@@ -83,6 +83,14 @@ public class XQueryVariableReferenceTest extends XQueryBaseTestCase {
         assertEquals(1, referenceBasedEntries.size());
     }
 
+    public void testVariableCompletionFromAnotherFileWithPrivate() {
+        myFixture.configureByFiles("VariableCompletionFromAnotherFileForPrivate.xq", "VariableReferencedFileWithPrivate.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
+        assertEquals(0, referenceBasedEntries.size());
+    }
+
     public void testVariableRenameInTheSameFile() {
         myFixture.configureByFiles("VariableRenameInTheSameFile.xq");
         myFixture.renameElementAtCaret("renamed");

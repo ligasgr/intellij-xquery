@@ -95,13 +95,22 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
     }
 
     private void addProposedReferencesFromImportedFile(String targetPrefix, XQueryFile file) {
-        for (final XQueryVarDecl functionDecl : file.getVariableDeclarations()) {
-            if (variableNameExists(functionDecl)) {
-                XQueryQName<XQueryVarName> qName = aXQueryQName(functionDecl.getVarName()).withPrefix(targetPrefix)
+        for (final XQueryVarDecl variableDeclaration : file.getVariableDeclarations()) {
+            if (variableNameExists(variableDeclaration) && variableIsPublic(variableDeclaration)) {
+                XQueryQName<XQueryVarName> qName = aXQueryQName(variableDeclaration.getVarName()).withPrefix(targetPrefix)
                         .build();
                 addProposedReferenceIfNotAlreadyAdded(qName);
             }
         }
+    }
+
+    private boolean variableIsPublic(XQueryVarDecl variableDeclaration) {
+        boolean result = true;
+        for (XQueryAnnotation annotation : variableDeclaration.getAnnotationList()) {
+            if ("private".equals(annotation.getAnnotationName().getText()))
+                return false;
+        }
+        return result;
     }
 
     private LookupElement[] convertToLookupElements(List<XQueryQName<XQueryVarName>> proposedReferences) {

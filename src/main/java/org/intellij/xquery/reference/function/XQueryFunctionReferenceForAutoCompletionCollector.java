@@ -92,8 +92,7 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
 
     private void addProposedReferencesFromImportedFile(String targetPrefix, XQueryFile importedFile, XQueryFile file) {
         for (final XQueryFunctionDecl functionDecl : importedFile.getFunctionDeclarations()) {
-            if (functionNameExists(functionDecl)) {
-
+            if (functionNameExists(functionDecl) && functionIsPublic(functionDecl)) {
                 XQueryQName<XQueryFunctionName> basicQName = aXQueryQName(functionDecl.getFunctionName()).withPrefix
                         (targetPrefix).build();
                 boolean isInDefaultNamespace = file.getDefaultFunctionNamespace().equals(basicQName.getNamespace());
@@ -114,6 +113,15 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
 
     private boolean functionNameExists(XQueryFunctionDecl functionDecl) {
         return functionDecl.getFunctionName() != null && functionDecl.getFunctionName().getTextLength() > 0;
+    }
+
+    private boolean functionIsPublic(XQueryFunctionDecl functionDecl) {
+        boolean result = true;
+        for (XQueryAnnotation annotation : functionDecl.getAnnotationList()) {
+            if ("private".equals(annotation.getAnnotationName().getText()))
+                return false;
+        }
+        return result;
     }
 
     private LookupElement[] convertToLookupElements(List<XQueryQName<XQueryFunctionName>> proposedReferences) {

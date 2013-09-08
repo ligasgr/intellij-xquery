@@ -95,6 +95,14 @@ public class XQueryFunctionReferenceTest extends XQueryBaseTestCase {
         assertEquals(1, referenceBasedEntries.size());
     }
 
+    public void testFunctionCompletionFromAnotherFileForPrivate() {
+        myFixture.configureByFiles("FunctionCompletionFromAnotherFileForPrivate.xq", "FunctionReferencedFileWithPrivate.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
+        assertEquals(0, referenceBasedEntries.size());
+    }
+
     public void testFunctionCompletionFromAnotherFileWithDefaultNamespaceAndImportedNamespacePrefix() {
         myFixture.configureByFiles("FunctionCompletionFromAnotherFileWithDefaultNamespaceAndImportedNamespacePrefix.xq",
                 "FunctionReferencedFile.xq");
