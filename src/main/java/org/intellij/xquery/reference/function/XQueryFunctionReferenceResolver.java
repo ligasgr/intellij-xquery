@@ -51,7 +51,22 @@ public class XQueryFunctionReferenceResolver {
         matchingFunctionNames = new ArrayList<XQueryFunctionName>();
         addFunctionDeclarationReferencesFromFile(file, checkedNamespacePrefix);
         addFunctionNameReferencesFromImportedFiles(file);
-        return convertToResolveResults(matchingFunctionNames);
+
+        return convertToResolveResults(filterByArity(myElement.getArity(), matchingFunctionNames));
+    }
+
+    private List<XQueryFunctionName> filterByArity(int arity, List<XQueryFunctionName> matchingFunctionNames) {
+        List<XQueryFunctionName> matchingArityFunctionNames = new ArrayList<XQueryFunctionName>();
+        for (XQueryFunctionName functionName : matchingFunctionNames) {
+            XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) functionName.getParent();
+            if (functionDeclaration.getArity() == arity) {
+                matchingArityFunctionNames.add(functionName);
+            }
+        }
+        if (matchingArityFunctionNames.size() > 0)
+            return matchingArityFunctionNames;
+        else
+            return matchingFunctionNames;
     }
 
     private void addFunctionDeclarationReferencesFromFile(XQueryFile file, String checkedNamespacePrefix) {

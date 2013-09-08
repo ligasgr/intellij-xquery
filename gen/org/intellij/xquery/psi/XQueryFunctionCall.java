@@ -32,4 +32,6 @@ public interface XQueryFunctionCall extends XQueryElement {
 
   PsiReference getReference();
 
+  int getArity();
+
 }

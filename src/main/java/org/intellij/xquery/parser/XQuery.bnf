@@ -267,7 +267,7 @@ VarDecl	   ::=   	"declare" Annotation* "variable" "$" VarName TypeDeclaration? 
 VarValue	   ::=   	ExprSingle
 VarDefaultValue	   ::=   	ExprSingle
 ContextItemDecl	   ::=   	"declare" "context" "item" ("as" ItemType)? ((":=" VarValue) | ("external" (":=" VarDefaultValue)?)) Separator {pin=2}
-FunctionDecl	   ::=   	"declare" Annotation* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external")  	/* xgc: reserved-function-names */ {pin=3 methods=[getPresentation] recoverUntil=FunctionDeclRec}
+FunctionDecl	   ::=   	"declare" Annotation* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external")  	/* xgc: reserved-function-names */ {pin=3 methods=[getPresentation getArity] recoverUntil=FunctionDeclRec}
 private FunctionDeclRec ::= !(';')
 ParamList	   ::=   	"(" (Param ("," Param)*)? ")"
 Param	   ::=   	"$" VarName TypeDeclaration?
@@ -404,7 +404,7 @@ ParenthesizedExpr	   ::=   	"(" Expr? ")"
 ContextItemExpr	   ::=   	"."
 OrderedExpr	   ::=   	"ordered" "{" Expr "}"
 UnorderedExpr	   ::=   	"unordered" "{" Expr "}"
-FunctionCall	   ::=   	FunctionName ArgumentList {methods=[getReference]}	/* xgc: reserved-function-names */
+FunctionCall	   ::=   	FunctionName ArgumentList {methods=[getReference getArity]}	/* xgc: reserved-function-names */
 				/* gn: parens */
 Argument	   ::=   	ExprSingle | ArgumentPlaceholder
 ArgumentPlaceholder	   ::=   	"?"

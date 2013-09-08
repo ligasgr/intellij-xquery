@@ -254,4 +254,15 @@ public class XQueryPsiImplUtil {
         }
         return null;
     }
+
+    public static int getArity(XQueryFunctionCall functionCall) {
+        return functionCall.getArgumentList().getArgumentList().size();
+    }
+
+    public static int getArity(XQueryFunctionDecl functionDeclaration) {
+        if (functionDeclaration.getParamList() != null)
+            return functionDeclaration.getParamList().getParamList().size();
+        else
+            return 0;
+    }
 }

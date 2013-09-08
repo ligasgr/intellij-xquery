@@ -41,4 +41,6 @@ public interface XQueryFunctionDecl extends XQueryElement {
 
   ItemPresentation getPresentation();
 
+  int getArity();
+
 }

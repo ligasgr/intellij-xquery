@@ -72,4 +72,8 @@ public class XQueryFunctionDeclImpl extends XQueryElementImpl implements XQueryF
     return XQueryPsiImplUtil.getPresentation(this);
   }
 
+  public int getArity() {
+    return XQueryPsiImplUtil.getArity(this);
+  }
+
 }

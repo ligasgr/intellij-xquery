@@ -54,4 +54,8 @@ public class XQueryFunctionCallImpl extends XQueryElementImpl implements XQueryF
     return XQueryPsiImplUtil.getReference(this);
   }
 
+  public int getArity() {
+    return XQueryPsiImplUtil.getArity(this);
+  }
+
 }
