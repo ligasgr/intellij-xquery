@@ -73,4 +73,11 @@
         <langCodeStyleSettingsProvider implementation="org.intellij.xquery.formatter.settings.XQueryLanguageCodeStyleSettingsProvider"/>
         <quoteHandler fileType="XQuery file" className="org.intellij.xquery.quotes.XQueryQuoteHandler"/>
     </extensions>
+
+    <actions>
+        <action id="XQuery.NewXQueryFile" class="org.intellij.xquery.actions.CreateXQueryFileAction"
+                text="XQuery File" description="Create new XQuery file">
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+        </action>
+    </actions>
 </idea-plugin>

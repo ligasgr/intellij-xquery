@@ -16,11 +16,9 @@
 package org.intellij.xquery.util;
 
 /**
- * Created with IntelliJ IDEA.
  * User: ligasgr
  * Date: 08/09/13
  * Time: 00:11
- * To change this template use File | Settings | File Templates.
  */
 public class StringUtils {
     public static String removeQuotOrApos(String text) {
