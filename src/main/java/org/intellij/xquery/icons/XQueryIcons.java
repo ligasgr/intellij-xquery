@@ -26,5 +26,5 @@ import javax.swing.*;
  * Time: 18:14
  */
 public class XQueryIcons {
-    public static final Icon FILE = IconLoader.getIcon("/org/intellij/xquery/icons/xq.png");
+    public static final Icon FILE = IconLoader.getIcon("/icons/xq.png");
 }
