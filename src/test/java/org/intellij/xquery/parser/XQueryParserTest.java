@@ -125,6 +125,10 @@ public class XQueryParserTest extends ParsingTestCase {
         doTest(true);
     }
 
+    public void testSimpleMap() throws Exception {
+        doTest(true);
+    }
+
     @Override
     protected String getTestDataPath() {
         return "src/test/testData/org/intellij/xquery";

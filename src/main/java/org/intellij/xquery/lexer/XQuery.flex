@@ -162,6 +162,7 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "#"                                       {return XQueryTypes.HASH;}
 "||"                                      {return XQueryTypes.PIPE_PIPE;}
 "|"                                       {return XQueryTypes.PIPE;}
+"!"                                       {return XQueryTypes.EXCLAMATION_MARK;}
 "eq"                                      {return XQueryTypes.EQ;}
 "ne"                                      {return XQueryTypes.NE;}
 "lt"                                      {return XQueryTypes.LT;}
@@ -174,7 +175,7 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "allowing" / {S} "empty"                  {return XQueryTypes.K_ALLOWING;}
 "greatest" / {S}? (";"|",")               {return XQueryTypes.K_GREATEST;}
 "greatest" / {S} ("for"|"let"|"order"|"stable"|"group"|"count"|"return") {return XQueryTypes.K_GREATEST;}
-"least"/ {S}? (";"|",")                   {return XQueryTypes.K_LEAST;}
+"least" / {S}? (";"|",")                   {return XQueryTypes.K_LEAST;}
 "least" / {S} ("for"|"let"|"order"|"stable"|"group"|"count"|"return") {return XQueryTypes.K_LEAST;}
 "ascending" / {S}? ","                    {return XQueryTypes.K_ASCENDING;}
 "ascending" / {S} ("empty"|"collation"|"for"|"let"|"order"|"stable"|"group"|"count"|"return"|",")   {return XQueryTypes.K_ASCENDING;}

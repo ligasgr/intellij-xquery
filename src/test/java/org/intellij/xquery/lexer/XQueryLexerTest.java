@@ -642,4 +642,40 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
                 "IntegerLiteral", "1"
         });
     }
+
+    public void testSimpleMapOperator() throws Exception {
+        assertProducedTokens("avg( //employee / salary ! translate(., '$','') ! number(.))", new String[] {
+                "WHITE_SPACE", "",
+                "NCName", "avg",
+                "(", "(",
+                "WHITE_SPACE", " ",
+                "//", "//",
+                "NCName", "employee",
+                "WHITE_SPACE", " ",
+                "/", "/",
+                "WHITE_SPACE", " ",
+                "NCName", "salary",
+                "WHITE_SPACE", " ",
+                "!", "!",
+                "WHITE_SPACE", " ",
+                "NCName", "translate",
+                "(", "(",
+                ".", ".",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'$'",
+                ",", ",",
+                "WHITE_SPACE", "",
+                "StringLiteral", "''",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "!", "!",
+                "WHITE_SPACE", " ",
+                "NCName", "number",
+                "(", "(",
+                ".", ".",
+                ")", ")",
+                ")", ")"
+        });
+    }
 }
