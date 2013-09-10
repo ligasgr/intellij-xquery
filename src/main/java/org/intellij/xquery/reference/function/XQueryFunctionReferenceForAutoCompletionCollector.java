@@ -38,10 +38,10 @@ import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInI
  */
 public class XQueryFunctionReferenceForAutoCompletionCollector {
 
-    private XQueryFunctionCall sourceOfReference;
+    private XQueryFunctionInvocation sourceOfReference;
     private List<XQueryQName<XQueryFunctionName>> proposedReferences;
 
-    public XQueryFunctionReferenceForAutoCompletionCollector(XQueryFunctionCall sourceOfReference) {
+    public XQueryFunctionReferenceForAutoCompletionCollector(XQueryFunctionInvocation sourceOfReference) {
         this.sourceOfReference = sourceOfReference;
     }
 

@@ -350,12 +350,16 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
+  public void visitFunctionArity(@NotNull XQueryFunctionArity o) {
+    visitElement(o);
+  }
+
   public void visitFunctionBody(@NotNull XQueryFunctionBody o) {
     visitElement(o);
   }
 
   public void visitFunctionCall(@NotNull XQueryFunctionCall o) {
-    visitElement(o);
+    visitFunctionInvocation(o);
   }
 
   public void visitFunctionDecl(@NotNull XQueryFunctionDecl o) {
@@ -503,7 +507,7 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitNamedFunctionRef(@NotNull XQueryNamedFunctionRef o) {
-    visitElement(o);
+    visitFunctionInvocation(o);
   }
 
   public void visitNamespaceDecl(@NotNull XQueryNamespaceDecl o) {
@@ -875,6 +879,10 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitWindowVars(@NotNull XQueryWindowVars o) {
+    visitElement(o);
+  }
+
+  public void visitFunctionInvocation(@NotNull XQueryFunctionInvocation o) {
     visitElement(o);
   }
 

@@ -220,6 +220,7 @@
 
   extends(".+Expr")=ExprSingle
   implements("NamespaceName|VarName|FunctionName")="org.intellij.xquery.psi.XQueryNamedElement"
+  implements("NamedFunctionRef|FunctionCall")="org.intellij.xquery.psi.XQueryFunctionInvocation"
   extends("NamespaceName|VarName|FunctionName")="org.intellij.xquery.psi.impl.XQueryNamedElementImpl"
 }
 
@@ -457,7 +458,8 @@ CompTextConstructor	   ::=   	"text" "{" Expr "}"
 CompCommentConstructor	   ::=   	"comment" "{" Expr "}"
 CompPIConstructor	   ::=   	"processing-instruction" (NCName | ("{" Expr "}")) "{" Expr? "}"
 FunctionItemExpr	   ::=   	NamedFunctionRef | InlineFunctionExpr
-NamedFunctionRef	   ::=   	FunctionName "#" IntegerLiteral	/* xgc: reserved-function-names */
+NamedFunctionRef	   ::=   	FunctionName "#" FunctionArity	{methods=[getArity getReference]} /* xgc: reserved-function-names */
+FunctionArity ::=  IntegerLiteral
 InlineFunctionExpr	   ::=   	Annotation* "function" ParamList ("as" SequenceType)? FunctionBody
 SingleType	   ::=   	SimpleTypeName "?"?
 TypeDeclaration	   ::=   	"as" SequenceType

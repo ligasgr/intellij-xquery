@@ -285,6 +285,9 @@ public class XQueryParser implements PsiParser {
     else if (root_ == FORWARD_STEP) {
       result_ = ForwardStep(builder_, level_ + 1);
     }
+    else if (root_ == FUNCTION_ARITY) {
+      result_ = FunctionArity(builder_, level_ + 1);
+    }
     else if (root_ == FUNCTION_BODY) {
       result_ = FunctionBody(builder_, level_ + 1);
     }
@@ -3951,6 +3954,23 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // IntegerLiteral
+  public static boolean FunctionArity(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FunctionArity")) return false;
+    if (!nextTokenIs(builder_, INTEGERLITERAL)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, INTEGERLITERAL);
+    if (result_) {
+      marker_.done(FUNCTION_ARITY);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
   // EnclosedExpr
   public static boolean FunctionBody(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionBody")) return false;
@@ -5419,7 +5439,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // FunctionName "#" IntegerLiteral
+  // FunctionName "#" FunctionArity
   public static boolean NamedFunctionRef(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "NamedFunctionRef")) return false;
     if (!nextTokenIs(builder_, NCNAME) && !nextTokenIs(builder_, URIQUALIFIEDNAME)
@@ -5429,7 +5449,7 @@ public class XQueryParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<named function ref>");
     result_ = FunctionName(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, HASH);
-    result_ = result_ && consumeToken(builder_, INTEGERLITERAL);
+    result_ = result_ && FunctionArity(builder_, level_ + 1);
     if (result_) {
       marker_.done(NAMED_FUNCTION_REF);
     }

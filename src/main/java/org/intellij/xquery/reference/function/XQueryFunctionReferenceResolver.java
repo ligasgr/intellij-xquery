@@ -36,11 +36,11 @@ import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
  */
 public class XQueryFunctionReferenceResolver {
 
-    private XQueryFunctionCall myElement;
+    private XQueryFunctionInvocation myElement;
     private String checkedNamespacePrefix;
     private List<XQueryFunctionName> matchingFunctionNames;
 
-    public XQueryFunctionReferenceResolver(XQueryFunctionCall myElement) {
+    public XQueryFunctionReferenceResolver(XQueryFunctionInvocation myElement) {
         if (myElement.getFunctionName().getFunctionNamespace() != null)
             this.checkedNamespacePrefix = myElement.getFunctionName().getFunctionNamespace().getText();
         this.myElement = myElement;

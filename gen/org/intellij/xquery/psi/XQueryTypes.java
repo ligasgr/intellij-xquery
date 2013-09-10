@@ -106,6 +106,7 @@ public interface XQueryTypes {
   IElementType FORWARD_STEP = new XQueryElementType("FORWARD_STEP");
   IElementType FOR_BINDING = new XQueryElementType("FOR_BINDING");
   IElementType FOR_CLAUSE = new XQueryElementType("FOR_CLAUSE");
+  IElementType FUNCTION_ARITY = new XQueryElementType("FUNCTION_ARITY");
   IElementType FUNCTION_BODY = new XQueryElementType("FUNCTION_BODY");
   IElementType FUNCTION_CALL = new XQueryElementType("FUNCTION_CALL");
   IElementType FUNCTION_DECL = new XQueryElementType("FUNCTION_DECL");
@@ -679,6 +680,9 @@ public interface XQueryTypes {
       }
       else if (type == FOR_CLAUSE) {
         return new XQueryForClauseImpl(node);
+      }
+      else if (type == FUNCTION_ARITY) {
+        return new XQueryFunctionArityImpl(node);
       }
       else if (type == FUNCTION_BODY) {
         return new XQueryFunctionBodyImpl(node);

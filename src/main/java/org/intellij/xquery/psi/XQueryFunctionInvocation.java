@@ -13,25 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-// This is a generated file. Not intended for manual editing.
 package org.intellij.xquery.psi;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-
-public interface XQueryFunctionCall extends XQueryFunctionInvocation {
-
-  @NotNull
-  XQueryArgumentList getArgumentList();
-
-  @NotNull
-  XQueryFunctionName getFunctionName();
-
-  PsiReference getReference();
-
-  int getArity();
-
+/**
+ * User: ligasgr
+ * Date: 11/09/13
+ * Time: 00:05
+ */
+public interface XQueryFunctionInvocation extends XQueryElement {
+    XQueryFunctionName getFunctionName();
+    int getArity();
 }
