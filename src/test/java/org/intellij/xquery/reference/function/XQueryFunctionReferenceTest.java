@@ -22,6 +22,7 @@ import com.intellij.psi.PsiElement;
 import org.intellij.xquery.XQueryBaseTestCase;
 import org.intellij.xquery.psi.XQueryFunctionCall;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
+import org.intellij.xquery.psi.XQueryNamedFunctionRef;
 import org.intellij.xquery.reference.MatchingStringCondition;
 
 import java.util.List;
@@ -213,6 +214,14 @@ public class XQueryFunctionReferenceTest extends XQueryBaseTestCase {
         myFixture.configureByFiles("FunctionReferenceInTheSameFile_Flwor.xq");
 
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+    }
+
+    public void testFunctionNamedReference() {
+        myFixture.configureByFiles("FunctionNamedReference.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryNamedFunctionRef.class);
 
         assertChildOf(resolvedReference, XQueryFunctionDecl.class);
     }

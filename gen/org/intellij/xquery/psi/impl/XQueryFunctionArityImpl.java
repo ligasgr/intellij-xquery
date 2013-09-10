@@ -15,23 +15,26 @@
  */
 
 // This is a generated file. Not intended for manual editing.
-package org.intellij.xquery.psi;
+package org.intellij.xquery.psi.impl;
 
 import java.util.List;
 import org.jetbrains.annotations.*;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
+import static org.intellij.xquery.psi.XQueryTypes.*;
+import org.intellij.xquery.psi.*;
 
-public interface XQueryFunctionCall extends XQueryFunctionInvocation {
+public class XQueryFunctionArityImpl extends XQueryElementImpl implements XQueryFunctionArity {
 
-  @NotNull
-  XQueryArgumentList getArgumentList();
+  public XQueryFunctionArityImpl(ASTNode node) {
+    super(node);
+  }
 
-  @NotNull
-  XQueryFunctionName getFunctionName();
-
-  PsiReference getReference();
-
-  int getArity();
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitFunctionArity(this);
+    else super.accept(visitor);
+  }
 
 }

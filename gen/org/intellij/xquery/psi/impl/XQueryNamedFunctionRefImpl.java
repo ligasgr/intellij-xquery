@@ -25,11 +25,18 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
+import com.intellij.psi.PsiReference;
 
 public class XQueryNamedFunctionRefImpl extends XQueryElementImpl implements XQueryNamedFunctionRef {
 
   public XQueryNamedFunctionRefImpl(ASTNode node) {
     super(node);
+  }
+
+  @Override
+  @NotNull
+  public XQueryFunctionArity getFunctionArity() {
+    return findNotNullChildByClass(XQueryFunctionArity.class);
   }
 
   @Override
@@ -41,6 +48,14 @@ public class XQueryNamedFunctionRefImpl extends XQueryElementImpl implements XQu
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitNamedFunctionRef(this);
     else super.accept(visitor);
+  }
+
+  public int getArity() {
+    return XQueryPsiImplUtil.getArity(this);
+  }
+
+  public PsiReference getReference() {
+    return XQueryPsiImplUtil.getReference(this);
   }
 
 }

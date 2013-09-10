@@ -136,7 +136,7 @@ public class XQueryPsiImplUtil {
         return new XQueryFunctionNamespaceNameReference(element, new TextRange(0, element.getTextLength()));
     }
 
-    public static PsiReference getReference(XQueryFunctionCall element) {
+    public static PsiReference getReference(XQueryFunctionInvocation element) {
         int localNameOffset = 0;
         if (element.getFunctionName().getFunctionNamespace() != null) {
             localNameOffset += element.getFunctionName().getFunctionNamespace().getTextLength() + SEPARATOR_LENGTH;
@@ -257,6 +257,10 @@ public class XQueryPsiImplUtil {
 
     public static int getArity(XQueryFunctionCall functionCall) {
         return functionCall.getArgumentList().getArgumentList().size();
+    }
+
+    public static int getArity(XQueryNamedFunctionRef functionCall) {
+        return StringUtil.parseInt(functionCall.getFunctionArity().getText(), 0);
     }
 
     public static int getArity(XQueryFunctionDecl functionDeclaration) {
