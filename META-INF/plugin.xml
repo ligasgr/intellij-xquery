@@ -72,6 +72,7 @@
         <codeStyleSettingsProvider implementation="org.intellij.xquery.formatter.settings.XQueryCodeStyleSettingsProvider"/>
         <langCodeStyleSettingsProvider implementation="org.intellij.xquery.formatter.settings.XQueryLanguageCodeStyleSettingsProvider"/>
         <quoteHandler fileType="XQuery file" className="org.intellij.xquery.quotes.XQueryQuoteHandler"/>
+        <declarationRangeHandler key="org.intellij.xquery.psi.XQueryFunctionDecl" implementationClass="org.intellij.xquery.structure.XQueryFunctionDeclarationRangeHandler"/>
     </extensions>
 
     <actions>

@@ -20,6 +20,8 @@ import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.ide.structureView.TreeBasedStructureViewBuilder;
 import com.intellij.lang.PsiStructureViewFactory;
 import com.intellij.psi.PsiFile;
+import org.intellij.xquery.psi.XQueryFunctionDecl;
+import org.intellij.xquery.psi.XQueryVarDecl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +38,9 @@ public class XQueryStructureViewFactory implements PsiStructureViewFactory {
             @NotNull
             @Override
             public com.intellij.ide.structureView.StructureViewModel createStructureViewModel() {
-                return new XQueryStructureViewModel(psiFile);
+                return new XQueryStructureViewModel(psiFile).withSuitableClasses(
+                        XQueryFunctionDecl.class, XQueryVarDecl.class
+                );
             }
         };
     }
