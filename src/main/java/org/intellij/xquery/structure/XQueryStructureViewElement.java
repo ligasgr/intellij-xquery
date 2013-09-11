@@ -67,7 +67,11 @@ public class XQueryStructureViewElement implements StructureViewTreeElement, Sor
 
     @Override
     public String getAlphaSortKey() {
-        return element instanceof PsiNamedElement ? ((PsiNamedElement) element).getName() : null;
+        if (element instanceof XQueryVarDecl)
+            return ((XQueryVarDecl) element).getVarName().getText();
+        if (element instanceof XQueryFunctionDecl)
+            return ((XQueryFunctionDecl) element).getFunctionName().getText();
+        return null;
     }
 
     @Override
