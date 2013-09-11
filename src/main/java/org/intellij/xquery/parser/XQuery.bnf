@@ -234,7 +234,7 @@ VersionDeclVersion ::= "version" StringLiteral ("encoding" StringLiteral)? {pin=
 MainModule	   ::=   	Prolog QueryBody {pin=1}
 LibraryModule	   ::=   	ModuleDecl Prolog {pin=1}
 ModuleDecl	   ::=   	"module" "namespace" NamespaceName "=" URILiteral Separator {pin=1 recoverUntil=ModuleDeclRecover}
-NamespaceName ::= NCName  {methods=[getName setName getNameIdentifier]}
+NamespaceName ::= NCName  {methods=[getName setName getNameIdentifier delete]}
 private ModuleDeclRecover ::= !('declare' | 'import')
 Prolog	   ::=   	FirstDecl* SecondDecl* {methods=[processDeclarations]} //{recoverUntil=PrologRecover}
 private FirstDecl ::= DefaultNamespaceDecl | Setter | NamespaceDecl | Import
@@ -515,9 +515,9 @@ private PrefixedName	   ::=   	Prefix ':' LocalPart
 private UnprefixedName	   ::=   	LocalPart
 Prefix	   ::=   	NCName
 LocalPart	   ::=   	NCName
-VarName ::= VarNamespace ':' VarLocalName | VarLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset getUseScope getPresentation]}
+VarName ::= VarNamespace ':' VarLocalName | VarLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset getUseScope getPresentation delete]}
 VarNamespace	   ::=   	NCName {methods=[getReference]}
 VarLocalName	   ::=   	NCName
-FunctionName ::= FunctionNamespace ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset  getPresentation]}
+FunctionName ::= FunctionNamespace ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset  getPresentation delete]}
 FunctionNamespace	   ::=   	NCName {methods=[getReference]}
 FunctionLocalName	   ::=   	NCName

@@ -40,4 +40,6 @@ public interface XQueryFunctionName extends XQueryNamedElement {
 
   ItemPresentation getPresentation();
 
+  void delete();
+
 }

@@ -17,12 +17,14 @@
 package org.intellij.xquery.psi.impl;
 
 import com.intellij.icons.AllIcons;
+import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.ResolveScopeManager;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.LocalSearchScope;
@@ -268,5 +270,22 @@ public class XQueryPsiImplUtil {
             return functionDeclaration.getParamList().getParamList().size();
         else
             return 0;
+    }
+
+    public static void delete(XQueryNamedElement namedElement) {
+        PsiElement declarationElement = namedElement.getParent();
+        final ASTNode parentNode = declarationElement.getParent().getNode();
+        assert parentNode != null;
+
+        ASTNode node = declarationElement.getNode();
+        ASTNode prev = node.getTreePrev();
+        ASTNode next = node.getTreeNext();
+        parentNode.removeChild(node);
+        if (prev == null || prev.getElementType() == TokenType.WHITE_SPACE) {
+            while (next != null && (next.getElementType() == TokenType.WHITE_SPACE || next.getElementType() == XQueryTypes.SEPARATOR)) {
+                parentNode.removeChild(next);
+                next = node.getTreeNext();
+            }
+        }
     }
 }

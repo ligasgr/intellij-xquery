@@ -29,4 +29,6 @@ public interface XQueryNamespaceName extends XQueryNamedElement {
 
   PsiElement getNameIdentifier();
 
+  void delete();
+
 }

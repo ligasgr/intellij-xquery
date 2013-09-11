@@ -43,4 +43,6 @@ public interface XQueryVarName extends XQueryNamedElement {
 
   ItemPresentation getPresentation();
 
+  void delete();
+
 }

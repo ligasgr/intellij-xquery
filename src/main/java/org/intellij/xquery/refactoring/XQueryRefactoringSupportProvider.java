@@ -19,6 +19,7 @@ package org.intellij.xquery.refactoring;
 import com.intellij.lang.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.PsiElement;
 import org.intellij.xquery.psi.XQueryFunctionName;
+import org.intellij.xquery.psi.XQueryNamespaceName;
 import org.intellij.xquery.psi.XQueryVarName;
 
 /**
@@ -30,6 +31,11 @@ public class XQueryRefactoringSupportProvider extends RefactoringSupportProvider
 
     @Override
     public boolean isMemberInplaceRenameAvailable(PsiElement element, PsiElement context) {
-        return element instanceof XQueryVarName || element instanceof XQueryFunctionName;
+        return element instanceof XQueryVarName || element instanceof XQueryFunctionName || element instanceof XQueryNamespaceName;
+    }
+
+    @Override
+    public boolean isSafeDeleteAvailable(PsiElement element) {
+        return element instanceof XQueryVarName || element instanceof XQueryFunctionName || element instanceof XQueryNamespaceName;
     }
 }

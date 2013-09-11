@@ -70,4 +70,8 @@ public class XQueryFunctionNameImpl extends XQueryNamedElementImpl implements XQ
     return XQueryPsiImplUtil.getPresentation(this);
   }
 
+  public void delete() {
+    XQueryPsiImplUtil.delete(this);
+  }
+
 }

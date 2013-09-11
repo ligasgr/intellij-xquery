@@ -75,4 +75,8 @@ public class XQueryVarNameImpl extends XQueryNamedElementImpl implements XQueryV
     return XQueryPsiImplUtil.getPresentation(this);
   }
 
+  public void delete() {
+    XQueryPsiImplUtil.delete(this);
+  }
+
 }
