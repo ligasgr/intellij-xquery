@@ -49,6 +49,4 @@ public class XQueryStructureViewModel extends StructureViewModelBase implements
     public boolean isAlwaysLeaf(StructureViewTreeElement element) {
         return element instanceof XQueryFile;
     }
-
-
 }

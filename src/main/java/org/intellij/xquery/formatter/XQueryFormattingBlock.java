@@ -18,14 +18,15 @@ package org.intellij.xquery.formatter;
 
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.formatter.common.AbstractBlock;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
-import org.intellij.xquery.psi.XQueryExpr;
-import org.intellij.xquery.psi.XQueryExprSingle;
+import org.intellij.xquery.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -125,6 +126,27 @@ public class XQueryFormattingBlock extends AbstractBlock {
         return Indent.getNoneIndent();
     }
 
+    @NotNull
+    @Override
+    public ChildAttributes getChildAttributes(int newChildIndex) {
+        IElementType type = myNode.getElementType();
+        Indent childIndent = calculateChildIndent(type, newChildIndex);
+        if (childIndent == null && newChildIndex > 0) {
+            IElementType calculatedType = getIElementType(newChildIndex);
+            childIndent = calculateChildIndent(calculatedType, newChildIndex);
+        }
+        return new ChildAttributes(childIndent != null ? childIndent : Indent.getNoneIndent(), null);
+    }
+
+    private Indent calculateChildIndent(IElementType type, int newChildIndex) {
+        if (type == COMMA && newChildIndex > 0) {
+            return Indent.getContinuationIndent();
+        }
+        if (type == ENCLOSED_EXPR || type == FUNCTION_DECL || type == FLWOR_EXPR)
+            return Indent.getNormalIndent();
+        return null;
+    }
+
     private boolean isASingleExpression() {
         return myNode.getPsi() instanceof XQueryExprSingle;
     }
@@ -157,5 +179,26 @@ public class XQueryFormattingBlock extends AbstractBlock {
 
     private boolean isFunctionBody(IElementType type, IElementType parentType) {
         return type == EXPR && parentType == ENCLOSED_EXPR;
+    }
+
+
+    @Nullable
+    private IElementType getIElementType(int newChildIndex) {
+        Block block = getSubBlocks().get(newChildIndex - 1);
+        while (block instanceof XQueryFormattingBlock && !block.getSubBlocks().isEmpty()) {
+            List<Block> subBlocks = block.getSubBlocks();
+            Block childBlock = subBlocks.get(subBlocks.size() - 1);
+            if (!(childBlock instanceof XQueryFormattingBlock)) break;
+            else {
+                ASTNode node = ((XQueryFormattingBlock) childBlock).getNode();
+                PsiElement psi = node.getPsi();
+                IElementType elementType = node.getElementType();
+                if (elementType instanceof XQueryTokenType) break;
+                if (psi instanceof LeafPsiElement || psi instanceof XQueryFunctionName || psi instanceof XQueryVarName || psi instanceof XQueryNamespaceName)
+                    break;
+            }
+            block = childBlock;
+        }
+        return block instanceof XQueryFormattingBlock ? ((XQueryFormattingBlock) block).getNode().getElementType() : null;
     }
 }
