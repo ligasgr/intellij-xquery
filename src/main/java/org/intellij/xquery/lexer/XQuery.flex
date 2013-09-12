@@ -355,6 +355,9 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 
 <DECLARATION_RECOGNITION> {
 {S}                                       {return TokenType.WHITE_SPACE;}
+"="                                       {return XQueryTypes.EQUAL;}
+"\""                                      {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"'"                                       {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
 "declare" / {S} ("boundary-space"|"default"|"base-uri"|"construction"|"ordering"|"copy-namespaces"|"decimal-format"|"namespace"|"context"|"option"|"function"|"variable"|"%") {return XQueryTypes.K_DECLARE;}
 "default" / {S} ("collation"|"order"|"decimal-format"|"element"|"function") {return XQueryTypes.K_DEFAULT;}
 "base-uri" / {S} ("\""|"'")               {return XQueryTypes.K_BASE_URI;}
@@ -421,8 +424,8 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 }
 
 <APOS_STRING_SIMPLE> {
-"\""                                      {return XQueryTypes.APOSTROPHE;}
-{StringLiteral}                           {popState(); return XQueryTypes.STRINGLITERAL;}
+"'"                                       {return XQueryTypes.APOSTROPHE;}
+{StringLiteral}                           {;popState(); return XQueryTypes.STRINGLITERAL;}
 {Char}                                    {return XQueryTypes.CHAR;}
 .                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }

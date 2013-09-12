@@ -678,4 +678,29 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
                 ")", ")"
         });
     }
+
+    public void testDecimalSeparator() throws Exception {
+        assertProducedTokens("declare default decimal-format decimal-separator = 'ds' NaN = 'nan';", new String[] {
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "default", "default",
+                "WHITE_SPACE", " ",
+                "decimal-format", "decimal-format",
+                "WHITE_SPACE", " ",
+                "decimal-separator", "decimal-separator",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'ds'",
+                "WHITE_SPACE", " ",
+                "NaN", "NaN",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'nan'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
 }
