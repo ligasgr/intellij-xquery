@@ -20,7 +20,12 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import junit.framework.Assert;
 import org.intellij.xquery.XQueryBaseTestCase;
+import org.intellij.xquery.XQueryFileType;
+import org.intellij.xquery.XQueryLanguage;
+import org.intellij.xquery.formatter.settings.XQueryCodeStyleSettings;
 
 /**
  * User: ligasgr
@@ -28,6 +33,8 @@ import org.intellij.xquery.XQueryBaseTestCase;
  * Time: 23:41
  */
 public abstract class XQueryFormattingModelBuilderTest extends XQueryBaseTestCase {
+
+    private CodeStyleSettings myTemporarySettings;
 
     void executeTest() {
         myFixture.configureByFiles(getTestName(false) + ".xq");
@@ -40,8 +47,38 @@ public abstract class XQueryFormattingModelBuilderTest extends XQueryBaseTestCas
         myFixture.checkResultByFile(getTestName(false) + "_after.xq");
     }
 
-    CodeStyleSettings getSettings() {
-        return CodeStyleSettingsManager.getSettings(getProject());
+    CommonCodeStyleSettings getSettings() {
+        return myTemporarySettings.getCommonSettings(XQueryLanguage.INSTANCE);
+    }
+
+    XQueryCodeStyleSettings getXQuerySettings() {
+        return myTemporarySettings.getCustomSettings(XQueryCodeStyleSettings.class);
+    }
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        setTestStyleSettings();
+    }
+
+    @Override
+    public void tearDown() throws Exception {
+        restoreStyleSettings();
+        super.tearDown();
+    }
+
+    private void setTestStyleSettings() {
+        CodeStyleSettingsManager settingsManager = CodeStyleSettingsManager.getInstance(getProject());
+        CodeStyleSettings currSettings = settingsManager.getCurrentSettings();
+        Assert.assertNotNull(currSettings);
+        myTemporarySettings = currSettings.clone();
+        CodeStyleSettings.IndentOptions indentOptions = myTemporarySettings.getIndentOptions(XQueryFileType.INSTANCE);
+        Assert.assertNotNull(indentOptions);
+        settingsManager.setTemporarySettings(myTemporarySettings);
+    }
+
+    private void restoreStyleSettings() {
+        CodeStyleSettingsManager.getInstance(getProject()).dropTemporarySettings();
     }
 }
 

@@ -28,6 +28,7 @@ import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.TokenSet;
 import org.intellij.xquery.XQueryLanguage;
+import org.intellij.xquery.formatter.settings.XQueryCodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,15 +48,21 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
     @Override
     public FormattingModel createModel(PsiElement element, CodeStyleSettings settings) {
         CommonCodeStyleSettings commonSettings = settings.getCommonSettings(XQueryLanguage.INSTANCE);
+        XQueryCodeStyleSettings xQuerySettings = settings.getCustomSettings(XQueryCodeStyleSettings.class);
         final XQueryFormattingBlock block = new XQueryFormattingBlock(element.getNode(), null, null, commonSettings,
-                createSpacingBuilder(settings));
+                createSpacingBuilder(commonSettings, xQuerySettings));
         FormattingModel result = createFormattingModelForPsiFile(element.getContainingFile(), block, settings);
         return result;
     }
 
-    private static SpacingBuilder createSpacingBuilder(CodeStyleSettings settings) {
-        return new SpacingBuilder(settings)
+    private static SpacingBuilder createSpacingBuilder(CommonCodeStyleSettings settings, XQueryCodeStyleSettings xQuerySettings) {
+        return new SpacingBuilder(settings.getRootSettings())
                 .aroundInside(EQUAL, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_EQUALITY_OPERATORS)
+                .aroundInside(EQUAL, MODULE_DECL).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
+                .aroundInside(EQUAL, SCHEMA_IMPORT).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
+                .aroundInside(EQUAL, MODULE_IMPORT).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
+                .aroundInside(EQUAL, DECIMAL_FORMAT_DECL).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
+                .aroundInside(EQUAL, NAMESPACE_DECL).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
                 .aroundInside(NOT_EQUAL, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_EQUALITY_OPERATORS)
                 .aroundInside(LT_CHAR, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_RELATIONAL_OPERATORS)
                 .aroundInside(LE_CHARS, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_RELATIONAL_OPERATORS)

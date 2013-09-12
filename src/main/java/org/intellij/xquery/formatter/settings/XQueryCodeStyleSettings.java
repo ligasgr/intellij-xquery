@@ -24,6 +24,8 @@ import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
  * Time: 19:06
  */
 public class XQueryCodeStyleSettings extends CustomCodeStyleSettings {
+    public boolean SPACE_AROUND_ASSIGNMENT_IN_PROLOG = true;
+
     public XQueryCodeStyleSettings(CodeStyleSettings container) {
         super("XQueryCodeStyleSettings", container);
     }

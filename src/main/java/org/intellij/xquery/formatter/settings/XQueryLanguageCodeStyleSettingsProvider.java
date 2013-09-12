@@ -19,6 +19,7 @@ import com.intellij.application.options.IndentOptionsEditor;
 import com.intellij.application.options.SmartIndentOptionsEditor;
 import com.intellij.lang.Language;
 import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizable;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
 import org.intellij.xquery.XQueryLanguage;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +42,17 @@ public class XQueryLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
     }
 
     @Override
+    public CommonCodeStyleSettings getDefaultCommonSettings() {
+        CommonCodeStyleSettings defaultSettings = new CommonCodeStyleSettings(getLanguage());
+        CommonCodeStyleSettings.IndentOptions indentOptions = defaultSettings.initIndentOptions();
+        indentOptions.INDENT_SIZE = 4;
+        indentOptions.CONTINUATION_INDENT_SIZE = 8;
+        indentOptions.TAB_SIZE = 4;
+
+        return defaultSettings;
+    }
+
+    @Override
     public void customizeSettings(@NotNull CodeStyleSettingsCustomizable consumer, @NotNull SettingsType settingsType) {
         if (settingsType == SettingsType.SPACING_SETTINGS) {
             consumer.showStandardOptions(
@@ -57,6 +69,8 @@ public class XQueryLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
             consumer.renameStandardOption("SPACE_AROUND_RELATIONAL_OPERATORS", "Relational operators (<, <=, >, >=)");
             consumer.renameStandardOption("SPACE_AROUND_ADDITIVE_OPERATORS", "Additive operators (+, -)");
             consumer.renameStandardOption("SPACE_AROUND_MULTIPLICATIVE_OPERATORS", "Multiplicative operators (*)");
+
+            consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_AROUND_ASSIGNMENT_IN_PROLOG", "Assignment operator in declarations", CodeStyleSettingsCustomizable.SPACES_AROUND_OPERATORS);
         } else if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) {
             consumer.showStandardOptions("KEEP_LINE_BREAKS");
         } else if (settingsType == SettingsType.BLANK_LINES_SETTINGS) {
@@ -66,7 +80,10 @@ public class XQueryLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 
     @Override
     public String getCodeSample(@NotNull SettingsType settingsType) {
-        return "declare namespace example = \"example\";\n" +
+        return "declare default decimal-format decimal-separator = \"anything\" NaN = \"whatever\";\n" +
+                "import schema namespace ex = \"ex\";\n" +
+                "import module namespace m = \"m\";\n" +
+                "declare namespace example = \"example\";\n" +
                 "\n" +
                 "declare variable $first := ();\n" +
                 "\n" +

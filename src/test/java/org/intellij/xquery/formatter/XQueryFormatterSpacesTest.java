@@ -16,7 +16,6 @@ public class XQueryFormatterSpacesTest extends XQueryFormattingModelBuilderTest 
         executeTest();
     }
 
-
     public void testSpaceAroundEqualityOperators() {
         getSettings().SPACE_AROUND_EQUALITY_OPERATORS = false;
         executeTest();
@@ -48,6 +47,11 @@ public class XQueryFormatterSpacesTest extends XQueryFormattingModelBuilderTest 
     }
 
     public void testSpaceAroundKeyword() {
+        executeTest();
+    }
+
+    public void testSpaceAroundAssignmentInModuleDeclAndFirstDecl() {
+        getXQuerySettings().SPACE_AROUND_ASSIGNMENT_IN_PROLOG = false;
         executeTest();
     }
 }

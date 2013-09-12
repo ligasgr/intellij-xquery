@@ -1,4 +1,3 @@
-declare namespace zz = 'xx';
-declare variable $fgdf := <tag attr = 'sdf'/>;
+declare variable $fgdf := 'sdf';
 let $df := zz:example()
 return $df
