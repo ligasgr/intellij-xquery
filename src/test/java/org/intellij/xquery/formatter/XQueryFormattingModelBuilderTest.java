@@ -27,89 +27,9 @@ import org.intellij.xquery.XQueryBaseTestCase;
  * Date: 22/08/13
  * Time: 23:41
  */
-public class XQueryFormattingModelBuilderTest extends XQueryBaseTestCase {
+public abstract class XQueryFormattingModelBuilderTest extends XQueryBaseTestCase {
 
-    @Override
-    protected String getTestDataPath() {
-        return "src/test/testData/org/intellij/xquery/formatter";
-    }
-
-    public void testSpaceAroundAssignmentOperators() {
-        getSettings().SPACE_AROUND_ASSIGNMENT_OPERATORS = false;
-        executeTest();
-    }
-
-    public void testSpaceAroundEqualityOperators() {
-        getSettings().SPACE_AROUND_EQUALITY_OPERATORS = false;
-        executeTest();
-    }
-
-    public void testSpaceAroundRelationalOperators() {
-        getSettings().SPACE_AROUND_RELATIONAL_OPERATORS = false;
-        executeTest();
-    }
-
-    public void testSpaceAroundAdditiveOperators() {
-        getSettings().SPACE_AROUND_ADDITIVE_OPERATORS = false;
-        executeTest();
-    }
-
-    public void testSpaceAroundMultiplicativeOperators() {
-        getSettings().SPACE_AROUND_MULTIPLICATIVE_OPERATORS= true;
-        executeTest();
-    }
-
-    private CodeStyleSettings getSettings() {
-        return CodeStyleSettingsManager.getSettings(getProject());
-    }
-
-    public void testSpaceBeforeAfterComma() {
-        getSettings().SPACE_BEFORE_COMMA = true;
-        getSettings().SPACE_AROUND_ASSIGNMENT_OPERATORS = true;
-        executeTest();
-    }
-
-    public void testSpaceBeforeAndAfterArgumentAndParamList() {
-        executeTest();
-    }
-
-    public void testSpaceAroundKeyword() {
-        executeTest();
-    }
-
-    public void testIndentFunctionBody() {
-        executeTest();
-    }
-
-    public void testIndentDirectXml() {
-        executeTest();
-    }
-
-    public void testIndentIfExpression() {
-        executeTest();
-    }
-
-    public void testIndentVariableValue() {
-        executeTest();
-    }
-
-    public void testIndentFunctionArgumentsAndParams() {
-        executeTest();
-    }
-
-    public void testIndentFlwor() {
-        executeTest();
-    }
-
-    public void testIndentBinaryExpressions() {
-        executeTest();
-    }
-
-    public void testIndentExpr() {
-        executeTest();
-    }
-
-    private void executeTest() {
+    void executeTest() {
         myFixture.configureByFiles(getTestName(false) + ".xq");
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
@@ -119,4 +39,9 @@ public class XQueryFormattingModelBuilderTest extends XQueryBaseTestCase {
         });
         myFixture.checkResultByFile(getTestName(false) + "_after.xq");
     }
+
+    CodeStyleSettings getSettings() {
+        return CodeStyleSettingsManager.getSettings(getProject());
+    }
 }
+

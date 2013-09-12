@@ -7,7 +7,7 @@ import org.intellij.xquery.XQueryBaseTestCase;
  * Date: 11/09/13
  * Time: 21:02
  */
-public class AutoIndentTest extends XQueryBaseTestCase {
+public class XQueryFormatterAutoIndentTest extends XQueryBaseTestCase {
 
     @Override
     protected String getTestDataPath() {
