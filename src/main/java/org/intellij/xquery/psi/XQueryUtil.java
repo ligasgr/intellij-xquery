@@ -20,7 +20,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.containers.ContainerUtil;
@@ -31,6 +33,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+
 /**
  * User: ligasgr
  * Date: 08/06/13
@@ -38,14 +42,40 @@ import java.util.List;
  */
 public class XQueryUtil {
 
-    public static List<XQueryFile> findXQueryFileByName(Project project, final String filename) {
+    public static List<XQueryFile> findXQueryFileByName(Project project, final String filename, PsiFile containingFile) {
         final String name = unifyNameFormatAndRemoveProtocol(filename);
+        if (isNotAbsolutePath(name)) {
+            PsiFile fileFoundRelatively = getFileByRelativePath(project, filename, containingFile);
+            if (fileFoundRelatively != null) {
+                List<XQueryFile> filteredList = getOnlyXQueryFiles(asList(fileFoundRelatively));
+                if (filteredList.size() > 0) {
+                    return filteredList;
+                }
+            }
+        }
         List<String> splitFilename = StringUtil.split(name, "/");
         String lastPartOfTheFilename = ContainerUtil.iterateAndGetLastItem(splitFilename);
         PsiFile[] filesByName = getFilesByName(project, lastPartOfTheFilename);
         List<PsiFile> filesThatEndWithFullName = getOnlyFilesThatEndWithFullName(name, filesByName);
 
         return getOnlyXQueryFiles(filesThatEndWithFullName);
+    }
+
+    private static boolean isNotAbsolutePath(String name) {
+        return !name.startsWith("/");
+    }
+
+    private static PsiFile getFileByRelativePath(Project project, String filename, PsiFile containingFile) {
+        if (!containingFile.isPhysical()) return null;
+        VirtualFile containingDirectory = containingFile.getParent().getVirtualFile();
+        VirtualFile foundByRelativePath = containingDirectory.findFileByRelativePath(filename);
+        if (foundByRelativePath != null) {
+            PsiFile found = PsiManager.getInstance(project).findFile(foundByRelativePath);
+            if (found != null) {
+                return found;
+            }
+        }
+        return null;
     }
 
     private static List<XQueryFile> getOnlyXQueryFiles(List<PsiFile> filesThatEndWithFullName) {

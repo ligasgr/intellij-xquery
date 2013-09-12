@@ -84,12 +84,23 @@ public class XQueryModuleReferenceTest extends XQueryBaseTestCase {
         assertNull(resolvedReference);
     }
 
-    public void testModuleReferenceToFileWhenTwoFilesWithTheSameName() {
+    public void testModuleReferenceToFileWhenTwoFilesWithTheSameNameAndDifferentDirectory() {
         myFixture.configureByFiles("ModuleReference.xq", "ModuleReference_ReferencedModule.xq",
                 "sub/ModuleReference_ReferencedModule.xq");
 
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryModuleImportPath.class);
 
-        assertNull(resolvedReference);
+        assertChildOf(resolvedReference, XQueryFile.class);
+        assertEquals("ModuleReference_ReferencedModule.xq", ((XQueryFile) resolvedReference).getName());
+        assertFalse("sub".equals(((XQueryFile) resolvedReference).getContainingDirectory().getName()));
+    }
+
+    public void testModuleReferenceWithRelativePath() {
+        myFixture.configureByFiles("sub/ModuleReference_InSubDir.xq", "ModuleReference.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryModuleImportPath.class);
+
+        assertChildOf(resolvedReference, XQueryFile.class);
+        assertEquals("ModuleReference.xq", ((XQueryFile) resolvedReference).getName());
     }
 }
