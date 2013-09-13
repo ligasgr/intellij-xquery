@@ -62,7 +62,10 @@ public class XQueryLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
                     "SPACE_AROUND_ADDITIVE_OPERATORS",
                     "SPACE_AROUND_MULTIPLICATIVE_OPERATORS",
                     "SPACE_AFTER_COMMA",
-                    "SPACE_BEFORE_COMMA");
+                    "SPACE_BEFORE_COMMA",
+                    "SPACE_BEFORE_IF_PARENTHESES",
+                    "SPACE_BEFORE_SWITCH_PARENTHESES"
+            );
 
             consumer.renameStandardOption("SPACE_AROUND_ASSIGNMENT_OPERATORS", "Assignment operators (:=, =)");
             consumer.renameStandardOption("SPACE_AROUND_EQUALITY_OPERATORS", "Equality operators (=, !=)");
@@ -70,7 +73,10 @@ public class XQueryLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
             consumer.renameStandardOption("SPACE_AROUND_ADDITIVE_OPERATORS", "Additive operators (+, -)");
             consumer.renameStandardOption("SPACE_AROUND_MULTIPLICATIVE_OPERATORS", "Multiplicative operators (*)");
 
-            consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_AROUND_ASSIGNMENT_IN_PROLOG", "Assignment operator in declarations", CodeStyleSettingsCustomizable.SPACES_AROUND_OPERATORS);
+            consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_AROUND_ASSIGNMENT_IN_PROLOG", "Around '=' in declarations", CodeStyleSettingsCustomizable.SPACES_OTHER);
+            consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_AROUND_ASSIGNMENT_IN_XML_ATTRIBUTE", "Around '=' inside XML attributes", CodeStyleSettingsCustomizable.SPACES_OTHER);
+            consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_BEFORE_TYPESWITCH_PARENTHESES", "'typeswitch' parentheses", CodeStyleSettingsCustomizable.SPACES_BEFORE_PARENTHESES);
+            consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_BEFORE_TYPE_TEST_PARENTHESES", "SequenceType and NodeTest parentheses", CodeStyleSettingsCustomizable.SPACES_BEFORE_PARENTHESES);
         } else if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) {
             consumer.showStandardOptions("KEEP_LINE_BREAKS");
         } else if (settingsType == SettingsType.BLANK_LINES_SETTINGS) {
@@ -85,21 +91,27 @@ public class XQueryLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
                 "import module namespace m = \"m\";\n" +
                 "declare namespace example = \"example\";\n" +
                 "\n" +
-                "declare variable $first := ();\n" +
+                "declare variable $first as item() := if(fn:true()) then 'true' else 'false';\n" +
                 "\n" +
                 "declare function example (\n" +
                 "        $param1 as xs:integer*,\n" +
                 "        $param2 as xs:integer)\n" +
                 "as xs:integer* {\n" +
-                "    let $var:=1+2, 3-4, 5*6\n" +
+                "    let $var:=(1+2, 3-4, 5*6)\n" +
                 "    return $var\n" +
                 "};\n" +
+                "\n" +
+                "declare function byCase($var) {\n" +
+                "    switch ($var)\n" +
+                "    case \"case1\" return \"1\"\n" +
+                "    default return \"default\"\n" +
+                "};" +
                 "\n" +
                 "for $b in doc(\"http://bstore1.example.com/bib.xml\")//book,\n" +
                 "    $t in $b/title,\n" +
                 "    $a in $b/author\n" +
                 "let\n" +
-                "    $e := $a\n" +
+                "    $e := ($a, <tag attr='val'/>)\n" +
                 "where\n" +
                 "    exists($e) and 5 > 6 and 7 = 8\n" +
                 "order by\n" +

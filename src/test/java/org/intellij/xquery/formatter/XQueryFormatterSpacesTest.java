@@ -54,4 +54,29 @@ public class XQueryFormatterSpacesTest extends XQueryFormattingModelBuilderTest 
         getXQuerySettings().SPACE_AROUND_ASSIGNMENT_IN_PROLOG = false;
         executeTest();
     }
+
+    public void testSpaceAroundAssignmentInXmlAttribute() {
+        getXQuerySettings().SPACE_AROUND_ASSIGNMENT_IN_XML_ATTRIBUTE = false;
+        executeTest();
+    }
+
+    public void testSpaceBeforeIfParentheses() {
+        getSettings().SPACE_BEFORE_IF_PARENTHESES = false;
+        executeTest();
+    }
+
+    public void testSpaceBeforeSwitchParentheses() {
+        getSettings().SPACE_BEFORE_SWITCH_PARENTHESES = false;
+        executeTest();
+    }
+
+    public void testSpaceBeforeTypeswitchParentheses() {
+        getXQuerySettings().SPACE_BEFORE_TYPESWITCH_PARENTHESES = false;
+        executeTest();
+    }
+
+    public void testSpaceBeforeTypeTestParentheses() {
+        getXQuerySettings().SPACE_BEFORE_TYPE_TEST_PARENTHESES = true;
+        executeTest();
+    }
 }

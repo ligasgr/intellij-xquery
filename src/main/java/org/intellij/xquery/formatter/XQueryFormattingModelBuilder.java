@@ -18,7 +18,6 @@ package org.intellij.xquery.formatter;
 
 import com.intellij.formatting.FormattingModel;
 import com.intellij.formatting.FormattingModelBuilder;
-import com.intellij.formatting.FormattingModelProvider;
 import com.intellij.formatting.SpacingBuilder;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
@@ -58,21 +57,49 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
     private static SpacingBuilder createSpacingBuilder(CommonCodeStyleSettings settings, XQueryCodeStyleSettings xQuerySettings) {
         return new SpacingBuilder(settings.getRootSettings())
                 .aroundInside(EQUAL, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_EQUALITY_OPERATORS)
+
                 .aroundInside(EQUAL, MODULE_DECL).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
                 .aroundInside(EQUAL, SCHEMA_IMPORT).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
                 .aroundInside(EQUAL, MODULE_IMPORT).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
                 .aroundInside(EQUAL, DECIMAL_FORMAT_DECL).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
                 .aroundInside(EQUAL, NAMESPACE_DECL).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
+
+                .aroundInside(EQUAL, DIR_ATTRIBUTE_LIST).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_XML_ATTRIBUTE)
+
                 .aroundInside(NOT_EQUAL, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_EQUALITY_OPERATORS)
                 .aroundInside(LT_CHAR, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_RELATIONAL_OPERATORS)
                 .aroundInside(LE_CHARS, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_RELATIONAL_OPERATORS)
                 .aroundInside(GT_CHAR, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_RELATIONAL_OPERATORS)
                 .aroundInside(GE_CHARS, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_RELATIONAL_OPERATORS)
+
                 .around(OP_PLUS).spaceIf(settings.SPACE_AROUND_ADDITIVE_OPERATORS)
                 .around(OP_MINUS).spaceIf(settings.SPACE_AROUND_ADDITIVE_OPERATORS)
+
                 .aroundInside(STAR_SIGN, MULTIPLICATIVE_EXPR).spaceIf(settings.SPACE_AROUND_MULTIPLICATIVE_OPERATORS)
+
                 .around(OP_ASSIGN).spaceIf(settings.SPACE_AROUND_ASSIGNMENT_OPERATORS)
                 .around(EQUAL).spaceIf(settings.SPACE_AROUND_ASSIGNMENT_OPERATORS)
+
+                .beforeInside(L_PAR, IF_EXPR).spaceIf(settings.SPACE_BEFORE_IF_PARENTHESES)
+                .beforeInside(L_PAR, SWITCH_EXPR).spaceIf(settings.SPACE_BEFORE_SWITCH_PARENTHESES)
+                .beforeInside(L_PAR, TYPESWITCH_EXPR).spaceIf(xQuerySettings.SPACE_BEFORE_TYPESWITCH_PARENTHESES)
+
+                .beforeInside(L_PAR, SEQUENCE_TYPE).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, ITEM_TYPE).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, ANY_KIND_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, DOCUMENT_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, TEXT_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, COMMENT_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, NAMESPACE_NODE_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, PI_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, ATTRIBUTE_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, SCHEMA_ATTRIBUTE_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, ELEMENT_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, MAP_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, SCHEMA_ELEMENT_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, ANY_FUNCTION_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, TYPED_FUNCTION_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+
                 .before(COMMA).spaceIf(settings.SPACE_BEFORE_COMMA)
                 .after(COMMA).spaceIf(settings.SPACE_AFTER_COMMA)
                 .around(KEYWORDS).spaces(1)
