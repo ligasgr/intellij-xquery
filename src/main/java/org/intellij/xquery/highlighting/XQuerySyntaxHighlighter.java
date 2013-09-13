@@ -230,6 +230,12 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType == XQueryTypes.K_EVERY
                 || tokenType == XQueryTypes.K_EXTERNAL
                 || tokenType == XQueryTypes.K_STABLE
+                || tokenType == XQueryTypes.K_EMPTY_SEQUENCE
+                || tokenType == XQueryTypes.K_DOCUMENT_NODE
+                || tokenType == XQueryTypes.K_NAMESPACE_NODE
+                || tokenType == XQueryTypes.K_ATTRIBUTE
+                || tokenType == XQueryTypes.K_SCHEMA_ATTRIBUTE
+                || tokenType == XQueryTypes.K_SCHEMA_ELEMENT
                 ) {
             return KEYWORDS;
         }
