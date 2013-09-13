@@ -100,6 +100,9 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
                 .beforeInside(L_PAR, ANY_FUNCTION_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
                 .beforeInside(L_PAR, TYPED_FUNCTION_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
 
+                .before(PARAM_LIST).spaceIf(xQuerySettings.SPACE_BEFORE_FUNCTION_DECLARATION_PARENTHESES)
+                .beforeInside(ARGUMENT_LIST, FUNCTION_CALL).spaceIf(xQuerySettings.SPACE_BEFORE_FUNCTION_CALL_PARENTHESES)
+
                 .before(COMMA).spaceIf(settings.SPACE_BEFORE_COMMA)
                 .after(COMMA).spaceIf(settings.SPACE_AFTER_COMMA)
                 .around(KEYWORDS).spaces(1)
@@ -110,7 +113,6 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
                 .before(ARGUMENT_LIST).none()
                 .before(ARGUMENT).none()
                 .after(ARGUMENT).none()
-                .before(PARAM_LIST).none()
                 .before(PARAM).none()
                 .after(PARAM).none()
                 ;

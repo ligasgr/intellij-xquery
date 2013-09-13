@@ -79,4 +79,14 @@ public class XQueryFormatterSpacesTest extends XQueryFormattingModelBuilderTest 
         getXQuerySettings().SPACE_BEFORE_TYPE_TEST_PARENTHESES = true;
         executeTest();
     }
+
+    public void testSpaceBeforeFunctionDeclarationParentheses() {
+        getXQuerySettings().SPACE_BEFORE_FUNCTION_DECLARATION_PARENTHESES = true;
+        executeTest();
+    }
+
+    public void testSpaceBeforeFunctionCallParentheses() {
+        getXQuerySettings().SPACE_BEFORE_FUNCTION_CALL_PARENTHESES = true;
+        executeTest();
+    }
 }

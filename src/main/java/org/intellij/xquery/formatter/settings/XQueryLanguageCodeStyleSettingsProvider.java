@@ -75,8 +75,11 @@ public class XQueryLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 
             consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_AROUND_ASSIGNMENT_IN_PROLOG", "Around '=' in declarations", CodeStyleSettingsCustomizable.SPACES_OTHER);
             consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_AROUND_ASSIGNMENT_IN_XML_ATTRIBUTE", "Around '=' inside XML attributes", CodeStyleSettingsCustomizable.SPACES_OTHER);
+
             consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_BEFORE_TYPESWITCH_PARENTHESES", "'typeswitch' parentheses", CodeStyleSettingsCustomizable.SPACES_BEFORE_PARENTHESES);
             consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_BEFORE_TYPE_TEST_PARENTHESES", "SequenceType and NodeTest parentheses", CodeStyleSettingsCustomizable.SPACES_BEFORE_PARENTHESES);
+            consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_BEFORE_FUNCTION_DECLARATION_PARENTHESES", "Function declaration parentheses", CodeStyleSettingsCustomizable.SPACES_BEFORE_PARENTHESES);
+            consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_BEFORE_FUNCTION_CALL_PARENTHESES", "Function call parentheses", CodeStyleSettingsCustomizable.SPACES_BEFORE_PARENTHESES);
         } else if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) {
             consumer.showStandardOptions("KEEP_LINE_BREAKS");
         } else if (settingsType == SettingsType.BLANK_LINES_SETTINGS) {
