@@ -245,6 +245,7 @@ Char=\u9| \uA | \uD | [\u20-\uD7FF] | [\uE000-\uFFFD] | [\u10000-\u10FFFF]      
 "strict" / {S}? "{"                       {return XQueryTypes.K_STRICT;}
 "external" / {S}? (":="|";")              {return XQueryTypes.K_EXTERNAL;}
 "validate" / {S} ("lax"|"strict"|"type")  {return XQueryTypes.K_VALIDATE;}
+"validate" / {S}? "{"                     {return XQueryTypes.K_VALIDATE;}
 "order" / {S} "by"                        {return XQueryTypes.K_ORDER;}
 "map" / {S}? ("("|"{")                    {return XQueryTypes.K_MAP;}
 "attribute" / ({S}?"("|{S}?"{"|{S}{NCName})     {return XQueryTypes.K_ATTRIBUTE;}

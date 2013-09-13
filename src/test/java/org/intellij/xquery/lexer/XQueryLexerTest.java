@@ -703,4 +703,28 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
                 ";", ";"
         });
     }
+
+    public void testValidate() throws Exception {
+        assertProducedTokens("validate {'string'}", new String[] {
+                "validate", "validate",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'string'",
+                "}", "}",
+        });
+    }
+
+    public void testValidateLax() throws Exception {
+        assertProducedTokens("validate lax {'string'}", new String[] {
+                "validate", "validate",
+                "WHITE_SPACE", " ",
+                "lax", "lax",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'string'",
+                "}", "}",
+        });
+    }
 }
