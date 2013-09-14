@@ -3446,7 +3446,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ExprSingle ("," ExprSingle)*
+  // ExprSingle ExprSingleAfterComma*
   public static boolean Expr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Expr")) return false;
     boolean result_ = false;
@@ -3466,12 +3466,12 @@ public class XQueryParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // ("," ExprSingle)*
+  // ExprSingleAfterComma*
   private static boolean Expr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Expr_1")) return false;
     int offset_ = builder_.getCurrentOffset();
     while (true) {
-      if (!Expr_1_0(builder_, level_ + 1)) break;
+      if (!ExprSingleAfterComma(builder_, level_ + 1)) break;
       int next_offset_ = builder_.getCurrentOffset();
       if (offset_ == next_offset_) {
         empty_element_parsed_guard_(builder_, offset_, "Expr_1");
@@ -3480,22 +3480,6 @@ public class XQueryParser implements PsiParser {
       offset_ = next_offset_;
     }
     return true;
-  }
-
-  // "," ExprSingle
-  private static boolean Expr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "Expr_1_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMMA);
-    result_ = result_ && ExprSingle(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
   }
 
   /* ********************************************************** */
@@ -3531,6 +3515,28 @@ public class XQueryParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // "," ExprSingle
+  static boolean ExprSingleAfterComma(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ExprSingleAfterComma")) return false;
+    if (!nextTokenIs(builder_, COMMA)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
+    result_ = consumeToken(builder_, COMMA);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && ExprSingle(builder_, level_ + 1);
+    if (!result_ && !pinned_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -6175,17 +6181,21 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ParenthesizedExpr")) return false;
     if (!nextTokenIs(builder_, L_PAR)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, L_PAR);
-    result_ = result_ && ParenthesizedExpr_1(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, R_PAR);
-    if (result_) {
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, ParenthesizedExpr_1(builder_, level_ + 1));
+    result_ = pinned_ && consumeToken(builder_, R_PAR) && result_;
+    if (result_ || pinned_) {
       marker_.done(PARENTHESIZED_EXPR);
     }
     else {
       marker_.rollbackTo();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   // Expr?

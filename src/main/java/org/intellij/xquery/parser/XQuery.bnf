@@ -276,7 +276,8 @@ FunctionBody	   ::=   	EnclosedExpr
 EnclosedExpr	   ::=   	"{" Expr "}" {pin=1}
 OptionDecl	   ::=   	"declare" "option" EQName StringLiteral Separator {pin=2}
 QueryBody	   ::=   	Expr {pin=1}
-Expr	   ::=   	ExprSingle ("," ExprSingle)* {pin=1}
+Expr	   ::=   	ExprSingle ExprSingleAfterComma* {pin=1}
+private ExprSingleAfterComma ::= "," ExprSingle {pin=1}
 ExprSingle	   ::=   	FLWORExpr
  | QuantifiedExpr
  | SwitchExpr
@@ -401,7 +402,7 @@ PrimaryExpr	   ::=   	Literal
 Literal	   ::=   	NumericLiteral | StringLiteral
 NumericLiteral	   ::=   	IntegerLiteral | DecimalLiteral | DoubleLiteral
 VarRef	   ::=   	"$" VarName {methods=[getReference]}
-ParenthesizedExpr	   ::=   	"(" Expr? ")"
+ParenthesizedExpr	   ::=   	"(" Expr? ")" {pin=1}
 ContextItemExpr	   ::=   	"."
 OrderedExpr	   ::=   	"ordered" "{" Expr "}"
 UnorderedExpr	   ::=   	"unordered" "{" Expr "}"
