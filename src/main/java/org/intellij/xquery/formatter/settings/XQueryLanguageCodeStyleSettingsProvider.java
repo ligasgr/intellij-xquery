@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.intellij.xquery.formatter.settings;
 
 import com.intellij.application.options.IndentOptionsEditor;
@@ -72,6 +73,8 @@ public class XQueryLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
             consumer.renameStandardOption("SPACE_AROUND_RELATIONAL_OPERATORS", "Relational operators (<, <=, >, >=)");
             consumer.renameStandardOption("SPACE_AROUND_ADDITIVE_OPERATORS", "Additive operators (+, -)");
             consumer.renameStandardOption("SPACE_AROUND_MULTIPLICATIVE_OPERATORS", "Multiplicative operators (*)");
+
+            consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_AROUND_AXIS_OPERATOR", "Axis operator (::)", CodeStyleSettingsCustomizable.SPACES_AROUND_OPERATORS);
 
             consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_AROUND_ASSIGNMENT_IN_PROLOG", "Around '=' in declarations", CodeStyleSettingsCustomizable.SPACES_OTHER);
             consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_AROUND_ASSIGNMENT_IN_XML_ATTRIBUTE", "Around '=' inside XML attributes", CodeStyleSettingsCustomizable.SPACES_OTHER);

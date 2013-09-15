@@ -24,10 +24,10 @@ import com.intellij.psi.PsiElement;
 public interface XQueryCaseClause extends XQueryElement {
 
   @Nullable
-  XQueryExprSingle getExprSingle();
+  XQuerySequenceTypeUnion getSequenceTypeUnion();
 
   @Nullable
-  XQuerySequenceTypeUnion getSequenceTypeUnion();
+  XQuerySwitchReturnClause getSwitchReturnClause();
 
   @Nullable
   XQueryVarName getVarName();

@@ -34,14 +34,14 @@ public class XQuerySwitchCaseClauseImpl extends XQueryElementImpl implements XQu
 
   @Override
   @NotNull
-  public XQueryExprSingle getExprSingle() {
-    return findNotNullChildByClass(XQueryExprSingle.class);
+  public List<XQuerySwitchCaseOperand> getSwitchCaseOperandList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQuerySwitchCaseOperand.class);
   }
 
   @Override
   @NotNull
-  public List<XQuerySwitchCaseOperand> getSwitchCaseOperandList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQuerySwitchCaseOperand.class);
+  public XQuerySwitchReturnClause getSwitchReturnClause() {
+    return findNotNullChildByClass(XQuerySwitchReturnClause.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

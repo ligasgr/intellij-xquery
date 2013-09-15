@@ -102,7 +102,6 @@ public interface XQueryTypes {
   IElementType EXPR_SINGLE = new XQueryElementType("EXPR_SINGLE");
   IElementType EXTENSION_EXPR = new XQueryElementType("EXTENSION_EXPR");
   IElementType FLWOR_EXPR = new XQueryElementType("FLWOR_EXPR");
-  IElementType FORWARD_AXIS = new XQueryElementType("FORWARD_AXIS");
   IElementType FORWARD_STEP = new XQueryElementType("FORWARD_STEP");
   IElementType FOR_BINDING = new XQueryElementType("FOR_BINDING");
   IElementType FOR_CLAUSE = new XQueryElementType("FOR_CLAUSE");
@@ -186,7 +185,6 @@ public interface XQueryTypes {
   IElementType RANGE_EXPR = new XQueryElementType("RANGE_EXPR");
   IElementType RELATIVE_PATH_EXPR = new XQueryElementType("RELATIVE_PATH_EXPR");
   IElementType RETURN_CLAUSE = new XQueryElementType("RETURN_CLAUSE");
-  IElementType REVERSE_AXIS = new XQueryElementType("REVERSE_AXIS");
   IElementType REVERSE_STEP = new XQueryElementType("REVERSE_STEP");
   IElementType SCHEMA_ATTRIBUTE_TEST = new XQueryElementType("SCHEMA_ATTRIBUTE_TEST");
   IElementType SCHEMA_ELEMENT_TEST = new XQueryElementType("SCHEMA_ELEMENT_TEST");
@@ -203,7 +201,9 @@ public interface XQueryTypes {
   IElementType STRING_CONCAT_EXPR = new XQueryElementType("STRING_CONCAT_EXPR");
   IElementType SWITCH_CASE_CLAUSE = new XQueryElementType("SWITCH_CASE_CLAUSE");
   IElementType SWITCH_CASE_OPERAND = new XQueryElementType("SWITCH_CASE_OPERAND");
+  IElementType SWITCH_DEFAULT_RETURN_CLAUSE = new XQueryElementType("SWITCH_DEFAULT_RETURN_CLAUSE");
   IElementType SWITCH_EXPR = new XQueryElementType("SWITCH_EXPR");
+  IElementType SWITCH_RETURN_CLAUSE = new XQueryElementType("SWITCH_RETURN_CLAUSE");
   IElementType TAG_NAME = new XQueryElementType("TAG_NAME");
   IElementType TEXT_TEST = new XQueryElementType("TEXT_TEST");
   IElementType TREAT_EXPR = new XQueryElementType("TREAT_EXPR");
@@ -212,6 +212,7 @@ public interface XQueryTypes {
   IElementType TRY_TARGET_EXPR = new XQueryElementType("TRY_TARGET_EXPR");
   IElementType TUMBLING_WINDOW_CLAUSE = new XQueryElementType("TUMBLING_WINDOW_CLAUSE");
   IElementType TYPED_FUNCTION_TEST = new XQueryElementType("TYPED_FUNCTION_TEST");
+  IElementType TYPESWITCH_DEFAULT_RETURN_CLAUSE = new XQueryElementType("TYPESWITCH_DEFAULT_RETURN_CLAUSE");
   IElementType TYPESWITCH_EXPR = new XQueryElementType("TYPESWITCH_EXPR");
   IElementType TYPE_DECLARATION = new XQueryElementType("TYPE_DECLARATION");
   IElementType TYPE_NAME = new XQueryElementType("TYPE_NAME");
@@ -669,9 +670,6 @@ public interface XQueryTypes {
       else if (type == FLWOR_EXPR) {
         return new XQueryFLWORExprImpl(node);
       }
-      else if (type == FORWARD_AXIS) {
-        return new XQueryForwardAxisImpl(node);
-      }
       else if (type == FORWARD_STEP) {
         return new XQueryForwardStepImpl(node);
       }
@@ -921,9 +919,6 @@ public interface XQueryTypes {
       else if (type == RETURN_CLAUSE) {
         return new XQueryReturnClauseImpl(node);
       }
-      else if (type == REVERSE_AXIS) {
-        return new XQueryReverseAxisImpl(node);
-      }
       else if (type == REVERSE_STEP) {
         return new XQueryReverseStepImpl(node);
       }
@@ -972,8 +967,14 @@ public interface XQueryTypes {
       else if (type == SWITCH_CASE_OPERAND) {
         return new XQuerySwitchCaseOperandImpl(node);
       }
+      else if (type == SWITCH_DEFAULT_RETURN_CLAUSE) {
+        return new XQuerySwitchDefaultReturnClauseImpl(node);
+      }
       else if (type == SWITCH_EXPR) {
         return new XQuerySwitchExprImpl(node);
+      }
+      else if (type == SWITCH_RETURN_CLAUSE) {
+        return new XQuerySwitchReturnClauseImpl(node);
       }
       else if (type == TAG_NAME) {
         return new XQueryTagNameImpl(node);
@@ -998,6 +999,9 @@ public interface XQueryTypes {
       }
       else if (type == TYPED_FUNCTION_TEST) {
         return new XQueryTypedFunctionTestImpl(node);
+      }
+      else if (type == TYPESWITCH_DEFAULT_RETURN_CLAUSE) {
+        return new XQueryTypeswitchDefaultReturnClauseImpl(node);
       }
       else if (type == TYPESWITCH_EXPR) {
         return new XQueryTypeswitchExprImpl(node);

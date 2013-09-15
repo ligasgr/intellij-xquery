@@ -26,10 +26,10 @@ public interface XQuerySwitchExpr extends XQueryExprSingle {
   @Nullable
   XQueryExpr getExpr();
 
-  @Nullable
-  XQueryExprSingle getExprSingle();
-
   @NotNull
   List<XQuerySwitchCaseClause> getSwitchCaseClauseList();
+
+  @Nullable
+  XQuerySwitchDefaultReturnClause getSwitchDefaultReturnClause();
 
 }

@@ -26,14 +26,20 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryForwardAxisImpl extends XQueryElementImpl implements XQueryForwardAxis {
+public class XQuerySwitchDefaultReturnClauseImpl extends XQueryElementImpl implements XQuerySwitchDefaultReturnClause {
 
-  public XQueryForwardAxisImpl(ASTNode node) {
+  public XQuerySwitchDefaultReturnClauseImpl(ASTNode node) {
     super(node);
   }
 
+  @Override
+  @Nullable
+  public XQuerySwitchReturnClause getSwitchReturnClause() {
+    return findChildByClass(XQuerySwitchReturnClause.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitForwardAxis(this);
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSwitchDefaultReturnClause(this);
     else super.accept(visitor);
   }
 

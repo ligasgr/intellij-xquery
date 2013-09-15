@@ -316,11 +316,14 @@ OrderSpec	   ::=   	ExprSingle OrderModifier
 OrderModifier	   ::=   	("ascending" | "descending")? ("empty" ("greatest" | "least"))? ("collation" URILiteral)?
 ReturnClause	   ::=   	"return" ExprSingle {pin=1}
 QuantifiedExpr	   ::=   	("some" | "every") "$" VarName TypeDeclaration? "in" ExprSingle ("," "$" VarName TypeDeclaration? "in" ExprSingle)* "satisfies" ExprSingle {pin=1}
-SwitchExpr	   ::=   	"switch" "(" Expr ")" SwitchCaseClause+ "default" "return" ExprSingle {pin=1}
-SwitchCaseClause	   ::=   	("case" SwitchCaseOperand)+ "return" ExprSingle
+SwitchExpr	   ::=   	"switch" "(" Expr ")" SwitchCaseClause+ SwitchDefaultReturnClause {pin=1}
+SwitchDefaultReturnClause ::= "default" SwitchReturnClause {pin=1}
+SwitchCaseClause	   ::=   	("case" SwitchCaseOperand)+ SwitchReturnClause
 SwitchCaseOperand	   ::=   	ExprSingle
-TypeswitchExpr	   ::=   	"typeswitch" "(" Expr ")" CaseClause+ "default" ("$" VarName)? "return" ExprSingle {pin=1}
-CaseClause	   ::=   	"case" ("$" VarName "as")? SequenceTypeUnion "return" ExprSingle {pin=1}
+TypeswitchExpr	   ::=   	"typeswitch" "(" Expr ")" CaseClause+ TypeswitchDefaultReturnClause {pin=1}
+TypeswitchDefaultReturnClause ::= "default" ("$" VarName)? SwitchReturnClause {pin=1}
+SwitchReturnClause ::= "return" ExprSingle
+CaseClause	   ::=   	"case" ("$" VarName "as")? SequenceTypeUnion SwitchReturnClause {pin=1}
 SequenceTypeUnion	   ::=   	SequenceType ("|" SequenceType)*
 IfExpr	   ::=   	"if" "(" Expr ")" "then" ExprSingle "else" ExprSingle {pin=1}
 TryCatchExpr	   ::=   	TryClause CatchClause+
@@ -365,7 +368,7 @@ RelativePathExpr	   ::=   	StepExpr (("/" | "//") StepExpr)*
 StepExpr	   ::=   	PostfixExpr | AxisStep
 AxisStep	   ::=   	(ReverseStep | ForwardStep) PredicateList
 ForwardStep	   ::=   	(ForwardAxis NodeTest) | AbbrevForwardStep
-ForwardAxis	   ::=   	("child" "::")
+private ForwardAxis	   ::=   	("child" "::")
  | ("descendant" "::")
  | ("attribute" "::")
  | ("self" "::")
@@ -374,7 +377,7 @@ ForwardAxis	   ::=   	("child" "::")
  | ("following" "::")
 AbbrevForwardStep	   ::=   	"@"? NodeTest
 ReverseStep	   ::=   	(ReverseAxis NodeTest) | AbbrevReverseStep
-ReverseAxis	   ::=   	("parent" "::")
+private ReverseAxis	   ::=   	("parent" "::")
  | ("ancestor" "::")
  | ("preceding-sibling" "::")
  | ("preceding" "::")

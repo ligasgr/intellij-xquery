@@ -15,12 +15,32 @@
  */
 
 // This is a generated file. Not intended for manual editing.
-package org.intellij.xquery.psi;
+package org.intellij.xquery.psi.impl;
 
 import java.util.List;
 import org.jetbrains.annotations.*;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
+import static org.intellij.xquery.psi.XQueryTypes.*;
+import org.intellij.xquery.psi.*;
 
-public interface XQueryReverseAxis extends XQueryElement {
+public class XQuerySwitchReturnClauseImpl extends XQueryElementImpl implements XQuerySwitchReturnClause {
+
+  public XQuerySwitchReturnClauseImpl(ASTNode node) {
+    super(node);
+  }
+
+  @Override
+  @NotNull
+  public XQueryExprSingle getExprSingle() {
+    return findNotNullChildByClass(XQueryExprSingle.class);
+  }
+
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSwitchReturnClause(this);
+    else super.accept(visitor);
+  }
 
 }

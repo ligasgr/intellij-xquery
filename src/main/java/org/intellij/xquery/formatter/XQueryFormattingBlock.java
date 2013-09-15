@@ -104,9 +104,13 @@ public class XQueryFormattingBlock extends AbstractBlock {
             if (parentType == WHERE_CLAUSE ||
                     parentType == RETURN_CLAUSE ||
                     parentType == VAR_VALUE ||
-                    parentType == ORDER_SPEC) {
+                    parentType == ORDER_SPEC ||
+                    parentType == SWITCH_RETURN_CLAUSE) {
                 return Indent.getNormalIndent();
             }
+        }
+        if (type == SWITCH_RETURN_CLAUSE || type == SWITCH_DEFAULT_RETURN_CLAUSE || type == TYPESWITCH_DEFAULT_RETURN_CLAUSE || type == CASE_CLAUSE || type == SWITCH_CASE_CLAUSE) {
+            return Indent.getNormalIndent();
         }
         if (isParamOrArgumentList(parentType) && (type != L_PAR && type != R_PAR)) {
             return Indent.getContinuationIndent();
@@ -120,7 +124,7 @@ public class XQueryFormattingBlock extends AbstractBlock {
     }
 
     private boolean isExpressionAfterBrace(IElementType type, IElementType typeOfPreviousElement) {
-        return type == EXPR && typeOfPreviousElement == L_C_BRACE;
+        return (type == EXPR || type == CONTENT_EXPR) && typeOfPreviousElement == L_C_BRACE;
     }
 
     private boolean isExpressionAfterParenthesis(IElementType type, IElementType typeOfPreviousElement) {

@@ -24,9 +24,9 @@ import com.intellij.psi.PsiElement;
 public interface XQuerySwitchCaseClause extends XQueryElement {
 
   @NotNull
-  XQueryExprSingle getExprSingle();
+  List<XQuerySwitchCaseOperand> getSwitchCaseOperandList();
 
   @NotNull
-  List<XQuerySwitchCaseOperand> getSwitchCaseOperandList();
+  XQuerySwitchReturnClause getSwitchReturnClause();
 
 }

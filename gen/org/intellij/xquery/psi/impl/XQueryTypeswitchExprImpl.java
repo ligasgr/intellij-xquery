@@ -46,14 +46,8 @@ public class XQueryTypeswitchExprImpl extends XQueryExprSingleImpl implements XQ
 
   @Override
   @Nullable
-  public XQueryExprSingle getExprSingle() {
-    return findChildByClass(XQueryExprSingle.class);
-  }
-
-  @Override
-  @Nullable
-  public XQueryVarName getVarName() {
-    return findChildByClass(XQueryVarName.class);
+  public XQueryTypeswitchDefaultReturnClause getTypeswitchDefaultReturnClause() {
+    return findChildByClass(XQueryTypeswitchDefaultReturnClause.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

@@ -27,9 +27,6 @@ public interface XQueryForwardStep extends XQueryElement {
   XQueryAbbrevForwardStep getAbbrevForwardStep();
 
   @Nullable
-  XQueryForwardAxis getForwardAxis();
-
-  @Nullable
   XQueryNodeTest getNodeTest();
 
 }

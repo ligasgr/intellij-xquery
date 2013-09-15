@@ -21,12 +21,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryReverseStep extends XQueryElement {
+public interface XQuerySwitchReturnClause extends XQueryElement {
 
-  @Nullable
-  XQueryAbbrevReverseStep getAbbrevReverseStep();
-
-  @Nullable
-  XQueryNodeTest getNodeTest();
+  @NotNull
+  XQueryExprSingle getExprSingle();
 
 }

@@ -26,32 +26,26 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQuerySwitchExprImpl extends XQueryExprSingleImpl implements XQuerySwitchExpr {
+public class XQueryTypeswitchDefaultReturnClauseImpl extends XQueryElementImpl implements XQueryTypeswitchDefaultReturnClause {
 
-  public XQuerySwitchExprImpl(ASTNode node) {
+  public XQueryTypeswitchDefaultReturnClauseImpl(ASTNode node) {
     super(node);
   }
 
   @Override
   @Nullable
-  public XQueryExpr getExpr() {
-    return findChildByClass(XQueryExpr.class);
-  }
-
-  @Override
-  @NotNull
-  public List<XQuerySwitchCaseClause> getSwitchCaseClauseList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQuerySwitchCaseClause.class);
+  public XQuerySwitchReturnClause getSwitchReturnClause() {
+    return findChildByClass(XQuerySwitchReturnClause.class);
   }
 
   @Override
   @Nullable
-  public XQuerySwitchDefaultReturnClause getSwitchDefaultReturnClause() {
-    return findChildByClass(XQuerySwitchDefaultReturnClause.class);
+  public XQueryVarName getVarName() {
+    return findChildByClass(XQueryVarName.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSwitchExpr(this);
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitTypeswitchDefaultReturnClause(this);
     else super.accept(visitor);
   }
 

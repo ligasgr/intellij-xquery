@@ -75,6 +75,8 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
                 .around(OP_PLUS).spaceIf(settings.SPACE_AROUND_ADDITIVE_OPERATORS)
                 .around(OP_MINUS).spaceIf(settings.SPACE_AROUND_ADDITIVE_OPERATORS)
 
+                .around(COLON_COLON).spaceIf(xQuerySettings.SPACE_AROUND_AXIS_OPERATOR)
+
                 .aroundInside(STAR_SIGN, MULTIPLICATIVE_EXPR).spaceIf(settings.SPACE_AROUND_MULTIPLICATIVE_OPERATORS)
 
                 .around(OP_ASSIGN).spaceIf(settings.SPACE_AROUND_ASSIGNMENT_OPERATORS)

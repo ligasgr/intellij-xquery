@@ -21,6 +21,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryForwardAxis extends XQueryElement {
+public interface XQueryTypeswitchDefaultReturnClause extends XQueryElement {
+
+  @Nullable
+  XQuerySwitchReturnClause getSwitchReturnClause();
+
+  @Nullable
+  XQueryVarName getVarName();
 
 }

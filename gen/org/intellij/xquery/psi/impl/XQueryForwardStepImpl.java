@@ -40,12 +40,6 @@ public class XQueryForwardStepImpl extends XQueryElementImpl implements XQueryFo
 
   @Override
   @Nullable
-  public XQueryForwardAxis getForwardAxis() {
-    return findChildByClass(XQueryForwardAxis.class);
-  }
-
-  @Override
-  @Nullable
   public XQueryNodeTest getNodeTest() {
     return findChildByClass(XQueryNodeTest.class);
   }

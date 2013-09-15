@@ -44,12 +44,6 @@ public class XQueryReverseStepImpl extends XQueryElementImpl implements XQueryRe
     return findChildByClass(XQueryNodeTest.class);
   }
 
-  @Override
-  @Nullable
-  public XQueryReverseAxis getReverseAxis() {
-    return findChildByClass(XQueryReverseAxis.class);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitReverseStep(this);
     else super.accept(visitor);

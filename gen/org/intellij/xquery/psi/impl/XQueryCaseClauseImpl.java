@@ -34,14 +34,14 @@ public class XQueryCaseClauseImpl extends XQueryElementImpl implements XQueryCas
 
   @Override
   @Nullable
-  public XQueryExprSingle getExprSingle() {
-    return findChildByClass(XQueryExprSingle.class);
+  public XQuerySequenceTypeUnion getSequenceTypeUnion() {
+    return findChildByClass(XQuerySequenceTypeUnion.class);
   }
 
   @Override
   @Nullable
-  public XQuerySequenceTypeUnion getSequenceTypeUnion() {
-    return findChildByClass(XQuerySequenceTypeUnion.class);
+  public XQuerySwitchReturnClause getSwitchReturnClause() {
+    return findChildByClass(XQuerySwitchReturnClause.class);
   }
 
   @Override

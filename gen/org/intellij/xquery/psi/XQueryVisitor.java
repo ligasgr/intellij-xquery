@@ -342,10 +342,6 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
-  public void visitForwardAxis(@NotNull XQueryForwardAxis o) {
-    visitElement(o);
-  }
-
   public void visitForwardStep(@NotNull XQueryForwardStep o) {
     visitElement(o);
   }
@@ -670,10 +666,6 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
-  public void visitReverseAxis(@NotNull XQueryReverseAxis o) {
-    visitElement(o);
-  }
-
   public void visitReverseStep(@NotNull XQueryReverseStep o) {
     visitElement(o);
   }
@@ -738,8 +730,16 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
+  public void visitSwitchDefaultReturnClause(@NotNull XQuerySwitchDefaultReturnClause o) {
+    visitElement(o);
+  }
+
   public void visitSwitchExpr(@NotNull XQuerySwitchExpr o) {
     visitExprSingle(o);
+  }
+
+  public void visitSwitchReturnClause(@NotNull XQuerySwitchReturnClause o) {
+    visitElement(o);
   }
 
   public void visitTagName(@NotNull XQueryTagName o) {
@@ -779,6 +779,10 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitTypedFunctionTest(@NotNull XQueryTypedFunctionTest o) {
+    visitElement(o);
+  }
+
+  public void visitTypeswitchDefaultReturnClause(@NotNull XQueryTypeswitchDefaultReturnClause o) {
     visitElement(o);
   }
 

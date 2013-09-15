@@ -30,9 +30,6 @@ public interface XQueryTypeswitchExpr extends XQueryExprSingle {
   XQueryExpr getExpr();
 
   @Nullable
-  XQueryExprSingle getExprSingle();
-
-  @Nullable
-  XQueryVarName getVarName();
+  XQueryTypeswitchDefaultReturnClause getTypeswitchDefaultReturnClause();
 
 }
