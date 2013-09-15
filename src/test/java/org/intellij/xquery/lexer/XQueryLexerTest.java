@@ -239,6 +239,32 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
         });
     }
 
+    public void testFunctionDeclarationWithComments() throws Exception {
+        assertProducedTokens("declare(: comment :)function (:comment:) x() {()};", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "ExprCommentStart", "(:",
+                "ExprCommentContent", " comment ",
+                "ExprCommentEnd", ":)",
+                "function", "function",
+                "WHITE_SPACE", " ",
+                "ExprCommentStart", "(:",
+                "ExprCommentContent", "comment",
+                "ExprCommentEnd", ":)",
+                "WHITE_SPACE", " ",
+                "NCName", "x",
+                "WHITE_SPACE", "",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "(", "(",
+                ")", ")",
+                "}", "}",
+                ";", ";"
+        });
+    }
+
     public void testFunctionCall() throws Exception {
         assertProducedTokens("fn:empty('')", new String[]{
                 "WHITE_SPACE", "",
