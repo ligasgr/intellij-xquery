@@ -31,9 +31,21 @@ public class XQueryQuoteHandlerTest extends XQueryBaseTestCase {
         myFixture.checkResult("''");
     }
 
+    public void testClosingApostropheNotRepeated() {
+        myFixture.configureByText(XQueryFileType.INSTANCE, "'<caret>'");
+        myFixture.type("'");
+        myFixture.checkResult("''<caret>");
+    }
+
     public void testClosingQuote() {
         myFixture.configureByText(XQueryFileType.INSTANCE, "");
         myFixture.type("\"");
         myFixture.checkResult("\"\"");
+    }
+
+    public void testClosingQuoteNotRepeated() {
+        myFixture.configureByText(XQueryFileType.INSTANCE, "\"<caret>\"");
+        myFixture.type("\"");
+        myFixture.checkResult("\"\"<caret>");
     }
 }

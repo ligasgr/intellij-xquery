@@ -18,6 +18,8 @@ package org.intellij.xquery.quotes;
 import com.intellij.codeInsight.editorActions.SimpleTokenSetQuoteHandler;
 import org.intellij.xquery.psi.XQueryTypes;
 
+import static org.intellij.xquery.psi.XQueryTypes.*;
+
 /**
  * User: ligasgr
  * Date: 03/09/13
@@ -25,6 +27,6 @@ import org.intellij.xquery.psi.XQueryTypes;
  */
 public class XQueryQuoteHandler extends SimpleTokenSetQuoteHandler {
     public XQueryQuoteHandler() {
-        super(XQueryTypes.QUOT, XQueryTypes.APOSTROPHE, XQueryTypes.CHAR);
+        super(QUOT, APOSTROPHE, CHAR, STRINGLITERAL);
     }
 }
