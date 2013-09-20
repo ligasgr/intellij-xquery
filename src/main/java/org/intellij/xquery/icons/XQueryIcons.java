@@ -16,7 +16,10 @@
 
 package org.intellij.xquery.icons;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.IconLoader;
+import com.intellij.ui.RowIcon;
+import com.intellij.util.PlatformIcons;
 
 import javax.swing.*;
 
@@ -27,4 +30,20 @@ import javax.swing.*;
  */
 public class XQueryIcons {
     public static final Icon FILE = IconLoader.getIcon("/icons/xq.png");
+    public static final Icon FUNCTION_ICON = AllIcons.Nodes.Method;
+    public static final Icon VARIABLE_ICON = AllIcons.Nodes.Variable;
+
+    public static final Icon FUNCTION_PRIVATE_ICON = createRowIcon(AllIcons.Nodes.Method, PlatformIcons.PRIVATE_ICON);
+    public static final Icon FUNCTION_PUBLIC_ICON = createRowIcon(AllIcons.Nodes.Method, PlatformIcons.PUBLIC_ICON);
+    public static final Icon VARIABLE_PRIVATE_ICON = createRowIcon(AllIcons.Nodes.Variable, PlatformIcons.PRIVATE_ICON);
+    public static final Icon VARIABLE_PUBLIC_ICON = createRowIcon(AllIcons.Nodes.Variable, PlatformIcons.PUBLIC_ICON);
+
+
+
+    private static Icon createRowIcon(Icon icon1, Icon icon2) {
+        RowIcon rowIcon = new RowIcon(2);
+        rowIcon.setIcon(icon1, 0);
+        rowIcon.setIcon(icon2, 1);
+        return rowIcon;
+    }
 }
