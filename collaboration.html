@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  ~ Copyright 2013 Grzegorz Ligas <ligasgr@gmail.com>
+  ~ Copyright 2013 Grzegorz Ligas <ligasgr@gmail.com> and other contributors (see the CONTRIBUTORS file).
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -50,6 +50,20 @@
             <h1>Collaboration</h1>
         </div>
 
+        <p>All contributions unless stated otherwise are assumed to be under project's license (Apache v2).</p>
+
+        <p>
+            Whenever raising a pull request with your changes please remember about following things:
+            <ul>
+                <li><a href="http://git-scm.com/book/en/Git-Branching-Rebasing">Rebase</a> pull request against master</li>
+                <li>Add unit tests wherever possible</li>
+                <li>Add functional tests wherever possible</li>
+                <li>Ensure that regression tests are not broken</li>
+                <li>Add yourself and information regarding contribution to CONTRIBUTORS file</li>
+                <li><a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882">Clean code</a> will be highly appreciated :)</li>
+            </ul>
+        </p>
+
         <h1>
             <a name="xquery---useful-links" class="anchor" href="#xquery---useful-links"><span
                     class="octicon octicon-link"></span></a>XQuery - useful links</h1>
@@ -91,8 +105,8 @@
                 a plugin for IntelliJ IDEA – some useful tips and links</a></li>
         </ol>
         <h1>
-            <a name="building-plugin-locally" class="anchor" href="#building-plugin-locally"><span
-                    class="octicon octicon-link"></span></a>Setup for development on Linux</h1>
+            <a name="dev-on-linux" class="anchor" href="#dev-on-linux"><span
+                    class="octicon octicon-link"></span></a>Setup for development on Linux/Unix/Mac</h1>
         <ul>
             <li>Fork intellij-xquery repository</li>
             <li>Fetch repository to your machine</li>
@@ -113,10 +127,34 @@
             <img src="images/collaboration/03_open_idea.png" alt="Open project"/>
             <li>In File &gt; Project Structure &gt; Platform Settings &gt; SDKs add IntelliJ Platform Plugin SDK (add JDK first if you haven't already)</li>
             <img src="images/collaboration/04_add_sdk.png" alt="Add SDK"/>
-            <li>Select downloaded SDK (sdk sub directory of downloaded plugin sources) or your own SDK if you prefer</li>
+            <li>Select downloaded SDK (sdk sub directory of downloaded plugin sources), your own SDK if you prefer or downloaded source repository of IntelliJ Community Edition pointing to the correct version tag</li>
             <img src="images/collaboration/05_select_sdk.png" alt="Select SDK"/>
             <li>In Project Settings &gt; Project set newly created plugin SDK as Project SDK</li>
             <img src="images/collaboration/05_set_sdk_for_project.png" alt="Set SDK"/>
+            <li>Check <a class="anchor" href="#plugin-development---useful-links"><span
+                    class="octicon octicon-link">Plugin development useful links</span></a> for more information on plugins required for plugin development</li>
+        </ul>
+
+
+        <h1>
+            <a name="building-plugin-locally" class="anchor" href="#building-plugin-locally"><span
+                    class="octicon octicon-link"></span></a>Setup for development on Windows/</h1>
+        <ul>
+            <li>Fork intellij-xquery repository</li>
+            <li>Fetch repository to your machine</li>
+            <div class="highlight"><pre>git clone git@github.com:username/intellij-xquery.git</pre></div>
+            <li>Change directory to newly downloaded directory</li>
+            <div class="highlight"><pre><span class="nb">cd </span>intellij-xquery</pre></div>
+            <li>Change the property in build.gradle file to point to your IntelliJ installation</li>
+            <div class="highlight"><pre>project.ext.userDefinedInstallationPath = 'C:/opt/dev/ideaU'</pre></div>
+            <li>Build the project</li>
+            <div class="highlight"><pre>gradlew build</pre></div>
+            <li>Generate IntelliJ Idea project structure</li>
+            <div class="highlight"><pre>gradlew idea</pre></div>
+            <li>Open project</li>
+            <li>In File &gt; Project Structure &gt; Platform Settings &gt; SDKs add IntelliJ Platform Plugin SDK (add JDK first if you haven't already)</li>
+            <li>Select the location of your IntelliJ Idea installation or downloaded source repository of IntelliJ Community Edition pointing to the correct version tag</li>
+            <li>In Project Settings &gt; Project set newly created plugin SDK as Project SDK</li>
             <li>Check <a class="anchor" href="#plugin-development---useful-links"><span
                     class="octicon octicon-link">Plugin development useful links</span></a> for more information on plugins required for plugin development</li>
         </ul>
