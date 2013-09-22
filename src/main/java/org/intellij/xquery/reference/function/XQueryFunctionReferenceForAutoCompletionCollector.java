@@ -20,9 +20,10 @@ import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.icons.AllIcons;
+import org.intellij.xquery.icons.XQueryIcons;
 import org.intellij.xquery.model.XQueryQName;
 import org.intellij.xquery.psi.*;
+import org.intellij.xquery.psi.impl.XQueryPsiImplUtil;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -92,7 +93,7 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
 
     private void addProposedReferencesFromImportedFile(String targetPrefix, XQueryFile importedFile, XQueryFile file) {
         for (final XQueryFunctionDecl functionDecl : importedFile.getFunctionDeclarations()) {
-            if (functionNameExists(functionDecl) && functionIsPublic(functionDecl)) {
+            if (functionNameExists(functionDecl) && XQueryPsiImplUtil.functionIsPublic(functionDecl)) {
                 XQueryQName<XQueryFunctionName> basicQName = aXQueryQName(functionDecl.getFunctionName()).withPrefix
                         (targetPrefix).build();
                 boolean isInDefaultNamespace = file.getDefaultFunctionNamespace().equals(basicQName.getNamespace());
@@ -115,15 +116,6 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
         return functionDecl.getFunctionName() != null && functionDecl.getFunctionName().getTextLength() > 0;
     }
 
-    private boolean functionIsPublic(XQueryFunctionDecl functionDecl) {
-        boolean result = true;
-        for (XQueryAnnotation annotation : functionDecl.getAnnotationList()) {
-            if ("private".equals(annotation.getAnnotationName().getText()))
-                return false;
-        }
-        return result;
-    }
-
     private LookupElement[] convertToLookupElements(List<XQueryQName<XQueryFunctionName>> proposedReferences) {
         LookupElement[] lookupElements = new LookupElement[proposedReferences.size()];
         for (int i = 0; i < proposedReferences.size(); i++) {
@@ -143,7 +135,7 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
         String typeText = functionDeclaration.getSequenceType() != null ? functionDeclaration.getSequenceType()
                 .getText() : "item()*";
         return LookupElementBuilder.create(functionDeclaration, key)
-                .withIcon(AllIcons.Nodes.Method)
+                .withIcon(XQueryIcons.FUNCTION_ICON)
                 .withTailText(tailText, true)
                 .withTypeText(typeText)
                 .withInsertHandler(new ParenthesesInsertHandler<LookupElement>() {

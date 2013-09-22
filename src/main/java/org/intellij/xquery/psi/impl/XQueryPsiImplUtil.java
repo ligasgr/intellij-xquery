@@ -16,7 +16,6 @@
 
 package org.intellij.xquery.psi.impl;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.util.TextRange;
@@ -30,6 +29,7 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.intellij.xquery.icons.XQueryIcons;
 import org.intellij.xquery.psi.*;
 import org.intellij.xquery.reference.function.XQueryFunctionReference;
 import org.intellij.xquery.reference.module.XQueryModuleReference;
@@ -211,7 +211,7 @@ public class XQueryPsiImplUtil {
             @Nullable
             @Override
             public Icon getIcon(boolean unused) {
-                return AllIcons.Nodes.Method;
+                return functionIsPublic(element) ? XQueryIcons.FUNCTION_PUBLIC_ICON : XQueryIcons.FUNCTION_PRIVATE_ICON;
             }
         };
     }
@@ -238,7 +238,7 @@ public class XQueryPsiImplUtil {
             @Nullable
             @Override
             public Icon getIcon(boolean unused) {
-                return AllIcons.Nodes.Variable;
+                return variableIsPublic(element) ? XQueryIcons.VARIABLE_PUBLIC_ICON : XQueryIcons.VARIABLE_PRIVATE_ICON;
             }
         };
     }
@@ -287,5 +287,23 @@ public class XQueryPsiImplUtil {
                 next = node.getTreeNext();
             }
         }
+    }
+
+    public static boolean functionIsPublic(XQueryFunctionDecl functionDecl) {
+        boolean result = true;
+        for (XQueryAnnotation annotation : functionDecl.getAnnotationList()) {
+            if ("private".equals(annotation.getAnnotationName().getText()))
+                return false;
+        }
+        return result;
+    }
+
+    public static boolean variableIsPublic(XQueryVarDecl variableDeclaration) {
+        boolean result = true;
+        for (XQueryAnnotation annotation : variableDeclaration.getAnnotationList()) {
+            if ("private".equals(annotation.getAnnotationName().getText()))
+                return false;
+        }
+        return result;
     }
 }
