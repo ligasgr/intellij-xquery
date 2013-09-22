@@ -21,8 +21,10 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.icons.AllIcons;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.intellij.xquery.icons.XQueryIcons;
 import org.intellij.xquery.model.XQueryQName;
 import org.intellij.xquery.psi.*;
+import org.intellij.xquery.psi.impl.XQueryPsiImplUtil;
 
 import javax.swing.*;
 import java.util.LinkedList;
@@ -96,21 +98,12 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
 
     private void addProposedReferencesFromImportedFile(String targetPrefix, XQueryFile file) {
         for (final XQueryVarDecl variableDeclaration : file.getVariableDeclarations()) {
-            if (variableNameExists(variableDeclaration) && variableIsPublic(variableDeclaration)) {
+            if (variableNameExists(variableDeclaration) && XQueryPsiImplUtil.variableIsPublic(variableDeclaration)) {
                 XQueryQName<XQueryVarName> qName = aXQueryQName(variableDeclaration.getVarName()).withPrefix(targetPrefix)
                         .build();
                 addProposedReferenceIfNotAlreadyAdded(qName);
             }
         }
-    }
-
-    private boolean variableIsPublic(XQueryVarDecl variableDeclaration) {
-        boolean result = true;
-        for (XQueryAnnotation annotation : variableDeclaration.getAnnotationList()) {
-            if ("private".equals(annotation.getAnnotationName().getText()))
-                return false;
-        }
-        return result;
     }
 
     private LookupElement[] convertToLookupElements(List<XQueryQName<XQueryVarName>> proposedReferences) {
@@ -127,7 +120,7 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
     }
 
     private LookupElement createLookupElement(XQueryVarName psiElement, String key) {
-        Icon icon = AllIcons.Nodes.Variable;
+        Icon icon = XQueryIcons.VARIABLE_ICON;
         String typeText = "item()*";
         if (psiElement.getParent() instanceof XQueryParam) {
             icon = AllIcons.Nodes.Parameter;

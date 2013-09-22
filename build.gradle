@@ -58,6 +58,7 @@ repositories {
 dependencies {
     compile fileTree(dir: project.ext.ideaInstallationPath + '/lib', include: '*.jar')
     provided files("${System.properties['java.home']}/../lib/tools.jar")
+    compile 'org.mockito:mockito-all:1.9.5'
 }
 
 test {
