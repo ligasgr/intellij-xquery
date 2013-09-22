@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  ~ Copyright 2013 Grzegorz Ligas <ligasgr@gmail.com>
+  ~ Copyright 2013 Grzegorz Ligas <ligasgr@gmail.com> and other contributors (see the CONTRIBUTORS file).
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -53,14 +53,14 @@
         <p>All contributions unless stated otherwise are assumed to be under project's license (Apache v2).</p>
 
         <p>
-            Whenever raising a pull request with your changes please remember about following things:
+            Whenever raising a pull request with your changes please remember to do the following things:
             <ul>
                 <li><a href="http://git-scm.com/book/en/Git-Branching-Rebasing">Rebase</a> pull request against master</li>
                 <li>Add unit tests wherever possible</li>
                 <li>Add functional tests wherever possible</li>
                 <li>Ensure that regression tests are not broken</li>
-                <li>Add yourself and information regarding contribution to CONTRIBUTORS file</li>
-                <li><a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882">Clean code</a> will be highly appreciated :)</li>
+                <li>Add information regarding your contribution to CONTRIBUTORS file</li>
+                <li>Write <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882">clean code</a>. It will be highly appreciated :)</li>
             </ul>
         </p>
 
@@ -127,7 +127,7 @@
             <img src="images/collaboration/03_open_idea.png" alt="Open project"/>
             <li>In File &gt; Project Structure &gt; Platform Settings &gt; SDKs add IntelliJ Platform Plugin SDK (add JDK first if you haven't already)</li>
             <img src="images/collaboration/04_add_sdk.png" alt="Add SDK"/>
-            <li>Select downloaded SDK (sdk sub directory of downloaded plugin sources), your own SDK if you prefer or downloaded source repository of IntelliJ Community Edition pointing to the correct version tag</li>
+            <li>Select downloaded SDK (sdk sub directory of downloaded plugin sources), your own SDK if you prefer or downloaded source code repository of IntelliJ Community Edition pointing to the correct version tag</li>
             <img src="images/collaboration/05_select_sdk.png" alt="Select SDK"/>
             <li>In Project Settings &gt; Project set newly created plugin SDK as Project SDK</li>
             <img src="images/collaboration/05_set_sdk_for_project.png" alt="Set SDK"/>
@@ -138,7 +138,7 @@
 
         <h1>
             <a name="building-plugin-locally" class="anchor" href="#building-plugin-locally"><span
-                    class="octicon octicon-link"></span></a>Setup for development on Windows/</h1>
+                    class="octicon octicon-link"></span></a>Setup for development on Windows</h1>
         <ul>
             <li>Fork intellij-xquery repository</li>
             <li>Fetch repository to your machine</li>
@@ -153,7 +153,7 @@
             <div class="highlight"><pre>gradlew idea</pre></div>
             <li>Open project</li>
             <li>In File &gt; Project Structure &gt; Platform Settings &gt; SDKs add IntelliJ Platform Plugin SDK (add JDK first if you haven't already)</li>
-            <li>Select the location of your IntelliJ Idea installation or downloaded source repository of IntelliJ Community Edition pointing to the correct version tag</li>
+            <li>Select the location of your IntelliJ Idea installation or downloaded source code repository of IntelliJ Community Edition pointing to the correct version tag</li>
             <li>In Project Settings &gt; Project set newly created plugin SDK as Project SDK</li>
             <li>Check <a class="anchor" href="#plugin-development---useful-links"><span
                     class="octicon octicon-link">Plugin development useful links</span></a> for more information on plugins required for plugin development</li>
