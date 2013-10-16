@@ -120,3 +120,12 @@ task dist(type: Zip) {
     from configurations.runtime
     into('intellij-xquery/lib')
 }
+
+task prepareForms(dependsOn: ':classes') << {
+    ant.taskdef(name: 'javac2', classname: 'com.intellij.ant.Javac2', classpath: configurations.provided.asPath)
+    ant.javac2(destdir: sourceSets.main.output.classesDir, srcdir: 'src/main/java;gen;src/main/resources', classpath: (configurations.provided + configurations.compile).asPath, debug: 'on', nowarn: 'on')
+}
+
+jar {
+    it.dependsOn prepareForms
+}
