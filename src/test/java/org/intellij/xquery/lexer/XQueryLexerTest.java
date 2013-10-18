@@ -752,4 +752,76 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
                 "}", "}",
         });
     }
+
+    public void testContextItemAs() throws Exception {
+        assertProducedTokens("declare context item as item() external;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "context", "context",
+                "WHITE_SPACE", " ",
+                "item", "item",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "WHITE_SPACE", " ",
+                "NCName", "item",
+                "WHITE_SPACE", "",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "external", "external",
+                ";", ";",
+        });
+    }
+
+    public void testContextItemExternal() throws Exception {
+        assertProducedTokens("declare context item external;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "context", "context",
+                "WHITE_SPACE", " ",
+                "item", "item",
+                "WHITE_SPACE", " ",
+                "external", "external",
+                "WHITE_SPACE", "",
+                ";", ";",
+        });
+    }
+
+    public void testContextItemWithValue() throws Exception {
+        assertProducedTokens("declare context item := ();", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "context", "context",
+                "WHITE_SPACE", " ",
+                "item", "item",
+                "WHITE_SPACE", " ",
+                ":=", ":=",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                ")", ")",
+                ";", ";",
+        });
+    }
+
+    public void testContextItemWithDefaultValue() throws Exception {
+        assertProducedTokens("declare context item external := ();", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "context", "context",
+                "WHITE_SPACE", " ",
+                "item", "item",
+                "WHITE_SPACE", " ",
+                "external", "external",
+                "WHITE_SPACE", " ",
+                ":=", ":=",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                ")", ")",
+                ";", ";",
+        });
+    }
 }

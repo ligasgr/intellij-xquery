@@ -111,72 +111,72 @@ SC=({S} | "(:" {Char}* ~":)")+
 
 
 <YYINITIAL> {
-{S}                                       {return TokenType.WHITE_SPACE;}
-{DecimalLiteral}                          {return XQueryTypes.DECIMALLITERAL;}
-{DoubleLiteral}                           {return XQueryTypes.DOUBLELITERAL;}
-{IntegerLiteral}                          {return XQueryTypes.INTEGERLITERAL;}
-"\""                                      {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
-"'"                                       {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
-"Q{"                                      {pushState(URIQUALIFIED); yypushback(2);}
-"(:"                                      {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
-"<<"                                      {return XQueryTypes.NODECOMP_LT;}
-">>"                                      {return XQueryTypes.NODECOMP_GT;}
+{S}                                        {return TokenType.WHITE_SPACE;}
+{DecimalLiteral}                           {return XQueryTypes.DECIMALLITERAL;}
+{DoubleLiteral}                            {return XQueryTypes.DOUBLELITERAL;}
+{IntegerLiteral}                           {return XQueryTypes.INTEGERLITERAL;}
+"\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"'"                                        {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"Q{"                                       {pushState(URIQUALIFIED); yypushback(2);}
+"(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
+"<<"                                       {return XQueryTypes.NODECOMP_LT;}
+">>"                                       {return XQueryTypes.NODECOMP_GT;}
 "<" / {SC}? "$"                            {return XQueryTypes.LT_CHAR;}
 "<" / {SC}? {IntegerLiteral}               {return XQueryTypes.LT_CHAR;}
 "<" / {SC}? {DecimalLiteral}               {return XQueryTypes.LT_CHAR;}
 "<" / {SC}? {DoubleLiteral}                {return XQueryTypes.LT_CHAR;}
-"<" / {SC}? {NCName} {SC}? "("              {return XQueryTypes.LT_CHAR;}
+"<" / {SC}? {NCName} {SC}? "("             {return XQueryTypes.LT_CHAR;}
 "<" / {SC}? {NCName} {SC}? ":" {SC}? {NCName} {SC}? "(" {return XQueryTypes.LT_CHAR;}
-"<="                                      {return XQueryTypes.LE_CHARS;}
-">="                                      {return XQueryTypes.GE_CHARS;}
-"<"                                       {pushState(START_TAG); return XQueryTypes.LT_CHAR;}
-">"                                       {return XQueryTypes.GT_CHAR;}
-"@"                                       {pushState(QNAME);return XQueryTypes.AT_SIGN;}
+"<="                                       {return XQueryTypes.LE_CHARS;}
+">="                                       {return XQueryTypes.GE_CHARS;}
+"<"                                        {pushState(START_TAG); return XQueryTypes.LT_CHAR;}
+">"                                        {return XQueryTypes.GT_CHAR;}
+"@"                                        {pushState(QNAME);return XQueryTypes.AT_SIGN;}
 "//" / {SC}? ("child"|"descendant"|"attribute"|"self"|"descendant-or-self"|"following-sibling"|"following"|"parent"|"ancestor"|"preceding-sibling"|"preceding"|"ancestor-or-self") {SC}? "::" {return XQueryTypes.SLASH_SLASH;}
-"//"                                      {pushState(QNAME);return XQueryTypes.SLASH_SLASH;}
+"//"                                       {pushState(QNAME);return XQueryTypes.SLASH_SLASH;}
 "/" / {SC}? ("child"|"descendant"|"attribute"|"self"|"descendant-or-self"|"following-sibling"|"following"|"parent"|"ancestor"|"preceding-sibling"|"preceding"|"ancestor-or-self") {SC}? "::" {return XQueryTypes.SLASH;}
-"/"                                       {pushState(QNAME);return XQueryTypes.SLASH;}
-"+"                                       {return XQueryTypes.OP_PLUS;}
-"-"                                       {return XQueryTypes.OP_MINUS;}
-":="                                      {return XQueryTypes.OP_ASSIGN;}
-"::"                                      {return XQueryTypes.COLON_COLON;}
-":"                                       {return XQueryTypes.COLON;}
-"?"                                       {return XQueryTypes.QUESTIONMARK;}
-"$"                                       {pushState(QNAME);return XQueryTypes.DOLLAR_SIGN;}
-".."                                      {return XQueryTypes.DOT_DOT;}
-"."                                       {return XQueryTypes.DOT;}
-"*"                                       {return XQueryTypes.STAR_SIGN;}
-"(#"                                      {pushState(PRAGMA);return XQueryTypes.PRAGMA_BEGIN;}
-"#)"                                      {return XQueryTypes.PRAGMA_END;}
-"<?"                                      {pushState(PI);return XQueryTypes.PI_BEGIN;}
-"?>"                                      {return XQueryTypes.PI_END;}
-"("                                       {return XQueryTypes.L_PAR;}
-")"                                       {return XQueryTypes.R_PAR;}
-"["                                       {return XQueryTypes.L_BRACKET;}
-"]"                                       {return XQueryTypes.R_BRACKET;}
-"{"                                       {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE;}
-"}"                                       {popState(); return XQueryTypes.R_C_BRACE;}
-","                                       {return XQueryTypes.COMMA;}
-"!="                                      {return XQueryTypes.NOT_EQUAL;}
-"="                                       {return XQueryTypes.EQUAL;}
-";"                                       {return XQueryTypes.SEMICOLON;}
-"#"                                       {return XQueryTypes.HASH;}
-"||"                                      {return XQueryTypes.PIPE_PIPE;}
-"|"                                       {return XQueryTypes.PIPE;}
-"!"                                       {return XQueryTypes.EXCLAMATION_MARK;}
-"eq"                                      {return XQueryTypes.EQ;}
-"ne"                                      {return XQueryTypes.NE;}
-"lt"                                      {return XQueryTypes.LT;}
-"le"                                      {return XQueryTypes.LE;}
-"gt"                                      {return XQueryTypes.GT;}
-"ge"                                      {return XQueryTypes.GE;}
-"declare"                                 {yypushback(yylength()); pushState(DECLARATION_RECOGNITION); return TokenType.WHITE_SPACE;}
+"/"                                        {pushState(QNAME);return XQueryTypes.SLASH;}
+"+"                                        {return XQueryTypes.OP_PLUS;}
+"-"                                        {return XQueryTypes.OP_MINUS;}
+":="                                       {return XQueryTypes.OP_ASSIGN;}
+"::"                                       {return XQueryTypes.COLON_COLON;}
+":"                                        {return XQueryTypes.COLON;}
+"?"                                        {return XQueryTypes.QUESTIONMARK;}
+"$"                                        {pushState(QNAME);return XQueryTypes.DOLLAR_SIGN;}
+".."                                       {return XQueryTypes.DOT_DOT;}
+"."                                        {return XQueryTypes.DOT;}
+"*"                                        {return XQueryTypes.STAR_SIGN;}
+"(#"                                       {pushState(PRAGMA);return XQueryTypes.PRAGMA_BEGIN;}
+"#)"                                       {return XQueryTypes.PRAGMA_END;}
+"<?"                                       {pushState(PI);return XQueryTypes.PI_BEGIN;}
+"?>"                                       {return XQueryTypes.PI_END;}
+"("                                        {return XQueryTypes.L_PAR;}
+")"                                        {return XQueryTypes.R_PAR;}
+"["                                        {return XQueryTypes.L_BRACKET;}
+"]"                                        {return XQueryTypes.R_BRACKET;}
+"{"                                        {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE;}
+"}"                                        {popState(); return XQueryTypes.R_C_BRACE;}
+","                                        {return XQueryTypes.COMMA;}
+"!="                                       {return XQueryTypes.NOT_EQUAL;}
+"="                                        {return XQueryTypes.EQUAL;}
+";"                                        {return XQueryTypes.SEMICOLON;}
+"#"                                        {return XQueryTypes.HASH;}
+"||"                                       {return XQueryTypes.PIPE_PIPE;}
+"|"                                        {return XQueryTypes.PIPE;}
+"!"                                        {return XQueryTypes.EXCLAMATION_MARK;}
+"eq"                                       {return XQueryTypes.EQ;}
+"ne"                                       {return XQueryTypes.NE;}
+"lt"                                       {return XQueryTypes.LT;}
+"le"                                       {return XQueryTypes.LE;}
+"gt"                                       {return XQueryTypes.GT;}
+"ge"                                       {return XQueryTypes.GE;}
+"declare"                                  {yypushback(yylength()); pushState(DECLARATION_RECOGNITION); return TokenType.WHITE_SPACE;}
 "namespace" / {SC} ({NCName}|"\""|"'"|"{") {return XQueryTypes.K_NAMESPACE;}
 "empty" / {SC} ("greates"|"least"|"at"|"in") {return XQueryTypes.K_EMPTY;}
 "allowing" / {SC} "empty"                  {return XQueryTypes.K_ALLOWING;}
 "greatest" / {SC}? (";"|",")               {return XQueryTypes.K_GREATEST;}
 "greatest" / {SC} ("for"|"let"|"order"|"stable"|"group"|"count"|"return") {return XQueryTypes.K_GREATEST;}
-"least" / {SC}? (";"|",")                   {return XQueryTypes.K_LEAST;}
+"least" / {SC}? (";"|",")                  {return XQueryTypes.K_LEAST;}
 "least" / {SC} ("for"|"let"|"order"|"stable"|"group"|"count"|"return") {return XQueryTypes.K_LEAST;}
 "ascending" / {SC}? ","                    {return XQueryTypes.K_ASCENDING;}
 "ascending" / {SC} ("empty"|"collation"|"for"|"let"|"order"|"stable"|"group"|"count"|"return"|",")   {return XQueryTypes.K_ASCENDING;}
@@ -184,29 +184,29 @@ SC=({S} | "(:" {Char}* ~":)")+
 "descending" / {SC} ("empty"|"collation"|"for"|"let"|"order"|"stable"|"group"|"count"|"return"|",")  {return XQueryTypes.K_DESCENDING;}
 "inherit" / {SC}? ";"                      {return XQueryTypes.K_INHERIT;}
 "no-inherit" / {SC}? ";"                   {return XQueryTypes.K_NO_INHERIT;}
-"import"                                  {yypushback(yylength()); pushState(IMPORT_RECOGNITION); return TokenType.WHITE_SPACE;}
-"module"                                  {yypushback(yylength()); pushState(MODULE_RECOGNITION); return TokenType.WHITE_SPACE;}
-"xquery"                                  {yypushback(yylength()); pushState(XQUERY_RECOGNITION); return TokenType.WHITE_SPACE;}
+"import"                                   {yypushback(yylength()); pushState(IMPORT_RECOGNITION); return TokenType.WHITE_SPACE;}
+"module"                                   {yypushback(yylength()); pushState(MODULE_RECOGNITION); return TokenType.WHITE_SPACE;}
+"xquery"                                   {yypushback(yylength()); pushState(XQUERY_RECOGNITION); return TokenType.WHITE_SPACE;}
 "at" / {SC} ("\""|"'"|"$")                 {return XQueryTypes.K_AT;}
-"return"                                  {return XQueryTypes.K_RETURN;}
+"return"                                   {return XQueryTypes.K_RETURN;}
 "for" / {SC} ("$"|"tumbling"|"sliding")    {return XQueryTypes.K_FOR;}
 "let" / {SC} "$"                           {return XQueryTypes.K_LET;}
 "some" / {SC} "$"                          {return XQueryTypes.K_SOME;}
 "every" / {SC} "$"                         {return XQueryTypes.K_EVERY;}
-"in"                                      {return XQueryTypes.K_IN;}
-"then"                                    {return XQueryTypes.K_THEN;}
-"else"                                    {return XQueryTypes.K_ELSE;}
-"case"                                    {return XQueryTypes.K_CASE;}
-"and"                                     {return XQueryTypes.K_AND;}
-"or"                                      {return XQueryTypes.K_OR;}
-"as"                                      {return XQueryTypes.K_AS;}
-"to"                                      {return XQueryTypes.K_TO;}
-"where"                                   {return XQueryTypes.K_WHERE;}
+"in"                                       {return XQueryTypes.K_IN;}
+"then"                                     {return XQueryTypes.K_THEN;}
+"else"                                     {return XQueryTypes.K_ELSE;}
+"case"                                     {return XQueryTypes.K_CASE;}
+"and"                                      {return XQueryTypes.K_AND;}
+"or"                                       {return XQueryTypes.K_OR;}
+"as"/ ("(")? {SC} (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "(" | {NCName})                        {return XQueryTypes.K_AS;}
+"to"                                       {return XQueryTypes.K_TO;}
+"where"                                    {return XQueryTypes.K_WHERE;}
 "group" / {SC} "by"                        {return XQueryTypes.K_GROUP;}
-"by"                                      {return XQueryTypes.K_BY;}
+"by"                                       {return XQueryTypes.K_BY;}
 "instance" / {SC} "of"                     {return XQueryTypes.K_INSTANCE;}
-"of"                                      {return XQueryTypes.K_OF;}
-"satisfies"                               {return XQueryTypes.K_SATISFIES;}
+"of"                                       {return XQueryTypes.K_OF;}
+"satisfies"                                {return XQueryTypes.K_SATISFIES;}
 "child" / {SC}? "::"                       {return XQueryTypes.K_CHILD;}
 "descendant" / {SC}? "::"                  {return XQueryTypes.K_DESCENDANT;}
 "self" / {SC}? "::"                        {return XQueryTypes.K_SELF;}
@@ -222,25 +222,25 @@ SC=({S} | "(:" {Char}* ~":)")+
 "sliding" / {SC} "window"                  {return XQueryTypes.K_SLIDING;}
 "window" / {SC} "$"                        {return XQueryTypes.K_WINDOW;}
 "start" / {SC} ("$"|"when"|"at"|"previous"|"next") {return XQueryTypes.K_START;}
-"when"                                    {return XQueryTypes.K_WHEN;}
+"when"                                     {return XQueryTypes.K_WHEN;}
 "only" / {SC} "end"                        {return XQueryTypes.K_ONLY;}
 "end" / {SC} ("$"|"when"|"at"|"previous"|"next") {return XQueryTypes.K_END;}
-"when"                                    {return XQueryTypes.K_WHEN;}
+"when"                                     {return XQueryTypes.K_WHEN;}
 "previous" / {SC} "$"                      {return XQueryTypes.K_PREVIOUS;}
 "next" / {SC} "$"                          {return XQueryTypes.K_NEXT;}
 "count" / {SC} "$"                         {return XQueryTypes.K_COUNT;}
 "try" / {SC} "{"                           {return XQueryTypes.K_TRY;}
 "catch" / {SC} ("Q{"|"*"|{NCName})         {return XQueryTypes.K_CATCH;}
-"div"                                     {return XQueryTypes.K_DIV;}
-"idiv"                                    {return XQueryTypes.K_IDIV;}
-"mod"                                     {return XQueryTypes.K_MOD;}
-"union"                                   {return XQueryTypes.K_UNION;}
-"intersect"                               {return XQueryTypes.K_INTERSECT;}
-"except"                                  {return XQueryTypes.K_EXCEPT;}
+"div"                                      {return XQueryTypes.K_DIV;}
+"idiv"                                     {return XQueryTypes.K_IDIV;}
+"mod"                                      {return XQueryTypes.K_MOD;}
+"union"                                    {return XQueryTypes.K_UNION;}
+"intersect"                                {return XQueryTypes.K_INTERSECT;}
+"except"                                   {return XQueryTypes.K_EXCEPT;}
 "treat" / {SC} "as"                        {return XQueryTypes.K_TREAT;}
 "castable" / {SC} "as"                     {return XQueryTypes.K_CASTABLE;}
 "cast" / {SC} "as"                         {return XQueryTypes.K_CAST;}
-"is"                                      {return XQueryTypes.K_IS;}
+"is"                                       {return XQueryTypes.K_IS;}
 "type" / {SC} ({NCName}|"Q{")              {return XQueryTypes.K_TYPE;}
 "lax" / {SC}? "{"                          {return XQueryTypes.K_LAX;}
 "strict" / {SC}? "{"                       {return XQueryTypes.K_STRICT;}
@@ -268,106 +268,106 @@ SC=({S} | "(:" {Char}* ~":)")+
 "default" / {SC} ("$"|"return")            {return XQueryTypes.K_DEFAULT;}
 "document" / {SC}? ("{")                   {return XQueryTypes.K_DOCUMENT;}
 "stable" / {SC} "order"                    {return XQueryTypes.K_STABLE;}
-{NCName}                                  {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
+{NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 }
 
 <EXPR_COMMENT> {
-":)"                                      {popState(); return XQueryBasicTypes.EXPR_COMMENT_END;}
-"(:"                                      {pushState(EXPR_COMMENT); return XQueryBasicTypes.EXPR_COMMENT_START;}
-{Char}                                    {return XQueryBasicTypes.EXPR_COMMENT_CONTENT;}
+":)"                                       {popState(); return XQueryBasicTypes.EXPR_COMMENT_END;}
+"(:"                                       {pushState(EXPR_COMMENT); return XQueryBasicTypes.EXPR_COMMENT_START;}
+{Char}                                     {return XQueryBasicTypes.EXPR_COMMENT_CONTENT;}
 }
 
 <START_TAG> {
-{S}                                       {return TokenType.WHITE_SPACE;}
-{NCName}                                  {return XQueryTypes.NCNAME;}
-":"                                       {return XQueryTypes.COLON;}
-"="                                       {return XQueryTypes.EQUAL;}
-"\""                                      {pushState(QUOT_STRING); return XQueryTypes.QUOT;}
-"'"                                       {pushState(APOS_STRING); return XQueryTypes.APOSTROPHE;}
-">"                                       {popState();pushState(ELEMENT_CONTENT); return XQueryTypes.GT_CHAR;}
-"/>"                                      {popState(); return XQueryTypes.CLOSE_TAG;}
+{S}                                        {return TokenType.WHITE_SPACE;}
+{NCName}                                   {return XQueryTypes.NCNAME;}
+":"                                        {return XQueryTypes.COLON;}
+"="                                        {return XQueryTypes.EQUAL;}
+"\""                                       {pushState(QUOT_STRING); return XQueryTypes.QUOT;}
+"'"                                        {pushState(APOS_STRING); return XQueryTypes.APOSTROPHE;}
+">"                                        {popState();pushState(ELEMENT_CONTENT); return XQueryTypes.GT_CHAR;}
+"/>"                                       {popState(); return XQueryTypes.CLOSE_TAG;}
 }
 
 <ELEMENT_CONTENT> {
-{S}                                       {return TokenType.WHITE_SPACE;}
-"<!--"                                    {pushState(DIR_COMMENT); return XQueryTypes.DIR_COMMENT_BEGIN;}
-"<![CDATA["                               {pushState(CDATA); return XQueryTypes.CDATA_BEGIN;}
-"{{" | "}}" | [^{}<]                      {return XQueryTypes.ELEMENTCONTENTCHAR;}
-"{"                                       {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE; }
-"</"                                      {popState(); pushState(END_TAG); return XQueryTypes.END_TAG;}
-"<"                                       {pushState(START_TAG); return XQueryTypes.LT_CHAR; }
+{S}                                        {return TokenType.WHITE_SPACE;}
+"<!--"                                     {pushState(DIR_COMMENT); return XQueryTypes.DIR_COMMENT_BEGIN;}
+"<![CDATA["                                {pushState(CDATA); return XQueryTypes.CDATA_BEGIN;}
+"{{" | "}}" | [^{}<]                       {return XQueryTypes.ELEMENTCONTENTCHAR;}
+"{"                                        {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE; }
+"</"                                       {popState(); pushState(END_TAG); return XQueryTypes.END_TAG;}
+"<"                                        {pushState(START_TAG); return XQueryTypes.LT_CHAR; }
 }
 
 <DIR_COMMENT> {
-"--"                                      {return TokenType.BAD_CHARACTER;}
-"-->"                                     {popState(); return XQueryTypes.DIR_COMMENT_END;}
-{Char}                                    {return XQueryTypes.DIRCOMMENTCHAR;}
+"--"                                       {return TokenType.BAD_CHARACTER;}
+"-->"                                      {popState(); return XQueryTypes.DIR_COMMENT_END;}
+{Char}                                     {return XQueryTypes.DIRCOMMENTCHAR;}
 }
 
 <END_TAG> {
-{S}                                       {return TokenType.WHITE_SPACE;}
-{NCName}                                  {return XQueryTypes.NCNAME;}
-":"                                       {return XQueryTypes.COLON;}
-">"                                       {popState(); return XQueryTypes.GT_CHAR;}
+{S}                                        {return TokenType.WHITE_SPACE;}
+{NCName}                                   {return XQueryTypes.NCNAME;}
+":"                                        {return XQueryTypes.COLON;}
+">"                                        {popState(); return XQueryTypes.GT_CHAR;}
 }
 
 <QUOT_STRING> {
-{PredefinedEntityRef}                     {return XQueryTypes.PREDEFINEDENTITYREF;}
-{CharRef}                                 {return XQueryTypes.CHARREF;}
-"{{"                                      {return XQueryTypes.DBL_L_C_BRACE;}
-"}}"                                      {return XQueryTypes.DBL_R_C_BRACE;}
-"{"                                       {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE; }
-"\""                                      {popState(); return XQueryTypes.QUOT;}
-{Char}                                    {return XQueryTypes.CHAR;}
+{PredefinedEntityRef}                      {return XQueryTypes.PREDEFINEDENTITYREF;}
+{CharRef}                                  {return XQueryTypes.CHARREF;}
+"{{"                                       {return XQueryTypes.DBL_L_C_BRACE;}
+"}}"                                       {return XQueryTypes.DBL_R_C_BRACE;}
+"{"                                        {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE; }
+"\""                                       {popState(); return XQueryTypes.QUOT;}
+{Char}                                     {return XQueryTypes.CHAR;}
 }
 
 <APOS_STRING> {
-{PredefinedEntityRef}                     {return XQueryTypes.PREDEFINEDENTITYREF;}
-{CharRef}                                 {return XQueryTypes.CHARREF;}
-"{{"                                      {return XQueryTypes.DBL_L_C_BRACE;}
-"}}"                                      {return XQueryTypes.DBL_R_C_BRACE;}
-"{"                                       {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE; }
-"'"                                       {popState(); return XQueryTypes.APOSTROPHE;}
-{Char}                                    {return XQueryTypes.CHAR;}
+{PredefinedEntityRef}                      {return XQueryTypes.PREDEFINEDENTITYREF;}
+{CharRef}                                  {return XQueryTypes.CHARREF;}
+"{{"                                       {return XQueryTypes.DBL_L_C_BRACE;}
+"}}"                                       {return XQueryTypes.DBL_R_C_BRACE;}
+"{"                                        {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE; }
+"'"                                        {popState(); return XQueryTypes.APOSTROPHE;}
+{Char}                                     {return XQueryTypes.CHAR;}
 }
 
 <URIQUALIFIED> {
-{S}                                       {return TokenType.WHITE_SPACE;}
-{URIQualifiedName}                        {popState(); return XQueryTypes.URIQUALIFIEDNAME;}
+{S}                                        {return TokenType.WHITE_SPACE;}
+{URIQualifiedName}                         {popState(); return XQueryTypes.URIQUALIFIEDNAME;}
 }
 
 <QNAME> {
-{NCName} ":" {NameStartCharWithoutFirst}  {yypushback(2); return XQueryTypes.NCNAME;}
-{NCName}                                  {popState(); return XQueryTypes.NCNAME;}
-":"                                       {return XQueryTypes.COLON;}
-{S}                                       {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
-.                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+{NCName} ":" {NameStartCharWithoutFirst}   {yypushback(2); return XQueryTypes.NCNAME;}
+{NCName}                                   {popState(); return XQueryTypes.NCNAME;}
+":"                                        {return XQueryTypes.COLON;}
+{S}                                        {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 <XQUERY_RECOGNITION> {
-{S}                                       {return TokenType.WHITE_SPACE;}
-"\""                                      {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
-"'"                                       {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
-"xquery" / {S} ("encoding"|"version")     {return XQueryTypes.K_XQUERY;}
-"version" / {S} ("\""|"'")                {return XQueryTypes.K_VERSION;}
-"encoding" / {S} ("\""|"'")               {return XQueryTypes.K_ENCODING;}
-{NCName}                                  {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
-.                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+{S}                                        {return TokenType.WHITE_SPACE;}
+"\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"'"                                        {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"xquery" / {S} ("encoding"|"version")      {return XQueryTypes.K_XQUERY;}
+"version" / {S} ("\""|"'")                 {return XQueryTypes.K_VERSION;}
+"encoding" / {S} ("\""|"'")                {return XQueryTypes.K_ENCODING;}
+{NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 <DECLARATION_RECOGNITION> {
-{S}                                       {return TokenType.WHITE_SPACE;}
-"(:"                                      {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
-"="                                       {return XQueryTypes.EQUAL;}
-"\""                                      {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
-"'"                                       {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+{S}                                        {return TokenType.WHITE_SPACE;}
+"(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
+"="                                        {return XQueryTypes.EQUAL;}
+"\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"'"                                        {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
 "declare" / {SC} ("boundary-space"|"default"|"base-uri"|"construction"|"ordering"|"copy-namespaces"|"decimal-format"|"namespace"|"context"|"option"|"function"|"variable"|"%") {return XQueryTypes.K_DECLARE;}
 "default" / {SC} ("collation"|"order"|"decimal-format"|"element"|"function") {return XQueryTypes.K_DEFAULT;}
 "base-uri" / {SC} ("\""|"'")               {return XQueryTypes.K_BASE_URI;}
 "option" / {SC} {NCName}                   {return XQueryTypes.K_OPTION;}
 "variable" / {SC} "$"                      {return XQueryTypes.K_VARIABLE;}
 "function" / {SC} "namespace" {SC} {StringLiteral} {return XQueryTypes.K_FUNCTION;}
-"function"                                {pushState(QNAME); return XQueryTypes.K_FUNCTION;}
+"function"                                 {pushState(QNAME); return XQueryTypes.K_FUNCTION;}
 "boundary-space" / {SC} ("preserve"|"strip") {return XQueryTypes.K_BOUNDARY_SPACE;}
 "construction" / {SC} ("preserve"|"strip") {return XQueryTypes.K_CONSTRUCTION;}
 "ordering" / {SC} ("ordered"|"unordered")  {return XQueryTypes.K_ORDERING;}
@@ -387,89 +387,92 @@ SC=({S} | "(:" {Char}* ~":)")+
 "zero-digit" / {SC}? "="                   {return XQueryTypes.K_ZERO_DIGIT;}
 "digit" / {SC}? "="                        {return XQueryTypes.K_DIGIT;}
 "pattern-separator" / {SC}? "="            {return XQueryTypes.K_PATTERN_SEPARATOR;}
-"namespace" / {SC} ({NCName}|"\""|"'"|"{")       {return XQueryTypes.K_NAMESPACE;}
+"namespace" / {SC} ({NCName}|"\""|"'"|"{") {return XQueryTypes.K_NAMESPACE;}
 "context" / {SC} "item"                    {return XQueryTypes.K_CONTEXT;}
-"empty" / {SC} ("greatest"|"least") {return XQueryTypes.K_EMPTY;}
+"item" / {SC} ("external"|":="|"as")       {return XQueryTypes.K_ITEM;}
+"as"/ ("(")? {SC} (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "(" | {NCName})                        {return XQueryTypes.K_AS;}
+"external" / {SC}? (":="|";")              {return XQueryTypes.K_EXTERNAL;}
+"empty" / {SC} ("greatest"|"least")        {return XQueryTypes.K_EMPTY;}
 "strip" / {SC}? ";"                        {return XQueryTypes.K_STRIP;}
 "collation" / {SC} ("\""|"'")              {return XQueryTypes.K_COLLATION;}
-"%"                                       {return XQueryTypes.PERCENT;}
+"%"                                        {return XQueryTypes.PERCENT;}
 "element" / ({SC}?"("|{SC}?"{"| {SC}{NCName})       {return XQueryTypes.K_ELEMENT;}
-{NCName}                                  {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
-.                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+{NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 <IMPORT_RECOGNITION> {
-{S}                                       {return TokenType.WHITE_SPACE;}
-"(:"                                      {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
+{S}                                        {return TokenType.WHITE_SPACE;}
+"(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
 "import" / {SC} ("schema"|"module")        {return XQueryTypes.K_IMPORT;}
 "schema" / {SC} ("namespace"|"default"|"\""|"'") {return XQueryTypes.K_SCHEMA;}
 "default" / {SC} "element"                 {return XQueryTypes.K_DEFAULT;}
-"module" / {SC} ("namespace"|"\""|"'")         {return XQueryTypes.K_MODULE;}
+"module" / {SC} ("namespace"|"\""|"'")     {return XQueryTypes.K_MODULE;}
 "element" / {SC} "namespace"               {return XQueryTypes.K_ELEMENT;}
 "namespace" / {SC} ({NCName}|"\""|"'"|"{") {return XQueryTypes.K_NAMESPACE;}
-{NCName}                                  {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
-.                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+{NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 <MODULE_RECOGNITION> {
-{S}                                       {return TokenType.WHITE_SPACE;}
-"(:"                                      {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
-"module" / {SC} ("namespace"|"\""|"'")         {return XQueryTypes.K_MODULE;}
+{S}                                        {return TokenType.WHITE_SPACE;}
+"(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
+"module" / {SC} ("namespace"|"\""|"'")     {return XQueryTypes.K_MODULE;}
 "namespace" / {SC} {NCName}                {return XQueryTypes.K_NAMESPACE;}
-{NCName}                                  {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
-.                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+{NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 
 <QUOT_STRING_SIMPLE> {
-"\""                                      {return XQueryTypes.QUOT;}
-{StringLiteral}                           {popState(); return XQueryTypes.STRINGLITERAL;}
-{Char}                                    {return XQueryTypes.CHAR;}
-.                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+"\""                                       {return XQueryTypes.QUOT;}
+{StringLiteral}                            {popState(); return XQueryTypes.STRINGLITERAL;}
+{Char}                                     {return XQueryTypes.CHAR;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 <APOS_STRING_SIMPLE> {
-"'"                                       {return XQueryTypes.APOSTROPHE;}
-{StringLiteral}                           {;popState(); return XQueryTypes.STRINGLITERAL;}
-{Char}                                    {return XQueryTypes.CHAR;}
-.                                         {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+"'"                                        {return XQueryTypes.APOSTROPHE;}
+{StringLiteral}                            {popState(); return XQueryTypes.STRINGLITERAL;}
+{Char}                                     {return XQueryTypes.CHAR;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 <PRAGMA> {
-{S}                                       {return XQueryTypes.S;}
-{NCName}                                  {popState();pushState(PRAGMA_BEFORE_CONTENT);return XQueryTypes.NCNAME;}
-"#)"                                      {popState();return XQueryTypes.PRAGMA_END;}
+{S}                                        {return XQueryTypes.S;}
+{NCName}                                   {popState();pushState(PRAGMA_BEFORE_CONTENT);return XQueryTypes.NCNAME;}
+"#)"                                       {popState();return XQueryTypes.PRAGMA_END;}
 }
 
 <PRAGMA_BEFORE_CONTENT> {
-{S}                                       {popState();pushState(PRAGMA_CONTENT);return XQueryTypes.S;}
-"#)"                                      {popState();return XQueryTypes.PRAGMA_END;}
+{S}                                        {popState();pushState(PRAGMA_CONTENT);return XQueryTypes.S;}
+"#)"                                       {popState();return XQueryTypes.PRAGMA_END;}
 }
 
 <PRAGMA_CONTENT> {
-{Char}                                    {return XQueryTypes.PRAGMACONTENTCHAR;}
-"#)"                                      {popState();return XQueryTypes.PRAGMA_END;}
+{Char}                                     {return XQueryTypes.PRAGMACONTENTCHAR;}
+"#)"                                       {popState();return XQueryTypes.PRAGMA_END;}
 }
 
 <CDATA> {
-{Char}                                    {return XQueryTypes.CDATASECTIONCONTENTCHAR;}
-"]]>"                                     {popState();return XQueryTypes.CDATA_END;}
+{Char}                                     {return XQueryTypes.CDATASECTIONCONTENTCHAR;}
+"]]>"                                      {popState();return XQueryTypes.CDATA_END;}
 }
 
 <PI> {
-{S}                                       {return XQueryTypes.S;}
-{Name}                                    {popState();pushState(PI_BEFORE_CONTENT);return XQueryTypes.PITARGET;}
-"?>"                                      {popState();return XQueryTypes.PRAGMA_END;}
+{S}                                        {return XQueryTypes.S;}
+{Name}                                     {popState();pushState(PI_BEFORE_CONTENT);return XQueryTypes.PITARGET;}
+"?>"                                       {popState();return XQueryTypes.PRAGMA_END;}
 }
 
 <PI_BEFORE_CONTENT> {
-{S}                                       {popState();pushState(PI_CONTENT);return XQueryTypes.S;}
-"?>"                                      {popState();return XQueryTypes.PI_END;}
+{S}                                        {popState();pushState(PI_CONTENT);return XQueryTypes.S;}
+"?>"                                       {popState();return XQueryTypes.PI_END;}
 }
 
 <PI_CONTENT> {
-{Char}                                    {return XQueryTypes.DIRPICONTENTCHAR;}
-"?>"                                      {popState();return XQueryTypes.PI_END;}
+{Char}                                     {return XQueryTypes.DIRPICONTENTCHAR;}
+"?>"                                       {popState();return XQueryTypes.PI_END;}
 }
 
-.                                         {return TokenType.BAD_CHARACTER;}
+.                                          {return TokenType.BAD_CHARACTER;}
