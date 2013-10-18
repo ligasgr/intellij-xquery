@@ -471,7 +471,8 @@ TypeDeclaration	   ::=   	"as" SequenceType
 SequenceType	   ::=   	("empty-sequence" "(" ")")
  | (ItemType OccurrenceIndicator?)
 OccurrenceIndicator	   ::=   	"?" | "*" | "+"	/* xgc: occurrence-indicators */
-ItemType	   ::=   	KindTest | ("item" "(" ")") | FunctionTest | AtomicOrUnionType | ParenthesizedItemType
+ItemType	   ::=   	KindTest | GeneralItemType | FunctionTest | AtomicOrUnionType | ParenthesizedItemType
+GeneralItemType ::= "item" "(" ")" {pin=2}
 AtomicOrUnionType	   ::=   	EQName
 KindTest	   ::=   	DocumentTest
  | ElementTest
@@ -484,20 +485,20 @@ KindTest	   ::=   	DocumentTest
  | TextTest
  | NamespaceNodeTest
  | AnyKindTest
-AnyKindTest	   ::=   	"node" "(" ")"
-DocumentTest	   ::=   	"document-node" "(" (ElementTest | SchemaElementTest)? ")"
-TextTest	   ::=   	"text" "(" ")"
-CommentTest	   ::=   	"comment" "(" ")"
-NamespaceNodeTest	   ::=   	"namespace-node" "(" ")"
-PITest	   ::=   	"processing-instruction" "(" (NCName | StringLiteral)? ")"
-AttributeTest	   ::=   	"attribute" "(" (AttribNameOrWildcard ("," TypeName)?)? ")"
+AnyKindTest	   ::=   	"node" "(" ")" {pin=2}
+DocumentTest	   ::=   	"document-node" "(" (ElementTest | SchemaElementTest)? ")" {pin=2}
+TextTest	   ::=   	"text" "(" ")" {pin=2}
+CommentTest	   ::=   	"comment" "(" ")" {pin=2}
+NamespaceNodeTest	   ::=   	"namespace-node" "(" ")" {pin=2}
+PITest	   ::=   	"processing-instruction" "(" (NCName | StringLiteral)? ")" {pin=2}
+AttributeTest	   ::=   	"attribute" "(" (AttribNameOrWildcard ("," TypeName)?)? ")" {pin=2}
 AttribNameOrWildcard	   ::=   	AttributeName | "*"
-SchemaAttributeTest	   ::=   	"schema-attribute" "(" AttributeDeclaration ")"
+SchemaAttributeTest	   ::=   	"schema-attribute" "(" AttributeDeclaration ")" {pin=2}
 AttributeDeclaration	   ::=   	AttributeName
-ElementTest	   ::=   	"element" "(" (ElementNameOrWildcard ("," TypeName "?"?)?)? ")"
+ElementTest	   ::=   	"element" "(" (ElementNameOrWildcard ("," TypeName "?"?)?)? ")" {pin=2}
 ElementNameOrWildcard	   ::=   	ElementName | "*"
-MapTest         ::=     "map" "(" ("*"| (AtomicOrUnionType "," SequenceType)) ")"
-SchemaElementTest	   ::=   	"schema-element" "(" ElementDeclaration ")"
+MapTest         ::=     "map" "(" ("*"| (AtomicOrUnionType "," SequenceType)) ")" {pin=2}
+SchemaElementTest	   ::=   	"schema-element" "(" ElementDeclaration ")" {pin=2}
 ElementDeclaration	   ::=   	ElementName
 AttributeName	   ::=   	EQName
 ElementName	   ::=   	EQName
@@ -505,8 +506,8 @@ SimpleTypeName	   ::=   	TypeName
 TypeName	   ::=   	EQName
 FunctionTest	   ::=   	Annotation* (AnyFunctionTest
  | TypedFunctionTest)
-AnyFunctionTest	   ::=   	"function" "(" "*" ")"
-TypedFunctionTest	   ::=   	"function" "(" (SequenceType ("," SequenceType)*)? ")" "as" SequenceType
+AnyFunctionTest	   ::=   	"function" "(" "*" ")"      {pin=3}
+TypedFunctionTest	   ::=   	"function" "(" (SequenceType ("," SequenceType)*)? ")" "as" SequenceType {pin=4}
 ParenthesizedItemType	   ::=   	"(" ItemType ")"
 URILiteral	   ::=   	StringLiteral
 private EQName	   ::=   	QName | URIQualifiedName

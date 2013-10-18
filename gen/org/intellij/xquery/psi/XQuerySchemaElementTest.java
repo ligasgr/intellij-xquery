@@ -23,7 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface XQuerySchemaElementTest extends XQueryElement {
 
-  @NotNull
+  @Nullable
   XQueryElementDeclaration getElementDeclaration();
 
 }

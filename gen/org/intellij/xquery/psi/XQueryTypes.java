@@ -115,6 +115,7 @@ public interface XQueryTypes {
   IElementType FUNCTION_NAME = new XQueryElementType("FUNCTION_NAME");
   IElementType FUNCTION_NAMESPACE = new XQueryElementType("FUNCTION_NAMESPACE");
   IElementType FUNCTION_TEST = new XQueryElementType("FUNCTION_TEST");
+  IElementType GENERAL_ITEM_TYPE = new XQueryElementType("GENERAL_ITEM_TYPE");
   IElementType GROUPING_SPEC = new XQueryElementType("GROUPING_SPEC");
   IElementType GROUPING_SPEC_LIST = new XQueryElementType("GROUPING_SPEC_LIST");
   IElementType GROUPING_VARIABLE = new XQueryElementType("GROUPING_VARIABLE");
@@ -709,6 +710,9 @@ public interface XQueryTypes {
       }
       else if (type == FUNCTION_TEST) {
         return new XQueryFunctionTestImpl(node);
+      }
+      else if (type == GENERAL_ITEM_TYPE) {
+        return new XQueryGeneralItemTypeImpl(node);
       }
       else if (type == GROUPING_SPEC) {
         return new XQueryGroupingSpecImpl(node);

@@ -30,6 +30,9 @@ public interface XQueryItemType extends XQueryElement {
   XQueryFunctionTest getFunctionTest();
 
   @Nullable
+  XQueryGeneralItemType getGeneralItemType();
+
+  @Nullable
   XQueryKindTest getKindTest();
 
   @Nullable

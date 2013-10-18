@@ -33,9 +33,9 @@ public class XQuerySchemaElementTestImpl extends XQueryElementImpl implements XQ
   }
 
   @Override
-  @NotNull
+  @Nullable
   public XQueryElementDeclaration getElementDeclaration() {
-    return findNotNullChildByClass(XQueryElementDeclaration.class);
+    return findChildByClass(XQueryElementDeclaration.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

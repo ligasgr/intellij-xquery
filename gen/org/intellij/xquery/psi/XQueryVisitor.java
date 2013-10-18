@@ -386,6 +386,10 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
+  public void visitGeneralItemType(@NotNull XQueryGeneralItemType o) {
+    visitElement(o);
+  }
+
   public void visitGroupByClause(@NotNull XQueryGroupByClause o) {
     visitElement(o);
   }

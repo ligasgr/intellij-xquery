@@ -34,8 +34,8 @@ public class XQueryRangeExprImpl extends XQueryExprSingleImpl implements XQueryR
 
   @Override
   @NotNull
-  public List<XQueryAdditiveExpr> getAdditiveExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryAdditiveExpr.class);
+  public List<XQueryExprSingle> getExprSingleList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

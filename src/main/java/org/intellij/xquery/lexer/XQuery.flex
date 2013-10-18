@@ -132,8 +132,10 @@ SC=({S} | "(:" {Char}* ~":)")+
 "<"                                        {pushState(START_TAG); return XQueryTypes.LT_CHAR;}
 ">"                                        {return XQueryTypes.GT_CHAR;}
 "@"                                        {pushState(QNAME);return XQueryTypes.AT_SIGN;}
+"//" / {SC}? ("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "("  {return XQueryTypes.SLASH_SLASH;}
 "//" / {SC}? ("child"|"descendant"|"attribute"|"self"|"descendant-or-self"|"following-sibling"|"following"|"parent"|"ancestor"|"preceding-sibling"|"preceding"|"ancestor-or-self") {SC}? "::" {return XQueryTypes.SLASH_SLASH;}
 "//"                                       {pushState(QNAME);return XQueryTypes.SLASH_SLASH;}
+"/" / {SC}? ("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "("  {return XQueryTypes.SLASH;}
 "/" / {SC}? ("child"|"descendant"|"attribute"|"self"|"descendant-or-self"|"following-sibling"|"following"|"parent"|"ancestor"|"preceding-sibling"|"preceding"|"ancestor-or-self") {SC}? "::" {return XQueryTypes.SLASH;}
 "/"                                        {pushState(QNAME);return XQueryTypes.SLASH;}
 "+"                                        {return XQueryTypes.OP_PLUS;}
@@ -199,7 +201,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "case"                                     {return XQueryTypes.K_CASE;}
 "and"                                      {return XQueryTypes.K_AND;}
 "or"                                       {return XQueryTypes.K_OR;}
-"as"/ ("(")? {SC} (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "(" | {NCName})                        {return XQueryTypes.K_AS;}
+"as"/ ({SC}? "(" {SC}?|{SC}) (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "(" | {NCName})                        {return XQueryTypes.K_AS;}
 "to"                                       {return XQueryTypes.K_TO;}
 "where"                                    {return XQueryTypes.K_WHERE;}
 "group" / {SC} "by"                        {return XQueryTypes.K_GROUP;}
@@ -255,15 +257,15 @@ SC=({S} | "(:" {Char}* ~":)")+
 "element" / ({SC}?"("|{SC}?"{"| {SC}{NCName})       {return XQueryTypes.K_ELEMENT;}
 "empty-sequence" / {SC}? ("(")             {return XQueryTypes.K_EMPTY_SEQUENCE;}
 "function" / {SC}? ("(")                   {return XQueryTypes.K_FUNCTION;}
-"if" / {SC}? ("(")                         {return XQueryTypes.K_IF;}
 "item" / {SC}? ("(")                       {return XQueryTypes.K_ITEM;}
 "namespace-node" / {SC}? ("(")             {return XQueryTypes.K_NAMESPACE_NODE;}
 "node" / {SC}? ("(")                       {return XQueryTypes.K_NODE;}
 "processing-instruction" / {SC}? ("("|"{"|{NCName}) {return XQueryTypes.K_PI;}
 "schema-attribute" / {SC}? ("(")           {return XQueryTypes.K_SCHEMA_ATTRIBUTE;}
 "schema-element" / {SC}? ("(")             {return XQueryTypes.K_SCHEMA_ELEMENT;}
-"switch" / {SC}? ("(")                     {return XQueryTypes.K_SWITCH;}
 "text" / {SC}? ("("|"{")                   {return XQueryTypes.K_TEXT;}
+"switch" / {SC}? ("(")                     {return XQueryTypes.K_SWITCH;}
+"if" / {SC}? ("(")                         {return XQueryTypes.K_IF;}
 "typeswitch" / {SC}? ("(")                 {return XQueryTypes.K_TYPESWITCH;}
 "default" / {SC} ("$"|"return")            {return XQueryTypes.K_DEFAULT;}
 "document" / {SC}? ("{")                   {return XQueryTypes.K_DOCUMENT;}
@@ -390,7 +392,21 @@ SC=({S} | "(:" {Char}* ~":)")+
 "namespace" / {SC} ({NCName}|"\""|"'"|"{") {return XQueryTypes.K_NAMESPACE;}
 "context" / {SC} "item"                    {return XQueryTypes.K_CONTEXT;}
 "item" / {SC} ("external"|":="|"as")       {return XQueryTypes.K_ITEM;}
-"as"/ ("(")? {SC} (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "(" | {NCName})                        {return XQueryTypes.K_AS;}
+"as"/ ({SC}? "(" {SC}?|{SC}) (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "(" | {NCName})                        {return XQueryTypes.K_AS;}
+"map" / {SC}? ("(")                        {return XQueryTypes.K_MAP;}
+"attribute" / {SC}? ("(")                  {return XQueryTypes.K_ATTRIBUTE;}
+"comment" / {SC}? ("(")                    {return XQueryTypes.K_COMMENT;}
+"document-node" / {SC}? ("(")              {return XQueryTypes.K_DOCUMENT_NODE;}
+"element" / {SC}? ("(")                    {return XQueryTypes.K_ELEMENT;}
+"empty-sequence" / {SC}? ("(")             {return XQueryTypes.K_EMPTY_SEQUENCE;}
+"function" / {SC}? ("(")                   {return XQueryTypes.K_FUNCTION;}
+"item" / {SC}? ("(")                       {return XQueryTypes.K_ITEM;}
+"namespace-node" / {SC}? ("(")             {return XQueryTypes.K_NAMESPACE_NODE;}
+"node" / {SC}? ("(")                       {return XQueryTypes.K_NODE;}
+"processing-instruction" / {SC}? ("(")     {return XQueryTypes.K_PI;}
+"schema-attribute" / {SC}? ("(")           {return XQueryTypes.K_SCHEMA_ATTRIBUTE;}
+"schema-element" / {SC}? ("(")             {return XQueryTypes.K_SCHEMA_ELEMENT;}
+"text" / {SC}? ("(")                       {return XQueryTypes.K_TEXT;}
 "external" / {SC}? (":="|";")              {return XQueryTypes.K_EXTERNAL;}
 "empty" / {SC} ("greatest"|"least")        {return XQueryTypes.K_EMPTY;}
 "strip" / {SC}? ";"                        {return XQueryTypes.K_STRIP;}

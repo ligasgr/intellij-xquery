@@ -46,6 +46,12 @@ public class XQueryItemTypeImpl extends XQueryElementImpl implements XQueryItemT
 
   @Override
   @Nullable
+  public XQueryGeneralItemType getGeneralItemType() {
+    return findChildByClass(XQueryGeneralItemType.class);
+  }
+
+  @Override
+  @Nullable
   public XQueryKindTest getKindTest() {
     return findChildByClass(XQueryKindTest.class);
   }

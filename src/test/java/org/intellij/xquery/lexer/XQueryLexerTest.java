@@ -736,7 +736,7 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
                 "{", "{",
                 "WHITE_SPACE", "",
                 "StringLiteral", "'string'",
-                "}", "}",
+                "}", "}"
         });
     }
 
@@ -749,7 +749,7 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
                 "{", "{",
                 "WHITE_SPACE", "",
                 "StringLiteral", "'string'",
-                "}", "}",
+                "}", "}"
         });
     }
 
@@ -764,13 +764,13 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
                 "WHITE_SPACE", " ",
                 "as", "as",
                 "WHITE_SPACE", " ",
-                "NCName", "item",
+                "item", "item",
                 "WHITE_SPACE", "",
                 "(", "(",
                 ")", ")",
                 "WHITE_SPACE", " ",
                 "external", "external",
-                ";", ";",
+                ";", ";"
         });
     }
 
@@ -785,7 +785,7 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
                 "WHITE_SPACE", " ",
                 "external", "external",
                 "WHITE_SPACE", "",
-                ";", ";",
+                ";", ";"
         });
     }
 
@@ -802,7 +802,7 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
                 "WHITE_SPACE", " ",
                 "(", "(",
                 ")", ")",
-                ";", ";",
+                ";", ";"
         });
     }
 
@@ -821,7 +821,111 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
                 "WHITE_SPACE", " ",
                 "(", "(",
                 ")", ")",
-                ";", ";",
+                ";", ";"
+        });
+    }
+
+    public void testItemType() throws Exception {
+        assertProducedTokens("declare variable $item as item() external;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "variable", "variable",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "item",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "WHITE_SPACE", " ",
+                "item", "item",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "external", "external",
+                ";", ";"
+        });
+    }
+
+    public void testItemTypeWithParentheses() throws Exception {
+        assertProducedTokens("declare variable $item as (item()) external;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "variable", "variable",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "item",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "item", "item",
+                "(", "(",
+                ")", ")",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "external", "external",
+                ";", ";"
+        });
+    }
+
+    public void testItemTypeWithParenthesesAndNoSpaceBefore() throws Exception {
+        assertProducedTokens("declare variable $item as(item()) external;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "variable", "variable",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "item",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "(", "(",
+                "item", "item",
+                "(", "(",
+                ")", ")",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "external", "external",
+                ";", ";"
+        });
+    }
+
+    public void testItemTypeWithParenthesesAndSpaces() throws Exception {
+        assertProducedTokens("declare variable $item as ( item ( ) ) external;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "variable", "variable",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "item",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "WHITE_SPACE", " ",
+                "item", "item",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "WHITE_SPACE", " ",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "external", "external",
+                ";", ";"
+        });
+    }
+
+    public void testKindTestInStepExpression() throws Exception {
+        assertProducedTokens("/xxx/text()", new String[]{
+                "/", "/",
+                "NCName", "xxx",
+                "/", "/",
+                "text", "text",
+                "(", "(",
+                ")", ")"
         });
     }
 }

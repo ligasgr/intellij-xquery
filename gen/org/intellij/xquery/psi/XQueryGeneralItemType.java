@@ -21,9 +21,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryRangeExpr extends XQueryExprSingle {
-
-  @NotNull
-  List<XQueryExprSingle> getExprSingleList();
+public interface XQueryGeneralItemType extends XQueryElement {
 
 }
