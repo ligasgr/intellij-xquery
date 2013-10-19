@@ -12,6 +12,7 @@ out/
 build/
 sdk/
 .gradle/
+.idea/
 *.iml
 *.ipr
 *.iws
