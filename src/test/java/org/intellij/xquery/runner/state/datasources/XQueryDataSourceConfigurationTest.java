@@ -55,6 +55,7 @@ public class XQueryDataSourceConfigurationTest {
     private static final String USER_DEFINED_LIBRARY_PATH = "userDefinedLibraryPath";
     private static final String DATABASE_NAME_FIELD = "databaseName";
     private static final String CONFIG_ATTRIBUTE_XPATH = "/data-source-configuration/@";
+    private static final String DEFAULT_FIELD = "default";
     private static final String VALUE = "1";
     private static final String DIFFERENT_VALUE = "2";
     private Class<XQueryDataSourceConfiguration> dataSourceClass = XQueryDataSourceConfiguration.class;
@@ -167,6 +168,15 @@ public class XQueryDataSourceConfigurationTest {
     }
 
     @Test
+    public void shouldPersistIfIsDefault() throws Exception {
+        dataSourceConfiguration.DEFAULT = true;
+
+        String xml = serializeToXml(dataSourceConfiguration);
+
+        assertThat(the(xml), hasXPath(CONFIG_ATTRIBUTE_XPATH + DEFAULT_FIELD, equalTo(TRUE.toString())));
+    }
+
+    @Test
     public void shouldReadName() throws Exception {
         String xml = format(XML_TEMPLATE, NAME_FIELD, NAME);
 
@@ -263,6 +273,15 @@ public class XQueryDataSourceConfigurationTest {
         dataSourceConfiguration = deserializeFromXml(rootElement(xml), dataSourceClass);
 
         assertThat(dataSourceConfiguration.DATABASE_NAME, is(equalTo(DATABASE)));
+    }
+
+    @Test
+    public void shouldReadIfIsDefault() throws Exception {
+        String xml = format(XML_TEMPLATE, DEFAULT_FIELD, TRUE.toString());
+
+        dataSourceConfiguration = deserializeFromXml(rootElement(xml), dataSourceClass);
+
+        assertThat(dataSourceConfiguration.DEFAULT, is(equalTo(TRUE)));
     }
 
     @Test
@@ -436,6 +455,22 @@ public class XQueryDataSourceConfigurationTest {
     public void shouldBeEqualWhenUserDefinedLibraryPathIsTheSame() throws Exception {
         dataSourceConfiguration.USER_DEFINED_LIBRARY_PATH = VALUE;
         dataSourceConfiguration1.USER_DEFINED_LIBRARY_PATH = VALUE;
+
+        assertThat(dataSourceConfiguration, is(equalTo(dataSourceConfiguration1)));
+    }
+
+    @Test
+    public void shouldNotBeEqualWhenDefaultIsDifferent() throws Exception {
+        dataSourceConfiguration.DEFAULT = true;
+        dataSourceConfiguration1.DEFAULT = false;
+
+        assertThat(dataSourceConfiguration, is(not(equalTo(dataSourceConfiguration1))));
+    }
+
+    @Test
+    public void shouldBeEqualWhenDefaultIsTheSame() throws Exception {
+        dataSourceConfiguration.DEFAULT = true;
+        dataSourceConfiguration1.DEFAULT = true;
 
         assertThat(dataSourceConfiguration, is(equalTo(dataSourceConfiguration1)));
     }

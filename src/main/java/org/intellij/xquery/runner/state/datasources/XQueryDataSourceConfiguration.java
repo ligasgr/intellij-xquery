@@ -49,6 +49,8 @@ public class XQueryDataSourceConfiguration implements Cloneable {
     public String USER_DEFINED_LIBRARY_PATH;
     @Attribute("databaseName")
     public String DATABASE_NAME;
+    @Attribute("default")
+    public boolean DEFAULT;
 
     public XQueryDataSourceConfiguration() {
     }
@@ -84,6 +86,7 @@ public class XQueryDataSourceConfiguration implements Cloneable {
             return false;
         if (DATABASE_NAME != null ? !DATABASE_NAME.equals(that.DATABASE_NAME) : that.DATABASE_NAME != null)
             return false;
+        if (DEFAULT != that.DEFAULT) return false;
 
         return true;
     }
@@ -101,6 +104,7 @@ public class XQueryDataSourceConfiguration implements Cloneable {
         result = 31 * result + (USER_DEFINED_LIBRARY_ENABLED ? 1 : 0);
         result = 31 * result + (USER_DEFINED_LIBRARY_PATH != null ? USER_DEFINED_LIBRARY_PATH.hashCode() : 0);
         result = 31 * result + (DATABASE_NAME != null ? DATABASE_NAME.hashCode() : 0);
+        result = 31 * result + (DEFAULT ? 1 : 0);
         return result;
     }
 }

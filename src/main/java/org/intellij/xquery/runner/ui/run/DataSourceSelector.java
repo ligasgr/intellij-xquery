@@ -20,11 +20,12 @@ import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.ComboboxSpeedSearch;
 import com.intellij.ui.ListCellRendererWrapper;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
-import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 
 import javax.swing.*;
 import java.util.List;
+
+import static org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings.getInstance;
 
 /**
  * User: ligasgr
@@ -33,7 +34,7 @@ import java.util.List;
  */
 public class DataSourceSelector {
     private final JComboBox dataSourceList;
-    private MyCollectionListModel dataSourcesModel = new MyCollectionListModel();
+    private ComboBoxCollectionListModel dataSourcesModel = new ComboBoxCollectionListModel();
 
     public DataSourceSelector(JComboBox dataSourceList) {
         this.dataSourceList = dataSourceList;
@@ -73,18 +74,18 @@ public class DataSourceSelector {
 
     public void reset(final XQueryRunConfiguration configuration) {
         boolean configNotFound = true;
-        List<XQueryDataSourceConfiguration> dataSources = XQueryDataSourcesSettings.getInstance()
-                .getDataSourceConfigurations();
+        List<XQueryDataSourceConfiguration> dataSources = getInstance().getDataSourceConfigurations();
         setDataSources(dataSources);
         for (XQueryDataSourceConfiguration cfg : dataSources) {
             if (cfg.NAME.equals(configuration.getDataSourceName())) {
-                dataSourcesModel.setSelectedItem(cfg);
+                setSelectedDataSource(cfg);
                 configNotFound = false;
                 break;
             }
         }
         if (configNotFound) {
-            dataSourcesModel.setSelectedItem(null);
+            setSelectedDataSource(getInstance().getDefaultDataSourceConfiguration());
+            applyTo(configuration);
         }
     }
 
@@ -97,7 +98,7 @@ public class DataSourceSelector {
         dataSourceList.setSelectedItem(selectedDataSource);
     }
 
-    private class MyCollectionListModel extends CollectionListModel<XQueryDataSourceConfiguration> implements
+    private class ComboBoxCollectionListModel extends CollectionListModel<XQueryDataSourceConfiguration> implements
             ComboBoxModel {
         Object selectedItem;
 

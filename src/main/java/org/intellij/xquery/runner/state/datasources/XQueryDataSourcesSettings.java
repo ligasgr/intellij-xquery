@@ -119,4 +119,14 @@ public class XQueryDataSourcesSettings implements PersistentStateComponent<XQuer
         }
         throw new RuntimeException("No data source found for type: " + name);
     }
+
+    public XQueryDataSourceConfiguration getDefaultDataSourceConfiguration() {
+        for (XQueryDataSourceConfiguration dataSourceConfiguration : XQueryDataSourcesSettings.getInstance()
+                .getDataSourceConfigurations()) {
+            if (dataSourceConfiguration.DEFAULT) {
+                return dataSourceConfiguration;
+            }
+        }
+        return null;
+    }
 }

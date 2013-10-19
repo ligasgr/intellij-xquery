@@ -22,6 +22,8 @@ import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguratio
 
 import javax.swing.*;
 import javax.swing.event.DocumentListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * User: ligasgr
@@ -35,16 +37,31 @@ public class DataSourceMainConfigurationPanel {
     private ConfigurationFilePanel configurationFilePanel;
     private ConnectionParametersPanel connectionParametersPanel;
     private UserDefinedLibraryPanel userDefinedLibraryPanel;
+    private JButton setAsDefaultButton;
     private XQueryDataSourceType dataSourceType;
+    private boolean isDefault;
 
     public DataSourceMainConfigurationPanel(final XQueryDataSourceConfiguration dataSourceConfiguration,
                                             DocumentListener nameChangedListener) {
         dataSourceType = dataSourceConfiguration.TYPE;
         name.getComponent().setText(dataSourceConfiguration.NAME);
+        isDefault = dataSourceConfiguration.DEFAULT;
         name.getComponent().getDocument().addDocumentListener(nameChangedListener);
         initConfigurationFilePanel(dataSourceConfiguration);
         initConnectionParametersPanel(dataSourceConfiguration);
         initUserDefinedLibraryPanel(dataSourceConfiguration);
+        initSetAsDefaultButton();
+    }
+
+    private void initSetAsDefaultButton() {
+        setAsDefaultButton.setEnabled(!isDefault);
+        setAsDefaultButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isDefault = true;
+                setAsDefaultButton.setEnabled(false);
+            }
+        });
     }
 
     public JPanel getPanel() {
@@ -64,6 +81,7 @@ public class DataSourceMainConfigurationPanel {
         currentConfiguration.USER_DEFINED_LIBRARY_ENABLED = userDefinedLibraryPanel.isUserDefinedLibraryEnabled();
         currentConfiguration.USER_DEFINED_LIBRARY_PATH = userDefinedLibraryPanel.getUserDefinedLibraryPath();
         currentConfiguration.DATABASE_NAME = connectionParametersPanel.getDatabaseName();
+        currentConfiguration.DEFAULT = isDefault;
         return currentConfiguration;
     }
 

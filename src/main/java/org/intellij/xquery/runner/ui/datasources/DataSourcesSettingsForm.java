@@ -91,10 +91,10 @@ public class DataSourcesSettingsForm {
         Splitter splitter = new Splitter(false, 0.3f);
         JPanel dataSourcesPanel = new JPanel(new BorderLayout());
         dataSourcesPanel.add(dataSourcesToolbarDecorator.createPanel(), BorderLayout.CENTER);
-        dataSourcesPanel.setMinimumSize(new Dimension(150, 300));
+        dataSourcesPanel.setMinimumSize(new Dimension(150, 400));
         splitter.setFirstComponent(dataSourcesPanel);
         splitter.setSecondComponent(dataSourcesConfigurationPanel);
-        dataSourcesConfigurationPanel.setMinimumSize(new Dimension(300, 300));
+        dataSourcesConfigurationPanel.setMinimumSize(new Dimension(300, 400));
         return splitter;
     }
 
@@ -195,6 +195,25 @@ public class DataSourcesSettingsForm {
         XQueryDataSourceConfiguration currentConfigurationState
                 = dataSourceMainConfigurationPanel.getCurrentConfigurationState();
         dataSourcesListModel.setElementAt(currentConfigurationState, index);
+        updateDefaultFlagIfNeeded(currentConfigurationState);
+    }
+
+    private void updateDefaultFlagIfNeeded(XQueryDataSourceConfiguration currentConfigurationState) {
+        if (currentConfigurationState.DEFAULT) {
+            updateAllAsNotDefault();
+            markCurrentAsDefaultAfterAllSetAsNotDefault(currentConfigurationState);
+        }
+    }
+
+    private void markCurrentAsDefaultAfterAllSetAsNotDefault(XQueryDataSourceConfiguration currentConfigurationState) {
+        currentConfigurationState.DEFAULT = true;
+    }
+
+    private void updateAllAsNotDefault() {
+        for (int i = 0; i < dataSourcesListModel.size(); i++) {
+            XQueryDataSourceConfiguration cfg = (XQueryDataSourceConfiguration) dataSourcesListModel.elementAt(i);
+            cfg.DEFAULT = false;
+        }
     }
 
     private void updateDataSourceConfigurationPanel(final XQueryDataSourceConfiguration dataSourceConfiguration) {
