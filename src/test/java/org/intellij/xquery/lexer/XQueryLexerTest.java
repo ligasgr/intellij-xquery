@@ -928,4 +928,14 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
                 ")", ")"
         });
     }
+
+    public void testAttributeAxis() throws Exception {
+        assertProducedTokens("/attribute::foo", new String[]{
+                "/", "/",
+                "attribute", "attribute",
+                "::", "::",
+                "WHITE_SPACE", "",
+                "NCName", "foo"
+        });
+    }
 }

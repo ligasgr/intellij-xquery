@@ -209,6 +209,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "instance" / {SC} "of"                     {return XQueryTypes.K_INSTANCE;}
 "of"                                       {return XQueryTypes.K_OF;}
 "satisfies"                                {return XQueryTypes.K_SATISFIES;}
+"attribute" / {SC}? "::"                   {return XQueryTypes.K_ATTRIBUTE;}
 "child" / {SC}? "::"                       {return XQueryTypes.K_CHILD;}
 "descendant" / {SC}? "::"                  {return XQueryTypes.K_DESCENDANT;}
 "self" / {SC}? "::"                        {return XQueryTypes.K_SELF;}
