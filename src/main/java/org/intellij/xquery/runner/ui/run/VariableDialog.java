@@ -70,6 +70,7 @@ public class VariableDialog extends DialogWrapper {
         this.namespace.getComponent().setText(namespace);
         this.type.getComponent().setSelectedItem(type);
         this.value.getComponent().setText(value);
+        setOKActionEnabled(isValidConfiguration());
     }
 
     @Nullable
