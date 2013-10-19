@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Grzegorz Ligas <ligasgr@gmail.com>
+ * Copyright 2013 Grzegorz Ligas <ligasgr@gmail.com> and other contributors (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,12 +29,6 @@ repositories {
 }
 
 dependencies {
-    compile('javax.xml.xquery:xqj-api:1.0') {
-        transitive = false
-    }
-    compile('com.xqj2:xqj2:0.2.0') {
-        transitive = false
-    }
     compile fileTree(dir: 'lib', include: '*.jar')
     testCompile 'junit:junit-dep:4.10'
     testCompile 'org.mockito:mockito-all:1.9.5'
