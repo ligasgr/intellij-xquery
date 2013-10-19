@@ -61,4 +61,8 @@ public class XQueryModuleImportImpl extends XQueryElementImpl implements XQueryM
     else super.accept(visitor);
   }
 
+  public String getNamespace() {
+    return XQueryPsiImplUtil.getNamespace(this);
+  }
+
 }

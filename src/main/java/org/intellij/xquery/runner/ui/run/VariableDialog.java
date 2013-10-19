@@ -41,6 +41,7 @@ public class VariableDialog extends DialogWrapper {
     private JPanel panel;
     private LabeledComponent<JBCheckBox> active;
     private LabeledComponent<JTextField> name;
+    private LabeledComponent<JTextField> namespace;
     private LabeledComponent<JComboBox> type;
     private LabeledComponent<JTextArea> value;
     private SortedComboBoxModel<Object> typesModel = new SortedComboBoxModel<Object>(new Comparator<Object>() {
@@ -63,9 +64,10 @@ public class VariableDialog extends DialogWrapper {
         init();
     }
 
-    public void init(boolean active, String name, String type, String value) {
+    public void init(boolean active, String name, String namespace, String type, String value) {
         this.active.getComponent().setSelected(active);
         this.name.getComponent().setText(name);
+        this.namespace.getComponent().setText(namespace);
         this.type.getComponent().setSelectedItem(type);
         this.value.getComponent().setText(value);
     }
@@ -105,6 +107,10 @@ public class VariableDialog extends DialogWrapper {
 
     public String getName() {
         return name.getComponent().getText();
+    }
+
+    public String getNamespace() {
+        return namespace.getComponent().getText();
     }
 
     public String getType() {

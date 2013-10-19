@@ -74,6 +74,7 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryModul
     private String contextItemText;
     private String contextItemFile;
     private String dataSourceName;
+    private String contextItemType;
 
     public XQueryRunConfiguration(String name, XQueryModuleBasedConfiguration configurationModule,
                                   ConfigurationFactory factory) {
@@ -198,6 +199,17 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryModul
         ProgramParametersUtil.checkWorkingDirectoryExist(this, getProject(), configurationModule.getModule());
         checkDataSourceConfiguration();
         checkVariables();
+        checkContextItem();
+    }
+
+    private void checkContextItem() throws RuntimeConfigurationError {
+        if (contextItemEnabled) {
+            if (isEmpty(contextItemType))
+                throw new RuntimeConfigurationError("Context item must have a type defined");
+            if (!contextItemFromEditorEnabled && isEmpty(contextItemFile)) {
+                throw new RuntimeConfigurationError("Context item file must be defined");
+            }
+        }
     }
 
     private void checkVariables() throws RuntimeConfigurationError {
@@ -245,6 +257,7 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryModul
             contextItemText = contextItemTextElement.getText();
         }
         contextItemFile = configuration.getAttributeValue("contextItemFile");
+        contextItemType = configuration.getAttributeValue("contextItemType");
         dataSourceName = configuration.getAttributeValue("dataSourceName");
     }
 
@@ -280,6 +293,9 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryModul
         }
         if (contextItemFile != null) {
             configuration.setAttribute("contextItemFile", contextItemFile);
+        }
+        if (contextItemType != null) {
+            configuration.setAttribute("contextItemType", contextItemType);
         }
         if (dataSourceName != null) {
             configuration.setAttribute("dataSourceName", dataSourceName);
@@ -372,5 +388,13 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryModul
 
     public String getDataSourceName() {
         return dataSourceName;
+    }
+
+    public String getContextItemType() {
+        return contextItemType;
+    }
+
+    public void setContextItemType(String contextItemType) {
+        this.contextItemType = contextItemType;
     }
 }

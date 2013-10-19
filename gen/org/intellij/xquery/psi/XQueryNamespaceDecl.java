@@ -21,7 +21,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryNamespaceDecl extends XQueryElement {
+public interface XQueryNamespaceDecl extends XQueryNamespaceSource {
 
   @Nullable
   XQueryNamespaceName getNamespaceName();
@@ -31,5 +31,7 @@ public interface XQueryNamespaceDecl extends XQueryElement {
 
   @Nullable
   XQueryURILiteral getURILiteral();
+
+  String getNamespace();
 
 }

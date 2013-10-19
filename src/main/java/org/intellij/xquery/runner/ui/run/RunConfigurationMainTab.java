@@ -57,13 +57,14 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
     private LabeledComponent<JComboBox> dataSourceSelectorComponent;
     private DataSourceSelector dataSourceSelector;
     private final ColumnInfo<XQueryRunVariable, String> NAME = new NameColumnInfo();
+    private final ColumnInfo<XQueryRunVariable, String> NAMESPACE = new NamespaceColumnInfo();
     private final ColumnInfo<XQueryRunVariable, String> TYPE = new TypeColumnInfo();
     private final ColumnInfo<XQueryRunVariable, String> VALUE = new ValueColumnInfo();
     private final ColumnInfo<XQueryRunVariable, Boolean> IS_ACTIVE = new IsActiveColumnInfo();
 
     public RunConfigurationMainTab(final Project project) {
         this.project = project;
-        variablesModel = new ListTableModel<XQueryRunVariable>(IS_ACTIVE, NAME, TYPE, VALUE);
+        variablesModel = new ListTableModel<XQueryRunVariable>(IS_ACTIVE, NAME, NAMESPACE, TYPE, VALUE);
         variablesTable = prepareVariablesTable();
         ToolbarDecorator variablesTableToolbarDecorator = prepareVariablesTableToolbarDecorator(variablesTable);
         variablesPanel.add(variablesTableToolbarDecorator.createPanel(), BorderLayout.CENTER);
@@ -86,13 +87,14 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
                     public void run(AnActionButton button) {
                         ArrayList<XQueryRunVariable> newList = new ArrayList<XQueryRunVariable>
                                 (variablesModel.getItems());
-                        XQueryRunVariable newVariable = new XQueryRunVariable("unnamed", "xs:string",
-                                "unknown");
-                        newList.add(newVariable);
-                        variablesModel.setItems(newList);
-                        int index = variablesModel.getRowCount() - 1;
-                        variablesModel.fireTableRowsInserted(index, index);
-                        variablesTable.setRowSelectionInterval(index, index);
+                        XQueryRunVariable newVariable = new XQueryRunVariable();
+                        if (showEditorDialog(newVariable)) {
+                            newList.add(newVariable);
+                            variablesModel.setItems(newList);
+                            int index = variablesModel.getRowCount() - 1;
+                            variablesModel.fireTableRowsInserted(index, index);
+                            variablesTable.setRowSelectionInterval(index, index);
+                        }
                     }
                 }).setRemoveAction(new AnActionButtonRunnable() {
                     @Override
@@ -173,7 +175,8 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
                 .getVariables());
         variablesModel.setItems(newList);
         contextItemPanel.init(configuration.isContextItemEnabled(), configuration.getContextItemText(),
-                configuration.getContextItemFile(), configuration.isContextItemFromEditorEnabled());
+                configuration.getContextItemFile(), configuration.isContextItemFromEditorEnabled(),
+                configuration.getContextItemType());
         dataSourceSelector.reset(configuration);
     }
 
@@ -185,6 +188,7 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
         configuration.setContextItemFile(contextItemPanel.getContextItemPath());
         configuration.setContextItemText(contextItemPanel.getContextItemEditorContent());
         configuration.setContextItemFromEditorEnabled(contextItemPanel.isContextItemFromEditorEnabled());
+        configuration.setContextItemType(contextItemPanel.getContextItemType());
         dataSourceSelector.applyTo(configuration);
     }
 
@@ -206,11 +210,13 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
 
     private static boolean showEditorDialog(@NotNull XQueryRunVariable variable) {
         VariableDialog dialog = new VariableDialog();
-        dialog.init(variable.isActive(), variable.getName(), variable.getType(), variable.getValue());
+        dialog.init(variable.isActive(), variable.getName(), variable.getNamespace(), variable.getType(),
+                variable.getValue());
         dialog.show();
         if (dialog.isOK()) {
             variable.setActive(dialog.isActive());
             variable.setName(dialog.getName());
+            variable.setNamespace(dialog.getNamespace());
             variable.setType(dialog.getType());
             variable.setValue(dialog.getValue());
             return true;

@@ -42,6 +42,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
+import static org.intellij.xquery.util.StringUtils.EMPTY;
+import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
+
 /**
  * User: ligasgr
  * Date: 10/02/13
@@ -309,5 +312,27 @@ public class XQueryPsiImplUtil {
 
     public static boolean isExternal(XQueryVarDecl variableDeclaration) {
         return variableDeclaration.getExternalVarPart() != null;
+    }
+
+    public static String getNamespace(XQueryModuleDecl moduleDecl) {
+        if (moduleDecl.getURILiteral() != null) {
+            return removeQuotOrApos(moduleDecl.getURILiteral().getText());
+        }
+        return EMPTY;
+    }
+
+    public static String getNamespace(XQueryModuleImport moduleImport) {
+        if (moduleImport.getModuleImportNamespace() != null) {
+            return removeQuotOrApos(moduleImport.getModuleImportNamespace().getModuleImportPath().getURILiteral()
+                    .getText());
+        }
+        return EMPTY;
+    }
+
+    public static String getNamespace(XQueryNamespaceDecl namespaceDecl) {
+        if (namespaceDecl.getURILiteral() != null) {
+            return removeQuotOrApos(namespaceDecl.getURILiteral().getText());
+        }
+        return EMPTY;
     }
 }

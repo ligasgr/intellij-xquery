@@ -33,6 +33,7 @@ import static org.intellij.xquery.util.StringUtils.EMPTY;
 @Tag("variable")
 public class XQueryRunVariable implements PersistentStateComponent<XQueryRunVariable> {
     private String name = EMPTY;
+    private String namespace = EMPTY;
     private String type = EMPTY;
     private String value = EMPTY;
     private boolean active = false;
@@ -40,15 +41,12 @@ public class XQueryRunVariable implements PersistentStateComponent<XQueryRunVari
     public XQueryRunVariable() {
     }
 
-    public XQueryRunVariable(String name, String type, String value) {
-        this(name, type, value, true);
-    }
-
-    public XQueryRunVariable(String name, String type, String value, boolean active) {
+    public XQueryRunVariable(String name, String namespace, String type, String value, boolean active) {
         this.name = name;
+        this.namespace = namespace;
         this.type = type;
-        this.setValue(value);
-        this.setActive(active);
+        this.value = value;
+        this.active = active;
     }
 
     @Attribute("name")
@@ -60,13 +58,22 @@ public class XQueryRunVariable implements PersistentStateComponent<XQueryRunVari
         this.name = name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    @Attribute("namespace")
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
     }
 
     @Attribute("type")
     public String getType() {
         return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Text
@@ -107,6 +114,7 @@ public class XQueryRunVariable implements PersistentStateComponent<XQueryRunVari
 
         if (isActive() != variable.isActive()) return false;
         if (name != null ? !name.equals(variable.name) : variable.name != null) return false;
+        if (namespace != null ? !namespace.equals(variable.namespace) : variable.namespace != null) return false;
         if (type != null ? !type.equals(variable.type) : variable.type != null) return false;
         if (value != null ? !value.equals(variable.value) : variable.value != null) return false;
 
@@ -116,6 +124,7 @@ public class XQueryRunVariable implements PersistentStateComponent<XQueryRunVari
     @Override
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (namespace != null ? namespace.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (value != null ? value.hashCode() : 0);
         result = 31 * result + (active ? 1 : 0);

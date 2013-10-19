@@ -55,4 +55,8 @@ public class XQueryModuleDeclImpl extends XQueryElementImpl implements XQueryMod
     else super.accept(visitor);
   }
 
+  public String getNamespace() {
+    return XQueryPsiImplUtil.getNamespace(this);
+  }
+
 }

@@ -30,10 +30,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import org.intellij.xquery.psi.XQueryFile;
-import org.intellij.xquery.psi.XQueryLiteral;
-import org.intellij.xquery.psi.XQueryVarDecl;
-import org.intellij.xquery.psi.XQueryVarDefaultValue;
+import org.intellij.xquery.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,8 +93,19 @@ public class XQueryRunConfigurationProducer extends RuntimeConfigurationProducer
 
     private void setFileSpecificSettings(VirtualFile vFile, XQueryRunConfiguration configuration) {
         configuration.setMainFileName(FileUtil.toSystemIndependentName(vFile.getCanonicalPath()));
-        configuration.setName(vFile.getNameWithoutExtension());
+        configuration.setName(vFile.getPresentableName());
         configuration.setVariables(getExternalVariables(containingFile));
+        configuration.setContextItemEnabled(containingFile.getContextItem() != null);
+        String contextItemType = getContextItemType(containingFile);
+        if (contextItemType != null)
+            configuration.setContextItemType(contextItemType);
+    }
+
+    private String getContextItemType(XQueryFile containingFile) {
+        XQueryContextItemDecl contextItem = containingFile.getContextItem();
+        if (contextItem != null && contextItem.getItemType() != null)
+            return contextItem.getItemType().getText();
+        return null;
     }
 
     private XQueryRunVariables getExternalVariables(XQueryFile file) {
@@ -114,7 +122,15 @@ public class XQueryRunConfigurationProducer extends RuntimeConfigurationProducer
                 }
                 boolean isActive = varDefaultValue == null;
                 String name = varDecl.getVarName().getText();
-                XQueryRunVariable variable = new XQueryRunVariable(name, type, value, isActive);
+                XQueryVarNamespace namespacePrefix = varDecl.getVarName().getVarNamespace();
+                String namespace = EMPTY;
+                if (namespacePrefix != null) {
+                    PsiElement resolved = namespacePrefix.getReference().resolve();
+                    if (resolved != null) {
+                        namespace = ((XQueryNamespaceSource) resolved.getParent()).getNamespace();
+                    }
+                }
+                XQueryRunVariable variable = new XQueryRunVariable(name, namespace, type, value, isActive);
                 variables.add(variable);
             }
         }
@@ -177,17 +193,11 @@ public class XQueryRunConfigurationProducer extends RuntimeConfigurationProducer
             final XQueryRunConfiguration appConfiguration = (XQueryRunConfiguration) existingConfiguration
                     .getConfiguration();
             if (isForTheSameFile(psiFile, appConfiguration) && isForTheSameModule(location, appConfiguration)
-                    && hasTheSameVariableNames(psiFile, appConfiguration)
                     && appConfiguration.getDataSourceName() != null) {
                 return existingConfiguration;
             }
         }
         return null;
-    }
-
-    private boolean hasTheSameVariableNames(PsiFile file, XQueryRunConfiguration appConfiguration) {
-        XQueryFile xQueryFile = (XQueryFile) file;
-        return getExternalVariables(xQueryFile).hasEqualVariableNames(appConfiguration.getVariables());
     }
 
     private boolean isForTheSameModule(Location location, XQueryRunConfiguration appConfiguration) {

@@ -55,4 +55,8 @@ public class XQueryNamespaceDeclImpl extends XQueryElementImpl implements XQuery
     else super.accept(visitor);
   }
 
+  public String getNamespace() {
+    return XQueryPsiImplUtil.getNamespace(this);
+  }
+
 }

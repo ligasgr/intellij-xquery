@@ -48,6 +48,7 @@ public class XQueryRunConfig {
     private final XPathExpression configFileEnabledExpression;
     private final XPathExpression configFileExpression;
     private final XPathExpression databaseNameExpression;
+    private final XPathExpression contextItemTypeExpression;
 
     public XQueryRunConfig(String xml) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -67,6 +68,7 @@ public class XQueryRunConfig {
         configFileEnabledExpression = xPath.compile(xqRunnerAttrXPath("configEnabled"));
         configFileExpression = xPath.compile(xqRunnerAttrXPath("configFile"));
         databaseNameExpression = xPath.compile(xqRunnerAttrXPath("databaseName"));
+        contextItemTypeExpression = xPath.compile(xqCfgAttrXPath("contextItemType"));
     }
 
     public String getMainFile() {
@@ -106,6 +108,7 @@ public class XQueryRunConfig {
             XQueryRunnerVariable variable = new XQueryRunnerVariable();
             variable.ACTIVE = Boolean.parseBoolean(getExpressionValue(getExpression(baseXPath + "@active")));
             variable.NAME = getExpressionValue(getExpression(baseXPath + "@name"));
+            variable.NAMESPACE = getExpressionValue(getExpression(baseXPath + "@namespace"));
             variable.TYPE = getExpressionValue(getExpression(baseXPath + "@type"));
             variable.VALUE = getExpressionValue(getExpression("string(" + baseXPath + "text())"));
             result.add(variable);
@@ -143,6 +146,10 @@ public class XQueryRunConfig {
 
     public String getDatabaseName() {
         return getExpressionValue(databaseNameExpression);
+    }
+
+    public String getContextItemType() {
+        return getExpressionValue(contextItemTypeExpression);
     }
 
     private XPathExpression getExpression(String xpath) {

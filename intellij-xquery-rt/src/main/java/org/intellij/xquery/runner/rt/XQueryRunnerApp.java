@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.intellij.xquery.runner.rt;
 
 import org.intellij.xquery.runner.rt.datasource.XqjDataSourceFactory;
 import org.intellij.xquery.runner.rt.variable.XqjBinderFactory;
 
+import javax.xml.namespace.QName;
 import javax.xml.xquery.*;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -59,7 +61,7 @@ public class XQueryRunnerApp {
                                                       XQConnection connection) throws Exception {
         XQPreparedExpression preparedExpression = connection.prepareExpression(new FileInputStream(config.getMainFile
                 ()));
-        prepareContextItem(config, preparedExpression);
+        prepareContextItem(config, connection, preparedExpression);
         prepareVariables(config, connection, preparedExpression);
         return preparedExpression;
     }
@@ -67,16 +69,44 @@ public class XQueryRunnerApp {
     private static void prepareVariables(XQueryRunConfig config, XQConnection connection, XQPreparedExpression
             preparedExpression) throws Exception {
         for (XQueryRunnerVariable variable : config.getVariables()) {
-            XqjBinderFactory.bindVariable(preparedExpression, connection, variable.NAME, variable.VALUE, variable.TYPE);
+            XqjBinderFactory.bind(preparedExpression, connection, getName(variable.NAME, variable.NAMESPACE),
+                    variable.VALUE,
+                    variable.TYPE);
         }
     }
 
-    private static void prepareContextItem(XQueryRunConfig config, XQPreparedExpression preparedExpression) throws
-            IOException, XQException {
+    private static QName getName(String name, String namespace) {
+        String[] parts = name.split(":");
+        if (parts.length < 1 || parts.length > 2) {
+            throw new RuntimeException("Variable name '" + name + "' is invalid");
+        }
+        String namespacePrefix = null;
+        String localPart = parts[parts.length - 1];
+        if (parts.length == 2) {
+            namespacePrefix = parts[0];
+        }
+        if (namespace != null && namespace.length() > 0) {
+            if (namespacePrefix != null) {
+                return new QName(namespace, localPart, namespacePrefix);
+            } else {
+                return new QName(namespace, localPart);
+            }
+        }
+        if (namespacePrefix != null) {
+            return new QName(localPart, namespacePrefix);
+        } else {
+            return new QName(localPart);
+        }
+    }
+
+    private static void prepareContextItem(XQueryRunConfig config, XQConnection connection,
+                                           XQPreparedExpression preparedExpression) throws
+            Exception {
         if (config.isContextItemEnabled()) {
             String contextItemValue = config.isContextItemFromEditorEnabled() ? config.getContextItemText() :
                     readFile(config.getContextItemFile());
-            preparedExpression.bindDocument(XQConstants.CONTEXT_ITEM, contextItemValue, null, null);
+            XqjBinderFactory.bind(preparedExpression, connection, XQConstants.CONTEXT_ITEM, contextItemValue,
+                    config.getContextItemType());
         }
     }
 

@@ -21,20 +21,21 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComponentWithBrowseButton;
+import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.ui.EditorTextField;
-import com.intellij.ui.GuiUtils;
-import com.intellij.ui.PanelWithAnchor;
+import com.intellij.ui.*;
 import com.intellij.ui.components.JBCheckBox;
 import net.miginfocom.swing.MigLayout;
+import org.intellij.xquery.runner.rt.XQJType;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Comparator;
 
 /**
  * User: ligasgr
@@ -50,8 +51,15 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
     private final JRadioButton editorRadioButton;
     private final JRadioButton fileRadioButton;
     private final ButtonGroup buttonGroup;
+    private final LabeledComponent<JComboBox> contextItemTypeField;
     private final JPanel contextItemOptionsPanel;
     private JComponent anchor;
+    private SortedComboBoxModel<Object> typesModel = new SortedComboBoxModel<Object>(new Comparator<Object>() {
+        @Override
+        public int compare(Object o1, Object o2) {
+            return ((String) o1).compareToIgnoreCase((String) o2);
+        }
+    });
 
     public ContextItemPanel(Project project) {
         contextItemEnabled = new JBCheckBox("Pass context item");
@@ -68,6 +76,10 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         contextItemPathField = new TextFieldWithBrowseButton();
         contextItemPathField.addBrowseFolderListener("Choose file", null, null,
                 FileChooserDescriptorFactory.createSingleFileOrFolderDescriptor());
+        contextItemTypeField = new LabeledComponent<JComboBox>();
+        contextItemTypeField.setText("&Type");
+        contextItemTypeField.setLabelLocation("West");
+        contextItemTypeField.setComponent(new JComboBox());
         editorRadioButton = new JRadioButton("Custom content");
         editorRadioButton.setMnemonic(KeyEvent.VK_E);
         editorRadioButton.setSelected(true);
@@ -91,12 +103,16 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         setLayout(new MigLayout("ins 0, gap 5, fill, flowx"));
         add(contextItemEnabled, "shrinkx, top");
         add(contextItemOptionsPanel, "growx, pushx");
+        contextItemTypeField.getComponent().setModel(typesModel);
+        contextItemOptionsPanel.add(contextItemTypeField, "growx, pushx, wrap, span 2");
         contextItemOptionsPanel.add(editorRadioButton);
         contextItemOptionsPanel.add(contextItemEditorContent, "growx, pushx, wrap");
         contextItemOptionsPanel.add(fileRadioButton);
         contextItemOptionsPanel.add(contextItemPathField, "growx, pushx");
         contextItemEnabledChanged();
         contextItemSourceChanged();
+        populateTypesList();
+        new ComboboxSpeedSearch(contextItemTypeField.getComponent());
     }
 
     @Override
@@ -109,11 +125,13 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         this.anchor = anchor;
     }
 
-    public void init(boolean isEnabled, String content, String filePath, boolean contextItemFromEditorEnabled) {
+    public void init(boolean isEnabled, String content, String filePath, boolean contextItemFromEditorEnabled, String
+            type) {
         contextItemEditorContent.getChildComponent().setText(content);
         contextItemPathField.setText(filePath);
         setContextItemEnabled(isEnabled);
         setContextItemFromEditorEnabled(contextItemFromEditorEnabled);
+        contextItemTypeField.getComponent().setSelectedItem(type);
     }
 
     private void setContextItemFromEditorEnabled(boolean contextItemFromEditorEnabled) {
@@ -162,6 +180,10 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         return contextItemEditorContent.getChildComponent().getText();
     }
 
+    public String getContextItemType() {
+        return (String) contextItemTypeField.getComponent().getSelectedItem();
+    }
+
     private class MyEditorTextFieldWithBrowseButton extends ComponentWithBrowseButton<EditorTextField> {
         public MyEditorTextFieldWithBrowseButton(final Project project, final EditorTextField editorTextField) {
             super(editorTextField, new ActionListener() {
@@ -172,6 +194,11 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
                                     editorTextField.getText(), null, null));
                 }
             });
+        }
+    }
+    private void populateTypesList() {
+        for (String type : XQJType.getAll()) {
+            typesModel.add(type);
         }
     }
 }

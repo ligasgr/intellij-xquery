@@ -21,7 +21,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryModuleImport extends XQueryElement {
+public interface XQueryModuleImport extends XQueryNamespaceSource {
 
   @Nullable
   XQueryModuleImportNamespace getModuleImportNamespace();
@@ -34,5 +34,7 @@ public interface XQueryModuleImport extends XQueryElement {
 
   @Nullable
   XQuerySeparator getSeparator();
+
+  String getNamespace();
 
 }

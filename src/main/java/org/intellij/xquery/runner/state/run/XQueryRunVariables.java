@@ -78,23 +78,4 @@ public class XQueryRunVariables implements PersistentStateComponent<XQueryRunVar
     public void loadState(XQueryRunVariables state) {
         XmlSerializerUtil.copyBean(state, this);
     }
-
-    public boolean hasEqualVariableNames(XQueryRunVariables o) {
-        if (this == o) return true;
-        if (o == null) return false;
-
-        if (variables != null && o.getVariables() != null) {
-            Set<String> localNames = new HashSet<String>(variables.size());
-            Set<String> comparedNames = new HashSet<String>(o.getVariables().size());
-            for (XQueryRunVariable variable : variables) {
-                localNames.add(variable.getName());
-            }
-            for (XQueryRunVariable variable : o.getVariables()) {
-                comparedNames.add(variable.getName());
-            }
-            return localNames.equals(comparedNames);
-        } else {
-            return false;
-        }
-    }
 }

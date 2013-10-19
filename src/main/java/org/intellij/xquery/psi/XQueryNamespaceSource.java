@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.rt.variable;
-
-import org.intellij.xquery.runner.rt.XQJType;
-
-import javax.xml.namespace.QName;
-import javax.xml.xquery.XQConnection;
-import javax.xml.xquery.XQPreparedExpression;
+package org.intellij.xquery.psi;
 
 /**
  * User: ligasgr
- * Date: 11/10/13
- * Time: 16:34
+ * Date: 18/10/13
+ * Time: 23:49
  */
-public class XqjBinderFactory {
-
-    public static void bind(XQPreparedExpression expression, XQConnection connection, QName name, String value,
-                            String type) throws Exception {
-        Class<? extends BinderFactory> factoryClass = XQJType.getTypeFactoryClass(type);
-        factoryClass.newInstance().bindValueForType(expression, connection, name, value, type);
-    }
+public interface XQueryNamespaceSource extends XQueryElement  {
+    String getNamespace();
 }

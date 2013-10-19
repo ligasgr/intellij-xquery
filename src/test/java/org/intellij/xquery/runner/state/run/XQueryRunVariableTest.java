@@ -39,6 +39,7 @@ public class XQueryRunVariableTest {
     private static final String MY_EXAMPLE_XML = "<?xml version=\"1.0\" " +
             "encoding=\"UTF-8\"?><my><example>text</example></my>";
     private static final String NAME = "name";
+    private static final String NAMESPACE = "namespace";
     private static final String TYPE = "type";
     private static final String VALUE = "1";
     private static final String DIFFERENT_VALUE = "2";
@@ -59,6 +60,15 @@ public class XQueryRunVariableTest {
         String xml = serializeToXml(variable);
 
         assertThat(the(xml), hasXPath("/variable/@name", equalTo(NAME)));
+    }
+
+    @Test
+    public void shouldPersistVariableNamespace() throws Exception {
+        variable.setNamespace(NAMESPACE);
+
+        String xml = serializeToXml(variable);
+
+        assertThat(the(xml), hasXPath("/variable/@namespace", equalTo(NAMESPACE)));
     }
 
     @Test
@@ -95,6 +105,15 @@ public class XQueryRunVariableTest {
         variable = deserializeFromXml(rootElement(xml), variableClass);
 
         assertThat(variable.getName(), is(equalTo(NAME)));
+    }
+
+    @Test
+    public void shouldReadVariableNamespace() throws Exception {
+        String xml = format(XML_TEMPLATE, NAMESPACE, NAMESPACE);
+
+        variable = deserializeFromXml(rootElement(xml), variableClass);
+
+        assertThat(variable.getNamespace(), is(equalTo(NAMESPACE)));
     }
 
     @Test
@@ -167,6 +186,22 @@ public class XQueryRunVariableTest {
     public void shouldBeEqualWhenNameIsTheSame() throws Exception {
         variable.setName(VALUE);
         variable2.setName(VALUE);
+
+        assertThat(variable, is(equalTo(variable2)));
+    }
+
+    @Test
+    public void shouldNotBeEqualWhenNamespaceIsDifferent() throws Exception {
+        variable.setNamespace(VALUE);
+        variable2.setNamespace(DIFFERENT_VALUE);
+
+        assertThat(variable, is(not(equalTo(variable2))));
+    }
+
+    @Test
+    public void shouldBeEqualWhenNamespaceIsTheSame() throws Exception {
+        variable.setNamespace(VALUE);
+        variable2.setNamespace(VALUE);
 
         assertThat(variable, is(equalTo(variable2)));
     }

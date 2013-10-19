@@ -297,4 +297,8 @@ public class XQueryFile extends PsiFileBase {
         XQueryModuleDecl moduleDecl = PsiTreeUtil.findChildOfType(this, XQueryModuleDecl.class);
         return moduleDecl != null;
     }
+
+    public XQueryContextItemDecl getContextItem() {
+        return PsiTreeUtil.findChildOfType(this, XQueryContextItemDecl.class);
+    }
 }

@@ -39,6 +39,7 @@ public class XQueryRunConfigTest {
     private static final String VARIABLE_VALUE = "<![CDATA[" + INNER_XML + "]]>";
     private static final Boolean VARIABLE_ACTIVE = true;
     private static final String VARIABLE_NAME = "name";
+    private static final String VARIABLE_NAMESPACE = "namespace";
     private static final String VARIABLE_TYPE = "xs:string";
     private static final XQueryDataSourceType DATA_SOURCE_TYPE = XQueryDataSourceType.SAXON;
     private static final String DATA_SOURCE_TYPE_NAME = DATA_SOURCE_TYPE.toString();
@@ -49,11 +50,14 @@ public class XQueryRunConfigTest {
     private static final String CONFIG_FILE = "/path/to/config/file.xml";
     private static final Boolean CONFIG_FILE_ENABLED = true;
     private static final String DATABASE_NAME = "dbName";
+    private static final String CONTEXT_ITEM_TYPE = "xs:string";
+
     private final String xml = "<run>\n" +
             "<variables>\n" +
             "<list>\n" +
             "<variable active=\"" + VARIABLE_ACTIVE +
             "\" name=\"" + VARIABLE_NAME +
+            "\" namespace=\"" + VARIABLE_NAMESPACE +
             "\" type=\"" + VARIABLE_TYPE +
             "\">" + VARIABLE_VALUE + "</variable>\n" +
             "</list>\n" +
@@ -62,7 +66,8 @@ public class XQueryRunConfigTest {
             "mainFileName=\"" + MAIN_FILE_NAME + "\" " +
             "contextItemEnabled=\"" + CONTEXT_ITEM_ENABLED.toString() + "\" " +
             "contextItemFromEditorEnabled=\"" + CONTEXT_ITEM_FROM_EDITOR_ENABLED.toString() + "\"\n" +
-            "contextItemFile=\"" + CONTEXT_ITEM_FILE_NAME + "\">\n" +
+            "contextItemFile=\"" + CONTEXT_ITEM_FILE_NAME + "\" " +
+            "contextItemType=\"" + CONTEXT_ITEM_TYPE + "\">\n" +
             "<contextItemText>" + VARIABLE_VALUE + "</contextItemText> " +
             "</xQueryConfiguration>\n" +
             "<data-source-configuration " +
@@ -136,6 +141,7 @@ public class XQueryRunConfigTest {
 
         assertThat(result.get(0).ACTIVE, is(VARIABLE_ACTIVE));
         assertThat(result.get(0).NAME, is(VARIABLE_NAME));
+        assertThat(result.get(0).NAMESPACE, is(VARIABLE_NAMESPACE));
         assertThat(result.get(0).TYPE, is(VARIABLE_TYPE));
         assertThat(result.get(0).VALUE, is(INNER_XML));
     }
@@ -194,5 +200,12 @@ public class XQueryRunConfigTest {
         String result = config.getDatabaseName();
 
         assertThat(result, is(DATABASE_NAME));
+    }
+
+    @Test
+    public void shouldReturnContextItemTypeValue() {
+        String result = config.getContextItemType();
+
+        assertThat(result, is(CONTEXT_ITEM_TYPE));
     }
 }
