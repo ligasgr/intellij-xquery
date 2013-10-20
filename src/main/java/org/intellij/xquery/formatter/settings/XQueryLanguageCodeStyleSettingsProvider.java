@@ -69,11 +69,11 @@ public class XQueryLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
                     "SPACE_BEFORE_SWITCH_PARENTHESES"
             );
 
-            consumer.renameStandardOption("SPACE_AROUND_ASSIGNMENT_OPERATORS", "Assignment operators (:=, =)");
+            consumer.renameStandardOption("SPACE_AROUND_ASSIGNMENT_OPERATORS", "Assignment operator (:=)");
             consumer.renameStandardOption("SPACE_AROUND_EQUALITY_OPERATORS", "Equality operators (=, !=)");
             consumer.renameStandardOption("SPACE_AROUND_RELATIONAL_OPERATORS", "Relational operators (<, <=, >, >=)");
             consumer.renameStandardOption("SPACE_AROUND_ADDITIVE_OPERATORS", "Additive operators (+, -)");
-            consumer.renameStandardOption("SPACE_AROUND_MULTIPLICATIVE_OPERATORS", "Multiplicative operators (*)");
+            consumer.renameStandardOption("SPACE_AROUND_MULTIPLICATIVE_OPERATORS", "Multiplicative operator (*)");
             consumer.renameStandardOption("SPACE_AROUND_UNARY_OPERATOR", "Unary operators (+, -)");
 
             consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_AROUND_AXIS_OPERATOR",
