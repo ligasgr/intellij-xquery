@@ -1,1 +1,0 @@
-switch('test') case "case1" return "1" default return "default"

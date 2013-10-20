@@ -105,7 +105,7 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
                 .beforeInside(L_PAR, TYPESWITCH_EXPR).spaceIf(xQuerySettings.SPACE_BEFORE_TYPESWITCH_PARENTHESES)
 
                 .beforeInside(L_PAR, SEQUENCE_TYPE).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
-                .beforeInside(L_PAR, ITEM_TYPE).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
+                .beforeInside(L_PAR, GENERAL_ITEM_TYPE).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
                 .beforeInside(L_PAR, ANY_KIND_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
                 .beforeInside(L_PAR, DOCUMENT_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)
                 .beforeInside(L_PAR, TEXT_TEST).spaceIf(xQuerySettings.SPACE_BEFORE_TYPE_TEST_PARENTHESES)

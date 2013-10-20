@@ -1,1 +1,0 @@
-if (fn:true) then 'x' else 'y'
