@@ -87,6 +87,9 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
                 .aroundInside(GT_CHAR, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_RELATIONAL_OPERATORS)
                 .aroundInside(GE_CHARS, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_RELATIONAL_OPERATORS)
 
+                .afterInside(OP_PLUS, UNARY_EXPR).spaceIf(settings.SPACE_AROUND_UNARY_OPERATOR)
+                .afterInside(OP_MINUS, UNARY_EXPR).spaceIf(settings.SPACE_AROUND_UNARY_OPERATOR)
+
                 .around(OP_PLUS).spaceIf(settings.SPACE_AROUND_ADDITIVE_OPERATORS)
                 .around(OP_MINUS).spaceIf(settings.SPACE_AROUND_ADDITIVE_OPERATORS)
 

@@ -62,6 +62,7 @@ public class XQueryLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
                     "SPACE_AROUND_RELATIONAL_OPERATORS",
                     "SPACE_AROUND_ADDITIVE_OPERATORS",
                     "SPACE_AROUND_MULTIPLICATIVE_OPERATORS",
+                    "SPACE_AROUND_UNARY_OPERATOR",
                     "SPACE_AFTER_COMMA",
                     "SPACE_BEFORE_COMMA",
                     "SPACE_BEFORE_IF_PARENTHESES",
@@ -73,6 +74,7 @@ public class XQueryLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
             consumer.renameStandardOption("SPACE_AROUND_RELATIONAL_OPERATORS", "Relational operators (<, <=, >, >=)");
             consumer.renameStandardOption("SPACE_AROUND_ADDITIVE_OPERATORS", "Additive operators (+, -)");
             consumer.renameStandardOption("SPACE_AROUND_MULTIPLICATIVE_OPERATORS", "Multiplicative operators (*)");
+            consumer.renameStandardOption("SPACE_AROUND_UNARY_OPERATOR", "Unary operators (+, -)");
 
             consumer.showCustomOption(XQueryCodeStyleSettings.class, "SPACE_AROUND_AXIS_OPERATOR",
                     "Axis operator (::)", CodeStyleSettingsCustomizable.SPACES_AROUND_OPERATORS);
@@ -110,7 +112,7 @@ public class XQueryLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
                 "        $param1 as xs:integer*,\n" +
                 "        $param2 as xs:integer)\n" +
                 "as xs:integer* {\n" +
-                "    let $var:=(1+2, 3-4, 5*6)\n" +
+                "    let $var:=(1+2, 3-4, 5*6, -1)\n" +
                 "    return $var\n" +
                 "};\n" +
                 "\n" +

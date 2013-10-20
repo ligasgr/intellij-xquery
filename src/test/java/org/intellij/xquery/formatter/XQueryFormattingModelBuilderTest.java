@@ -47,6 +47,18 @@ public abstract class XQueryFormattingModelBuilderTest extends XQueryBaseTestCas
         myFixture.checkResultByFile(getTestName(false) + "_after.xq");
     }
 
+
+    void executeTest(String before, String after) {
+        myFixture.configureByText("a.xq", before);
+        ApplicationManager.getApplication().runWriteAction(new Runnable() {
+            @Override
+            public void run() {
+                CodeStyleManager.getInstance(getProject()).reformat(myFixture.getFile());
+            }
+        });
+        myFixture.checkResult(after);
+    }
+
     CommonCodeStyleSettings getSettings() {
         return myTemporarySettings.getCommonSettings(XQueryLanguage.INSTANCE);
     }

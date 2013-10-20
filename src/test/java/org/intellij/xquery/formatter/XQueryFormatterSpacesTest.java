@@ -110,4 +110,14 @@ public class XQueryFormatterSpacesTest extends XQueryFormattingModelBuilderTest 
         getXQuerySettings().SPACE_AROUND_AXIS_OPERATOR = true;
         executeTest();
     }
+
+    public void testSpaceAroundUnaryOperatorOff() {
+        getSettings().SPACE_AROUND_UNARY_OPERATOR = false;
+        executeTest("(- 1)", "(-1)");
+    }
+
+    public void testSpaceAroundUnaryOperatorOn() {
+        getSettings().SPACE_AROUND_UNARY_OPERATOR = true;
+        executeTest("(+1)", "(+ 1)");
+    }
 }
