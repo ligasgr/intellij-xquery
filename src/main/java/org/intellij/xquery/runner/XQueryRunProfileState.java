@@ -61,7 +61,7 @@ public class XQueryRunProfileState extends JavaCommandLineState {
     private JavaParameters prepareRunnerParameters() throws CantRunException {
         final JavaParameters parameters = new JavaParameters();
         parameters.setMainClass(configuration.getRunClass());
-        parameters.getClassPath().addTail(new XQueryRunnerClasspathEntryGenerator()
+        parameters.getClassPath().addFirst(new XQueryRunnerClasspathEntryGenerator()
                 .generateRunnerClasspathEntries(configuration));
         parameters.getProgramParametersList().prepend(getSerializedConfig(configuration).getAbsolutePath());
         return parameters;
