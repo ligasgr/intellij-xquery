@@ -40,42 +40,6 @@ public class CreateXQueryFileAction extends CreateFileFromTemplateAction impleme
     }
 
     @Override
-    protected void buildDialog(final Project project, PsiDirectory psiDirectory, CreateFileFromTemplateDialog.Builder
-            builder) {
-        builder.
-                setTitle(NEW_XQUERY_FILE).
-                addKind("Library Module", XQueryIcons.FILE, "XQuery Library Module.xq").
-                addKind("Main Module", XQueryIcons.FILE, "XQuery Main Module.xq").
-                setValidator(new InputValidatorEx() {
-                    @Override
-                    public boolean checkInput(String inputString) {
-                        return true;
-                    }
-
-                    @Override
-                    public boolean canClose(String inputString) {
-                        return !StringUtil.isEmptyOrSpaces(inputString) && getErrorText(inputString) == null;
-                    }
-
-                    @Override
-                    public String getErrorText(String inputString) {
-                        String error = " is not a valid XQuery Module name";
-                        if (StringUtil.isEmpty(inputString)) return null;
-                        if (inputString != null && inputString.equals(FileUtil.sanitizeFileName(inputString))) {
-                            return null;
-                        }
-                        return "'" + inputString + "'" + error;
-                    }
-                })
-        ;
-    }
-
-    @Override
-    protected String getActionName(PsiDirectory psiDirectory, String s, String s2) {
-        return NEW_XQUERY_FILE;
-    }
-
-    @Override
     public int hashCode() {
         return 0;
     }
@@ -83,5 +47,44 @@ public class CreateXQueryFileAction extends CreateFileFromTemplateAction impleme
     @Override
     public boolean equals(Object obj) {
         return obj instanceof CreateXQueryFileAction;
+    }
+
+    @Override
+    protected void buildDialog(final Project project, PsiDirectory psiDirectory, CreateFileFromTemplateDialog.Builder
+            builder) {
+        builder
+                .setTitle(NEW_XQUERY_FILE)
+                .addKind("Library Module", XQueryIcons.FILE, "XQuery Library Module.xq")
+                .addKind("Main Module", XQueryIcons.FILE, "XQuery Main Module.xq")
+                .setValidator(getValidator());
+    }
+
+    @Override
+    protected String getActionName(PsiDirectory psiDirectory, String s, String s2) {
+        return NEW_XQUERY_FILE;
+    }
+
+    private InputValidatorEx getValidator() {
+        return new InputValidatorEx() {
+            @Override
+            public boolean checkInput(String inputString) {
+                return true;
+            }
+
+            @Override
+            public boolean canClose(String inputString) {
+                return ! StringUtil.isEmptyOrSpaces(inputString) && getErrorText(inputString) == null;
+            }
+
+            @Override
+            public String getErrorText(String inputString) {
+                String error = " is not a valid XQuery Module name";
+                if (StringUtil.isEmpty(inputString)) return null;
+                if (inputString != null && inputString.equals(FileUtil.sanitizeFileName(inputString))) {
+                    return null;
+                }
+                return "'" + inputString + "'" + error;
+            }
+        };
     }
 }

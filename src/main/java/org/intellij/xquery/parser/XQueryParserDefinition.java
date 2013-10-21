@@ -42,10 +42,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class XQueryParserDefinition implements ParserDefinition {
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    public static final TokenSet COMMENTS = TokenSet.create(XQueryBasicTypes.EXPR_COMMENT_CONTENT,
-            XQueryBasicTypes.EXPR_COMMENT_END, XQueryBasicTypes.EXPR_COMMENT_START);
+    public static final TokenSet COMMENTS = TokenSet.create(
+            XQueryBasicTypes.EXPR_COMMENT_CONTENT,
+            XQueryBasicTypes.EXPR_COMMENT_END,
+            XQueryBasicTypes.EXPR_COMMENT_START
+    );
     public static final TokenSet STRINGS = TokenSet.create(XQueryTypes.STRINGLITERAL);
-
     public static final IFileElementType FILE = new IFileElementType(Language.<XQueryLanguage>findInstance
             (XQueryLanguage.class));
 

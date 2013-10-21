@@ -24,6 +24,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
+import static org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings.getInstance;
+
 /**
  * User: ligasgr
  * Date: 02/10/13
@@ -48,8 +50,7 @@ public class XQueryDataSourcesConfigurable implements Configurable {
     @Override
     public JComponent createComponent() {
         if (settingsForm == null) {
-            settingsForm = new DataSourcesSettingsForm(XQueryDataSourcesSettings.getInstance()
-                    .getDataSourceConfigurations());
+            settingsForm = new DataSourcesSettingsForm(getInstance().getDataSourceConfigurations());
         }
         return settingsForm.getFormComponent();
     }
@@ -57,7 +58,7 @@ public class XQueryDataSourcesConfigurable implements Configurable {
     @Override
     public boolean isModified() {
         if (settingsForm != null) {
-            return settingsForm.isModified(XQueryDataSourcesSettings.getInstance().getDataSourceConfigurations());
+            return settingsForm.isModified(getInstance().getDataSourceConfigurations());
         }
         return false;
     }
@@ -65,16 +66,14 @@ public class XQueryDataSourcesConfigurable implements Configurable {
     @Override
     public void apply() throws ConfigurationException {
         if (settingsForm != null) {
-            XQueryDataSourcesSettings.getInstance()
-                    .setDataSourceConfigurations(settingsForm.getCurrentConfigurations());
+            getInstance().setDataSourceConfigurations(settingsForm.getCurrentConfigurations());
         }
     }
 
     @Override
     public void reset() {
         if (settingsForm != null) {
-            settingsForm.refreshCurrentConfiguration(XQueryDataSourcesSettings.getInstance()
-                    .getDataSourceConfigurations());
+            settingsForm.refreshCurrentConfiguration(getInstance().getDataSourceConfigurations());
         }
     }
 

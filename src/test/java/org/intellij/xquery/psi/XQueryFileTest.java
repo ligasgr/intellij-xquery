@@ -20,6 +20,7 @@ import org.intellij.xquery.XQueryBaseTestCase;
 
 import java.util.Collection;
 
+import static org.intellij.xquery.psi.XQueryElementFactory.createFile;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.getMappingFromPrefix;
 
@@ -31,7 +32,7 @@ import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace
 public class XQueryFileTest extends XQueryBaseTestCase {
 
     public void testVariableDeclarations() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare variable $xxx := 'yyy';");
+        XQueryFile file = aFile("declare variable $xxx := 'yyy';");
 
         Collection<XQueryVarDecl> variables = file.getVariableDeclarations();
 
@@ -43,7 +44,7 @@ public class XQueryFileTest extends XQueryBaseTestCase {
     }
 
     public void testModuleImports() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "import module namespace dummy = 'file.xq'");
+        XQueryFile file = aFile("import module namespace dummy = 'file.xq'");
 
         Collection<XQueryModuleImport> imports = file.getModuleImports();
 
@@ -55,7 +56,7 @@ public class XQueryFileTest extends XQueryBaseTestCase {
     }
 
     public void testModuleNamespaceName() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "module namespace dummy = \"my\";");
+        XQueryFile file = aFile("module namespace dummy = \"my\";");
 
         XQueryNamespaceName name = file.getModuleNamespaceName();
 
@@ -64,7 +65,7 @@ public class XQueryFileTest extends XQueryBaseTestCase {
     }
 
     public void testNamespaceDeclarations() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare namespace dummy = \"my\";");
+        XQueryFile file = aFile("declare namespace dummy = \"my\";");
 
         Collection<XQueryNamespaceDecl> namespaceDeclarations = file.getNamespaceDeclarations();
 
@@ -75,7 +76,7 @@ public class XQueryFileTest extends XQueryBaseTestCase {
     }
 
     public void testFunctionDeclarations() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare function dummy() {()};");
+        XQueryFile file = aFile("declare function dummy() {()};");
 
         Collection<XQueryFunctionDecl> namespaceDeclarations = file.getFunctionDeclarations();
 
@@ -86,7 +87,7 @@ public class XQueryFileTest extends XQueryBaseTestCase {
     }
 
     public void testDefaultFunctionNamespaceWhenNotDeclared() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "()");
+        XQueryFile file = aFile("()");
 
         String defaultFunctionNamespace = file.getDefaultFunctionNamespace();
 
@@ -94,7 +95,7 @@ public class XQueryFileTest extends XQueryBaseTestCase {
     }
 
     public void testDefaultFunctionNamespaceWhenDeclared() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare default function namespace 'xxx';()");
+        XQueryFile file = aFile("declare default function namespace 'xxx';()");
 
         String defaultFunctionNamespace = file.getDefaultFunctionNamespace();
 
@@ -102,7 +103,7 @@ public class XQueryFileTest extends XQueryBaseTestCase {
     }
 
     public void testDefaultFunctionNamespaceWhenDeclaredEmpty() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare default function namespace '';()");
+        XQueryFile file = aFile("declare default function namespace '';()");
 
         String defaultFunctionNamespace = file.getDefaultFunctionNamespace();
 
@@ -110,7 +111,7 @@ public class XQueryFileTest extends XQueryBaseTestCase {
     }
 
     public void testNamespaceMappingsForPredeclaredNamespaces() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "()");
+        XQueryFile file = aFile("()");
 
         for (String key : getMappingFromPrefix().keySet()) {
             assertEquals(getMappingFromPrefix().get(key), file.mapPrefixToNamespace(key));
@@ -118,43 +119,43 @@ public class XQueryFileTest extends XQueryBaseTestCase {
     }
 
     public void testNamespaceMappingsWhenDefaultFunctionNamespaceNotDeclared() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "()");
+        XQueryFile file = aFile("()");
 
         assertEquals(FN.getNamespace(), file.mapPrefixToNamespace(null));
     }
 
     public void testNamespaceMappingsWhenDefaultFunctionNamespaceDeclared() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare default function namespace 'xxx';()");
+        XQueryFile file = aFile("declare default function namespace 'xxx';()");
 
         assertEquals("xxx", file.mapPrefixToNamespace(null));
     }
 
     public void testNamespaceMappingsWhenNamespaceDeclared() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare namespace ex = 'xxx';");
+        XQueryFile file = aFile("declare namespace ex = 'xxx';");
 
         assertEquals("xxx", file.mapPrefixToNamespace("ex"));
     }
 
     public void testNamespaceMappingsWhenModuleDeclared() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "module namespace ex = 'xxx';");
+        XQueryFile file = aFile("module namespace ex = 'xxx';");
 
         assertEquals("xxx", file.mapPrefixToNamespace("ex"));
     }
 
     public void testNamespaceMappingsWhenModuleImportedWithName() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "import module namespace ex = 'xxx';");
+        XQueryFile file = aFile("import module namespace ex = 'xxx';");
 
         assertEquals("xxx", file.mapPrefixToNamespace("ex"));
     }
 
     public void testNamespaceMappingsWhenModuleImportedWithoutName() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "import module 'xxx';");
+        XQueryFile file = aFile("import module 'xxx';");
 
         assertNull(file.mapPrefixToNamespace("ex"));
     }
 
     public void testGetNamespaceDeclarationsMatchingDefaultFunctionNamespace() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare default function namespace 'xxx';" +
+        XQueryFile file = aFile("declare default function namespace 'xxx';" +
                 "declare namespace yyy = '';" +
                 "declare namespace zzz = 'zzz';" +
                 "declare namespace aaa = 'xxx';" +
@@ -168,8 +169,12 @@ public class XQueryFileTest extends XQueryBaseTestCase {
     }
 
     public void testGetContextItem() {
-        XQueryFile file = XQueryElementFactory.createFile(getProject(), "declare context item := ();");
+        XQueryFile file = aFile("declare context item := ();");
 
         assertNotNull(file.getContextItem());
+    }
+
+    private XQueryFile aFile(String content) {
+        return createFile(getProject(), content);
     }
 }

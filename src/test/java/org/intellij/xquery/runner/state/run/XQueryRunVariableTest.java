@@ -36,8 +36,8 @@ public class XQueryRunVariableTest {
 
     private static final String XML_TEMPLATE = "<variable %s='%s'/>";
     private static final String XML_TEMPLATE_WITH_TEXT = "<variable>%s</variable>";
-    private static final String MY_EXAMPLE_XML = "<?xml version=\"1.0\" " +
-            "encoding=\"UTF-8\"?><my><example>text</example></my>";
+    private static final String MY_EXAMPLE_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+            "<my><example>text</example></my>";
     private static final String NAME = "name";
     private static final String NAMESPACE = "namespace";
     private static final String TYPE = "type";

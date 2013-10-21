@@ -35,8 +35,7 @@ import java.util.List;
  * Time: 14:09
  */
 @State(name = "XQueryDataSourcesSettings", storages = {@Storage(id = "xqueryDataSources",
-        file = StoragePathMacros.APP_CONFIG
-        + "/xquery.xml")})
+        file = StoragePathMacros.APP_CONFIG + "/xquery.xml")})
 public class XQueryDataSourcesSettings implements PersistentStateComponent<XQueryDataSourcesSettings>,
         ExportableApplicationComponent {
 
@@ -94,22 +93,6 @@ public class XQueryDataSourcesSettings implements PersistentStateComponent<XQuer
         XmlSerializerUtil.copyBean(state, this);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        XQueryDataSourcesSettings that = (XQueryDataSourcesSettings) o;
-        if (dataSourceConfigurations != null)
-            return dataSourceConfigurations.equals(that.dataSourceConfigurations);
-        else
-            return that.dataSourceConfigurations == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return dataSourceConfigurations != null ? dataSourceConfigurations.hashCode() : 0;
-    }
-
     public XQueryDataSourceConfiguration getDataSourceConfigurationForName(String name) {
         for (XQueryDataSourceConfiguration dataSourceConfiguration : XQueryDataSourcesSettings.getInstance()
                 .getDataSourceConfigurations()) {
@@ -128,5 +111,21 @@ public class XQueryDataSourcesSettings implements PersistentStateComponent<XQuer
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        XQueryDataSourcesSettings that = (XQueryDataSourcesSettings) o;
+        if (dataSourceConfigurations != null)
+            return dataSourceConfigurations.equals(that.dataSourceConfigurations);
+        else
+            return that.dataSourceConfigurations == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return dataSourceConfigurations != null ? dataSourceConfigurations.hashCode() : 0;
     }
 }

@@ -74,17 +74,17 @@ public class XQueryDataSourceConfiguration implements Cloneable {
 
         if (CONFIG_ENABLED != that.CONFIG_ENABLED) return false;
         if (USER_DEFINED_LIBRARY_ENABLED != that.USER_DEFINED_LIBRARY_ENABLED) return false;
-        if (CONFIG_FILE != null ? !CONFIG_FILE.equals(that.CONFIG_FILE) : that.CONFIG_FILE != null) return false;
-        if (HOST != null ? !HOST.equals(that.HOST) : that.HOST != null) return false;
-        if (NAME != null ? !NAME.equals(that.NAME) : that.NAME != null) return false;
-        if (PASSWORD != null ? !PASSWORD.equals(that.PASSWORD) : that.PASSWORD != null) return false;
-        if (PORT != null ? !PORT.equals(that.PORT) : that.PORT != null) return false;
+        if (CONFIG_FILE != null ? ! CONFIG_FILE.equals(that.CONFIG_FILE) : that.CONFIG_FILE != null) return false;
+        if (HOST != null ? ! HOST.equals(that.HOST) : that.HOST != null) return false;
+        if (NAME != null ? ! NAME.equals(that.NAME) : that.NAME != null) return false;
+        if (PASSWORD != null ? ! PASSWORD.equals(that.PASSWORD) : that.PASSWORD != null) return false;
+        if (PORT != null ? ! PORT.equals(that.PORT) : that.PORT != null) return false;
         if (TYPE != that.TYPE) return false;
-        if (USERNAME != null ? !USERNAME.equals(that.USERNAME) : that.USERNAME != null) return false;
-        if (USER_DEFINED_LIBRARY_PATH != null ? !USER_DEFINED_LIBRARY_PATH.equals(that.USER_DEFINED_LIBRARY_PATH) :
+        if (USERNAME != null ? ! USERNAME.equals(that.USERNAME) : that.USERNAME != null) return false;
+        if (USER_DEFINED_LIBRARY_PATH != null ? ! USER_DEFINED_LIBRARY_PATH.equals(that.USER_DEFINED_LIBRARY_PATH) :
                 that.USER_DEFINED_LIBRARY_PATH != null)
             return false;
-        if (DATABASE_NAME != null ? !DATABASE_NAME.equals(that.DATABASE_NAME) : that.DATABASE_NAME != null)
+        if (DATABASE_NAME != null ? ! DATABASE_NAME.equals(that.DATABASE_NAME) : that.DATABASE_NAME != null)
             return false;
         if (DEFAULT != that.DEFAULT) return false;
 

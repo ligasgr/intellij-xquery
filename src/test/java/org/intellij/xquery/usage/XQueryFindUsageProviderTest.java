@@ -16,6 +16,7 @@
 
 package org.intellij.xquery.usage;
 
+import com.intellij.psi.PsiElement;
 import com.intellij.usageView.UsageInfo;
 import org.intellij.xquery.XQueryBaseTestCase;
 import org.intellij.xquery.psi.*;
@@ -44,19 +45,19 @@ public class XQueryFindUsageProviderTest extends XQueryBaseTestCase {
         assertEquals(1, foundUsages.size());
         UsageInfo usageInfo = foundUsages.iterator().next();
         assertChildOf(usageInfo.getElement(), XQueryQueryBody.class);
-        assertChildOf(usageInfo.getReference().resolve(), XQueryFunctionDecl.class);
+        assertChildOf(resolved(usageInfo), XQueryFunctionDecl.class);
     }
-
+    
     public void testFindTwoFunctionUsages() {
         Collection<UsageInfo> foundUsages = myFixture.testFindUsages("FunctionTwoUsages.xq");
 
         assertEquals(2, foundUsages.size());
         UsageInfo usageInfo = foundUsages.iterator().next();
         assertChildOf(usageInfo.getElement(), XQueryQueryBody.class);
-        assertChildOf(usageInfo.getReference().resolve(), XQueryFunctionDecl.class);
+        assertChildOf(resolved(usageInfo), XQueryFunctionDecl.class);
         UsageInfo secondUsageInfo = foundUsages.iterator().next();
         assertChildOf(secondUsageInfo.getElement(), XQueryQueryBody.class);
-        assertChildOf(secondUsageInfo.getReference().resolve(), XQueryFunctionDecl.class);
+        assertChildOf(resolved(secondUsageInfo), XQueryFunctionDecl.class);
     }
 
     public void testFindFunctionUsagesInAnotherFile() {
@@ -65,8 +66,8 @@ public class XQueryFindUsageProviderTest extends XQueryBaseTestCase {
         assertEquals(1, foundUsages.size());
         UsageInfo usageInfo = foundUsages.iterator().next();
         assertChildOf(usageInfo.getElement(), XQueryQueryBody.class);
-        assertChildOf(usageInfo.getReference().resolve(), XQueryFunctionDecl.class);
-        assertEquals("AnotherFile.xq", usageInfo.getReference().resolve().getContainingFile().getName());
+        assertChildOf(resolved(usageInfo), XQueryFunctionDecl.class);
+        assertEquals("AnotherFile.xq", resolved(usageInfo).getContainingFile().getName());
     }
 
     public void testFindFunctionUsagesWhenAnotherFileDoesNotExist() {
@@ -99,7 +100,7 @@ public class XQueryFindUsageProviderTest extends XQueryBaseTestCase {
         assertEquals(1, foundUsages.size());
         UsageInfo usageInfo = foundUsages.iterator().next();
         assertChildOf(usageInfo.getElement(), XQueryFunctionDecl.class);
-        assertChildOf(usageInfo.getReference().resolve(), XQueryVarDecl.class);
+        assertChildOf(resolved(usageInfo), XQueryVarDecl.class);
     }
 
     public void testFindVariableTextUsages() {
@@ -134,7 +135,7 @@ public class XQueryFindUsageProviderTest extends XQueryBaseTestCase {
         assertEquals(1, foundUsages.size());
         UsageInfo usageInfo = foundUsages.iterator().next();
         assertChildOf(usageInfo.getElement(), XQueryFunctionDecl.class);
-        assertChildOf(usageInfo.getReference().resolve(), XQueryNamespaceDecl.class);
+        assertChildOf(resolved(usageInfo), XQueryNamespaceDecl.class);
     }
 
     public void testNamespaceNameUsagesDescription() {
@@ -221,5 +222,9 @@ public class XQueryFindUsageProviderTest extends XQueryBaseTestCase {
     private XQueryModuleImport exampleImport() {
         return (XQueryModuleImport) XQueryElementFactory.createImportPath(getProject(),
                 "'path.xq'").getParent().getParent();
+    }
+
+    private PsiElement resolved(UsageInfo usageInfo) {
+        return usageInfo.getReference().resolve();
     }
 }

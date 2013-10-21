@@ -58,6 +58,7 @@ public class XQueryDataSourceConfigurationTest {
     private static final String DEFAULT_FIELD = "default";
     private static final String VALUE = "1";
     private static final String DIFFERENT_VALUE = "2";
+
     private Class<XQueryDataSourceConfiguration> dataSourceClass = XQueryDataSourceConfiguration.class;
     private XQueryDataSourceConfiguration dataSourceConfiguration;
     private XQueryDataSourceConfiguration dataSourceConfiguration1;
