@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply from: 'idea.gradle'
@@ -45,12 +47,6 @@ sourceSets {
         compileClasspath += configurations.provided
         test.compileClasspath += configurations.provided
         test.runtimeClasspath += configurations.provided
-    }
-}
-
-processResources {
-    from(projectDir) {
-        include 'META-INF/**'
     }
 }
 
@@ -114,9 +110,18 @@ class DownloadTask extends DefaultTask {
 }
 
 task dist(type: Zip) {
-    from jar.outputs.files
-    from configurations.runtime
-    into('intellij-xquery/lib')
+    from(jar.outputs.files) {
+        into('intellij-xquery/lib')
+    }
+    from(configurations.runtime) {
+        into('intellij-xquery/lib')
+    }
+    from(projectDir) {
+        include 'licenses/**'
+        include 'NOTICE'
+        include 'LICENSE'
+        include 'CONTRIBUTORS'
+    }
 }
 
 task prepareForms(dependsOn: ':classes') << {

@@ -1,0 +1,12 @@
+License for marklogic-xqj-1.0.0.jar which can be found in either intellij-xquery-rt/lib (source code) or intellij-xquery/lib (in case of zip distribution):
+==============================================================
+MarkLogic XQJ API
+
+Copyright (c) 2013. xqj.net. All rights reserved.
+
+* This software is free for commercial use.
+* This software can be freely distributed.
+
+Full licence information can be found here:
+
+http://creativecommons.org/licenses/by/3.0/legalcode

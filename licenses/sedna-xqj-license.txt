@@ -1,0 +1,13 @@
+License for sedna-xqj-1.0.0.jar which can be found in either intellij-xquery-rt/lib (source code) or intellij-xquery/lib (in case of zip distribution):
+==============================================================
+Sedna XQJ Licence Overview
+--------------------------
+
+Copyright (c) 2012. xqj.net All rights reserved.
+
+* Software is free for commercial use.
+* You are allowed to redistribute this software.
+
+Full licence information can be found here:
+
+http://creativecommons.org/licenses/by/3.0/
