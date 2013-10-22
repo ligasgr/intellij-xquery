@@ -16,9 +16,13 @@
 
 package org.intellij.xquery.runner.state.datasources;
 
+import com.intellij.util.xmlb.annotations.AbstractCollection;
 import com.intellij.util.xmlb.annotations.Attribute;
 import com.intellij.util.xmlb.annotations.Tag;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: ligasgr
@@ -45,12 +49,13 @@ public class XQueryDataSourceConfiguration implements Cloneable {
     public String PASSWORD;
     @Attribute("userDefinedLibraryEnabled")
     public boolean USER_DEFINED_LIBRARY_ENABLED;
-    @Attribute("userDefinedLibraryPath")
-    public String USER_DEFINED_LIBRARY_PATH;
     @Attribute("databaseName")
     public String DATABASE_NAME;
     @Attribute("default")
     public boolean DEFAULT;
+    @Tag("userDefinedLibraryPaths")
+    @AbstractCollection(surroundWithTag = false, elementTag = "userDefinedLibraryPath")
+    public List<String> USER_DEFINED_LIBRARY_PATHS = new ArrayList<String>();
 
     public XQueryDataSourceConfiguration() {
     }
@@ -73,20 +78,20 @@ public class XQueryDataSourceConfiguration implements Cloneable {
         XQueryDataSourceConfiguration that = (XQueryDataSourceConfiguration) o;
 
         if (CONFIG_ENABLED != that.CONFIG_ENABLED) return false;
+        if (DEFAULT != that.DEFAULT) return false;
         if (USER_DEFINED_LIBRARY_ENABLED != that.USER_DEFINED_LIBRARY_ENABLED) return false;
         if (CONFIG_FILE != null ? ! CONFIG_FILE.equals(that.CONFIG_FILE) : that.CONFIG_FILE != null) return false;
+        if (DATABASE_NAME != null ? ! DATABASE_NAME.equals(that.DATABASE_NAME) : that.DATABASE_NAME != null)
+            return false;
         if (HOST != null ? ! HOST.equals(that.HOST) : that.HOST != null) return false;
         if (NAME != null ? ! NAME.equals(that.NAME) : that.NAME != null) return false;
         if (PASSWORD != null ? ! PASSWORD.equals(that.PASSWORD) : that.PASSWORD != null) return false;
         if (PORT != null ? ! PORT.equals(that.PORT) : that.PORT != null) return false;
         if (TYPE != that.TYPE) return false;
         if (USERNAME != null ? ! USERNAME.equals(that.USERNAME) : that.USERNAME != null) return false;
-        if (USER_DEFINED_LIBRARY_PATH != null ? ! USER_DEFINED_LIBRARY_PATH.equals(that.USER_DEFINED_LIBRARY_PATH) :
-                that.USER_DEFINED_LIBRARY_PATH != null)
+        if (USER_DEFINED_LIBRARY_PATHS != null ? ! USER_DEFINED_LIBRARY_PATHS.equals(that.USER_DEFINED_LIBRARY_PATHS)
+                : that.USER_DEFINED_LIBRARY_PATHS != null)
             return false;
-        if (DATABASE_NAME != null ? ! DATABASE_NAME.equals(that.DATABASE_NAME) : that.DATABASE_NAME != null)
-            return false;
-        if (DEFAULT != that.DEFAULT) return false;
 
         return true;
     }
@@ -102,9 +107,9 @@ public class XQueryDataSourceConfiguration implements Cloneable {
         result = 31 * result + (USERNAME != null ? USERNAME.hashCode() : 0);
         result = 31 * result + (PASSWORD != null ? PASSWORD.hashCode() : 0);
         result = 31 * result + (USER_DEFINED_LIBRARY_ENABLED ? 1 : 0);
-        result = 31 * result + (USER_DEFINED_LIBRARY_PATH != null ? USER_DEFINED_LIBRARY_PATH.hashCode() : 0);
         result = 31 * result + (DATABASE_NAME != null ? DATABASE_NAME.hashCode() : 0);
         result = 31 * result + (DEFAULT ? 1 : 0);
+        result = 31 * result + (USER_DEFINED_LIBRARY_PATHS != null ? USER_DEFINED_LIBRARY_PATHS.hashCode() : 0);
         return result;
     }
 }

@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import static java.lang.Boolean.TRUE;
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
 import static org.intellij.xquery.runner.rt.XQueryDataSourceType.MARKLOGIC;
 import static org.intellij.xquery.runner.rt.XQueryDataSourceType.SAXON;
@@ -53,8 +54,10 @@ public class XQueryDataSourceConfigurationTest {
     private static final String PASSWORD_FIELD = "password";
     private static final String USER_DEFINED_LIBRARY_ENABLED = "userDefinedLibraryEnabled";
     private static final String USER_DEFINED_LIBRARY_PATH = "userDefinedLibraryPath";
+    private static final String USER_DEFINED_LIBRARY_PATHS = "userDefinedLibraryPaths";
     private static final String DATABASE_NAME_FIELD = "databaseName";
     private static final String CONFIG_ATTRIBUTE_XPATH = "/data-source-configuration/@";
+    private static final String CONFIG_ELEMENT_XPATH = "/data-source-configuration/";
     private static final String DEFAULT_FIELD = "default";
     private static final String VALUE = "1";
     private static final String DIFFERENT_VALUE = "2";
@@ -151,12 +154,17 @@ public class XQueryDataSourceConfigurationTest {
     }
 
     @Test
-    public void shouldPersistUserDefinedLibraryPath() throws Exception {
-        dataSourceConfiguration.USER_DEFINED_LIBRARY_PATH = LIBRARY_PATH;
+    public void shouldPersistUserDefinedLibraryPaths() throws Exception {
+        dataSourceConfiguration.USER_DEFINED_LIBRARY_PATHS.add(LIBRARY_PATH);
+        dataSourceConfiguration.USER_DEFINED_LIBRARY_PATHS.add(LIBRARY_PATH);
 
         String xml = serializeToXml(dataSourceConfiguration);
+        System.out.println(xml);
 
-        assertThat(the(xml), hasXPath(CONFIG_ATTRIBUTE_XPATH + USER_DEFINED_LIBRARY_PATH, equalTo(LIBRARY_PATH)));
+        assertThat(the(xml), hasXPath(CONFIG_ELEMENT_XPATH + USER_DEFINED_LIBRARY_PATHS + "/" +
+                USER_DEFINED_LIBRARY_PATH + "[1]/@value", equalTo(LIBRARY_PATH)));
+        assertThat(the(xml), hasXPath(CONFIG_ELEMENT_XPATH + USER_DEFINED_LIBRARY_PATHS + "/" +
+                USER_DEFINED_LIBRARY_PATH + "[2]/@value", equalTo(LIBRARY_PATH)));
     }
 
     @Test
@@ -259,12 +267,18 @@ public class XQueryDataSourceConfigurationTest {
     }
 
     @Test
-    public void shouldReadUserDefinedLibraryPath() throws Exception {
-        String xml = format(XML_TEMPLATE, USER_DEFINED_LIBRARY_PATH, LIBRARY_PATH);
+    public void shouldReadUserDefinedLibraryPaths() throws Exception {
+        String xml = "<data-source-configuration>\n" +
+                "  <" + USER_DEFINED_LIBRARY_PATHS + ">\n" +
+                "    <" + USER_DEFINED_LIBRARY_PATH + " value=\"" + LIBRARY_PATH + "\" />\n" +
+                "    <" + USER_DEFINED_LIBRARY_PATH + " value=\"" + LIBRARY_PATH + "\" />\n" +
+                "  </" + USER_DEFINED_LIBRARY_PATHS + ">\n" +
+                "</data-source-configuration>\n";
 
         dataSourceConfiguration = deserializeFromXml(rootElement(xml), dataSourceClass);
 
-        assertThat(dataSourceConfiguration.USER_DEFINED_LIBRARY_PATH, is(equalTo(LIBRARY_PATH)));
+        assertThat(dataSourceConfiguration.USER_DEFINED_LIBRARY_PATHS.get(0), is(equalTo(LIBRARY_PATH)));
+        assertThat(dataSourceConfiguration.USER_DEFINED_LIBRARY_PATHS.get(1), is(equalTo(LIBRARY_PATH)));
     }
 
     @Test
@@ -445,17 +459,17 @@ public class XQueryDataSourceConfigurationTest {
     }
 
     @Test
-    public void shouldNotBeEqualWhenUserDefinedLibraryPathIsDifferent() throws Exception {
-        dataSourceConfiguration.USER_DEFINED_LIBRARY_PATH = VALUE;
-        dataSourceConfiguration1.USER_DEFINED_LIBRARY_PATH = DIFFERENT_VALUE;
+    public void shouldNotBeEqualWhenUserDefinedLibraryPathsAreDifferent() throws Exception {
+        dataSourceConfiguration.USER_DEFINED_LIBRARY_PATHS = asList(VALUE);
+        dataSourceConfiguration1.USER_DEFINED_LIBRARY_PATHS = asList(DIFFERENT_VALUE);
 
         assertThat(dataSourceConfiguration, is(not(equalTo(dataSourceConfiguration1))));
     }
 
     @Test
-    public void shouldBeEqualWhenUserDefinedLibraryPathIsTheSame() throws Exception {
-        dataSourceConfiguration.USER_DEFINED_LIBRARY_PATH = VALUE;
-        dataSourceConfiguration1.USER_DEFINED_LIBRARY_PATH = VALUE;
+    public void shouldBeEqualWhenUserDefinedLibraryPathsAreTheSame() throws Exception {
+        dataSourceConfiguration.USER_DEFINED_LIBRARY_PATHS = asList(VALUE);
+        dataSourceConfiguration1.USER_DEFINED_LIBRARY_PATHS = asList(VALUE);
 
         assertThat(dataSourceConfiguration, is(equalTo(dataSourceConfiguration1)));
     }
