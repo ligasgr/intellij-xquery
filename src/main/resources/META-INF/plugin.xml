@@ -59,7 +59,7 @@
         <langCodeStyleSettingsProvider implementation="org.intellij.xquery.formatter.settings.XQueryLanguageCodeStyleSettingsProvider"/>
         <quoteHandler fileType="XQuery file" className="org.intellij.xquery.quotes.XQueryQuoteHandler"/>
         <declarationRangeHandler key="org.intellij.xquery.psi.XQueryFunctionDecl" implementationClass="org.intellij.xquery.structure.XQueryFunctionDeclarationRangeHandler"/>
-        <highlightVisitor implementation="org.intellij.xquery.analysis.XQueryHighlightVisitor"/>
+        <annotator language="XQuery" implementationClass="org.intellij.xquery.annotator.XQueryAnnotator"/>
     </extensions>
 
     <actions>
