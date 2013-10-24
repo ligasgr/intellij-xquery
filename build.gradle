@@ -71,6 +71,7 @@ dependencies {
     testCompile('org.hamcrest:hamcrest-library:1.1') {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
     }
+    testCompile 'org.easytesting:fest-swing:1.2.1'
 }
 
 test {
