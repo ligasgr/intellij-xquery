@@ -159,7 +159,6 @@ public class XQueryDataSourceConfigurationTest {
         dataSourceConfiguration.USER_DEFINED_LIBRARY_PATHS.add(LIBRARY_PATH);
 
         String xml = serializeToXml(dataSourceConfiguration);
-        System.out.println(xml);
 
         assertThat(the(xml), hasXPath(CONFIG_ELEMENT_XPATH + USER_DEFINED_LIBRARY_PATHS + "/" +
                 USER_DEFINED_LIBRARY_PATH + "[1]/@value", equalTo(LIBRARY_PATH)));

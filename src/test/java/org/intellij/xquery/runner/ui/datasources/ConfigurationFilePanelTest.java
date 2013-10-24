@@ -37,14 +37,59 @@ public class ConfigurationFilePanelTest {
     public void shouldShowPanelWhenNeeded() throws Exception {
         configurationFilePanel.init(XQueryDataSourceType.SAXON, false, null);
 
-        assertThat(true, is(configurationFilePanel.getMainPanel().isVisible()));
+        assertThat(configurationFilePanel.getMainPanel().isVisible(), is(true));
     }
 
     @Test
     public void shouldHidePanelWhenNeeded() throws Exception {
         configurationFilePanel.init(XQueryDataSourceType.MARKLOGIC, false, null);
 
-        assertThat(false, is(configurationFilePanel.getMainPanel().isVisible()));
+        assertThat(configurationFilePanel.getMainPanel().isVisible(), is(false));
+    }
+
+    @Test
+    public void shouldDisableConfigFileField() throws Exception {
+        configurationFilePanel.init(XQueryDataSourceType.SAXON, false, null);
+
+        window.checkBox("configurationEnabled").requireNotSelected();
+        window.textBox("configFile").requireDisabled();
+
+    }
+
+    @Test
+    public void shouldEnableConfigFileField() throws Exception {
+        configurationFilePanel.init(XQueryDataSourceType.SAXON, true, null);
+
+        window.checkBox("configurationEnabled").requireSelected();
+        window.textBox("configFile").requireEnabled();
+    }
+
+    @Test
+    public void shouldChangeValueOfConfigurationEnabledToTrue() throws Exception {
+        configurationFilePanel.init(XQueryDataSourceType.SAXON, false, null);
+
+        window.checkBox("configurationEnabled").check();
+        window.checkBox("configurationEnabled").requireSelected();
+        window.textBox("configFile").requireEnabled();
+        assertThat(configurationFilePanel.isConfigurationEnabled(), is(true));
+    }
+
+    @Test
+    public void shouldChangeValueOfConfigurationEnabledToFalse() throws Exception {
+        configurationFilePanel.init(XQueryDataSourceType.SAXON, true, null);
+
+        window.checkBox("configurationEnabled").uncheck();
+        window.checkBox("configurationEnabled").requireNotSelected();
+        window.textBox("configFile").requireDisabled();
+        assertThat(configurationFilePanel.isConfigurationEnabled(), is(false));
+    }
+
+    @Test
+    public void shouldChangeValueOfConfigFileWhenTextEntered() throws Exception {
+        configurationFilePanel.init(XQueryDataSourceType.SAXON, true, null);
+
+        window.textBox("configFile").enterText("/my/file");
+        assertThat(configurationFilePanel.getConfigFile(), is("/my/file"));
     }
 
     @After

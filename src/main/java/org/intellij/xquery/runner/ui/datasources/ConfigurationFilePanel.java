@@ -41,6 +41,7 @@ public class ConfigurationFilePanel {
     public ConfigurationFilePanel() {
         configFile.addBrowseFolderListener("Choose file", null, null, createSingleFileNoJarsDescriptor(),
                 TextComponentAccessor.TEXT_FIELD_WHOLE_TEXT , false);
+        configFile.getTextField().setName("configFile");
         configurationEnabled.addActionListener(getConfigEnabledListener());
     }
 
