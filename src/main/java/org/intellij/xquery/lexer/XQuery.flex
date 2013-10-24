@@ -129,6 +129,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "<" / {SC}? {NCName} {SC}? ":" {SC}? {NCName} {SC}? "(" {return XQueryTypes.LT_CHAR;}
 "<="                                       {return XQueryTypes.LE_CHARS;}
 ">="                                       {return XQueryTypes.GE_CHARS;}
+"</"                                       {pushState(END_TAG); return XQueryTypes.END_TAG;}
 "<"                                        {pushState(START_TAG); return XQueryTypes.LT_CHAR;}
 ">"                                        {return XQueryTypes.GT_CHAR;}
 "@"                                        {pushState(QNAME);return XQueryTypes.AT_SIGN;}

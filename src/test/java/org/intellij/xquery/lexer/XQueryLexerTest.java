@@ -938,4 +938,12 @@ public class XQueryLexerTest extends XQueryBaseTestCase {
                 "NCName", "foo"
         });
     }
+
+    public void testIncompleteXmlContent() throws Exception {
+        assertProducedTokens("</books>", new String[]{
+                "</", "</",
+                "NCName", "books",
+                ">", ">",
+        });
+    }
 }
