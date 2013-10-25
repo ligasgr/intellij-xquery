@@ -34,6 +34,10 @@ import static org.junit.Assert.assertThat;
  * Time: 13:42
  */
 public class ConfigurationFilePanelTest {
+    private static final XQueryDataSourceType CONFIG_FILE_SUPPORTED_TYPE = XQueryDataSourceType.SAXON;
+    private static final XQueryDataSourceType CONFIG_FILE_UNSUPPORTED_TYPE = XQueryDataSourceType.MARKLOGIC;
+    private static final boolean ENABLED = true;
+    private static final boolean DISABLED = false;
     private FrameFixture window;
     private ConfigurationFilePanel configurationFilePanel;
 
@@ -51,21 +55,21 @@ public class ConfigurationFilePanelTest {
 
     @Test
     public void shouldShowPanelWhenNeeded() throws Exception {
-        configurationFilePanel.init(XQueryDataSourceType.SAXON, false, null);
+        configurationFilePanel.init(CONFIG_FILE_SUPPORTED_TYPE, false, null);
 
         assertThat(configurationFilePanel.getMainPanel().isVisible(), is(true));
     }
 
     @Test
     public void shouldHidePanelWhenNeeded() throws Exception {
-        configurationFilePanel.init(XQueryDataSourceType.MARKLOGIC, false, null);
+        configurationFilePanel.init(CONFIG_FILE_UNSUPPORTED_TYPE, false, null);
 
         assertThat(configurationFilePanel.getMainPanel().isVisible(), is(false));
     }
 
     @Test
     public void shouldDisableConfigFileField() throws Exception {
-        configurationFilePanel.init(XQueryDataSourceType.SAXON, false, null);
+        initVisiblePanelWithConfigFile(DISABLED);
 
         window.checkBox("configurationEnabled").requireNotSelected();
         window.textBox("configFile").requireDisabled();
@@ -74,7 +78,7 @@ public class ConfigurationFilePanelTest {
 
     @Test
     public void shouldEnableConfigFileField() throws Exception {
-        configurationFilePanel.init(XQueryDataSourceType.SAXON, true, null);
+        initVisiblePanelWithConfigFile(ENABLED);
 
         window.checkBox("configurationEnabled").requireSelected();
         window.textBox("configFile").requireEnabled();
@@ -82,7 +86,7 @@ public class ConfigurationFilePanelTest {
 
     @Test
     public void shouldChangeValueOfConfigurationEnabledToTrue() throws Exception {
-        configurationFilePanel.init(XQueryDataSourceType.SAXON, false, null);
+        initVisiblePanelWithConfigFile(DISABLED);
 
         window.checkBox("configurationEnabled").check().requireSelected();
 
@@ -92,7 +96,7 @@ public class ConfigurationFilePanelTest {
 
     @Test
     public void shouldChangeValueOfConfigurationEnabledToFalse() throws Exception {
-        configurationFilePanel.init(XQueryDataSourceType.SAXON, true, null);
+        initVisiblePanelWithConfigFile(ENABLED);
 
         window.checkBox("configurationEnabled").uncheck().requireNotSelected();
 
@@ -102,7 +106,7 @@ public class ConfigurationFilePanelTest {
 
     @Test
     public void shouldChangeValueOfConfigFileWhenTextEntered() throws Exception {
-        configurationFilePanel.init(XQueryDataSourceType.SAXON, true, null);
+        initVisiblePanelWithConfigFile(ENABLED);
 
         window.textBox("configFile").enterText("/my/file");
 
@@ -112,5 +116,9 @@ public class ConfigurationFilePanelTest {
     @After
     public void tearDown() throws Exception {
         window.cleanUp();
+    }
+
+    private void initVisiblePanelWithConfigFile(boolean enabled) {
+        configurationFilePanel.init(CONFIG_FILE_SUPPORTED_TYPE, enabled, null);
     }
 }
