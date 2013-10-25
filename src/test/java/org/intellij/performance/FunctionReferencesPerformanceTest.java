@@ -42,7 +42,7 @@ public class FunctionReferencesPerformanceTest extends XQueryBaseTestCase {
     public void testCompletion() throws Exception {
         setupTestFiles(1000, 100, 10, "declare function prefix_target:example() {<caret>};", getTestName(false));
 
-        PlatformTestUtil.startPerformanceTest(getTestName(false), 11000, new ThrowableRunnable() {
+        PlatformTestUtil.startPerformanceTest(getTestName(false), 22000, new ThrowableRunnable() {
             @Override
             public void run() throws Exception {
                 for (int i = 0; i < 100; i++) {
@@ -70,7 +70,7 @@ public class FunctionReferencesPerformanceTest extends XQueryBaseTestCase {
         setupTestFiles(1000, 100, 10, "declare function prefix_target:example() {module_0:fun<caret>ction_9()};",
                 getTestName(false));
         final PsiElement source = myFixture.getElementAtCaret();
-        PlatformTestUtil.startPerformanceTest(getTestName(false), 50000, new ThrowableRunnable() {
+        PlatformTestUtil.startPerformanceTest(getTestName(false), 300000, new ThrowableRunnable() {
             @Override
             public void run() throws Exception {
                 for (int i = 0; i < 100; i++) {
