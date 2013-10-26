@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+
+
 // --- changes to idea plugin ---
 idea {
     module {
@@ -34,20 +36,36 @@ idea {
 idea.project.ipr {
     withXml {
         it.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'Git'
-	def prm = it.node.component.find { it.@name == 'ProjectRootManager' }
-	prm.@'project-jdk-name'= project.ext.ideaSdkName
-	prm.@'project-jdk-type'='IDEA JDK'
-	prm.attributes().remove('assert-jdk-15')
+        prepareJdk(it)
+        prepareCopyright(it)
     }
+}
+
+private void prepareCopyright(it) {
+    def cm = it.node.component.find { it.@name == 'CopyrightManager' }
+    cm.@'default' = 'apache'
+    def copyright = cm.appendNode('copyright')
+    copyright.appendNode('option', ['name': 'notice', 'value': project.file('NOTICE').text])
+    copyright.appendNode('option', ['name': 'keyword', 'value': 'Copyright'])
+    copyright.appendNode('option', ['name': 'allowReplaceKeyword', 'value': ''])
+    copyright.appendNode('option', ['name': 'myName', 'value': 'apache'])
+    copyright.appendNode('option', ['name': 'myLocal', 'value': 'true'])
+}
+
+private void prepareJdk(it) {
+    def prm = it.node.component.find { it.@name == 'ProjectRootManager' }
+    prm.@'project-jdk-name' = project.ext.ideaSdkName
+    prm.@'project-jdk-type' = 'IDEA JDK'
+    prm.attributes().remove('assert-jdk-15')
 }
 
 // --- changes to idea plugin ---
 
 
 def removeIdeaJdkDependencies(def module) {
-    def deps = module.dependencies.findAll {!(it instanceof org.gradle.plugins.ide.idea.model.ModuleDependency) && it.classes.url[0].contains(ideaInstallationPath)}
+    def deps = module.dependencies.findAll { !(it instanceof org.gradle.plugins.ide.idea.model.ModuleDependency) && it.classes.url[0].contains(ideaInstallationPath) }
     if (deps)
-    	module.dependencies.removeAll(deps)
+        module.dependencies.removeAll(deps)
 }
 
 def changeModuleType(def module) {
@@ -55,7 +73,7 @@ def changeModuleType(def module) {
 }
 
 def removeUnnecessaryComponent(def module) {
-    module.remove(module.component.find { it.@name == 'ModuleRootManager'})
+    module.remove(module.component.find { it.@name == 'ModuleRootManager' })
 }
 
 def appendRequiredComponent(def module) {
