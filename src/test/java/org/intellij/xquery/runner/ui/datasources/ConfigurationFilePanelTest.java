@@ -16,14 +16,13 @@
 
 package org.intellij.xquery.runner.ui.datasources;
 
-import org.fest.swing.edt.GuiActionRunner;
-import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.fixture.FrameFixture;
+import net.java.openjdk.cacio.ctc.junit.CacioFESTRunner;
+import net.java.openjdk.cacio.ctc.junit.CacioTestRunner;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
+import org.intellij.xquery.runner.ui.BaseGuiTest;
 import org.intellij.xquery.runner.ui.PanelTestingFrame;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -33,24 +32,17 @@ import static org.junit.Assert.assertThat;
  * Date: 24/10/13
  * Time: 13:42
  */
-public class ConfigurationFilePanelTest {
+@RunWith(CacioFESTRunner.class)
+public class ConfigurationFilePanelTest extends BaseGuiTest {
     private static final XQueryDataSourceType CONFIG_FILE_SUPPORTED_TYPE = XQueryDataSourceType.SAXON;
     private static final XQueryDataSourceType CONFIG_FILE_UNSUPPORTED_TYPE = XQueryDataSourceType.MARKLOGIC;
     private static final boolean ENABLED = true;
     private static final boolean DISABLED = false;
-    private FrameFixture window;
     private ConfigurationFilePanel configurationFilePanel;
 
-    @Before
-    public void setUp() throws Exception {
-        PanelTestingFrame frame = GuiActionRunner.execute(new GuiQuery<PanelTestingFrame>() {
-            protected PanelTestingFrame executeInEDT() {
-                configurationFilePanel = new ConfigurationFilePanel();
-                return new PanelTestingFrame(configurationFilePanel.getMainPanel());
-            }
-        });
-        window = new FrameFixture(frame);
-        window.show();
+    protected PanelTestingFrame getPanelTestingFrame() {
+        configurationFilePanel = new ConfigurationFilePanel();
+        return new PanelTestingFrame(configurationFilePanel.getMainPanel());
     }
 
     @Test
@@ -87,6 +79,8 @@ public class ConfigurationFilePanelTest {
     @Test
     public void shouldChangeValueOfConfigurationEnabledToTrue() throws Exception {
         initVisiblePanelWithConfigFile(DISABLED);
+        window.checkBox("configurationEnabled").requireNotSelected();
+        window.robot.settings().delayBetweenEvents(200);
 
         window.checkBox("configurationEnabled").check().requireSelected();
 
@@ -97,6 +91,8 @@ public class ConfigurationFilePanelTest {
     @Test
     public void shouldChangeValueOfConfigurationEnabledToFalse() throws Exception {
         initVisiblePanelWithConfigFile(ENABLED);
+        window.checkBox("configurationEnabled").requireSelected();
+        window.robot.settings().delayBetweenEvents(200);
 
         window.checkBox("configurationEnabled").uncheck().requireNotSelected();
 
@@ -111,11 +107,6 @@ public class ConfigurationFilePanelTest {
         window.textBox("configFile").enterText("/my/file");
 
         assertThat(configurationFilePanel.getConfigFile(), is("/my/file"));
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        window.cleanUp();
     }
 
     private void initVisiblePanelWithConfigFile(boolean enabled) {
