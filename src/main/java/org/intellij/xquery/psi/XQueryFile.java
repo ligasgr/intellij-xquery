@@ -71,6 +71,8 @@ public class XQueryFile extends PsiFileBase {
     private CachedValue<Collection<XQueryModuleImport>> myModulesImports;
     private CachedValue<Collection<XQueryNamespaceDecl>> myNamespaceDeclarations;
     private CachedValue<Collection<XQueryFunctionDecl>> myFunctions;
+    private CachedValue<Collection<XQueryFunctionInvocation>> functionInvocations;
+    private CachedValue<Collection<XQueryVarRef>> referencedVariables;
     private CachedValue<Collection<XQueryNamespaceDecl>> myNamespacesMatchingDefault;
     private CachedValue<String> myDefaultFunctionNamespace;
     private CachedValue<Map<String, String>> myNamespaceMapping;
@@ -136,6 +138,35 @@ public class XQueryFile extends PsiFileBase {
         return myFunctions.getValue();
     }
 
+    public Collection<XQueryVarRef> getVariableReferences() {
+        if (referencedVariables == null) {
+            referencedVariables = CachedValuesManager
+                    .getManager(getProject())
+                    .createCachedValue(new CachedValueProvider<Collection<XQueryVarRef>>() {
+                        @Override
+                        public Result<Collection<XQueryVarRef>> compute() {
+                            return CachedValueProvider.Result.create(calcVariableReferences(), XQueryFile.this);
+                        }
+                    }, false);
+        }
+        return referencedVariables.getValue();
+    }
+
+    @NotNull
+    public Collection<XQueryFunctionInvocation> getFunctionInvocations() {
+        if (functionInvocations == null) {
+            functionInvocations = CachedValuesManager
+                    .getManager(getProject())
+                    .createCachedValue(new CachedValueProvider<Collection<XQueryFunctionInvocation>>() {
+                        @Override
+                        public Result<Collection<XQueryFunctionInvocation>> compute() {
+                            return CachedValueProvider.Result.create(calcFunctionsInvocations(), XQueryFile.this);
+                        }
+                    }, false);
+        }
+        return functionInvocations.getValue();
+    }
+
     @NotNull
     public Collection<XQueryNamespaceDecl> getNamespaceDeclarationsMatchingDefaultNamespace() {
         if (myNamespacesMatchingDefault == null) {
@@ -189,6 +220,11 @@ public class XQueryFile extends PsiFileBase {
         return variableDeclarations;
     }
 
+    private Collection<XQueryVarRef> calcVariableReferences() {
+        Collection<XQueryVarRef> variableReferences = PsiTreeUtil.findChildrenOfType(this, XQueryVarRef.class);
+        return variableReferences;
+    }
+
     private Collection<XQueryModuleImport> calcModuleImports() {
         Collection<XQueryModuleImport> moduleImports = PsiTreeUtil.findChildrenOfType(this, XQueryModuleImport.class);
         return moduleImports;
@@ -204,6 +240,12 @@ public class XQueryFile extends PsiFileBase {
         Collection<XQueryFunctionDecl> functionDeclarations = PsiTreeUtil.findChildrenOfType(this,
                 XQueryFunctionDecl.class);
         return functionDeclarations;
+    }
+
+    private Collection<XQueryFunctionInvocation> calcFunctionsInvocations() {
+        Collection<XQueryFunctionInvocation> functionsInvocations = PsiTreeUtil.findChildrenOfType(this,
+                XQueryFunctionInvocation.class);
+        return functionsInvocations;
     }
 
     private Collection<XQueryNamespaceDecl> calcNamespaceDeclarationsMatchingDefaultNamespace() {

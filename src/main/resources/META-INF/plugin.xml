@@ -60,6 +60,9 @@
         <quoteHandler fileType="XQuery file" className="org.intellij.xquery.quotes.XQueryQuoteHandler"/>
         <declarationRangeHandler key="org.intellij.xquery.psi.XQueryFunctionDecl" implementationClass="org.intellij.xquery.structure.XQueryFunctionDeclarationRangeHandler"/>
         <annotator language="XQuery" implementationClass="org.intellij.xquery.annotator.XQueryAnnotator"/>
+        <localInspection enabledByDefault="true" shortName="ImportDeclaration" groupName="XQuery"
+                         displayName="Highlights unused import declarations"
+                         implementationClass="org.intellij.xquery.inspection.UnusedImportsInspection"/>
     </extensions>
 
     <actions>
