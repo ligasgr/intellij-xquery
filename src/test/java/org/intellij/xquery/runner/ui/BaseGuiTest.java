@@ -16,22 +16,28 @@
 
 package org.intellij.xquery.runner.ui;
 
+import net.java.openjdk.cacio.ctc.junit.CacioFESTRunner;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.fixture.FrameFixture;
+import org.intellij.xquery.XQueryBaseTestCase;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.runner.RunWith;
 
 /**
  * User: ligasgr
  * Date: 26/10/13
  * Time: 17:36
  */
-public abstract class BaseGuiTest {
+@RunWith(CacioFESTRunner.class)
+public abstract class BaseGuiTest extends XQueryBaseTestCase {
     protected FrameFixture window;
 
+    @Override
     @Before
     public void setUp() throws Exception {
+        super.setUp();
         PanelTestingFrame frame = GuiActionRunner.execute(new GuiQuery<PanelTestingFrame>() {
             protected PanelTestingFrame executeInEDT() {
                 return getPanelTestingFrame();
@@ -43,8 +49,10 @@ public abstract class BaseGuiTest {
 
     protected abstract PanelTestingFrame getPanelTestingFrame();
 
+    @Override
     @After
     public void tearDown() throws Exception {
         window.cleanUp();
+        super.tearDown();
     }
 }

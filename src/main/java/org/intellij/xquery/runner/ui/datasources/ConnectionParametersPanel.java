@@ -27,6 +27,11 @@ import javax.swing.*;
  * Time: 17:51
  */
 public class ConnectionParametersPanel {
+    public static final String HOST_FIELD_NAME = "host";
+    public static final String PORT_FIELD_NAME = "port";
+    public static final String USERNAME_FIELD_NAME = "username";
+    public static final String PASSWORD_FIELD_NAME = "password";
+    public static final String DATABASE_NAME_FIELD_NAME = "databaseName";
     private JPanel mainPanel;
     private LabeledComponent<JTextField> host;
     private LabeledComponent<JTextField> port;
@@ -34,7 +39,15 @@ public class ConnectionParametersPanel {
     private LabeledComponent<JTextField> password;
     private LabeledComponent<JTextField> databaseName;
 
-    public JPanel getPanel() {
+    public ConnectionParametersPanel() {
+        host.getComponent().setName(HOST_FIELD_NAME);
+        port.getComponent().setName(PORT_FIELD_NAME);
+        username.getComponent().setName(USERNAME_FIELD_NAME);
+        password.getComponent().setName(PASSWORD_FIELD_NAME);
+        databaseName.getComponent().setName(DATABASE_NAME_FIELD_NAME);
+    }
+
+    public JPanel getMainPanel() {
         return mainPanel;
     }
 

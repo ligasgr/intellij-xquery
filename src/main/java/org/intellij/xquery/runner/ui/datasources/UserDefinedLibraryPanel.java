@@ -39,6 +39,8 @@ import java.util.List;
  * Time: 19:05
  */
 public class UserDefinedLibraryPanel {
+    public static final String USER_DEFINED_LIBRARY_ENABLED_FIELD_NAME = "userDefinedLibraryEnabled";
+    public static final String PATH_LIST_NAME = "pathList";
     private final FileChooserDescriptor jarsOnlyFileChooserDescriptor = new FileChooserDescriptor(false, false, true,
             true, false, true);
     private JPanel mainPanel;
@@ -46,65 +48,20 @@ public class UserDefinedLibraryPanel {
     private JPanel pathsPanel;
     private DefaultListModel pathListModel;
     private JBList pathList;
+    private final ToolbarDecorator toolbarDecorator;
 
     public UserDefinedLibraryPanel() {
         pathListModel = new DefaultListModel();
         pathList = preparePathList(pathListModel);
-        ToolbarDecorator toolbarDecorator = prepareToolbarDecorator(pathList);
+        toolbarDecorator = prepareToolbarDecorator(pathList);
         pathsPanel.add(toolbarDecorator.createPanel());
         userDefinedLibraryEnabled.addActionListener(getUserDefinedLibraryEnabledListener());
-    }
-
-    private ToolbarDecorator prepareToolbarDecorator(final JBList pathList) {
-        return ToolbarDecorator.createDecorator(pathList)
-                .setAddAction(new AnActionButtonRunnable() {
-                    @Override
-                    public void run(AnActionButton button) {
-                        showAddPathPopup();
-                    }
-                }).setRemoveAction(new AnActionButtonRunnable() {
-                    @Override
-                    public void run(AnActionButton button) {
-                        ListUtil.removeSelectedItems(pathList);
-                        pathList.repaint();
-                    }
-                });
-    }
-
-    private void showAddPathPopup() {
-        FileChooser.chooseFiles(jarsOnlyFileChooserDescriptor, null, null, new Consumer<List<VirtualFile>>() {
-            @Override
-            public void consume(List<VirtualFile> files) {
-                for (VirtualFile file : files) {
-                    onFileChosen(file);
-                }
-            }
-        });
-    }
-
-    private void onFileChosen(VirtualFile chosenFile) {
-        pathListModel.addElement(chosenFile.getPresentableUrl());
     }
 
     public void init(boolean userDefinedLibraryEnabled, List<String> userDefinedLibraryPaths) {
         this.userDefinedLibraryEnabled.setSelected(userDefinedLibraryEnabled);
         populatePathList(userDefinedLibraryPaths);
         userDefinedLibraryEnabledChanged();
-    }
-
-    private void populatePathList(List<String> userDefinedLibraryPaths) {
-        pathListModel.removeAllElements();
-        for (String userDefinedLibraryPath : userDefinedLibraryPaths) {
-            pathListModel.addElement(userDefinedLibraryPath);
-        }
-    }
-
-    public boolean isUserDefinedLibraryEnabled() {
-        return userDefinedLibraryEnabled.isSelected();
-    }
-
-    private void userDefinedLibraryEnabledChanged() {
-        pathList.setEnabled(userDefinedLibraryEnabled.isSelected());
     }
 
     public List<String> getUserDefinedLibraryPaths() {
@@ -115,11 +72,75 @@ public class UserDefinedLibraryPanel {
         return currentPaths;
     }
 
+    public JPanel getMainPanel() {
+        return mainPanel;
+    }
+
+    public ToolbarDecorator getToolbarDecorator() {
+        return toolbarDecorator;
+    }
+
+    public boolean isUserDefinedLibraryEnabled() {
+        return userDefinedLibraryEnabled.isSelected();
+    }
+
+    private ToolbarDecorator prepareToolbarDecorator(final JBList pathList) {
+        return ToolbarDecorator.createDecorator(pathList)
+                .setAddAction(new AnActionButtonRunnable() {
+                    @Override
+                    public void run(AnActionButton button) {
+                        showAddPathPopup();
+                    }
+                })
+                .setRemoveAction(new AnActionButtonRunnable() {
+                    @Override
+                    public void run(AnActionButton button) {
+                        ListUtil.removeSelectedItems(pathList);
+                        pathList.repaint();
+                    }
+                });
+    }
+
+    private void showAddPathPopup() {
+        chooseFilesWithFileChooser(jarsOnlyFileChooserDescriptor, new Consumer<List<VirtualFile>>() {
+            @Override
+            public void consume(List<VirtualFile> files) {
+                for (VirtualFile file : files) {
+                    onFileChosen(file);
+                }
+            }
+        });
+    }
+
+    protected void chooseFilesWithFileChooser(FileChooserDescriptor descriptor, Consumer<List<VirtualFile>> consumer) {
+        FileChooser.chooseFiles(descriptor, null, null, consumer);
+    }
+
+    void onFileChosen(VirtualFile chosenFile) {
+        pathListModel.addElement(chosenFile.getPresentableUrl());
+    }
+
+    JBList getPathList() {
+        return pathList;
+    }
+
+    private void populatePathList(List<String> userDefinedLibraryPaths) {
+        pathListModel.removeAllElements();
+        for (String userDefinedLibraryPath : userDefinedLibraryPaths) {
+            pathListModel.addElement(userDefinedLibraryPath);
+        }
+    }
+
+    private void userDefinedLibraryEnabledChanged() {
+        pathList.setEnabled(userDefinedLibraryEnabled.isSelected());
+    }
+
     private JBList preparePathList(DefaultListModel pathListModel) {
         final JBList pathList = new JBList(pathListModel);
         pathList.getEmptyText().setText("No classpath entries defined");
         pathList.setDragEnabled(false);
         pathList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        pathList.setName(PATH_LIST_NAME);
         return pathList;
     }
 

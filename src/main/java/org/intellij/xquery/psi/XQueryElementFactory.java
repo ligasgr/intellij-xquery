@@ -19,6 +19,7 @@ package org.intellij.xquery.psi;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.LocalTimeCounter;
 import org.intellij.xquery.XQueryFileType;
 
 /**
@@ -32,6 +33,12 @@ public class XQueryElementFactory {
         String name = "dummy.xq";
         return (XQueryFile) PsiFileFactory.getInstance(project).
                 createFileFromText(name, XQueryFileType.INSTANCE, text);
+    }
+
+    public static XQueryFile createPhysicalFile(Project project, String text) {
+        String name = "dummy.xq";
+        return (XQueryFile) PsiFileFactory.getInstance(project).
+                createFileFromText(name, XQueryFileType.INSTANCE, text, LocalTimeCounter.currentTime(), true);
     }
 
     public static XQueryVarName createVariableReference(Project project, String localVariableName) {

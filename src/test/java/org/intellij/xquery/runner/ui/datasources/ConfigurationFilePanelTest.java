@@ -16,15 +16,14 @@
 
 package org.intellij.xquery.runner.ui.datasources;
 
-import net.java.openjdk.cacio.ctc.junit.CacioFESTRunner;
-import net.java.openjdk.cacio.ctc.junit.CacioTestRunner;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.intellij.xquery.runner.ui.BaseGuiTest;
 import org.intellij.xquery.runner.ui.PanelTestingFrame;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static org.hamcrest.Matchers.is;
+import static org.intellij.xquery.runner.rt.XQueryDataSourceType.MARKLOGIC;
+import static org.intellij.xquery.runner.rt.XQueryDataSourceType.SAXON;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -32,31 +31,38 @@ import static org.junit.Assert.assertThat;
  * Date: 24/10/13
  * Time: 13:42
  */
-@RunWith(CacioFESTRunner.class)
 public class ConfigurationFilePanelTest extends BaseGuiTest {
-    private static final XQueryDataSourceType CONFIG_FILE_SUPPORTED_TYPE = XQueryDataSourceType.SAXON;
-    private static final XQueryDataSourceType CONFIG_FILE_UNSUPPORTED_TYPE = XQueryDataSourceType.MARKLOGIC;
+    private static final XQueryDataSourceType CONFIG_FILE_SUPPORTED_TYPE = SAXON;
+    private static final XQueryDataSourceType CONFIG_FILE_UNSUPPORTED_TYPE = MARKLOGIC;
     private static final boolean ENABLED = true;
     private static final boolean DISABLED = false;
-    private ConfigurationFilePanel configurationFilePanel;
+    private static final String FILE_NAME = "/my/file";
+    private ConfigurationFilePanel panel;
 
     protected PanelTestingFrame getPanelTestingFrame() {
-        configurationFilePanel = new ConfigurationFilePanel();
-        return new PanelTestingFrame(configurationFilePanel.getMainPanel());
-    }
-
-    @Test
-    public void shouldShowPanelWhenNeeded() throws Exception {
-        configurationFilePanel.init(CONFIG_FILE_SUPPORTED_TYPE, false, null);
-
-        assertThat(configurationFilePanel.getMainPanel().isVisible(), is(true));
+        panel = new ConfigurationFilePanel();
+        return new PanelTestingFrame(panel.getMainPanel());
     }
 
     @Test
     public void shouldHidePanelWhenNeeded() throws Exception {
-        configurationFilePanel.init(CONFIG_FILE_UNSUPPORTED_TYPE, false, null);
+        panel.init(CONFIG_FILE_UNSUPPORTED_TYPE, false, null);
 
-        assertThat(configurationFilePanel.getMainPanel().isVisible(), is(false));
+        assertThat(panel.getMainPanel().isVisible(), is(false));
+    }
+
+    @Test
+    public void shouldShowPanelWhenNeeded() throws Exception {
+        panel.init(CONFIG_FILE_SUPPORTED_TYPE, false, null);
+
+        assertThat(panel.getMainPanel().isVisible(), is(true));
+    }
+
+    @Test
+    public void shouldInitializeWithCorrectFileName() throws Exception {
+        panel.init(CONFIG_FILE_UNSUPPORTED_TYPE, true, FILE_NAME);
+
+        assertThat(panel.getConfigFile(), is(FILE_NAME));
     }
 
     @Test
@@ -65,7 +71,6 @@ public class ConfigurationFilePanelTest extends BaseGuiTest {
 
         window.checkBox("configurationEnabled").requireNotSelected();
         window.textBox("configFile").requireDisabled();
-
     }
 
     @Test
@@ -79,37 +84,33 @@ public class ConfigurationFilePanelTest extends BaseGuiTest {
     @Test
     public void shouldChangeValueOfConfigurationEnabledToTrue() throws Exception {
         initVisiblePanelWithConfigFile(DISABLED);
-        window.checkBox("configurationEnabled").requireNotSelected();
-        window.robot.settings().delayBetweenEvents(200);
 
-        window.checkBox("configurationEnabled").check().requireSelected();
+        window.checkBox("configurationEnabled").check();
 
         window.textBox("configFile").requireEnabled();
-        assertThat(configurationFilePanel.isConfigurationEnabled(), is(true));
+        assertThat(panel.isConfigurationEnabled(), is(true));
     }
 
     @Test
     public void shouldChangeValueOfConfigurationEnabledToFalse() throws Exception {
         initVisiblePanelWithConfigFile(ENABLED);
-        window.checkBox("configurationEnabled").requireSelected();
-        window.robot.settings().delayBetweenEvents(200);
 
-        window.checkBox("configurationEnabled").uncheck().requireNotSelected();
+        window.checkBox("configurationEnabled").uncheck();
 
         window.textBox("configFile").requireDisabled();
-        assertThat(configurationFilePanel.isConfigurationEnabled(), is(false));
+        assertThat(panel.isConfigurationEnabled(), is(false));
     }
 
     @Test
     public void shouldChangeValueOfConfigFileWhenTextEntered() throws Exception {
         initVisiblePanelWithConfigFile(ENABLED);
 
-        window.textBox("configFile").enterText("/my/file");
+        window.textBox("configFile").enterText(FILE_NAME);
 
-        assertThat(configurationFilePanel.getConfigFile(), is("/my/file"));
+        assertThat(panel.getConfigFile(), is(FILE_NAME));
     }
 
     private void initVisiblePanelWithConfigFile(boolean enabled) {
-        configurationFilePanel.init(CONFIG_FILE_SUPPORTED_TYPE, enabled, null);
+        panel.init(CONFIG_FILE_SUPPORTED_TYPE, enabled, null);
     }
 }
