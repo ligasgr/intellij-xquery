@@ -31,6 +31,7 @@ import javax.swing.*;
 public class XQueryFileType extends LanguageFileType {
     public static final XQueryFileType INSTANCE = new XQueryFileType();
     public static final String DEFAULT_EXTENSION = "xq";
+    public static final String DEFAULT_EXTENSION_WITH_DOT = "." + DEFAULT_EXTENSION;
     public static final String ALL_EXTENSIONS = "xq;xqi;xql;xqm;xqy;xqws;xquery";
 
     private XQueryFileType() {

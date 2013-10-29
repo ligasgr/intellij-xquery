@@ -16,10 +16,12 @@
 
 package org.intellij.xquery.annotator.duplicateFunction;
 
-import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
+import org.intellij.xquery.XQueryBaseTestCase;
 import org.jetbrains.annotations.NotNull;
 
-public class XQueryDuplicateFunctionDeclarationTest extends LightDaemonAnalyzerTestCase {
+import static org.intellij.xquery.XQueryFileType.DEFAULT_EXTENSION_WITH_DOT;
+
+public class XQueryDuplicateFunctionDeclarationTest extends XQueryBaseTestCase {
 
     @NotNull
     @Override
@@ -43,8 +45,20 @@ public class XQueryDuplicateFunctionDeclarationTest extends LightDaemonAnalyzerT
         executeTest();
     }
 
-    private void executeTest() {
-        doTest(getTestName(false) + ".xq", false, false);
+    public void testDuplicateFromImport() throws Exception {
+        executeTest(getDefaultFileName(), "ImportedModule.xq");
     }
 
+    private String getDefaultFileName() {
+        return getTestName(false) + DEFAULT_EXTENSION_WITH_DOT;
+    }
+
+    private void executeTest() {
+        executeTest(getDefaultFileName());
+    }
+
+    private void executeTest(String... files) {
+        myFixture.configureByFiles(files);
+        myFixture.checkHighlighting(false, false, true);
+    }
 }

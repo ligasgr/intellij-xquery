@@ -28,4 +28,8 @@ public abstract class XQueryBaseTestCase extends LightPlatformCodeInsightFixture
     public XQueryBaseTestCase() {
         PlatformTestCase.initPlatformPrefix("not_existing_class", "PlatformLangXml");
     }
+
+    protected boolean isWriteActionRequired() {
+        return false;
+    }
 }
