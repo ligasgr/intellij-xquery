@@ -49,10 +49,6 @@ public class XQueryDuplicateFunctionDeclarationTest extends XQueryBaseTestCase {
         executeTest(getDefaultFileName(), "ImportedModule.xq");
     }
 
-    private String getDefaultFileName() {
-        return getTestName(false) + DEFAULT_EXTENSION_WITH_DOT;
-    }
-
     private void executeTest() {
         executeTest(getDefaultFileName());
     }

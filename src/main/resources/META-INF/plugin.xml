@@ -62,7 +62,7 @@
         <annotator language="XQuery" implementationClass="org.intellij.xquery.annotator.XQueryAnnotator"/>
         <localInspection enabledByDefault="true" shortName="ImportDeclaration" groupName="XQuery"
                          displayName="Highlights unused import declarations"
-                         implementationClass="org.intellij.xquery.inspection.UnusedImportsInspection"/>
+                         implementationClass="org.intellij.xquery.inspection.imports.UnusedImportsInspection"/>
     </extensions>
 
     <actions>

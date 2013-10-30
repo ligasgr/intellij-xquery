@@ -19,6 +19,8 @@ package org.intellij.xquery;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 
+import static org.intellij.xquery.XQueryFileType.DEFAULT_EXTENSION_WITH_DOT;
+
 /**
  * User: ligasgr
  * Date: 30/08/13
@@ -31,5 +33,9 @@ public abstract class XQueryBaseTestCase extends LightPlatformCodeInsightFixture
 
     protected boolean isWriteActionRequired() {
         return false;
+    }
+
+    protected String getDefaultFileName() {
+        return getTestName(false) + DEFAULT_EXTENSION_WITH_DOT;
     }
 }
