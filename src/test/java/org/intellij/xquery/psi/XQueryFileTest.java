@@ -154,7 +154,7 @@ public class XQueryFileTest extends XQueryBaseTestCase {
         assertNull(file.mapPrefixToNamespace("ex"));
     }
 
-    public void testGetNamespaceDeclarationsMatchingDefaultFunctionNamespace() {
+    public void testNamespaceDeclarationsMatchingDefaultFunctionNamespace() {
         XQueryFile file = aFile("declare default function namespace 'xxx';" +
                 "declare namespace yyy = '';" +
                 "declare namespace zzz = 'zzz';" +
@@ -168,10 +168,40 @@ public class XQueryFileTest extends XQueryBaseTestCase {
         assertEquals("aaa", results.iterator().next().getNamespaceName().getText());
     }
 
-    public void testGetContextItem() {
+    public void testContextItem() {
         XQueryFile file = aFile("declare context item := ();");
 
         assertNotNull(file.getContextItem());
+    }
+
+    public void testFunctionInvocationsForFunctionCall() {
+        XQueryFile file = aFile("test()");
+
+        Collection<XQueryFunctionInvocation> results = file.getFunctionInvocations();
+
+        assertEquals(1, results.size());
+        XQueryFunctionInvocation functionInvocation = results.iterator().next();
+        assertEquals("test", functionInvocation.getFunctionName().getText());
+        assertEquals(0, functionInvocation.getArity());
+    }
+
+    public void testFunctionInvocationsForNamedFunctionRef() {
+        XQueryFile file = aFile("test#1");
+
+        Collection<XQueryFunctionInvocation> results = file.getFunctionInvocations();
+
+        XQueryFunctionInvocation functionInvocation = results.iterator().next();
+        assertEquals("test", functionInvocation.getFunctionName().getText());
+        assertEquals(1, functionInvocation.getArity());
+    }
+
+    public void testVariableReferences() {
+        XQueryFile file = aFile("$test");
+
+        Collection<XQueryVarRef> results = file.getVariableReferences();
+
+        XQueryVarRef variableReference = results.iterator().next();
+        assertEquals("test", variableReference.getVarName().getText());
     }
 
     private XQueryFile aFile(String content) {

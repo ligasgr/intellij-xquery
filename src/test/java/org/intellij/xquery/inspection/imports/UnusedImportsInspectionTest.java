@@ -17,13 +17,16 @@
 package org.intellij.xquery.inspection.imports;
 
 import org.intellij.xquery.XQueryBaseTestCase;
-import org.intellij.xquery.XQueryFileType;
 
 public class UnusedImportsInspectionTest extends XQueryBaseTestCase {
 
     @Override
     protected String getTestDataPath() {
         return "src/test/testData/org/intellij/xquery/inspection/imports";
+    }
+
+    public void testIncorrectFileType() {
+        executeTest("IncorrectFileType.txt");
     }
 
     public void testImportWithDefaultNamespaceForFunctionCall() {
@@ -54,9 +57,19 @@ public class UnusedImportsInspectionTest extends XQueryBaseTestCase {
         executeTest();
     }
 
-    private void executeTest() {
+    private void executeTest(String... filenames) {
+        if (filenames != null && filenames.length > 0) {
+            for (String filename : filenames) {
+                executeTest(filename);
+            }
+        } else {
+            executeTest(getDefaultFileName());
+        }
+    }
+
+    private void executeTest(String filename) {
         myFixture.enableInspections(UnusedImportsInspection.class);
 
-        myFixture.testHighlighting(true, false, false, getDefaultFileName());
+        myFixture.testHighlighting(true, false, false, filename);
     }
 }
