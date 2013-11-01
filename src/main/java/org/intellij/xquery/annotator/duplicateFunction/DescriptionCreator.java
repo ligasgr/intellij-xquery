@@ -25,7 +25,7 @@ import static java.lang.String.format;
 
 public class DescriptionCreator {
 
-    static final String DUPLICATE_FUNCTION_TOOLTIP = "'%s' is already defined in '%s'";
+    public static final String DUPLICATE_FUNCTION_TOOLTIP = "'%s' is already defined in '%s'";
 
     public String createDescription(XQueryFunctionName functionName, XQueryFile file) {
         XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) functionName.getParent();

@@ -33,7 +33,7 @@ import static org.intellij.xquery.util.StringUtils.removeQuotOrAposIfNeeded;
 
 public class Determiner {
 
-    static final Condition<XQueryModuleImport> NO_CONDITION = new Condition<XQueryModuleImport>() {
+    public static final Condition<XQueryModuleImport> NO_CONDITION = new Condition<XQueryModuleImport>() {
         @Override
         public boolean value(XQueryModuleImport xQueryModuleImport) {
             return true;

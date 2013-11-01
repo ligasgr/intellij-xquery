@@ -25,7 +25,7 @@ import java.util.Set;
 
 public class FunctionNamespacesExtractor {
 
-    Set<String> getNamespacesUsedByFunctions(XQueryFile xQueryFile) {
+    public Set<String> getNamespacesUsedByFunctions(XQueryFile xQueryFile) {
         Set<String> usedNamespaces = new HashSet<String>();
         for (XQueryFunctionInvocation functionInvocation : xQueryFile.getFunctionInvocations()) {
             XQueryFunctionNamespace namespacePrefix = functionInvocation.getFunctionName().getFunctionNamespace();

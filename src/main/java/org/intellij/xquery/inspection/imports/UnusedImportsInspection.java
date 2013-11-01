@@ -33,7 +33,10 @@ import static com.intellij.codeInspection.ProblemHighlightType.LIKE_UNUSED_SYMBO
 public class UnusedImportsInspection extends LocalInspectionTool {
 
     private static final HintAction NO_HINT_ACTION = null;
-    private final UnusedImportsFinder unusedImportsFinder = new UnusedImportsFinder();
+    private FunctionNamespacesExtractor functionNamespacesExtractor = new FunctionNamespacesExtractor();
+    private VariableNamespacesExtractor variableNamespacesExtractor = new VariableNamespacesExtractor();
+    private final UnusedImportsFinder unusedImportsFinder = new UnusedImportsFinder(functionNamespacesExtractor,
+            variableNamespacesExtractor);
 
     @Override
     public ProblemDescriptor[] checkFile(PsiFile file, InspectionManager manager, boolean isOnTheFly) {

@@ -27,7 +27,7 @@ public class XQueryQName<T> {
     private final String namespace;
     private final T namedObject;
 
-    XQueryQName(String prefix, String localName, String namespace, T namedObject) {
+    public XQueryQName(String prefix, String localName, String namespace, T namedObject) {
         this.prefix = prefix;
         this.localName = localName;
         this.namespace = namespace;

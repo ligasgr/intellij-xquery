@@ -25,7 +25,7 @@ import java.util.Set;
 
 public class VariableNamespacesExtractor {
 
-    Set<String> getNamespacesUsedByVariables(XQueryFile xQueryFile) {
+    public Set<String> getNamespacesUsedByVariables(XQueryFile xQueryFile) {
         Set<String> usedNamespaces = new HashSet<String>();
         for (XQueryVarRef variableReference : xQueryFile.getVariableReferences()) {
             XQueryVarNamespace namespacePrefix = variableReference.getVarName().getVarNamespace();

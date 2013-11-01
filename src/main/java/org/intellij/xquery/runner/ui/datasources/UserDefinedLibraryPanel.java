@@ -116,11 +116,11 @@ public class UserDefinedLibraryPanel {
         FileChooser.chooseFiles(descriptor, null, null, consumer);
     }
 
-    void onFileChosen(VirtualFile chosenFile) {
+    public void onFileChosen(VirtualFile chosenFile) {
         pathListModel.addElement(chosenFile.getPresentableUrl());
     }
 
-    JBList getPathList() {
+    public JBList getPathList() {
         return pathList;
     }
 

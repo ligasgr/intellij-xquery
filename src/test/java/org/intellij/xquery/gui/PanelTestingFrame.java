@@ -14,35 +14,18 @@
  * limitations under the License.
  */
 
+package org.intellij.xquery.gui;
 
+import javax.swing.JPanel;
+import java.awt.Frame;
 
-apply plugin: 'java'
-apply plugin: 'idea'
-
-sourceCompatibility = 1.6
-
-repositories {
-    mavenCentral()
-    mavenLocal()
-
-    maven {
-        url "http://xqj.net/maven/"
+/**
+ * User: ligasgr
+ * Date: 24/10/13
+ * Time: 13:45
+ */
+public class PanelTestingFrame extends Frame {
+    public PanelTestingFrame(JPanel mainPanel) {
+        add(mainPanel);
     }
-}
-
-dependencies {
-    compile fileTree(dir: 'lib', include: '*.jar')
-    testCompile 'junit:junit-dep:4.10'
-    testCompile 'org.mockito:mockito-all:1.9.5'
-    testCompile('org.hamcrest:hamcrest-library:1.1') {
-        exclude group: 'org.hamcrest', module: 'hamcrest-core'
-    }
-}
-
-tasks.withType(Compile) {
-    options.compilerArgs << "-Xlint:unchecked"
-}
-
-test {
-    include '**/org/intellij/xquery/runner/rt/unit/**'
 }

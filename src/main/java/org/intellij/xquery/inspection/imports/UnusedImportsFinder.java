@@ -26,10 +26,16 @@ import java.util.List;
 import java.util.Set;
 
 public class UnusedImportsFinder {
-    VariableNamespacesExtractor variableNamespacesExtractor = new VariableNamespacesExtractor();
-    FunctionNamespacesExtractor functionNamespacesExtractor = new FunctionNamespacesExtractor();
+    private final VariableNamespacesExtractor variableNamespacesExtractor;
+    private final FunctionNamespacesExtractor functionNamespacesExtractor;
 
-    Collection<XQueryModuleImport> getUnusedImports(XQueryFile xQueryFile) {
+    public UnusedImportsFinder(FunctionNamespacesExtractor functionNamespacesExtractor, VariableNamespacesExtractor
+            variableNamespacesExtractor) {
+        this.functionNamespacesExtractor = functionNamespacesExtractor;
+        this.variableNamespacesExtractor = variableNamespacesExtractor;
+    }
+
+    public Collection<XQueryModuleImport> getUnusedImports(XQueryFile xQueryFile) {
         List<XQueryModuleImport> unusedImports = new ArrayList<XQueryModuleImport>();
         Set<String> usedNamespaces = getUsedNamespaces(xQueryFile);
         for (XQueryModuleImport moduleImport : xQueryFile.getModuleImports()) {
