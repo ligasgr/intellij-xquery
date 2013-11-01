@@ -37,7 +37,7 @@ import static org.intellij.xquery.functional.reference.ReferenceUtil.getTargetOf
 public class XQueryVariableNamespaceNameReferenceTest extends BaseFunctionalTestCase {
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData/org/intellij/xquery/reference/namespace";
+        return "src/test/testData/org/intellij/xquery/functional/reference/namespace";
     }
 
     public void testVariableNamespaceCompletion() {

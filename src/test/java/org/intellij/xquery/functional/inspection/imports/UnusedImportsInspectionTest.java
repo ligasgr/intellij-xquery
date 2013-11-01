@@ -23,7 +23,7 @@ public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
 
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData/org/intellij/xquery/inspection/imports";
+        return "src/test/testData/org/intellij/xquery/functional/inspection/imports";
     }
 
     public void testIncorrectFileType() {

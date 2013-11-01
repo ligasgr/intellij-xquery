@@ -27,7 +27,7 @@ public class XQueryFormatterAutoIndentTest extends BaseFunctionalTestCase {
 
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData/org/intellij/xquery/formatter/auto-indent";
+        return "src/test/testData/org/intellij/xquery/functional/formatter/auto-indent";
     }
 
     public void testAfterVersion() throws Exception {

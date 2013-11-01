@@ -38,7 +38,7 @@ public class XQueryFunctionNamespaceNameReferenceTest extends BaseFunctionalTest
 
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData/org/intellij/xquery/reference/namespace";
+        return "src/test/testData/org/intellij/xquery/functional/reference/namespace";
     }
 
     public void testFunctionNamespaceCompletion() {

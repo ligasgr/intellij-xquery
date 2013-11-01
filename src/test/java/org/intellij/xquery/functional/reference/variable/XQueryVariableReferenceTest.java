@@ -39,7 +39,7 @@ public class XQueryVariableReferenceTest extends BaseFunctionalTestCase {
 
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData/org/intellij/xquery/reference/variable";
+        return "src/test/testData/org/intellij/xquery/functional/reference/variable";
     }
 
     public void testVariableCompletionInTheSameFile() {

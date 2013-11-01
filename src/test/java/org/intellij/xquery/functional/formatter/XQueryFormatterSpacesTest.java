@@ -24,7 +24,7 @@ package org.intellij.xquery.functional.formatter;
 public class XQueryFormatterSpacesTest extends XQueryFormattingModelBuilderTest {
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData/org/intellij/xquery/formatter/spaces";
+        return "src/test/testData/org/intellij/xquery/functional/formatter/spaces";
     }
 
     public void testSpaceAroundAssignmentOperators() {

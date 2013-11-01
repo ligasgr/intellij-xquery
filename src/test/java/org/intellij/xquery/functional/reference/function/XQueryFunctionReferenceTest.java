@@ -39,7 +39,7 @@ import static org.intellij.xquery.functional.reference.ReferenceUtil.getTargetOf
 public class XQueryFunctionReferenceTest extends BaseFunctionalTestCase {
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData/org/intellij/xquery/reference/function";
+        return "src/test/testData/org/intellij/xquery/functional/reference/function";
     }
 
     public void testFunctionCompletionInTheSameFile() {

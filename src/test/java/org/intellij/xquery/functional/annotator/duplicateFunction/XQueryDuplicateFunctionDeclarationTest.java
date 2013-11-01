@@ -24,7 +24,7 @@ public class XQueryDuplicateFunctionDeclarationTest extends BaseFunctionalTestCa
     @NotNull
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData/org/intellij/xquery/annotator/duplicateFunction/";
+        return "src/test/testData/org/intellij/xquery/functional/annotator/duplicateFunction/";
     }
 
     public void testTwoFunctions() {

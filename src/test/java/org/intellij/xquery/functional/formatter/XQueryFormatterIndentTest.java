@@ -25,7 +25,7 @@ public class XQueryFormatterIndentTest extends XQueryFormattingModelBuilderTest 
 
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData/org/intellij/xquery/formatter/indent";
+        return "src/test/testData/org/intellij/xquery/functional/formatter/indent";
     }
 
     public void testIndentFunctionBody() {

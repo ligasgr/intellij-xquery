@@ -30,6 +30,11 @@ public class XQueryParserTest extends ParsingTestCase {
         super("parser", "xq", new XQueryParserDefinition());
     }
 
+    @Override
+    protected String getTestDataPath() {
+        return "src/test/testData/org/intellij/xquery/functional";
+    }
+
     public void testTour() {
         doTest(true);
     }
@@ -128,11 +133,6 @@ public class XQueryParserTest extends ParsingTestCase {
 
     public void testSimpleMap() throws Exception {
         doTest(true);
-    }
-
-    @Override
-    protected String getTestDataPath() {
-        return "src/test/testData/org/intellij/xquery";
     }
 
     @Override

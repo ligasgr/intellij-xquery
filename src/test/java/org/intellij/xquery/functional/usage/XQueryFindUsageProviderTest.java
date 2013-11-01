@@ -37,7 +37,7 @@ public class XQueryFindUsageProviderTest extends BaseFunctionalTestCase {
 
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData/org/intellij/xquery/usage";
+        return "src/test/testData/org/intellij/xquery/functional/usage";
     }
 
     public void testFindFunctionUsages() {
