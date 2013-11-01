@@ -91,13 +91,33 @@ public class UserDefinedLibraryPanelTest extends BaseGuiTest {
     }
 
     @Test
+    public void shouldReturnIfUserDefineLibraryIsEnabled() {
+        panel.init(true, Collections.<String>emptyList());
+
+        boolean result = panel.isUserDefinedLibraryEnabled();
+
+        assertThat(result, is(true));
+    }
+
+    @Test
     public void shouldPopulatePathList() {
         panel.init(true, asList(PATH_JAR, PATH_JAR));
 
         String[] contents = window.list(PATH_LIST_NAME).contents();
-        assertThat(window.list(PATH_LIST_NAME).contents().length, is(2));
+        assertThat(contents.length, is(2));
         assertThat(contents[0], is(PATH_JAR));
         assertThat(contents[1], is(PATH_JAR));
+    }
+
+    @Test
+    public void shouldReturnAllPaths() {
+        panel.init(true, asList(PATH_JAR, PATH_JAR));
+
+        List<String> result = panel.getUserDefinedLibraryPaths();
+
+        assertThat(result.size(), is(2));
+        assertThat(result.get(0), is(PATH_JAR));
+        assertThat(result.get(1), is(PATH_JAR));
     }
 
     @Test
@@ -108,7 +128,7 @@ public class UserDefinedLibraryPanelTest extends BaseGuiTest {
         panel.onFileChosen(file.getVirtualFile());
 
         String[] contents = window.list(PATH_LIST_NAME).contents();
-        assertThat(window.list(PATH_LIST_NAME).contents().length, is(1));
+        assertThat(contents.length, is(1));
         assertThat(contents[0], is(file.getVirtualFile().getPresentableUrl()));
     }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.gui.runner;
+package org.intellij.xquery.gui.runner.ui.datasources;
 
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.intellij.xquery.gui.BaseGuiTest;

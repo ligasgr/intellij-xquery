@@ -32,6 +32,8 @@ import java.awt.event.ActionListener;
  */
 public class DataSourceMainConfigurationPanel {
 
+    public static final String NAME_FIELD = "nameField";
+    public static final String SET_AS_DEFAULT_BUTTON_NAME = "setAsDefaultButton";
     private JPanel mainPanel;
     private LabeledComponent<JTextField> name;
     private ConfigurationFilePanel configurationFilePanel;
@@ -45,6 +47,8 @@ public class DataSourceMainConfigurationPanel {
                                             DocumentListener nameChangedListener) {
         dataSourceType = dataSourceConfiguration.TYPE;
         name.getComponent().setText(dataSourceConfiguration.NAME);
+        name.getComponent().setName(NAME_FIELD);
+        setAsDefaultButton.setName(SET_AS_DEFAULT_BUTTON_NAME);
         isDefault = dataSourceConfiguration.DEFAULT;
         name.getComponent().getDocument().addDocumentListener(nameChangedListener);
         initConfigurationFilePanel(dataSourceConfiguration);
