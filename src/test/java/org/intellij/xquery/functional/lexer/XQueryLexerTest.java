@@ -113,6 +113,48 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testDirectComment() throws Exception {
+        assertProducedTokens("<tag attr='val'><!--content--></tag>", new String[]{
+                "<", "<",
+                "NCName", "tag",
+                "WHITE_SPACE", " ",
+                "NCName", "attr",
+                "=", "=",
+                "'", "'",
+                "Char", "v",
+                "Char", "a",
+                "Char", "l",
+                "'", "'",
+                ">", ">",
+                "<!--", "<!--",
+                "DirCommentChar", "c",
+                "DirCommentChar", "o",
+                "DirCommentChar", "n",
+                "DirCommentChar", "t",
+                "DirCommentChar", "e",
+                "DirCommentChar", "n",
+                "DirCommentChar", "t",
+                "-->", "-->",
+                "</", "</",
+                "NCName", "tag",
+                ">", ">"
+        });
+    }
+
+    public void testDirectCommentWithoutSurroundingTag() throws Exception {
+        assertProducedTokens("<!--content-->", new String[]{
+                "<!--", "<!--",
+                "DirCommentChar", "c",
+                "DirCommentChar", "o",
+                "DirCommentChar", "n",
+                "DirCommentChar", "t",
+                "DirCommentChar", "e",
+                "DirCommentChar", "n",
+                "DirCommentChar", "t",
+                "-->", "-->",
+        });
+    }
+
     public void testFlworExpression() throws Exception {
         assertProducedTokens("for $i in 1 to 10 let $j := 'no. ' || $i order by $i ascending, " +
                 "$j descending return $j", new String[]{
@@ -559,6 +601,17 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "</", "</",
                 "NCName", "tag",
                 ">", ">"
+        });
+    }
+
+    public void testCDataWithoutSurroundingTag() throws Exception {
+        assertProducedTokens("<![CDATA[data]]>", new String[]{
+                "<![CDATA[", "<![CDATA[",
+                "CDataSectionContentChar", "d",
+                "CDataSectionContentChar", "a",
+                "CDataSectionContentChar", "t",
+                "CDataSectionContentChar", "a",
+                "]]>", "]]>",
         });
     }
 
