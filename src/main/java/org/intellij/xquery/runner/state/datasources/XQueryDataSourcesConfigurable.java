@@ -73,7 +73,7 @@ public class XQueryDataSourcesConfigurable implements Configurable {
     @Override
     public void reset() {
         if (settingsForm != null) {
-            settingsForm.refreshCurrentConfiguration(getInstance().getDataSourceConfigurations());
+            settingsForm.populateWithConfigurations(getInstance().getDataSourceConfigurations());
         }
     }
 

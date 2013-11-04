@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.state.run;
+package org.intellij.xquery.runner;
 
 import com.intellij.execution.Location;
 import com.intellij.execution.RunManagerEx;
@@ -31,6 +31,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.intellij.xquery.psi.*;
+import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
+import org.intellij.xquery.runner.state.run.XQueryRunVariable;
+import org.intellij.xquery.runner.state.run.XQueryRunVariables;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -17,8 +17,8 @@
 <idea-plugin version="2">
     <extensions defaultExtensionNs="com.intellij">
         <programRunner implementation="org.intellij.xquery.runner.XQueryRunner"/>
-        <configurationType implementation="org.intellij.xquery.runner.state.run.XQueryRunConfigurationType"/>
-        <configurationProducer implementation="org.intellij.xquery.runner.state.run.XQueryRunConfigurationProducer"/>
+        <configurationType implementation="org.intellij.xquery.runner.XQueryRunConfigurationType"/>
+        <configurationProducer implementation="org.intellij.xquery.runner.XQueryRunConfigurationProducer"/>
         <applicationConfigurable instance="org.intellij.xquery.runner.state.datasources.XQueryDataSourcesConfigurable"/>
     </extensions>
 

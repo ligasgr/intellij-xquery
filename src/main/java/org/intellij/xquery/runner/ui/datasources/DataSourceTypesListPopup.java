@@ -29,10 +29,11 @@ import javax.swing.*;
  * Time: 17:07
  */
 public class DataSourceTypesListPopup extends BaseListPopupStep<XQueryDataSourceType> {
+    public static final String TITLE = "Add new data source";
     private ActionExecutor actionExecutor;
 
     public DataSourceTypesListPopup(ActionExecutor actionExecutor) {
-        super("Add new data source", XQueryDataSourceType.values());
+        super(TITLE, XQueryDataSourceType.values());
         this.actionExecutor = actionExecutor;
     }
 
@@ -58,9 +59,5 @@ public class DataSourceTypesListPopup extends BaseListPopupStep<XQueryDataSource
     public PopupStep onChosen(final XQueryDataSourceType type, final boolean finalChoice) {
         actionExecutor.execute(type);
         return FINAL_CHOICE;
-    }
-
-    public int getDefaultOptionIndex() {
-        return super.getDefaultOptionIndex();
     }
 }

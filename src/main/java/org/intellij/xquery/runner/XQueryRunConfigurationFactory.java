@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.state.run;
+package org.intellij.xquery.runner;
 
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.project.Project;
+import org.intellij.xquery.runner.state.run.XQueryModuleBasedConfiguration;
+import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 /**

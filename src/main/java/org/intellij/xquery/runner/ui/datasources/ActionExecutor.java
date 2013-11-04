@@ -23,6 +23,6 @@ import org.intellij.xquery.runner.rt.XQueryDataSourceType;
  * Date: 06/10/13
  * Time: 17:10
  */
-interface ActionExecutor {
+public interface ActionExecutor {
     void execute(XQueryDataSourceType type);
 }
