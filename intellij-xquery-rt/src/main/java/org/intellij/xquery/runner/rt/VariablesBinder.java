@@ -42,9 +42,11 @@ public class VariablesBinder {
     public void bindVariables(XQConnection connection, XQPreparedExpression preparedExpression)
             throws Exception {
         for (XQueryRunnerVariable variable : config.getVariables()) {
-            TypeBinder binder = binderFactory.getBinder(variable.TYPE);
-            QName name = nameExtractor.getName(variable.NAME, variable.NAMESPACE);
-            binder.bind(preparedExpression, connection, name, variable.VALUE, variable.TYPE);
+            if (variable.ACTIVE) {
+                TypeBinder binder = binderFactory.getBinder(variable.TYPE);
+                QName name = nameExtractor.getName(variable.NAME, variable.NAMESPACE);
+                binder.bind(preparedExpression, connection, name, variable.VALUE, variable.TYPE);
+            }
         }
     }
 }

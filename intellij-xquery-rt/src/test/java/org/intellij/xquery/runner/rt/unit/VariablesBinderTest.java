@@ -72,6 +72,7 @@ public class VariablesBinderTest {
     @Test
     public void shouldDoNothingIfNoVariables() throws Exception {
         given(config.getVariables()).willReturn(Collections.<XQueryRunnerVariable>emptyList());
+
         binder.bindVariables(connection, expression);
 
         verify(config).getVariables();
@@ -110,12 +111,27 @@ public class VariablesBinderTest {
         verify(typeBinder).bind(expression, connection, qName, VALUE, TYPE);
     }
 
+    @Test
+    public void shouldDoNothingIfVariableNotActive() throws Exception {
+        QName qName = new QName(variable.NAMESPACE, variable.NAME);
+        given(config.getVariables()).willReturn(asList(variable));
+        given(binderFactory.getBinder(TYPE)).willReturn(typeBinder);
+        given(extractor.getName(NAME, NAMESPACE)).willReturn(qName);
+        variable.ACTIVE = false;
+
+        binder.bindVariables(connection, expression);
+
+        verify(config).getVariables();
+        verifyNoMoreInteractions(binderFactory, config, extractor, connection, expression);
+    }
+
     private XQueryRunnerVariable prepareVariable() {
         XQueryRunnerVariable variable = new XQueryRunnerVariable();
         variable.NAME = NAME;
         variable.NAMESPACE = NAMESPACE;
         variable.TYPE = TYPE;
         variable.VALUE = VALUE;
+        variable.ACTIVE = true;
         return variable;
     }
 }
