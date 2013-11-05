@@ -24,6 +24,7 @@ import org.intellij.xquery.runner.rt.datasource.SaxonXQDataSourceFactory;
 import org.intellij.xquery.runner.rt.datasource.SednaXQDataSourceFactory;
 import org.intellij.xquery.runner.rt.datasource.ZorbaXQDataSourceFactory;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.xml.xquery.XQDataSource;
@@ -76,6 +77,7 @@ public class XQDataSourceFactoryTest {
     }
 
     @Test
+    @Ignore("works only when zorba_api is present on LD_LIBRARY_PATH")
     public void shouldReturnXQDataSourceForZorbaFactory() throws Exception {
         assertThat(new ZorbaXQDataSourceFactory().getXQDataSource(config), is(not(nullValue())));
     }
