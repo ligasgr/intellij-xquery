@@ -5089,7 +5089,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // MapEntry ("," MapEntry)*
+  // MapEntry ("," MapEntry)* ","?
   public static boolean MapEntryList(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MapEntryList")) return false;
     boolean result_ = false;
@@ -5097,6 +5097,7 @@ public class XQueryParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<map entry list>");
     result_ = MapEntry(builder_, level_ + 1);
     result_ = result_ && MapEntryList_1(builder_, level_ + 1);
+    result_ = result_ && MapEntryList_2(builder_, level_ + 1);
     if (result_) {
       marker_.done(MAP_ENTRY_LIST);
     }
@@ -5137,6 +5138,13 @@ public class XQueryParser implements PsiParser {
       marker_.drop();
     }
     return result_;
+  }
+
+  // ","?
+  private static boolean MapEntryList_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MapEntryList_2")) return false;
+    consumeToken(builder_, COMMA);
+    return true;
   }
 
   /* ********************************************************** */

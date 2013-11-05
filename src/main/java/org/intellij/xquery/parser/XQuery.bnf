@@ -452,7 +452,7 @@ ComputedConstructor	   ::=   	CompDocConstructor
 CompDocConstructor	   ::=   	"document" "{" Expr "}"
 CompElemConstructor	   ::=   	"element" (EQName | ("{" Expr "}")) "{" ContentExpr? "}"
 CompMapConstructor	   ::=   	"map" "{" MapEntryList? "}"
-MapEntryList           ::=      MapEntry ("," MapEntry)*
+MapEntryList           ::=      MapEntry ("," MapEntry)* ","?
 MapEntry               ::=  ExprSingle ":=" ExprSingle
 ContentExpr	   ::=   	Expr
 CompAttrConstructor	   ::=   	"attribute" (EQName | ("{" Expr "}")) "{" Expr? "}"
