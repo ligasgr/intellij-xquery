@@ -17,19 +17,18 @@
 <idea-plugin url="http://ligasgr.github.io/intellij-xquery/" version="2">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
-    <version>0.0.8</version>
+    <version>0.0.9</version>
     <vendor email="ligasgr@gmail.com">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0</description>
 
     <change-notes>
         <![CDATA[
-            <p>0.0.8:</p>
+            <p>0.0.9:</p>
             <ul>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/34">#34</a> - Introduce runner for xquery main modules (please check comments in the issue for current limitations).</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/47">#47</a> - Structure view should display visibility modifier.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/52">#52</a> - Parser doesn't recognise attribute xpath axis.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/53">#53</a> - Unary operators formatting.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/65">#65</a> - Variable is passed to the runner even when pass checkbox is not selected.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/51">#51</a> - Inspection for unused imports (by <a href="https://github.com/slawwach">Slawomir Wachowski</a>).</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/22">#22</a> - Add analysis for duplicate function declarations (by <a href="https://github.com/mjedynak">Michal Jedynak</a>).</li>
             </ul>
         ]]>
     </change-notes>
