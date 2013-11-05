@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.rt.variable;
+package org.intellij.xquery.runner.rt.binding;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -33,9 +33,9 @@ import javax.xml.xquery.XQPreparedExpression;
  * Date: 14/10/13
  * Time: 20:23
  */
-public class AttributeBinderFactory implements BinderFactory {
+public class AttributeBinder implements TypeBinder {
     @Override
-    public void bindValueForType(XQPreparedExpression expression, XQConnection connection, QName name, String value,
+    public void bind(XQPreparedExpression expression, XQConnection connection, QName name, String value,
                                  String type) throws Exception {
         expression.bindNode(name, createAttributeNode(value), getType(connection));
     }

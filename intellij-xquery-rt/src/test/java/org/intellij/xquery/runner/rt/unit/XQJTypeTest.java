@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.rt.variable;
+package org.intellij.xquery.runner.rt.unit;
 
-import javax.xml.namespace.QName;
-import javax.xml.xquery.XQConnection;
-import javax.xml.xquery.XQPreparedExpression;
+import org.junit.Test;
 
 /**
  * User: ligasgr
- * Date: 11/10/13
- * Time: 16:35
+ * Date: 05/11/13
+ * Time: 00:19
  */
-public interface BinderFactory {
-    void bindValueForType(XQPreparedExpression expression, XQConnection connection, QName name, String value,
-                          String type) throws Exception;
+public class XQJTypeTest {
+
+    @Test
+    public void should() {
+
+    }
 }

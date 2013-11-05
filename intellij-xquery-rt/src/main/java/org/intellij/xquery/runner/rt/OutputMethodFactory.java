@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.rt.variable;
+package org.intellij.xquery.runner.rt;
 
-import javax.xml.namespace.QName;
-import javax.xml.xquery.XQConnection;
-import javax.xml.xquery.XQItemType;
-import javax.xml.xquery.XQPreparedExpression;
+import java.util.Properties;
 
 /**
  * User: ligasgr
- * Date: 14/10/13
- * Time: 13:39
+ * Date: 04/11/13
+ * Time: 14:08
  */
-public class DocumentBinderFactory implements BinderFactory {
-    @Override
-    public void bindValueForType(XQPreparedExpression expression, XQConnection connection, QName name, String value,
-                                 String type) throws Exception {
-        expression.bindDocument(name, value, null, getType(connection));
+public class OutputMethodFactory {
+    public static final String METHOD_PROPERTY_NAME = "method";
+    public static final String OUTPUT_TYPE_XML = "xml";
+    private final XQueryRunConfig config;
+
+    public OutputMethodFactory(XQueryRunConfig config) {
+        this.config = config;
     }
 
-    public XQItemType getType(XQConnection connection) throws Exception {
-        return connection.createDocumentType();
+    public Properties getOutputMethodProperties() {
+        Properties props = new Properties();
+        props.setProperty(METHOD_PROPERTY_NAME, OUTPUT_TYPE_XML);
+        return props;
     }
 }

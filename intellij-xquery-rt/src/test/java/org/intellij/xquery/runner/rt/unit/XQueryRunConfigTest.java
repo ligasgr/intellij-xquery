@@ -33,7 +33,6 @@ import static org.junit.Assert.assertThat;
  * Time: 00:06
  */
 public class XQueryRunConfigTest {
-
     private static final String MAIN_FILE_NAME = "/path/to/main/file.xq";
     private static final Boolean CONTEXT_ITEM_ENABLED = true;
     private static final Boolean CONTEXT_ITEM_FROM_EDITOR_ENABLED = false;

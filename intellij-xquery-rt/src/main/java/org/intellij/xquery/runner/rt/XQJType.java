@@ -16,10 +16,10 @@
 
 package org.intellij.xquery.runner.rt;
 
-import org.intellij.xquery.runner.rt.variable.AtomicValueBinderFactory;
-import org.intellij.xquery.runner.rt.variable.BinderFactory;
-import org.intellij.xquery.runner.rt.variable.DocumentBinderFactory;
-import org.intellij.xquery.runner.rt.variable.TextBinderFactory;
+import org.intellij.xquery.runner.rt.binding.AtomicValueBinder;
+import org.intellij.xquery.runner.rt.binding.TypeBinder;
+import org.intellij.xquery.runner.rt.binding.DocumentBinder;
+import org.intellij.xquery.runner.rt.binding.TextBinder;
 
 import javax.xml.xquery.XQItemType;
 import java.util.ArrayList;
@@ -31,16 +31,16 @@ import java.util.List;
  * Time: 14:47
  */
 public enum XQJType {
-    //    ATTRIBUTE("attribute()", XQItemType.XQITEMKIND_ATTRIBUTE, AttributeBinderFactory.class),
+    //    ATTRIBUTE("attribute()", XQItemType.XQITEMKIND_ATTRIBUTE, AttributeBinder.class),
 //    COMMENT("comment()", XQItemType.XQITEMKIND_COMMENT),
-    DOCUMENT("document-node()", XQItemType.XQITEMKIND_DOCUMENT, DocumentBinderFactory.class),
+    DOCUMENT("document-node()", XQItemType.XQITEMKIND_DOCUMENT, DocumentBinder.class),
     //    DOCUMENT_ELEMENT("document-element()", XQItemType.XQITEMKIND_DOCUMENT_ELEMENT),
 //    DOCUMENT_SCHEMA_ELEMENT("document-schema-element()", XQItemType.XQITEMKIND_DOCUMENT_SCHEMA_ELEMENT),
 //    ELEMENT("element()", XQItemType.XQITEMKIND_ELEMENT),
 //    ITEM("item()", XQItemType.XQITEMKIND_ITEM),
 //    NODE("node()", XQItemType.XQITEMKIND_NODE),
 //    PI("processing-instruction()", XQItemType.XQITEMKIND_PI),
-    TEXT("text()", XQItemType.XQITEMKIND_TEXT, TextBinderFactory.class),
+    TEXT("text()", XQItemType.XQITEMKIND_TEXT, TextBinder.class),
     //    SCHEMA_ELEMENT("schema-element()", XQItemType.XQITEMKIND_SCHEMA_ELEMENT),
 //    SCHEMA_ATTRIBUTE("schema-attribute()", XQItemType.XQITEMKIND_SCHEMA_ATTRIBUTE),
     XS_UNTYPED("xs:untyped", XQItemType.XQBASETYPE_UNTYPED),
@@ -98,15 +98,15 @@ public enum XQJType {
 
     private final String description;
     private final int xqjType;
-    private final Class<? extends BinderFactory> typeFactoryClass;
+    private final Class<? extends TypeBinder> typeFactoryClass;
 
     XQJType(String description, int xqjType) {
         this.description = description;
         this.xqjType = xqjType;
-        this.typeFactoryClass = AtomicValueBinderFactory.class;
+        this.typeFactoryClass = AtomicValueBinder.class;
     }
 
-    XQJType(String description, int xqjType, Class<? extends BinderFactory> typeFactoryClass) {
+    XQJType(String description, int xqjType, Class<? extends TypeBinder> typeFactoryClass) {
         this.description = description;
         this.xqjType = xqjType;
         this.typeFactoryClass = typeFactoryClass;
@@ -132,13 +132,13 @@ public enum XQJType {
         return all;
     }
 
-    public static Class<? extends BinderFactory> getTypeFactoryClass(String description) {
+    public static Class<? extends TypeBinder> getTypeFactoryClass(String description) {
         for (XQJType type : XQJType.values()) {
             if (type.getDescription().equalsIgnoreCase(description)) {
                 return type.typeFactoryClass;
             }
         }
-        return AtomicValueBinderFactory.class;
+        return AtomicValueBinder.class;
     }
 
     public static int getXQJTypeForDescription(String description) {

@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.rt.variable;
-
-import org.intellij.xquery.runner.rt.XQJType;
+package org.intellij.xquery.runner.rt.binding;
 
 import javax.xml.namespace.QName;
 import javax.xml.xquery.XQConnection;
-import javax.xml.xquery.XQItemType;
 import javax.xml.xquery.XQPreparedExpression;
 
 /**
@@ -28,14 +25,7 @@ import javax.xml.xquery.XQPreparedExpression;
  * Date: 11/10/13
  * Time: 16:35
  */
-public class AtomicValueBinderFactory implements BinderFactory {
-    @Override
-    public void bindValueForType(XQPreparedExpression expression, XQConnection connection, QName name, String value,
-                                 String type) throws Exception {
-        expression.bindAtomicValue(name, value, getType(connection, type));
-    }
-
-    private XQItemType getType(XQConnection connection, String type) throws Exception {
-        return connection.createAtomicType(XQJType.getXQJTypeForDescription(type));
-    }
+public interface TypeBinder {
+    void bind(XQPreparedExpression expression, XQConnection connection, QName name, String value,
+                          String type) throws Exception;
 }

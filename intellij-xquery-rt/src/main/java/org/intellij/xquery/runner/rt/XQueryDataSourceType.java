@@ -29,23 +29,23 @@ import static java.util.Arrays.asList;
  * Time: 14:19
  */
 public enum XQueryDataSourceType {
-    SAXON("Saxon", true, false, asList("saxon9he.jar"), true, SaxonDataSourceFactory.class),
-    MARKLOGIC("MarkLogic", false, true, asList("marklogic-xqj-1.0.0.jar"), false, MarklogicDataSourceFactory.class),
-    EXIST("eXist", false, true, asList("exist-xqj-1.0.1.jar"), false, ExistDataSourceFactory.class),
-    BASEX("BaseX", false, true, asList("basex-xqj-1.2.3.jar"), false, BaseXDataSourceFactory.class),
-    SEDNA("Sedna", false, true, asList("sedna-xqj-1.0.0.jar"), false, SednaDataSourceFactory.class),
-    ZORBA("Zorba", false, false, asList("zorba_xqj.jar", "zorba_api.jar"), false, ZorbaDataSourceFactory.class);
+    SAXON("Saxon", true, false, asList("saxon9he.jar"), true, SaxonXQDataSourceFactory.class),
+    MARKLOGIC("MarkLogic", false, true, asList("marklogic-xqj-1.0.0.jar"), false, MarklogicXQDataSourceFactory.class),
+    EXIST("eXist", false, true, asList("exist-xqj-1.0.1.jar"), false, ExistXQDataSourceFactory.class),
+    BASEX("BaseX", false, true, asList("basex-xqj-1.2.3.jar"), false, BaseXXQDataSourceFactory.class),
+    SEDNA("Sedna", false, true, asList("sedna-xqj-1.0.0.jar"), false, SednaXQDataSourceFactory.class),
+    ZORBA("Zorba", false, false, asList("zorba_xqj.jar", "zorba_api.jar"), false, ZorbaXQDataSourceFactory.class);
 
     private String presentableName;
     private boolean configFileSupported;
     private boolean database;
     private final List<String> classpathEntries;
     private final boolean jarContainsXqjApi;
-    private final Class<? extends DataSourceFactory> dataSourceFactoryClass;
+    private final Class<? extends XQDataSourceFactory> dataSourceFactoryClass;
 
     private XQueryDataSourceType(String presentableName, boolean configFileSupported, boolean database,
                                  List<String> classpathEntries, boolean jarContainsXqjApi,
-                                 Class<? extends DataSourceFactory> dataSourceFactoryClass) {
+                                 Class<? extends XQDataSourceFactory> dataSourceFactoryClass) {
         this.presentableName = presentableName;
         this.configFileSupported = configFileSupported;
         this.database = database;
@@ -86,7 +86,7 @@ public enum XQueryDataSourceType {
         return jarContainsXqjApi;
     }
 
-    public Class<? extends DataSourceFactory> getDataSourceFactoryClass() {
+    public Class<? extends XQDataSourceFactory> getDataSourceFactoryClass() {
         return dataSourceFactoryClass;
     }
 }
