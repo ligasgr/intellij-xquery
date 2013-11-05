@@ -160,7 +160,7 @@ public class DataSourceFactoryTest {
     @Test
     public void shouldGetDataSourceBasedOnDataSourceType() throws Exception {
         factory = new DataSourceFactory(config);
-        given(config.getDataSourceType()).willReturn(XQueryDataSourceType.ZORBA);
+        given(config.getDataSourceType()).willReturn(XQueryDataSourceType.SAXON);
 
         XQDataSource result = factory.getDataSource();
 
