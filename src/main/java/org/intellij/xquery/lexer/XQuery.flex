@@ -417,6 +417,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 "collation" / {SC} ("\""|"'")              {return XQueryTypes.K_COLLATION;}
 "%"                                        {return XQueryTypes.PERCENT;}
 "element" / ({SC}?"("|{SC}?"{"| {SC}{NCName})       {return XQueryTypes.K_ELEMENT;}
+"("                                        {return XQueryTypes.L_PAR;}
+")"                                        {return XQueryTypes.R_PAR;}
 {NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }

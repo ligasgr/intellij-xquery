@@ -24,6 +24,8 @@
 
 
 
+
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply from: 'idea.gradle'
@@ -138,6 +140,7 @@ task dist(type: Zip) {
         include 'CONTRIBUTORS'
         into('intellij-xquery')
     }
+    archiveName 'intellij-xquery.zip'
 }
 
 task compileForms(dependsOn: ':classes') << {

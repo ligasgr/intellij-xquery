@@ -997,7 +997,65 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         assertProducedTokens("</books>", new String[]{
                 "</", "</",
                 "NCName", "books",
-                ">", ">",
+                ">", ">"
+        });
+    }
+
+    public void testFunctionDeclarationWithSimpleAnnotation() throws Exception {
+        assertProducedTokens("declare %rest:path function x() {()};", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "%", "%",
+                "WHITE_SPACE", "",
+                "NCName", "rest",
+                ":", ":",
+                "NCName", "path",
+                "WHITE_SPACE", " ",
+                "function", "function",
+                "WHITE_SPACE", " ",
+                "NCName", "x",
+                "WHITE_SPACE", "",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "(", "(",
+                ")", ")",
+                "}", "}",
+                ";", ";"
+        });
+    }
+
+    public void testFunctionDeclarationWithAnnotationWithLiterals() throws Exception {
+        assertProducedTokens("declare %rest:path(\"/test\") function local:login() {<test/>};", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "%", "%",
+                "WHITE_SPACE", "",
+                "NCName", "rest",
+                ":", ":",
+                "NCName", "path",
+                "(", "(",
+                "WHITE_SPACE", "",
+                "StringLiteral", "\"/test\"",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "function", "function",
+                "WHITE_SPACE", " ",
+                "NCName", "local",
+                ":", ":",
+                "NCName", "login",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "<", "<",
+                "NCName", "test",
+                "/>", "/>",
+                "}", "}",
+                ";", ";"
         });
     }
 }
