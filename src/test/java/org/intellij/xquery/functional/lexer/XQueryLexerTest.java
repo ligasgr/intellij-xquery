@@ -269,7 +269,6 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "function", "function",
                 "WHITE_SPACE", " ",
                 "NCName", "x",
-                "WHITE_SPACE", "",
                 "(", "(",
                 ")", ")",
                 "WHITE_SPACE", " ",
@@ -295,7 +294,6 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "ExprCommentEnd", ":)",
                 "WHITE_SPACE", " ",
                 "NCName", "x",
-                "WHITE_SPACE", "",
                 "(", "(",
                 ")", ")",
                 "WHITE_SPACE", " ",
@@ -819,11 +817,11 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "as", "as",
                 "WHITE_SPACE", " ",
                 "item", "item",
-                "WHITE_SPACE", "",
                 "(", "(",
                 ")", ")",
                 "WHITE_SPACE", " ",
                 "external", "external",
+                "WHITE_SPACE", "",
                 ";", ";"
         });
     }
@@ -1015,7 +1013,6 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "function", "function",
                 "WHITE_SPACE", " ",
                 "NCName", "x",
-                "WHITE_SPACE", "",
                 "(", "(",
                 ")", ")",
                 "WHITE_SPACE", " ",
