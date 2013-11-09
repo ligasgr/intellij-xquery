@@ -14,39 +14,27 @@
  * limitations under the License.
  */
 
+package org.intellij.xquery.runner.ui.run.main.variables;
 
+import com.intellij.util.ui.ColumnInfo;
+import org.intellij.xquery.runner.state.run.XQueryRunVariable;
+import org.jetbrains.annotations.Nullable;
 
+/**
+ * User: ligasgr
+ * Date: 19/10/13
+ * Time: 01:12
+ */
+public class NamespaceColumnInfo extends ColumnInfo<XQueryRunVariable, String> {
+    public static final String HEADER = "Namespace";
 
-
-apply plugin: 'java'
-apply plugin: 'idea'
-
-sourceCompatibility = 1.6
-
-repositories {
-    mavenCentral()
-    mavenLocal()
-
-    maven {
-        url "http://xqj.net/maven/"
+    public NamespaceColumnInfo() {
+        super(HEADER);
     }
-}
 
-dependencies {
-    compile fileTree(dir: 'lib', include: '*.jar')
-    testCompile 'junit:junit-dep:4.10'
-    testCompile 'org.mockito:mockito-all:1.9.5'
-    testCompile('org.hamcrest:hamcrest-library:1.1') {
-        exclude group: 'org.hamcrest', module: 'hamcrest-core'
+    @Nullable
+    @Override
+    public String valueOf(XQueryRunVariable xQueryRunVariable) {
+        return xQueryRunVariable.getNamespace();
     }
-}
-
-tasks.withType(Compile) {
-    options.compilerArgs << "-Xlint:unchecked"
-}
-
-test {
-    include '**/org/intellij/xquery/unit/**'
-    include '**/org/intellij/xquery/functional/**'
-    include '**/org/intellij/xquery/integration/**'
 }

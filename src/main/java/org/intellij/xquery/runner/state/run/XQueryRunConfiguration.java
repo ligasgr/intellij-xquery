@@ -40,7 +40,7 @@ import org.intellij.xquery.runner.XQueryRunProfileState;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.intellij.xquery.runner.ui.run.RunConfigurationJavaTab;
-import org.intellij.xquery.runner.ui.run.RunConfigurationMainTab;
+import org.intellij.xquery.runner.ui.run.main.RunConfigurationMainTab;
 import org.jdom.CDATA;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;

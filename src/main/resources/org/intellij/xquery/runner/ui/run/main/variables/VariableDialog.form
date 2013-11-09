@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="org.intellij.xquery.runner.ui.run.main.variables.VariableDialog">
+  <grid id="27dc6" binding="panel" layout-manager="GridLayoutManager" row-count="6" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <vspacer id="9d65f">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+      <component id="dce41" class="com.intellij.openapi.ui.LabeledComponent" binding="active">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <componentClass value="com.intellij.ui.components.JBCheckBox"/>
+          <labelLocation value="West"/>
+          <text value="&amp;Pass"/>
+        </properties>
+      </component>
+      <component id="2e5d7" class="com.intellij.openapi.ui.LabeledComponent" binding="name">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <componentClass value="javax.swing.JTextField"/>
+          <text value="&amp;Name"/>
+        </properties>
+      </component>
+      <component id="64650" class="com.intellij.openapi.ui.LabeledComponent" binding="type">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <componentClass value="javax.swing.JComboBox"/>
+          <text value="&amp;Type"/>
+        </properties>
+      </component>
+      <component id="d761a" class="com.intellij.openapi.ui.LabeledComponent" binding="value">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <componentClass value="javax.swing.JTextArea"/>
+          <text value="&amp;Value"/>
+        </properties>
+      </component>
+      <component id="b9aba" class="com.intellij.openapi.ui.LabeledComponent" binding="namespace">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <componentClass value="javax.swing.JTextField"/>
+          <text value="Name&amp;space"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>
