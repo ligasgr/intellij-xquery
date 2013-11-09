@@ -33,9 +33,6 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 
 /**
  * User: ligasgr
@@ -44,14 +41,14 @@ import static org.mockito.Mockito.verify;
  */
 public class DataSourcesSettingsFormTest extends BaseGuiTest {
     private DataSourceDetailsPanel dataSourceDetailsPanel;
-    private DataSourceListPanel dataSourceListPanel;
+    private TestDataSourceListPanel dataSourceListPanel;
     private TestDataSourcesSettingsForm form;
     private XQueryDataSourceConfiguration configuration = new XQueryDataSourceConfiguration("name", XQueryDataSourceType.SAXON);
 
     @Override
     protected PanelTestingFrame getPanelTestingFrame() {
-        dataSourceDetailsPanel = spy(new DataSourceDetailsPanel());
-        dataSourceListPanel = spy(new DataSourceListPanel(dataSourceDetailsPanel));
+        dataSourceDetailsPanel = new DataSourceDetailsPanel();
+        dataSourceListPanel = new TestDataSourceListPanel(dataSourceDetailsPanel);
         List<XQueryDataSourceConfiguration> dataSourceConfigurations = asList(configuration);
         form = new TestDataSourcesSettingsForm(dataSourceConfigurations);
         return new PanelTestingFrame((JPanel) form.getFormComponent());
@@ -69,35 +66,35 @@ public class DataSourcesSettingsFormTest extends BaseGuiTest {
 
     @Test
     public void shouldPopulateDataSourceListPanelWithConfigurations() {
-        verify(dataSourceListPanel).populateWithConfigurations(asList(configuration));
+        assertThat(dataSourceListPanel.populateWithConfigurationsCalled, is(true));
     }
 
     @Test
     public void shouldDelegatePopulationToDataSourceListPanel() {
         form.populateWithConfigurations(asList(configuration));
 
-        verify(dataSourceListPanel, atLeastOnce()).populateWithConfigurations(asList(configuration));
+        assertThat(dataSourceListPanel.populateWithConfigurationsCalled, is(true));
     }
 
     @Test
     public void shouldDelegateGettingCurrentConfigurationsToDataSourceListPanel() {
         form.getCurrentConfigurations();
 
-        verify(dataSourceListPanel).getCurrentConfigurations();
+        assertThat(dataSourceListPanel.getCurrentConfigurationsCalled, is(true));
     }
 
     @Test
     public void shouldDelegateGettingSelectedDataSourceToDataSourceListPanel() {
         form.getSelectedDataSource();
 
-        verify(dataSourceListPanel).getSelectedDataSource();
+        assertThat(dataSourceListPanel.getSelectedDataSourceCalled, is(true));
     }
 
     @Test
     public void shouldVerifyIfModifiedBasedOnConfigurationsListFromDataSourceListPanel() {
         form.isModified(Collections.<XQueryDataSourceConfiguration>emptyList());
 
-        verify(dataSourceListPanel).getCurrentConfigurations();
+        assertThat(dataSourceListPanel.getCurrentConfigurationsCalled, is(true));
     }
 
     private class TestDataSourcesSettingsForm extends DataSourcesSettingsForm {
@@ -108,6 +105,34 @@ public class DataSourcesSettingsFormTest extends BaseGuiTest {
         @Override
         public Splitter getSplitter() {
             return super.getSplitter();
+        }
+    }
+
+    private class TestDataSourceListPanel extends DataSourceListPanel {
+        public boolean getSelectedDataSourceCalled;
+        public boolean getCurrentConfigurationsCalled;
+        public boolean populateWithConfigurationsCalled;
+
+        public TestDataSourceListPanel(DataSourceDetailsPanel dataSourceDetailsPanel) {
+            super(dataSourceDetailsPanel);
+        }
+
+        @Override
+        public XQueryDataSourceConfiguration getSelectedDataSource() {
+            getSelectedDataSourceCalled = true;
+            return super.getSelectedDataSource();
+        }
+
+        @Override
+        public List<XQueryDataSourceConfiguration> getCurrentConfigurations() {
+            getCurrentConfigurationsCalled = true;
+            return super.getCurrentConfigurations();
+        }
+
+        @Override
+        public void populateWithConfigurations(List<XQueryDataSourceConfiguration> dataSourceConfigurations) {
+            populateWithConfigurationsCalled = true;
+            super.populateWithConfigurations(dataSourceConfigurations);
         }
     }
 }
