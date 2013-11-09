@@ -56,6 +56,7 @@ public class DataSourcesDialog extends DialogWrapper {
 
     @Override
     protected void createDefaultActions() {
+        super.createDefaultActions();
         updateDataSourceSelectionRunnable = new UpdateDataSourceSelectionRunnable();
         myOKAction = new MyOkAction(updateDataSourceSelectionRunnable);
         myCancelAction = new MyCancelAction();
