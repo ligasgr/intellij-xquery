@@ -16,6 +16,10 @@
 
 package org.intellij.xquery.gui.runner.ui.datasources;
 
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.testFramework.TestActionEvent;
+import com.intellij.ui.AnActionButton;
+import com.intellij.ui.CommonActionsPanel;
 import com.intellij.ui.ExpandedItemListCellRendererWrapper;
 import org.fest.swing.driver.BasicJListCellReader;
 import org.fest.swing.edt.GuiActionRunner;
@@ -25,21 +29,28 @@ import org.intellij.xquery.gui.BaseGuiTest;
 import org.intellij.xquery.gui.PanelTestingFrame;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
+import org.intellij.xquery.runner.ui.datasources.ConfigurationChangeListener;
 import org.intellij.xquery.runner.ui.datasources.DataSourceConfigurationCellRenderer;
+import org.intellij.xquery.runner.ui.datasources.DataSourceDetailsPanel;
 import org.intellij.xquery.runner.ui.datasources.DataSourceListPanel;
+import org.intellij.xquery.runner.ui.datasources.XQueryDataSourceTypeBasedActionExecutor;
 import org.junit.Test;
 
 import javax.swing.JList;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
+import static com.intellij.ui.CommonActionsPanel.Buttons.ADD;
+import static com.intellij.ui.CommonActionsPanel.Buttons.REMOVE;
 import static java.util.Arrays.asList;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.hamcrest.Matchers.is;
 import static org.intellij.xquery.runner.ui.datasources.DataSourceListPanel.DATA_SOURCE_LIST_PANEL;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -50,32 +61,33 @@ import static org.mockito.Mockito.verify;
  * Time: 19:23
  */
 public class DataSourceListPanelTest extends BaseGuiTest {
-    private DataSourceListPanel panel;
-    private JPanel dataSourceConfigurationPanel;
-    private JPanel mainPanel;
+    private TestingDataSourceListPanel panel;
+    private DataSourceDetailsPanel dataSourceDetailsPanel;
     private XQueryDataSourceConfiguration defaultDataSource =
             new XQueryDataSourceConfiguration("default", XQueryDataSourceType.SAXON);
     private XQueryDataSourceConfiguration notDefaultDataSource =
             new XQueryDataSourceConfiguration("not_default", XQueryDataSourceType.MARKLOGIC);
+    private boolean showPopupInvoked;
+    private XQueryDataSourceTypeBasedActionExecutor addDataSourceActionExecutor;
 
     @Override
     protected PanelTestingFrame getPanelTestingFrame() {
-        mainPanel = mock(JPanel.class);
-        dataSourceConfigurationPanel = mock(JPanel.class);
-        panel = new DataSourceListPanel(dataSourceConfigurationPanel, mainPanel);
+        defaultDataSource.DEFAULT = true;
+        dataSourceDetailsPanel = mock(DataSourceDetailsPanel.class);
+        panel = new TestingDataSourceListPanel(dataSourceDetailsPanel);
         return new PanelTestingFrame(panel);
     }
 
     @Test
     public void shouldShowPanelWhenNoDataSources() {
-        panel.populateWithConfigurations(Collections.<XQueryDataSourceConfiguration>emptyList());
+        preparePanelWithEmptyList();
 
         window.panel(DATA_SOURCE_LIST_PANEL).requireVisible();
     }
 
     @Test
     public void shouldUseCorrectCellRenderer() {
-        panel.populateWithConfigurations(Collections.<XQueryDataSourceConfiguration>emptyList());
+        preparePanelWithEmptyList();
 
         assertThat(((ExpandedItemListCellRendererWrapper) window.list().component().getCellRenderer()).getWrappee()
                 instanceof DataSourceConfigurationCellRenderer, is(true));
@@ -90,7 +102,7 @@ public class DataSourceListPanelTest extends BaseGuiTest {
 
     @Test
     public void shouldHaveNoSelectedItem() {
-        panel.populateWithConfigurations(Collections.<XQueryDataSourceConfiguration>emptyList());
+        preparePanelWithEmptyList();
 
         window.list().requireNoSelection();
     }
@@ -131,19 +143,153 @@ public class DataSourceListPanelTest extends BaseGuiTest {
     }
 
     @Test
-    public void shouldCleanupDetailsPanel() {
+    public void shouldReturnAllConfigurations() {
+        panel.populateWithConfigurations(asList(notDefaultDataSource, defaultDataSource));
+
+        Set<XQueryDataSourceConfiguration> result = new HashSet<XQueryDataSourceConfiguration>(panel
+                .getCurrentConfigurations());
+
+        assertThat(result.size(), is(2));
+        assertThat(result.contains(notDefaultDataSource), is(true));
+        assertThat(result.contains(defaultDataSource), is(true));
+    }
+
+    @Test
+    public void shouldCleanupDetailsPanelAndDisplayNewConfigAfterSelectionChanged() {
         panel.populateWithConfigurations(asList(notDefaultDataSource, defaultDataSource));
 
         window.list().selectItem(1);
 
-        verify(dataSourceConfigurationPanel, times(3)).removeAll();
-        verify(dataSourceConfigurationPanel, times(3)).add(any(JPanel.class), eq(BorderLayout.NORTH));
+        verify(dataSourceDetailsPanel, times(2)).stopDisplayingDetails();
+        verify(dataSourceDetailsPanel, times(1)).displayDetails(eq(defaultDataSource),
+                isA(ConfigurationChangeListener.class));
+    }
+
+    @Test
+    public void shouldShowAddPathDialogAfterActioningAddButton() {
+        preparePanelWithEmptyList();
+        clickAdd();
+
+        assertThat(showPopupInvoked, is(true));
+    }
+
+    @Test
+    public void shouldAddNewDataSourceAfterExecutionInvoked() {
+        panel.populateWithConfigurations(asList(notDefaultDataSource));
+        clickAdd();
+
+        GuiActionRunner.execute(new GuiTask() {
+            @Override
+            protected void executeInEDT() throws Throwable {
+                addDataSourceActionExecutor.execute(XQueryDataSourceType.SAXON);
+            }
+        });
+
+        JListFixture list = window.list().cellReader(new DataSourceListCellReader());
+        list.requireSelection(1);
+        assertThat(list.contents()[1], is(XQueryDataSourceType.SAXON.getPresentableName()));
+    }
+
+    @Test
+    public void shouldRemoveEntryAfterRemoveButtonClicked() {
+        panel.populateWithConfigurations(asList(defaultDataSource));
+        final AnActionButton action = getAnActionButton(REMOVE);
+        final AnActionEvent event = new TestActionEvent(action);
+
+        execute(new GuiTask() {
+            @Override
+            protected void executeInEDT() throws Throwable {
+                action.actionPerformed(event);
+            }
+        });
+
+        window.list().requireNoSelection();
+        assertThat(window.list().contents().length, is(0));
+    }
+
+    @Test
+    public void shouldOnlySwapObjectsInModelIfUpdatedWithNotDefault() {
+        panel.populateWithConfigurations(asList(defaultDataSource));
+        window.list().selectItem(0);
+
+        execute(new GuiTask() {
+            @Override
+            protected void executeInEDT() throws Throwable {
+                panel.updateCurrentlySelectedItemWithData(notDefaultDataSource);
+
+                assertThat(panel.getSelectedDataSource(), is(notDefaultDataSource));
+                assertThat(panel.getSelectedDataSource().DEFAULT, is(false));
+            }
+        });
+    }
+
+    @Test
+    public void shouldSwapObjectsInModelAndMarkOthersNotDefaultIfUpdatedWithDefault() {
+        panel.populateWithConfigurations(asList(defaultDataSource, defaultDataSource));
+        window.list().selectItem(0);
+
+        execute(new GuiTask() {
+            @Override
+            protected void executeInEDT() throws Throwable {
+                panel.updateCurrentlySelectedItemWithData(defaultDataSource);
+            }
+        });
+
+        execute(new GuiTask() {
+            @Override
+            protected void executeInEDT() throws Throwable {
+                assertThat(panel.getSelectedDataSource(), is(defaultDataSource));
+                assertThat(panel.getSelectedDataSource().DEFAULT, is(true));
+                assertThat(panel.getCurrentConfigurations().get(1).DEFAULT, is(false));
+            }
+        });
+    }
+
+    private void preparePanelWithEmptyList() {
+        panel.populateWithConfigurations(Collections.<XQueryDataSourceConfiguration>emptyList());
+    }
+
+    private void clickAdd() {
+        final AnActionButton action = getAnActionButton(ADD);
+        final AnActionEvent event = new TestActionEvent(action);
+
+        execute(new GuiTask() {
+            @Override
+            protected void executeInEDT() throws Throwable {
+                action.actionPerformed(event);
+            }
+        });
+    }
+
+    private AnActionButton getAnActionButton(CommonActionsPanel.Buttons button) {
+        return panel.getToolbarDecorator()
+                .getActionsPanel()
+                .getAnActionButton(button);
     }
 
     private class DataSourceListCellReader extends BasicJListCellReader {
         @Override
         public String valueAt(JList list, int index) {
             return ((XQueryDataSourceConfiguration) list.getModel().getElementAt(index)).NAME;
+        }
+    }
+
+    private class TestingDataSourceListPanel extends DataSourceListPanel {
+        public TestingDataSourceListPanel(DataSourceDetailsPanel dataSourceDetailsPanel) {
+            super(dataSourceDetailsPanel);
+        }
+
+        @Override
+        protected void showAddDataSourcePopupWithActionExecutor(XQueryDataSourceTypeBasedActionExecutor
+                                                                        addDataSourceActionExecutor) {
+            showPopupInvoked = true;
+            DataSourceListPanelTest.this.addDataSourceActionExecutor = addDataSourceActionExecutor;
+        }
+
+        @Override
+        public void updateCurrentlySelectedItemWithData(XQueryDataSourceConfiguration
+                                                                currentConfigurationState) {
+            super.updateCurrentlySelectedItemWithData(currentConfigurationState);
         }
     }
 }

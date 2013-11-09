@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.ui.datasources;
+package org.intellij.xquery.runner.ui.datasources.details;
 
 import com.intellij.openapi.ui.TextComponentAccessor;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.components.JBCheckBox;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
+import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
+import org.intellij.xquery.runner.ui.datasources.ConfigurationChangeListener;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.event.DocumentEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -34,22 +38,17 @@ import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.crea
  */
 public class ConfigurationFilePanel {
 
+    public static final String CONFIG_FILE = "configFile";
+    public static final String CONFIG_ENABLED = "configurationEnabled";
     private JPanel mainPanel;
     private JBCheckBox configurationEnabled;
     private TextFieldWithBrowseButton configFile;
 
     public ConfigurationFilePanel() {
         configFile.addBrowseFolderListener("Choose file", null, null, createSingleFileNoJarsDescriptor(),
-                TextComponentAccessor.TEXT_FIELD_WHOLE_TEXT , false);
-        configFile.getTextField().setName("configFile");
+                TextComponentAccessor.TEXT_FIELD_WHOLE_TEXT, false);
+        configFile.getTextField().setName(CONFIG_FILE);
         configurationEnabled.addActionListener(getConfigEnabledListener());
-    }
-
-    public void init(XQueryDataSourceType type, boolean configurationEnabled, String configurationFile) {
-        mainPanel.setVisible(type.configFileIsSupported());
-        this.configurationEnabled.setSelected(configurationEnabled);
-        configFile.setText(configurationFile);
-        configurationEnabledChanged();
     }
 
     public boolean isConfigurationEnabled() {
@@ -58,6 +57,15 @@ public class ConfigurationFilePanel {
 
     public String getConfigFile() {
         return configFile.getText();
+    }
+
+    public void init(XQueryDataSourceConfiguration cfg, DataSourceConfigurationAggregatingPanel
+            dataSourceConfigurationAggregatingPanel, ConfigurationChangeListener changeListener) {
+        mainPanel.setVisible(cfg.TYPE.configFileIsSupported());
+        this.configurationEnabled.setSelected(cfg.CONFIG_ENABLED);
+        configFile.setText(cfg.CONFIG_FILE);
+        configurationEnabledChanged();
+        setUpChangeListeners(dataSourceConfigurationAggregatingPanel, changeListener);
     }
 
     private void configurationEnabledChanged() {
@@ -74,5 +82,27 @@ public class ConfigurationFilePanel {
 
     public JPanel getMainPanel() {
         return mainPanel;
+    }
+
+    public void updateConfigurationWithChanges(XQueryDataSourceConfiguration currentConfiguration) {
+        currentConfiguration.CONFIG_ENABLED = isConfigurationEnabled();
+        currentConfiguration.CONFIG_FILE = getConfigFile();
+    }
+
+    private void setUpChangeListeners(final DataSourceConfigurationAggregatingPanel aggregatingPanel,
+                                     final ConfigurationChangeListener listener) {
+        configurationEnabled.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listener.changeApplied(aggregatingPanel
+                        .getCurrentConfigurationState());
+            }
+        });
+        configFile.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
+            @Override
+            protected void textChanged(DocumentEvent e) {
+                listener.changeApplied(aggregatingPanel.getCurrentConfigurationState());
+            }
+        });
     }
 }

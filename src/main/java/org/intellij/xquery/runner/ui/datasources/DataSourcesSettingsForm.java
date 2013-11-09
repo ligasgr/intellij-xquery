@@ -36,13 +36,16 @@ public class DataSourcesSettingsForm {
 
     private JPanel formComponent;
     private DataSourceListPanel dataSourceListPanel;
-    private JPanel dataSourceConfigurationPanel;
+    private DataSourceDetailsPanel dataSourceDetailsPanel;
+    private Splitter splitter;
 
-    public DataSourcesSettingsForm(List<XQueryDataSourceConfiguration> dataSourceConfigurations) {
-        dataSourceConfigurationPanel = new JPanel(new BorderLayout());
+    public DataSourcesSettingsForm(List<XQueryDataSourceConfiguration> dataSourceConfigurations, DataSourceListPanel
+            dataSourceListPanel, DataSourceDetailsPanel dataSourceDetailsPanel) {
+        this.dataSourceListPanel = dataSourceListPanel;
+        this.dataSourceDetailsPanel = dataSourceDetailsPanel;
         formComponent = new JPanel(new BorderLayout());
-        dataSourceListPanel = new DataSourceListPanel(dataSourceConfigurationPanel, formComponent);
-        formComponent.add(prepareSplitter(dataSourceListPanel, dataSourceConfigurationPanel), CENTER);
+        splitter = prepareSplitter(this.dataSourceListPanel, this.dataSourceDetailsPanel);
+        formComponent.add(splitter, CENTER);
         populateWithConfigurations(dataSourceConfigurations);
     }
 
@@ -72,6 +75,10 @@ public class DataSourcesSettingsForm {
         splitter.setFirstComponent(dataSourceListPanel);
         splitter.setSecondComponent(dataSourcesConfigurationPanel);
         dataSourcesConfigurationPanel.setMinimumSize(new Dimension(300, 400));
+        return splitter;
+    }
+
+    protected Splitter getSplitter() {
         return splitter;
     }
 }

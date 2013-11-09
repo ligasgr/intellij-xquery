@@ -30,9 +30,9 @@ import javax.swing.*;
  */
 public class DataSourceTypesListPopup extends BaseListPopupStep<XQueryDataSourceType> {
     public static final String TITLE = "Add new data source";
-    private ActionExecutor actionExecutor;
+    private XQueryDataSourceTypeBasedActionExecutor actionExecutor;
 
-    public DataSourceTypesListPopup(ActionExecutor actionExecutor) {
+    public DataSourceTypesListPopup(XQueryDataSourceTypeBasedActionExecutor actionExecutor) {
         super(TITLE, XQueryDataSourceType.values());
         this.actionExecutor = actionExecutor;
     }

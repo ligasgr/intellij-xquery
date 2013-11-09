@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.gui.runner.ui.datasources;
+package org.intellij.xquery.gui.runner.ui.datasources.details;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
@@ -28,7 +28,11 @@ import org.intellij.xquery.psi.XQueryElementFactory;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.gui.BaseGuiTest;
 import org.intellij.xquery.gui.PanelTestingFrame;
-import org.intellij.xquery.runner.ui.datasources.UserDefinedLibraryPanel;
+import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
+import org.intellij.xquery.runner.ui.datasources.ConfigurationChangeListener;
+import org.intellij.xquery.runner.ui.datasources.details.DataSourceConfigurationAggregatingPanel;
+import org.intellij.xquery.runner.ui.datasources.details.UserDefinedLibraryPanel;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -39,9 +43,13 @@ import static com.intellij.ui.CommonActionsPanel.Buttons.REMOVE;
 import static java.util.Arrays.asList;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.hamcrest.Matchers.is;
-import static org.intellij.xquery.runner.ui.datasources.UserDefinedLibraryPanel.PATH_LIST_NAME;
-import static org.intellij.xquery.runner.ui.datasources.UserDefinedLibraryPanel.USER_DEFINED_LIBRARY_ENABLED_FIELD_NAME;
+import static org.intellij.xquery.runner.ui.datasources.details.UserDefinedLibraryPanel.PATH_LIST_NAME;
+import static org.intellij.xquery.runner.ui.datasources.details.UserDefinedLibraryPanel.USER_DEFINED_LIBRARY_ENABLED_FIELD_NAME;
 import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * User: ligasgr
@@ -51,8 +59,13 @@ import static org.junit.Assert.assertThat;
 public class UserDefinedLibraryPanelTest extends BaseGuiTest {
 
     private static final String PATH_JAR = "/my/path/to.jar";
+    private static final boolean ENABLED = true;
+    private static final boolean DISABLED = false;
     private UserDefinedLibraryPanel panel;
     boolean fileChooserUsedToChooseFiles;
+    private DataSourceConfigurationAggregatingPanel aggregatingPanel;
+    private ConfigurationChangeListener listener;
+    private XQueryDataSourceConfiguration cfg;
 
     @Override
     protected PanelTestingFrame getPanelTestingFrame() {
@@ -66,16 +79,25 @@ public class UserDefinedLibraryPanelTest extends BaseGuiTest {
         return new PanelTestingFrame(panel.getMainPanel());
     }
 
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        cfg = new XQueryDataSourceConfiguration();
+        aggregatingPanel = mock(DataSourceConfigurationAggregatingPanel.class);
+        given(aggregatingPanel.getCurrentConfigurationState()).willReturn(cfg);
+        listener = mock(ConfigurationChangeListener.class);
+    }
+
     @Test
     public void shouldShowMainPanel() {
-        panel.init(false, Collections.<String>emptyList());
+        setUpPanelWithUserLibrary(ENABLED);
 
         assertThat(panel.getMainPanel().isVisible(), is(true));
     }
 
     @Test
     public void shouldPopulateEnabledFieldAndDisablePathsPanel() {
-        panel.init(false, Collections.<String>emptyList());
+        setUpPanelWithUserLibrary(DISABLED);
 
         window.checkBox(USER_DEFINED_LIBRARY_ENABLED_FIELD_NAME).requireNotSelected();
         window.list(PATH_LIST_NAME).requireDisabled();
@@ -84,15 +106,35 @@ public class UserDefinedLibraryPanelTest extends BaseGuiTest {
 
     @Test
     public void shouldPopulateEnabledFieldAndEnablePathsPanel() {
-        panel.init(true, Collections.<String>emptyList());
+        setUpPanelWithUserLibrary(ENABLED);
 
         window.checkBox(USER_DEFINED_LIBRARY_ENABLED_FIELD_NAME).requireSelected();
         window.list(PATH_LIST_NAME).requireEnabled();
     }
 
     @Test
+    public void shouldChangeEnabledFieldToUnchecked() {
+        setUpPanelWithUserLibrary(ENABLED);
+
+        window.checkBox(USER_DEFINED_LIBRARY_ENABLED_FIELD_NAME).uncheck();
+
+        assertThat(panel.isUserDefinedLibraryEnabled(), is(false));
+        window.list(PATH_LIST_NAME).requireDisabled();
+    }
+
+    @Test
+    public void shouldChangeEnabledFieldToChecked() {
+        setUpPanelWithUserLibrary(DISABLED);
+
+        window.checkBox(USER_DEFINED_LIBRARY_ENABLED_FIELD_NAME).check();
+
+        assertThat(panel.isUserDefinedLibraryEnabled(), is(true));
+        window.list(PATH_LIST_NAME).requireEnabled();
+    }
+
+    @Test
     public void shouldReturnIfUserDefineLibraryIsEnabled() {
-        panel.init(true, Collections.<String>emptyList());
+        setUpPanelWithUserLibrary(ENABLED);
 
         boolean result = panel.isUserDefinedLibraryEnabled();
 
@@ -101,7 +143,8 @@ public class UserDefinedLibraryPanelTest extends BaseGuiTest {
 
     @Test
     public void shouldPopulatePathList() {
-        panel.init(true, asList(PATH_JAR, PATH_JAR));
+        cfg.USER_DEFINED_LIBRARY_PATHS = asList(PATH_JAR, PATH_JAR);
+        setUpPanelWithUserLibrary(ENABLED);
 
         String[] contents = window.list(PATH_LIST_NAME).contents();
         assertThat(contents.length, is(2));
@@ -111,7 +154,8 @@ public class UserDefinedLibraryPanelTest extends BaseGuiTest {
 
     @Test
     public void shouldReturnAllPaths() {
-        panel.init(true, asList(PATH_JAR, PATH_JAR));
+        cfg.USER_DEFINED_LIBRARY_PATHS = asList(PATH_JAR, PATH_JAR);
+        setUpPanelWithUserLibrary(ENABLED);
 
         List<String> result = panel.getUserDefinedLibraryPaths();
 
@@ -122,7 +166,7 @@ public class UserDefinedLibraryPanelTest extends BaseGuiTest {
 
     @Test
     public void shouldPopulatePathListWithChosenFile() {
-        panel.init(true, Collections.<String>emptyList());
+        setUpPanelWithUserLibrary(ENABLED);
         XQueryFile file = XQueryElementFactory.createPhysicalFile(getProject(), "()");
 
         panel.onFileChosen(file.getVirtualFile());
@@ -134,7 +178,7 @@ public class UserDefinedLibraryPanelTest extends BaseGuiTest {
 
     @Test
     public void shouldShowAddPathDialogAfterActioningAddButton() {
-        panel.init(true, Collections.<String>emptyList());
+        setUpPanelWithUserLibrary(ENABLED);
         final AnActionButton action = getAnActionButton(ADD);
         final AnActionEvent event = new TestActionEvent(action);
 
@@ -150,7 +194,8 @@ public class UserDefinedLibraryPanelTest extends BaseGuiTest {
 
     @Test
     public void shouldRemoveSelectedPositionAfterActioningRemoveButton() {
-        panel.init(true, asList(PATH_JAR));
+        cfg.USER_DEFINED_LIBRARY_PATHS = asList(PATH_JAR);
+        setUpPanelWithUserLibrary(ENABLED);
         final AnActionButton action = getAnActionButton(REMOVE);
         final AnActionEvent event = new TestActionEvent(action);
         panel.getPathList().setSelectedIndex(0);
@@ -165,9 +210,49 @@ public class UserDefinedLibraryPanelTest extends BaseGuiTest {
         assertThat(window.list(PATH_LIST_NAME).contents().length, is(0));
     }
 
+    @Test
+    public void shouldInvokeChangeListenerAfterChangeOfEnabledField() {
+        setUpPanelWithUserLibrary(ENABLED);
+        panel.setUpChangeListeners(aggregatingPanel, listener);
+
+        window.checkBox(USER_DEFINED_LIBRARY_ENABLED_FIELD_NAME).uncheck();
+
+        verifyChangeListenerInvokedForCurrentConfigurationState();
+    }
+
+    @Test
+    public void shouldInvokeChangeListenerAfterChangeOfPathListContents() {
+        cfg.USER_DEFINED_LIBRARY_PATHS = asList(PATH_JAR);
+        setUpPanelWithUserLibrary(ENABLED);
+        panel.setUpChangeListeners(aggregatingPanel, listener);
+        final AnActionButton action = getAnActionButton(REMOVE);
+        final AnActionEvent event = new TestActionEvent(action);
+        panel.getPathList().setSelectedIndex(0);
+
+        execute(new GuiTask() {
+            @Override
+            protected void executeInEDT() throws Throwable {
+                action.actionPerformed(event);
+            }
+        });
+
+        verifyChangeListenerInvokedForCurrentConfigurationState();
+    }
+
     private AnActionButton getAnActionButton(CommonActionsPanel.Buttons button) {
         return panel.getToolbarDecorator()
                 .getActionsPanel()
                 .getAnActionButton(button);
     }
+
+    private void verifyChangeListenerInvokedForCurrentConfigurationState() {
+        verify(aggregatingPanel, atLeast(1)).getCurrentConfigurationState();
+        verify(listener, atLeast(1)).changeApplied(cfg);
+    }
+
+    private void setUpPanelWithUserLibrary(boolean enabled) {
+        cfg.USER_DEFINED_LIBRARY_ENABLED = enabled;
+        panel.init(cfg, aggregatingPanel, listener);
+    }
+
 }

@@ -31,6 +31,7 @@ import javax.xml.xquery.XQPreparedExpression;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -69,6 +70,6 @@ public class TextBinderTest {
     public void shouldBindNode() throws Exception {
         binder.bind(expression, connection, qName, VALUE, TYPE);
 
-        verify(expression).bindNode(eq(qName), any(Node.class), eq(xqItemType));
+        verify(expression).bindNode(eq(qName), isA(Node.class), eq(xqItemType));
     }
 }

@@ -21,12 +21,10 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.ui.AnActionButton;
 import com.intellij.ui.AnActionButtonRunnable;
-import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.ListScrollingUtil;
 import com.intellij.ui.ListUtil;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBList;
-import com.intellij.util.ui.UIUtil;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 
@@ -34,11 +32,12 @@ import javax.swing.DefaultListModel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,24 +50,38 @@ import static org.intellij.xquery.runner.UniqueNameGenerator.generateUniqueNameU
  */
 public class DataSourceListPanel extends JPanel {
     public static final String DATA_SOURCE_LIST_PANEL = "dataSourceListPanel";
-    private ToolbarDecorator dataSourcesToolbarDecorator;
     private DefaultListModel dataSourcesListModel;
     private JBList dataSourceList;
-    private JPanel dataSourceConfigurationPanel;
-    private JPanel formComponent;
-    private DataSourceMainConfigurationPanel dataSourceMainConfigurationPanel;
-    private int previouslySelectedIndex = -1;
+    private DataSourceDetailsPanel dataSourceDetailsPanel;
+    private ToolbarDecorator toolbarDecorator;
 
-    public DataSourceListPanel(JPanel dataSourceConfigurationPanel, JPanel formComponent) {
+    public DataSourceListPanel(DataSourceDetailsPanel dataSourceDetailsPanel) {
         super(new BorderLayout());
+        this.dataSourceDetailsPanel = dataSourceDetailsPanel;
         setName(DATA_SOURCE_LIST_PANEL);
         setMinimumSize(new Dimension(150, 400));
-        this.dataSourceConfigurationPanel = dataSourceConfigurationPanel;
-        this.formComponent = formComponent;
         dataSourcesListModel = new DefaultListModel();
         dataSourceList = prepareDataSourcesList(dataSourcesListModel);
-        dataSourcesToolbarDecorator = prepareDataSourcesTableToolbarDecorator(dataSourceList);
-        add(dataSourcesToolbarDecorator.createPanel(), BorderLayout.CENTER);
+        toolbarDecorator = prepareDataSourcesTableToolbarDecorator(dataSourceList);
+        add(toolbarDecorator.createPanel(), BorderLayout.CENTER);
+    }
+
+    public XQueryDataSourceConfiguration getSelectedDataSource() {
+        return (XQueryDataSourceConfiguration) dataSourceList.getSelectedValue();
+    }
+
+    public List<XQueryDataSourceConfiguration> getCurrentConfigurations() {
+        List<XQueryDataSourceConfiguration> currentConfigurations = new ArrayList<XQueryDataSourceConfiguration>();
+        for (int i = 0; i < dataSourcesListModel.getSize(); i++) {
+            currentConfigurations.add(((XQueryDataSourceConfiguration) dataSourcesListModel.getElementAt(i)));
+        }
+        return currentConfigurations;
+    }
+
+    public void populateWithConfigurations(List<XQueryDataSourceConfiguration> dataSourceConfigurations) {
+        clearDataSourcesListModel();
+        populateModelWithClonesOfConfigurations(dataSourceConfigurations);
+        setFirstPositionAsSelectedIfExists();
     }
 
     private JBList prepareDataSourcesList(DefaultListModel dataSourcesListModel) {
@@ -77,28 +90,8 @@ public class DataSourceListPanel extends JPanel {
         dataSourcesList.setDragEnabled(false);
         dataSourcesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         dataSourcesList.setCellRenderer(new DataSourceConfigurationCellRenderer());
-        dataSourcesList.addListSelectionListener(getSelectionChangedListener(dataSourcesList));
+        dataSourcesList.addListSelectionListener(getSelectionChangedListener());
         return dataSourcesList;
-    }
-
-    private ListSelectionListener getSelectionChangedListener(final JBList dataSourceList) {
-        return new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                dataSourceConfigurationPanel.removeAll();
-                XQueryDataSourceConfiguration selection = getSelectedDataSource();
-                if (selection != null) {
-                    saveConfigurationChangesForPreviouslySelected();
-                    updateDataSourceConfigurationPanel(selection);
-                    dataSourceList.repaint();
-                }
-                dataSourceConfigurationPanel.revalidate();
-                dataSourceConfigurationPanel.repaint();
-            }
-        };
-    }
-
-    public XQueryDataSourceConfiguration getSelectedDataSource() {
-        return (XQueryDataSourceConfiguration) dataSourceList.getSelectedValue();
     }
 
     private ToolbarDecorator prepareDataSourcesTableToolbarDecorator(final JBList dataSourceList) {
@@ -111,33 +104,18 @@ public class DataSourceListPanel extends JPanel {
                 }).setRemoveAction(new AnActionButtonRunnable() {
                     @Override
                     public void run(AnActionButton button) {
-                        cleanupCurrentConfigurationPanel();
+                        dataSourceDetailsPanel.stopDisplayingDetails();
                         ListUtil.removeSelectedItems(dataSourceList);
                         dataSourceList.repaint();
                     }
                 }).disableUpDownActions().setToolbarPosition(ActionToolbarPosition.TOP);
     }
 
-    private void cleanupCurrentConfigurationPanel() {
-        dataSourceMainConfigurationPanel = null;
-    }
-
-    private void saveConfigurationChangesForPreviouslySelected() {
-        if (dataSourceMainConfigurationPanel != null
-                && previouslySelectedIndex > -1
-                && previouslySelectedIndex < dataSourcesListModel.getSize()) {
-            updateModelWithChangesFromConfigurationPanel(previouslySelectedIndex);
-        }
-    }
-
-    private void updateModelWithChangesFromConfigurationPanel(int index) {
-        if (dataSourceMainConfigurationPanel == null) return;
-        XQueryDataSourceConfiguration currentConfigurationState
-                = dataSourceMainConfigurationPanel.getCurrentConfigurationState();
+    protected void updateCurrentlySelectedItemWithData(XQueryDataSourceConfiguration currentConfigurationState) {
+        int index = dataSourceList.getSelectedIndex();
         dataSourcesListModel.setElementAt(currentConfigurationState, index);
         updateDefaultFlagIfNeeded(currentConfigurationState);
     }
-
 
     private void updateDefaultFlagIfNeeded(XQueryDataSourceConfiguration currentConfigurationState) {
         if (currentConfigurationState.DEFAULT) {
@@ -157,40 +135,15 @@ public class DataSourceListPanel extends JPanel {
         }
     }
 
-    private void updateDataSourceConfigurationPanel(final XQueryDataSourceConfiguration dataSourceConfiguration) {
-        final int index = dataSourceList.getSelectedIndex();
-        dataSourceMainConfigurationPanel = new DataSourceMainConfigurationPanel(dataSourceConfiguration,
-                getNameChangedListener(index));
-        dataSourceConfigurationPanel.add(dataSourceMainConfigurationPanel.getPanel(), BorderLayout.NORTH);
-        setupEnclosingDialogBounds();
-        previouslySelectedIndex = index;
-    }
-
-    private void setupEnclosingDialogBounds() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                UIUtil.setupEnclosingDialogBounds(formComponent);
-            }
-        });
-    }
-
-    private DocumentAdapter getNameChangedListener(final int index) {
-        return new DocumentAdapter() {
-            @Override
-            protected void textChanged(DocumentEvent e) {
-                updateModelWithChangesFromConfigurationPanel(index);
-            }
-        };
-    }
-
-    private void showAddDataSourcePopupWithActionExecutor(ActionExecutor addDataSourceActionExecutor) {
+    protected void showAddDataSourcePopupWithActionExecutor(XQueryDataSourceTypeBasedActionExecutor
+                                                                    addDataSourceActionExecutor) {
         DataSourceTypesListPopup dataSourceTypesListPopup = new DataSourceTypesListPopup(addDataSourceActionExecutor);
         final ListPopup popup = JBPopupFactory.getInstance().createListPopup(dataSourceTypesListPopup);
-        popup.showUnderneathOf(dataSourcesToolbarDecorator.getActionsPanel());
+        popup.showUnderneathOf(toolbarDecorator.getActionsPanel());
     }
 
-    private ActionExecutor getAddDataSourceActionExecutor() {
-        return new ActionExecutor() {
+    private XQueryDataSourceTypeBasedActionExecutor getAddDataSourceActionExecutor() {
+        return new XQueryDataSourceTypeBasedActionExecutor() {
             @Override
             public void execute(XQueryDataSourceType type) {
                 addDataSourceConfigurationBasedOnType(type);
@@ -243,20 +196,6 @@ public class DataSourceListPanel extends JPanel {
         return new XQueryDataSourceConfiguration(name, type);
     }
 
-    public List<XQueryDataSourceConfiguration> getCurrentConfigurations() {
-        updateModelWithChangesFromConfigurationPanel(previouslySelectedIndex);
-        return getConfigurationsFromModel();
-    }
-
-    private List<XQueryDataSourceConfiguration> getConfigurationsFromModel() {
-        List<XQueryDataSourceConfiguration> currentConfigurations = new ArrayList<XQueryDataSourceConfiguration>();
-        for (int i = 0; i < dataSourcesListModel.getSize(); i++) {
-            currentConfigurations.add(((XQueryDataSourceConfiguration) dataSourcesListModel.getElementAt(i)));
-        }
-        return currentConfigurations;
-    }
-
-
     private List<String> getNames(List<XQueryDataSourceConfiguration> currentConfigurations) {
         List<String> names = new ArrayList<String>();
         for (XQueryDataSourceConfiguration cfg : currentConfigurations) {
@@ -265,10 +204,33 @@ public class DataSourceListPanel extends JPanel {
         return names;
     }
 
-    public void populateWithConfigurations(List<XQueryDataSourceConfiguration> dataSourceConfigurations) {
-        cleanupCurrentConfigurationPanel();
-        clearDataSourcesListModel();
-        populateModelWithClonesOfConfigurations(dataSourceConfigurations);
-        setFirstPositionAsSelectedIfExists();
+
+    private ListSelectionListener getSelectionChangedListener() {
+        return new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                if (e.getValueIsAdjusting()) return;
+                dataSourceDetailsPanel.stopDisplayingDetails();
+                XQueryDataSourceConfiguration selection = getSelectedDataSource();
+                if (selection != null) {
+                    dataSourceDetailsPanel.displayDetails(selection, getConfigurationChangeListener());
+                    ((JBList) e.getSource()).repaint();
+                }
+                dataSourceDetailsPanel.revalidate();
+                dataSourceDetailsPanel.repaint();
+            }
+        };
+    }
+
+    private ConfigurationChangeListener getConfigurationChangeListener() {
+        return new ConfigurationChangeListener() {
+            @Override
+            public void changeApplied(XQueryDataSourceConfiguration currentState) {
+                updateCurrentlySelectedItemWithData(currentState);
+            }
+        };
+    }
+
+    public ToolbarDecorator getToolbarDecorator() {
+        return toolbarDecorator;
     }
 }

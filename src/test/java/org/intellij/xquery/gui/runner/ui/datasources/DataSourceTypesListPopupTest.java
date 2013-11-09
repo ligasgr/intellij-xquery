@@ -23,7 +23,7 @@ import org.fest.swing.fixture.JListFixture;
 import org.intellij.xquery.gui.BaseGuiTest;
 import org.intellij.xquery.gui.PanelTestingFrame;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
-import org.intellij.xquery.runner.ui.datasources.ActionExecutor;
+import org.intellij.xquery.runner.ui.datasources.XQueryDataSourceTypeBasedActionExecutor;
 import org.intellij.xquery.runner.ui.datasources.DataSourceTypesListPopup;
 import org.junit.Test;
 
@@ -50,11 +50,11 @@ public class DataSourceTypesListPopupTest extends BaseGuiTest {
 
     private JPanel mainPanel;
     private DataSourceTypesListPopup popup;
-    private ActionExecutor executor;
+    private XQueryDataSourceTypeBasedActionExecutor executor;
 
     @Override
     protected PanelTestingFrame getPanelTestingFrame() {
-        executor = mock(ActionExecutor.class);
+        executor = mock(XQueryDataSourceTypeBasedActionExecutor.class);
         popup = new DataSourceTypesListPopup(executor);
         final ListPopup listPopup = JBPopupFactory.getInstance().createListPopup(popup);
 

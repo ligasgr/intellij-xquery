@@ -30,6 +30,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -62,21 +63,21 @@ public class XQueryRunConfigurationSerializerTest {
     public void shouldWriteVariables() throws Exception {
         serializer.serialize(writer);
 
-        verify(configuration).writeVariables(any(Element.class));
+        verify(configuration).writeVariables(isA(Element.class));
     }
 
     @Test
     public void shouldWriteConfiguration() throws Exception {
         serializer.serialize(writer);
 
-        verify(configuration).writeConfiguration(any(Element.class));
+        verify(configuration).writeConfiguration(isA(Element.class));
     }
 
     @Test
     public void shouldWriteDataSourceConfiguration() throws Exception {
         serializer.serialize(writer);
 
-        verify(configuration).writeDataSourceConfiguration(any(Element.class));
+        verify(configuration).writeDataSourceConfiguration(isA(Element.class));
     }
 
     @Test
@@ -85,7 +86,7 @@ public class XQueryRunConfigurationSerializerTest {
 
         serializer.serialize(writer);
 
-        verify(elementWriter).writeElement(any(Element.class), writerArgumentCaptor.capture(), anyString());
+        verify(elementWriter).writeElement(isA(Element.class), writerArgumentCaptor.capture(), anyString());
         assertThat(writerArgumentCaptor.getValue(), is(writer));
     }
 }

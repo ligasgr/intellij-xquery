@@ -18,6 +18,8 @@ package org.intellij.xquery.runner.ui.run;
 
 import com.intellij.openapi.ui.DialogWrapper;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
+import org.intellij.xquery.runner.ui.datasources.DataSourceDetailsPanel;
+import org.intellij.xquery.runner.ui.datasources.DataSourceListPanel;
 import org.intellij.xquery.runner.ui.datasources.DataSourcesSettingsForm;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,8 +38,10 @@ public class DataSourcesDialog extends DialogWrapper {
 
     protected DataSourcesDialog(JComponent parent, DataSourceSelector dataSourceConfigurationSelector) {
         super(parent, false);
+        DataSourceDetailsPanel dataSourceDetailsPanel = new DataSourceDetailsPanel();
+        DataSourceListPanel dataSourceListPanel = new DataSourceListPanel(dataSourceDetailsPanel);
         settingsForm = new DataSourcesSettingsForm(XQueryDataSourcesSettings.getInstance()
-                .getDataSourceConfigurations());
+                .getDataSourceConfigurations(), dataSourceListPanel, dataSourceDetailsPanel);
         updateDataSourceSelectionRunnable.setSettingsForm(settingsForm);
         updateDataSourceSelectionRunnable.setDataSourceSelector(dataSourceConfigurationSelector);
         setTitle("XQuery Data Sources");

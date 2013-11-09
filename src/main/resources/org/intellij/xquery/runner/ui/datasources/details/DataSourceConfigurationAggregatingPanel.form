@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="org.intellij.xquery.runner.ui.datasources.DataSourceMainConfigurationPanel">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="org.intellij.xquery.runner.ui.datasources.details.DataSourceConfigurationAggregatingPanel">
   <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
@@ -13,17 +13,17 @@
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
-      <nested-form id="4ce0e" form-file="org/intellij/xquery/runner/ui/datasources/ConfigurationFilePanel.form" binding="configurationFilePanel">
+      <nested-form id="4ce0e" form-file="org/intellij/xquery/runner/ui/datasources/details/ConfigurationFilePanel.form" binding="configurationFilePanel">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
       </nested-form>
-      <nested-form id="5835" form-file="org/intellij/xquery/runner/ui/datasources/ConnectionParametersPanel.form" binding="connectionParametersPanel">
+      <nested-form id="5835" form-file="org/intellij/xquery/runner/ui/datasources/details/ConnectionParametersPanel.form" binding="connectionParametersPanel">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
       </nested-form>
-      <nested-form id="9e21b" form-file="org/intellij/xquery/runner/ui/datasources/UserDefinedLibraryPanel.form" binding="userDefinedLibraryPanel">
+      <nested-form id="9e21b" form-file="org/intellij/xquery/runner/ui/datasources/details/UserDefinedLibraryPanel.form" binding="userDefinedLibraryPanel">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>

@@ -16,13 +16,13 @@
 
 package org.intellij.xquery.runner.ui.datasources;
 
-import org.intellij.xquery.runner.rt.XQueryDataSourceType;
+import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 
 /**
  * User: ligasgr
- * Date: 06/10/13
- * Time: 17:10
+ * Date: 07/11/13
+ * Time: 15:23
  */
-public interface ActionExecutor {
-    void execute(XQueryDataSourceType type);
+public interface ConfigurationChangeListener {
+    void changeApplied(XQueryDataSourceConfiguration currentState);
 }

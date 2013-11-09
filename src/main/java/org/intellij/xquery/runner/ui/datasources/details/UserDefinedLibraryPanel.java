@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.ui.datasources;
+package org.intellij.xquery.runner.ui.datasources.details;
 
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
@@ -26,8 +26,14 @@ import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.Consumer;
+import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
+import org.intellij.xquery.runner.ui.datasources.ConfigurationChangeListener;
 
-import javax.swing.*;
+import javax.swing.DefaultListModel;
+import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -58,10 +64,12 @@ public class UserDefinedLibraryPanel {
         userDefinedLibraryEnabled.addActionListener(getUserDefinedLibraryEnabledListener());
     }
 
-    public void init(boolean userDefinedLibraryEnabled, List<String> userDefinedLibraryPaths) {
-        this.userDefinedLibraryEnabled.setSelected(userDefinedLibraryEnabled);
-        populatePathList(userDefinedLibraryPaths);
+    public void init(XQueryDataSourceConfiguration cfg, DataSourceConfigurationAggregatingPanel
+            aggregatingPanel, ConfigurationChangeListener listener) {
+        this.userDefinedLibraryEnabled.setSelected(cfg.USER_DEFINED_LIBRARY_ENABLED);
+        populatePathList(cfg.USER_DEFINED_LIBRARY_PATHS);
         userDefinedLibraryEnabledChanged();
+        setUpChangeListeners(aggregatingPanel, listener);
     }
 
     public List<String> getUserDefinedLibraryPaths() {
@@ -150,5 +158,37 @@ public class UserDefinedLibraryPanel {
                 userDefinedLibraryEnabledChanged();
             }
         };
+    }
+
+    public void updateConfigurationWithChanges(XQueryDataSourceConfiguration currentConfiguration) {
+        currentConfiguration.USER_DEFINED_LIBRARY_ENABLED = isUserDefinedLibraryEnabled();
+        currentConfiguration.USER_DEFINED_LIBRARY_PATHS = getUserDefinedLibraryPaths();
+    }
+
+    public void setUpChangeListeners(final DataSourceConfigurationAggregatingPanel aggregatingPanel,
+                                     final ConfigurationChangeListener listener) {
+        userDefinedLibraryEnabled.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listener.changeApplied(aggregatingPanel
+                        .getCurrentConfigurationState());
+            }
+        });
+        pathListModel.addListDataListener(new ListDataListener() {
+            @Override
+            public void intervalAdded(ListDataEvent e) {
+                listener.changeApplied(aggregatingPanel.getCurrentConfigurationState());
+            }
+
+            @Override
+            public void intervalRemoved(ListDataEvent e) {
+                listener.changeApplied(aggregatingPanel.getCurrentConfigurationState());
+            }
+
+            @Override
+            public void contentsChanged(ListDataEvent e) {
+                listener.changeApplied(aggregatingPanel.getCurrentConfigurationState());
+            }
+        });
     }
 }

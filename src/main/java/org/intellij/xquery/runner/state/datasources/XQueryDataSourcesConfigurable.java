@@ -18,6 +18,8 @@ package org.intellij.xquery.runner.state.datasources;
 
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import org.intellij.xquery.runner.ui.datasources.DataSourceDetailsPanel;
+import org.intellij.xquery.runner.ui.datasources.DataSourceListPanel;
 import org.intellij.xquery.runner.ui.datasources.DataSourcesSettingsForm;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
@@ -50,7 +52,9 @@ public class XQueryDataSourcesConfigurable implements Configurable {
     @Override
     public JComponent createComponent() {
         if (settingsForm == null) {
-            settingsForm = new DataSourcesSettingsForm(getInstance().getDataSourceConfigurations());
+            DataSourceDetailsPanel dataSourceDetailsPanel = new DataSourceDetailsPanel();
+            DataSourceListPanel dataSourceListPanel = new DataSourceListPanel(dataSourceDetailsPanel);
+            settingsForm = new DataSourcesSettingsForm(getInstance().getDataSourceConfigurations(), dataSourceListPanel, dataSourceDetailsPanel);
         }
         return settingsForm.getFormComponent();
     }
