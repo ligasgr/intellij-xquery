@@ -187,7 +187,7 @@ public class XQueryRunConfigurationProducer extends RuntimeConfigurationProducer
 
     @Override
     protected RunnerAndConfigurationSettings findExistingByElement(Location location,
-                                                                   @NotNull RunnerAndConfigurationSettings[]
+                                                                   @NotNull List<RunnerAndConfigurationSettings>
                                                                            existingConfigurations,
                                                                    ConfigurationContext context) {
         PsiFile psiFile = location.getPsiElement().getContainingFile();
@@ -196,7 +196,7 @@ public class XQueryRunConfigurationProducer extends RuntimeConfigurationProducer
     }
 
     private RunnerAndConfigurationSettings getExistingConfigurationForLocation(Location location, PsiFile psiFile,
-                                                                               RunnerAndConfigurationSettings[]
+                                                                               List<RunnerAndConfigurationSettings>
                                                                                        existingConfigurations) {
         for (RunnerAndConfigurationSettings existingConfiguration : existingConfigurations) {
             final XQueryRunConfiguration appConfiguration = (XQueryRunConfiguration) existingConfiguration
@@ -225,7 +225,7 @@ public class XQueryRunConfigurationProducer extends RuntimeConfigurationProducer
     }
 
     private Module getPredefinedModule(Location location) {
-        return ((XQueryRunConfiguration) ((RunManagerImpl) RunManagerEx.getInstanceEx(location.getProject()))
+        return ((XQueryRunConfiguration) RunManagerEx.getInstanceEx(location.getProject())
                 .getConfigurationTemplate(getConfigurationFactory())
                 .getConfiguration()).getConfigurationModule().getModule();
     }

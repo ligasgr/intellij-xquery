@@ -16,9 +16,9 @@
 
 package org.intellij.xquery.inspection.imports;
 
-import com.intellij.codeInspection.HintAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalInspectionTool;
+import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.psi.PsiFile;
 import org.intellij.xquery.psi.XQueryFile;
@@ -32,7 +32,6 @@ import static com.intellij.codeInspection.ProblemHighlightType.LIKE_UNUSED_SYMBO
 
 public class UnusedImportsInspection extends LocalInspectionTool {
 
-    private static final HintAction NO_HINT_ACTION = null;
     private FunctionNamespacesExtractor functionNamespacesExtractor = new FunctionNamespacesExtractor();
     private VariableNamespacesExtractor variableNamespacesExtractor = new VariableNamespacesExtractor();
     private final UnusedImportsFinder unusedImportsFinder = new UnusedImportsFinder(functionNamespacesExtractor,
@@ -40,7 +39,7 @@ public class UnusedImportsInspection extends LocalInspectionTool {
 
     @Override
     public ProblemDescriptor[] checkFile(PsiFile file, InspectionManager manager, boolean isOnTheFly) {
-        if (!(file instanceof XQueryFile)) {
+        if (! (file instanceof XQueryFile)) {
             return null;
         }
         List<ProblemDescriptor> problems = getUnusedImportProblems((XQueryFile) file, manager);
@@ -51,8 +50,8 @@ public class UnusedImportsInspection extends LocalInspectionTool {
         Collection<XQueryModuleImport> unusedImports = unusedImportsFinder.getUnusedImports(xQueryFile);
         List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
         for (XQueryModuleImport unused : unusedImports) {
-            problems.add(manager.createProblemDescriptor(unused, "Unused import", LIKE_UNUSED_SYMBOL,
-                    NO_HINT_ACTION, true));
+            problems.add(manager.createProblemDescriptor(unused, "Unused import", (LocalQuickFix) null,
+                    LIKE_UNUSED_SYMBOL, true));
         }
 
         return problems;

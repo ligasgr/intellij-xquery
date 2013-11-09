@@ -17,7 +17,7 @@
 <idea-plugin url="http://ligasgr.github.io/intellij-xquery/" version="2">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
-    <version>1.0.0</version>
+    <version>1.0.0_13</version>
     <vendor email="ligasgr@gmail.com">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0</description>
@@ -42,7 +42,7 @@
         ]]>
     </change-notes>
 
-    <idea-version since-build="126.47" until-build="129.9999"/>
+    <idea-version since-build="132.947" until-build="139.9999"/>
 
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="java-lang.xml">com.intellij.modules.java</depends>
@@ -70,7 +70,8 @@
         <quoteHandler fileType="XQuery file" className="org.intellij.xquery.quotes.XQueryQuoteHandler"/>
         <declarationRangeHandler key="org.intellij.xquery.psi.XQueryFunctionDecl" implementationClass="org.intellij.xquery.structure.XQueryFunctionDeclarationRangeHandler"/>
         <annotator language="XQuery" implementationClass="org.intellij.xquery.annotator.XQueryAnnotator"/>
-        <bundledColorSchemesProvider implementation="org.intellij.xquery.highlighting.XQueryColorSchemesProvider"/>
+        <additionalTextAttributes scheme="Default" file="colorSchemes/Default.xml"/>
+        <additionalTextAttributes scheme="Darcula" file="colorSchemes/Darcula.xml"/>
         <colorSettingsPage implementation="org.intellij.xquery.highlighting.XQueryColorSettingsPage"/>
 
         <localInspection enabledByDefault="true" shortName="UnusedImports" groupName="XQuery"

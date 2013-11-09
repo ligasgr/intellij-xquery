@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+
+
+
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply from: 'idea.gradle'
@@ -23,14 +27,14 @@ sourceCompatibility = 1.6
 // Update this path to point to your IDEA installation
 project.ext.userDefinedInstallationPath = ''
 project.ext.sdkDir = 'sdk'
-project.ext.sdkVersion = '129.713'
+project.ext.sdkVersion = '133.331'
 project.ext.ideaSdk = 'idea-IC-' + project.ext.sdkVersion
 project.ext.ideaSdkName = 'IDEA IC-' + project.ext.sdkVersion
 if (project.ext.userDefinedInstallationPath)
     project.ext.ideaInstallationPath = project.ext.userDefinedInstallationPath
 else
     project.ext.ideaInstallationPath = project.ext.sdkDir + "/" + project.ext.ideaSdk
-project.ext.ideaInstallationSource = 'http://download.jetbrains.com/idea/ideaIC-12.1.4.tar.gz'
+project.ext.ideaInstallationSource = 'http://download.jetbrains.com/idea/ideaIC-13.0.1.tar.gz'
 project.ext.ideaArchiveFileName = project.ext.ideaInstallationSource.substring(project.ext.ideaInstallationSource.lastIndexOf('/'))
 
 configurations {
