@@ -25,13 +25,21 @@ import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.ui.*;
+import com.intellij.ui.ComboboxSpeedSearch;
+import com.intellij.ui.EditorTextField;
+import com.intellij.ui.GuiUtils;
+import com.intellij.ui.PanelWithAnchor;
+import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.components.JBCheckBox;
 import net.miginfocom.swing.MigLayout;
 import org.intellij.xquery.runner.rt.XQJType;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -44,8 +52,16 @@ import java.util.Comparator;
  */
 public class ContextItemPanel extends JPanel implements PanelWithAnchor {
 
+    public static final String CONTEXT_ITEM_PANEL = "contextItemPanel";
+    public static final String CONTEXT_ITEM_OPTIONS_PANEL = "contextItemOptionsPanel";
+    public static final String CONTEXT_ITEM_TYPE = "contextItemType";
+    public static final String EDITOR_RADIO_BUTTON = "editorRadioButton";
+    public static final String FILE_RADIO_BUTTON = "fileRadioButton";
+    public static final String EDITOR_CONTENT = "editorContent";
+    public static final String FILE_PATH = "filePath";
+    public static final String SHOW_EDITOR_BUTTON = "showEditorButton";
     private final JBCheckBox contextItemEnabled;
-    private final TextFieldWithBrowseButton contextItemPathField;
+    protected final TextFieldWithBrowseButton contextItemPathField;
     private final EditorTextField contextItemEditorField;
     private final ComponentWithBrowseButton<EditorTextField> contextItemEditorContent;
     private final JRadioButton editorRadioButton;
@@ -62,6 +78,7 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
     });
 
     public ContextItemPanel(Project project) {
+        setName(CONTEXT_ITEM_PANEL);
         contextItemEnabled = new JBCheckBox("Pass context item");
         contextItemEnabled.setMnemonic(KeyEvent.VK_C);
         contextItemEnabled.addActionListener(new ActionListener() {
@@ -70,17 +87,20 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
             }
         });
         contextItemOptionsPanel = new JPanel(new MigLayout("ins 0, gap 5, fill, flowx"));
+        contextItemOptionsPanel.setName(CONTEXT_ITEM_OPTIONS_PANEL);
         contextItemEditorField = new EditorTextField("", project, StdFileTypes.PLAIN_TEXT);
         contextItemEditorContent = new MyEditorTextFieldWithBrowseButton(project, contextItemEditorField);
+        contextItemEditorContent.getChildComponent().setName(EDITOR_CONTENT);
         contextItemEditorContent.setButtonIcon(AllIcons.Actions.ShowViewer);
         contextItemPathField = new TextFieldWithBrowseButton();
-        contextItemPathField.addBrowseFolderListener("Choose file", null, null,
-                FileChooserDescriptorFactory.createSingleFileOrFolderDescriptor());
+        contextItemPathField.getTextField().setName(FILE_PATH);
+        addPathFieldButtonListener();
         contextItemTypeField = new LabeledComponent<JComboBox>();
         contextItemTypeField.setText("&Type");
         contextItemTypeField.setLabelLocation("West");
         contextItemTypeField.setComponent(new JComboBox());
         editorRadioButton = new JRadioButton("Custom content");
+        editorRadioButton.setName(EDITOR_RADIO_BUTTON);
         editorRadioButton.setMnemonic(KeyEvent.VK_E);
         editorRadioButton.setSelected(true);
         editorRadioButton.addActionListener(new ActionListener() {
@@ -90,6 +110,7 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
             }
         });
         fileRadioButton = new JRadioButton("Content from file");
+        fileRadioButton.setName(FILE_RADIO_BUTTON);
         fileRadioButton.setMnemonic(KeyEvent.VK_L);
         fileRadioButton.addActionListener(new ActionListener() {
             @Override
@@ -103,6 +124,7 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         setLayout(new MigLayout("ins 0, gap 5, fill, flowx"));
         add(contextItemEnabled, "shrinkx, top");
         add(contextItemOptionsPanel, "growx, pushx");
+        contextItemTypeField.getComponent().setName(CONTEXT_ITEM_TYPE);
         contextItemTypeField.getComponent().setModel(typesModel);
         contextItemOptionsPanel.add(contextItemTypeField, "growx, pushx, wrap, span 2");
         contextItemOptionsPanel.add(editorRadioButton);
@@ -113,6 +135,11 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         contextItemSourceChanged();
         populateTypesList();
         new ComboboxSpeedSearch(contextItemTypeField.getComponent());
+    }
+
+    protected void addPathFieldButtonListener() {
+        contextItemPathField.addBrowseFolderListener("Choose file", null, null,
+                FileChooserDescriptorFactory.createSingleFileOrFolderDescriptor());
     }
 
     @Override
@@ -158,7 +185,7 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         final boolean editorAsSource = isContextItemFromEditorEnabled();
         if (isContextItemEnabled()) {
             GuiUtils.enableChildren(contextItemEditorContent, editorAsSource);
-            GuiUtils.enableChildren(contextItemPathField, !editorAsSource);
+            GuiUtils.enableChildren(contextItemPathField, ! editorAsSource);
         }
         contextItemEditorContent.invalidate();
         contextItemPathField.invalidate();
@@ -189,13 +216,19 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
             super(editorTextField, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    editorTextField.setText(
-                            Messages.showMultilineInputDialog(project, "Edit custom content", "Edit",
-                                    editorTextField.getText(), null, null));
+                    editorTextField.setText(getValueFromMultilineInputDialog(project, editorTextField));
                 }
             });
+            getButton().setName(SHOW_EDITOR_BUTTON);
+
         }
     }
+
+    private String getValueFromMultilineInputDialog(Project project, EditorTextField editorTextField) {
+        return Messages.showMultilineInputDialog(project, "Edit custom content", "Edit",
+                editorTextField.getText(), null, null);
+    }
+
     private void populateTypesList() {
         for (String type : XQJType.getAll()) {
             typesModel.add(type);
