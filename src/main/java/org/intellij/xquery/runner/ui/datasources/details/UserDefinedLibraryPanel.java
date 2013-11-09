@@ -187,7 +187,7 @@ public class UserDefinedLibraryPanel {
 
             @Override
             public void contentsChanged(ListDataEvent e) {
-                listener.changeApplied(aggregatingPanel.getCurrentConfigurationState());
+                // do nothing (can't happen - we only support adding and removing)
             }
         });
     }
