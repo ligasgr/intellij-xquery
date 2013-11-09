@@ -26,8 +26,11 @@ import org.jetbrains.annotations.Nullable;
  * Time: 15:40
  */
 public class IsActiveColumnInfo extends ColumnInfo<XQueryRunVariable, Boolean> {
+
+    public static final String HEADER = "Pass";
+
     public IsActiveColumnInfo() {
-        super("Pass");
+        super(HEADER);
     }
 
     @Nullable

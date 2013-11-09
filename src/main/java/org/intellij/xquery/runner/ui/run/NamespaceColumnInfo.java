@@ -26,8 +26,10 @@ import org.jetbrains.annotations.Nullable;
  * Time: 01:12
  */
 public class NamespaceColumnInfo extends ColumnInfo<XQueryRunVariable, String> {
+    public static final String HEADER = "Namespace";
+
     public NamespaceColumnInfo() {
-        super("Namespace");
+        super(HEADER);
     }
 
     @Nullable

@@ -26,8 +26,10 @@ import org.jetbrains.annotations.Nullable;
  * Time: 15:40
  */
 public class TypeColumnInfo extends ColumnInfo<XQueryRunVariable, String> {
+    public static final String HEADER = "Type";
+
     public TypeColumnInfo() {
-        super("Type");
+        super(HEADER);
     }
 
     @Nullable
