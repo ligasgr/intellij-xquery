@@ -16,8 +16,12 @@
 
 package org.intellij.xquery.functional.inspection.imports;
 
+import com.intellij.codeInspection.LocalInspectionTool;
 import org.intellij.xquery.functional.BaseFunctionalTestCase;
 import org.intellij.xquery.inspection.imports.UnusedImportsInspection;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
 
@@ -58,9 +62,9 @@ public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
         executeTest();
     }
 
-    private void executeTest(String... filenames) {
-        if (filenames != null && filenames.length > 0) {
-            for (String filename : filenames) {
+    private void executeTest(String... fileNames) {
+        if (fileNames != null && fileNames.length > 0) {
+            for (String filename : fileNames) {
                 executeTest(filename);
             }
         } else {
@@ -69,7 +73,10 @@ public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
     }
 
     private void executeTest(String filename) {
-        myFixture.enableInspections(UnusedImportsInspection.class);
+        Collection<Class<? extends LocalInspectionTool>> inspections = new ArrayList<Class<? extends
+                LocalInspectionTool>>();
+        inspections.add(UnusedImportsInspection.class);
+        myFixture.enableInspections(inspections);
 
         myFixture.testHighlighting(true, false, false, filename);
     }
