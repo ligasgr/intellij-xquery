@@ -16,15 +16,15 @@
 
 package org.intellij.xquery.gui;
 
+import javax.swing.JFrame;
 import java.awt.Component;
-import java.awt.Frame;
 
 /**
  * User: ligasgr
  * Date: 24/10/13
  * Time: 13:45
  */
-public class PanelTestingFrame extends Frame {
+public class PanelTestingFrame extends JFrame {
     public PanelTestingFrame(Component mainPanel) {
         add(mainPanel);
     }

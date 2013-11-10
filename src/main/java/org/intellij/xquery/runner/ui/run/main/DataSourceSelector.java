@@ -20,6 +20,7 @@ import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.ComboboxSpeedSearch;
 import com.intellij.ui.ListCellRendererWrapper;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
+import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 
 import javax.swing.*;
@@ -33,6 +34,7 @@ import static org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSett
  * Time: 21:52
  */
 public class DataSourceSelector {
+    public static final String NO_DATA_SOURCE = "<no data source>";
     private final JComboBox dataSourceList;
     private ComboBoxCollectionListModel dataSourcesModel = new ComboBoxCollectionListModel();
 
@@ -43,7 +45,7 @@ public class DataSourceSelector {
                 if (element instanceof XQueryDataSourceConfiguration) {
                     return ((XQueryDataSourceConfiguration) element).NAME;
                 } else if (element == null) {
-                    return "<no data source>";
+                    return NO_DATA_SOURCE;
                 }
                 return super.getElementText(element);
             }
@@ -57,7 +59,7 @@ public class DataSourceSelector {
                     final XQueryDataSourceConfiguration dataSourceConfiguration = (XQueryDataSourceConfiguration) value;
                     setText(dataSourceConfiguration.NAME);
                 } else if (value == null) {
-                    setText("<no data source>");
+                    setText(NO_DATA_SOURCE);
                 }
             }
         });
@@ -74,7 +76,8 @@ public class DataSourceSelector {
 
     public void reset(final XQueryRunConfiguration configuration) {
         boolean configNotFound = true;
-        List<XQueryDataSourceConfiguration> dataSources = getInstance().getDataSourceConfigurations();
+        XQueryDataSourcesSettings dataSourcesSettings = getDataSourcesSettings();
+        List<XQueryDataSourceConfiguration> dataSources = dataSourcesSettings.getDataSourceConfigurations();
         setDataSources(dataSources);
         for (XQueryDataSourceConfiguration cfg : dataSources) {
             if (cfg.NAME.equals(configuration.getDataSourceName())) {
@@ -84,9 +87,13 @@ public class DataSourceSelector {
             }
         }
         if (configNotFound) {
-            setSelectedDataSource(getInstance().getDefaultDataSourceConfiguration());
+            setSelectedDataSource(dataSourcesSettings.getDefaultDataSourceConfiguration());
             applyTo(configuration);
         }
+    }
+
+    protected XQueryDataSourcesSettings getDataSourcesSettings() {
+        return getInstance();
     }
 
     public void setDataSources(List<XQueryDataSourceConfiguration> dataSources) {
@@ -98,8 +105,8 @@ public class DataSourceSelector {
         dataSourceList.setSelectedItem(selectedDataSource);
     }
 
-    private class ComboBoxCollectionListModel extends CollectionListModel<XQueryDataSourceConfiguration> implements
-            ComboBoxModel {
+    private class ComboBoxCollectionListModel extends CollectionListModel<XQueryDataSourceConfiguration>
+            implements ComboBoxModel {
         Object selectedItem;
 
         @Override
