@@ -18,16 +18,26 @@ package org.intellij.xquery.runner.rt;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 public class XQueryContentFactory {
-    private XQueryRunConfig config;
+  private XQueryRunConfig config;
 
-    public XQueryContentFactory(XQueryRunConfig config) {
-        this.config = config;
-    }
+  public XQueryContentFactory(XQueryRunConfig config) {
+    this.config = config;
+  }
 
-    public InputStream getXQueryContentAsStream() throws FileNotFoundException {
-        return new FileInputStream(config.getMainFile());
-    }
+  public InputStream getXQueryContentAsStream() throws FileNotFoundException {
+    return new FileInputStream(config.getMainFile());
+  }
+
+  public String getXQueryContentAsString() throws IOException {
+    InputStream in = getXQueryContentAsStream();
+    java.util.Scanner s = new java.util.Scanner(in).useDelimiter("\\A");
+    String t = s.hasNext() ? s.next() : "";
+    in.close();
+
+    return t;
+  }
 }

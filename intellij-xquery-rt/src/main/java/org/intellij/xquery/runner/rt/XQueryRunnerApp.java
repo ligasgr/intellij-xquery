@@ -16,12 +16,6 @@
 
 package org.intellij.xquery.runner.rt;
 
-import org.intellij.xquery.runner.rt.binding.TypeBinderFactory;
-
-import javax.xml.xquery.XQConnection;
-import javax.xml.xquery.XQDataSource;
-import javax.xml.xquery.XQPreparedExpression;
-import javax.xml.xquery.XQResultSequence;
 import java.io.PrintStream;
 
 /**
@@ -30,53 +24,19 @@ import java.io.PrintStream;
  * Time: 13:56
  */
 public class XQueryRunnerApp {
-    private final ConnectionFactory connectionFactory;
-    private final DataSourceFactory dataSourceFactory;
-    private final ExpressionFactory expressionFactory;
-    private final OutputMethodFactory outputMethodFactory;
-    private final PrintStream output;
+  public static void main(String[] args) throws Exception {
+    runConfigForOutputStream(new XQueryRunConfig(FileUtil.readFile(args[0])), System.out);
+  }
 
-    private XQueryRunnerApp(ConnectionFactory connectionFactory,
-                            DataSourceFactory dataSourceFactory, ExpressionFactory expressionFactory,
-                            OutputMethodFactory outputMethodFactory, PrintStream output) {
-        this.connectionFactory = connectionFactory;
-        this.dataSourceFactory = dataSourceFactory;
-        this.expressionFactory = expressionFactory;
-        this.outputMethodFactory = outputMethodFactory;
-        this.output = output;
+  public static void runConfigForOutputStream(XQueryRunConfig config, PrintStream output) throws Exception {
+    XQueryGenericRunner app;
+
+    if (config.getDataSourceType() == XQueryDataSourceType.BASEX_EMBEDDED) {
+      app = new XQueryBaseXRunner(config);
+    } else {
+      app = new XQueryXQJRunner(config);
     }
 
-    public static void main(String[] args) throws Exception {
-        runConfigForOutputStream(new XQueryRunConfig(FileUtil.readFile(args[0])), System.out);
-    }
-
-    public static void runConfigForOutputStream(XQueryRunConfig config, PrintStream output) throws Exception {
-        DataSourceFactory dataSourceFactory = new DataSourceFactory(config);
-        ConnectionFactory connectionFactory = new ConnectionFactory(config);
-        TypeBinderFactory binderFactory = new TypeBinderFactory();
-        NameExtractor nameExtractor = new NameExtractor();
-        VariablesBinder variablesBinder = new VariablesBinder(binderFactory, config, nameExtractor);
-        ContextItemBinder contextItemBinder = new ContextItemBinder(binderFactory, config);
-        XQueryContentFactory contentFactory = new XQueryContentFactory(config);
-        ExpressionFactory expressionFactory = new ExpressionFactory(config, contentFactory, variablesBinder, contextItemBinder);
-        OutputMethodFactory outputMethodFactory = new OutputMethodFactory(config);
-        XQueryRunnerApp app = new XQueryRunnerApp(connectionFactory, dataSourceFactory,
-                expressionFactory, outputMethodFactory, output);
-        app.run();
-    }
-
-    private void run() throws Exception {
-        XQDataSource xqs = dataSourceFactory.getDataSource();
-        XQConnection connection = null;
-        try {
-            connection = connectionFactory.getConnection(xqs);
-            XQPreparedExpression preparedExpression = expressionFactory.getExpression(connection);
-            XQResultSequence rs = preparedExpression.executeQuery();
-            rs.writeSequence(output, outputMethodFactory.getOutputMethodProperties());
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
-        }
-    }
+    app.run(output);
+  }
 }

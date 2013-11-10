@@ -29,9 +29,7 @@ import com.intellij.util.Consumer;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 import org.intellij.xquery.runner.ui.datasources.ConfigurationChangeListener;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JPanel;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import java.awt.event.ActionEvent;
@@ -45,150 +43,151 @@ import java.util.List;
  * Time: 19:05
  */
 public class UserDefinedLibraryPanel {
-    public static final String USER_DEFINED_LIBRARY_ENABLED_FIELD_NAME = "userDefinedLibraryEnabled";
-    public static final String PATH_LIST_NAME = "pathList";
-    private final FileChooserDescriptor jarsOnlyFileChooserDescriptor = new FileChooserDescriptor(false, false, true,
-            true, false, true);
-    private JPanel mainPanel;
-    private JBCheckBox userDefinedLibraryEnabled;
-    private JPanel pathsPanel;
-    private DefaultListModel pathListModel;
-    private JBList pathList;
-    private final ToolbarDecorator toolbarDecorator;
+  public static final String USER_DEFINED_LIBRARY_ENABLED_FIELD_NAME = "userDefinedLibraryEnabled";
+  public static final String PATH_LIST_NAME = "pathList";
+  private final FileChooserDescriptor jarsOnlyFileChooserDescriptor = new FileChooserDescriptor(false, false, true,
+          true, false, true);
+  private JPanel mainPanel;
+  private JBCheckBox userDefinedLibraryEnabled;
+  private JPanel pathsPanel;
+  private DefaultListModel pathListModel;
+  private JBList pathList;
+  private final ToolbarDecorator toolbarDecorator;
 
-    public UserDefinedLibraryPanel() {
-        pathListModel = new DefaultListModel();
-        pathList = preparePathList(pathListModel);
-        toolbarDecorator = prepareToolbarDecorator(pathList);
-        pathsPanel.add(toolbarDecorator.createPanel());
-        userDefinedLibraryEnabled.addActionListener(getUserDefinedLibraryEnabledListener());
+  public UserDefinedLibraryPanel() {
+    pathListModel = new DefaultListModel();
+    pathList = preparePathList(pathListModel);
+    toolbarDecorator = prepareToolbarDecorator(pathList);
+    pathsPanel.add(toolbarDecorator.createPanel());
+    userDefinedLibraryEnabled.addActionListener(getUserDefinedLibraryEnabledListener());
+  }
+
+  public void init(XQueryDataSourceConfiguration cfg, DataSourceConfigurationAggregatingPanel
+          aggregatingPanel, ConfigurationChangeListener listener) {
+    mainPanel.setVisible(cfg.TYPE.userDefinedLibraryIsSupported());
+    this.userDefinedLibraryEnabled.setSelected(cfg.USER_DEFINED_LIBRARY_ENABLED);
+    populatePathList(cfg.USER_DEFINED_LIBRARY_PATHS);
+    userDefinedLibraryEnabledChanged();
+    setUpChangeListeners(aggregatingPanel, listener);
+  }
+
+  public List<String> getUserDefinedLibraryPaths() {
+    List<String> currentPaths = new ArrayList<String>();
+    for (int i = 0; i < pathListModel.getSize(); i++) {
+      currentPaths.add(((String) pathListModel.getElementAt(i)));
     }
+    return currentPaths;
+  }
 
-    public void init(XQueryDataSourceConfiguration cfg, DataSourceConfigurationAggregatingPanel
-            aggregatingPanel, ConfigurationChangeListener listener) {
-        this.userDefinedLibraryEnabled.setSelected(cfg.USER_DEFINED_LIBRARY_ENABLED);
-        populatePathList(cfg.USER_DEFINED_LIBRARY_PATHS);
+  public JPanel getMainPanel() {
+    return mainPanel;
+  }
+
+  public ToolbarDecorator getToolbarDecorator() {
+    return toolbarDecorator;
+  }
+
+  public boolean isUserDefinedLibraryEnabled() {
+    return userDefinedLibraryEnabled.isSelected();
+  }
+
+  private ToolbarDecorator prepareToolbarDecorator(final JBList pathList) {
+    return ToolbarDecorator.createDecorator(pathList)
+            .setAddAction(new AnActionButtonRunnable() {
+              @Override
+              public void run(AnActionButton button) {
+                showAddPathPopup();
+              }
+            })
+            .setRemoveAction(new AnActionButtonRunnable() {
+              @Override
+              public void run(AnActionButton button) {
+                ListUtil.removeSelectedItems(pathList);
+                pathList.repaint();
+              }
+            });
+  }
+
+  private void showAddPathPopup() {
+    chooseFilesWithFileChooser(jarsOnlyFileChooserDescriptor, new Consumer<List<VirtualFile>>() {
+      @Override
+      public void consume(List<VirtualFile> files) {
+        for (VirtualFile file : files) {
+          onFileChosen(file);
+        }
+      }
+    });
+  }
+
+  protected void chooseFilesWithFileChooser(FileChooserDescriptor descriptor, Consumer<List<VirtualFile>> consumer) {
+    FileChooser.chooseFiles(descriptor, null, null, consumer);
+  }
+
+  public void onFileChosen(VirtualFile chosenFile) {
+    pathListModel.addElement(chosenFile.getPresentableUrl());
+  }
+
+  public JBList getPathList() {
+    return pathList;
+  }
+
+  private void populatePathList(List<String> userDefinedLibraryPaths) {
+    pathListModel.removeAllElements();
+    for (String userDefinedLibraryPath : userDefinedLibraryPaths) {
+      pathListModel.addElement(userDefinedLibraryPath);
+    }
+  }
+
+  private void userDefinedLibraryEnabledChanged() {
+    pathList.setEnabled(userDefinedLibraryEnabled.isSelected());
+  }
+
+  private JBList preparePathList(DefaultListModel pathListModel) {
+    final JBList pathList = new JBList(pathListModel);
+    pathList.getEmptyText().setText("No classpath entries defined");
+    pathList.setDragEnabled(false);
+    pathList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    pathList.setName(PATH_LIST_NAME);
+    return pathList;
+  }
+
+  private ActionListener getUserDefinedLibraryEnabledListener() {
+    return new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
         userDefinedLibraryEnabledChanged();
-        setUpChangeListeners(aggregatingPanel, listener);
-    }
+      }
+    };
+  }
 
-    public List<String> getUserDefinedLibraryPaths() {
-        List<String> currentPaths = new ArrayList<String>();
-        for (int i = 0; i < pathListModel.getSize(); i++) {
-            currentPaths.add(((String) pathListModel.getElementAt(i)));
-        }
-        return currentPaths;
-    }
+  public void updateConfigurationWithChanges(XQueryDataSourceConfiguration currentConfiguration) {
+    currentConfiguration.USER_DEFINED_LIBRARY_ENABLED = isUserDefinedLibraryEnabled();
+    currentConfiguration.USER_DEFINED_LIBRARY_PATHS = getUserDefinedLibraryPaths();
+  }
 
-    public JPanel getMainPanel() {
-        return mainPanel;
-    }
+  public void setUpChangeListeners(final DataSourceConfigurationAggregatingPanel aggregatingPanel,
+                                   final ConfigurationChangeListener listener) {
+    userDefinedLibraryEnabled.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        listener.changeApplied(aggregatingPanel
+                .getCurrentConfigurationState());
+      }
+    });
+    pathListModel.addListDataListener(new ListDataListener() {
+      @Override
+      public void intervalAdded(ListDataEvent e) {
+        listener.changeApplied(aggregatingPanel.getCurrentConfigurationState());
+      }
 
-    public ToolbarDecorator getToolbarDecorator() {
-        return toolbarDecorator;
-    }
+      @Override
+      public void intervalRemoved(ListDataEvent e) {
+        listener.changeApplied(aggregatingPanel.getCurrentConfigurationState());
+      }
 
-    public boolean isUserDefinedLibraryEnabled() {
-        return userDefinedLibraryEnabled.isSelected();
-    }
-
-    private ToolbarDecorator prepareToolbarDecorator(final JBList pathList) {
-        return ToolbarDecorator.createDecorator(pathList)
-                .setAddAction(new AnActionButtonRunnable() {
-                    @Override
-                    public void run(AnActionButton button) {
-                        showAddPathPopup();
-                    }
-                })
-                .setRemoveAction(new AnActionButtonRunnable() {
-                    @Override
-                    public void run(AnActionButton button) {
-                        ListUtil.removeSelectedItems(pathList);
-                        pathList.repaint();
-                    }
-                });
-    }
-
-    private void showAddPathPopup() {
-        chooseFilesWithFileChooser(jarsOnlyFileChooserDescriptor, new Consumer<List<VirtualFile>>() {
-            @Override
-            public void consume(List<VirtualFile> files) {
-                for (VirtualFile file : files) {
-                    onFileChosen(file);
-                }
-            }
-        });
-    }
-
-    protected void chooseFilesWithFileChooser(FileChooserDescriptor descriptor, Consumer<List<VirtualFile>> consumer) {
-        FileChooser.chooseFiles(descriptor, null, null, consumer);
-    }
-
-    public void onFileChosen(VirtualFile chosenFile) {
-        pathListModel.addElement(chosenFile.getPresentableUrl());
-    }
-
-    public JBList getPathList() {
-        return pathList;
-    }
-
-    private void populatePathList(List<String> userDefinedLibraryPaths) {
-        pathListModel.removeAllElements();
-        for (String userDefinedLibraryPath : userDefinedLibraryPaths) {
-            pathListModel.addElement(userDefinedLibraryPath);
-        }
-    }
-
-    private void userDefinedLibraryEnabledChanged() {
-        pathList.setEnabled(userDefinedLibraryEnabled.isSelected());
-    }
-
-    private JBList preparePathList(DefaultListModel pathListModel) {
-        final JBList pathList = new JBList(pathListModel);
-        pathList.getEmptyText().setText("No classpath entries defined");
-        pathList.setDragEnabled(false);
-        pathList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        pathList.setName(PATH_LIST_NAME);
-        return pathList;
-    }
-
-    private ActionListener getUserDefinedLibraryEnabledListener() {
-        return new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                userDefinedLibraryEnabledChanged();
-            }
-        };
-    }
-
-    public void updateConfigurationWithChanges(XQueryDataSourceConfiguration currentConfiguration) {
-        currentConfiguration.USER_DEFINED_LIBRARY_ENABLED = isUserDefinedLibraryEnabled();
-        currentConfiguration.USER_DEFINED_LIBRARY_PATHS = getUserDefinedLibraryPaths();
-    }
-
-    public void setUpChangeListeners(final DataSourceConfigurationAggregatingPanel aggregatingPanel,
-                                     final ConfigurationChangeListener listener) {
-        userDefinedLibraryEnabled.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                listener.changeApplied(aggregatingPanel
-                        .getCurrentConfigurationState());
-            }
-        });
-        pathListModel.addListDataListener(new ListDataListener() {
-            @Override
-            public void intervalAdded(ListDataEvent e) {
-                listener.changeApplied(aggregatingPanel.getCurrentConfigurationState());
-            }
-
-            @Override
-            public void intervalRemoved(ListDataEvent e) {
-                listener.changeApplied(aggregatingPanel.getCurrentConfigurationState());
-            }
-
-            @Override
-            public void contentsChanged(ListDataEvent e) {
-                // do nothing (can't happen - we only support adding and removing)
-            }
-        });
-    }
+      @Override
+      public void contentsChanged(ListDataEvent e) {
+        // do nothing (can't happen - we only support adding and removing)
+      }
+    });
+  }
 }
