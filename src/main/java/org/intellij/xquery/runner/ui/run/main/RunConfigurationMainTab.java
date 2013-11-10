@@ -21,14 +21,23 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.ui.*;
+import com.intellij.ui.AnActionButton;
+import com.intellij.ui.AnActionButtonRunnable;
+import com.intellij.ui.AnActionButtonUpdater;
+import com.intellij.ui.PanelWithAnchor;
+import com.intellij.ui.TableUtil;
+import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.TableView;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.ListTableModel;
 import com.intellij.util.ui.UIUtil;
+import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.intellij.xquery.runner.state.run.XQueryRunVariable;
 import org.intellij.xquery.runner.state.run.XQueryRunVariables;
+import org.intellij.xquery.runner.ui.datasources.DataSourceDetailsPanel;
+import org.intellij.xquery.runner.ui.datasources.DataSourceListPanel;
+import org.intellij.xquery.runner.ui.datasources.DataSourcesSettingsForm;
 import org.intellij.xquery.runner.ui.run.main.variables.IsActiveColumnInfo;
 import org.intellij.xquery.runner.ui.run.main.variables.NameColumnInfo;
 import org.intellij.xquery.runner.ui.run.main.variables.NamespaceColumnInfo;
@@ -38,8 +47,12 @@ import org.intellij.xquery.runner.ui.run.main.variables.VariableDialog;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -74,12 +87,17 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
         variablesTable = prepareVariablesTable();
         ToolbarDecorator variablesTableToolbarDecorator = prepareVariablesTableToolbarDecorator(variablesTable);
         variablesPanel.add(variablesTableToolbarDecorator.createPanel(), BorderLayout.CENTER);
-        variablesPanel.setPreferredSize(new Dimension(-1, 120));
+        variablesPanel.setPreferredSize(new Dimension(- 1, 120));
         dataSourceSelector = new DataSourceSelector(dataSourceSelectorComponent.getComponent());
         configureDataSourcesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new DataSourcesDialog(editor, dataSourceSelector).show();
+                DataSourceDetailsPanel dataSourceDetailsPanel = new DataSourceDetailsPanel();
+                DataSourceListPanel dataSourceListPanel = new DataSourceListPanel(dataSourceDetailsPanel);
+                DataSourcesSettingsForm settingsForm = new DataSourcesSettingsForm(XQueryDataSourcesSettings
+                        .getInstance()
+                        .getDataSourceConfigurations(), dataSourceListPanel, dataSourceDetailsPanel);
+                new DataSourcesDialog(editor, dataSourceSelector, settingsForm).show();
             }
         });
 

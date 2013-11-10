@@ -17,14 +17,13 @@
 package org.intellij.xquery.runner.ui.run.main;
 
 import com.intellij.openapi.ui.DialogWrapper;
+import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
-import org.intellij.xquery.runner.ui.datasources.DataSourceDetailsPanel;
-import org.intellij.xquery.runner.ui.datasources.DataSourceListPanel;
 import org.intellij.xquery.runner.ui.datasources.DataSourcesSettingsForm;
-import org.intellij.xquery.runner.ui.run.main.DataSourceSelector;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 /**
@@ -37,13 +36,11 @@ public class DataSourcesDialog extends DialogWrapper {
     private DataSourcesSettingsForm settingsForm;
     private UpdateDataSourceSelectionRunnable updateDataSourceSelectionRunnable;
 
-    protected DataSourcesDialog(JComponent parent, DataSourceSelector dataSourceConfigurationSelector) {
+    public DataSourcesDialog(Component parent, DataSourceSelector dataSourceConfigurationSelector,
+                             DataSourcesSettingsForm settingsForm) {
         super(parent, false);
-        DataSourceDetailsPanel dataSourceDetailsPanel = new DataSourceDetailsPanel();
-        DataSourceListPanel dataSourceListPanel = new DataSourceListPanel(dataSourceDetailsPanel);
-        settingsForm = new DataSourcesSettingsForm(XQueryDataSourcesSettings.getInstance()
-                .getDataSourceConfigurations(), dataSourceListPanel, dataSourceDetailsPanel);
-        updateDataSourceSelectionRunnable.setSettingsForm(settingsForm);
+        this.settingsForm = settingsForm;
+        updateDataSourceSelectionRunnable.setSettingsForm(this.settingsForm);
         updateDataSourceSelectionRunnable.setDataSourceSelector(dataSourceConfigurationSelector);
         setTitle("XQuery Data Sources");
         init();
@@ -60,35 +57,27 @@ public class DataSourcesDialog extends DialogWrapper {
         super.createDefaultActions();
         updateDataSourceSelectionRunnable = new UpdateDataSourceSelectionRunnable();
         myOKAction = new MyOkAction(updateDataSourceSelectionRunnable);
-        myCancelAction = new MyCancelAction();
+    }
+
+    protected XQueryDataSourcesSettings getDataSourceSettings() {
+        return XQueryDataSourcesSettings.getInstance();
     }
 
     private class MyOkAction extends OkAction {
+
         private UpdateDataSourceSelectionRunnable updateDataSourceSelectionRunnable;
 
         private MyOkAction(UpdateDataSourceSelectionRunnable updateDataSourceSelectionRunnable) {
             this.updateDataSourceSelectionRunnable = updateDataSourceSelectionRunnable;
         }
-
         @Override
         protected void doAction(ActionEvent e) {
-            XQueryDataSourcesSettings.getInstance()
+            super.doAction(e);
+            getDataSourceSettings()
                     .setDataSourceConfigurations(settingsForm.getCurrentConfigurations());
             updateDataSourceSelectionRunnable.run();
-            super.doAction(e);
-        }
-    }
-
-    private class MyCancelAction extends DialogWrapperAction {
-
-        protected MyCancelAction() {
-            super("Cancel");
         }
 
-        @Override
-        protected void doAction(ActionEvent e) {
-            doCancelAction();
-        }
     }
 
     public static class UpdateDataSourceSelectionRunnable implements Runnable {
@@ -98,8 +87,9 @@ public class DataSourcesDialog extends DialogWrapper {
         @Override
         public void run() {
             dataSourceSelector.setDataSources(settingsForm.getCurrentConfigurations());
-            if (settingsForm.getSelectedDataSource() != null) {
-                dataSourceSelector.setSelectedDataSource(settingsForm.getSelectedDataSource());
+            XQueryDataSourceConfiguration selectedDataSource = settingsForm.getSelectedDataSource();
+            if (selectedDataSource != null) {
+                dataSourceSelector.setSelectedDataSource(selectedDataSource);
             }
         }
 

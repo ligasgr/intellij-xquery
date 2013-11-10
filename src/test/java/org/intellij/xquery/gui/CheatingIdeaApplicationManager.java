@@ -16,16 +16,22 @@
 
 package org.intellij.xquery.gui;
 
-import java.awt.Component;
-import java.awt.Frame;
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
 
 /**
  * User: ligasgr
- * Date: 24/10/13
- * Time: 13:45
+ * Date: 10/11/13
+ * Time: 20:58
  */
-public class PanelTestingFrame extends Frame {
-    public PanelTestingFrame(Component mainPanel) {
-        add(mainPanel);
+public class CheatingIdeaApplicationManager extends ApplicationManager{
+    private static Application oldInstance;
+    public static void removeApplication() {
+        oldInstance = ourApplication;
+        ourApplication = null;
+    }
+
+    public static void restoreApplication() {
+        ourApplication = oldInstance;
     }
 }
