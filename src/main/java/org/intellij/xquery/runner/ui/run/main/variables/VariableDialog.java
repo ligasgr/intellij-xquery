@@ -16,16 +16,17 @@
 
 package org.intellij.xquery.runner.ui.run.main.variables;
 
-import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.ui.ComboboxSpeedSearch;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.components.JBCheckBox;
 import org.intellij.xquery.runner.rt.XQJType;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,8 +37,12 @@ import java.util.Comparator;
  * Date: 08/10/13
  * Time: 14:17
  */
-public class VariableDialog extends DialogWrapper {
+public class VariableDialog {
 
+    public static final String DIALOG_PANEL = "dialogPanel";
+    public static final String NAME = "nameField";
+    public static final String NAMESPACE = "namespaceField";
+    public static final String VALUE = "valueField";
     private JPanel panel;
     private LabeledComponent<JBCheckBox> active;
     private LabeledComponent<JTextField> name;
@@ -50,6 +55,7 @@ public class VariableDialog extends DialogWrapper {
             return ((String) o1).compareToIgnoreCase((String) o2);
         }
     });
+    private VariableDialogWrapper wrapper;
 
     private boolean isValidConfiguration() {
         boolean nameFieldPopulated = name.getComponent().getText() != null
@@ -58,10 +64,29 @@ public class VariableDialog extends DialogWrapper {
         return nameFieldPopulated && typeFieldPopulated;
     }
 
-    public VariableDialog() {
-        super(true);
-        setTitle("Edit variable");
-        init();
+    public VariableDialog(final VariableDialogWrapper wrapper) {
+        this.wrapper = wrapper;
+        panel.setName(DIALOG_PANEL);
+        name.getComponent().getDocument().addDocumentListener(new DocumentAdapter() {
+            @Override
+            protected void textChanged(DocumentEvent e) {
+                wrapper.setOKActionEnabled(isValidConfiguration());
+            }
+        });
+        name.getComponent().setName(NAME);
+        namespace.getComponent().setName(NAMESPACE);
+        value.getComponent().setRows(7);
+        value.getComponent().setColumns(50);
+        value.getComponent().setName(VALUE);
+        type.getComponent().setModel(typesModel);
+        type.getComponent().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                wrapper.setOKActionEnabled(isValidConfiguration());
+            }
+        });
+        populateTypesList();
+        new ComboboxSpeedSearch(type.getComponent());
     }
 
     public void init(boolean active, String name, String namespace, String type, String value) {
@@ -70,29 +95,10 @@ public class VariableDialog extends DialogWrapper {
         this.namespace.getComponent().setText(namespace);
         this.type.getComponent().setSelectedItem(type);
         this.value.getComponent().setText(value);
-        setOKActionEnabled(isValidConfiguration());
+        wrapper.setOKActionEnabled(isValidConfiguration());
     }
 
-    @Nullable
-    @Override
-    protected JComponent createCenterPanel() {
-        name.getComponent().getDocument().addDocumentListener(new DocumentAdapter() {
-            @Override
-            protected void textChanged(DocumentEvent e) {
-                setOKActionEnabled(isValidConfiguration());
-            }
-        });
-        value.getComponent().setRows(7);
-        value.getComponent().setColumns(50);
-        type.getComponent().setModel(typesModel);
-        type.getComponent().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setOKActionEnabled(isValidConfiguration());
-            }
-        });
-        populateTypesList();
-        new ComboboxSpeedSearch(type.getComponent());
+    public JPanel getPanel() {
         return panel;
     }
 
