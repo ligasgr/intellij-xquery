@@ -1024,7 +1024,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
-    public void testFunctionDeclarationWithAnnotationWithLiterals() throws Exception {
+    public void testFunctionDeclarationWithAnnotationWithSingleLiteral() throws Exception {
         assertProducedTokens("declare %rest:path(\"/test\") function local:login() {<test/>};", new String[]{
                 "WHITE_SPACE", "",
                 "declare", "declare",
@@ -1037,6 +1037,41 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "(", "(",
                 "WHITE_SPACE", "",
                 "StringLiteral", "\"/test\"",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "function", "function",
+                "WHITE_SPACE", " ",
+                "NCName", "local",
+                ":", ":",
+                "NCName", "login",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "<", "<",
+                "NCName", "test",
+                "/>", "/>",
+                "}", "}",
+                ";", ";"
+        });
+    }
+
+    public void testFunctionDeclarationWithAnnotationWithLiterals() throws Exception {
+        assertProducedTokens("declare %rest:path(\"/test\",\"test2\") function local:login() {<test/>};", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "%", "%",
+                "WHITE_SPACE", "",
+                "NCName", "rest",
+                ":", ":",
+                "NCName", "path",
+                "(", "(",
+                "WHITE_SPACE", "",
+                "StringLiteral", "\"/test\"",
+                ",", ",",
+                "WHITE_SPACE", "",
+                "StringLiteral", "\"test2\"",
                 ")", ")",
                 "WHITE_SPACE", " ",
                 "function", "function",
