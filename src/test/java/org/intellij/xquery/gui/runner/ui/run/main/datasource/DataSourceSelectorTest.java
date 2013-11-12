@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.gui.runner.ui.run.main;
+package org.intellij.xquery.gui.runner.ui.run.main.datasource;
 
 import org.fest.swing.core.GenericTypeMatcher;
 import org.intellij.xquery.gui.BaseGuiTest;
@@ -23,7 +23,7 @@ import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
-import org.intellij.xquery.runner.ui.run.main.DataSourceSelector;
+import org.intellij.xquery.runner.ui.run.main.datasource.DataSourceSelector;
 import org.junit.Test;
 
 import javax.swing.JComboBox;
@@ -33,7 +33,7 @@ import java.awt.event.KeyEvent;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
-import static org.intellij.xquery.runner.ui.run.main.DataSourceSelector.NO_DATA_SOURCE;
+import static org.intellij.xquery.runner.ui.run.main.datasource.DataSourceSelector.NO_DATA_SOURCE;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;

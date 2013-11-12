@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.ui.run.main;
+package org.intellij.xquery.runner.ui.run.main.datasource;
 
 import com.intellij.openapi.ui.DialogWrapper;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;

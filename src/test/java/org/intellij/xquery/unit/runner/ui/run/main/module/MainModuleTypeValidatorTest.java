@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.unit.runner.ui.run.main;
+package org.intellij.xquery.unit.runner.ui.run.main.module;
 
 import com.intellij.openapi.vfs.VirtualFile;
-import org.intellij.xquery.runner.ui.run.main.MainModuleTypeValidator;
-import org.intellij.xquery.runner.ui.run.main.ModuleTypeValidator;
+import org.intellij.xquery.runner.ui.run.main.module.MainModuleTypeValidator;
+import org.intellij.xquery.runner.ui.run.main.module.ModuleTypeValidator;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -14,15 +14,31 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.ui.run.main;
+package org.intellij.xquery.runner.ui.run.main.module;
 
 import com.intellij.openapi.vfs.VirtualFile;
+
+import java.io.IOException;
 
 /**
  * User: ligasgr
  * Date: 12/11/13
- * Time: 15:03
+ * Time: 15:05
  */
-public interface ModuleTypeValidator {
-    boolean isValidModuleType(VirtualFile file);
+public class MainModuleTypeValidator implements ModuleTypeValidator {
+    private static final String MODULE_NAMESPACE_DETECTION_STRING = "module namespace ";
+
+    @Override
+    public boolean isValidModuleType(VirtualFile file) {
+        try {
+            return isMainModuleBasedOnContent(file);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isMainModuleBasedOnContent(VirtualFile file) throws IOException {
+        String contents = new String(file.contentsToByteArray());
+        return contents.indexOf(MODULE_NAMESPACE_DETECTION_STRING) < 0;
+    }
 }

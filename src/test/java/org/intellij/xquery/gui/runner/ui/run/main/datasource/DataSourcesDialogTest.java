@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.gui.runner.ui.run.main;
+package org.intellij.xquery.gui.runner.ui.run.main.datasource;
 
 import net.java.openjdk.cacio.ctc.junit.CacioTestRunner;
 import org.intellij.xquery.gui.CheatingIdeaApplicationManager;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.intellij.xquery.runner.ui.datasources.DataSourcesSettingsForm;
-import org.intellij.xquery.runner.ui.run.main.DataSourceSelector;
-import org.intellij.xquery.runner.ui.run.main.DataSourcesDialog;
+import org.intellij.xquery.runner.ui.run.main.datasource.DataSourceSelector;
+import org.intellij.xquery.runner.ui.run.main.datasource.DataSourcesDialog;
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;

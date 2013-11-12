@@ -14,31 +14,29 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.ui.run.main;
+package org.intellij.xquery.runner.ui.run.main.module;
 
+import com.intellij.openapi.fileChooser.FileTypeDescriptor;
 import com.intellij.openapi.vfs.VirtualFile;
-
-import java.io.IOException;
+import org.intellij.xquery.XQueryFileType;
 
 /**
  * User: ligasgr
  * Date: 12/11/13
- * Time: 15:05
+ * Time: 14:14
  */
-public class MainModuleTypeValidator implements ModuleTypeValidator {
-    private static final String MODULE_NAMESPACE_DETECTION_STRING = "module namespace ";
+public class XQueryModuleDescriptor extends FileTypeDescriptor {
 
-    @Override
-    public boolean isValidModuleType(VirtualFile file) {
-        try {
-            return isMainModuleBasedOnContent(file);
-        } catch (Exception e) {
-            return false;
-        }
+    private static final String EXTENSION_SEPARATOR = ";";
+    private ModuleTypeValidator moduleTypeValidator;
+
+    public XQueryModuleDescriptor(ModuleTypeValidator moduleTypeValidator) {
+        super("XQuery module", XQueryFileType.ALL_EXTENSIONS.split(EXTENSION_SEPARATOR));
+        this.moduleTypeValidator = moduleTypeValidator;
     }
 
-    private boolean isMainModuleBasedOnContent(VirtualFile file) throws IOException {
-        String contents = new String(file.contentsToByteArray());
-        return contents.indexOf(MODULE_NAMESPACE_DETECTION_STRING) < 0;
+    @Override
+    public boolean isFileSelectable(VirtualFile file) {
+        return super.isFileSelectable(file) && moduleTypeValidator.isValidModuleType(file);
     }
 }

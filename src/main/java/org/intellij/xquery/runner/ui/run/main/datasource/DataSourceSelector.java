@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.ui.run.main;
+package org.intellij.xquery.runner.ui.run.main.datasource;
 
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.ComboboxSpeedSearch;

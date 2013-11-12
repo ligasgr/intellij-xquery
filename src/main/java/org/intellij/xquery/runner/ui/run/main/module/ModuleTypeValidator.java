@@ -14,29 +14,15 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.ui.run.main;
+package org.intellij.xquery.runner.ui.run.main.module;
 
-import com.intellij.openapi.fileChooser.FileTypeDescriptor;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.intellij.xquery.XQueryFileType;
 
 /**
  * User: ligasgr
  * Date: 12/11/13
- * Time: 14:14
+ * Time: 15:03
  */
-public class XQueryModuleDescriptor extends FileTypeDescriptor {
-
-    private static final String EXTENSION_SEPARATOR = ";";
-    private ModuleTypeValidator moduleTypeValidator;
-
-    public XQueryModuleDescriptor(ModuleTypeValidator moduleTypeValidator) {
-        super("XQuery module", XQueryFileType.ALL_EXTENSIONS.split(EXTENSION_SEPARATOR));
-        this.moduleTypeValidator = moduleTypeValidator;
-    }
-
-    @Override
-    public boolean isFileSelectable(VirtualFile file) {
-        return super.isFileSelectable(file) && moduleTypeValidator.isValidModuleType(file);
-    }
+public interface ModuleTypeValidator {
+    boolean isValidModuleType(VirtualFile file);
 }
