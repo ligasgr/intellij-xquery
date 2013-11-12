@@ -16,11 +16,12 @@
 
 package org.intellij.xquery.gui.runner.ui.run.main.variables;
 
+import com.intellij.openapi.ui.ValidationInfo;
 import org.intellij.xquery.gui.BaseGuiTest;
 import org.intellij.xquery.gui.PanelTestingFrame;
 import org.intellij.xquery.runner.rt.XQJType;
+import org.intellij.xquery.runner.state.run.XQueryRunVariable;
 import org.intellij.xquery.runner.ui.run.main.variables.VariableDialog;
-import org.intellij.xquery.runner.ui.run.main.variables.VariableDialogWrapper;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -31,12 +32,9 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.sort;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 /**
  * User: ligasgr
@@ -44,17 +42,17 @@ import static org.mockito.Mockito.verify;
  * Time: 14:17
  */
 public class VariableDialogTest extends BaseGuiTest {
-    private VariableDialogWrapper wrapper;
     private VariableDialog dialog;
     private static final String VALUE = "my value";
     private static final String TYPE = XQJType.XS_STRING.getDescription();
     private static final String NAME = "my name";
     private static final String NAMESPACE = "my namespace";
+    private XQueryRunVariable variable;
 
     @Override
     protected PanelTestingFrame getPanelTestingFrame() {
-        wrapper = mock(VariableDialogWrapper.class);
-        dialog = new VariableDialog(wrapper);
+        variable = new XQueryRunVariable();
+        dialog = new VariableDialog();
         return new PanelTestingFrame(dialog.getPanel());
     }
 
@@ -74,167 +72,154 @@ public class VariableDialogTest extends BaseGuiTest {
 
     @Test
     public void shouldPopulateActiveCheckbox() {
-        dialog.init(true, null, null, null, null);
+        variable.setActive(true);
+        dialog.init(variable);
 
         window.checkBox().requireSelected();
 
-        dialog.init(false, null, null, null, null);
+        variable.setActive(false);
+        dialog.init(variable);
 
         window.checkBox().requireNotSelected();
     }
 
     @Test
     public void shouldPopulateName() {
-        dialog.init(false, NAME, null, null, null);
+        variable.setName(NAME);
+        dialog.init(variable);
 
         window.textBox(VariableDialog.NAME).requireText(NAME);
     }
 
     @Test
     public void shouldPopulateNamespace() {
-        dialog.init(false, null, NAMESPACE, null, null);
+        variable.setNamespace(NAMESPACE);
+        dialog.init(variable);
 
         window.textBox(VariableDialog.NAMESPACE).requireText(NAMESPACE);
     }
 
     @Test
     public void shouldPopulateType() {
-        dialog.init(false, null, null, TYPE, null);
+        variable.setType(TYPE);
+        dialog.init(variable);
 
         window.comboBox().requireSelection(TYPE);
     }
 
     @Test
     public void shouldPopulateValue() {
-        dialog.init(false, null, null, null, VALUE);
+        variable.setValue(VALUE);
+        dialog.init(variable);
 
         window.textBox(VariableDialog.VALUE).requireText(VALUE);
     }
 
     @Test
     public void shouldChangeValueOfPassAfterChecked() {
-        dialog.init(false, null, null, null, null);
+        dialog.init(variable);
 
         window.checkBox().check();
+        dialog.applyValuesTo(variable);
 
-        assertThat(dialog.isActive(), is(true));
+        assertThat(variable.isActive(), is(true));
     }
 
     @Test
     public void shouldChangeValueOfPassAfterUnChecked() {
-        dialog.init(true, null, null, null, null);
+        variable.setActive(true);
+        dialog.init(variable);
 
         window.checkBox().uncheck();
+        dialog.applyValuesTo(variable);
 
-        assertThat(dialog.isActive(), is(false));
+        assertThat(variable.isActive(), is(false));
     }
 
     @Test
     public void shouldChangeValueOfNameAfterTextEntered() {
-        dialog.init(false, null, null, null, null);
+        dialog.init(variable);
 
         window.textBox(VariableDialog.NAME).enterText(NAME);
+        dialog.applyValuesTo(variable);
 
-        assertThat(dialog.getName(), is(NAME));
+        assertThat(variable.getName(), is(NAME));
     }
 
     @Test
     public void shouldChangeValueOfNamespaceAfterTextEntered() {
-        dialog.init(false, null, null, null, null);
+        dialog.init(variable);
 
         window.textBox(VariableDialog.NAMESPACE).enterText(NAMESPACE);
+        dialog.applyValuesTo(variable);
 
-        assertThat(dialog.getNamespace(), is(NAMESPACE));
+        assertThat(variable.getNamespace(), is(NAMESPACE));
     }
 
     @Test
     public void shouldChangeValueOfTypeAfterSelectionMade() {
-        dialog.init(false, null, null, null, null);
+        dialog.init(variable);
 
         window.comboBox().selectItem(TYPE);
+        dialog.applyValuesTo(variable);
 
-        assertThat(dialog.getType(), is(TYPE));
+        assertThat(variable.getType(), is(TYPE));
     }
 
     @Test
     public void shouldChangeValueOfValueFieldAfterTextEntered() {
-        dialog.init(false, null, null, null, null);
+        dialog.init(variable);
 
         window.textBox(VariableDialog.VALUE).enterText(VALUE);
+        dialog.applyValuesTo(variable);
 
-        assertThat(dialog.getValue(), is(VALUE));
+        assertThat(variable.getValue(), is(VALUE));
     }
 
     @Test
-    public void shouldChangeOkButtonStateAfterTypingIntoNameField() {
-        dialog.init(false, null, null, null, null);
+    public void shouldReturnValidationInfoWhenNameIsNull() {
+        dialog.init(variable);
 
-        window.textBox(VariableDialog.NAME).enterText("a");
+        ValidationInfo result = dialog.validate();
 
-        verify(wrapper, atLeast(1)).setOKActionEnabled(anyBoolean());
+        assertThat(result, is(not(nullValue())));
+        assertThat(result.component, is(not(nullValue())));
+        assertThat(result.message, is(VariableDialog.NAME_CANNOT_BE_EMPTY));
     }
 
     @Test
-    public void shouldChangeOkButtonStateAfterSelectingType() {
-        dialog.init(false, null, null, null, null);
+    public void shouldReturnValidationInfoWhenNameIsEmptyText() {
+        variable.setName("");
+        dialog.init(variable);
 
-        window.comboBox().selectItem(TYPE);
+        ValidationInfo result = dialog.validate();
 
-        verify(wrapper, atLeast(1)).setOKActionEnabled(anyBoolean());
+        assertThat(result, is(not(nullValue())));
+        assertThat(result.component, is(not(nullValue())));
+        assertThat(result.message, is(VariableDialog.NAME_CANNOT_BE_EMPTY));
     }
 
     @Test
-    public void shouldDisableOkButtonWhenOnlyNameFilled() {
-        dialog.init(false, null, null, null, null);
+    public void shouldReturnValidationInfoWhenTypeNotSelected() {
+        variable.setName(NAME);
+        dialog.init(variable);
 
-        window.textBox(VariableDialog.NAME).enterText("a");
+        ValidationInfo result = dialog.validate();
 
-        verify(wrapper, atLeast(1)).setOKActionEnabled(false);
+        assertThat(result, is(not(nullValue())));
+        assertThat(result.component, is(not(nullValue())));
+        assertThat(result.message, is(VariableDialog.TYPE_CANNOT_BE_EMPTY));
     }
 
     @Test
-    public void shouldDisableOkButtonWhenOnlyTypeFilled() {
-        dialog.init(false, null, null, null, null);
+    public void shouldReturnValidationInfoWhenAllOk() {
+        variable.setName(NAME);
+        variable.setType(TYPE);
+        dialog.init(variable);
 
-        window.comboBox().selectItem(TYPE);
+        ValidationInfo result = dialog.validate();
 
-        verify(wrapper, atLeast(1)).setOKActionEnabled(false);
-    }
-
-    @Test
-    public void shouldDisableOkButtonWhenNameWasFilledAndNowIsNot() {
-        dialog.init(false, NAME, null, TYPE, null);
-
-        window.textBox(VariableDialog.NAME).deleteText();
-
-        verify(wrapper, atLeast(1)).setOKActionEnabled(false);
-    }
-
-    @Test
-    public void shouldDisableOkButtonWhenTypeWasFilledAndNowIsNot() {
-        dialog.init(false, NAME, null, TYPE, null);
-
-        window.comboBox().clearSelection();
-
-        verify(wrapper, atLeast(1)).setOKActionEnabled(false);
-    }
-
-    @Test
-    public void shouldEnableOkButtonAfterSelectingType() {
-        dialog.init(false, NAME, null, null, null);
-
-        window.comboBox().selectItem(TYPE);
-
-        verify(wrapper, atLeast(1)).setOKActionEnabled(true);
-    }
-
-    @Test
-    public void shouldEnableOkButtonAfterTypingName() {
-        dialog.init(false, null, null, TYPE, null);
-
-        window.textBox(VariableDialog.NAME).enterText("a");
-
-        verify(wrapper, atLeast(1)).setOKActionEnabled(true);
+        assertThat(result, is(nullValue()));
     }
 
     private List<String> getSortedTypes() {

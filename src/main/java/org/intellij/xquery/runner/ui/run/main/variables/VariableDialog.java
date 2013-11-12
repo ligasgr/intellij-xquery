@@ -17,19 +17,17 @@
 package org.intellij.xquery.runner.ui.run.main.variables;
 
 import com.intellij.openapi.ui.LabeledComponent;
+import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.ComboboxSpeedSearch;
-import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.components.JBCheckBox;
 import org.intellij.xquery.runner.rt.XQJType;
+import org.intellij.xquery.runner.state.run.XQueryRunVariable;
 
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Comparator;
 
 /**
@@ -43,6 +41,8 @@ public class VariableDialog {
     public static final String NAME = "nameField";
     public static final String NAMESPACE = "namespaceField";
     public static final String VALUE = "valueField";
+    public static final String NAME_CANNOT_BE_EMPTY = "Name can't be empty";
+    public static final String TYPE_CANNOT_BE_EMPTY = "Type can't be empty";
     private JPanel panel;
     private LabeledComponent<JBCheckBox> active;
     private LabeledComponent<JTextField> name;
@@ -55,47 +55,17 @@ public class VariableDialog {
             return ((String) o1).compareToIgnoreCase((String) o2);
         }
     });
-    private VariableDialogWrapper wrapper;
 
-    private boolean isValidConfiguration() {
-        boolean nameFieldPopulated = name.getComponent().getText() != null
-                && name.getComponent().getText().length() > 0;
-        boolean typeFieldPopulated = type.getComponent().getSelectedItem() != null;
-        return nameFieldPopulated && typeFieldPopulated;
-    }
-
-    public VariableDialog(final VariableDialogWrapper wrapper) {
-        this.wrapper = wrapper;
+    public VariableDialog() {
         panel.setName(DIALOG_PANEL);
-        name.getComponent().getDocument().addDocumentListener(new DocumentAdapter() {
-            @Override
-            protected void textChanged(DocumentEvent e) {
-                wrapper.setOKActionEnabled(isValidConfiguration());
-            }
-        });
         name.getComponent().setName(NAME);
         namespace.getComponent().setName(NAMESPACE);
         value.getComponent().setRows(7);
         value.getComponent().setColumns(50);
         value.getComponent().setName(VALUE);
         type.getComponent().setModel(typesModel);
-        type.getComponent().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                wrapper.setOKActionEnabled(isValidConfiguration());
-            }
-        });
         populateTypesList();
         new ComboboxSpeedSearch(type.getComponent());
-    }
-
-    public void init(boolean active, String name, String namespace, String type, String value) {
-        this.active.getComponent().setSelected(active);
-        this.name.getComponent().setText(name);
-        this.namespace.getComponent().setText(namespace);
-        this.type.getComponent().setSelectedItem(type);
-        this.value.getComponent().setText(value);
-        wrapper.setOKActionEnabled(isValidConfiguration());
     }
 
     public JPanel getPanel() {
@@ -108,23 +78,29 @@ public class VariableDialog {
         }
     }
 
-    public boolean isActive() {
-        return active.getComponent().isSelected();
+    public ValidationInfo validate() {
+        if (name.getComponent().getText() == null || name.getComponent().getText().length() <= 0)
+            return new ValidationInfo(NAME_CANNOT_BE_EMPTY, name.getComponent());
+
+        if (type.getComponent().getSelectedItem() == null)
+            return new ValidationInfo(TYPE_CANNOT_BE_EMPTY, name.getComponent());
+
+        return null;
     }
 
-    public String getName() {
-        return name.getComponent().getText();
+    public void init(XQueryRunVariable variable) {
+        this.active.getComponent().setSelected(variable.isActive());
+        this.name.getComponent().setText(variable.getName());
+        this.namespace.getComponent().setText(variable.getNamespace());
+        this.type.getComponent().setSelectedItem(variable.getType());
+        this.value.getComponent().setText(variable.getValue());
     }
 
-    public String getNamespace() {
-        return namespace.getComponent().getText();
-    }
-
-    public String getType() {
-        return (String) type.getComponent().getSelectedItem();
-    }
-
-    public String getValue() {
-        return value.getComponent().getText();
+    public void applyValuesTo(XQueryRunVariable variable) {
+        variable.setActive(active.getComponent().isSelected());
+        variable.setName(name.getComponent().getText());
+        variable.setNamespace(namespace.getComponent().getText());
+        variable.setType((String) type.getComponent().getSelectedItem());
+        variable.setValue(value.getComponent().getText());
     }
 }

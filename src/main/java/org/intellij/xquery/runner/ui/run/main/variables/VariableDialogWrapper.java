@@ -17,6 +17,8 @@
 package org.intellij.xquery.runner.ui.run.main.variables;
 
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.ValidationInfo;
+import org.intellij.xquery.runner.state.run.XQueryRunVariable;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JComponent;
@@ -30,27 +32,30 @@ public class VariableDialogWrapper extends DialogWrapper {
 
     private VariableDialog variableDialog;
 
-    public VariableDialogWrapper() {
+    public VariableDialogWrapper(VariableDialog variableDialog) {
         super(true);
+        this.variableDialog = variableDialog;
         setTitle("Edit variable");
         init();
     }
 
     @Nullable
     @Override
+    protected ValidationInfo doValidate() {
+        return variableDialog.validate();
+    }
+
+    @Nullable
+    @Override
     protected JComponent createCenterPanel() {
-        if (variableDialog == null) {
-            variableDialog = new VariableDialog(this);
-        }
         return variableDialog.getPanel();
     }
 
-    @Override
-    public void setOKActionEnabled(boolean isEnabled) {
-        super.setOKActionEnabled(isEnabled);
+    public void init(XQueryRunVariable variable) {
+        variableDialog.init(variable);
     }
 
-    public VariableDialog getDialog() {
-        return variableDialog;
+    public void applyValuesTo(XQueryRunVariable variable) {
+        variableDialog.applyValuesTo(variable);
     }
 }

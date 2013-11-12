@@ -234,17 +234,11 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
     }
 
     private static boolean showEditorDialog(@NotNull XQueryRunVariable variable) {
-        VariableDialogWrapper wrapper = new VariableDialogWrapper();
-        VariableDialog dialog = wrapper.getDialog();
-        dialog.init(variable.isActive(), variable.getName(), variable.getNamespace(), variable.getType(),
-                variable.getValue());
+        VariableDialogWrapper wrapper = new VariableDialogWrapper(new VariableDialog());
+        wrapper.init(variable);
         wrapper.show();
         if (wrapper.isOK()) {
-            variable.setActive(dialog.isActive());
-            variable.setName(dialog.getName());
-            variable.setNamespace(dialog.getNamespace());
-            variable.setType(dialog.getType());
-            variable.setValue(dialog.getValue());
+            wrapper.applyValuesTo(variable);
             return true;
         }
         return false;
