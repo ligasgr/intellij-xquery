@@ -17,7 +17,6 @@
 package org.intellij.xquery.runner.ui.run.main;
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileChooser.FileTypeDescriptor;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComponentWithBrowseButton;
@@ -27,7 +26,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.TextAccessor;
-import org.intellij.xquery.XQueryFileType;
 
 import java.io.File;
 
@@ -59,7 +57,7 @@ public class XQueryModuleSelector extends ComponentWithBrowseButton<EditorTextFi
     }
 
     private static FileChooserDescriptor getDescriptor() {
-        return new FileTypeDescriptor("XQuery module", XQueryFileType.ALL_EXTENSIONS.split(";"));
+        return new XQueryModuleDescriptor(new MainModuleTypeValidator());
     }
 
     private static TextComponentAccessor<EditorTextField> getTextComponentAccessor() {
