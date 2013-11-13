@@ -26,8 +26,8 @@ import com.intellij.psi.search.GlobalSearchScope;
  * Date: 18/09/13
  * Time: 16:22
  */
-public class XQueryModuleBasedConfiguration extends RunConfigurationModule {
-    public XQueryModuleBasedConfiguration(Project project) {
+public class XQueryRunConfigurationModule extends RunConfigurationModule {
+    public XQueryRunConfigurationModule(Project project) {
         super(project);
     }
 

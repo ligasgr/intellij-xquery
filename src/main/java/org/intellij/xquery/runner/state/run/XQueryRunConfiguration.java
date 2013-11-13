@@ -58,7 +58,7 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
  * Date: 04/08/13
  * Time: 14:56
  */
-public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryModuleBasedConfiguration> implements
+public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunConfigurationModule> implements
         CommonJavaRunConfigurationParameters, RunConfigurationWithSuppressedDefaultDebugAction {
     public static final String CONFIGURATION_TAG = "xQueryConfiguration";
     private String mainFileName;
@@ -77,7 +77,7 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryModul
     private String dataSourceName;
     private String contextItemType;
 
-    public XQueryRunConfiguration(String name, XQueryModuleBasedConfiguration configurationModule,
+    public XQueryRunConfiguration(String name, XQueryRunConfigurationModule configurationModule,
                                   ConfigurationFactory factory) {
         super(name, configurationModule, factory);
         setWorkingDirectory(getProject().getBasePath());
@@ -104,7 +104,7 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryModul
             ExecutionException {
         XQueryRunProfileState state = new XQueryRunProfileState(env, (XQueryRunConfiguration) env
                 .getRunnerAndConfigurationSettings().getConfiguration());
-        XQueryModuleBasedConfiguration module = getConfigurationModule();
+        XQueryRunConfigurationModule module = getConfigurationModule();
         state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject(),
                 module.getSearchScope()));
         return state;
@@ -331,7 +331,7 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryModul
 
     @Override
     protected ModuleBasedConfiguration createInstance() {
-        return new XQueryRunConfiguration(getName(), new XQueryModuleBasedConfiguration(getProject()),
+        return new XQueryRunConfiguration(getName(), new XQueryRunConfigurationModule(getProject()),
                 XQueryRunConfigurationType.getInstance().getConfigurationFactories()[0]);
     }
 
