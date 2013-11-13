@@ -39,6 +39,9 @@ import java.util.List;
 public class XQueryDataSourcesSettings implements PersistentStateComponent<XQueryDataSourcesSettings>,
         ExportableApplicationComponent {
 
+    public static final String PRESENTABLE_NAME = "XQuery data sources configuration";
+    public static final String COMPONENT_NAME = "XQueryDataSourcesSettings";
+    public static final String NO_DATA_SOURCE_FOUND_FOR_NAME_MESSAGE = "No data source found for name: ";
     private List<XQueryDataSourceConfiguration> dataSourceConfigurations = new
             ArrayList<XQueryDataSourceConfiguration>();
 
@@ -73,13 +76,13 @@ public class XQueryDataSourcesSettings implements PersistentStateComponent<XQuer
     @NotNull
     @Override
     public String getPresentableName() {
-        return "XQuery data sources configuration";
+        return PRESENTABLE_NAME;
     }
 
     @NotNull
     @Override
     public String getComponentName() {
-        return "XQueryDataSourcesSettings";
+        return COMPONENT_NAME;
     }
 
     @Nullable
@@ -94,38 +97,20 @@ public class XQueryDataSourcesSettings implements PersistentStateComponent<XQuer
     }
 
     public XQueryDataSourceConfiguration getDataSourceConfigurationForName(String name) {
-        for (XQueryDataSourceConfiguration dataSourceConfiguration : XQueryDataSourcesSettings.getInstance()
-                .getDataSourceConfigurations()) {
-            if (dataSourceConfiguration.NAME.equals(name)) {
+        for (XQueryDataSourceConfiguration dataSourceConfiguration : dataSourceConfigurations) {
+            if (dataSourceConfiguration.NAME != null && dataSourceConfiguration.NAME.equals(name)) {
                 return dataSourceConfiguration;
             }
         }
-        throw new RuntimeException("No data source found for type: " + name);
+        throw new RuntimeException(NO_DATA_SOURCE_FOUND_FOR_NAME_MESSAGE + name);
     }
 
     public XQueryDataSourceConfiguration getDefaultDataSourceConfiguration() {
-        for (XQueryDataSourceConfiguration dataSourceConfiguration : XQueryDataSourcesSettings.getInstance()
-                .getDataSourceConfigurations()) {
+        for (XQueryDataSourceConfiguration dataSourceConfiguration : dataSourceConfigurations) {
             if (dataSourceConfiguration.DEFAULT) {
                 return dataSourceConfiguration;
             }
         }
         return null;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        XQueryDataSourcesSettings that = (XQueryDataSourcesSettings) o;
-        if (dataSourceConfigurations != null)
-            return dataSourceConfigurations.equals(that.dataSourceConfigurations);
-        else
-            return that.dataSourceConfigurations == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return dataSourceConfigurations != null ? dataSourceConfigurations.hashCode() : 0;
     }
 }
