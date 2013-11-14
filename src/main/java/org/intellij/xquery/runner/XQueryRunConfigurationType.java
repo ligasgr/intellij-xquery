@@ -29,7 +29,7 @@ import org.intellij.xquery.icons.XQueryIcons;
  */
 public class XQueryRunConfigurationType extends ConfigurationTypeBase {
 
-    private static final String XQUERY_MAIN_MODULE = "XQuery Main Module";
+    public static final String XQUERY_MAIN_MODULE = "XQuery Main Module";
 
     public static XQueryRunConfigurationType getInstance() {
         return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP),

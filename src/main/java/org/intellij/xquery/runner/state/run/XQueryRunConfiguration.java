@@ -61,6 +61,7 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
 public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunConfigurationModule> implements
         CommonJavaRunConfigurationParameters, RunConfigurationWithSuppressedDefaultDebugAction {
     public static final String CONFIGURATION_TAG = "xQueryConfiguration";
+    public static final String RUNNER_CLASS = "org.intellij.xquery.runner.rt.XQueryRunnerApp";
     private String mainFileName;
     private String vmParameters;
     private String programParameters;
@@ -143,7 +144,7 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
     @Nullable
     @Override
     public String getRunClass() {
-        return "org.intellij.xquery.runner.rt.XQueryRunnerApp";
+        return RUNNER_CLASS;
     }
 
     @Nullable
