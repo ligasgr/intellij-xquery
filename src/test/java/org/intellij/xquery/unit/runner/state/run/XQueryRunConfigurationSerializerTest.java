@@ -19,6 +19,7 @@ package org.intellij.xquery.unit.runner.state.run;
 import org.intellij.xquery.runner.state.run.ElementWriter;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.intellij.xquery.runner.state.run.XQueryRunConfigurationSerializer;
+import org.intellij.xquery.runner.state.run.XmlConfigurationAccessor;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +31,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -45,13 +47,15 @@ public class XQueryRunConfigurationSerializerTest {
     private XQueryRunConfigurationSerializer serializer;
     private Writer writer;
     private ElementWriter elementWriter;
+    private XmlConfigurationAccessor xmlConfigurationAccessor;
 
     @Before
     public void setUp() throws Exception {
         configuration = mock(XQueryRunConfiguration.class);
+        xmlConfigurationAccessor = mock(XmlConfigurationAccessor.class);
         writer = mock(Writer.class);
         elementWriter = mock(ElementWriter.class);
-        serializer = new XQueryRunConfigurationSerializer(configuration) {
+        serializer = new XQueryRunConfigurationSerializer(configuration, xmlConfigurationAccessor) {
             @Override
             protected ElementWriter getElementWriter() {
                 return elementWriter;
@@ -70,7 +74,7 @@ public class XQueryRunConfigurationSerializerTest {
     public void shouldWriteConfiguration() throws Exception {
         serializer.serialize(writer);
 
-        verify(configuration).writeConfiguration(isA(Element.class));
+        verify(xmlConfigurationAccessor).writeConfiguration(eq(configuration), isA(Element.class));
     }
 
     @Test

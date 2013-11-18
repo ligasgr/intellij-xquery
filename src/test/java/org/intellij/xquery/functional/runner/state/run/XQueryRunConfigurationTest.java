@@ -17,12 +17,22 @@
 package org.intellij.xquery.functional.runner.state.run;
 
 import com.intellij.execution.configurations.ConfigurationFactory;
+import com.intellij.execution.configurations.RuntimeConfigurationException;
 import org.intellij.xquery.functional.BaseFunctionalTestCase;
 import org.intellij.xquery.runner.XQueryRunConfigurationFactory;
 import org.intellij.xquery.runner.XQueryRunConfigurationType;
+import org.intellij.xquery.runner.state.run.AlternativeJreValidator;
+import org.intellij.xquery.runner.state.run.ContextItemValidator;
+import org.intellij.xquery.runner.state.run.DataSourceValidator;
+import org.intellij.xquery.runner.state.run.ModuleValidator;
+import org.intellij.xquery.runner.state.run.VariablesValidator;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.intellij.xquery.runner.state.run.XQueryRunConfigurationModule;
+import org.intellij.xquery.runner.state.run.XQueryRunVariable;
+import org.intellij.xquery.runner.state.run.XQueryRunVariables;
+import org.mockito.InOrder;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +42,10 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.intellij.xquery.runner.XQueryRunConfigurationType.XQUERY_MAIN_MODULE;
 import static org.intellij.xquery.runner.state.run.XQueryRunConfiguration.RUNNER_CLASS;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 
 /**
  * User: ligasgr
@@ -44,9 +58,26 @@ public class XQueryRunConfigurationTest extends BaseFunctionalTestCase {
     private static final String JRE_PATH = "jre path";
     private static final boolean JRE_ENABLED = true;
     private static final boolean PASS_PARENT_ENVS = true;
+    private static final String MAIN_FILE_NAME = "file.xq";
+    private static final boolean CONTEXT_ITEM_ENABLED = true;
+    private static final boolean CONTEXT_ITEM_FROM_EDITOR_ENABLED = true;
+    private static final String CONTEXT_ITEM_TEXT = "my text";
+    private static final String CONTEXT_ITEM_FILE = "file.xml";
+    private static final String CONTEXT_ITEM_TYPE = "xs:int";
+    private static final String DATA_SOURCE_NAME = "saxon";
 
     private final Map<String, String> envs = new HashMap<String, String>();
-    private XQueryRunConfiguration configuration;
+    private TestXQueryRunConfiguration configuration;
+    private XQueryRunVariable variable1 = new XQueryRunVariable("name:name", null, "xs:string", "value", true);
+    private XQueryRunVariable variable2 = new XQueryRunVariable("name", "namespace", "xs:boolean", "true", false);
+    private XQueryRunVariables variables = new XQueryRunVariables(Collections.<XQueryRunVariable>emptyList());
+    private boolean moduleVerified;
+    private boolean jreVerified;
+    private VariablesValidator variablesValidator;
+    private ContextItemValidator contextItemValidator;
+    private DataSourceValidator dataSourceValidator;
+    private AlternativeJreValidator alternativeJreValidator;
+    private ModuleValidator moduleValidator;
 
     @Override
     public void setUp() throws Exception {
@@ -54,7 +85,15 @@ public class XQueryRunConfigurationTest extends BaseFunctionalTestCase {
         XQueryRunConfigurationModule module = new XQueryRunConfigurationModule(getProject());
         XQueryRunConfigurationType type = new XQueryRunConfigurationType();
         ConfigurationFactory factory = new XQueryRunConfigurationFactory(XQUERY_MAIN_MODULE, type);
-        configuration = new XQueryRunConfiguration(XQUERY_MAIN_MODULE, module, factory);
+        variablesValidator = mock(VariablesValidator.class);
+        contextItemValidator = mock(ContextItemValidator.class);
+        dataSourceValidator = mock(DataSourceValidator.class);
+        alternativeJreValidator = mock(AlternativeJreValidator.class);
+        moduleValidator = mock(ModuleValidator.class);
+        configuration = new TestXQueryRunConfiguration(XQUERY_MAIN_MODULE, module, factory,
+                variablesValidator, contextItemValidator, dataSourceValidator, alternativeJreValidator, moduleValidator);
+        configuration.setVariables(variables);
+        configuration.setDataSourceName(DATA_SOURCE_NAME);
     }
 
     public void testShouldCreateConfiguration() {
@@ -87,5 +126,53 @@ public class XQueryRunConfigurationTest extends BaseFunctionalTestCase {
         assertThat(configuration.getAlternativeJrePath(), is(JRE_PATH));
         assertThat(configuration.getEnvs(), is(envs));
         assertThat(configuration.isPassParentEnvs(), is(PASS_PARENT_ENVS));
+    }
+
+    public void testShouldAssignAndReturnXQueryRelatedParameters() {
+        configuration.setVariables(variables);
+        configuration.setMainFileName(MAIN_FILE_NAME);
+        configuration.setContextItemEnabled(CONTEXT_ITEM_ENABLED);
+        configuration.setContextItemFromEditorEnabled(CONTEXT_ITEM_FROM_EDITOR_ENABLED);
+        configuration.setContextItemText(CONTEXT_ITEM_TEXT);
+        configuration.setContextItemFile(CONTEXT_ITEM_FILE);
+        configuration.setContextItemType(CONTEXT_ITEM_TYPE);
+        configuration.setDataSourceName(DATA_SOURCE_NAME);
+
+        assertThat(configuration.getVariables(), is(variables));
+        assertThat(configuration.getMainFileName(), is(MAIN_FILE_NAME));
+        assertThat(configuration.isContextItemEnabled(), is(CONTEXT_ITEM_ENABLED));
+        assertThat(configuration.isContextItemFromEditorEnabled(), is(CONTEXT_ITEM_FROM_EDITOR_ENABLED));
+        assertThat(configuration.getContextItemText(), is(CONTEXT_ITEM_TEXT));
+        assertThat(configuration.getContextItemFile(), is(CONTEXT_ITEM_FILE));
+        assertThat(configuration.getContextItemType(), is(CONTEXT_ITEM_TYPE));
+        assertThat(configuration.getDataSourceName(), is(DATA_SOURCE_NAME));
+    }
+
+    public void testShouldVerifyConfigurationUsingValidators() throws RuntimeConfigurationException {
+        configuration.checkConfiguration();
+
+        InOrder inOrder = inOrder(alternativeJreValidator,
+                moduleValidator,
+                variablesValidator,
+                contextItemValidator,
+                dataSourceValidator);
+        inOrder.verify(alternativeJreValidator).validate(configuration);
+        inOrder.verify(moduleValidator).validate(configuration);
+        inOrder.verify(variablesValidator).validate(variables);
+        inOrder.verify(contextItemValidator).validate(anyBoolean(), anyString(), anyBoolean(), anyString(), anyString());
+    }
+
+    private class TestXQueryRunConfiguration extends XQueryRunConfiguration {
+        public TestXQueryRunConfiguration(String name,
+                                          XQueryRunConfigurationModule configurationModule,
+                                          ConfigurationFactory factory,
+                                          VariablesValidator variablesValidator,
+                                          ContextItemValidator contextItemValidator,
+                                          DataSourceValidator dataSourceValidator,
+                                          AlternativeJreValidator alternativeJreValidator,
+                                          ModuleValidator moduleValidator) {
+            super(name, configurationModule, factory, variablesValidator, contextItemValidator, dataSourceValidator,
+                    alternativeJreValidator, moduleValidator);
+        }
     }
 }

@@ -29,15 +29,18 @@ import java.io.Writer;
  */
 public class XQueryRunConfigurationSerializer {
     private final XQueryRunConfiguration configuration;
+    private XmlConfigurationAccessor xmlConfigurationAccessor;
 
-    public XQueryRunConfigurationSerializer(XQueryRunConfiguration configuration) {
+    public XQueryRunConfigurationSerializer(XQueryRunConfiguration configuration, XmlConfigurationAccessor
+            xmlConfigurationAccessor) {
         this.configuration = configuration;
+        this.xmlConfigurationAccessor = xmlConfigurationAccessor;
     }
 
     public void serialize(Writer writer) throws Exception {
         Element run = new Element("run");
         configuration.writeVariables(run);
-        configuration.writeConfiguration(run);
+        xmlConfigurationAccessor.writeConfiguration(configuration, run);
         configuration.writeDataSourceConfiguration(run);
         getElementWriter().writeElement(run, writer, System.getProperty("line.separator"));
     }

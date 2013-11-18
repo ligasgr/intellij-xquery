@@ -25,6 +25,7 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.util.JavaParametersUtil;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.intellij.xquery.runner.state.run.XQueryRunConfigurationSerializer;
+import org.intellij.xquery.runner.state.run.XmlConfigurationAccessor;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -70,7 +71,8 @@ public class XQueryRunProfileState extends JavaCommandLineState {
     private File getSerializedConfig(XQueryRunConfiguration configuration) {
         try {
             File serializedConfig = File.createTempFile("xquery-run", ".xml");
-            new XQueryRunConfigurationSerializer(configuration).serialize(new FileWriter(serializedConfig));
+            XmlConfigurationAccessor xmlConfigurationAccessor = new XmlConfigurationAccessor();
+            new XQueryRunConfigurationSerializer(configuration, xmlConfigurationAccessor).serialize(new FileWriter(serializedConfig));
             return serializedConfig;
         } catch (Exception e) {
             throw new RuntimeException(e);
