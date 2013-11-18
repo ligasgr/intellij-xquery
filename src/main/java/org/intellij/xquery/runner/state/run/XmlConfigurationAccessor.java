@@ -35,7 +35,7 @@ public class XmlConfigurationAccessor {
         runConfiguration.setMainFileName(configuration.getAttributeValue("mainFileName"));
         runConfiguration.setVMParameters(configuration.getAttributeValue("vmParameters"));
         runConfiguration.setProgramParameters(configuration.getAttributeValue("programParameters"));
-        runConfiguration.setWorkingDirectory(configuration.getAttributeValue("workingDirectory"));
+        runConfiguration.setRawWorkingDirectory(configuration.getAttributeValue("workingDirectory"));
         String alternativeJrePathEnabledString = configuration.getAttributeValue("alternativeJrePathEnabled");
         if (alternativeJrePathEnabledString != null)
             runConfiguration.setAlternativeJrePathEnabled(new Boolean(alternativeJrePathEnabledString));
@@ -64,8 +64,8 @@ public class XmlConfigurationAccessor {
                 configuration.setAttribute("vmParameters", runConfiguration.getVMParameters());
             if (runConfiguration.getProgramParameters() != null)
                 configuration.setAttribute("programParameters", runConfiguration.getProgramParameters());
-            if (runConfiguration.getWorkingDirectory() != null)
-                configuration.setAttribute("workingDirectory", runConfiguration.getWorkingDirectory());
+            if (runConfiguration.getRawWorkingDirectory() != null)
+                configuration.setAttribute("workingDirectory", runConfiguration.getRawWorkingDirectory());
             configuration.setAttribute("alternativeJrePathEnabled", Boolean.toString(runConfiguration.isAlternativeJrePathEnabled()));
             if (runConfiguration.getAlternativeJrePath() != null)
                 configuration.setAttribute("alternativeJrePath", runConfiguration.getAlternativeJrePath());

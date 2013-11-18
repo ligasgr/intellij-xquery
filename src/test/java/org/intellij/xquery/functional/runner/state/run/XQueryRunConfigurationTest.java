@@ -18,6 +18,7 @@ package org.intellij.xquery.functional.runner.state.run;
 
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import org.intellij.xquery.functional.BaseFunctionalTestCase;
 import org.intellij.xquery.runner.XQueryRunConfigurationFactory;
 import org.intellij.xquery.runner.XQueryRunConfigurationType;
@@ -30,12 +31,14 @@ import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.intellij.xquery.runner.state.run.XQueryRunConfigurationModule;
 import org.intellij.xquery.runner.state.run.XQueryRunVariable;
 import org.intellij.xquery.runner.state.run.XQueryRunVariables;
+import org.intellij.xquery.runner.state.run.XmlConfigurationAccessor;
 import org.mockito.InOrder;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
@@ -44,6 +47,7 @@ import static org.intellij.xquery.runner.state.run.XQueryRunConfiguration.RUNNER
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 
@@ -68,16 +72,13 @@ public class XQueryRunConfigurationTest extends BaseFunctionalTestCase {
 
     private final Map<String, String> envs = new HashMap<String, String>();
     private TestXQueryRunConfiguration configuration;
-    private XQueryRunVariable variable1 = new XQueryRunVariable("name:name", null, "xs:string", "value", true);
-    private XQueryRunVariable variable2 = new XQueryRunVariable("name", "namespace", "xs:boolean", "true", false);
     private XQueryRunVariables variables = new XQueryRunVariables(Collections.<XQueryRunVariable>emptyList());
-    private boolean moduleVerified;
-    private boolean jreVerified;
     private VariablesValidator variablesValidator;
     private ContextItemValidator contextItemValidator;
     private DataSourceValidator dataSourceValidator;
     private AlternativeJreValidator alternativeJreValidator;
     private ModuleValidator moduleValidator;
+    private XmlConfigurationAccessor xmlConfigurationAccessor;
 
     @Override
     public void setUp() throws Exception {
@@ -90,8 +91,10 @@ public class XQueryRunConfigurationTest extends BaseFunctionalTestCase {
         dataSourceValidator = mock(DataSourceValidator.class);
         alternativeJreValidator = mock(AlternativeJreValidator.class);
         moduleValidator = mock(ModuleValidator.class);
+        xmlConfigurationAccessor = mock(XmlConfigurationAccessor.class);
         configuration = new TestXQueryRunConfiguration(XQUERY_MAIN_MODULE, module, factory,
-                variablesValidator, contextItemValidator, dataSourceValidator, alternativeJreValidator, moduleValidator);
+                variablesValidator, contextItemValidator, dataSourceValidator, alternativeJreValidator, moduleValidator,
+                xmlConfigurationAccessor);
         configuration.setVariables(variables);
         configuration.setDataSourceName(DATA_SOURCE_NAME);
     }
@@ -102,6 +105,9 @@ public class XQueryRunConfigurationTest extends BaseFunctionalTestCase {
 
     public void testShouldSetWorkingDirectoryToProjectBasePath() {
         assertThat(configuration.getWorkingDirectory(), is(getProject().getBasePath()));
+        assertThat(configuration.getWorkingDirectory(), not(containsString(LocalFileSystem.PROTOCOL)));
+        assertThat(configuration.getRawWorkingDirectory(), containsString(LocalFileSystem.PROTOCOL));
+        assertThat(configuration.getRawWorkingDirectory(), not(containsString("\\")));
     }
 
     public void testShouldReturnCorrectRunnerClass() {
@@ -170,9 +176,10 @@ public class XQueryRunConfigurationTest extends BaseFunctionalTestCase {
                                           ContextItemValidator contextItemValidator,
                                           DataSourceValidator dataSourceValidator,
                                           AlternativeJreValidator alternativeJreValidator,
-                                          ModuleValidator moduleValidator) {
+                                          ModuleValidator moduleValidator,
+                                          XmlConfigurationAccessor xmlConfigurationAccessor) {
             super(name, configurationModule, factory, variablesValidator, contextItemValidator, dataSourceValidator,
-                    alternativeJreValidator, moduleValidator);
+                    alternativeJreValidator, moduleValidator, xmlConfigurationAccessor);
         }
     }
 }

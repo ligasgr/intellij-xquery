@@ -82,20 +82,22 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
     public XQueryRunConfiguration(String name, XQueryRunConfigurationModule configurationModule,
                                   ConfigurationFactory factory) {
         this(name, configurationModule, factory, new VariablesValidator(), new ContextItemValidator(),
-                new DataSourceValidator(), new AlternativeJreValidator(), new ModuleValidator());
+                new DataSourceValidator(), new AlternativeJreValidator(), new ModuleValidator(), new XmlConfigurationAccessor());
         setWorkingDirectory(getProject().getBasePath());
     }
 
     public XQueryRunConfiguration(String name, XQueryRunConfigurationModule configurationModule,
                                   ConfigurationFactory factory, VariablesValidator variablesValidator,
                                   ContextItemValidator contextItemValidator, DataSourceValidator dataSourceValidator,
-                                  AlternativeJreValidator alternativeJreValidator, ModuleValidator moduleValidator) {
+                                  AlternativeJreValidator alternativeJreValidator, ModuleValidator moduleValidator,
+                                  XmlConfigurationAccessor xmlConfigurationAccessor) {
         super(name, configurationModule, factory);
         this.variablesValidator = variablesValidator;
         this.contextItemValidator = contextItemValidator;
         this.dataSourceValidator = dataSourceValidator;
         this.alternativeJreValidator = alternativeJreValidator;
         this.moduleValidator = moduleValidator;
+        this.xmlConfigurationAccessor = xmlConfigurationAccessor;
         setWorkingDirectory(getProject().getBasePath());
     }
 
@@ -330,5 +332,13 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
 
     public void setContextItemType(String contextItemType) {
         this.contextItemType = contextItemType;
+    }
+
+    public String getRawWorkingDirectory() {
+        return workingDirectory;
+    }
+
+    public void setRawWorkingDirectory(String workingDirectory) {
+        this.workingDirectory = workingDirectory;
     }
 }
