@@ -16,7 +16,9 @@
 
 package org.intellij.xquery.unit.runner.state.run;
 
+import org.intellij.xquery.runner.state.run.DataSourceAccessor;
 import org.intellij.xquery.runner.state.run.ElementWriter;
+import org.intellij.xquery.runner.state.run.VariablesAccessor;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.intellij.xquery.runner.state.run.XQueryRunConfigurationSerializer;
 import org.intellij.xquery.runner.state.run.XmlConfigurationAccessor;
@@ -48,14 +50,19 @@ public class XQueryRunConfigurationSerializerTest {
     private Writer writer;
     private ElementWriter elementWriter;
     private XmlConfigurationAccessor xmlConfigurationAccessor;
+    private VariablesAccessor variablesAccessor;
+    private DataSourceAccessor dataSourceAccessor;
 
     @Before
     public void setUp() throws Exception {
         configuration = mock(XQueryRunConfiguration.class);
         xmlConfigurationAccessor = mock(XmlConfigurationAccessor.class);
+        variablesAccessor = mock(VariablesAccessor.class);
+        dataSourceAccessor = mock(DataSourceAccessor.class);
         writer = mock(Writer.class);
         elementWriter = mock(ElementWriter.class);
-        serializer = new XQueryRunConfigurationSerializer(configuration, xmlConfigurationAccessor) {
+        serializer = new XQueryRunConfigurationSerializer(configuration, xmlConfigurationAccessor, variablesAccessor,
+                dataSourceAccessor) {
             @Override
             protected ElementWriter getElementWriter() {
                 return elementWriter;
@@ -67,7 +74,7 @@ public class XQueryRunConfigurationSerializerTest {
     public void shouldWriteVariables() throws Exception {
         serializer.serialize(writer);
 
-        verify(configuration).writeVariables(isA(Element.class));
+        verify(variablesAccessor).writeVariables(eq(configuration), isA(Element.class));
     }
 
     @Test
@@ -81,7 +88,7 @@ public class XQueryRunConfigurationSerializerTest {
     public void shouldWriteDataSourceConfiguration() throws Exception {
         serializer.serialize(writer);
 
-        verify(configuration).writeDataSourceConfiguration(isA(Element.class));
+        verify(dataSourceAccessor).writeDataSourceConfiguration(eq(configuration), isA(Element.class));
     }
 
     @Test

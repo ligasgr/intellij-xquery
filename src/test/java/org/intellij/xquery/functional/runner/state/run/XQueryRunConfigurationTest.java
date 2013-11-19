@@ -26,6 +26,7 @@ import org.intellij.xquery.runner.state.run.AlternativeJreValidator;
 import org.intellij.xquery.runner.state.run.ContextItemValidator;
 import org.intellij.xquery.runner.state.run.DataSourceValidator;
 import org.intellij.xquery.runner.state.run.ModuleValidator;
+import org.intellij.xquery.runner.state.run.VariablesAccessor;
 import org.intellij.xquery.runner.state.run.VariablesValidator;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.intellij.xquery.runner.state.run.XQueryRunConfigurationModule;
@@ -79,6 +80,7 @@ public class XQueryRunConfigurationTest extends BaseFunctionalTestCase {
     private AlternativeJreValidator alternativeJreValidator;
     private ModuleValidator moduleValidator;
     private XmlConfigurationAccessor xmlConfigurationAccessor;
+    private VariablesAccessor variablesAccessor;
 
     @Override
     public void setUp() throws Exception {
@@ -92,9 +94,10 @@ public class XQueryRunConfigurationTest extends BaseFunctionalTestCase {
         alternativeJreValidator = mock(AlternativeJreValidator.class);
         moduleValidator = mock(ModuleValidator.class);
         xmlConfigurationAccessor = mock(XmlConfigurationAccessor.class);
+        variablesAccessor = mock(VariablesAccessor.class);
         configuration = new TestXQueryRunConfiguration(XQUERY_MAIN_MODULE, module, factory,
                 variablesValidator, contextItemValidator, dataSourceValidator, alternativeJreValidator, moduleValidator,
-                xmlConfigurationAccessor);
+                xmlConfigurationAccessor, variablesAccessor);
         configuration.setVariables(variables);
         configuration.setDataSourceName(DATA_SOURCE_NAME);
     }
@@ -177,9 +180,10 @@ public class XQueryRunConfigurationTest extends BaseFunctionalTestCase {
                                           DataSourceValidator dataSourceValidator,
                                           AlternativeJreValidator alternativeJreValidator,
                                           ModuleValidator moduleValidator,
-                                          XmlConfigurationAccessor xmlConfigurationAccessor) {
+                                          XmlConfigurationAccessor xmlConfigurationAccessor,
+                                          VariablesAccessor variablesAccessor) {
             super(name, configurationModule, factory, variablesValidator, contextItemValidator, dataSourceValidator,
-                    alternativeJreValidator, moduleValidator, xmlConfigurationAccessor);
+                    alternativeJreValidator, moduleValidator, xmlConfigurationAccessor, variablesAccessor);
         }
     }
 }

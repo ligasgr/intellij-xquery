@@ -16,9 +16,6 @@
 
 package org.intellij.xquery.gui.runner.ui.datasources.details;
 
-import org.fest.swing.edt.GuiActionRunner;
-import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.fixture.FrameFixture;
 import org.intellij.xquery.gui.BaseGuiTest;
 import org.intellij.xquery.gui.PanelTestingFrame;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
@@ -27,15 +24,10 @@ import org.intellij.xquery.runner.ui.datasources.ConfigurationChangeListener;
 import org.intellij.xquery.runner.ui.datasources.details.DataSourceConfigurationAggregatingPanel;
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.intellij.xquery.runner.ui.datasources.details.DataSourceConfigurationAggregatingPanel.NAME_FIELD;
-import static org.intellij.xquery.runner.ui.datasources.details.DataSourceConfigurationAggregatingPanel
-        .SET_AS_DEFAULT_BUTTON_NAME;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 /**
  * User: ligasgr
@@ -44,17 +36,14 @@ import static org.mockito.Mockito.verify;
  */
 public class DataSourceConfigurationAggregatingPanelTest extends BaseGuiTest {
 
-    private static final String NAME_VALUE = "myName";
-    private static final String NEW_NAME_VALUE = "newValue";
     private DataSourceConfigurationAggregatingPanel panel;
     private ConfigurationChangeListener nameChangedListener;
     private XQueryDataSourceConfiguration configuration;
 
     @Override
     protected PanelTestingFrame getPanelTestingFrame() {
-        configuration = new XQueryDataSourceConfiguration(NAME_VALUE, XQueryDataSourceType.SAXON);
-        configuration.DEFAULT = false;
         nameChangedListener = mock(ConfigurationChangeListener.class);
+        configuration = new XQueryDataSourceConfiguration("config", XQueryDataSourceType.SAXON);
         panel = new DataSourceConfigurationAggregatingPanel(configuration, nameChangedListener);
         return new PanelTestingFrame(panel.getPanel());
     }
@@ -65,64 +54,9 @@ public class DataSourceConfigurationAggregatingPanelTest extends BaseGuiTest {
     }
 
     @Test
-    public void shouldDisplayCorrectName() {
-        window.textBox(NAME_FIELD).requireText(NAME_VALUE);
-    }
+    public void shouldReturnTheSameValues() {
+        XQueryDataSourceConfiguration currentConfig = panel.getCurrentConfigurationState();
 
-    @Test
-    public void shouldReturnCorrectName() {
-        panel.getCurrentConfigurationState().NAME = NAME_VALUE;
-    }
-
-    @Test
-    public void shouldEnabledSetAsDefaultButton() {
-        window.button(SET_AS_DEFAULT_BUTTON_NAME).requireEnabled();
-    }
-
-    @Test
-    public void shouldDisableSetAsDefaultButton() {
-        window.cleanUp();
-        PanelTestingFrame frame = GuiActionRunner.execute(new GuiQuery<PanelTestingFrame>() {
-            protected PanelTestingFrame executeInEDT() {
-                configuration.DEFAULT = true;
-                panel = new DataSourceConfigurationAggregatingPanel(configuration, nameChangedListener);
-                return new PanelTestingFrame(panel.getPanel());
-            }
-        });
-        FrameFixture anotherWindow = new FrameFixture(frame);
-
-        anotherWindow.show();
-
-        anotherWindow.button(SET_AS_DEFAULT_BUTTON_NAME).requireDisabled();
-        anotherWindow.cleanUp();
-    }
-
-    @Test
-    public void shouldDisableSetAsDefaultButtonAfterMarkingDataSourceAsDefault() {
-        window.button(SET_AS_DEFAULT_BUTTON_NAME).click();
-
-        window.button(SET_AS_DEFAULT_BUTTON_NAME).requireDisabled();
-    }
-
-    @Test
-    public void shouldMarkDataSourceAsDefault() {
-        window.button(SET_AS_DEFAULT_BUTTON_NAME).click();
-
-        assertThat(panel.getCurrentConfigurationState().DEFAULT, is(true));
-    }
-
-    @Test
-    public void shouldInvokeTypingInNameField() {
-        window.textBox(NAME_FIELD).enterText(NEW_NAME_VALUE);
-
-        verify(nameChangedListener, times(NEW_NAME_VALUE.length())).changeApplied(isA(XQueryDataSourceConfiguration
-                .class));
-    }
-
-    @Test
-    public void shouldChangeNameAfterTypingInNameField() {
-        window.textBox(NAME_FIELD).enterText(NEW_NAME_VALUE);
-
-        assertThat(panel.getCurrentConfigurationState().NAME, is(NAME_VALUE + NEW_NAME_VALUE));
+        assertThat(currentConfig.equals(configuration), is(true));
     }
 }

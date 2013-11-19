@@ -20,9 +20,12 @@ import com.intellij.util.xmlb.annotations.AbstractCollection;
 import com.intellij.util.xmlb.annotations.Attribute;
 import com.intellij.util.xmlb.annotations.Tag;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
+import org.intellij.xquery.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.intellij.xquery.util.StringUtils.EMPTY;
 
 /**
  * User: ligasgr
@@ -32,25 +35,25 @@ import java.util.List;
 @Tag("data-source-configuration")
 public class XQueryDataSourceConfiguration implements Cloneable {
     @Attribute("name")
-    public String NAME;
+    public String NAME = EMPTY;
     @Attribute("type")
     public XQueryDataSourceType TYPE;
     @Attribute("configEnabled")
     public boolean CONFIG_ENABLED;
     @Attribute("configFile")
-    public String CONFIG_FILE;
+    public String CONFIG_FILE = EMPTY;
     @Attribute("host")
-    public String HOST;
+    public String HOST = EMPTY;
     @Attribute("port")
-    public String PORT;
+    public String PORT = EMPTY;
     @Attribute("username")
-    public String USERNAME;
+    public String USERNAME = EMPTY;
     @Attribute("password")
-    public String PASSWORD;
+    public String PASSWORD = EMPTY;
     @Attribute("userDefinedLibraryEnabled")
     public boolean USER_DEFINED_LIBRARY_ENABLED;
     @Attribute("databaseName")
-    public String DATABASE_NAME;
+    public String DATABASE_NAME = EMPTY;
     @Attribute("default")
     public boolean DEFAULT;
     @Tag("userDefinedLibraryPaths")

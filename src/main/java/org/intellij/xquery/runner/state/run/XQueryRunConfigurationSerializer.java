@@ -30,19 +30,23 @@ import java.io.Writer;
 public class XQueryRunConfigurationSerializer {
     private final XQueryRunConfiguration configuration;
     private XmlConfigurationAccessor xmlConfigurationAccessor;
+    private VariablesAccessor variablesAccessor;
+    private DataSourceAccessor dataSourceAccessor;
 
     public XQueryRunConfigurationSerializer(XQueryRunConfiguration configuration, XmlConfigurationAccessor
-            xmlConfigurationAccessor) {
+            xmlConfigurationAccessor, VariablesAccessor variablesAccessor, DataSourceAccessor dataSourceAccessor) {
         this.configuration = configuration;
         this.xmlConfigurationAccessor = xmlConfigurationAccessor;
+        this.variablesAccessor = variablesAccessor;
+        this.dataSourceAccessor = dataSourceAccessor;
     }
 
     public void serialize(Writer writer) throws Exception {
-        Element run = new Element("run");
-        configuration.writeVariables(run);
-        xmlConfigurationAccessor.writeConfiguration(configuration, run);
-        configuration.writeDataSourceConfiguration(run);
-        getElementWriter().writeElement(run, writer, System.getProperty("line.separator"));
+        Element xmlRootElement = new Element("run");
+        variablesAccessor.writeVariables(configuration, xmlRootElement);
+        xmlConfigurationAccessor.writeConfiguration(configuration, xmlRootElement);
+        dataSourceAccessor.writeDataSourceConfiguration(configuration, xmlRootElement);
+        getElementWriter().writeElement(xmlRootElement, writer, System.getProperty("line.separator"));
     }
 
     protected ElementWriter getElementWriter() {
