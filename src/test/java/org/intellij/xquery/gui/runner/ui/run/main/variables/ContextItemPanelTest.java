@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.gui.runner.ui.run.main;
+package org.intellij.xquery.gui.runner.ui.run.main.variables;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
@@ -25,7 +25,8 @@ import org.fest.swing.edt.GuiTask;
 import org.intellij.xquery.gui.BaseGuiTest;
 import org.intellij.xquery.gui.PanelTestingFrame;
 import org.intellij.xquery.runner.rt.XQJType;
-import org.intellij.xquery.runner.ui.run.main.ContextItemPanel;
+import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
+import org.intellij.xquery.runner.ui.run.main.variables.ContextItemPanel;
 import org.junit.Test;
 
 import javax.swing.JComponent;
@@ -39,15 +40,16 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.sort;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.intellij.xquery.runner.ui.run.main.ContextItemPanel.CONTEXT_ITEM_OPTIONS_PANEL;
-import static org.intellij.xquery.runner.ui.run.main.ContextItemPanel.CONTEXT_ITEM_PANEL;
-import static org.intellij.xquery.runner.ui.run.main.ContextItemPanel.CONTEXT_ITEM_TYPE;
-import static org.intellij.xquery.runner.ui.run.main.ContextItemPanel.EDITOR_CONTENT;
-import static org.intellij.xquery.runner.ui.run.main.ContextItemPanel.EDITOR_RADIO_BUTTON;
-import static org.intellij.xquery.runner.ui.run.main.ContextItemPanel.FILE_PATH;
-import static org.intellij.xquery.runner.ui.run.main.ContextItemPanel.FILE_RADIO_BUTTON;
-import static org.intellij.xquery.runner.ui.run.main.ContextItemPanel.SHOW_EDITOR_BUTTON;
+import static org.intellij.xquery.runner.ui.run.main.variables.ContextItemPanel.CONTEXT_ITEM_OPTIONS_PANEL;
+import static org.intellij.xquery.runner.ui.run.main.variables.ContextItemPanel.CONTEXT_ITEM_PANEL;
+import static org.intellij.xquery.runner.ui.run.main.variables.ContextItemPanel.CONTEXT_ITEM_TYPE;
+import static org.intellij.xquery.runner.ui.run.main.variables.ContextItemPanel.EDITOR_CONTENT;
+import static org.intellij.xquery.runner.ui.run.main.variables.ContextItemPanel.EDITOR_RADIO_BUTTON;
+import static org.intellij.xquery.runner.ui.run.main.variables.ContextItemPanel.FILE_PATH;
+import static org.intellij.xquery.runner.ui.run.main.variables.ContextItemPanel.FILE_RADIO_BUTTON;
+import static org.intellij.xquery.runner.ui.run.main.variables.ContextItemPanel.SHOW_EDITOR_BUTTON;
 import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -254,7 +256,13 @@ public class ContextItemPanelTest extends BaseGuiTest {
         GuiActionRunner.execute(new GuiTask() {
             @Override
             protected void executeInEDT() throws Throwable {
-                panel.init(isEnabled, content, filePath, contextItemFromEditorEnabled, type);
+                XQueryRunConfiguration configuration = mock(XQueryRunConfiguration.class);
+                given(configuration.isContextItemEnabled()).willReturn(isEnabled);
+                given(configuration.getContextItemText()).willReturn(content);
+                given(configuration.getContextItemFile()).willReturn(filePath);
+                given(configuration.isContextItemFromEditorEnabled()).willReturn(contextItemFromEditorEnabled);
+                given(configuration.getContextItemType()).willReturn(type);
+                panel.init(configuration);
             }
         });
     }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.intellij.xquery.runner.ui.run.main;
+package org.intellij.xquery.runner.ui.run.main.variables;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.ui.AnActionButton;
@@ -25,6 +25,7 @@ import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.TableView;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.ListTableModel;
+import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.intellij.xquery.runner.state.run.XQueryRunVariable;
 import org.intellij.xquery.runner.state.run.XQueryRunVariables;
 import org.intellij.xquery.runner.ui.run.main.variables.IsActiveColumnInfo;
@@ -42,7 +43,6 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * User: ligasgr
@@ -142,11 +142,6 @@ public class VariablesPanel extends JPanel implements PanelWithAnchor {
         return variablesTable;
     }
 
-    public void setVariables(XQueryRunVariables variables) {
-        ArrayList<XQueryRunVariable> newList = new ArrayList<XQueryRunVariable>(variables.getVariables());
-        variablesModel.setItems(newList);
-    }
-
     private static boolean showEditorDialog(@NotNull XQueryRunVariable variable) {
         VariableDialogWrapper wrapper = new VariableDialogWrapper(new VariableDialog());
         wrapper.init(variable);
@@ -158,10 +153,6 @@ public class VariablesPanel extends JPanel implements PanelWithAnchor {
         return false;
     }
 
-    public Collection<XQueryRunVariable> getVariables() {
-        return variablesModel.getItems();
-    }
-
     @Override
     public JComponent getAnchor() {
         return anchor;
@@ -170,6 +161,15 @@ public class VariablesPanel extends JPanel implements PanelWithAnchor {
     @Override
     public void setAnchor(@Nullable JComponent anchor) {
         this.anchor = anchor;
+    }
+
+    public void applyChanges(XQueryRunConfiguration configuration) {
+        configuration.setVariables(new XQueryRunVariables(variablesModel.getItems()));
+    }
+
+    public void init(XQueryRunVariables variables) {
+        ArrayList<XQueryRunVariable> newList = new ArrayList<XQueryRunVariable>(variables.getVariables());
+        variablesModel.setItems(newList);
     }
 }
 

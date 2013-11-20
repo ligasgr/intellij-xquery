@@ -19,27 +19,18 @@ package org.intellij.xquery.runner.ui.run.main;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.ui.PanelWithAnchor;
 import com.intellij.util.ui.UIUtil;
-import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
-import org.intellij.xquery.runner.state.run.XQueryRunVariables;
-import org.intellij.xquery.runner.ui.datasources.DataSourceDetailsPanel;
-import org.intellij.xquery.runner.ui.datasources.DataSourceListPanel;
-import org.intellij.xquery.runner.ui.datasources.DataSourcesSettingsForm;
-import org.intellij.xquery.runner.ui.run.main.datasource.DataSourceSelector;
-import org.intellij.xquery.runner.ui.run.main.datasource.DataSourcesDialog;
-import org.intellij.xquery.runner.ui.run.main.module.XQueryModuleSelector;
+import org.intellij.xquery.runner.ui.run.main.datasource.DataSourcePanel;
+import org.intellij.xquery.runner.ui.run.main.module.ModuleSelectionPanel;
+import org.intellij.xquery.runner.ui.run.main.variables.ContextItemPanel;
+import org.intellij.xquery.runner.ui.run.main.variables.VariablesPanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * User: ligasgr
@@ -48,32 +39,17 @@ import java.awt.event.ActionListener;
  */
 public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfiguration> implements PanelWithAnchor {
 
+    private ModuleSelectionPanel moduleSelectionPanel;
     private VariablesPanel variablesPanel;
-    private LabeledComponent<XQueryModuleSelector> mainFile;
     private ContextItemPanel contextItemPanel;
+    private DataSourcePanel dataSourcePanel;
     private final Project project;
     private JComponent anchor;
     private JPanel editor;
-    private JButton configureDataSourcesButton;
-    private LabeledComponent<JComboBox> dataSourceSelectorComponent;
-    private DataSourceSelector dataSourceSelector;
 
     public RunConfigurationMainTab(final Project project) {
         this.project = project;
-        dataSourceSelector = new DataSourceSelector(dataSourceSelectorComponent.getComponent());
-        configureDataSourcesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DataSourceDetailsPanel dataSourceDetailsPanel = new DataSourceDetailsPanel();
-                DataSourceListPanel dataSourceListPanel = new DataSourceListPanel(dataSourceDetailsPanel);
-                DataSourcesSettingsForm settingsForm = new DataSourcesSettingsForm(XQueryDataSourcesSettings
-                        .getInstance()
-                        .getDataSourceConfigurations(), dataSourceListPanel, dataSourceDetailsPanel);
-                new DataSourcesDialog(editor, dataSourceSelector, settingsForm).show();
-            }
-        });
-
-        anchor = UIUtil.mergeComponentsWithAnchor(mainFile, contextItemPanel, variablesPanel);
+        anchor = UIUtil.mergeComponentsWithAnchor(moduleSelectionPanel, contextItemPanel, variablesPanel, dataSourcePanel);
     }
 
     @Override
@@ -83,35 +59,26 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
 
     @Override
     public void setAnchor(@Nullable JComponent anchor) {
-        mainFile.setAnchor(anchor);
+        moduleSelectionPanel.setAnchor(anchor);
         contextItemPanel.setAnchor(anchor);
         variablesPanel.setAnchor(anchor);
-    }
-
-    public XQueryModuleSelector getMainFileField() {
-        return mainFile.getComponent();
+        dataSourcePanel.setAnchor(anchor);
     }
 
     @Override
     protected void resetEditorFrom(XQueryRunConfiguration configuration) {
-        getMainFileField().setText(configuration.getMainFileName());
-        variablesPanel.setVariables(configuration.getVariables());
-        contextItemPanel.init(configuration.isContextItemEnabled(), configuration.getContextItemText(),
-                configuration.getContextItemFile(), configuration.isContextItemFromEditorEnabled(),
-                configuration.getContextItemType());
-        dataSourceSelector.reset(configuration);
+        moduleSelectionPanel.init(configuration);
+        variablesPanel.init(configuration.getVariables());
+        contextItemPanel.init(configuration);
+        dataSourcePanel.init(configuration);
     }
 
     @Override
     protected void applyEditorTo(XQueryRunConfiguration configuration) throws ConfigurationException {
-        configuration.setMainFileName(getMainFileField().getText());
-        configuration.setVariables(new XQueryRunVariables(variablesPanel.getVariables()));
-        configuration.setContextItemEnabled(contextItemPanel.isContextItemEnabled());
-        configuration.setContextItemFile(contextItemPanel.getContextItemPath());
-        configuration.setContextItemText(contextItemPanel.getContextItemEditorContent());
-        configuration.setContextItemFromEditorEnabled(contextItemPanel.isContextItemFromEditorEnabled());
-        configuration.setContextItemType(contextItemPanel.getContextItemType());
-        dataSourceSelector.applyTo(configuration);
+        moduleSelectionPanel.applyChanges(configuration);
+        variablesPanel.applyChanges(configuration);
+        contextItemPanel.applyChanges(configuration);
+        dataSourcePanel.applyChanges(configuration);
     }
 
     @NotNull
@@ -125,8 +92,7 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
     }
 
     private void createUIComponents() {
-        mainFile = new LabeledComponent<XQueryModuleSelector>();
-        mainFile.setComponent(new XQueryModuleSelector(project));
         contextItemPanel = new ContextItemPanel(project);
+        moduleSelectionPanel = new ModuleSelectionPanel(project);
     }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.ui.run.main;
+package org.intellij.xquery.runner.ui.run.main.variables;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
@@ -33,6 +33,7 @@ import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.components.JBCheckBox;
 import net.miginfocom.swing.MigLayout;
 import org.intellij.xquery.runner.rt.XQJType;
+import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.ButtonGroup;
@@ -152,15 +153,6 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         this.anchor = anchor;
     }
 
-    public void init(boolean isEnabled, String content, String filePath, boolean contextItemFromEditorEnabled, String
-            type) {
-        contextItemEditorContent.getChildComponent().setText(content);
-        contextItemPathField.setText(filePath);
-        setContextItemEnabled(isEnabled);
-        setContextItemFromEditorEnabled(contextItemFromEditorEnabled);
-        contextItemTypeField.getComponent().setSelectedItem(type);
-    }
-
     private void setContextItemFromEditorEnabled(boolean contextItemFromEditorEnabled) {
         if (contextItemFromEditorEnabled) {
             editorRadioButton.setSelected(true);
@@ -209,6 +201,22 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
 
     public String getContextItemType() {
         return (String) contextItemTypeField.getComponent().getSelectedItem();
+    }
+
+    public void applyChanges(XQueryRunConfiguration configuration) {
+        configuration.setContextItemEnabled(isContextItemEnabled());
+        configuration.setContextItemFile(getContextItemPath());
+        configuration.setContextItemText(getContextItemEditorContent());
+        configuration.setContextItemFromEditorEnabled(isContextItemFromEditorEnabled());
+        configuration.setContextItemType(getContextItemType());
+    }
+
+    public void init(XQueryRunConfiguration configuration) {
+        contextItemEditorContent.getChildComponent().setText(configuration.getContextItemText());
+        contextItemPathField.setText(configuration.getContextItemFile());
+        setContextItemEnabled(configuration.isContextItemEnabled());
+        setContextItemFromEditorEnabled(configuration.isContextItemFromEditorEnabled());
+        contextItemTypeField.getComponent().setSelectedItem(configuration.getContextItemType());
     }
 
     private class MyEditorTextFieldWithBrowseButton extends ComponentWithBrowseButton<EditorTextField> {
