@@ -60,6 +60,7 @@ import static org.mockito.Mockito.mock;
 public class ContextItemPanelTest extends BaseGuiTest {
     private static final String CONTEXT_ITEM_PATH_BUTTON = "contextItemPathButton";
     private TestContextItemPanel panel;
+    private static final String TYPE = "xs:string";
 
     @Override
     protected PanelTestingFrame getPanelTestingFrame() {
@@ -159,20 +160,16 @@ public class ContextItemPanelTest extends BaseGuiTest {
 
     @Test
     public void shouldPopulateContextItemType() {
-        String type = "xs:string";
+        initPanel(true, null, null, false, TYPE);
 
-        initPanel(true, null, null, false, type);
-
-        assertThat(panel.getContextItemType(), is(type));
+        assertThat(panel.getContextItemType(), is(TYPE));
     }
 
     @Test
     public void shouldSelectPopulatedType() {
-        String type = "xs:string";
+        initPanel(true, null, null, false, TYPE);
 
-        initPanel(true, null, null, false, type);
-
-        window.comboBox(CONTEXT_ITEM_TYPE).requireSelection(type);
+        window.comboBox(CONTEXT_ITEM_TYPE).requireSelection(TYPE);
     }
 
     @Test

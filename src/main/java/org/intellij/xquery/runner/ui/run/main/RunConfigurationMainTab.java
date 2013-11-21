@@ -68,7 +68,7 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
     @Override
     protected void resetEditorFrom(XQueryRunConfiguration configuration) {
         moduleSelectionPanel.init(configuration);
-        variablesPanel.init(configuration.getVariables());
+        variablesPanel.init(configuration);
         contextItemPanel.init(configuration);
         dataSourcePanel.init(configuration);
     }

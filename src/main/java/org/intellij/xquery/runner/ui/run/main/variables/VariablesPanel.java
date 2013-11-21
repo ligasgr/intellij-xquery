@@ -28,13 +28,6 @@ import com.intellij.util.ui.ListTableModel;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.intellij.xquery.runner.state.run.XQueryRunVariable;
 import org.intellij.xquery.runner.state.run.XQueryRunVariables;
-import org.intellij.xquery.runner.ui.run.main.variables.IsActiveColumnInfo;
-import org.intellij.xquery.runner.ui.run.main.variables.NameColumnInfo;
-import org.intellij.xquery.runner.ui.run.main.variables.NamespaceColumnInfo;
-import org.intellij.xquery.runner.ui.run.main.variables.TypeColumnInfo;
-import org.intellij.xquery.runner.ui.run.main.variables.ValueColumnInfo;
-import org.intellij.xquery.runner.ui.run.main.variables.VariableDialog;
-import org.intellij.xquery.runner.ui.run.main.variables.VariableDialogWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,6 +44,7 @@ import java.util.ArrayList;
  */
 public class VariablesPanel extends JPanel implements PanelWithAnchor {
 
+    public static final String VARIABLES_PANEL = "variablesPanel";
     private final ColumnInfo<XQueryRunVariable, String> NAME = new NameColumnInfo();
     private final ColumnInfo<XQueryRunVariable, String> NAMESPACE = new NamespaceColumnInfo();
     private final ColumnInfo<XQueryRunVariable, String> TYPE = new TypeColumnInfo();
@@ -59,64 +53,24 @@ public class VariablesPanel extends JPanel implements PanelWithAnchor {
     private JComponent anchor;
     private final TableView<XQueryRunVariable> variablesTable;
     private final ListTableModel<XQueryRunVariable> variablesModel;
+    private ToolbarDecorator toolbarDecorator;
 
     public VariablesPanel() {
         super(new BorderLayout());
+        setName(VARIABLES_PANEL);
         variablesModel = new ListTableModel<XQueryRunVariable>(IS_ACTIVE, NAME, NAMESPACE, TYPE, VALUE);
         variablesTable = prepareVariablesTable();
-        ToolbarDecorator variablesTableToolbarDecorator = prepareVariablesTableToolbarDecorator(variablesTable);
-        add(variablesTableToolbarDecorator.createPanel());
+        toolbarDecorator = prepareVariablesTableToolbarDecorator(variablesTable);
+        add(toolbarDecorator.createPanel());
         setPreferredSize(new Dimension(- 1, 120));
     }
 
     private ToolbarDecorator prepareVariablesTableToolbarDecorator(final TableView<XQueryRunVariable> variablesTable) {
         return ToolbarDecorator.createDecorator(variablesTable)
-                .setAddAction(new AnActionButtonRunnable() {
-                    @Override
-                    public void run(AnActionButton button) {
-                        ArrayList<XQueryRunVariable> newList = new ArrayList<XQueryRunVariable>
-                                (variablesModel.getItems());
-                        XQueryRunVariable newVariable = new XQueryRunVariable();
-                        if (showEditorDialog(newVariable)) {
-                            newList.add(newVariable);
-                            variablesModel.setItems(newList);
-                            int index = variablesModel.getRowCount() - 1;
-                            variablesModel.fireTableRowsInserted(index, index);
-                            variablesTable.setRowSelectionInterval(index, index);
-                        }
-                    }
-                }).setRemoveAction(new AnActionButtonRunnable() {
-                    @Override
-                    public void run(AnActionButton button) {
-                        TableUtil.stopEditing(variablesTable);
-                        final int[] selected = variablesTable.getSelectedRows();
-                        if (selected == null || selected.length == 0) return;
-                        for (int i = selected.length - 1; i >= 0; i--) {
-                            variablesModel.removeRow(selected[i]);
-                        }
-                        for (int i = selected.length - 1; i >= 0; i--) {
-                            int idx = selected[i];
-                            variablesModel.fireTableRowsDeleted(idx, idx);
-                        }
-                        int selection = selected[0];
-                        if (selection >= variablesModel.getRowCount()) {
-                            selection = variablesModel.getRowCount() - 1;
-                        }
-                        if (selection >= 0) {
-                            variablesTable.setRowSelectionInterval(selection, selection);
-                        }
-                        variablesTable.requestFocus();
-                    }
-                }).setEditAction(new AnActionButtonRunnable() {
-                    @Override
-                    public void run(AnActionButton button) {
-                        final int selectedRow = variablesTable.getSelectedRow();
-                        final XQueryRunVariable selectedVariable = variablesTable.getSelectedObject();
-                        showEditorDialog(selectedVariable);
-                        variablesModel.fireTableDataChanged();
-                        variablesTable.setRowSelectionInterval(selectedRow, selectedRow);
-                    }
-                }).setRemoveActionUpdater(new AnActionButtonUpdater() {
+                .setAddAction(getAddAction(variablesTable))
+                .setRemoveAction(getRemoveAction(variablesTable))
+                .setEditAction(getUpdateAction(variablesTable))
+                .setRemoveActionUpdater(new AnActionButtonUpdater() {
                     @Override
                     public boolean isEnabled(AnActionEvent e) {
                         return variablesTable.getSelectedRowCount() >= 1;
@@ -128,6 +82,63 @@ public class VariablesPanel extends JPanel implements PanelWithAnchor {
                                 variablesTable.getSelectedObject() != null;
                     }
                 }).disableUpDownActions().initPosition();
+    }
+
+    private AnActionButtonRunnable getUpdateAction(final TableView<XQueryRunVariable> variablesTable) {
+        return new AnActionButtonRunnable() {
+            @Override
+            public void run(AnActionButton button) {
+                final int selectedRow = variablesTable.getSelectedRow();
+                final XQueryRunVariable selectedVariable = variablesTable.getSelectedObject();
+                showEditorDialog(selectedVariable);
+                variablesModel.fireTableDataChanged();
+                variablesTable.setRowSelectionInterval(selectedRow, selectedRow);
+            }
+        };
+    }
+
+    private AnActionButtonRunnable getRemoveAction(final TableView<XQueryRunVariable> variablesTable) {
+        return new AnActionButtonRunnable() {
+            @Override
+            public void run(AnActionButton button) {
+                TableUtil.stopEditing(variablesTable);
+                final int[] selected = variablesTable.getSelectedRows();
+                if (selected == null || selected.length == 0) return;
+                for (int i = selected.length - 1; i >= 0; i--) {
+                    variablesModel.removeRow(selected[i]);
+                }
+                for (int i = selected.length - 1; i >= 0; i--) {
+                    int idx = selected[i];
+                    variablesModel.fireTableRowsDeleted(idx, idx);
+                }
+                int selection = selected[0];
+                if (selection >= variablesModel.getRowCount()) {
+                    selection = variablesModel.getRowCount() - 1;
+                }
+                if (selection >= 0) {
+                    variablesTable.setRowSelectionInterval(selection, selection);
+                }
+                variablesTable.requestFocus();
+            }
+        };
+    }
+
+    private AnActionButtonRunnable getAddAction(final TableView<XQueryRunVariable> variablesTable) {
+        return new AnActionButtonRunnable() {
+            @Override
+            public void run(AnActionButton button) {
+                XQueryRunVariable newVariable = new XQueryRunVariable();
+                if (showEditorDialog(newVariable)) {
+                    ArrayList<XQueryRunVariable> newList = new ArrayList<XQueryRunVariable>(variablesModel
+                            .getItems());
+                    newList.add(newVariable);
+                    variablesModel.setItems(newList);
+                    int index = variablesModel.getRowCount() - 1;
+                    variablesModel.fireTableRowsInserted(index, index);
+                    variablesTable.setRowSelectionInterval(index, index);
+                }
+            }
+        };
     }
 
     private TableView<XQueryRunVariable> prepareVariablesTable() {
@@ -142,7 +153,7 @@ public class VariablesPanel extends JPanel implements PanelWithAnchor {
         return variablesTable;
     }
 
-    private static boolean showEditorDialog(@NotNull XQueryRunVariable variable) {
+    protected boolean showEditorDialog(@NotNull XQueryRunVariable variable) {
         VariableDialogWrapper wrapper = new VariableDialogWrapper(new VariableDialog());
         wrapper.init(variable);
         wrapper.show();
@@ -167,9 +178,14 @@ public class VariablesPanel extends JPanel implements PanelWithAnchor {
         configuration.setVariables(new XQueryRunVariables(variablesModel.getItems()));
     }
 
-    public void init(XQueryRunVariables variables) {
+    public void init(XQueryRunConfiguration configuration) {
+        XQueryRunVariables variables = configuration.getVariables();
         ArrayList<XQueryRunVariable> newList = new ArrayList<XQueryRunVariable>(variables.getVariables());
         variablesModel.setItems(newList);
+    }
+
+    public ToolbarDecorator getToolbarDecorator() {
+        return toolbarDecorator;
     }
 }
 
