@@ -19,7 +19,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.ui.PanelWithAnchor;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
-import org.intellij.xquery.runner.ui.run.main.module.XQueryModuleSelector;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -31,19 +30,21 @@ import java.awt.BorderLayout;
  * Time: 15:45
  */
 public class ModuleSelectionPanel extends JPanel implements PanelWithAnchor {
-    private LabeledComponent<XQueryModuleSelector> mainFile;
+    public static final String MODULE_SELECTION_PANEL = "moduleSelectionPanel";
+    private LabeledComponent<ModuleSelector> mainFile;
     private JComponent anchor;
 
     public ModuleSelectionPanel(Project project) {
         super(new BorderLayout());
-        mainFile = new LabeledComponent<XQueryModuleSelector>();
+        setName(MODULE_SELECTION_PANEL);
+        mainFile = new LabeledComponent<ModuleSelector>();
         mainFile.setText("Main &file");
         mainFile.setLabelLocation("West");
         mainFile.setComponent(getModuleSelector(project));
         add(mainFile);
     }
 
-    public XQueryModuleSelector getMainFileField() {
+    private ModuleSelector getMainFileField() {
         return mainFile.getComponent();
     }
 
@@ -63,7 +64,7 @@ public class ModuleSelectionPanel extends JPanel implements PanelWithAnchor {
         return anchor;
     }
 
-    protected XQueryModuleSelector getModuleSelector(Project project) {
-        return new XQueryModuleSelector(project);
+    protected ModuleSelector getModuleSelector(Project project) {
+        return new ModuleSelector(project);
     }
 }

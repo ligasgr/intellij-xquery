@@ -25,12 +25,12 @@ import org.intellij.xquery.XQueryFileType;
  * Date: 12/11/13
  * Time: 14:14
  */
-public class XQueryModuleDescriptor extends FileTypeDescriptor {
+public class ModuleFileDescriptor extends FileTypeDescriptor {
 
     private static final String EXTENSION_SEPARATOR = ";";
     private ModuleTypeValidator moduleTypeValidator;
 
-    public XQueryModuleDescriptor(ModuleTypeValidator moduleTypeValidator) {
+    public ModuleFileDescriptor(ModuleTypeValidator moduleTypeValidator) {
         super("XQuery module", XQueryFileType.ALL_EXTENSIONS.split(EXTENSION_SEPARATOR));
         this.moduleTypeValidator = moduleTypeValidator;
     }

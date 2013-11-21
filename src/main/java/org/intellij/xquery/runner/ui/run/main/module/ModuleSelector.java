@@ -34,10 +34,14 @@ import java.io.File;
  * Date: 19/09/13
  * Time: 16:27
  */
-public class XQueryModuleSelector extends ComponentWithBrowseButton<EditorTextField> implements TextAccessor {
+public class ModuleSelector extends ComponentWithBrowseButton<EditorTextField> implements TextAccessor {
 
-    public XQueryModuleSelector(Project project) {
+    public ModuleSelector(Project project) {
         super(createEditorTextField(project), null);
+        addBrowseFolderListener(project);
+    }
+
+    protected void addBrowseFolderListener(Project project) {
         addBrowseFolderListener("Choose module", null, project, getDescriptor(), getTextComponentAccessor());
     }
 
@@ -57,7 +61,7 @@ public class XQueryModuleSelector extends ComponentWithBrowseButton<EditorTextFi
     }
 
     private static FileChooserDescriptor getDescriptor() {
-        return new XQueryModuleDescriptor(new MainModuleTypeValidator());
+        return new ModuleFileDescriptor(new MainModuleTypeValidator());
     }
 
     private static TextComponentAccessor<EditorTextField> getTextComponentAccessor() {
