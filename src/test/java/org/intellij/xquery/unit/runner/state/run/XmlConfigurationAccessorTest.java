@@ -36,8 +36,8 @@ public class XmlConfigurationAccessorTest {
     private static final boolean BOOLEAN_VALUE = true;
     private XQueryRunConfiguration originalConfiguration;
     private XQueryRunConfiguration readConfiguration;
-    private XmlConfigurationAccessor accessor;
     private Element element;
+    private XmlConfigurationAccessor accessor;
 
     @Before
     public void setUp() throws Exception {

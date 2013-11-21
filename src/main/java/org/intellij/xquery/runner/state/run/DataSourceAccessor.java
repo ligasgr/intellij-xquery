@@ -26,6 +26,7 @@ import org.jdom.Element;
  * Time: 12:48
  */
 public class DataSourceAccessor {
+
     public void writeDataSourceConfiguration(XQueryRunConfiguration configuration, Element xmlRootElement) {
         String dataSourceName = configuration.getDataSourceName();
         if (dataSourceName != null) {
