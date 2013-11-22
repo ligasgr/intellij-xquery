@@ -3671,19 +3671,21 @@ public class XQueryParser implements PsiParser {
     if (!nextTokenIs(builder_, K_FOR) && !nextTokenIs(builder_, K_LET)
         && replaceVariants(builder_, 2, "<flwor expr>")) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<flwor expr>");
     result_ = InitialClause(builder_, level_ + 1);
-    result_ = result_ && FLWORExpr_1(builder_, level_ + 1);
-    result_ = result_ && ReturnClause(builder_, level_ + 1);
-    if (result_) {
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, FLWORExpr_1(builder_, level_ + 1));
+    result_ = pinned_ && ReturnClause(builder_, level_ + 1) && result_;
+    if (result_ || pinned_) {
       marker_.done(FLWOR_EXPR);
     }
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   // IntermediateClause*

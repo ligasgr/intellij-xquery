@@ -287,7 +287,7 @@ ExprSingle	   ::=   	FLWORExpr
  | IfExpr
  | TryCatchExpr
  | OrExpr
-FLWORExpr	   ::=   	InitialClause IntermediateClause* ReturnClause
+FLWORExpr	   ::=   	InitialClause IntermediateClause* ReturnClause {pin=1}
 private FLWORExprRecover ::= !('count' | 'for' | 'group' | 'let' | 'order' | 'return' | 'stable' | 'where')
 InitialClause	   ::=   	ForClause | LetClause | WindowClause
 IntermediateClause	   ::=   	InitialClause | WhereClause | GroupByClause | OrderByClause | CountClause

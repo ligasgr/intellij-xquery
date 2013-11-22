@@ -29,7 +29,7 @@ public interface XQueryFLWORExpr extends XQueryExprSingle {
   @NotNull
   List<XQueryIntermediateClause> getIntermediateClauseList();
 
-  @NotNull
+  @Nullable
   XQueryReturnClause getReturnClause();
 
 }

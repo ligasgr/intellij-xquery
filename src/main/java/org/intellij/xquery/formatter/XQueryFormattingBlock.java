@@ -137,16 +137,17 @@ public class XQueryFormattingBlock extends AbstractBlock {
     @Override
     public ChildAttributes getChildAttributes(int newChildIndex) {
         IElementType type = myNode.getElementType();
-        Indent childIndent = calculateChildIndent(type);
+        Indent childIndent = calculateChildIndent(type, false);
         if (childIndent == null && newChildIndex > 0) {
             IElementType calculatedType = getIElementType(newChildIndex);
-            childIndent = calculateChildIndent(calculatedType);
+            childIndent = calculateChildIndent(calculatedType, true);
         }
         return new ChildAttributes(childIndent != null ? childIndent : Indent.getNoneIndent(), null);
     }
 
-    private Indent calculateChildIndent(IElementType type) {
-        if (type == ENCLOSED_EXPR || type == FUNCTION_DECL || type == FLWOR_EXPR || type == PARENTHESIZED_EXPR)
+    private Indent calculateChildIndent(IElementType type, boolean fromCalculatedType) {
+        if (type == ENCLOSED_EXPR || type == FUNCTION_DECL || type == FLWOR_EXPR || (!fromCalculatedType && type == PARENTHESIZED_EXPR)
+                || type == LET_BINDING || type == OP_ASSIGN)
             return Indent.getNormalIndent();
         return null;
     }

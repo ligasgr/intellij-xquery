@@ -45,9 +45,9 @@ public class XQueryFLWORExprImpl extends XQueryExprSingleImpl implements XQueryF
   }
 
   @Override
-  @NotNull
+  @Nullable
   public XQueryReturnClause getReturnClause() {
-    return findNotNullChildByClass(XQueryReturnClause.class);
+    return findChildByClass(XQueryReturnClause.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

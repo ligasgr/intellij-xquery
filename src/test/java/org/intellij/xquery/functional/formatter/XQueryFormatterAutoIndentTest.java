@@ -58,6 +58,34 @@ public class XQueryFormatterAutoIndentTest extends BaseFunctionalTestCase {
         doTest();
     }
 
+    public void testAfterParenthesizedExpression() throws Exception {
+        doTest();
+    }
+
+    public void testInsideLetBinding() throws Exception {
+        doTest();
+    }
+
+    public void testInsideForBindingNestedInLet() throws Exception {
+        doTest();
+    }
+
+    public void testInsideForLetBindingNestedInLet() throws Exception {
+        doTest();
+    }
+
+    public void testInsideForForBindingNestedInLet() throws Exception {
+        doTest();
+    }
+
+    public void testInsideForLetReturnBindingNestedInLet() throws Exception {
+        doTest();
+    }
+
+    public void testInsideForLetReturnValueBindingNestedInLet() throws Exception {
+        doTest();
+    }
+
     private void doTest() throws Exception {
         final String testName = getTestName(false);
         myFixture.configureByFile(testName + ".xq");
