@@ -3705,7 +3705,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // !('count' | 'for' | 'group' | 'let' | 'order' | 'return' | 'stable' | 'where')
+  // !('count' | 'for' | 'group' | 'let' | 'order' | 'return' | 'stable' | 'where' | '}' | '<' TagName | '</' TagName )
   static boolean FLWORExprRecover(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FLWORExprRecover")) return false;
     boolean result_ = false;
@@ -3717,7 +3717,7 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // 'count' | 'for' | 'group' | 'let' | 'order' | 'return' | 'stable' | 'where'
+  // 'count' | 'for' | 'group' | 'let' | 'order' | 'return' | 'stable' | 'where' | '}' | '<' TagName | '</' TagName
   private static boolean FLWORExprRecover_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FLWORExprRecover_0")) return false;
     boolean result_ = false;
@@ -3730,6 +3730,41 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, K_RETURN);
     if (!result_) result_ = consumeToken(builder_, K_STABLE);
     if (!result_) result_ = consumeToken(builder_, K_WHERE);
+    if (!result_) result_ = consumeToken(builder_, R_C_BRACE);
+    if (!result_) result_ = FLWORExprRecover_0_9(builder_, level_ + 1);
+    if (!result_) result_ = FLWORExprRecover_0_10(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // '<' TagName
+  private static boolean FLWORExprRecover_0_9(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FLWORExprRecover_0_9")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, LT_CHAR);
+    result_ = result_ && TagName(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // '</' TagName
+  private static boolean FLWORExprRecover_0_10(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FLWORExprRecover_0_10")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, END_TAG);
+    result_ = result_ && TagName(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }

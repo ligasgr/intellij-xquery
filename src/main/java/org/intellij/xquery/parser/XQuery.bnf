@@ -288,7 +288,7 @@ ExprSingle	   ::=   	FLWORExpr
  | TryCatchExpr
  | OrExpr
 FLWORExpr	   ::=   	InitialClause IntermediateClause* ReturnClause {pin=1}
-private FLWORExprRecover ::= !('count' | 'for' | 'group' | 'let' | 'order' | 'return' | 'stable' | 'where')
+private FLWORExprRecover ::= !('count' | 'for' | 'group' | 'let' | 'order' | 'return' | 'stable' | 'where' | '}' | '<' TagName | '</' TagName )
 InitialClause	   ::=   	ForClause | LetClause | WindowClause
 IntermediateClause	   ::=   	InitialClause | WhereClause | GroupByClause | OrderByClause | CountClause
 ForClause	   ::=   	"for" ForBinding ("," ForBinding)* {pin=1 recoverUntil=FLWORExprRecover}
