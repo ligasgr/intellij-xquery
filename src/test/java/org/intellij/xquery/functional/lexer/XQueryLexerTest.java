@@ -237,71 +237,10 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
-    public void testVariableDeclaration() throws Exception {
-        assertProducedTokens("declare variable $x := 'value';", new String[]{
-                "WHITE_SPACE", "",
-                "declare", "declare",
-                "WHITE_SPACE", " ",
-                "variable", "variable",
-                "WHITE_SPACE", " ",
-                "$", "$",
-                "NCName", "x",
-                "WHITE_SPACE", " ",
-                ":=", ":=",
-                "WHITE_SPACE", " ",
-                "StringLiteral", "'value'",
-                ";", ";"
-        });
-    }
-
     public void testVariableReference() throws Exception {
         assertProducedTokens("$y", new String[]{
                 "$", "$",
                 "NCName", "y"
-        });
-    }
-
-    public void testFunctionDeclaration() throws Exception {
-        assertProducedTokens("declare function x() {()};", new String[]{
-                "WHITE_SPACE", "",
-                "declare", "declare",
-                "WHITE_SPACE", " ",
-                "function", "function",
-                "WHITE_SPACE", " ",
-                "NCName", "x",
-                "(", "(",
-                ")", ")",
-                "WHITE_SPACE", " ",
-                "{", "{",
-                "(", "(",
-                ")", ")",
-                "}", "}",
-                ";", ";"
-        });
-    }
-
-    public void testFunctionDeclarationWithComments() throws Exception {
-        assertProducedTokens("declare(: comment :)function (:comment:) x() {()};", new String[]{
-                "WHITE_SPACE", "",
-                "declare", "declare",
-                "ExprCommentStart", "(:",
-                "ExprCommentContent", " comment ",
-                "ExprCommentEnd", ":)",
-                "function", "function",
-                "WHITE_SPACE", " ",
-                "ExprCommentStart", "(:",
-                "ExprCommentContent", "comment",
-                "ExprCommentEnd", ":)",
-                "WHITE_SPACE", " ",
-                "NCName", "x",
-                "(", "(",
-                ")", ")",
-                "WHITE_SPACE", " ",
-                "{", "{",
-                "(", "(",
-                ")", ")",
-                "}", "}",
-                ";", ";"
         });
     }
 
@@ -636,36 +575,6 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
-    public void testImportModuleWithPrefix() throws Exception {
-        assertProducedTokens("import module namespace ex = 'example';", new String[]{
-                "WHITE_SPACE", "",
-                "import", "import",
-                "WHITE_SPACE", " ",
-                "module", "module",
-                "WHITE_SPACE", " ",
-                "namespace", "namespace",
-                "WHITE_SPACE", " ",
-                "NCName", "ex",
-                "WHITE_SPACE", " ",
-                "=", "=",
-                "WHITE_SPACE", " ",
-                "StringLiteral", "'example'",
-                ";", ";"
-        });
-    }
-
-    public void testImportModuleWithoutPrefix() throws Exception {
-        assertProducedTokens("import module 'example';", new String[]{
-                "WHITE_SPACE", "",
-                "import", "import",
-                "WHITE_SPACE", " ",
-                "module", "module",
-                "WHITE_SPACE", " ",
-                "StringLiteral", "'example'",
-                ";", ";"
-        });
-    }
-
     public void testComparisonWithFunctionResult() throws Exception {
         assertProducedTokens("if (0 < string-length('')) then 0 else 1", new String[]{
                 "if", "if",
@@ -805,78 +714,6 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
-    public void testContextItemAs() throws Exception {
-        assertProducedTokens("declare context item as item() external;", new String[]{
-                "WHITE_SPACE", "",
-                "declare", "declare",
-                "WHITE_SPACE", " ",
-                "context", "context",
-                "WHITE_SPACE", " ",
-                "item", "item",
-                "WHITE_SPACE", " ",
-                "as", "as",
-                "WHITE_SPACE", " ",
-                "item", "item",
-                "(", "(",
-                ")", ")",
-                "WHITE_SPACE", " ",
-                "external", "external",
-                "WHITE_SPACE", "",
-                ";", ";"
-        });
-    }
-
-    public void testContextItemExternal() throws Exception {
-        assertProducedTokens("declare context item external;", new String[]{
-                "WHITE_SPACE", "",
-                "declare", "declare",
-                "WHITE_SPACE", " ",
-                "context", "context",
-                "WHITE_SPACE", " ",
-                "item", "item",
-                "WHITE_SPACE", " ",
-                "external", "external",
-                "WHITE_SPACE", "",
-                ";", ";"
-        });
-    }
-
-    public void testContextItemWithValue() throws Exception {
-        assertProducedTokens("declare context item := ();", new String[]{
-                "WHITE_SPACE", "",
-                "declare", "declare",
-                "WHITE_SPACE", " ",
-                "context", "context",
-                "WHITE_SPACE", " ",
-                "item", "item",
-                "WHITE_SPACE", " ",
-                ":=", ":=",
-                "WHITE_SPACE", " ",
-                "(", "(",
-                ")", ")",
-                ";", ";"
-        });
-    }
-
-    public void testContextItemWithDefaultValue() throws Exception {
-        assertProducedTokens("declare context item external := ();", new String[]{
-                "WHITE_SPACE", "",
-                "declare", "declare",
-                "WHITE_SPACE", " ",
-                "context", "context",
-                "WHITE_SPACE", " ",
-                "item", "item",
-                "WHITE_SPACE", " ",
-                "external", "external",
-                "WHITE_SPACE", " ",
-                ":=", ":=",
-                "WHITE_SPACE", " ",
-                "(", "(",
-                ")", ")",
-                ";", ";"
-        });
-    }
-
     public void testItemType() throws Exception {
         assertProducedTokens("declare variable $item as item() external;", new String[]{
                 "WHITE_SPACE", "",
@@ -999,6 +836,657 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testModuleNamespace() throws Exception {
+        assertProducedTokens("module namespace a = 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "module", "module",
+                "WHITE_SPACE", " ",
+                "namespace", "namespace",
+                "WHITE_SPACE", " ",
+                "NCName", "a",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareDefaultFunctionNamespace() throws Exception {
+        assertProducedTokens("declare default function namespace 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "default", "default",
+                "WHITE_SPACE", " ",
+                "function", "function",
+                "WHITE_SPACE", " ",
+                "namespace", "namespace",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareDefaultElementNamespace() throws Exception {
+        assertProducedTokens("declare default element namespace 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "default", "default",
+                "WHITE_SPACE", " ",
+                "element", "element",
+                "WHITE_SPACE", " ",
+                "namespace", "namespace",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareBoundarySpacePreserve() throws Exception {
+        assertProducedTokens("declare boundary-space preserve;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "boundary-space", "boundary-space",
+                "WHITE_SPACE", " ",
+                "preserve", "preserve",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareBoundarySpaceStrip() throws Exception {
+        assertProducedTokens("declare boundary-space strip;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "boundary-space", "boundary-space",
+                "WHITE_SPACE", " ",
+                "strip", "strip",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareDefaultCollation() throws Exception {
+        assertProducedTokens("declare default collation 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "default", "default",
+                "WHITE_SPACE", " ",
+                "collation", "collation",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareBaseUri() throws Exception {
+        assertProducedTokens("declare base-uri 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "base-uri", "base-uri",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareConstructionStrip() throws Exception {
+        assertProducedTokens("declare construction strip;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "construction", "construction",
+                "WHITE_SPACE", " ",
+                "strip", "strip",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareConstructionPreserve() throws Exception {
+        assertProducedTokens("declare construction preserve;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "construction", "construction",
+                "WHITE_SPACE", " ",
+                "preserve", "preserve",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareOrderingOrdered() throws Exception {
+        assertProducedTokens("declare ordering ordered;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "ordering", "ordering",
+                "WHITE_SPACE", " ",
+                "ordered", "ordered",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareOrderingUnordered() throws Exception {
+        assertProducedTokens("declare ordering unordered;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "ordering", "ordering",
+                "WHITE_SPACE", " ",
+                "unordered", "unordered",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareDefaultOrderEmptyGreatest() throws Exception {
+        assertProducedTokens("declare default order empty greatest;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "default", "default",
+                "WHITE_SPACE", " ",
+                "order", "order",
+                "WHITE_SPACE", " ",
+                "empty", "empty",
+                "WHITE_SPACE", " ",
+                "greatest", "greatest",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareDefaultOrderEmptyLeast() throws Exception {
+        assertProducedTokens("declare default order empty least;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "default", "default",
+                "WHITE_SPACE", " ",
+                "order", "order",
+                "WHITE_SPACE", " ",
+                "empty", "empty",
+                "WHITE_SPACE", " ",
+                "least", "least",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareCopyNamespacePreserveInherit() throws Exception {
+        assertProducedTokens("declare copy-namespaces preserve, inherit;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "copy-namespaces", "copy-namespaces",
+                "WHITE_SPACE", " ",
+                "preserve", "preserve",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "inherit", "inherit",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareCopyNamespaceNoPreserveNoInherit() throws Exception {
+        assertProducedTokens("declare copy-namespaces no-preserve, no-inherit;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "copy-namespaces", "copy-namespaces",
+                "WHITE_SPACE", " ",
+                "no-preserve", "no-preserve",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "no-inherit", "no-inherit",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareDecimalFormat() throws Exception {
+        assertProducedTokens("declare decimal-format a:a " +
+                "decimal-separator = 'a' grouping-separator = 'a' infinity = 'a' " +
+                "minus-sign = 'a' NaN = 'a' percent = 'a' per-mille = 'a' " +
+                "zero-digit = 'a' digit = 'a' pattern-separator = 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "decimal-format", "decimal-format",
+                "WHITE_SPACE", " ",
+                "NCName", "a",
+                ":", ":",
+                "NCName", "a",
+                "WHITE_SPACE", " ",
+                "decimal-separator", "decimal-separator",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", " ",
+                "grouping-separator", "grouping-separator",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", " ",
+                "infinity", "infinity",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", " ",
+                "minus-sign", "minus-sign",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", " ",
+                "NaN", "NaN",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", " ",
+                "percent", "percent",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", " ",
+                "per-mille", "per-mille",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", " ",
+                "zero-digit", "zero-digit",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", " ",
+                "digit", "digit",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", " ",
+                "pattern-separator", "pattern-separator",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareDefaultDecimalFormat() throws Exception {
+        assertProducedTokens("declare default decimal-format;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "default", "default",
+                "WHITE_SPACE", " ",
+                "decimal-format", "decimal-format",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareNamespace() throws Exception {
+        assertProducedTokens("declare namespace a = 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "namespace", "namespace",
+                "WHITE_SPACE", " ",
+                "NCName", "a",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testImportSchema() throws Exception {
+        assertProducedTokens("import schema 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "import", "import",
+                "WHITE_SPACE", " ",
+                "schema", "schema",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testImportSchemaAtLocation() throws Exception {
+        assertProducedTokens("import schema 'a' at 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "import", "import",
+                "WHITE_SPACE", " ",
+                "schema", "schema",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", " ",
+                "at", "at",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testImportSchemaAtMultipleLocations() throws Exception {
+        assertProducedTokens("import schema 'a' at 'a', 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "import", "import",
+                "WHITE_SPACE", " ",
+                "schema", "schema",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", " ",
+                "at", "at",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testImportSchemaNamespaceAtMultipleLocations() throws Exception {
+        assertProducedTokens("import schema namespace a = 'a' at 'a', 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "import", "import",
+                "WHITE_SPACE", " ",
+                "schema", "schema",
+                "WHITE_SPACE", " ",
+                "namespace", "namespace",
+                "WHITE_SPACE", " ",
+                "NCName", "a",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", " ",
+                "at", "at",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testImportSchemaDefaultElementNamespaceAtMultipleLocations() throws Exception {
+        assertProducedTokens("import schema default element namespace 'a' at 'a', 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "import", "import",
+                "WHITE_SPACE", " ",
+                "schema", "schema",
+                "WHITE_SPACE", " ",
+                "default", "default",
+                "WHITE_SPACE", " ",
+                "element", "element",
+                "WHITE_SPACE", " ",
+                "namespace", "namespace",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", " ",
+                "at", "at",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testImportModuleWithPrefix() throws Exception {
+        assertProducedTokens("import module namespace ex = 'example';", new String[]{
+                "WHITE_SPACE", "",
+                "import", "import",
+                "WHITE_SPACE", " ",
+                "module", "module",
+                "WHITE_SPACE", " ",
+                "namespace", "namespace",
+                "WHITE_SPACE", " ",
+                "NCName", "ex",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'example'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testImportModuleWithoutPrefix() throws Exception {
+        assertProducedTokens("import module 'example';", new String[]{
+                "WHITE_SPACE", "",
+                "import", "import",
+                "WHITE_SPACE", " ",
+                "module", "module",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'example'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testImportModuleWithoutPrefixAtLocation() throws Exception {
+        assertProducedTokens("import module 'example' at 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "import", "import",
+                "WHITE_SPACE", " ",
+                "module", "module",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'example'",
+                "WHITE_SPACE", " ",
+                "at", "at",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testImportModuleWithoutPrefixAtMultipleLocations() throws Exception {
+        assertProducedTokens("import module 'example' at 'a', 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "import", "import",
+                "WHITE_SPACE", " ",
+                "module", "module",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'example'",
+                "WHITE_SPACE", " ",
+                "at", "at",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareContextItemAs() throws Exception {
+        assertProducedTokens("declare context item as item() external;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "context", "context",
+                "WHITE_SPACE", " ",
+                "item", "item",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "WHITE_SPACE", " ",
+                "item", "item",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "external", "external",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareContextItemExternal() throws Exception {
+        assertProducedTokens("declare context item external;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "context", "context",
+                "WHITE_SPACE", " ",
+                "item", "item",
+                "WHITE_SPACE", " ",
+                "external", "external",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareContextItemWithValue() throws Exception {
+        assertProducedTokens("declare context item := ();", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "context", "context",
+                "WHITE_SPACE", " ",
+                "item", "item",
+                "WHITE_SPACE", " ",
+                ":=", ":=",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                ")", ")",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareContextItemWithDefaultValue() throws Exception {
+        assertProducedTokens("declare context item external := ();", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "context", "context",
+                "WHITE_SPACE", " ",
+                "item", "item",
+                "WHITE_SPACE", " ",
+                "external", "external",
+                "WHITE_SPACE", " ",
+                ":=", ":=",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                ")", ")",
+                ";", ";"
+        });
+    }
+
+    public void testDeclareOption() throws Exception {
+        assertProducedTokens("declare option a:a 'a';", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "option", "option",
+                "WHITE_SPACE", " ",
+                "NCName", "a",
+                ":", ":",
+                "NCName", "a",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
+
+    public void testVariableDeclaration() throws Exception {
+        assertProducedTokens("declare variable $x := 'value';", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "variable", "variable",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "x",
+                "WHITE_SPACE", " ",
+                ":=", ":=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'value'",
+                ";", ";"
+        });
+    }
+
+    public void testFunctionDeclaration() throws Exception {
+        assertProducedTokens("declare function x() {()};", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "function", "function",
+                "WHITE_SPACE", " ",
+                "NCName", "x",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "(", "(",
+                ")", ")",
+                "}", "}",
+                ";", ";"
+        });
+    }
+
+    public void testFunctionDeclarationWithComments() throws Exception {
+        assertProducedTokens("declare(: comment :)function (:comment:) x() {()};", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "ExprCommentStart", "(:",
+                "ExprCommentContent", " comment ",
+                "ExprCommentEnd", ":)",
+                "function", "function",
+                "WHITE_SPACE", " ",
+                "ExprCommentStart", "(:",
+                "ExprCommentContent", "comment",
+                "ExprCommentEnd", ":)",
+                "WHITE_SPACE", " ",
+                "NCName", "x",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "(", "(",
+                ")", ")",
+                "}", "}",
+                ";", ";"
+        });
+    }
+
     public void testFunctionDeclarationWithSimpleAnnotation() throws Exception {
         assertProducedTokens("declare %rest:path function x() {()};", new String[]{
                 "WHITE_SPACE", "",
@@ -1090,4 +1578,5 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ";", ";"
         });
     }
+
 }

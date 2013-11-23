@@ -187,8 +187,6 @@ SC=({S} | "(:" {Char}* ~":)")+
 "ascending" / {SC} ("empty"|"collation"|"for"|"let"|"order"|"stable"|"group"|"count"|"return"|",")   {return XQueryTypes.K_ASCENDING;}
 "descending" / {SC}? ","                   {return XQueryTypes.K_DESCENDING;}
 "descending" / {SC} ("empty"|"collation"|"for"|"let"|"order"|"stable"|"group"|"count"|"return"|",")  {return XQueryTypes.K_DESCENDING;}
-"inherit" / {SC}? ";"                      {return XQueryTypes.K_INHERIT;}
-"no-inherit" / {SC}? ";"                   {return XQueryTypes.K_NO_INHERIT;}
 "import"                                   {yypushback(yylength()); pushState(IMPORT_RECOGNITION); return TokenType.WHITE_SPACE;}
 "module"                                   {yypushback(yylength()); pushState(MODULE_RECOGNITION); return TokenType.WHITE_SPACE;}
 "xquery"                                   {yypushback(yylength()); pushState(XQUERY_RECOGNITION); return TokenType.WHITE_SPACE;}
@@ -382,7 +380,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "copy-namespaces" / {SC} ("preserve"|"no-preserve") {return XQueryTypes.K_COPY_NAMESPACES;}
 "preserve" / {SC}? (";"|",")               {return XQueryTypes.K_PRESERVE;}
 "no-preserve" / {SC}? ","                  {return XQueryTypes.K_NO_PRESERVE;}
-"decimal-format" / {SC} ({NCName} | "decimal-separator" | "grouping-separator" | "infinity" | "minus-sign" | "NaN" | "percent" | "per-mille" | "zero-digit" | "digit" | "pattern-separator")                          {return XQueryTypes.K_DECIMAL_FORMAT;}
+"decimal-format" / ({SC} ({NCName} | "decimal-separator" | "grouping-separator" | "infinity" | "minus-sign" | "NaN" | "percent" | "per-mille" | "zero-digit" | "digit" | "pattern-separator") | {SC}? ";")                          {return XQueryTypes.K_DECIMAL_FORMAT;}
 "decimal-separator" / {SC}? "="            {return XQueryTypes.K_DECIMAL_SEPARATOR;}
 "grouping-separator" / {SC}? "="           {return XQueryTypes.K_GROUPING_SEPARATOR;}
 "infinity" / {SC}? "="                     {return XQueryTypes.K_INFINITY;}
@@ -420,12 +418,19 @@ SC=({S} | "(:" {Char}* ~":)")+
 "("                                        {return XQueryTypes.L_PAR;}
 ")"                                        {return XQueryTypes.R_PAR;}
 ","                                        {return XQueryTypes.COMMA;}
+"order" / {SC} "empty"                     {return XQueryTypes.K_ORDER;}
+"greatest" / {SC}? (";"|",")               {return XQueryTypes.K_GREATEST;}
+"least" / {SC}? (";"|",")                  {return XQueryTypes.K_LEAST;}
+"inherit" / {SC}? ";"                      {return XQueryTypes.K_INHERIT;}
+"no-inherit" / {SC}? ";"                   {return XQueryTypes.K_NO_INHERIT;}
 {NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 <IMPORT_RECOGNITION> {
 {S}                                        {return TokenType.WHITE_SPACE;}
+"\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"'"                                        {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
 "(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
 "import" / {SC} ("schema"|"module")        {return XQueryTypes.K_IMPORT;}
 "schema" / {SC} ("namespace"|"default"|"\""|"'") {return XQueryTypes.K_SCHEMA;}
@@ -433,6 +438,9 @@ SC=({S} | "(:" {Char}* ~":)")+
 "module" / {SC} ("namespace"|"\""|"'")     {return XQueryTypes.K_MODULE;}
 "element" / {SC} "namespace"               {return XQueryTypes.K_ELEMENT;}
 "namespace" / {SC} ({NCName}|"\""|"'"|"{") {return XQueryTypes.K_NAMESPACE;}
+"at" / {SC} ("\""|"'")                     {return XQueryTypes.K_AT;}
+","                                        {return XQueryTypes.COMMA;}
+"="                                        {return XQueryTypes.EQUAL;}
 {NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
