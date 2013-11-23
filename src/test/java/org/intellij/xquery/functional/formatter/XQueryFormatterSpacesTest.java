@@ -118,16 +118,7 @@ public class XQueryFormatterSpacesTest extends XQueryFormattingModelBuilderTest 
         executeTest(withSpaces, withoutSpaces);
     }
 
-    public void testSpaceAroundKeyword() {
-        String withTabs = "\t\tdeclare\t\tfunction\texample() {()};\n" +
-                "example()";
-        String withSpaces = "declare function example() {()};\n" +
-                "example()";
-
-        executeTest(withTabs, withSpaces);
-    }
-
-    public void testSpaceAroundAssignmentInModuleDeclAndFirstDecl() {
+    public void testSpaceAroundAssignmentInProlog() {
         String withSpaces = "module namespace example = \"example\";\n" +
                 "declare default decimal-format decimal-separator = \"anything\" NaN = \"whatever\";\n" +
                 "import schema namespace ex = \"ex\";\n" +
@@ -290,5 +281,58 @@ public class XQueryFormatterSpacesTest extends XQueryFormattingModelBuilderTest 
                 "external; declare option a 'a'; declare variable $a := 'a'; declare function a() {'a'};";
 
         executeTest(withSpace, withoutSpace);
+    }
+
+    public void testSpaceAroundKeyword() {
+        String withTabs = "\t\tdeclare\t\tfunction\texample() {()};\n" +
+                "example()";
+        String withSpaces = "declare function example() {()};\n" +
+                "example()";
+
+        executeTest(withTabs, withSpaces);
+    }
+
+    public void testSpaceAroundKeywordsInPrologOfLibraryModule() {
+        String withDuplicatedSpace = "  xquery  version  \"1.0\"  encoding  'utf';  module  namespace  a = 'a';  " +
+                "declare  default  function  namespace  'a';  declare  default  element  namespace  'a';  declare  " +
+                "boundary-space  preserve;  declare  default  collation  'a';  declare  base-uri  'a';  declare  " +
+                "construction  strip;  declare  ordering  ordered;  declare  default  order  empty  greatest;  " +
+                "declare  copy-namespaces  preserve,  inherit;  declare  decimal-format  a:a  decimal-separator  = " +
+                "'a'  grouping-separator  = 'a'  infinity  = 'a'  minus-sign  = 'a'  NaN  = 'a'  percent  = 'a'  " +
+                "per-mille  = 'a'  zero-digit  = 'a'  digit  = 'a'  pattern-separator  = 'a';  declare  namespace  a " +
+                "= 'a';  import  module  'a';    import  schema  'a';  declare  context  item  external;  declare  option  a 'a';  declare  " +
+                "variable  $a := 'a';  declare  function  a() {'a'};";
+        String withSpace = "xquery version \"1.0\" encoding 'utf'; module namespace a = 'a'; declare default function" +
+                " namespace 'a'; declare default element namespace 'a'; declare boundary-space preserve; declare " +
+                "default collation 'a'; declare base-uri 'a'; declare construction strip; declare ordering ordered; " +
+                "declare default order empty greatest; declare copy-namespaces preserve, " +
+                "inherit; declare decimal-format a:a decimal-separator = 'a' grouping-separator = 'a' infinity = 'a' " +
+                "minus-sign = 'a' NaN = 'a' percent = 'a' per-mille = 'a' zero-digit = 'a' digit = 'a' " +
+                "pattern-separator = 'a'; declare namespace a = 'a'; import module 'a'; import schema 'a'; declare context item " +
+                "external; declare option a 'a'; declare variable $a := 'a'; declare function a() {'a'};";
+
+        executeTest(withDuplicatedSpace, withSpace);
+    }
+
+    public void testSpaceAroundKeywordsInPrologOfMainModule() {
+        String withDuplicatedSpace = "  xquery  version  \"1.0\"  encoding  'utf';  " +
+                "declare  default  function  namespace  'a';  declare  default  element  namespace  'a';  declare  " +
+                "boundary-space  preserve;  declare  default  collation  'a';  declare  base-uri  'a';  declare  " +
+                "construction  strip;  declare  ordering  ordered;  declare  default  order  empty  greatest;  " +
+                "declare  copy-namespaces  preserve,  inherit;  declare  decimal-format  a:a  decimal-separator  = " +
+                "'a'  grouping-separator  = 'a'  infinity  = 'a'  minus-sign  = 'a'  NaN  = 'a'  percent  = 'a'  " +
+                "per-mille  = 'a'  zero-digit  = 'a'  digit  = 'a'  pattern-separator  = 'a';  declare  namespace  a " +
+                "= 'a';  import  module  'a';  import  schema  'a';  declare  context  item  external;  declare  option  a 'a';  declare  " +
+                "variable  $a := 'a';  declare  function  a() {'a'};";
+        String withSpace = "xquery version \"1.0\" encoding 'utf'; declare default function" +
+                " namespace 'a'; declare default element namespace 'a'; declare boundary-space preserve; declare " +
+                "default collation 'a'; declare base-uri 'a'; declare construction strip; declare ordering ordered; " +
+                "declare default order empty greatest; declare copy-namespaces preserve, " +
+                "inherit; declare decimal-format a:a decimal-separator = 'a' grouping-separator = 'a' infinity = 'a' " +
+                "minus-sign = 'a' NaN = 'a' percent = 'a' per-mille = 'a' zero-digit = 'a' digit = 'a' " +
+                "pattern-separator = 'a'; declare namespace a = 'a'; import module 'a'; import schema 'a'; declare context item " +
+                "external; declare option a 'a'; declare variable $a := 'a'; declare function a() {'a'};";
+
+        executeTest(withDuplicatedSpace, withSpace);
     }
 }
