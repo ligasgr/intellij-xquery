@@ -70,6 +70,7 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
     private static SpacingBuilder createSpacingBuilder(CommonCodeStyleSettings settings,
                                                        XQueryCodeStyleSettings xQuerySettings) {
         return new SpacingBuilder(settings.getRootSettings())
+                .before(SEPARATOR).none()
                 .aroundInside(EQUAL, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_EQUALITY_OPERATORS)
 
                 .aroundInside(EQUAL, MODULE_DECL).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
