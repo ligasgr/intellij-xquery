@@ -23,9 +23,6 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryDecimalFormatDecl extends XQueryElement {
 
-  @NotNull
-  List<XQueryDFPropertyName> getDFPropertyNameList();
-
   @Nullable
   XQueryLocalPart getLocalPart();
 

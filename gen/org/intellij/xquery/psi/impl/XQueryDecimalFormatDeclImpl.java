@@ -33,12 +33,6 @@ public class XQueryDecimalFormatDeclImpl extends XQueryElementImpl implements XQ
   }
 
   @Override
-  @NotNull
-  public List<XQueryDFPropertyName> getDFPropertyNameList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryDFPropertyName.class);
-  }
-
-  @Override
   @Nullable
   public XQueryLocalPart getLocalPart() {
     return findChildByClass(XQueryLocalPart.class);

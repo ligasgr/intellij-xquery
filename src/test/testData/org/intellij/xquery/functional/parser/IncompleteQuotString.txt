@@ -1,10 +1,6 @@
 XQuery File(0,11)
-  XQueryModuleImpl(MODULE)(0,0)
-    XQueryMainModuleImpl(MAIN_MODULE)(0,0)
-      XQueryPrologImpl(PROLOG)(0,0)
-        <empty list>
-    PsiErrorElement:<expr single>, declare, import, module or xquery expected, got '"'(0,0)
-      <empty list>
+  PsiErrorElement:<expr single>, declare, import, module or xquery expected, got '"'(0,0)
+    <empty list>
   PsiElement(")('"')(0,1)
   PsiElement(Char)('i')(1,2)
   PsiElement(Char)('n')(2,3)

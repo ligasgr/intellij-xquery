@@ -113,12 +113,6 @@ public class XQueryPsiImplUtil {
         return getNameIdentifier(element).getTextOffset();
     }
 
-    public static boolean processDeclarations(XQueryProlog module, @NotNull PsiScopeProcessor processor,
-                                              @NotNull ResolveState state, PsiElement lastParent,
-                                              @NotNull PsiElement place) {
-        return processor.execute(module, state);
-    }
-
     public static PsiReference getReference(XQueryModuleImportPath element) {
         String filename = stripApostrophes(element.getURILiteral().getText());
         if (!StringUtil.isEmptyOrSpaces(filename)) {

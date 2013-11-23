@@ -218,10 +218,6 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
-  public void visitDFPropertyName(@NotNull XQueryDFPropertyName o) {
-    visitElement(o);
-  }
-
   public void visitDecimalFormatDecl(@NotNull XQueryDecimalFormatDecl o) {
     visitElement(o);
   }
@@ -235,10 +231,6 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitDefaultFunctionNamespaceDecl(@NotNull XQueryDefaultFunctionNamespaceDecl o) {
-    visitElement(o);
-  }
-
-  public void visitDefaultNamespaceDecl(@NotNull XQueryDefaultNamespaceDecl o) {
     visitElement(o);
   }
 
@@ -410,10 +402,6 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitExprSingle(o);
   }
 
-  public void visitImport(@NotNull XQueryImport o) {
-    visitElement(o);
-  }
-
   public void visitInheritMode(@NotNull XQueryInheritMode o) {
     visitElement(o);
   }
@@ -454,19 +442,11 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
-  public void visitLibraryModule(@NotNull XQueryLibraryModule o) {
-    visitElement(o);
-  }
-
   public void visitLiteral(@NotNull XQueryLiteral o) {
     visitElement(o);
   }
 
   public void visitLocalPart(@NotNull XQueryLocalPart o) {
-    visitElement(o);
-  }
-
-  public void visitMainModule(@NotNull XQueryMainModule o) {
     visitElement(o);
   }
 
@@ -479,10 +459,6 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitMapTest(@NotNull XQueryMapTest o) {
-    visitElement(o);
-  }
-
-  public void visitModule(@NotNull XQueryModule o) {
     visitElement(o);
   }
 
@@ -642,10 +618,6 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitExprSingle(o);
   }
 
-  public void visitProlog(@NotNull XQueryProlog o) {
-    visitElement(o);
-  }
-
   public void visitQuantifiedExpr(@NotNull XQueryQuantifiedExpr o) {
     visitExprSingle(o);
   }
@@ -699,10 +671,6 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitSequenceTypeUnion(@NotNull XQuerySequenceTypeUnion o) {
-    visitElement(o);
-  }
-
-  public void visitSetter(@NotNull XQuerySetter o) {
     visitElement(o);
   }
 

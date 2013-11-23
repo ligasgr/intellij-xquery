@@ -227,21 +227,21 @@
 
 xqueryFile ::= Module {pin(".*")=1}
 
-Module	   ::=   	VersionDecl? (LibraryModule | MainModule)
+private Module	   ::=   	VersionDecl? (LibraryModule | MainModule)
 VersionDecl	   ::=   	"xquery" ((VersionDeclEncoding) | (VersionDeclVersion)) Separator {pin=1 recoverUntil=VersionDeclRecover}
 private VersionDeclRecover ::= !('$' | '%' | '(#' | '(' | '*' | '+' | '-' | '.' | '..' | '/' | '//' | '<!--' | '<' | '<?' | '@' | 'ancestor' | 'ancestor-or-self' | 'attribute' | 'child' | 'comment' | 'declare' | 'descendant' | 'descendant-or-self' | 'document' | 'document-node' | 'element' | 'every' | 'following' | 'following-sibling' | 'for' | 'function' | 'if' | 'import' | 'let' | 'module' | 'namespace' | 'namespace-node' | 'node' | 'ordered' | 'parent' | 'preceding' | 'preceding-sibling' | 'processing-instruction' | 'schema-attribute' | 'schema-element' | 'self' | 'some' | 'switch' | 'text' | 'try' | 'typeswitch' | 'unordered' | 'validate' | -eof- | BracedURILiteral | DecimalLiteral | DoubleLiteral | IntegerLiteral | NCName | QName | StringLiteral | URIQualifiedName)
 VersionDeclEncoding ::= "encoding" StringLiteral {pin=1}
 VersionDeclVersion ::= "version" StringLiteral ("encoding" StringLiteral)? {pin=1}
-MainModule	   ::=   	Prolog QueryBody {pin=1}
-LibraryModule	   ::=   	ModuleDecl Prolog {pin=1}
+private MainModule	   ::=   	Prolog QueryBody {pin=1}
+private LibraryModule	   ::=   	ModuleDecl Prolog {pin=1}
 ModuleDecl	   ::=   	"module" "namespace" NamespaceName "=" URILiteral Separator {pin=1 recoverUntil=ModuleDeclRecover methods=[getNamespace]}
 NamespaceName ::= NCName  {methods=[getName setName getNameIdentifier delete]}
 private ModuleDeclRecover ::= !('declare' | 'import')
-Prolog	   ::=   	FirstDecl* SecondDecl* {methods=[processDeclarations]} //{recoverUntil=PrologRecover}
+private Prolog	   ::=   	FirstDecl* SecondDecl*
 private FirstDecl ::= DefaultNamespaceDecl | Setter | NamespaceDecl | Import
 private SecondDecl ::= ContextItemDecl | OptionDecl | AnnotatedDecl
 Separator	   ::=   	";"
-Setter	   ::=   	BoundarySpaceDecl | DefaultCollationDecl | BaseURIDecl | ConstructionDecl | OrderingModeDecl | EmptyOrderDecl | CopyNamespacesDecl | DecimalFormatDecl
+private Setter	   ::=   	BoundarySpaceDecl | DefaultCollationDecl | BaseURIDecl | ConstructionDecl | OrderingModeDecl | EmptyOrderDecl | CopyNamespacesDecl | DecimalFormatDecl
 BoundarySpaceDecl	   ::=   	"declare" "boundary-space" ("preserve" | "strip") Separator {pin=2}
 DefaultCollationDecl	   ::=   	"declare" "default" "collation" URILiteral Separator    {pin=3}
 BaseURIDecl	   ::=   	"declare" "base-uri" URILiteral Separator                           {pin=2}
@@ -252,14 +252,14 @@ CopyNamespacesDecl	   ::=   	"declare" "copy-namespaces" PreserveMode "," Inheri
 PreserveMode	   ::=   	"preserve" | "no-preserve"
 InheritMode	   ::=   	"inherit" | "no-inherit"
 DecimalFormatDecl	   ::=   	"declare" (("decimal-format" EQName) | ("default" "decimal-format")) (DFPropertyName "=" StringLiteral)* Separator {pin=2}
-DFPropertyName	   ::=   	"decimal-separator" | "grouping-separator" | "infinity" | "minus-sign" | "NaN" | "percent" | "per-mille" | "zero-digit" | "digit" | "pattern-separator"
-Import	   ::=   	SchemaImport | ModuleImport
+private DFPropertyName	   ::=   	"decimal-separator" | "grouping-separator" | "infinity" | "minus-sign" | "NaN" | "percent" | "per-mille" | "zero-digit" | "digit" | "pattern-separator"
+private Import	   ::=   	SchemaImport | ModuleImport
 SchemaImport	   ::=   	"import" "schema" (("namespace" NamespaceName "=") | ("default" "element" "namespace"))? URILiteral ("at" URILiteral ("," URILiteral)*)? Separator {pin=2}
 ModuleImport	   ::=   	"import" "module" ("namespace" NamespaceName "=")? ModuleImportNamespace ("at" ModuleImportPath ("," ModuleImportPath)*)? Separator {pin=2 methods=[getNamespace]}
 ModuleImportNamespace ::= ModuleImportPath
 ModuleImportPath ::= URILiteral {methods=[getReference]}
 NamespaceDecl	   ::=   	"declare" "namespace" NamespaceName "=" URILiteral Separator {pin=2 methods=[getNamespace]}
-DefaultNamespaceDecl	   ::=   	(DefaultFunctionNamespaceDecl | DefaultElementNamespaceDecl) Separator
+private DefaultNamespaceDecl	   ::=   	(DefaultFunctionNamespaceDecl | DefaultElementNamespaceDecl) Separator
 DefaultFunctionNamespaceDecl	   ::=   	"declare" "default" "function" "namespace" URILiteral {pin=3}
 DefaultElementNamespaceDecl	   ::=   	"declare" "default" "element" "namespace" URILiteral {pin=3}
 private AnnotatedDecl	   ::=   (VarDecl | FunctionDecl) Separator {pin=1}

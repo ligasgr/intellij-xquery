@@ -186,9 +186,6 @@ public class XQueryParser implements PsiParser {
     else if (root_ == CURRENT_ITEM) {
       result_ = CurrentItem(builder_, level_ + 1);
     }
-    else if (root_ == DF_PROPERTY_NAME) {
-      result_ = DFPropertyName(builder_, level_ + 1);
-    }
     else if (root_ == DECIMAL_FORMAT_DECL) {
       result_ = DecimalFormatDecl(builder_, level_ + 1);
     }
@@ -200,9 +197,6 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == DEFAULT_FUNCTION_NAMESPACE_DECL) {
       result_ = DefaultFunctionNamespaceDecl(builder_, level_ + 1);
-    }
-    else if (root_ == DEFAULT_NAMESPACE_DECL) {
-      result_ = DefaultNamespaceDecl(builder_, level_ + 1);
     }
     else if (root_ == DIR_ATTRIBUTE_LIST) {
       result_ = DirAttributeList(builder_, level_ + 1);
@@ -330,9 +324,6 @@ public class XQueryParser implements PsiParser {
     else if (root_ == IF_EXPR) {
       result_ = IfExpr(builder_, level_ + 1);
     }
-    else if (root_ == IMPORT) {
-      result_ = Import(builder_, level_ + 1);
-    }
     else if (root_ == INHERIT_MODE) {
       result_ = InheritMode(builder_, level_ + 1);
     }
@@ -363,17 +354,11 @@ public class XQueryParser implements PsiParser {
     else if (root_ == LET_CLAUSE) {
       result_ = LetClause(builder_, level_ + 1);
     }
-    else if (root_ == LIBRARY_MODULE) {
-      result_ = LibraryModule(builder_, level_ + 1);
-    }
     else if (root_ == LITERAL) {
       result_ = Literal(builder_, level_ + 1);
     }
     else if (root_ == LOCAL_PART) {
       result_ = LocalPart(builder_, level_ + 1);
-    }
-    else if (root_ == MAIN_MODULE) {
-      result_ = MainModule(builder_, level_ + 1);
     }
     else if (root_ == MAP_ENTRY) {
       result_ = MapEntry(builder_, level_ + 1);
@@ -383,9 +368,6 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == MAP_TEST) {
       result_ = MapTest(builder_, level_ + 1);
-    }
-    else if (root_ == MODULE) {
-      result_ = Module(builder_, level_ + 1);
     }
     else if (root_ == MODULE_DECL) {
       result_ = ModuleDecl(builder_, level_ + 1);
@@ -504,9 +486,6 @@ public class XQueryParser implements PsiParser {
     else if (root_ == PRIMARY_EXPR) {
       result_ = PrimaryExpr(builder_, level_ + 1);
     }
-    else if (root_ == PROLOG) {
-      result_ = Prolog(builder_, level_ + 1);
-    }
     else if (root_ == QUANTIFIED_EXPR) {
       result_ = QuantifiedExpr(builder_, level_ + 1);
     }
@@ -548,9 +527,6 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == SEQUENCE_TYPE_UNION) {
       result_ = SequenceTypeUnion(builder_, level_ + 1);
-    }
-    else if (root_ == SETTER) {
-      result_ = Setter(builder_, level_ + 1);
     }
     else if (root_ == SIMPLE_MAP_EXPR) {
       result_ = SimpleMapExpr(builder_, level_ + 1);
@@ -2528,11 +2504,10 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // "decimal-separator" | "grouping-separator" | "infinity" | "minus-sign" | "NaN" | "percent" | "per-mille" | "zero-digit" | "digit" | "pattern-separator"
-  public static boolean DFPropertyName(PsiBuilder builder_, int level_) {
+  static boolean DFPropertyName(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DFPropertyName")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<df property name>");
     result_ = consumeToken(builder_, K_DECIMAL_SEPARATOR);
     if (!result_) result_ = consumeToken(builder_, K_GROUPING_SEPARATOR);
     if (!result_) result_ = consumeToken(builder_, K_INFINITY);
@@ -2543,13 +2518,12 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, K_ZERO_DIGIT);
     if (!result_) result_ = consumeToken(builder_, K_DIGIT);
     if (!result_) result_ = consumeToken(builder_, K_PATTERN_SEPARATOR);
-    if (result_) {
-      marker_.done(DF_PROPERTY_NAME);
-    }
-    else {
+    if (!result_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    else {
+      marker_.drop();
+    }
     return result_;
   }
 
@@ -2735,18 +2709,18 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // (DefaultFunctionNamespaceDecl | DefaultElementNamespaceDecl) Separator
-  public static boolean DefaultNamespaceDecl(PsiBuilder builder_, int level_) {
+  static boolean DefaultNamespaceDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DefaultNamespaceDecl")) return false;
     if (!nextTokenIs(builder_, K_DECLARE)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = DefaultNamespaceDecl_0(builder_, level_ + 1);
     result_ = result_ && Separator(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(DEFAULT_NAMESPACE_DECL);
+    if (!result_) {
+      marker_.rollbackTo();
     }
     else {
-      marker_.rollbackTo();
+      marker_.drop();
     }
     return result_;
   }
@@ -4620,18 +4594,18 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // SchemaImport | ModuleImport
-  public static boolean Import(PsiBuilder builder_, int level_) {
+  static boolean Import(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Import")) return false;
     if (!nextTokenIs(builder_, K_IMPORT)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = SchemaImport(builder_, level_ + 1);
     if (!result_) result_ = ModuleImport(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(IMPORT);
+    if (!result_) {
+      marker_.rollbackTo();
     }
     else {
-      marker_.rollbackTo();
+      marker_.drop();
     }
     return result_;
   }
@@ -5028,7 +5002,7 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // ModuleDecl Prolog
-  public static boolean LibraryModule(PsiBuilder builder_, int level_) {
+  static boolean LibraryModule(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "LibraryModule")) return false;
     if (!nextTokenIs(builder_, K_MODULE)) return false;
     boolean result_ = false;
@@ -5038,11 +5012,11 @@ public class XQueryParser implements PsiParser {
     result_ = ModuleDecl(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && Prolog(builder_, level_ + 1);
-    if (result_ || pinned_) {
-      marker_.done(LIBRARY_MODULE);
+    if (!result_ && !pinned_) {
+      marker_.rollbackTo();
     }
     else {
-      marker_.rollbackTo();
+      marker_.drop();
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
@@ -5086,20 +5060,20 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // Prolog QueryBody
-  public static boolean MainModule(PsiBuilder builder_, int level_) {
+  static boolean MainModule(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MainModule")) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<main module>");
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = Prolog(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && QueryBody(builder_, level_ + 1);
-    if (result_ || pinned_) {
-      marker_.done(MAIN_MODULE);
+    if (!result_ && !pinned_) {
+      marker_.rollbackTo();
     }
     else {
-      marker_.rollbackTo();
+      marker_.drop();
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
@@ -5243,20 +5217,18 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // VersionDecl? (LibraryModule | MainModule)
-  public static boolean Module(PsiBuilder builder_, int level_) {
+  static boolean Module(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Module")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<module>");
     result_ = Module_0(builder_, level_ + 1);
     result_ = result_ && Module_1(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(MODULE);
-    }
-    else {
+    if (!result_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    else {
+      marker_.drop();
+    }
     return result_;
   }
 
@@ -6747,20 +6719,18 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // FirstDecl* SecondDecl*
-  public static boolean Prolog(PsiBuilder builder_, int level_) {
+  static boolean Prolog(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Prolog")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<prolog>");
     result_ = Prolog_0(builder_, level_ + 1);
     result_ = result_ && Prolog_1(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(PROLOG);
-    }
-    else {
+    if (!result_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    else {
+      marker_.drop();
+    }
     return result_;
   }
 
@@ -7610,7 +7580,7 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // BoundarySpaceDecl | DefaultCollationDecl | BaseURIDecl | ConstructionDecl | OrderingModeDecl | EmptyOrderDecl | CopyNamespacesDecl | DecimalFormatDecl
-  public static boolean Setter(PsiBuilder builder_, int level_) {
+  static boolean Setter(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Setter")) return false;
     if (!nextTokenIs(builder_, K_DECLARE)) return false;
     boolean result_ = false;
@@ -7623,11 +7593,11 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = EmptyOrderDecl(builder_, level_ + 1);
     if (!result_) result_ = CopyNamespacesDecl(builder_, level_ + 1);
     if (!result_) result_ = DecimalFormatDecl(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(SETTER);
+    if (!result_) {
+      marker_.rollbackTo();
     }
     else {
-      marker_.rollbackTo();
+      marker_.drop();
     }
     return result_;
   }
