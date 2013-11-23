@@ -28,6 +28,7 @@ import org.intellij.xquery.psi.XQueryElementFactory;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.gui.BaseGuiTest;
 import org.intellij.xquery.gui.PanelTestingFrame;
+import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 import org.intellij.xquery.runner.ui.datasources.ConfigurationChangeListener;
 import org.intellij.xquery.runner.ui.datasources.details.DataSourceConfigurationAggregatingPanel;
@@ -252,6 +253,7 @@ public class UserDefinedLibraryPanelTest extends BaseGuiTest {
 
     private void setUpPanelWithUserLibrary(boolean enabled) {
         cfg.USER_DEFINED_LIBRARY_ENABLED = enabled;
+        cfg.TYPE = XQueryDataSourceType.BASEX;
         panel.init(cfg, aggregatingPanel, listener);
     }
 

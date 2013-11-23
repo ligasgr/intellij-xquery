@@ -16,65 +16,73 @@
 
 package org.intellij.xquery.runner.ui.datasources.details;
 
+import com.intellij.openapi.ui.LabeledComponent;
+import com.intellij.ui.DocumentAdapter;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 import org.intellij.xquery.runner.ui.datasources.ConfigurationChangeListener;
 
-import javax.swing.JPanel;
-
+import javax.swing.*;
 /**
  * User: ligasgr
  * Date: 02/10/13
  * Time: 22:11
  */
 public class DataSourceConfigurationAggregatingPanel {
-    private JPanel mainPanel;
-    private NameAndDefaultButtonPanel nameAndDefaultButtonPanel;
-    private ConfigurationFilePanel configurationFilePanel;
-    private ConnectionParametersPanel connectionParametersPanel;
-    private UserDefinedLibraryPanel userDefinedLibraryPanel;
-    private XQueryDataSourceType dataSourceType;
+  private JPanel mainPanel;
+  private NameAndDefaultButtonPanel nameAndDefaultButtonPanel;
+  private ConfigurationFilePanel configurationFilePanel;
+  private ConnectionParametersPanel connectionParametersPanel;
+  private UserDefinedLibraryPanel userDefinedLibraryPanel;
+  private EmbeddedJarFilePanel embeddedJarFilePanel;
+  private XQueryDataSourceType dataSourceType;
 
-    public DataSourceConfigurationAggregatingPanel(final XQueryDataSourceConfiguration dataSourceConfiguration,
-                                                   ConfigurationChangeListener configurationChangeListener) {
-        dataSourceType = dataSourceConfiguration.TYPE;
-        initNameAndDefaultButtonPanel(dataSourceConfiguration, configurationChangeListener);
-        initConfigurationFilePanel(dataSourceConfiguration, configurationChangeListener);
-        initConnectionParametersPanel(dataSourceConfiguration, configurationChangeListener);
-        initUserDefinedLibraryPanel(dataSourceConfiguration, configurationChangeListener);
-    }
+  public DataSourceConfigurationAggregatingPanel(final XQueryDataSourceConfiguration dataSourceConfiguration,
+                                                 ConfigurationChangeListener configurationChangeListener) {
+    dataSourceType = dataSourceConfiguration.TYPE;
+    initConfigurationFilePanel(dataSourceConfiguration, configurationChangeListener);
+    initEmbeddedJarFilePanel(dataSourceConfiguration, configurationChangeListener);
+    initConnectionParametersPanel(dataSourceConfiguration, configurationChangeListener);
+    initUserDefinedLibraryPanel(dataSourceConfiguration, configurationChangeListener);
+  }
 
-    public JPanel getPanel() {
-        return mainPanel;
-    }
+  public JPanel getPanel() {
+    return mainPanel;
+  }
 
-    public XQueryDataSourceConfiguration getCurrentConfigurationState() {
-        XQueryDataSourceConfiguration currentConfiguration = new XQueryDataSourceConfiguration();
-        currentConfiguration.TYPE = dataSourceType;
-        nameAndDefaultButtonPanel.updateConfigurationWithChanges(currentConfiguration);
-        configurationFilePanel.updateConfigurationWithChanges(currentConfiguration);
-        connectionParametersPanel.updateConfigurationWithChanges(currentConfiguration);
-        userDefinedLibraryPanel.updateConfigurationWithChanges(currentConfiguration);
-        return currentConfiguration;
-    }
+  public XQueryDataSourceConfiguration getCurrentConfigurationState() {
+    XQueryDataSourceConfiguration currentConfiguration = new XQueryDataSourceConfiguration();
+    currentConfiguration.TYPE = dataSourceType;
+    nameAndDefaultButtonPanel.updateConfigurationWithChanges(currentConfiguration);
+    configurationFilePanel.updateConfigurationWithChanges(currentConfiguration);
+    embeddedJarFilePanel.updateConfigurationWithChanges(currentConfiguration);
+    connectionParametersPanel.updateConfigurationWithChanges(currentConfiguration);
+    userDefinedLibraryPanel.updateConfigurationWithChanges(currentConfiguration);
+    return currentConfiguration;
+  }
 
-    private void initNameAndDefaultButtonPanel(XQueryDataSourceConfiguration cfg,
-                                               ConfigurationChangeListener changeListener) {
-        nameAndDefaultButtonPanel.init(cfg, this, changeListener);
-    }
-
-    private void initConfigurationFilePanel(XQueryDataSourceConfiguration cfg,
-                                            ConfigurationChangeListener changeListener) {
-        configurationFilePanel.init(cfg, this, changeListener);
-    }
-
-    private void initConnectionParametersPanel(XQueryDataSourceConfiguration cfg,
-                                               ConfigurationChangeListener changeListener) {
-        connectionParametersPanel.init(cfg, this, changeListener);
-    }
-
-    private void initUserDefinedLibraryPanel(XQueryDataSourceConfiguration cfg,
+  private void initNameAndDefaultButtonPanel(XQueryDataSourceConfiguration cfg,
                                              ConfigurationChangeListener changeListener) {
-        userDefinedLibraryPanel.init(cfg, this, changeListener);
-    }
+    nameAndDefaultButtonPanel.init(cfg, this, changeListener);
+  }
+
+  private void initConfigurationFilePanel(XQueryDataSourceConfiguration cfg,
+                                          ConfigurationChangeListener changeListener) {
+    configurationFilePanel.init(cfg, this, changeListener);
+  }
+
+  private void initEmbeddedJarFilePanel(XQueryDataSourceConfiguration cfg,
+                                        ConfigurationChangeListener changeListener) {
+    embeddedJarFilePanel.init(cfg, this, changeListener);
+  }
+
+  private void initConnectionParametersPanel(XQueryDataSourceConfiguration cfg,
+                                             ConfigurationChangeListener changeListener) {
+    connectionParametersPanel.init(cfg, this, changeListener);
+  }
+
+  private void initUserDefinedLibraryPanel(XQueryDataSourceConfiguration cfg,
+                                           ConfigurationChangeListener changeListener) {
+    userDefinedLibraryPanel.init(cfg, this, changeListener);
+  }
 }
