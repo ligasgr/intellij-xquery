@@ -177,7 +177,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "ge"                                       {return XQueryTypes.GE;}
 "declare"                                  {yypushback(yylength()); pushState(DECLARATION_RECOGNITION); return TokenType.WHITE_SPACE;}
 "namespace" / {SC} ({NCName}|"\""|"'"|"{") {return XQueryTypes.K_NAMESPACE;}
-"empty" / {SC} ("greates"|"least"|"at"|"in") {return XQueryTypes.K_EMPTY;}
+"empty" / {SC} ("greatest"|"least"|"at"|"in") {return XQueryTypes.K_EMPTY;}
 "allowing" / {SC} "empty"                  {return XQueryTypes.K_ALLOWING;}
 "greatest" / {SC}? (";"|",")               {return XQueryTypes.K_GREATEST;}
 "greatest" / {SC} ("for"|"let"|"order"|"stable"|"group"|"count"|"return") {return XQueryTypes.K_GREATEST;}

@@ -1579,4 +1579,35 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testFlworAllowingEmptyWithTypeAndPositionalVar() throws Exception {
+        assertProducedTokens("for $i as empty-sequence() allowing empty at $j in 1 to 10", new String[]{
+                "for", "for",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "WHITE_SPACE", " ",
+                "empty-sequence", "empty-sequence",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "allowing", "allowing",
+                "WHITE_SPACE", " ",
+                "empty", "empty",
+                "WHITE_SPACE", " ",
+                "at", "at",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "j",
+                "WHITE_SPACE", " ",
+                "in", "in",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "1",
+                "WHITE_SPACE", " ",
+                "to", "to",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "10"
+        });
+    }
 }
