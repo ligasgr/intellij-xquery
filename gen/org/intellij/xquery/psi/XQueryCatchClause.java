@@ -23,10 +23,10 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryCatchClause extends XQueryElement {
 
-  @NotNull
+  @Nullable
   XQueryCatchErrorList getCatchErrorList();
 
-  @NotNull
+  @Nullable
   XQueryExpr getExpr();
 
 }

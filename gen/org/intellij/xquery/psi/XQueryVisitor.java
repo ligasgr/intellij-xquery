@@ -722,10 +722,6 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
-  public void visitTryTargetExpr(@NotNull XQueryTryTargetExpr o) {
-    visitExprSingle(o);
-  }
-
   public void visitTypeDeclaration(@NotNull XQueryTypeDeclaration o) {
     visitElement(o);
   }

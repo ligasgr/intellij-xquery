@@ -199,7 +199,6 @@ public interface XQueryTypes {
   IElementType TREAT_EXPR = new XQueryElementType("TREAT_EXPR");
   IElementType TRY_CATCH_EXPR = new XQueryElementType("TRY_CATCH_EXPR");
   IElementType TRY_CLAUSE = new XQueryElementType("TRY_CLAUSE");
-  IElementType TRY_TARGET_EXPR = new XQueryElementType("TRY_TARGET_EXPR");
   IElementType TYPED_FUNCTION_TEST = new XQueryElementType("TYPED_FUNCTION_TEST");
   IElementType TYPESWITCH_DEFAULT_RETURN_CLAUSE = new XQueryElementType("TYPESWITCH_DEFAULT_RETURN_CLAUSE");
   IElementType TYPESWITCH_EXPR = new XQueryElementType("TYPESWITCH_EXPR");
@@ -943,9 +942,6 @@ public interface XQueryTypes {
       }
       else if (type == TRY_CLAUSE) {
         return new XQueryTryClauseImpl(node);
-      }
-      else if (type == TRY_TARGET_EXPR) {
-        return new XQueryTryTargetExprImpl(node);
       }
       else if (type == TYPED_FUNCTION_TEST) {
         return new XQueryTypedFunctionTestImpl(node);

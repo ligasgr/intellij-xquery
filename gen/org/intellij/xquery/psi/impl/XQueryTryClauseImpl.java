@@ -34,8 +34,8 @@ public class XQueryTryClauseImpl extends XQueryElementImpl implements XQueryTryC
 
   @Override
   @Nullable
-  public XQueryTryTargetExpr getTryTargetExpr() {
-    return findChildByClass(XQueryTryTargetExpr.class);
+  public XQueryExpr getExpr() {
+    return findChildByClass(XQueryExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

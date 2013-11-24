@@ -331,10 +331,10 @@ SwitchReturnClause ::= "return" ExprSingle
 CaseClause	   ::=   	"case" ("$" VarName "as")? SequenceTypeUnion SwitchReturnClause {pin=1}
 SequenceTypeUnion	   ::=   	SequenceType ("|" SequenceType)*
 IfExpr	   ::=   	"if" "(" Expr ")" "then" ExprSingle "else" ExprSingle {pin=1}
-TryCatchExpr	   ::=   	TryClause CatchClause+
+TryCatchExpr	   ::=   	TryClause CatchClause+ {pin=1}
 TryClause	   ::=   	"try" "{" TryTargetExpr "}" {pin=1}
-TryTargetExpr	   ::=   	Expr
-CatchClause	   ::=   	"catch" CatchErrorList "{" Expr "}"
+private TryTargetExpr	   ::=   	Expr
+CatchClause	   ::=   	"catch" CatchErrorList "{" Expr "}" {pin=1}
 CatchErrorList	   ::=   	NameTest ("|" NameTest)*
 OrExpr	   ::=   	AndExpr (OrMultipliedExpr)*
 private OrMultipliedExpr ::=  "or" AndExpr {pin=1}

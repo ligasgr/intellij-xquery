@@ -1,0 +1,6 @@
+try {
+    'a'
+}
+catch * {
+    <caret>
+}

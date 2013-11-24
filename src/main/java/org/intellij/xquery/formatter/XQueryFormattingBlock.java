@@ -147,7 +147,8 @@ public class XQueryFormattingBlock extends AbstractBlock {
 
     private Indent calculateChildIndent(IElementType type, boolean fromCalculatedType) {
         if (type == ENCLOSED_EXPR || type == FUNCTION_DECL || (!fromCalculatedType && type == PARENTHESIZED_EXPR)
-                || type == LET_BINDING || type == OP_ASSIGN || (fromCalculatedType && type == RETURN_CLAUSE))
+                || type == LET_BINDING || type == OP_ASSIGN || (fromCalculatedType && type == RETURN_CLAUSE)
+                || (!fromCalculatedType && type == TRY_CLAUSE) || (!fromCalculatedType && type == CATCH_CLAUSE))
             return Indent.getNormalIndent();
         return null;
     }

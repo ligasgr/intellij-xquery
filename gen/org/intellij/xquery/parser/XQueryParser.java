@@ -564,9 +564,6 @@ public class XQueryParser implements PsiParser {
     else if (root_ == TRY_CLAUSE) {
       result_ = TryClause(builder_, level_ + 1);
     }
-    else if (root_ == TRY_TARGET_EXPR) {
-      result_ = TryTargetExpr(builder_, level_ + 1);
-    }
     else if (root_ == TYPE_DECLARATION) {
       result_ = TypeDeclaration(builder_, level_ + 1);
     }
@@ -659,9 +656,8 @@ public class XQueryParser implements PsiParser {
       PATH_EXPR, POSTFIX_EXPR, PREFIX_EXPR, PRIMARY_EXPR,
       QUANTIFIED_EXPR, RANGE_EXPR, RELATIVE_PATH_EXPR, SIMPLE_MAP_EXPR,
       STEP_EXPR, STRING_CONCAT_EXPR, SWITCH_EXPR, TREAT_EXPR,
-      TRY_CATCH_EXPR, TRY_TARGET_EXPR, TYPESWITCH_EXPR, UNARY_EXPR,
-      UNION_EXPR, UNORDERED_EXPR, URI_EXPR, VALIDATE_EXPR,
-      VALUE_EXPR),
+      TRY_CATCH_EXPR, TYPESWITCH_EXPR, UNARY_EXPR, UNION_EXPR,
+      UNORDERED_EXPR, URI_EXPR, VALIDATE_EXPR, VALUE_EXPR),
   };
 
   public static boolean type_extends_(IElementType child_, IElementType parent_) {
@@ -1647,19 +1643,23 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "CatchClause")) return false;
     if (!nextTokenIs(builder_, K_CATCH)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, K_CATCH);
-    result_ = result_ && CatchErrorList(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, L_C_BRACE);
-    result_ = result_ && Expr(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, R_C_BRACE);
-    if (result_) {
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, CatchErrorList(builder_, level_ + 1));
+    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, L_C_BRACE)) && result_;
+    result_ = pinned_ && report_error_(builder_, Expr(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && consumeToken(builder_, R_C_BRACE) && result_;
+    if (result_ || pinned_) {
       marker_.done(CATCH_CLAUSE);
     }
     else {
       marker_.rollbackTo();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -8117,16 +8117,20 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "TryCatchExpr")) return false;
     if (!nextTokenIs(builder_, K_TRY)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = TryClause(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
     result_ = result_ && TryCatchExpr_1(builder_, level_ + 1);
-    if (result_) {
+    if (result_ || pinned_) {
       marker_.done(TRY_CATCH_EXPR);
     }
     else {
       marker_.rollbackTo();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   // CatchClause+
@@ -8180,20 +8184,8 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // Expr
-  public static boolean TryTargetExpr(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TryTargetExpr")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<try target expr>");
-    result_ = Expr(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(TRY_TARGET_EXPR);
-    }
-    else {
-      marker_.rollbackTo();
-    }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
-    return result_;
+  static boolean TryTargetExpr(PsiBuilder builder_, int level_) {
+    return Expr(builder_, level_ + 1);
   }
 
   /* ********************************************************** */

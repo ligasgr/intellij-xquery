@@ -33,15 +33,15 @@ public class XQueryCatchClauseImpl extends XQueryElementImpl implements XQueryCa
   }
 
   @Override
-  @NotNull
+  @Nullable
   public XQueryCatchErrorList getCatchErrorList() {
-    return findNotNullChildByClass(XQueryCatchErrorList.class);
+    return findChildByClass(XQueryCatchErrorList.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public XQueryExpr getExpr() {
-    return findNotNullChildByClass(XQueryExpr.class);
+    return findChildByClass(XQueryExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
