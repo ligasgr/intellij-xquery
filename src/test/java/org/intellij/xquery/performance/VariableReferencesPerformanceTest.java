@@ -21,12 +21,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.ThrowableRunnable;
-import org.intellij.xquery.psi.XQueryFunctionCall;
+import org.intellij.xquery.psi.XQueryVarRef;
 
 import java.util.Collection;
 import java.util.List;
 
-import static com.intellij.testFramework.PlatformTestUtil.startPerformanceTest;
 import static org.intellij.xquery.functional.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
 /**
@@ -34,14 +33,14 @@ import static org.intellij.xquery.functional.reference.ReferenceUtil.getTargetOf
  * Date: 19/08/13
  * Time: 19:28
  */
-public class FunctionReferencesPerformanceTest extends BasePerformanceTestCase {
+public class VariableReferencesPerformanceTest extends BasePerformanceTestCase {
 
-    public void testFunctionCompletion() throws Exception {
-        String template = "declare function prefix_%s_target:example() {<caret>};";
+    public void testVariableCompletion() throws Exception {
+        String template = "declare function prefix_%s_target:example() {$<caret>}";
         String testSpecificContent = String.format(template, testName);
         setupTestFiles(1000, 100, 10, 10, testSpecificContent, testName);
 
-        startPerformanceTest(testName, 40000, new ThrowableRunnable() {
+        PlatformTestUtil.startPerformanceTest(testName, 40000, new ThrowableRunnable() {
             @Override
             public void run() throws Exception {
                 for (int i = 0; i < 100; i++) {
@@ -53,28 +52,29 @@ public class FunctionReferencesPerformanceTest extends BasePerformanceTestCase {
         }).cpuBound().attempts(1).assertTiming();
     }
 
-    public void testFunctionReferenceResolution() throws Exception {
-        String template = "declare function prefix_%s_target:example() {module_%s_0:fun<caret>ction_9()};";
+    public void testVariableReferenceResolution() throws Exception {
+        String template = "declare function prefix_%s_target:example() {$module_%s_0:v<caret>ar_9()};";
         String testSpecificContent = String.format(template, testName, testName);
         setupTestFiles(1000, 100, 10, 10, testSpecificContent, testName);
 
-        startPerformanceTest(testName, 1000, new ThrowableRunnable() {
+        PlatformTestUtil.startPerformanceTest(testName, 1000, new ThrowableRunnable() {
             @Override
             public void run() throws Exception {
                 for (int i = 0; i < 100; i++) {
-                    assertTrue(getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class) != null);
+                    assertTrue(getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class) != null);
                 }
             }
         }).cpuBound().attempts(1).assertTiming();
     }
 
-    public void testFunctionFindUsage() throws Exception {
-        String template = "declare function prefix_%s_target:example() {module_%s_0:fun<caret>ction_9()};";
+    public void testVariableFindUsage() throws Exception {
+        String template = "declare function prefix_%s_target:example() {$module_%s_0:v<caret>ar_9()};";
         String testSpecificContent = String.format(template, testName, testName);
         setupTestFiles(1000, 100, 10, 10, testSpecificContent, testName);
         final PsiElement source = myFixture.getElementAtCaret();
 
-        startPerformanceTest(testName, 300000, new ThrowableRunnable() {
+
+        PlatformTestUtil.startPerformanceTest(testName, 300000, new ThrowableRunnable() {
             @Override
             public void run() throws Exception {
                 for (int i = 0; i < 100; i++) {
