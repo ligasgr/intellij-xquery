@@ -167,12 +167,15 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
                 .after(L_BRACKET).none()
                 .before(R_BRACKET).none()
                 .after(L_C_BRACE).none()
+                .before(L_C_BRACE).spaces(1)
                 .before(R_C_BRACE).none()
+                .after(R_C_BRACE).spaces(1)
                 .before(ARGUMENT_LIST).none()
                 .before(ARGUMENT).none()
                 .after(ARGUMENT).none()
                 .before(PARAM).none()
                 .after(PARAM).none()
+                .after(EXPR).none()
                 ;
     }
 

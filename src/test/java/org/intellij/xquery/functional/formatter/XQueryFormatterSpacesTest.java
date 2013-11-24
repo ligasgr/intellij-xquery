@@ -342,4 +342,32 @@ public class XQueryFormatterSpacesTest extends XQueryFormattingModelBuilderTest 
 
         executeTest(withDuplicatedSpace, withSpace);
     }
+
+    public void testSpaceAroundCurlyBracesInTryCatch() {
+        String withDuplicatedSpace = "try  {''}  catch Exception1 | Exception2  {''}  catch Exception3  {''}";
+        String withSpace = "try {''} catch Exception1 | Exception2 {''} catch Exception3 {''}";
+
+        executeTest(withDuplicatedSpace, withSpace);
+    }
+
+    public void testSpaceAroundCurlyBracesInValidate() {
+        String withDuplicatedSpace = "validate  {validate lax  {validate type xs:int  {'a'}  }  }";
+        String withSpace = "validate {validate lax {validate type xs:int {'a'}}}";
+
+        executeTest(withDuplicatedSpace, withSpace);
+    }
+
+    public void testSpaceAroundCurlyBracesInPragma() {
+        String withDuplicatedSpace = "(# my #)  {'a'}";
+        String withSpace = "(# my #) {'a'}";
+
+        executeTest(withDuplicatedSpace, withSpace);
+    }
+
+    public void testSpaceAroundCurlyBracesInOrderedExpression() {
+        String withDuplicatedSpace = "ordered  {'a'}";
+        String withSpace = "ordered {'a'}";
+
+        executeTest(withDuplicatedSpace, withSpace);
+    }
 }
