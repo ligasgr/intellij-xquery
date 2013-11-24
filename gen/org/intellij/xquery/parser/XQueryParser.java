@@ -327,17 +327,11 @@ public class XQueryParser implements PsiParser {
     else if (root_ == INHERIT_MODE) {
       result_ = InheritMode(builder_, level_ + 1);
     }
-    else if (root_ == INITIAL_CLAUSE) {
-      result_ = InitialClause(builder_, level_ + 1);
-    }
     else if (root_ == INLINE_FUNCTION_EXPR) {
       result_ = InlineFunctionExpr(builder_, level_ + 1);
     }
     else if (root_ == INSTANCEOF_EXPR) {
       result_ = InstanceofExpr(builder_, level_ + 1);
-    }
-    else if (root_ == INTERMEDIATE_CLAUSE) {
-      result_ = IntermediateClause(builder_, level_ + 1);
     }
     else if (root_ == INTERSECT_EXCEPT_EXPR) {
       result_ = IntersectExceptExpr(builder_, level_ + 1);
@@ -537,9 +531,6 @@ public class XQueryParser implements PsiParser {
     else if (root_ == SINGLE_TYPE) {
       result_ = SingleType(builder_, level_ + 1);
     }
-    else if (root_ == SLIDING_WINDOW_CLAUSE) {
-      result_ = SlidingWindowClause(builder_, level_ + 1);
-    }
     else if (root_ == STEP_EXPR) {
       result_ = StepExpr(builder_, level_ + 1);
     }
@@ -578,9 +569,6 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == TRY_TARGET_EXPR) {
       result_ = TryTargetExpr(builder_, level_ + 1);
-    }
-    else if (root_ == TUMBLING_WINDOW_CLAUSE) {
-      result_ = TumblingWindowClause(builder_, level_ + 1);
     }
     else if (root_ == TYPE_DECLARATION) {
       result_ = TypeDeclaration(builder_, level_ + 1);
@@ -645,12 +633,6 @@ public class XQueryParser implements PsiParser {
     else if (root_ == VERSION_DECL) {
       result_ = VersionDecl(builder_, level_ + 1);
     }
-    else if (root_ == VERSION_DECL_ENCODING) {
-      result_ = VersionDeclEncoding(builder_, level_ + 1);
-    }
-    else if (root_ == VERSION_DECL_VERSION) {
-      result_ = VersionDeclVersion(builder_, level_ + 1);
-    }
     else if (root_ == WHERE_CLAUSE) {
       result_ = WhereClause(builder_, level_ + 1);
     }
@@ -659,15 +641,6 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == WINDOW_CLAUSE) {
       result_ = WindowClause(builder_, level_ + 1);
-    }
-    else if (root_ == WINDOW_END_CONDITION) {
-      result_ = WindowEndCondition(builder_, level_ + 1);
-    }
-    else if (root_ == WINDOW_START_CONDITION) {
-      result_ = WindowStartCondition(builder_, level_ + 1);
-    }
-    else if (root_ == WINDOW_VARS) {
-      result_ = WindowVars(builder_, level_ + 1);
     }
     else {
       Marker marker_ = builder_.mark();
@@ -3646,13 +3619,18 @@ public class XQueryParser implements PsiParser {
         && replaceVariants(builder_, 2, "<flwor expr>")) return false;
     boolean result_ = false;
     boolean pinned_ = false;
+    int start_ = builder_.getCurrentOffset();
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<flwor expr>");
     result_ = InitialClause(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, FLWORExpr_1(builder_, level_ + 1));
     result_ = pinned_ && ReturnClause(builder_, level_ + 1) && result_;
-    if (result_ || pinned_) {
+    LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
+    if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), FLWOR_EXPR)) {
+      marker_.drop();
+    }
+    else if (result_ || pinned_) {
       marker_.done(FLWOR_EXPR);
     }
     else {
@@ -3769,45 +3747,67 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "$" VarName TypeDeclaration? AllowingEmpty? PositionalVar? "in" ExprSingle
+  // "$" ForBindingDetails
   public static boolean ForBinding(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ForBinding")) return false;
     if (!nextTokenIs(builder_, DOLLAR_SIGN)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, DOLLAR_SIGN);
-    result_ = result_ && VarName(builder_, level_ + 1);
-    result_ = result_ && ForBinding_2(builder_, level_ + 1);
-    result_ = result_ && ForBinding_3(builder_, level_ + 1);
-    result_ = result_ && ForBinding_4(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, K_IN);
-    result_ = result_ && ExprSingle(builder_, level_ + 1);
-    if (result_) {
+    pinned_ = result_; // pin = 1
+    result_ = result_ && ForBindingDetails(builder_, level_ + 1);
+    if (result_ || pinned_) {
       marker_.done(FOR_BINDING);
     }
     else {
       marker_.rollbackTo();
     }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // VarName TypeDeclaration? AllowingEmpty? PositionalVar? "in" ExprSingle
+  static boolean ForBindingDetails(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ForBindingDetails")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_RECOVER_, null);
+    result_ = VarName(builder_, level_ + 1);
+    result_ = result_ && ForBindingDetails_1(builder_, level_ + 1);
+    result_ = result_ && ForBindingDetails_2(builder_, level_ + 1);
+    result_ = result_ && ForBindingDetails_3(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, K_IN);
+    result_ = result_ && ExprSingle(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_RECOVER_, FLWORExprRecover_parser_);
     return result_;
   }
 
   // TypeDeclaration?
-  private static boolean ForBinding_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ForBinding_2")) return false;
+  private static boolean ForBindingDetails_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ForBindingDetails_1")) return false;
     TypeDeclaration(builder_, level_ + 1);
     return true;
   }
 
   // AllowingEmpty?
-  private static boolean ForBinding_3(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ForBinding_3")) return false;
+  private static boolean ForBindingDetails_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ForBindingDetails_2")) return false;
     AllowingEmpty(builder_, level_ + 1);
     return true;
   }
 
   // PositionalVar?
-  private static boolean ForBinding_4(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ForBinding_4")) return false;
+  private static boolean ForBindingDetails_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ForBindingDetails_3")) return false;
     PositionalVar(builder_, level_ + 1);
     return true;
   }
@@ -3816,21 +3816,22 @@ public class XQueryParser implements PsiParser {
   // "for" ForBinding ("," ForBinding)*
   public static boolean ForClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ForClause")) return false;
+    if (!nextTokenIs(builder_, K_FOR)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_RECOVER_, "<for clause>");
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, K_FOR);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, ForBinding(builder_, level_ + 1));
-    result_ = pinned_ && ForClause_2(builder_, level_ + 1) && result_;
+    result_ = result_ && ForBinding(builder_, level_ + 1);
+    pinned_ = result_; // pin = 2
+    result_ = result_ && ForClause_2(builder_, level_ + 1);
     if (result_ || pinned_) {
       marker_.done(FOR_CLAUSE);
     }
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_RECOVER_, FLWORExprRecover_parser_);
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
   }
 
@@ -4632,24 +4633,21 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ForClause | LetClause | WindowClause
-  public static boolean InitialClause(PsiBuilder builder_, int level_) {
+  // ForClause | WindowClause | LetClause
+  static boolean InitialClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "InitialClause")) return false;
-    if (!nextTokenIs(builder_, K_FOR) && !nextTokenIs(builder_, K_LET)
-        && replaceVariants(builder_, 2, "<initial clause>")) return false;
+    if (!nextTokenIs(builder_, K_FOR) && !nextTokenIs(builder_, K_LET)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<initial clause>");
     result_ = ForClause(builder_, level_ + 1);
-    if (!result_) result_ = LetClause(builder_, level_ + 1);
     if (!result_) result_ = WindowClause(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(INITIAL_CLAUSE);
-    }
-    else {
+    if (!result_) result_ = LetClause(builder_, level_ + 1);
+    if (!result_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    else {
+      marker_.drop();
+    }
     return result_;
   }
 
@@ -4766,23 +4764,21 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // InitialClause | WhereClause | GroupByClause | OrderByClause | CountClause
-  public static boolean IntermediateClause(PsiBuilder builder_, int level_) {
+  static boolean IntermediateClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "IntermediateClause")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<intermediate clause>");
     result_ = InitialClause(builder_, level_ + 1);
     if (!result_) result_ = WhereClause(builder_, level_ + 1);
     if (!result_) result_ = GroupByClause(builder_, level_ + 1);
     if (!result_) result_ = OrderByClause(builder_, level_ + 1);
     if (!result_) result_ = CountClause(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(INTERMEDIATE_CLAUSE);
-    }
-    else {
+    if (!result_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    else {
+      marker_.drop();
+    }
     return result_;
   }
 
@@ -4922,9 +4918,9 @@ public class XQueryParser implements PsiParser {
   // "$" VarName TypeDeclaration? ":=" ExprSingle
   public static boolean LetBinding(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "LetBinding")) return false;
-    if (!nextTokenIs(builder_, DOLLAR_SIGN)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_RECOVER_, "<let binding>");
     result_ = consumeToken(builder_, DOLLAR_SIGN);
     result_ = result_ && VarName(builder_, level_ + 1);
     result_ = result_ && LetBinding_2(builder_, level_ + 1);
@@ -4936,6 +4932,7 @@ public class XQueryParser implements PsiParser {
     else {
       marker_.rollbackTo();
     }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_RECOVER_, FLWORExprRecover_parser_);
     return result_;
   }
 
@@ -4950,10 +4947,11 @@ public class XQueryParser implements PsiParser {
   // "let" LetBinding ("," LetBinding)*
   public static boolean LetClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "LetClause")) return false;
+    if (!nextTokenIs(builder_, K_LET)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_RECOVER_, "<let clause>");
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, K_LET);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, LetBinding(builder_, level_ + 1));
@@ -4964,7 +4962,7 @@ public class XQueryParser implements PsiParser {
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_RECOVER_, FLWORExprRecover_parser_);
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
   }
 
@@ -7707,36 +7705,55 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "sliding" "window" "$" VarName TypeDeclaration? "in" ExprSingle WindowStartCondition WindowEndCondition
-  public static boolean SlidingWindowClause(PsiBuilder builder_, int level_) {
+  // "sliding" SlidingWindowDetails
+  static boolean SlidingWindowClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SlidingWindowClause")) return false;
+    if (!nextTokenIs(builder_, K_SLIDING)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_RECOVER_, "<sliding window clause>");
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, K_SLIDING);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, consumeToken(builder_, K_WINDOW));
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, DOLLAR_SIGN)) && result_;
-    result_ = pinned_ && report_error_(builder_, VarName(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && report_error_(builder_, SlidingWindowClause_4(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, K_IN)) && result_;
-    result_ = pinned_ && report_error_(builder_, ExprSingle(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && report_error_(builder_, WindowStartCondition(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && WindowEndCondition(builder_, level_ + 1) && result_;
-    if (result_ || pinned_) {
-      marker_.done(SLIDING_WINDOW_CLAUSE);
-    }
-    else {
+    result_ = result_ && SlidingWindowDetails(builder_, level_ + 1);
+    if (!result_ && !pinned_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_RECOVER_, FLWORExprRecover_parser_);
+    else {
+      marker_.drop();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
   }
 
+  /* ********************************************************** */
+  // "window" "$" VarName TypeDeclaration? "in" ExprSingle WindowStartCondition WindowEndCondition
+  static boolean SlidingWindowDetails(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SlidingWindowDetails")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_RECOVER_, null);
+    result_ = consumeToken(builder_, K_WINDOW);
+    result_ = result_ && consumeToken(builder_, DOLLAR_SIGN);
+    result_ = result_ && VarName(builder_, level_ + 1);
+    result_ = result_ && SlidingWindowDetails_3(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, K_IN);
+    result_ = result_ && ExprSingle(builder_, level_ + 1);
+    result_ = result_ && WindowStartCondition(builder_, level_ + 1);
+    result_ = result_ && WindowEndCondition(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_RECOVER_, FLWORExprRecover_parser_);
+    return result_;
+  }
+
   // TypeDeclaration?
-  private static boolean SlidingWindowClause_4(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "SlidingWindowClause_4")) return false;
+  private static boolean SlidingWindowDetails_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SlidingWindowDetails_3")) return false;
     TypeDeclaration(builder_, level_ + 1);
     return true;
   }
@@ -8184,43 +8201,62 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "tumbling" "window" "$" VarName TypeDeclaration? "in" ExprSingle WindowStartCondition WindowEndCondition?
-  public static boolean TumblingWindowClause(PsiBuilder builder_, int level_) {
+  // "tumbling" TumblingWindowDetails
+  static boolean TumblingWindowClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TumblingWindowClause")) return false;
+    if (!nextTokenIs(builder_, K_TUMBLING)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_RECOVER_, "<tumbling window clause>");
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, K_TUMBLING);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, consumeToken(builder_, K_WINDOW));
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, DOLLAR_SIGN)) && result_;
-    result_ = pinned_ && report_error_(builder_, VarName(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && report_error_(builder_, TumblingWindowClause_4(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, K_IN)) && result_;
-    result_ = pinned_ && report_error_(builder_, ExprSingle(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && report_error_(builder_, WindowStartCondition(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && TumblingWindowClause_8(builder_, level_ + 1) && result_;
-    if (result_ || pinned_) {
-      marker_.done(TUMBLING_WINDOW_CLAUSE);
-    }
-    else {
+    result_ = result_ && TumblingWindowDetails(builder_, level_ + 1);
+    if (!result_ && !pinned_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_RECOVER_, FLWORExprRecover_parser_);
+    else {
+      marker_.drop();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
   }
 
+  /* ********************************************************** */
+  // "window" "$" VarName TypeDeclaration? "in" ExprSingle WindowStartCondition WindowEndCondition?
+  static boolean TumblingWindowDetails(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TumblingWindowDetails")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_RECOVER_, null);
+    result_ = consumeToken(builder_, K_WINDOW);
+    result_ = result_ && consumeToken(builder_, DOLLAR_SIGN);
+    result_ = result_ && VarName(builder_, level_ + 1);
+    result_ = result_ && TumblingWindowDetails_3(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, K_IN);
+    result_ = result_ && ExprSingle(builder_, level_ + 1);
+    result_ = result_ && WindowStartCondition(builder_, level_ + 1);
+    result_ = result_ && TumblingWindowDetails_7(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_RECOVER_, FLWORExprRecover_parser_);
+    return result_;
+  }
+
   // TypeDeclaration?
-  private static boolean TumblingWindowClause_4(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TumblingWindowClause_4")) return false;
+  private static boolean TumblingWindowDetails_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TumblingWindowDetails_3")) return false;
     TypeDeclaration(builder_, level_ + 1);
     return true;
   }
 
   // WindowEndCondition?
-  private static boolean TumblingWindowClause_8(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TumblingWindowClause_8")) return false;
+  private static boolean TumblingWindowDetails_7(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TumblingWindowDetails_7")) return false;
     WindowEndCondition(builder_, level_ + 1);
     return true;
   }
@@ -9036,7 +9072,7 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // "encoding" StringLiteral
-  public static boolean VersionDeclEncoding(PsiBuilder builder_, int level_) {
+  static boolean VersionDeclEncoding(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VersionDeclEncoding")) return false;
     if (!nextTokenIs(builder_, K_ENCODING)) return false;
     boolean result_ = false;
@@ -9046,11 +9082,11 @@ public class XQueryParser implements PsiParser {
     result_ = consumeToken(builder_, K_ENCODING);
     pinned_ = result_; // pin = 1
     result_ = result_ && consumeToken(builder_, STRINGLITERAL);
-    if (result_ || pinned_) {
-      marker_.done(VERSION_DECL_ENCODING);
+    if (!result_ && !pinned_) {
+      marker_.rollbackTo();
     }
     else {
-      marker_.rollbackTo();
+      marker_.drop();
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
@@ -9151,7 +9187,7 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // "version" StringLiteral ("encoding" StringLiteral)?
-  public static boolean VersionDeclVersion(PsiBuilder builder_, int level_) {
+  static boolean VersionDeclVersion(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VersionDeclVersion")) return false;
     if (!nextTokenIs(builder_, K_VERSION)) return false;
     boolean result_ = false;
@@ -9162,11 +9198,11 @@ public class XQueryParser implements PsiParser {
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, consumeToken(builder_, STRINGLITERAL));
     result_ = pinned_ && VersionDeclVersion_2(builder_, level_ + 1) && result_;
-    if (result_ || pinned_) {
-      marker_.done(VERSION_DECL_VERSION);
+    if (!result_ && !pinned_) {
+      marker_.rollbackTo();
     }
     else {
-      marker_.rollbackTo();
+      marker_.drop();
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
@@ -9296,16 +9332,20 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "WindowClause")) return false;
     if (!nextTokenIs(builder_, K_FOR)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, K_FOR);
     result_ = result_ && WindowClause_1(builder_, level_ + 1);
-    if (result_) {
+    pinned_ = result_; // pin = 2
+    if (result_ || pinned_) {
       marker_.done(WINDOW_CLAUSE);
     }
     else {
       marker_.rollbackTo();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   // TumblingWindowClause | SlidingWindowClause
@@ -9326,25 +9366,22 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // "only"? "end" WindowVars "when" ExprSingle
-  public static boolean WindowEndCondition(PsiBuilder builder_, int level_) {
+  static boolean WindowEndCondition(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "WindowEndCondition")) return false;
-    if (!nextTokenIs(builder_, K_END) && !nextTokenIs(builder_, K_ONLY)
-        && replaceVariants(builder_, 2, "<window end condition>")) return false;
+    if (!nextTokenIs(builder_, K_END) && !nextTokenIs(builder_, K_ONLY)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<window end condition>");
     result_ = WindowEndCondition_0(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, K_END);
     result_ = result_ && WindowVars(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, K_WHEN);
     result_ = result_ && ExprSingle(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(WINDOW_END_CONDITION);
-    }
-    else {
+    if (!result_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    else {
+      marker_.drop();
+    }
     return result_;
   }
 
@@ -9357,7 +9394,7 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // "start" WindowVars "when" ExprSingle
-  public static boolean WindowStartCondition(PsiBuilder builder_, int level_) {
+  static boolean WindowStartCondition(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "WindowStartCondition")) return false;
     if (!nextTokenIs(builder_, K_START)) return false;
     boolean result_ = false;
@@ -9366,33 +9403,31 @@ public class XQueryParser implements PsiParser {
     result_ = result_ && WindowVars(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, K_WHEN);
     result_ = result_ && ExprSingle(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(WINDOW_START_CONDITION);
+    if (!result_) {
+      marker_.rollbackTo();
     }
     else {
-      marker_.rollbackTo();
+      marker_.drop();
     }
     return result_;
   }
 
   /* ********************************************************** */
   // ("$" CurrentItem)? PositionalVar? ("previous" "$" PreviousItem)? ("next" "$" NextItem)?
-  public static boolean WindowVars(PsiBuilder builder_, int level_) {
+  static boolean WindowVars(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "WindowVars")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<window vars>");
     result_ = WindowVars_0(builder_, level_ + 1);
     result_ = result_ && WindowVars_1(builder_, level_ + 1);
     result_ = result_ && WindowVars_2(builder_, level_ + 1);
     result_ = result_ && WindowVars_3(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(WINDOW_VARS);
-    }
-    else {
+    if (!result_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    else {
+      marker_.drop();
+    }
     return result_;
   }
 

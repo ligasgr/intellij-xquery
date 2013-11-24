@@ -23,10 +23,25 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryWindowClause extends XQueryElement {
 
-  @Nullable
-  XQuerySlidingWindowClause getSlidingWindowClause();
+  @NotNull
+  List<XQueryCurrentItem> getCurrentItemList();
+
+  @NotNull
+  List<XQueryExprSingle> getExprSingleList();
+
+  @NotNull
+  List<XQueryNextItem> getNextItemList();
+
+  @NotNull
+  List<XQueryPositionalVar> getPositionalVarList();
+
+  @NotNull
+  List<XQueryPreviousItem> getPreviousItemList();
 
   @Nullable
-  XQueryTumblingWindowClause getTumblingWindowClause();
+  XQueryTypeDeclaration getTypeDeclaration();
+
+  @Nullable
+  XQueryVarName getVarName();
 
 }

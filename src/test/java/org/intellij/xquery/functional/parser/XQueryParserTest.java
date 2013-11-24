@@ -135,6 +135,10 @@ public class XQueryParserTest extends ParsingTestCase {
         doTest(true);
     }
 
+    public void testTumblingAndSlidingWindows() throws Exception {
+        doTest(true);
+    }
+
     @Override
     protected boolean skipSpaces() {
         return false;

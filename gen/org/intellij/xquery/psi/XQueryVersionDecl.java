@@ -26,10 +26,4 @@ public interface XQueryVersionDecl extends XQueryElement {
   @Nullable
   XQuerySeparator getSeparator();
 
-  @Nullable
-  XQueryVersionDeclEncoding getVersionDeclEncoding();
-
-  @Nullable
-  XQueryVersionDeclVersion getVersionDeclVersion();
-
 }

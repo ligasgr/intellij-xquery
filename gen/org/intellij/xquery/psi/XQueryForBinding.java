@@ -26,7 +26,7 @@ public interface XQueryForBinding extends XQueryElement {
   @Nullable
   XQueryAllowingEmpty getAllowingEmpty();
 
-  @NotNull
+  @Nullable
   XQueryExprSingle getExprSingle();
 
   @Nullable
@@ -35,7 +35,7 @@ public interface XQueryForBinding extends XQueryElement {
   @Nullable
   XQueryTypeDeclaration getTypeDeclaration();
 
-  @NotNull
+  @Nullable
   XQueryVarName getVarName();
 
 }

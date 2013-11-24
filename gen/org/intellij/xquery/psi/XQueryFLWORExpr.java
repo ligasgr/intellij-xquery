@@ -24,12 +24,27 @@ import com.intellij.psi.PsiElement;
 public interface XQueryFLWORExpr extends XQueryExprSingle {
 
   @NotNull
-  XQueryInitialClause getInitialClause();
+  List<XQueryCountClause> getCountClauseList();
 
   @NotNull
-  List<XQueryIntermediateClause> getIntermediateClauseList();
+  List<XQueryForClause> getForClauseList();
+
+  @NotNull
+  List<XQueryGroupByClause> getGroupByClauseList();
+
+  @NotNull
+  List<XQueryLetClause> getLetClauseList();
+
+  @NotNull
+  List<XQueryOrderByClause> getOrderByClauseList();
 
   @Nullable
   XQueryReturnClause getReturnClause();
+
+  @NotNull
+  List<XQueryWhereClause> getWhereClauseList();
+
+  @NotNull
+  List<XQueryWindowClause> getWindowClauseList();
 
 }

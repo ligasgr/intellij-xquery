@@ -34,20 +34,50 @@ public class XQueryFLWORExprImpl extends XQueryExprSingleImpl implements XQueryF
 
   @Override
   @NotNull
-  public XQueryInitialClause getInitialClause() {
-    return findNotNullChildByClass(XQueryInitialClause.class);
+  public List<XQueryCountClause> getCountClauseList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryCountClause.class);
   }
 
   @Override
   @NotNull
-  public List<XQueryIntermediateClause> getIntermediateClauseList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryIntermediateClause.class);
+  public List<XQueryForClause> getForClauseList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryForClause.class);
+  }
+
+  @Override
+  @NotNull
+  public List<XQueryGroupByClause> getGroupByClauseList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryGroupByClause.class);
+  }
+
+  @Override
+  @NotNull
+  public List<XQueryLetClause> getLetClauseList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryLetClause.class);
+  }
+
+  @Override
+  @NotNull
+  public List<XQueryOrderByClause> getOrderByClauseList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryOrderByClause.class);
   }
 
   @Override
   @Nullable
   public XQueryReturnClause getReturnClause() {
     return findChildByClass(XQueryReturnClause.class);
+  }
+
+  @Override
+  @NotNull
+  public List<XQueryWhereClause> getWhereClauseList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryWhereClause.class);
+  }
+
+  @Override
+  @NotNull
+  public List<XQueryWindowClause> getWindowClauseList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryWindowClause.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

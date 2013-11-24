@@ -406,20 +406,12 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
-  public void visitInitialClause(@NotNull XQueryInitialClause o) {
-    visitElement(o);
-  }
-
   public void visitInlineFunctionExpr(@NotNull XQueryInlineFunctionExpr o) {
     visitExprSingle(o);
   }
 
   public void visitInstanceofExpr(@NotNull XQueryInstanceofExpr o) {
     visitExprSingle(o);
-  }
-
-  public void visitIntermediateClause(@NotNull XQueryIntermediateClause o) {
-    visitElement(o);
   }
 
   public void visitIntersectExceptExpr(@NotNull XQueryIntersectExceptExpr o) {
@@ -686,10 +678,6 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
-  public void visitSlidingWindowClause(@NotNull XQuerySlidingWindowClause o) {
-    visitElement(o);
-  }
-
   public void visitStepExpr(@NotNull XQueryStepExpr o) {
     visitExprSingle(o);
   }
@@ -740,10 +728,6 @@ public class XQueryVisitor extends PsiElementVisitor {
 
   public void visitTryTargetExpr(@NotNull XQueryTryTargetExpr o) {
     visitExprSingle(o);
-  }
-
-  public void visitTumblingWindowClause(@NotNull XQueryTumblingWindowClause o) {
-    visitElement(o);
   }
 
   public void visitTypeDeclaration(@NotNull XQueryTypeDeclaration o) {
@@ -830,14 +814,6 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
-  public void visitVersionDeclEncoding(@NotNull XQueryVersionDeclEncoding o) {
-    visitElement(o);
-  }
-
-  public void visitVersionDeclVersion(@NotNull XQueryVersionDeclVersion o) {
-    visitElement(o);
-  }
-
   public void visitWhereClause(@NotNull XQueryWhereClause o) {
     visitElement(o);
   }
@@ -847,18 +823,6 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitWindowClause(@NotNull XQueryWindowClause o) {
-    visitElement(o);
-  }
-
-  public void visitWindowEndCondition(@NotNull XQueryWindowEndCondition o) {
-    visitElement(o);
-  }
-
-  public void visitWindowStartCondition(@NotNull XQueryWindowStartCondition o) {
-    visitElement(o);
-  }
-
-  public void visitWindowVars(@NotNull XQueryWindowVars o) {
     visitElement(o);
   }
 

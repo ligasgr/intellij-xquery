@@ -33,15 +33,45 @@ public class XQueryWindowClauseImpl extends XQueryElementImpl implements XQueryW
   }
 
   @Override
-  @Nullable
-  public XQuerySlidingWindowClause getSlidingWindowClause() {
-    return findChildByClass(XQuerySlidingWindowClause.class);
+  @NotNull
+  public List<XQueryCurrentItem> getCurrentItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryCurrentItem.class);
+  }
+
+  @Override
+  @NotNull
+  public List<XQueryExprSingle> getExprSingleList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
+  }
+
+  @Override
+  @NotNull
+  public List<XQueryNextItem> getNextItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryNextItem.class);
+  }
+
+  @Override
+  @NotNull
+  public List<XQueryPositionalVar> getPositionalVarList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryPositionalVar.class);
+  }
+
+  @Override
+  @NotNull
+  public List<XQueryPreviousItem> getPreviousItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryPreviousItem.class);
   }
 
   @Override
   @Nullable
-  public XQueryTumblingWindowClause getTumblingWindowClause() {
-    return findChildByClass(XQueryTumblingWindowClause.class);
+  public XQueryTypeDeclaration getTypeDeclaration() {
+    return findChildByClass(XQueryTypeDeclaration.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryVarName getVarName() {
+    return findChildByClass(XQueryVarName.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

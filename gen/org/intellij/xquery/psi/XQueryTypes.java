@@ -120,10 +120,8 @@ public interface XQueryTypes {
   IElementType GROUP_BY_CLAUSE = new XQueryElementType("GROUP_BY_CLAUSE");
   IElementType IF_EXPR = new XQueryElementType("IF_EXPR");
   IElementType INHERIT_MODE = new XQueryElementType("INHERIT_MODE");
-  IElementType INITIAL_CLAUSE = new XQueryElementType("INITIAL_CLAUSE");
   IElementType INLINE_FUNCTION_EXPR = new XQueryElementType("INLINE_FUNCTION_EXPR");
   IElementType INSTANCEOF_EXPR = new XQueryElementType("INSTANCEOF_EXPR");
-  IElementType INTERMEDIATE_CLAUSE = new XQueryElementType("INTERMEDIATE_CLAUSE");
   IElementType INTERSECT_EXCEPT_EXPR = new XQueryElementType("INTERSECT_EXCEPT_EXPR");
   IElementType ITEM_TYPE = new XQueryElementType("ITEM_TYPE");
   IElementType KIND_TEST = new XQueryElementType("KIND_TEST");
@@ -190,7 +188,6 @@ public interface XQueryTypes {
   IElementType SIMPLE_MAP_EXPR = new XQueryElementType("SIMPLE_MAP_EXPR");
   IElementType SIMPLE_TYPE_NAME = new XQueryElementType("SIMPLE_TYPE_NAME");
   IElementType SINGLE_TYPE = new XQueryElementType("SINGLE_TYPE");
-  IElementType SLIDING_WINDOW_CLAUSE = new XQueryElementType("SLIDING_WINDOW_CLAUSE");
   IElementType STEP_EXPR = new XQueryElementType("STEP_EXPR");
   IElementType STRING_CONCAT_EXPR = new XQueryElementType("STRING_CONCAT_EXPR");
   IElementType SWITCH_CASE_CLAUSE = new XQueryElementType("SWITCH_CASE_CLAUSE");
@@ -204,7 +201,6 @@ public interface XQueryTypes {
   IElementType TRY_CATCH_EXPR = new XQueryElementType("TRY_CATCH_EXPR");
   IElementType TRY_CLAUSE = new XQueryElementType("TRY_CLAUSE");
   IElementType TRY_TARGET_EXPR = new XQueryElementType("TRY_TARGET_EXPR");
-  IElementType TUMBLING_WINDOW_CLAUSE = new XQueryElementType("TUMBLING_WINDOW_CLAUSE");
   IElementType TYPED_FUNCTION_TEST = new XQueryElementType("TYPED_FUNCTION_TEST");
   IElementType TYPESWITCH_DEFAULT_RETURN_CLAUSE = new XQueryElementType("TYPESWITCH_DEFAULT_RETURN_CLAUSE");
   IElementType TYPESWITCH_EXPR = new XQueryElementType("TYPESWITCH_EXPR");
@@ -226,14 +222,9 @@ public interface XQueryTypes {
   IElementType VAR_REF = new XQueryElementType("VAR_REF");
   IElementType VAR_VALUE = new XQueryElementType("VAR_VALUE");
   IElementType VERSION_DECL = new XQueryElementType("VERSION_DECL");
-  IElementType VERSION_DECL_ENCODING = new XQueryElementType("VERSION_DECL_ENCODING");
-  IElementType VERSION_DECL_VERSION = new XQueryElementType("VERSION_DECL_VERSION");
   IElementType WHERE_CLAUSE = new XQueryElementType("WHERE_CLAUSE");
   IElementType WILDCARD = new XQueryElementType("WILDCARD");
   IElementType WINDOW_CLAUSE = new XQueryElementType("WINDOW_CLAUSE");
-  IElementType WINDOW_END_CONDITION = new XQueryElementType("WINDOW_END_CONDITION");
-  IElementType WINDOW_START_CONDITION = new XQueryElementType("WINDOW_START_CONDITION");
-  IElementType WINDOW_VARS = new XQueryElementType("WINDOW_VARS");
 
   IElementType APOSTROPHE = new XQueryTokenType("'");
   IElementType AT_SIGN = new XQueryTokenType("@");
@@ -718,17 +709,11 @@ public interface XQueryTypes {
       else if (type == INHERIT_MODE) {
         return new XQueryInheritModeImpl(node);
       }
-      else if (type == INITIAL_CLAUSE) {
-        return new XQueryInitialClauseImpl(node);
-      }
       else if (type == INLINE_FUNCTION_EXPR) {
         return new XQueryInlineFunctionExprImpl(node);
       }
       else if (type == INSTANCEOF_EXPR) {
         return new XQueryInstanceofExprImpl(node);
-      }
-      else if (type == INTERMEDIATE_CLAUSE) {
-        return new XQueryIntermediateClauseImpl(node);
       }
       else if (type == INTERSECT_EXCEPT_EXPR) {
         return new XQueryIntersectExceptExprImpl(node);
@@ -928,9 +913,6 @@ public interface XQueryTypes {
       else if (type == SINGLE_TYPE) {
         return new XQuerySingleTypeImpl(node);
       }
-      else if (type == SLIDING_WINDOW_CLAUSE) {
-        return new XQuerySlidingWindowClauseImpl(node);
-      }
       else if (type == STEP_EXPR) {
         return new XQueryStepExprImpl(node);
       }
@@ -969,9 +951,6 @@ public interface XQueryTypes {
       }
       else if (type == TRY_TARGET_EXPR) {
         return new XQueryTryTargetExprImpl(node);
-      }
-      else if (type == TUMBLING_WINDOW_CLAUSE) {
-        return new XQueryTumblingWindowClauseImpl(node);
       }
       else if (type == TYPED_FUNCTION_TEST) {
         return new XQueryTypedFunctionTestImpl(node);
@@ -1036,12 +1015,6 @@ public interface XQueryTypes {
       else if (type == VERSION_DECL) {
         return new XQueryVersionDeclImpl(node);
       }
-      else if (type == VERSION_DECL_ENCODING) {
-        return new XQueryVersionDeclEncodingImpl(node);
-      }
-      else if (type == VERSION_DECL_VERSION) {
-        return new XQueryVersionDeclVersionImpl(node);
-      }
       else if (type == WHERE_CLAUSE) {
         return new XQueryWhereClauseImpl(node);
       }
@@ -1050,15 +1023,6 @@ public interface XQueryTypes {
       }
       else if (type == WINDOW_CLAUSE) {
         return new XQueryWindowClauseImpl(node);
-      }
-      else if (type == WINDOW_END_CONDITION) {
-        return new XQueryWindowEndConditionImpl(node);
-      }
-      else if (type == WINDOW_START_CONDITION) {
-        return new XQueryWindowStartConditionImpl(node);
-      }
-      else if (type == WINDOW_VARS) {
-        return new XQueryWindowVarsImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

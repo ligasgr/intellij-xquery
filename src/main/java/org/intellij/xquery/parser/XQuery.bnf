@@ -230,8 +230,8 @@ xqueryFile ::= Module {pin(".*")=1}
 private Module	   ::=   	VersionDecl? (LibraryModule | MainModule)
 VersionDecl	   ::=   	"xquery" ((VersionDeclEncoding) | (VersionDeclVersion)) Separator {pin=1 recoverUntil=VersionDeclRecover}
 private VersionDeclRecover ::= !('$' | '%' | '(#' | '(' | '*' | '+' | '-' | '.' | '..' | '/' | '//' | '<!--' | '<' | '<?' | '@' | 'ancestor' | 'ancestor-or-self' | 'attribute' | 'child' | 'comment' | 'declare' | 'descendant' | 'descendant-or-self' | 'document' | 'document-node' | 'element' | 'every' | 'following' | 'following-sibling' | 'for' | 'function' | 'if' | 'import' | 'let' | 'module' | 'namespace' | 'namespace-node' | 'node' | 'ordered' | 'parent' | 'preceding' | 'preceding-sibling' | 'processing-instruction' | 'schema-attribute' | 'schema-element' | 'self' | 'some' | 'switch' | 'text' | 'try' | 'typeswitch' | 'unordered' | 'validate' | -eof- | BracedURILiteral | DecimalLiteral | DoubleLiteral | IntegerLiteral | NCName | QName | StringLiteral | URIQualifiedName)
-VersionDeclEncoding ::= "encoding" StringLiteral {pin=1}
-VersionDeclVersion ::= "version" StringLiteral ("encoding" StringLiteral)? {pin=1}
+private VersionDeclEncoding ::= "encoding" StringLiteral {pin=1}
+private VersionDeclVersion ::= "version" StringLiteral ("encoding" StringLiteral)? {pin=1}
 private MainModule	   ::=   	Prolog QueryBody {pin=1}
 private LibraryModule	   ::=   	ModuleDecl Prolog {pin=1}
 ModuleDecl	   ::=   	"module" "namespace" NamespaceName "=" URILiteral Separator {pin=1 recoverUntil=ModuleDeclRecover methods=[getNamespace]}
@@ -289,20 +289,23 @@ ExprSingle	   ::=   	FLWORExpr
  | OrExpr
 FLWORExpr	   ::=   	InitialClause IntermediateClause* ReturnClause {pin=1}
 private FLWORExprRecover ::= !('count' | 'for' | 'group' | 'let' | 'order' | 'return' | 'stable' | 'where' | '}' | '<' TagName | '</' TagName )
-InitialClause	   ::=   	ForClause | LetClause | WindowClause
-IntermediateClause	   ::=   	InitialClause | WhereClause | GroupByClause | OrderByClause | CountClause
-ForClause	   ::=   	"for" ForBinding ("," ForBinding)* {pin=1 recoverUntil=FLWORExprRecover}
-ForBinding	   ::=   	"$" VarName TypeDeclaration? AllowingEmpty? PositionalVar? "in" ExprSingle
+private InitialClause	   ::=   	ForClause | WindowClause | LetClause {pin=1}
+private IntermediateClause	   ::=   	InitialClause | WhereClause | GroupByClause | OrderByClause | CountClause
+ForClause	   ::=   	"for" ForBinding ("," ForBinding)* {pin=2}
+ForBinding	   ::=   	"$" ForBindingDetails {pin=1}
+private ForBindingDetails ::= VarName TypeDeclaration? AllowingEmpty? PositionalVar? "in" ExprSingle {recoverUntil=FLWORExprRecover}
 AllowingEmpty	   ::=   	"allowing" "empty"
 PositionalVar	   ::=   	"at" "$" VarName
-LetClause	   ::=   	"let" LetBinding ("," LetBinding)* {pin=1 recoverUntil=FLWORExprRecover}
-LetBinding	   ::=   	"$" VarName TypeDeclaration? ":=" ExprSingle
-WindowClause	   ::=   	"for" (TumblingWindowClause | SlidingWindowClause)
-TumblingWindowClause	   ::=   	"tumbling" "window" "$" VarName TypeDeclaration? "in" ExprSingle WindowStartCondition WindowEndCondition? {pin=1 recoverUntil=FLWORExprRecover}
-SlidingWindowClause	   ::=   	"sliding" "window" "$" VarName TypeDeclaration? "in" ExprSingle WindowStartCondition WindowEndCondition {pin=1 recoverUntil=FLWORExprRecover}
-WindowStartCondition	   ::=   	"start" WindowVars "when" ExprSingle
-WindowEndCondition	   ::=   	"only"? "end" WindowVars "when" ExprSingle
-WindowVars	   ::=   	("$" CurrentItem)? PositionalVar? ("previous" "$" PreviousItem)? ("next" "$" NextItem)?
+LetClause	   ::=   	"let" LetBinding ("," LetBinding)* {pin=1}
+LetBinding	   ::=   	"$" VarName TypeDeclaration? ":=" ExprSingle {recoverUntil=FLWORExprRecover}
+WindowClause	   ::=   	"for" (TumblingWindowClause | SlidingWindowClause) {pin=2}
+private TumblingWindowClause	   ::=   	"tumbling" TumblingWindowDetails {pin=1}
+private TumblingWindowDetails ::= "window" "$" VarName TypeDeclaration? "in" ExprSingle WindowStartCondition WindowEndCondition? {recoverUntil=FLWORExprRecover}
+private SlidingWindowClause	   ::=   	"sliding" SlidingWindowDetails {pin=1}
+private SlidingWindowDetails ::= "window" "$" VarName TypeDeclaration? "in" ExprSingle WindowStartCondition WindowEndCondition {recoverUntil=FLWORExprRecover}
+private WindowStartCondition	   ::=   	"start" WindowVars "when" ExprSingle
+private WindowEndCondition	   ::=   	"only"? "end" WindowVars "when" ExprSingle
+private WindowVars	   ::=   	("$" CurrentItem)? PositionalVar? ("previous" "$" PreviousItem)? ("next" "$" NextItem)?
 CurrentItem	   ::=   	EQName
 PreviousItem	   ::=   	EQName
 NextItem	   ::=   	EQName

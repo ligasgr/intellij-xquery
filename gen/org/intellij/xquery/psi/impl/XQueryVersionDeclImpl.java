@@ -38,18 +38,6 @@ public class XQueryVersionDeclImpl extends XQueryElementImpl implements XQueryVe
     return findChildByClass(XQuerySeparator.class);
   }
 
-  @Override
-  @Nullable
-  public XQueryVersionDeclEncoding getVersionDeclEncoding() {
-    return findChildByClass(XQueryVersionDeclEncoding.class);
-  }
-
-  @Override
-  @Nullable
-  public XQueryVersionDeclVersion getVersionDeclVersion() {
-    return findChildByClass(XQueryVersionDeclVersion.class);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitVersionDecl(this);
     else super.accept(visitor);

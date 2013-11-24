@@ -39,9 +39,9 @@ public class XQueryForBindingImpl extends XQueryElementImpl implements XQueryFor
   }
 
   @Override
-  @NotNull
+  @Nullable
   public XQueryExprSingle getExprSingle() {
-    return findNotNullChildByClass(XQueryExprSingle.class);
+    return findChildByClass(XQueryExprSingle.class);
   }
 
   @Override
@@ -57,9 +57,9 @@ public class XQueryForBindingImpl extends XQueryElementImpl implements XQueryFor
   }
 
   @Override
-  @NotNull
+  @Nullable
   public XQueryVarName getVarName() {
-    return findNotNullChildByClass(XQueryVarName.class);
+    return findChildByClass(XQueryVarName.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
