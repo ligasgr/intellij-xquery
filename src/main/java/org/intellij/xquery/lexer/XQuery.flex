@@ -273,6 +273,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 "default" / {SC} ("$"|"return")            {return XQueryTypes.K_DEFAULT;}
 "document" / {SC}? ("{")                   {return XQueryTypes.K_DOCUMENT;}
 "stable" / {SC} "order"                    {return XQueryTypes.K_STABLE;}
+"ordered" / {SC}? "{"                      {return XQueryTypes.K_ORDERED;}
+"unordered" / {SC}? "{"                    {return XQueryTypes.K_UNORDERED;}
 {NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 }
 

@@ -412,8 +412,8 @@ NumericLiteral	   ::=   	IntegerLiteral | DecimalLiteral | DoubleLiteral
 VarRef	   ::=   	"$" VarName {methods=[getReference]}
 ParenthesizedExpr	   ::=   	"(" Expr? ")" {pin=1}
 ContextItemExpr	   ::=   	"."
-OrderedExpr	   ::=   	"ordered" "{" Expr "}"
-UnorderedExpr	   ::=   	"unordered" "{" Expr "}"
+OrderedExpr	   ::=   	"ordered" "{" Expr "}" {pin=2}
+UnorderedExpr	   ::=   	"unordered" "{" Expr "}" {pin=2}
 FunctionCall	   ::=   	FunctionName ArgumentList {methods=[getReference getArity]}	/* xgc: reserved-function-names */
 				/* gn: parens */
 Argument	   ::=   	ExprSingle | ArgumentPlaceholder

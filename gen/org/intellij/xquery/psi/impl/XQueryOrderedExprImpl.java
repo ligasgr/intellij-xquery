@@ -33,9 +33,9 @@ public class XQueryOrderedExprImpl extends XQueryExprSingleImpl implements XQuer
   }
 
   @Override
-  @NotNull
+  @Nullable
   public XQueryExpr getExpr() {
-    return findNotNullChildByClass(XQueryExpr.class);
+    return findChildByClass(XQueryExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

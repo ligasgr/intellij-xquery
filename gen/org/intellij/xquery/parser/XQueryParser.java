@@ -6070,18 +6070,22 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "OrderedExpr")) return false;
     if (!nextTokenIs(builder_, K_ORDERED)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, K_ORDERED);
     result_ = result_ && consumeToken(builder_, L_C_BRACE);
-    result_ = result_ && Expr(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, R_C_BRACE);
-    if (result_) {
+    pinned_ = result_; // pin = 2
+    result_ = result_ && report_error_(builder_, Expr(builder_, level_ + 1));
+    result_ = pinned_ && consumeToken(builder_, R_C_BRACE) && result_;
+    if (result_ || pinned_) {
       marker_.done(ORDERED_EXPR);
     }
     else {
       marker_.rollbackTo();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -8638,18 +8642,22 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "UnorderedExpr")) return false;
     if (!nextTokenIs(builder_, K_UNORDERED)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, K_UNORDERED);
     result_ = result_ && consumeToken(builder_, L_C_BRACE);
-    result_ = result_ && Expr(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, R_C_BRACE);
-    if (result_) {
+    pinned_ = result_; // pin = 2
+    result_ = result_ && report_error_(builder_, Expr(builder_, level_ + 1));
+    result_ = pinned_ && consumeToken(builder_, R_C_BRACE) && result_;
+    if (result_ || pinned_) {
       marker_.done(UNORDERED_EXPR);
     }
     else {
       marker_.rollbackTo();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */

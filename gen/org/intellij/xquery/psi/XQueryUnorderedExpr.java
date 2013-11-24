@@ -23,7 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryUnorderedExpr extends XQueryExprSingle {
 
-  @NotNull
+  @Nullable
   XQueryExpr getExpr();
 
 }

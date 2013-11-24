@@ -1705,4 +1705,26 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "IntegerLiteral", "10"
         });
     }
+
+    public void testOrderedExpression() {
+        assertProducedTokens("ordered {''}", new String[]{
+                "ordered", "ordered",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "WHITE_SPACE", "",
+                "StringLiteral", "''",
+                "}", "}"
+        });
+    }
+
+    public void testUnorderedExpression() {
+        assertProducedTokens("unordered {''}", new String[]{
+                "unordered", "unordered",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "WHITE_SPACE", "",
+                "StringLiteral", "''",
+                "}", "}"
+        });
+    }
 }
