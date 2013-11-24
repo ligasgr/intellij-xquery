@@ -29,7 +29,4 @@ public interface XQueryValidateExpr extends XQueryExprSingle {
   @Nullable
   XQueryTypeName getTypeName();
 
-  @Nullable
-  XQueryValidationMode getValidationMode();
-
 }

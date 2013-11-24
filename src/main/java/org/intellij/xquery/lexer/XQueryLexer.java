@@ -155,6 +155,10 @@ public class XQueryLexer extends LookAheadLexer {
             XQueryTypes.K_ZERO_DIGIT
     );
 
+    public static final TokenSet OPERATORS = TokenSet.create(
+
+    );
+
     public XQueryLexer() {
         super(new MergingLexerAdapter(new FlexAdapter(new _XQueryLexer()), orSet(COMMENTS, WHITE_SPACES)));
     }

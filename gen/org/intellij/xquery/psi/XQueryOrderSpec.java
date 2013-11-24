@@ -26,7 +26,7 @@ public interface XQueryOrderSpec extends XQueryElement {
   @NotNull
   XQueryExprSingle getExprSingle();
 
-  @NotNull
-  XQueryOrderModifier getOrderModifier();
+  @Nullable
+  XQueryURILiteral getURILiteral();
 
 }

@@ -318,7 +318,7 @@ GroupingVariable	   ::=   	"$" VarName
 OrderByClause	   ::=   	(("order" "by") | ("stable" "order" "by")) OrderSpecList {pin=1 recoverUntil=FLWORExprRecover}
 OrderSpecList	   ::=   	OrderSpec ("," OrderSpec)*
 OrderSpec	   ::=   	ExprSingle OrderModifier
-OrderModifier	   ::=   	("ascending" | "descending")? ("empty" ("greatest" | "least"))? ("collation" URILiteral)?
+private OrderModifier	   ::=   	("ascending" | "descending")? ("empty" ("greatest" | "least"))? ("collation" URILiteral)?
 ReturnClause	   ::=   	"return" ExprSingle {pin=1}
 QuantifiedExpr	   ::=   	("some" | "every") "$" VarName TypeDeclaration? "in" ExprSingle ("," "$" VarName TypeDeclaration? "in" ExprSingle)* "satisfies" ExprSingle {pin=1}
 SwitchExpr	   ::=   	"switch" "(" Expr ")" SwitchCaseClause+ SwitchDefaultReturnClause {pin=1}
@@ -361,7 +361,7 @@ private GeneralComp	   ::=   	"=" | "!=" | "<" | "<=" | ">" | ">="
 private ValueComp	   ::=   	"eq" | "ne" | "lt" | "le" | "gt" | "ge"
 private NodeComp	   ::=   	"is" | "<<" | ">>"
 ValidateExpr	   ::=   	"validate" (ValidationMode | ("type" TypeName))? "{" Expr "}"
-ValidationMode	   ::=   	"lax" | "strict"
+private ValidationMode	   ::=   	"lax" | "strict"
 ExtensionExpr	   ::=   	Pragma+ "{" Expr? "}"
 Pragma	   ::=   	"(#" S? EQName (S PragmaContents)? "#)"	/* ws: explicit */
 PragmaContents	   ::=   	PragmaContentChar*

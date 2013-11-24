@@ -335,4 +335,11 @@ public class XQueryFormatterSpacesTest extends XQueryFormattingModelBuilderTest 
 
         executeTest(withDuplicatedSpace, withSpace);
     }
+
+    public void testSpaceAroundKeywordsInExpressions() {
+        String withDuplicatedSpace = "  for  $i  in  1  to  10  for  $i  in  1  to  10  for  tumbling  window  $w  in  1  to  10  start  at  $s  when  fn:true()  only  end  at  $e  when  $e  =  1  let  $b  :=  'b'  where  $s  >  1  group  by  $c  as  xs:string  :=  'c'  collation  'col'  stable  order  by  'x'  ascending  empty  greatest  collation  'x'  order  by  $x  count  $z  return  some  $d  in  1  to  10  satisfies  if  ($d  is  validate  lax  {validate  type  xs:string {'s'}})  then  switch  ($d)  case  5  return  '5'  case  6  return  try  {''}  catch  Error {'sd'}  default  return  typeswitch  ($p)  case  $x1  as  xs:int  return  'int'  default  $d1  return  'def'  else  true  or  false  and  1  *  2  div  3  idiv  4  mod  5  union  6  intersect  7  except  8  cast  as  xs:integer  castable  as  xs:integer  treat  as  xs:integer  instance  of  xs:integer  =  1";
+        String withSpace = "for $i in 1 to 10 for $i in 1 to 10 for tumbling window $w in 1 to 10 start at $s when fn:true() only end at $e when $e = 1 let $b := 'b' where $s > 1 group by $c as xs:string := 'c' collation 'col' stable order by 'x' ascending empty greatest collation 'x' order by $x count $z return some $d in 1 to 10 satisfies if ($d is validate lax {validate type xs:string {'s'}}) then switch ($d) case 5 return '5' case 6 return try {''} catch Error {'sd'} default return typeswitch ($p) case $x1 as xs:int return 'int' default $d1 return 'def' else true or false and 1 * 2 div 3 idiv 4 mod 5 union 6 intersect 7 except 8 cast as xs:integer castable as xs:integer treat as xs:integer instance of xs:integer = 1";
+
+        executeTest(withDuplicatedSpace, withSpace);
+    }
 }

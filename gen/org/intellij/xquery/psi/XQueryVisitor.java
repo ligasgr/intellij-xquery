@@ -522,10 +522,6 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
-  public void visitOrderModifier(@NotNull XQueryOrderModifier o) {
-    visitElement(o);
-  }
-
   public void visitOrderSpec(@NotNull XQueryOrderSpec o) {
     visitElement(o);
   }
@@ -772,10 +768,6 @@ public class XQueryVisitor extends PsiElementVisitor {
 
   public void visitValidateExpr(@NotNull XQueryValidateExpr o) {
     visitExprSingle(o);
-  }
-
-  public void visitValidationMode(@NotNull XQueryValidationMode o) {
-    visitElement(o);
   }
 
   public void visitValueExpr(@NotNull XQueryValueExpr o) {

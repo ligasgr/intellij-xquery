@@ -39,9 +39,9 @@ public class XQueryOrderSpecImpl extends XQueryElementImpl implements XQueryOrde
   }
 
   @Override
-  @NotNull
-  public XQueryOrderModifier getOrderModifier() {
-    return findNotNullChildByClass(XQueryOrderModifier.class);
+  @Nullable
+  public XQueryURILiteral getURILiteral() {
+    return findChildByClass(XQueryURILiteral.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

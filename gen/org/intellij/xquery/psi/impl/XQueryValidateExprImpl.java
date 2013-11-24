@@ -44,12 +44,6 @@ public class XQueryValidateExprImpl extends XQueryExprSingleImpl implements XQue
     return findChildByClass(XQueryTypeName.class);
   }
 
-  @Override
-  @Nullable
-  public XQueryValidationMode getValidationMode() {
-    return findChildByClass(XQueryValidationMode.class);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitValidateExpr(this);
     else super.accept(visitor);

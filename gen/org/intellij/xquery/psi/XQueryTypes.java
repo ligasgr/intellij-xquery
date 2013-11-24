@@ -150,7 +150,6 @@ public interface XQueryTypes {
   IElementType ORDERED_EXPR = new XQueryElementType("ORDERED_EXPR");
   IElementType ORDERING_MODE_DECL = new XQueryElementType("ORDERING_MODE_DECL");
   IElementType ORDER_BY_CLAUSE = new XQueryElementType("ORDER_BY_CLAUSE");
-  IElementType ORDER_MODIFIER = new XQueryElementType("ORDER_MODIFIER");
   IElementType ORDER_SPEC = new XQueryElementType("ORDER_SPEC");
   IElementType ORDER_SPEC_LIST = new XQueryElementType("ORDER_SPEC_LIST");
   IElementType OR_EXPR = new XQueryElementType("OR_EXPR");
@@ -212,7 +211,6 @@ public interface XQueryTypes {
   IElementType URI_EXPR = new XQueryElementType("URI_EXPR");
   IElementType URI_LITERAL = new XQueryElementType("URI_LITERAL");
   IElementType VALIDATE_EXPR = new XQueryElementType("VALIDATE_EXPR");
-  IElementType VALIDATION_MODE = new XQueryElementType("VALIDATION_MODE");
   IElementType VALUE_EXPR = new XQueryElementType("VALUE_EXPR");
   IElementType VAR_DECL = new XQueryElementType("VAR_DECL");
   IElementType VAR_DEFAULT_VALUE = new XQueryElementType("VAR_DEFAULT_VALUE");
@@ -799,9 +797,6 @@ public interface XQueryTypes {
       else if (type == ORDER_BY_CLAUSE) {
         return new XQueryOrderByClauseImpl(node);
       }
-      else if (type == ORDER_MODIFIER) {
-        return new XQueryOrderModifierImpl(node);
-      }
       else if (type == ORDER_SPEC) {
         return new XQueryOrderSpecImpl(node);
       }
@@ -984,9 +979,6 @@ public interface XQueryTypes {
       }
       else if (type == VALIDATE_EXPR) {
         return new XQueryValidateExprImpl(node);
-      }
-      else if (type == VALIDATION_MODE) {
-        return new XQueryValidationModeImpl(node);
       }
       else if (type == VALUE_EXPR) {
         return new XQueryValueExprImpl(node);

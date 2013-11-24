@@ -414,9 +414,6 @@ public class XQueryParser implements PsiParser {
     else if (root_ == ORDER_BY_CLAUSE) {
       result_ = OrderByClause(builder_, level_ + 1);
     }
-    else if (root_ == ORDER_MODIFIER) {
-      result_ = OrderModifier(builder_, level_ + 1);
-    }
     else if (root_ == ORDER_SPEC) {
       result_ = OrderSpec(builder_, level_ + 1);
     }
@@ -602,9 +599,6 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == VALIDATE_EXPR) {
       result_ = ValidateExpr(builder_, level_ + 1);
-    }
-    else if (root_ == VALIDATION_MODE) {
-      result_ = ValidationMode(builder_, level_ + 1);
     }
     else if (root_ == VALUE_EXPR) {
       result_ = ValueExpr(builder_, level_ + 1);
@@ -5899,21 +5893,19 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // ("ascending" | "descending")? ("empty" ("greatest" | "least"))? ("collation" URILiteral)?
-  public static boolean OrderModifier(PsiBuilder builder_, int level_) {
+  static boolean OrderModifier(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "OrderModifier")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<order modifier>");
     result_ = OrderModifier_0(builder_, level_ + 1);
     result_ = result_ && OrderModifier_1(builder_, level_ + 1);
     result_ = result_ && OrderModifier_2(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(ORDER_MODIFIER);
-    }
-    else {
+    if (!result_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    else {
+      marker_.drop();
+    }
     return result_;
   }
 
@@ -8728,22 +8720,19 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // "lax" | "strict"
-  public static boolean ValidationMode(PsiBuilder builder_, int level_) {
+  static boolean ValidationMode(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ValidationMode")) return false;
-    if (!nextTokenIs(builder_, K_LAX) && !nextTokenIs(builder_, K_STRICT)
-        && replaceVariants(builder_, 2, "<validation mode>")) return false;
+    if (!nextTokenIs(builder_, K_LAX) && !nextTokenIs(builder_, K_STRICT)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<validation mode>");
     result_ = consumeToken(builder_, K_LAX);
     if (!result_) result_ = consumeToken(builder_, K_STRICT);
-    if (result_) {
-      marker_.done(VALIDATION_MODE);
-    }
-    else {
+    if (!result_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    else {
+      marker_.drop();
+    }
     return result_;
   }
 
