@@ -180,13 +180,14 @@ SC=({S} | "(:" {Char}* ~":)")+
 "empty" / {SC} ("greatest"|"least"|"at"|"in") {return XQueryTypes.K_EMPTY;}
 "allowing" / {SC} "empty"                  {return XQueryTypes.K_ALLOWING;}
 "greatest" / {SC}? (";"|",")               {return XQueryTypes.K_GREATEST;}
-"greatest" / {SC} ("for"|"let"|"order"|"stable"|"group"|"count"|"return") {return XQueryTypes.K_GREATEST;}
+"greatest" / {SC} ("for"|"let"|"order"|"stable"|"group"|"count"|"return"|"collation") {return XQueryTypes.K_GREATEST;}
 "least" / {SC}? (";"|",")                  {return XQueryTypes.K_LEAST;}
-"least" / {SC} ("for"|"let"|"order"|"stable"|"group"|"count"|"return") {return XQueryTypes.K_LEAST;}
+"least" / {SC} ("for"|"let"|"order"|"stable"|"group"|"count"|"return"|"collation") {return XQueryTypes.K_LEAST;}
 "ascending" / {SC}? ","                    {return XQueryTypes.K_ASCENDING;}
 "ascending" / {SC} ("empty"|"collation"|"for"|"let"|"order"|"stable"|"group"|"count"|"return"|",")   {return XQueryTypes.K_ASCENDING;}
 "descending" / {SC}? ","                   {return XQueryTypes.K_DESCENDING;}
 "descending" / {SC} ("empty"|"collation"|"for"|"let"|"order"|"stable"|"group"|"count"|"return"|",")  {return XQueryTypes.K_DESCENDING;}
+"collation" / {SC} ("\""|"'")              {return XQueryTypes.K_COLLATION;}
 "import"                                   {yypushback(yylength()); pushState(IMPORT_RECOGNITION); return TokenType.WHITE_SPACE;}
 "module"                                   {yypushback(yylength()); pushState(MODULE_RECOGNITION); return TokenType.WHITE_SPACE;}
 "xquery"                                   {yypushback(yylength()); pushState(XQUERY_RECOGNITION); return TokenType.WHITE_SPACE;}

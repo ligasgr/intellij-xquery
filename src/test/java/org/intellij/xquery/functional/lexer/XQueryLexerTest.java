@@ -332,6 +332,39 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testGroupByWithCollation() throws Exception {
+        assertProducedTokens("for $x in 1 to 20 group by $key collation 'x' return $x", new String[]{
+                "for", "for",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "x",
+                "WHITE_SPACE", " ",
+                "in", "in",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "1",
+                "WHITE_SPACE", " ",
+                "to", "to",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "20",
+                "WHITE_SPACE", " ",
+                "group", "group",
+                "WHITE_SPACE", " ",
+                "by", "by",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "key",
+                "WHITE_SPACE", " ",
+                "collation", "collation",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'x'",
+                "WHITE_SPACE", " ",
+                "return", "return",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "x"
+        });
+    }
+
     public void testWhere() throws Exception {
         assertProducedTokens("for $i in //item where $i/id = '0' return $i/name", new String[]{
                 "for", "for",
@@ -391,6 +424,68 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "NCName", "i",
                 "/", "/",
                 "NCName", "name"
+        });
+    }
+
+    public void testOrderByWithCollation() throws Exception {
+        assertProducedTokens("for $i in //item order by 'x' collation 'x' return $i", new String[]{
+                "for", "for",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "in", "in",
+                "WHITE_SPACE", " ",
+                "//", "//",
+                "NCName", "item",
+                "WHITE_SPACE", " ",
+                "order", "order",
+                "WHITE_SPACE", " ",
+                "by", "by",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'x'",
+                "WHITE_SPACE", " ",
+                "collation", "collation",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'x'",
+                "WHITE_SPACE", " ",
+                "return", "return",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+        });
+    }
+
+    public void testOrderByEmptyGreatestWithCollation() throws Exception {
+        assertProducedTokens("for $i in //item order by 'x' empty greatest collation 'x' return $i", new String[]{
+                "for", "for",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "in", "in",
+                "WHITE_SPACE", " ",
+                "//", "//",
+                "NCName", "item",
+                "WHITE_SPACE", " ",
+                "order", "order",
+                "WHITE_SPACE", " ",
+                "by", "by",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'x'",
+                "WHITE_SPACE", " ",
+                "empty", "empty",
+                "WHITE_SPACE", " ",
+                "greatest", "greatest",
+                "WHITE_SPACE", " ",
+                "collation", "collation",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'x'",
+                "WHITE_SPACE", " ",
+                "return", "return",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
         });
     }
 
