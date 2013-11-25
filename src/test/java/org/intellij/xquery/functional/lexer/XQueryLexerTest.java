@@ -159,6 +159,58 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testXmlContentWithCharacterRefs() throws Exception {
+        assertProducedTokens("<tag attr='x&#xa0;&#123;y'>x&#xa0;&#123;y</tag>", new String[]{
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "tag",
+                "WHITE_SPACE", " ",
+                "AttrNCName", "attr",
+                "AttrEqual", "=",
+                "'", "'",
+                "Char", "x",
+                "CharRef", "&#xa0;",
+                "CharRef", "&#123;",
+                "Char", "y",
+                "'", "'",
+                "WHITE_SPACE", "",
+                "XmlTagEnd", ">",
+                "ElementContentChar", "x",
+                "CharRef", "&#xa0;",
+                "CharRef", "&#123;",
+                "ElementContentChar", "y",
+                "XmlEndTagStart", "</",
+                "XmlTagNCName", "tag",
+                "XmlTagEnd", ">"
+        });
+    }
+
+    public void testXmlContentWithPredefinedRefs() throws Exception {
+        assertProducedTokens("<tag attr='x&amp;&nbsp;y'>x&amp;&nbsp;y</tag>", new String[]{
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "tag",
+                "WHITE_SPACE", " ",
+                "AttrNCName", "attr",
+                "AttrEqual", "=",
+                "'", "'",
+                "Char", "x",
+                "PredefinedEntityRef", "&amp;",
+                "PredefinedEntityRef", "&nbsp;",
+                "Char", "y",
+                "'", "'",
+                "WHITE_SPACE", "",
+                "XmlTagEnd", ">",
+                "ElementContentChar", "x",
+                "PredefinedEntityRef", "&amp;",
+                "PredefinedEntityRef", "&nbsp;",
+                "ElementContentChar", "y",
+                "XmlEndTagStart", "</",
+                "XmlTagNCName", "tag",
+                "XmlTagEnd", ">"
+        });
+    }
+
     public void testFlworExpression() throws Exception {
         assertProducedTokens("for $i in 1 to 10 let $j := 'no. ' || $i order by $i ascending, " +
                 "$j descending return $j", new String[]{
