@@ -21,12 +21,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryTagName extends XQueryElement {
-
-  @NotNull
-  XQueryLocalPart getLocalPart();
-
-  @Nullable
-  XQueryPrefix getPrefix();
+public interface XQueryXmlTagLocalName extends XQueryElement {
 
 }

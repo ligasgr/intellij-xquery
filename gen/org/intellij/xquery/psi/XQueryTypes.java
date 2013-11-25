@@ -43,6 +43,8 @@ public interface XQueryTypes {
   IElementType ATTRIBUTE_NAME = new XQueryElementType("ATTRIBUTE_NAME");
   IElementType ATTRIBUTE_TEST = new XQueryElementType("ATTRIBUTE_TEST");
   IElementType ATTRIB_NAME_OR_WILDCARD = new XQueryElementType("ATTRIB_NAME_OR_WILDCARD");
+  IElementType ATTR_LOCAL_NAME = new XQueryElementType("ATTR_LOCAL_NAME");
+  IElementType ATTR_NAMESPACE = new XQueryElementType("ATTR_NAMESPACE");
   IElementType AXIS_STEP = new XQueryElementType("AXIS_STEP");
   IElementType BASE_URI_DECL = new XQueryElementType("BASE_URI_DECL");
   IElementType BOUNDARY_SPACE_DECL = new XQueryElementType("BOUNDARY_SPACE_DECL");
@@ -194,7 +196,6 @@ public interface XQueryTypes {
   IElementType SWITCH_DEFAULT_RETURN_CLAUSE = new XQueryElementType("SWITCH_DEFAULT_RETURN_CLAUSE");
   IElementType SWITCH_EXPR = new XQueryElementType("SWITCH_EXPR");
   IElementType SWITCH_RETURN_CLAUSE = new XQueryElementType("SWITCH_RETURN_CLAUSE");
-  IElementType TAG_NAME = new XQueryElementType("TAG_NAME");
   IElementType TEXT_TEST = new XQueryElementType("TEXT_TEST");
   IElementType TREAT_EXPR = new XQueryElementType("TREAT_EXPR");
   IElementType TRY_CATCH_EXPR = new XQueryElementType("TRY_CATCH_EXPR");
@@ -222,8 +223,14 @@ public interface XQueryTypes {
   IElementType WHERE_CLAUSE = new XQueryElementType("WHERE_CLAUSE");
   IElementType WILDCARD = new XQueryElementType("WILDCARD");
   IElementType WINDOW_CLAUSE = new XQueryElementType("WINDOW_CLAUSE");
+  IElementType XML_TAG_LOCAL_NAME = new XQueryElementType("XML_TAG_LOCAL_NAME");
+  IElementType XML_TAG_NAME = new XQueryElementType("XML_TAG_NAME");
+  IElementType XML_TAG_NAMESPACE = new XQueryElementType("XML_TAG_NAMESPACE");
 
   IElementType APOSTROPHE = new XQueryTokenType("'");
+  IElementType ATTRCOLON = new XQueryTokenType("AttrColon");
+  IElementType ATTREQUAL = new XQueryTokenType("AttrEqual");
+  IElementType ATTRNCNAME = new XQueryTokenType("AttrNCName");
   IElementType AT_SIGN = new XQueryTokenType("@");
   IElementType BRACEDURILITERAL = new XQueryTokenType("BracedURILiteral");
   IElementType CDATASECTIONCONTENTCHAR = new XQueryTokenType("CDataSectionContentChar");
@@ -413,7 +420,14 @@ public interface XQueryTypes {
   IElementType SLASH_SLASH = new XQueryTokenType("//");
   IElementType STAR_SIGN = new XQueryTokenType("*");
   IElementType STRINGLITERAL = new XQueryTokenType("StringLiteral");
+  IElementType TAGNAME = new XQueryTokenType("TagName");
   IElementType URIQUALIFIEDNAME = new XQueryTokenType("URIQualifiedName");
+  IElementType XMLCOLON = new XQueryTokenType("XmlColon");
+  IElementType XMLEMPTYELEMENTEND = new XQueryTokenType("XmlEmptyElementEnd");
+  IElementType XMLENDTAGSTART = new XQueryTokenType("XmlEndTagStart");
+  IElementType XMLSTARTTAGSTART = new XQueryTokenType("XmlStartTagStart");
+  IElementType XMLTAGEND = new XQueryTokenType("XmlTagEnd");
+  IElementType XMLTAGNCNAME = new XQueryTokenType("XmlTagNCName");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
@@ -474,6 +488,12 @@ public interface XQueryTypes {
       }
       else if (type == ATTRIB_NAME_OR_WILDCARD) {
         return new XQueryAttribNameOrWildcardImpl(node);
+      }
+      else if (type == ATTR_LOCAL_NAME) {
+        return new XQueryAttrLocalNameImpl(node);
+      }
+      else if (type == ATTR_NAMESPACE) {
+        return new XQueryAttrNamespaceImpl(node);
       }
       else if (type == AXIS_STEP) {
         return new XQueryAxisStepImpl(node);
@@ -928,9 +948,6 @@ public interface XQueryTypes {
       else if (type == SWITCH_RETURN_CLAUSE) {
         return new XQuerySwitchReturnClauseImpl(node);
       }
-      else if (type == TAG_NAME) {
-        return new XQueryTagNameImpl(node);
-      }
       else if (type == TEXT_TEST) {
         return new XQueryTextTestImpl(node);
       }
@@ -1011,6 +1028,15 @@ public interface XQueryTypes {
       }
       else if (type == WINDOW_CLAUSE) {
         return new XQueryWindowClauseImpl(node);
+      }
+      else if (type == XML_TAG_LOCAL_NAME) {
+        return new XQueryXmlTagLocalNameImpl(node);
+      }
+      else if (type == XML_TAG_NAME) {
+        return new XQueryXmlTagNameImpl(node);
+      }
+      else if (type == XML_TAG_NAMESPACE) {
+        return new XQueryXmlTagNamespaceImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

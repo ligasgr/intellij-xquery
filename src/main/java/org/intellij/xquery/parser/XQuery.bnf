@@ -423,10 +423,14 @@ Constructor	   ::=   	DirectConstructor
 DirectConstructor	   ::=   	DirElemConstructor
  | DirCommentConstructor
  | DirPIConstructor
-DirElemConstructor	   ::=   	"<" TagName DirAttributeList? ("/>" | (">" DirElemContent* "</" TagName ">"))	/* ws: explicit */ {pin=1}
-TagName                ::= QName
-DirAttributeList	   ::=   	(DirAttributeName "=" DirAttributeValue)*	/* ws: explicit */
-DirAttributeName       ::= QName
+DirElemConstructor	   ::=   	XmlStartTagStart XmlTagName DirAttributeList? (XmlEmptyElementEnd | (XmlTagEnd DirElemContent* XmlEndTagStart XmlTagName XmlTagEnd))	/* ws: explicit */ {pin=1}
+XmlTagName ::= XmlTagNamespace XmlColon XmlTagLocalName | XmlTagLocalName
+XmlTagNamespace ::= XmlTagNCName
+XmlTagLocalName ::= XmlTagNCName
+DirAttributeList	   ::=   	(DirAttributeName AttrEqual DirAttributeValue)*	/* ws: explicit */
+DirAttributeName ::= AttrNamespace AttrColon AttrLocalName | AttrLocalName
+AttrNamespace	   ::=   	AttrNCName
+AttrLocalName	   ::=   	AttrNCName
 DirAttributeValue	   ::=   	("\"" (EscapeQuot | QuotAttrValueContent)* "\"")
  | ("'" (EscapeApos | AposAttrValueContent)* "'")	/* ws: explicit */
 QuotAttrValueContent	   ::=   	QuotAttrContentChar

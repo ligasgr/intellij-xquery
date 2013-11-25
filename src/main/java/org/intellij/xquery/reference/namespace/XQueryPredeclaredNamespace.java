@@ -31,6 +31,8 @@ public enum XQueryPredeclaredNamespace {
     XS("xs", "http://www.w3.org/2001/XMLSchema"),
     XSI("xsi", "http://www.w3.org/2001/XMLSchema-instance"),
     FN("fn", "http://www.w3.org/2005/xpath-functions"),
+    MATH("math", "http://www.w3.org/2005/xpath-functions/math"),
+    ERR("err", "http://www.w3.org/2005/xqt-errors"),
     LOCAL("local", "http://www.w3.org/2005/xquery-local-functions");
 
     private static final Map<String, String> mappingFromPrefix = new HashMap<String, String>();

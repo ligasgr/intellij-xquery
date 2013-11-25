@@ -13,23 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.intellij.xquery.highlighting;
 
-// This is a generated file. Not intended for manual editing.
-package org.intellij.xquery.psi;
+import com.intellij.openapi.editor.colors.impl.BundledColorSchemesProvider;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
+/**
+ * User: ligasgr
+ * Date: 25/11/13
+ * Time: 21:19
+ */
+public class XQueryColorSchemesProvider implements BundledColorSchemesProvider {
+    @Nullable
+    @Override
+    public String[] getBundledSchemesRelativePaths() {
+        return null;
+    }
 
-public interface XQueryDirElemConstructor extends XQueryElement {
-
-  @Nullable
-  XQueryDirAttributeList getDirAttributeList();
-
-  @NotNull
-  List<XQueryDirElemContent> getDirElemContentList();
-
-  @NotNull
-  List<XQueryXmlTagName> getXmlTagNameList();
-
+    @Nullable
+    @Override
+    public String getDefaultSchemaExtensionPath() {
+        return "/colorSchemes/Default";
+    }
 }

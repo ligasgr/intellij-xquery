@@ -21,15 +21,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryDirElemConstructor extends XQueryElement {
+public interface XQueryXmlTagName extends XQueryElement {
+
+  @NotNull
+  XQueryXmlTagLocalName getXmlTagLocalName();
 
   @Nullable
-  XQueryDirAttributeList getDirAttributeList();
-
-  @NotNull
-  List<XQueryDirElemContent> getDirElemContentList();
-
-  @NotNull
-  List<XQueryXmlTagName> getXmlTagNameList();
+  XQueryXmlTagNamespace getXmlTagNamespace();
 
 }

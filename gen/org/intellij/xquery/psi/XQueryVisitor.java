@@ -82,6 +82,14 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
+  public void visitAttrLocalName(@NotNull XQueryAttrLocalName o) {
+    visitElement(o);
+  }
+
+  public void visitAttrNamespace(@NotNull XQueryAttrNamespace o) {
+    visitElement(o);
+  }
+
   public void visitAttribNameOrWildcard(@NotNull XQueryAttribNameOrWildcard o) {
     visitElement(o);
   }
@@ -702,10 +710,6 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
-  public void visitTagName(@NotNull XQueryTagName o) {
-    visitElement(o);
-  }
-
   public void visitTextTest(@NotNull XQueryTextTest o) {
     visitElement(o);
   }
@@ -811,6 +815,18 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitWindowClause(@NotNull XQueryWindowClause o) {
+    visitElement(o);
+  }
+
+  public void visitXmlTagLocalName(@NotNull XQueryXmlTagLocalName o) {
+    visitElement(o);
+  }
+
+  public void visitXmlTagName(@NotNull XQueryXmlTagName o) {
+    visitElement(o);
+  }
+
+  public void visitXmlTagNamespace(@NotNull XQueryXmlTagNamespace o) {
     visitElement(o);
   }
 

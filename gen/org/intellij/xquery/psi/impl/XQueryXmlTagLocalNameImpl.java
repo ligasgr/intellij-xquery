@@ -26,26 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryTagNameImpl extends XQueryElementImpl implements XQueryTagName {
+public class XQueryXmlTagLocalNameImpl extends XQueryElementImpl implements XQueryXmlTagLocalName {
 
-  public XQueryTagNameImpl(ASTNode node) {
+  public XQueryXmlTagLocalNameImpl(ASTNode node) {
     super(node);
   }
 
-  @Override
-  @NotNull
-  public XQueryLocalPart getLocalPart() {
-    return findNotNullChildByClass(XQueryLocalPart.class);
-  }
-
-  @Override
-  @Nullable
-  public XQueryPrefix getPrefix() {
-    return findChildByClass(XQueryPrefix.class);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitTagName(this);
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitXmlTagLocalName(this);
     else super.accept(visitor);
   }
 

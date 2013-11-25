@@ -79,7 +79,7 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
                 .aroundInside(EQUAL, DECIMAL_FORMAT_DECL).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
                 .aroundInside(EQUAL, NAMESPACE_DECL).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
 
-                .aroundInside(EQUAL, DIR_ATTRIBUTE_LIST).spaceIf(xQuerySettings
+                .aroundInside(ATTREQUAL, DIR_ATTRIBUTE_LIST).spaceIf(xQuerySettings
                         .SPACE_AROUND_ASSIGNMENT_IN_XML_ATTRIBUTE)
 
                 .aroundInside(NOT_EQUAL, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_EQUALITY_OPERATORS)

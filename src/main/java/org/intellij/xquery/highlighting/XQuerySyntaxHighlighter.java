@@ -18,6 +18,7 @@ package org.intellij.xquery.highlighting;
 
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
+import com.intellij.openapi.editor.HighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.TokenType;
@@ -50,10 +51,20 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
             DefaultLanguageHighlighterColors.BLOCK_COMMENT);
     private static final TextAttributesKey NUMBER = createTextAttributesKey("XQUERY_NUMBER",
             DefaultLanguageHighlighterColors.NUMBER);
-    private static final TextAttributesKey NAME = createTextAttributesKey("XQUERY_NAME",
-            DefaultLanguageHighlighterColors.NUMBER);
     private static final TextAttributesKey OPERATION_SIGN = createTextAttributesKey("XQUERY_OPERATION",
             DefaultLanguageHighlighterColors.OPERATION_SIGN);
+    private static final TextAttributesKey XML_TAG = createTextAttributesKey("XQUERY_XML_TAG",
+            DefaultLanguageHighlighterColors.MARKUP_TAG);
+    private static final TextAttributesKey XML_TAG_NAME = createTextAttributesKey("XQUERY_XML_TAG_NAME");
+    private static final TextAttributesKey XML_ATTRIBUTE_NAME = createTextAttributesKey("XQUERY_XML_ATTRIBUTE_NAME",
+            DefaultLanguageHighlighterColors.MARKUP_ATTRIBUTE);
+    private static final TextAttributesKey XML_TAG_DATA = createTextAttributesKey("XQUERY_XML_TAG_DATA",
+            HighlighterColors.TEXT);
+    private static final TextAttributesKey XML_ENTITY_REFERENCE = createTextAttributesKey("XQUERY_XML_ENTITY_REFERENCE",
+            DefaultLanguageHighlighterColors.MARKUP_ENTITY);
+    public static final TextAttributesKey XML_COMMENT = createTextAttributesKey("XQUERY_XML_COMMENT",
+            DefaultLanguageHighlighterColors.LINE_COMMENT);
+
     private static final TextAttributesKey[] BAD_CHAR_KEYS = pack(BAD_CHARACTER);
     private static final TextAttributesKey[] KEYWORDS = pack(KEYWORD);
     private static final TextAttributesKey[] STRINGS = pack(STRING);
@@ -61,8 +72,13 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] PARENTHESES = pack(PARENTHESIS);
     private static final TextAttributesKey[] COMMENTS = pack(COMMENT);
     private static final TextAttributesKey[] NUMBERS = pack(NUMBER);
-    private static final TextAttributesKey[] NAMES = pack(NAME);
     private static final TextAttributesKey[] OPERATION_SIGNS = pack(OPERATION_SIGN);
+    private static final TextAttributesKey[] XML_TAGS = pack(XML_TAG);
+    private static final TextAttributesKey[] XML_TAG_NAMES = pack(XML_TAG, XML_TAG_NAME);
+    private static final TextAttributesKey[] XML_ATTRIBUTE_NAMES = pack(XML_TAG, XML_ATTRIBUTE_NAME);
+    private static final TextAttributesKey[] XML_ENTITY_REFERENCES = pack(XML_ENTITY_REFERENCE);
+    private static final TextAttributesKey[] XML_TAG_DATA_KEY = pack(XML_TAG_DATA);
+    private static final TextAttributesKey[] XML_COMMENTS = pack(XML_COMMENT);
 
     @NotNull
     @Override
@@ -75,11 +91,34 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
         if (tokenType == XQueryBasicTypes.EXPR_COMMENT_CONTENT
                 || tokenType == XQueryBasicTypes.EXPR_COMMENT_END
-                || tokenType == XQueryBasicTypes.EXPR_COMMENT_START
-                || tokenType == XQueryTypes.DIRCOMMENTCHAR
+                || tokenType == XQueryBasicTypes.EXPR_COMMENT_START) {
+            return COMMENTS;
+        }
+        if (tokenType == XQueryTypes.XMLEMPTYELEMENTEND
+                || tokenType == XQueryTypes.XMLENDTAGSTART
+                || tokenType == XQueryTypes.XMLSTARTTAGSTART
+                || tokenType == XQueryTypes.XMLTAGEND) {
+            return XML_TAGS;
+        }
+        if (tokenType == XQueryTypes.XMLTAGNCNAME
+                || tokenType == XQueryTypes.XMLCOLON) {
+            return XML_TAG_NAMES;
+        }
+        if (tokenType == XQueryTypes.ATTRNCNAME
+                || tokenType == XQueryTypes.ATTRCOLON) {
+            return XML_ATTRIBUTE_NAMES;
+        }
+        if (tokenType == XQueryTypes.CHARREF
+                || tokenType == XQueryTypes.PREDEFINEDENTITYREF) {
+            return XML_ENTITY_REFERENCES;
+        }
+        if (tokenType == XQueryTypes.ELEMENTCONTENTCHAR) {
+            return XML_TAG_DATA_KEY;
+        }
+        if (tokenType == XQueryTypes.DIRCOMMENTCHAR
                 || tokenType == XQueryTypes.DIR_COMMENT_BEGIN
                 || tokenType == XQueryTypes.DIR_COMMENT_END) {
-            return COMMENTS;
+            return XML_COMMENTS;
         }
         if (tokenType == XQueryTypes.DECIMALLITERAL
                 || tokenType == XQueryTypes.DOUBLELITERAL
@@ -88,7 +127,6 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
         }
         if (tokenType == XQueryTypes.STRINGLITERAL
                 || tokenType == XQueryTypes.CHAR
-                || tokenType == XQueryTypes.ELEMENTCONTENTCHAR
                 || tokenType == XQueryTypes.PREDEFINEDENTITYREF
                 || tokenType == XQueryTypes.APOSTROPHE
                 || tokenType == XQueryTypes.QUOT) {

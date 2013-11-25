@@ -46,8 +46,8 @@ public class XQueryDirElemConstructorImpl extends XQueryElementImpl implements X
 
   @Override
   @NotNull
-  public List<XQueryTagName> getTagNameList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryTagName.class);
+  public List<XQueryXmlTagName> getXmlTagNameList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryXmlTagName.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

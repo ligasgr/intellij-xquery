@@ -26,26 +26,26 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryDirAttributeNameImpl extends XQueryElementImpl implements XQueryDirAttributeName {
+public class XQueryXmlTagNameImpl extends XQueryElementImpl implements XQueryXmlTagName {
 
-  public XQueryDirAttributeNameImpl(ASTNode node) {
+  public XQueryXmlTagNameImpl(ASTNode node) {
     super(node);
   }
 
   @Override
   @NotNull
-  public XQueryAttrLocalName getAttrLocalName() {
-    return findNotNullChildByClass(XQueryAttrLocalName.class);
+  public XQueryXmlTagLocalName getXmlTagLocalName() {
+    return findNotNullChildByClass(XQueryXmlTagLocalName.class);
   }
 
   @Override
   @Nullable
-  public XQueryAttrNamespace getAttrNamespace() {
-    return findChildByClass(XQueryAttrNamespace.class);
+  public XQueryXmlTagNamespace getXmlTagNamespace() {
+    return findChildByClass(XQueryXmlTagNamespace.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirAttributeName(this);
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitXmlTagName(this);
     else super.accept(visitor);
   }
 

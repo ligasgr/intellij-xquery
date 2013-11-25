@@ -26,26 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryDirAttributeNameImpl extends XQueryElementImpl implements XQueryDirAttributeName {
+public class XQueryAttrNamespaceImpl extends XQueryElementImpl implements XQueryAttrNamespace {
 
-  public XQueryDirAttributeNameImpl(ASTNode node) {
+  public XQueryAttrNamespaceImpl(ASTNode node) {
     super(node);
   }
 
-  @Override
-  @NotNull
-  public XQueryAttrLocalName getAttrLocalName() {
-    return findNotNullChildByClass(XQueryAttrLocalName.class);
-  }
-
-  @Override
-  @Nullable
-  public XQueryAttrNamespace getAttrNamespace() {
-    return findChildByClass(XQueryAttrNamespace.class);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirAttributeName(this);
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAttrNamespace(this);
     else super.accept(visitor);
   }
 

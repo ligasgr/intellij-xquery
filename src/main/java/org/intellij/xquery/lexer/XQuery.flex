@@ -102,6 +102,9 @@ SC=({S} | "(:" {Char}* ~":)")+
 %state PI_BEFORE_CONTENT
 %state PI_CONTENT
 %state CDATA
+%state TAG_QNAME
+%state ATTR_LIST
+%state ATTR_QNAME
 // helper states for better support of live syntax highlighting
 %state XQUERY_RECOGNITION
 %state DECLARATION_RECOGNITION
@@ -129,11 +132,17 @@ SC=({S} | "(:" {Char}* ~":)")+
 "<" / {SC}? {DoubleLiteral}                {return XQueryTypes.LT_CHAR;}
 "<" / {SC}? {NCName} {SC}? "("             {return XQueryTypes.LT_CHAR;}
 "<" / {SC}? {NCName} {SC}? ":" {SC}? {NCName} {SC}? "(" {return XQueryTypes.LT_CHAR;}
+"<"                                        {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART;}
 "<="                                       {return XQueryTypes.LE_CHARS;}
 ">="                                       {return XQueryTypes.GE_CHARS;}
-"</"                                       {pushState(END_TAG); return XQueryTypes.END_TAG;}
-"<"                                        {pushState(START_TAG); return XQueryTypes.LT_CHAR;}
-">"                                        {return XQueryTypes.GT_CHAR;}
+"</"                                       {pushState(END_TAG); return XQueryTypes.XMLENDTAGSTART;}
+">" / {SC}? "$"                            {return XQueryTypes.GT_CHAR;}
+">" / {SC}? {IntegerLiteral}               {return XQueryTypes.GT_CHAR;}
+">" / {SC}? {DecimalLiteral}               {return XQueryTypes.GT_CHAR;}
+">" / {SC}? {DoubleLiteral}                {return XQueryTypes.GT_CHAR;}
+">" / {SC}? {NCName} {SC}? "("             {return XQueryTypes.GT_CHAR;}
+">" / {SC}? {NCName} {SC}? ":" {SC}? {NCName} {SC}? "(" {return XQueryTypes.GT_CHAR;}
+">"                                        {return XQueryTypes.XMLTAGEND;}
 "@"                                        {pushState(QNAME);return XQueryTypes.AT_SIGN;}
 "//" / {SC}? ("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "("  {return XQueryTypes.SLASH_SLASH;}
 "//" / {SC}? ("child"|"descendant"|"attribute"|"self"|"descendant-or-self"|"following-sibling"|"following"|"parent"|"ancestor"|"preceding-sibling"|"preceding"|"ancestor-or-self") {SC}? "::" {return XQueryTypes.SLASH_SLASH;}
@@ -286,23 +295,47 @@ SC=({S} | "(:" {Char}* ~":)")+
 
 <START_TAG> {
 {S}                                        {return TokenType.WHITE_SPACE;}
-{NCName}                                   {return XQueryTypes.NCNAME;}
-":"                                        {return XQueryTypes.COLON;}
-"="                                        {return XQueryTypes.EQUAL;}
+{NCName}                                   {pushState(TAG_QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
+">"                                        {popState();pushState(ELEMENT_CONTENT); return XQueryTypes.XMLTAGEND;}
+"/>"                                       {popState(); return XQueryTypes.XMLEMPTYELEMENTEND;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+}
+
+<TAG_QNAME> {
+{NCName} ":" {NameStartCharWithoutFirst}   {yypushback(2); return XQueryTypes.XMLTAGNCNAME;}
+{NCName}                                   {pushState(ATTR_LIST); return XQueryTypes.XMLTAGNCNAME;}
+":"                                        {return XQueryTypes.XMLCOLON;}
+{S}                                        {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+}
+
+<ATTR_LIST> {
+{S}                                        {return TokenType.WHITE_SPACE;}
+{NCName}                                   {pushState(ATTR_QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"="                                        {return XQueryTypes.ATTREQUAL;}
 "\""                                       {pushState(QUOT_STRING); return XQueryTypes.QUOT;}
 "'"                                        {pushState(APOS_STRING); return XQueryTypes.APOSTROPHE;}
-">"                                        {popState();pushState(ELEMENT_CONTENT); return XQueryTypes.GT_CHAR;}
-"/>"                                       {popState(); return XQueryTypes.CLOSE_TAG;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+}
+
+<ATTR_QNAME> {
+{NCName} ":" {NameStartCharWithoutFirst}   {yypushback(2); return XQueryTypes.ATTRNCNAME;}
+{NCName}                                   {popState(); return XQueryTypes.ATTRNCNAME;}
+":"                                        {return XQueryTypes.ATTRCOLON;}
+{S}                                        {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 <ELEMENT_CONTENT> {
 {S}                                        {return TokenType.WHITE_SPACE;}
 "<!--"                                     {pushState(DIR_COMMENT); return XQueryTypes.DIR_COMMENT_BEGIN;}
 "<![CDATA["                                {pushState(CDATA); return XQueryTypes.CDATA_BEGIN;}
+{PredefinedEntityRef}                      {return XQueryTypes.PREDEFINEDENTITYREF;}
+{CharRef}                                  {return XQueryTypes.CHARREF;}
 "{{" | "}}" | [^{}<]                       {return XQueryTypes.ELEMENTCONTENTCHAR;}
 "{"                                        {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE; }
-"</"                                       {popState(); pushState(END_TAG); return XQueryTypes.END_TAG;}
-"<"                                        {pushState(START_TAG); return XQueryTypes.LT_CHAR; }
+"</"                                       {popState(); pushState(END_TAG); return XQueryTypes.XMLENDTAGSTART;}
+"<"                                        {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART; }
 }
 
 <DIR_COMMENT> {
@@ -313,9 +346,9 @@ SC=({S} | "(:" {Char}* ~":)")+
 
 <END_TAG> {
 {S}                                        {return TokenType.WHITE_SPACE;}
-{NCName}                                   {return XQueryTypes.NCNAME;}
-":"                                        {return XQueryTypes.COLON;}
-">"                                        {popState(); return XQueryTypes.GT_CHAR;}
+{NCName}                                   {return XQueryTypes.XMLTAGNCNAME;}
+":"                                        {return XQueryTypes.XMLCOLON;}
+">"                                        {popState(); return XQueryTypes.XMLTAGEND;}
 }
 
 <QUOT_STRING> {

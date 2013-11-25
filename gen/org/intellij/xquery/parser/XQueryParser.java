@@ -84,6 +84,12 @@ public class XQueryParser implements PsiParser {
     else if (root_ == ATOMIC_OR_UNION_TYPE) {
       result_ = AtomicOrUnionType(builder_, level_ + 1);
     }
+    else if (root_ == ATTR_LOCAL_NAME) {
+      result_ = AttrLocalName(builder_, level_ + 1);
+    }
+    else if (root_ == ATTR_NAMESPACE) {
+      result_ = AttrNamespace(builder_, level_ + 1);
+    }
     else if (root_ == ATTRIB_NAME_OR_WILDCARD) {
       result_ = AttribNameOrWildcard(builder_, level_ + 1);
     }
@@ -549,9 +555,6 @@ public class XQueryParser implements PsiParser {
     else if (root_ == SWITCH_RETURN_CLAUSE) {
       result_ = SwitchReturnClause(builder_, level_ + 1);
     }
-    else if (root_ == TAG_NAME) {
-      result_ = TagName(builder_, level_ + 1);
-    }
     else if (root_ == TEXT_TEST) {
       result_ = TextTest(builder_, level_ + 1);
     }
@@ -632,6 +635,15 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == WINDOW_CLAUSE) {
       result_ = WindowClause(builder_, level_ + 1);
+    }
+    else if (root_ == XML_TAG_LOCAL_NAME) {
+      result_ = XmlTagLocalName(builder_, level_ + 1);
+    }
+    else if (root_ == XML_TAG_NAME) {
+      result_ = XmlTagName(builder_, level_ + 1);
+    }
+    else if (root_ == XML_TAG_NAMESPACE) {
+      result_ = XmlTagNamespace(builder_, level_ + 1);
     }
     else {
       Marker marker_ = builder_.mark();
@@ -1222,6 +1234,40 @@ public class XQueryParser implements PsiParser {
       marker_.rollbackTo();
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // AttrNCName
+  public static boolean AttrLocalName(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "AttrLocalName")) return false;
+    if (!nextTokenIs(builder_, ATTRNCNAME)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, ATTRNCNAME);
+    if (result_) {
+      marker_.done(ATTR_LOCAL_NAME);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // AttrNCName
+  public static boolean AttrNamespace(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "AttrNamespace")) return false;
+    if (!nextTokenIs(builder_, ATTRNCNAME)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, ATTRNCNAME);
+    if (result_) {
+      marker_.done(ATTR_NAMESPACE);
+    }
+    else {
+      marker_.rollbackTo();
+    }
     return result_;
   }
 
@@ -2709,7 +2755,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (DirAttributeName "=" DirAttributeValue)*
+  // (DirAttributeName AttrEqual DirAttributeValue)*
   public static boolean DirAttributeList(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DirAttributeList")) return false;
     Marker marker_ = builder_.mark();
@@ -2729,13 +2775,13 @@ public class XQueryParser implements PsiParser {
     return true;
   }
 
-  // DirAttributeName "=" DirAttributeValue
+  // DirAttributeName AttrEqual DirAttributeValue
   private static boolean DirAttributeList_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DirAttributeList_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = DirAttributeName(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, EQUAL);
+    result_ = result_ && consumeToken(builder_, ATTREQUAL);
     result_ = result_ && DirAttributeValue(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -2747,18 +2793,36 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // QName
+  // AttrNamespace AttrColon AttrLocalName | AttrLocalName
   public static boolean DirAttributeName(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DirAttributeName")) return false;
-    if (!nextTokenIs(builder_, NCNAME)) return false;
+    if (!nextTokenIs(builder_, ATTRNCNAME)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = QName(builder_, level_ + 1);
+    result_ = DirAttributeName_0(builder_, level_ + 1);
+    if (!result_) result_ = AttrLocalName(builder_, level_ + 1);
     if (result_) {
       marker_.done(DIR_ATTRIBUTE_NAME);
     }
     else {
       marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  // AttrNamespace AttrColon AttrLocalName
+  private static boolean DirAttributeName_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "DirAttributeName_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = AttrNamespace(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, ATTRCOLON);
+    result_ = result_ && AttrLocalName(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
     }
     return result_;
   }
@@ -2924,17 +2988,17 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "<" TagName DirAttributeList? ("/>" | (">" DirElemContent* "</" TagName ">"))
+  // XmlStartTagStart XmlTagName DirAttributeList? (XmlEmptyElementEnd | (XmlTagEnd DirElemContent* XmlEndTagStart XmlTagName XmlTagEnd))
   public static boolean DirElemConstructor(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DirElemConstructor")) return false;
-    if (!nextTokenIs(builder_, LT_CHAR)) return false;
+    if (!nextTokenIs(builder_, XMLSTARTTAGSTART)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
-    result_ = consumeToken(builder_, LT_CHAR);
+    result_ = consumeToken(builder_, XMLSTARTTAGSTART);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, TagName(builder_, level_ + 1));
+    result_ = result_ && report_error_(builder_, XmlTagName(builder_, level_ + 1));
     result_ = pinned_ && report_error_(builder_, DirElemConstructor_2(builder_, level_ + 1)) && result_;
     result_ = pinned_ && DirElemConstructor_3(builder_, level_ + 1) && result_;
     if (result_ || pinned_) {
@@ -2954,12 +3018,12 @@ public class XQueryParser implements PsiParser {
     return true;
   }
 
-  // "/>" | (">" DirElemContent* "</" TagName ">")
+  // XmlEmptyElementEnd | (XmlTagEnd DirElemContent* XmlEndTagStart XmlTagName XmlTagEnd)
   private static boolean DirElemConstructor_3(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DirElemConstructor_3")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, CLOSE_TAG);
+    result_ = consumeToken(builder_, XMLEMPTYELEMENTEND);
     if (!result_) result_ = DirElemConstructor_3_1(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
@@ -2970,16 +3034,16 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ">" DirElemContent* "</" TagName ">"
+  // XmlTagEnd DirElemContent* XmlEndTagStart XmlTagName XmlTagEnd
   private static boolean DirElemConstructor_3_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DirElemConstructor_3_1")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, GT_CHAR);
+    result_ = consumeToken(builder_, XMLTAGEND);
     result_ = result_ && DirElemConstructor_3_1_1(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, END_TAG);
-    result_ = result_ && TagName(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, GT_CHAR);
+    result_ = result_ && consumeToken(builder_, XMLENDTAGSTART);
+    result_ = result_ && XmlTagName(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, XMLTAGEND);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -3694,7 +3758,7 @@ public class XQueryParser implements PsiParser {
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, LT_CHAR);
-    result_ = result_ && TagName(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, TAGNAME);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -3710,7 +3774,7 @@ public class XQueryParser implements PsiParser {
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, END_TAG);
-    result_ = result_ && TagName(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, TAGNAME);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -8024,23 +8088,6 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // QName
-  public static boolean TagName(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TagName")) return false;
-    if (!nextTokenIs(builder_, NCNAME)) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = QName(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(TAG_NAME);
-    }
-    else {
-      marker_.rollbackTo();
-    }
-    return result_;
-  }
-
-  /* ********************************************************** */
   // "text" "(" ")"
   public static boolean TextTest(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TextTest")) return false;
@@ -9494,6 +9541,75 @@ public class XQueryParser implements PsiParser {
     }
     else {
       marker_.drop();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // XmlTagNCName
+  public static boolean XmlTagLocalName(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "XmlTagLocalName")) return false;
+    if (!nextTokenIs(builder_, XMLTAGNCNAME)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, XMLTAGNCNAME);
+    if (result_) {
+      marker_.done(XML_TAG_LOCAL_NAME);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // XmlTagNamespace XmlColon XmlTagLocalName | XmlTagLocalName
+  public static boolean XmlTagName(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "XmlTagName")) return false;
+    if (!nextTokenIs(builder_, XMLTAGNCNAME)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = XmlTagName_0(builder_, level_ + 1);
+    if (!result_) result_ = XmlTagLocalName(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(XML_TAG_NAME);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  // XmlTagNamespace XmlColon XmlTagLocalName
+  private static boolean XmlTagName_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "XmlTagName_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = XmlTagNamespace(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, XMLCOLON);
+    result_ = result_ && XmlTagLocalName(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // XmlTagNCName
+  public static boolean XmlTagNamespace(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "XmlTagNamespace")) return false;
+    if (!nextTokenIs(builder_, XMLTAGNCNAME)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, XMLTAGNCNAME);
+    if (result_) {
+      marker_.done(XML_TAG_NAMESPACE);
+    }
+    else {
+      marker_.rollbackTo();
     }
     return result_;
   }

@@ -24,9 +24,9 @@ import com.intellij.psi.PsiElement;
 public interface XQueryDirAttributeName extends XQueryElement {
 
   @NotNull
-  XQueryLocalPart getLocalPart();
+  XQueryAttrLocalName getAttrLocalName();
 
   @Nullable
-  XQueryPrefix getPrefix();
+  XQueryAttrNamespace getAttrNamespace();
 
 }

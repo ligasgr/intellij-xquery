@@ -89,17 +89,19 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testXmlContent() throws Exception {
         assertProducedTokens("<tag attr='val'>content</tag>", new String[]{
-                "<", "<",
-                "NCName", "tag",
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "tag",
                 "WHITE_SPACE", " ",
-                "NCName", "attr",
-                "=", "=",
+                "AttrNCName", "attr",
+                "AttrEqual", "=",
                 "'", "'",
                 "Char", "v",
                 "Char", "a",
                 "Char", "l",
                 "'", "'",
-                ">", ">",
+                "WHITE_SPACE", "",
+                "XmlTagEnd", ">",
                 "ElementContentChar", "c",
                 "ElementContentChar", "o",
                 "ElementContentChar", "n",
@@ -107,25 +109,27 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "ElementContentChar", "e",
                 "ElementContentChar", "n",
                 "ElementContentChar", "t",
-                "</", "</",
-                "NCName", "tag",
-                ">", ">"
+                "XmlEndTagStart", "</",
+                "XmlTagNCName", "tag",
+                "XmlTagEnd", ">"
         });
     }
 
     public void testDirectComment() throws Exception {
         assertProducedTokens("<tag attr='val'><!--content--></tag>", new String[]{
-                "<", "<",
-                "NCName", "tag",
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "tag",
                 "WHITE_SPACE", " ",
-                "NCName", "attr",
-                "=", "=",
+                "AttrNCName", "attr",
+                "AttrEqual", "=",
                 "'", "'",
                 "Char", "v",
                 "Char", "a",
                 "Char", "l",
                 "'", "'",
-                ">", ">",
+                "WHITE_SPACE", "",
+                "XmlTagEnd", ">",
                 "<!--", "<!--",
                 "DirCommentChar", "c",
                 "DirCommentChar", "o",
@@ -135,9 +139,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "DirCommentChar", "n",
                 "DirCommentChar", "t",
                 "-->", "-->",
-                "</", "</",
-                "NCName", "tag",
-                ">", ">"
+                "XmlEndTagStart", "</",
+                "XmlTagNCName", "tag",
+                "XmlTagEnd", ">"
         });
     }
 
@@ -619,9 +623,11 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testCData() throws Exception {
         assertProducedTokens("<tag><![CDATA[ data ]]></tag>", new String[]{
-                "<", "<",
-                "NCName", "tag",
-                ">", ">",
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "tag",
+                "WHITE_SPACE", "",
+                "XmlTagEnd", ">",
                 "<![CDATA[", "<![CDATA[",
                 "CDataSectionContentChar", " ",
                 "CDataSectionContentChar", "d",
@@ -630,9 +636,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "CDataSectionContentChar", "a",
                 "CDataSectionContentChar", " ",
                 "]]>", "]]>",
-                "</", "</",
-                "NCName", "tag",
-                ">", ">"
+                "XmlEndTagStart", "</",
+                "XmlTagNCName", "tag",
+                "XmlTagEnd", ">"
         });
     }
 
@@ -925,9 +931,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testIncompleteXmlContent() throws Exception {
         assertProducedTokens("</books>", new String[]{
-                "</", "</",
-                "NCName", "books",
-                ">", ">"
+                "XmlEndTagStart", "</",
+                "XmlTagNCName", "books",
+                "XmlTagEnd", ">"
         });
     }
 
@@ -1631,9 +1637,11 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ")", ")",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "<", "<",
-                "NCName", "test",
-                "/>", "/>",
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "test",
+                "WHITE_SPACE", "",
+                "XmlEmptyElementEnd", "/>",
                 "}", "}",
                 ";", ";"
         });
@@ -1666,9 +1674,11 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ")", ")",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "<", "<",
-                "NCName", "test",
-                "/>", "/>",
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "test",
+                "WHITE_SPACE", "",
+                "XmlEmptyElementEnd", "/>",
                 "}", "}",
                 ";", ";"
         });
