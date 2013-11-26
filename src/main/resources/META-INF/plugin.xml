@@ -58,6 +58,7 @@
         <declarationRangeHandler key="org.intellij.xquery.psi.XQueryFunctionDecl" implementationClass="org.intellij.xquery.structure.XQueryFunctionDeclarationRangeHandler"/>
         <annotator language="XQuery" implementationClass="org.intellij.xquery.annotator.XQueryAnnotator"/>
         <bundledColorSchemesProvider implementation="org.intellij.xquery.highlighting.XQueryColorSchemesProvider"/>
+        <colorSettingsPage implementation="org.intellij.xquery.highlighting.XQueryColorSettingsPage"/>
 
         <localInspection enabledByDefault="true" shortName="UnusedImports" groupName="XQuery"
                          displayName="Unused import"

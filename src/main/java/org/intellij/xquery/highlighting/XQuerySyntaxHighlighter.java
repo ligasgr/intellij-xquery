@@ -37,48 +37,54 @@ import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAtt
  */
 public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
 
-    private static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("XQUERY_BAD_CHARACTER",
+    public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("XQUERY_BAD_CHARACTER",
             DefaultLanguageHighlighterColors.INVALID_STRING_ESCAPE);
-    private static final TextAttributesKey KEYWORD = createTextAttributesKey("XQUERY_KEYWORD",
+    public static final TextAttributesKey KEYWORD = createTextAttributesKey("XQUERY_KEYWORD",
             DefaultLanguageHighlighterColors.KEYWORD);
-    private static final TextAttributesKey STRING = createTextAttributesKey("XQUERY_STRING",
-            DefaultLanguageHighlighterColors.STRING);
-    private static final TextAttributesKey SEMICOLON = createTextAttributesKey("XQUERY_SEMICOLON",
+    public static final TextAttributesKey SEMICOLON = createTextAttributesKey("XQUERY_SEMICOLON",
             DefaultLanguageHighlighterColors.SEMICOLON);
-    private static final TextAttributesKey PARENTHESIS = createTextAttributesKey("XQUERY_PARENTHESIS",
-            DefaultLanguageHighlighterColors.PARENTHESES);
-    private static final TextAttributesKey COMMENT = createTextAttributesKey("XQUERY_COMMENT",
-            DefaultLanguageHighlighterColors.BLOCK_COMMENT);
-    private static final TextAttributesKey NUMBER = createTextAttributesKey("XQUERY_NUMBER",
+    public static final TextAttributesKey STRING = createTextAttributesKey("XQUERY_STRING",
+            DefaultLanguageHighlighterColors.STRING);
+    public static final TextAttributesKey NUMBER = createTextAttributesKey("XQUERY_NUMBER",
             DefaultLanguageHighlighterColors.NUMBER);
-    private static final TextAttributesKey OPERATION_SIGN = createTextAttributesKey("XQUERY_OPERATION",
+    public static final TextAttributesKey OPERATION_SIGN = createTextAttributesKey("XQUERY_OPERATION",
             DefaultLanguageHighlighterColors.OPERATION_SIGN);
-    private static final TextAttributesKey XML_TAG = createTextAttributesKey("XQUERY_XML_TAG",
-            DefaultLanguageHighlighterColors.MARKUP_TAG);
-    private static final TextAttributesKey XML_TAG_NAME = createTextAttributesKey("XQUERY_XML_TAG_NAME");
-    private static final TextAttributesKey XML_ATTRIBUTE_NAME = createTextAttributesKey("XQUERY_XML_ATTRIBUTE_NAME",
-            DefaultLanguageHighlighterColors.MARKUP_ATTRIBUTE);
-    private static final TextAttributesKey XML_TAG_DATA = createTextAttributesKey("XQUERY_XML_TAG_DATA",
-            HighlighterColors.TEXT);
-    private static final TextAttributesKey XML_ENTITY_REFERENCE = createTextAttributesKey("XQUERY_XML_ENTITY_REFERENCE",
-            DefaultLanguageHighlighterColors.MARKUP_ENTITY);
+    public static final TextAttributesKey PARENTHESIS = createTextAttributesKey("XQUERY_PARENTHESIS",
+            DefaultLanguageHighlighterColors.PARENTHESES);
+    public static final TextAttributesKey BRACKET = createTextAttributesKey("XQUERY_BRACKET",
+            DefaultLanguageHighlighterColors.BRACKETS);
+    public static final TextAttributesKey BRACE = createTextAttributesKey("XQUERY_BRACE",
+            DefaultLanguageHighlighterColors.BRACES);
+    public static final TextAttributesKey COMMENT = createTextAttributesKey("XQUERY_COMMENT",
+            DefaultLanguageHighlighterColors.BLOCK_COMMENT);
     public static final TextAttributesKey XML_COMMENT = createTextAttributesKey("XQUERY_XML_COMMENT",
             DefaultLanguageHighlighterColors.LINE_COMMENT);
+    public static final TextAttributesKey XML_TAG = createTextAttributesKey("XQUERY_XML_TAG",
+            DefaultLanguageHighlighterColors.MARKUP_TAG);
+    public static final TextAttributesKey XML_TAG_NAME = createTextAttributesKey("XQUERY_XML_TAG_NAME");
+    public static final TextAttributesKey XML_ATTRIBUTE_NAME = createTextAttributesKey("XQUERY_XML_ATTRIBUTE_NAME",
+            DefaultLanguageHighlighterColors.MARKUP_ATTRIBUTE);
+    public static final TextAttributesKey XML_TAG_DATA = createTextAttributesKey("XQUERY_XML_TAG_DATA",
+            HighlighterColors.TEXT);
 
+    public static final TextAttributesKey XML_ENTITY_REFERENCE = createTextAttributesKey("XQUERY_XML_ENTITY_REFERENCE",
+            DefaultLanguageHighlighterColors.MARKUP_ENTITY);
     private static final TextAttributesKey[] BAD_CHAR_KEYS = pack(BAD_CHARACTER);
     private static final TextAttributesKey[] KEYWORDS = pack(KEYWORD);
-    private static final TextAttributesKey[] STRINGS = pack(STRING);
     private static final TextAttributesKey[] SEMICOLONS = pack(SEMICOLON);
-    private static final TextAttributesKey[] PARENTHESES = pack(PARENTHESIS);
-    private static final TextAttributesKey[] COMMENTS = pack(COMMENT);
+    private static final TextAttributesKey[] STRINGS = pack(STRING);
     private static final TextAttributesKey[] NUMBERS = pack(NUMBER);
     private static final TextAttributesKey[] OPERATION_SIGNS = pack(OPERATION_SIGN);
+    private static final TextAttributesKey[] PARENTHESES = pack(PARENTHESIS);
+    private static final TextAttributesKey[] BRACKETS = pack(BRACKET);
+    private static final TextAttributesKey[] BRACES = pack(BRACE);
+    private static final TextAttributesKey[] COMMENTS = pack(COMMENT);
+    private static final TextAttributesKey[] XML_COMMENTS = pack(XML_COMMENT);
     private static final TextAttributesKey[] XML_TAGS = pack(XML_TAG);
     private static final TextAttributesKey[] XML_TAG_NAMES = pack(XML_TAG, XML_TAG_NAME);
     private static final TextAttributesKey[] XML_ATTRIBUTE_NAMES = pack(XML_TAG, XML_ATTRIBUTE_NAME);
-    private static final TextAttributesKey[] XML_ENTITY_REFERENCES = pack(XML_ENTITY_REFERENCE);
     private static final TextAttributesKey[] XML_TAG_DATA_KEY = pack(XML_TAG_DATA);
-    private static final TextAttributesKey[] XML_COMMENTS = pack(XML_COMMENT);
+    private static final TextAttributesKey[] XML_ENTITY_REFERENCES = pack(XML_ENTITY_REFERENCE);
 
     @NotNull
     @Override
@@ -105,7 +111,8 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
             return XML_TAG_NAMES;
         }
         if (tokenType == XQueryTypes.ATTRNCNAME
-                || tokenType == XQueryTypes.ATTRCOLON) {
+                || tokenType == XQueryTypes.ATTRCOLON
+                || tokenType == XQueryTypes.ATTREQUAL) {
             return XML_ATTRIBUTE_NAMES;
         }
         if (tokenType == XQueryTypes.CHARREF
@@ -135,9 +142,14 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
         if (tokenType == XQueryTypes.SEMICOLON) {
             return SEMICOLONS;
         }
-        if (tokenType == XQueryTypes.L_PAR || tokenType == XQueryTypes.R_PAR || tokenType == XQueryTypes.L_C_BRACE ||
-                tokenType == XQueryTypes.R_C_BRACE) {
+        if (tokenType == XQueryTypes.L_PAR || tokenType == XQueryTypes.R_PAR) {
             return PARENTHESES;
+        }
+        if (tokenType == XQueryTypes.L_BRACKET || tokenType == XQueryTypes.R_BRACKET) {
+            return BRACKETS;
+        }
+        if (tokenType == XQueryTypes.L_C_BRACE || tokenType == XQueryTypes.R_C_BRACE) {
+            return BRACES;
         }
         if (tokenType == TokenType.BAD_CHARACTER) {
             return BAD_CHAR_KEYS;
@@ -148,6 +160,18 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType == XQueryTypes.LE
                 || tokenType == XQueryTypes.LT
                 || tokenType == XQueryTypes.NE
+                || tokenType == XQueryTypes.EQUAL
+                || tokenType == XQueryTypes.NOT_EQUAL
+                || tokenType == XQueryTypes.OP_ASSIGN
+                || tokenType == XQueryTypes.GE_CHARS
+                || tokenType == XQueryTypes.GT_CHAR
+                || tokenType == XQueryTypes.LE_CHARS
+                || tokenType == XQueryTypes.LT_CHAR
+                || tokenType == XQueryTypes.STAR_SIGN
+                || tokenType == XQueryTypes.OP_PLUS
+                || tokenType == XQueryTypes.OP_MINUS
+                || tokenType == XQueryTypes.NODECOMP_GT
+                || tokenType == XQueryTypes.NODECOMP_LT
                 ) {
             return OPERATION_SIGNS;
         }
