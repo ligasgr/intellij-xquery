@@ -16,17 +16,14 @@
 
 package org.intellij.xquery.functional.reference.module;
 
-import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import org.intellij.xquery.functional.BaseFunctionalTestCase;
 import org.intellij.xquery.XQueryFileType;
+import org.intellij.xquery.functional.BaseFunctionalTestCase;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryModuleImportPath;
-
-import java.util.List;
 
 import static org.intellij.xquery.functional.Assertions.assertChildOf;
 import static org.intellij.xquery.functional.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
@@ -40,13 +37,6 @@ public class XQueryModuleReferenceTest extends BaseFunctionalTestCase {
     @Override
     protected String getTestDataPath() {
         return "src/test/testData/org/intellij/xquery/functional/reference/module";
-    }
-
-    public void testModuleCompletion() {
-        myFixture.configureByFiles("ModuleCompletion.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
-        assertEquals(0, strings.size());
     }
 
     public void testModuleReference() {

@@ -36,12 +36,10 @@ import org.jetbrains.annotations.Nullable;
 public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> implements PsiPolyVariantReference {
 
     private XQueryVariableReferenceResolver variableReferenceResolver;
-    private XQueryVariableReferenceForAutoCompletionCollector autoCompletionCollector;
 
     public XQueryVariableReference(@NotNull XQueryVarRef element, TextRange textRange) {
         super(element, textRange);
         variableReferenceResolver = new XQueryVariableReferenceResolver(myElement);
-        autoCompletionCollector = new XQueryVariableReferenceForAutoCompletionCollector(myElement);
     }
 
     @NotNull
@@ -60,7 +58,7 @@ public class XQueryVariableReference extends PsiReferenceBase<XQueryVarRef> impl
     @NotNull
     @Override
     public Object[] getVariants() {
-        return autoCompletionCollector.getReferencesForAutoCompletion();
+        return new Object[0];
     }
 
     @Override

@@ -16,18 +16,12 @@
 
 package org.intellij.xquery.functional.reference.function;
 
-import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.psi.PsiElement;
 import org.intellij.xquery.functional.BaseFunctionalTestCase;
 import org.intellij.xquery.psi.XQueryFunctionCall;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryNamedFunctionRef;
-import org.intellij.xquery.functional.reference.MatchingStringCondition;
 
-import java.util.List;
-
-import static com.intellij.util.containers.ContainerUtil.findAll;
 import static org.intellij.xquery.functional.Assertions.assertChildOf;
 import static org.intellij.xquery.functional.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
@@ -40,143 +34,6 @@ public class XQueryFunctionReferenceTest extends BaseFunctionalTestCase {
     @Override
     protected String getTestDataPath() {
         return "src/test/testData/org/intellij/xquery/functional/reference/function";
-    }
-
-    public void testFunctionCompletionInTheSameFile() {
-        myFixture.configureByFiles("FunctionCompletionInTheSameFile.xq");
-
-        myFixture.complete(CompletionType.BASIC, 1);
-
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
-        assertEquals(1, referenceBasedEntries.size());
-    }
-
-    public void testFunctionCompletionInTheSameFileForDuplicatedEntries() {
-        myFixture.configureByFiles("FunctionCompletionInTheSameFileForDuplicatedEntries.xq");
-
-        myFixture.complete(CompletionType.BASIC, 1);
-
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
-        assertEquals(2, referenceBasedEntries.size());
-    }
-
-    public void testFunctionCompletionInTheSameFileForSameNameAndDifferentArity() {
-        myFixture.configureByFiles("FunctionCompletionInTheSameFileForSameNameAndDifferentArity.xq");
-
-        myFixture.complete(CompletionType.BASIC, 1);
-
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
-        assertEquals(2, referenceBasedEntries.size());
-    }
-
-    public void testFunctionCompletionInTheSameFileWithoutPrefixWithDefaultNamespace() {
-        myFixture.configureByFiles("FunctionCompletionInTheSameFileWithoutPrefixWithDefaultNamespace.xq");
-
-        myFixture.complete(CompletionType.BASIC, 1);
-
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
-        assertEquals(1, referenceBasedEntries.size());
-        List<String> referenceBasedEntriesWithAdditionalNamespace = findAll(strings,
-                new MatchingStringCondition("example:example"));
-        assertEquals(1, referenceBasedEntriesWithAdditionalNamespace.size());
-    }
-
-    public void testFunctionCompletionInTheSameFileWithPrefixWithDefaultNamespace() {
-        myFixture.configureByFiles("FunctionCompletionInTheSameFileWithPrefixWithDefaultNamespace.xq");
-
-        myFixture.complete(CompletionType.BASIC, 1);
-
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
-        assertEquals(1, referenceBasedEntries.size());
-        List<String> referenceBasedEntriesWithAdditionalNamespace = findAll(strings,
-                new MatchingStringCondition("example:example"));
-        assertEquals(1, referenceBasedEntriesWithAdditionalNamespace.size());
-    }
-
-    public void testFunctionCompletionFromAnotherFile() {
-        myFixture.configureByFiles("FunctionCompletionFromAnotherFile.xq", "FunctionReferencedFile.xq");
-
-        myFixture.complete(CompletionType.BASIC, 1);
-
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
-        assertEquals(1, referenceBasedEntries.size());
-    }
-
-    public void testFunctionCompletionFromAnotherFileForPrivate() {
-        myFixture.configureByFiles("FunctionCompletionFromAnotherFileForPrivate.xq",
-                "FunctionReferencedFileWithPrivate.xq");
-
-        myFixture.complete(CompletionType.BASIC, 1);
-
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
-        assertEquals(0, referenceBasedEntries.size());
-    }
-
-    public void testFunctionCompletionFromAnotherFileWithDefaultNamespaceAndImportedNamespacePrefix() {
-        myFixture.configureByFiles("FunctionCompletionFromAnotherFileWithDefaultNamespaceAndImportedNamespacePrefix.xq",
-                "FunctionReferencedFile.xq");
-
-        myFixture.complete(CompletionType.BASIC, 1);
-
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
-        assertEquals(1, referenceBasedEntries.size());
-        List<String> referenceBasedEntriesWithAdditionalNamespace = findAll(strings,
-                new MatchingStringCondition("accessible"));
-        assertEquals(1, referenceBasedEntriesWithAdditionalNamespace.size());
-    }
-
-    public void testFunctionCompletionFromAnotherFileWithDefaultNamespaceAndNotImportedNamespacePrefix() {
-        myFixture.configureByFiles
-                ("FunctionCompletionFromAnotherFileWithDefaultNamespaceAndNotImportedNamespacePrefix.xq",
-                        "FunctionReferencedFile.xq");
-
-        myFixture.complete(CompletionType.BASIC, 1);
-
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntriesWithAdditionalNamespace = findAll(strings,
-                new MatchingStringCondition("accessible"));
-        assertEquals(1, referenceBasedEntriesWithAdditionalNamespace.size());
-    }
-
-    public void testFunctionCompletionFromAnotherFileWithDefaultNamespaceAndDeclaredNamespace() {
-        myFixture.configureByFiles("FunctionCompletionFromAnotherFileWithDefaultNamespaceAndDeclaredNamespace.xq",
-                "FunctionReferencedFile.xq");
-
-        myFixture.complete(CompletionType.BASIC, 1);
-
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
-        assertEquals(1, referenceBasedEntries.size());
-        List<String> referenceBasedEntriesWithAdditionalNamespace = findAll(strings,
-                new MatchingStringCondition("accessible"));
-        assertEquals(1, referenceBasedEntriesWithAdditionalNamespace.size());
-    }
-
-    public void testFunctionCompletionInTheSameFileWithoutParentheses() {
-        myFixture.configureByFiles("FunctionCompletionInTheSameFileWithoutParentheses.xq");
-
-        myFixture.complete(CompletionType.BASIC, 1);
-
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
-        assertEquals(1, referenceBasedEntries.size());
-    }
-
-    public void testFunctionCompletionWithParenthesesAddedAfterFunctionName() {
-        myFixture.configureByFile("FunctionCompletionWithParenthesesAdded.xq");
-
-        myFixture.completeBasic();
-        myFixture.type(Lookup.NORMAL_SELECT_CHAR);
-
-        myFixture.checkResultByFile("FunctionCompletionWithParenthesesAddedAfter.xq");
     }
 
     public void testFunctionRenameInTheSameFile() {

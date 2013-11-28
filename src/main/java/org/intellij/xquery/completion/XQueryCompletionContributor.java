@@ -16,21 +16,27 @@
 
 package org.intellij.xquery.completion;
 
-import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionInitializationContext;
+import com.intellij.codeInsight.completion.CompletionParameters;
+import com.intellij.codeInsight.completion.CompletionProvider;
+import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ProcessingContext;
-import org.intellij.xquery.psi.*;
+import org.intellij.xquery.completion.function.FunctionCollector;
+import org.intellij.xquery.completion.keyword.KeywordCollector;
+import org.intellij.xquery.completion.variable.VariableCollector;
+import org.intellij.xquery.psi.XQueryFile;
+import org.intellij.xquery.psi.XQueryTypes;
+import org.intellij.xquery.psi.XQueryURILiteral;
+import org.intellij.xquery.reference.function.XQueryFunctionReference;
+import org.intellij.xquery.reference.variable.XQueryVariableReference;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.instanceOf;
-import static org.intellij.xquery.lexer.XQueryLexer.KEYWORDS;
 
 /**
  * User: ligasgr
@@ -42,47 +48,70 @@ public class XQueryCompletionContributor extends CompletionContributor {
     private static final String PARENTHESES = "()";
 
     public XQueryCompletionContributor() {
+        extendForVariablesOnly();
+        extendForVariablesAndFunctions();
+        extendForKeywords();
+    }
+
+    @Override
+    public void beforeCompletion(@NotNull CompletionInitializationContext context) {
+        overwriteDummyIdentifierToTryToCreateFunctionReference(context);
+    }
+
+    private void extendForKeywords() {
         extend(CompletionType.BASIC, psiElement().inFile(instanceOf(XQueryFile.class)),
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context,
                                                   @NotNull CompletionResultSet result) {
-                        if (positionAlreadyHasContributionFromReferences(getGrandfatherOfPosition(parameters))) return;
-                        result.addAllElements(getAllKeywords());
+                        if (isInsideOfUriLiteral(parameters.getPosition())) return;
+                        KeywordCollector keywordCollector = new KeywordCollector();
+                        result.addAllElements(keywordCollector.getProposedLookUpItems());
                     }
                 });
     }
 
-    @Override
-    public void beforeCompletion(@NotNull CompletionInitializationContext context) {
-        final CharSequence text = context.getEditor().getDocument().getCharsSequence();
-        if (isAPositionSuitableForFunctionCall(context, text)) {
-            context.setDummyIdentifier(CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED + PARENTHESES);
-        } else {
-            context.setDummyIdentifier(CompletionInitializationContext.DUMMY_IDENTIFIER);
-        }
+    private void extendForVariablesAndFunctions() {
+        extend(CompletionType.BASIC, referencePattern(XQueryTypes.NCNAME).withReferenceOfAnyOfTypes
+                (XQueryFunctionReference.class),
+                new CompletionProvider<CompletionParameters>() {
+                    @Override
+                    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context,
+                                                  @NotNull CompletionResultSet result) {
+                        XQueryFile originalFile = (XQueryFile) parameters.getOriginalFile();
+                        FunctionCollector functionCollector = new FunctionCollector(originalFile);
+                        VariableCollector variableCollector = new VariableCollector(parameters
+                                .getPosition());
+
+                        result.addAllElements(functionCollector.getProposedLookUpItems());
+                        result.addAllElements(variableCollector.getProposedLookUpItems());
+                    }
+                });
     }
 
-    private PsiElement getGrandfatherOfPosition(CompletionParameters parameters) {
-        return parameters.getPosition().getParent().getParent();
+    private void extendForVariablesOnly() {
+        extend(CompletionType.BASIC, referencePattern(XQueryTypes.NCNAME).withReferenceOfAnyOfTypes
+                (XQueryVariableReference.class),
+                new CompletionProvider<CompletionParameters>() {
+                    @Override
+                    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context,
+                                                  @NotNull CompletionResultSet result) {
+                        VariableCollector variableCollector = new VariableCollector(parameters
+                                .getPosition());
+                        result.addAllElements(variableCollector.getProposedLookUpItems());
+                    }
+                });
     }
 
-    private boolean positionAlreadyHasContributionFromReferences(PsiElement parent) {
-        return (parent instanceof XQueryFunctionName && !(parent.getParent() instanceof XQueryFunctionCall))
-                || parent instanceof XQueryVarName
-                || parent instanceof XQueryModuleImportPath;
+    private boolean isInsideOfUriLiteral(PsiElement position) {
+        return position.getParent() instanceof XQueryURILiteral;
     }
 
-    private boolean isAPositionSuitableForFunctionCall(CompletionInitializationContext context, CharSequence text) {
-        return context.getStartOffset() > 1 && !text.subSequence(context.getStartOffset() - 1,
-                context.getStartOffset()).equals("$");
+    private void overwriteDummyIdentifierToTryToCreateFunctionReference(CompletionInitializationContext context) {
+        context.setDummyIdentifier(CompletionInitializationContext.DUMMY_IDENTIFIER + PARENTHESES);
     }
 
-    private List<LookupElement> getAllKeywords() {
-        List<LookupElement> result = new LinkedList<LookupElement>();
-        for (IElementType keywordTokenType : KEYWORDS.getTypes()) {
-            result.add(LookupElementBuilder.create(keywordTokenType.toString()).bold());
-        }
-        return result;
+    private ReferencePattern referencePattern(IElementType type) {
+        return new ReferencePattern().withElementType(type);
     }
 }

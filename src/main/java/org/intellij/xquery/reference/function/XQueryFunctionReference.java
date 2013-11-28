@@ -38,12 +38,10 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionInvo
         PsiPolyVariantReference {
 
     private XQueryFunctionReferenceResolver functionReferenceResolver;
-    private XQueryFunctionReferenceForAutoCompletionCollector autoCompletionCollector;
 
     public XQueryFunctionReference(@NotNull XQueryFunctionInvocation element, TextRange textRange) {
         super(element, textRange);
         functionReferenceResolver = new XQueryFunctionReferenceResolver(myElement);
-        autoCompletionCollector = new XQueryFunctionReferenceForAutoCompletionCollector(myElement);
     }
 
     @NotNull
@@ -62,7 +60,7 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionInvo
     @NotNull
     @Override
     public Object[] getVariants() {
-        return autoCompletionCollector.getReferencesForAutoCompletion();
+        return new Object[0];
     }
 
     @Override

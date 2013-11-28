@@ -14,19 +14,34 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.reference.variable;
+package org.intellij.xquery.completion.variable;
 
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.icons.XQueryIcons;
 import org.intellij.xquery.model.XQueryQName;
-import org.intellij.xquery.psi.*;
+import org.intellij.xquery.psi.XQueryFile;
+import org.intellij.xquery.psi.XQueryModuleImport;
+import org.intellij.xquery.psi.XQueryParam;
+import org.intellij.xquery.psi.XQueryTypes;
+import org.intellij.xquery.psi.XQueryVarDecl;
+import org.intellij.xquery.psi.XQueryVarName;
 import org.intellij.xquery.psi.impl.XQueryPsiImplUtil;
+import org.intellij.xquery.reference.variable.VariableVariantsScopeProcessor;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,16 +53,16 @@ import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInI
  * Date: 14/08/13
  * Time: 22:28
  */
-public class XQueryVariableReferenceForAutoCompletionCollector {
+public class VariableCollector {
 
-    private XQueryVarRef sourceOfReference;
+    private PsiElement sourceOfReference;
     private List<XQueryQName<XQueryVarName>> proposedReferences;
 
-    public XQueryVariableReferenceForAutoCompletionCollector(XQueryVarRef sourceOfReference) {
+    public VariableCollector(PsiElement sourceOfReference) {
         this.sourceOfReference = sourceOfReference;
     }
 
-    public Object[] getReferencesForAutoCompletion() {
+    public List<LookupElement> getProposedLookUpItems() {
         XQueryFile file = (XQueryFile) sourceOfReference.getContainingFile();
         proposedReferences = new LinkedList<XQueryQName<XQueryVarName>>();
         addProposedReferencesFromLocalScopes();
@@ -76,7 +91,7 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
     }
 
     private void addProposedReferenceIfNotAlreadyAdded(XQueryQName<XQueryVarName> qName) {
-        if (!proposedReferences.contains(qName)) {
+        if (! proposedReferences.contains(qName)) {
             proposedReferences.add(qName);
         }
     }
@@ -107,10 +122,10 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
         }
     }
 
-    private LookupElement[] convertToLookupElements(List<XQueryQName<XQueryVarName>> proposedReferences) {
-        LookupElement[] lookupElements = new LookupElement[proposedReferences.size()];
+    private List<LookupElement> convertToLookupElements(List<XQueryQName<XQueryVarName>> proposedReferences) {
+        List<LookupElement> lookupElements = new ArrayList<LookupElement>(proposedReferences.size());
         for (int i = 0; i < proposedReferences.size(); i++) {
-            lookupElements[i] = convertToLookupElement(proposedReferences.get(i));
+            lookupElements.add(convertToLookupElement(proposedReferences.get(i)));
         }
         return lookupElements;
     }
@@ -139,6 +154,30 @@ public class XQueryVariableReferenceForAutoCompletionCollector {
         }
         return LookupElementBuilder.create(key)
                 .withIcon(icon)
-                .withTypeText(typeText);
+                .withTypeText(typeText)
+                .withInsertHandler(new VariableInsertHandler());
+    }
+
+    private class VariableInsertHandler implements InsertHandler<LookupElement> {
+        @Override
+        public void handleInsert(InsertionContext context, LookupElement item) {
+            final Editor editor = context.getEditor();
+            final Document document = editor.getDocument();
+            context.commitDocument();
+            PsiElement element = findPreviousToken(context);
+            if (element instanceof LeafPsiElement
+                    && ((LeafPsiElement) element).getElementType() != XQueryTypes.DOLLAR_SIGN) {
+                document.insertString(context.getStartOffset(), "$");
+            }
+        }
+
+        private PsiElement findPreviousToken(InsertionContext context) {
+            final PsiFile file = context.getFile();
+            PsiElement element = file.findElementAt(context.getStartOffset() - 1);
+            if (element instanceof PsiWhiteSpace) {
+                element = file.findElementAt(element.getTextRange().getStartOffset());
+            }
+            return element;
+        }
     }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.reference.function;
+package org.intellij.xquery.completion.function;
 
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
@@ -22,9 +22,14 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import org.intellij.xquery.icons.XQueryIcons;
 import org.intellij.xquery.model.XQueryQName;
-import org.intellij.xquery.psi.*;
+import org.intellij.xquery.psi.XQueryFile;
+import org.intellij.xquery.psi.XQueryFunctionDecl;
+import org.intellij.xquery.psi.XQueryFunctionName;
+import org.intellij.xquery.psi.XQueryModuleImport;
+import org.intellij.xquery.psi.XQueryNamespaceDecl;
 import org.intellij.xquery.psi.impl.XQueryPsiImplUtil;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,17 +42,16 @@ import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInI
  * Date: 07/08/13
  * Time: 15:08
  */
-public class XQueryFunctionReferenceForAutoCompletionCollector {
+public class FunctionCollector {
 
-    private XQueryFunctionInvocation sourceOfReference;
     private List<XQueryQName<XQueryFunctionName>> proposedReferences;
+    private XQueryFile file;
 
-    public XQueryFunctionReferenceForAutoCompletionCollector(XQueryFunctionInvocation sourceOfReference) {
-        this.sourceOfReference = sourceOfReference;
+    public FunctionCollector(XQueryFile file) {
+        this.file = file;
     }
 
-    public Object[] getReferencesForAutoCompletion() {
-        XQueryFile file = (XQueryFile) sourceOfReference.getContainingFile();
+    public List<LookupElement> getProposedLookUpItems() {
         proposedReferences = new LinkedList<XQueryQName<XQueryFunctionName>>();
         addProposedReferencesFromFile(file);
         addProposedReferencesFromModuleImports(file);
@@ -116,10 +120,10 @@ public class XQueryFunctionReferenceForAutoCompletionCollector {
         return functionDecl.getFunctionName() != null && functionDecl.getFunctionName().getTextLength() > 0;
     }
 
-    private LookupElement[] convertToLookupElements(List<XQueryQName<XQueryFunctionName>> proposedReferences) {
-        LookupElement[] lookupElements = new LookupElement[proposedReferences.size()];
+    private List<LookupElement> convertToLookupElements(List<XQueryQName<XQueryFunctionName>> proposedReferences) {
+        List<LookupElement> lookupElements = new ArrayList<LookupElement>(proposedReferences.size());
         for (int i = 0; i < proposedReferences.size(); i++) {
-            lookupElements[i] = convertToLookupElement(proposedReferences.get(i));
+            lookupElements.add(convertToLookupElement(proposedReferences.get(i)));
         }
         return lookupElements;
     }

@@ -16,15 +16,12 @@
 
 package org.intellij.xquery.functional.reference.namespace;
 
-import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
 import org.intellij.xquery.functional.BaseFunctionalTestCase;
 import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryModuleImport;
 import org.intellij.xquery.psi.XQueryNamespaceDecl;
 import org.intellij.xquery.psi.XQueryVarNamespace;
-
-import java.util.List;
 
 import static org.intellij.xquery.functional.Assertions.assertChildOf;
 import static org.intellij.xquery.functional.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
@@ -38,13 +35,6 @@ public class XQueryVariableNamespaceNameReferenceTest extends BaseFunctionalTest
     @Override
     protected String getTestDataPath() {
         return "src/test/testData/org/intellij/xquery/functional/reference/namespace";
-    }
-
-    public void testVariableNamespaceCompletion() {
-        myFixture.configureByFiles("VariableNamespaceNameCompletion.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
-        assertEquals(0, strings.size());
     }
 
     public void testVariableNamespaceReferenceForModuleDeclaration() {

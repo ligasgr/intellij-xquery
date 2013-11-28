@@ -16,18 +16,16 @@
 
 package org.intellij.xquery.functional.reference.variable;
 
-import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
 import org.intellij.xquery.functional.Assertions;
 import org.intellij.xquery.functional.BaseFunctionalTestCase;
-import org.intellij.xquery.psi.*;
-import org.intellij.xquery.functional.reference.MatchingStringCondition;
-
-import java.util.List;
+import org.intellij.xquery.psi.XQueryFunctionDecl;
+import org.intellij.xquery.psi.XQueryLetBinding;
+import org.intellij.xquery.psi.XQueryParam;
+import org.intellij.xquery.psi.XQueryVarDecl;
+import org.intellij.xquery.psi.XQueryVarRef;
 
 import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
-import static com.intellij.util.containers.ContainerUtil.findAll;
-import static java.util.Arrays.asList;
 import static org.intellij.xquery.functional.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
 /**
@@ -40,56 +38,6 @@ public class XQueryVariableReferenceTest extends BaseFunctionalTestCase {
     @Override
     protected String getTestDataPath() {
         return "src/test/testData/org/intellij/xquery/functional/reference/variable";
-    }
-
-    public void testVariableCompletionInTheSameFile() {
-        myFixture.configureByFiles("VariableCompletionInTheSameFile.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
-        assertTrue(strings.containsAll(asList("globalScopeVar", "functionArgumentScopeVar", "flworScopeVar")));
-        assertEquals(3, strings.size());
-    }
-
-    public void testVariableCompletionInTheSameFileWithScopesChecking() {
-        myFixture.configureByFiles("VariableCompletionInTheSameFileScopes.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
-        assertTrue(strings.containsAll(asList("anotherOne", "globalScopeVar", "scope:globalScopeVar",
-                "functionArgumentScopeVar", "newOne", "p", "rank", "someVar")));
-        assertEquals(8, strings.size());
-    }
-
-    public void testVariableCompletionInTheSameFileForDuplicatedEntries() {
-        myFixture.configureByFiles("VariableCompletionInTheSameFileForDuplicatedEntries.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
-        assertEquals(1, referenceBasedEntries.size());
-    }
-
-    public void testVariableCompletionInTheSameFileForSameNameAndDifferentScope() {
-        myFixture.configureByFiles("VariableCompletionInTheSameFileForSameNameAndDifferentScope.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
-        assertEquals(1, referenceBasedEntries.size());
-    }
-
-    public void testVariableCompletionFromAnotherFile() {
-        myFixture.configureByFiles("VariableCompletionFromAnotherFile.xq", "VariableReferencedFile.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
-        assertEquals(1, referenceBasedEntries.size());
-    }
-
-    public void testVariableCompletionFromAnotherFileWithPrivate() {
-        myFixture.configureByFiles("VariableCompletionFromAnotherFileForPrivate.xq",
-                "VariableReferencedFileWithPrivate.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
-        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
-        assertEquals(0, referenceBasedEntries.size());
     }
 
     public void testVariableRenameInTheSameFile() {

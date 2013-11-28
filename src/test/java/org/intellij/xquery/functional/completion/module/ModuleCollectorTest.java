@@ -13,37 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.intellij.xquery.functional.completion;
+package org.intellij.xquery.functional.completion.module;
 
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
 import org.intellij.xquery.functional.BaseFunctionalTestCase;
-import org.intellij.xquery.XQueryFileType;
 
 import java.util.List;
 
-import static org.intellij.xquery.lexer.XQueryLexer.KEYWORDS;
-
 /**
  * User: ligasgr
- * Date: 02/08/13
- * Time: 13:46
+ * Date: 27/11/13
+ * Time: 20:46
  */
-public class XQueryCompletionContributorTest extends BaseFunctionalTestCase {
-
-    public void testKeywordsCompletion() throws Exception {
-        myFixture.configureByText(XQueryFileType.INSTANCE, "<caret>");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
-        assertAllKeywords(KEYWORDS, strings);
+public class ModuleCollectorTest extends BaseFunctionalTestCase {
+    @Override
+    protected String getTestDataPath() {
+        return "src/test/testData/org/intellij/xquery/functional/completion/module";
     }
 
-    private void assertAllKeywords(TokenSet keywords, List<String> strings) {
-        for (IElementType keywordTokenType : keywords.getTypes()) {
-            String keywordString = keywordTokenType.toString();
-            assertTrue(String.format("Keyword %s missing", keywordString), strings.contains(keywordString));
-        }
+    public void testModuleCompletion() {
+        myFixture.configureByFiles("ModuleCompletion.xq");
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> strings = myFixture.getLookupElementStrings();
+        assertEquals(0, strings.size());
     }
 }
