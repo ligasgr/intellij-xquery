@@ -16,29 +16,20 @@
 
 package org.intellij.xquery.completion.variable;
 
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.ResolveState;
-import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.icons.XQueryIcons;
 import org.intellij.xquery.model.XQueryQName;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryModuleImport;
 import org.intellij.xquery.psi.XQueryParam;
-import org.intellij.xquery.psi.XQueryTypes;
 import org.intellij.xquery.psi.XQueryVarDecl;
 import org.intellij.xquery.psi.XQueryVarName;
 import org.intellij.xquery.psi.impl.XQueryPsiImplUtil;
-import org.intellij.xquery.reference.variable.VariableVariantsScopeProcessor;
 
 import javax.swing.Icon;
 import java.util.ArrayList;
@@ -156,28 +147,5 @@ public class VariableCollector {
                 .withIcon(icon)
                 .withTypeText(typeText)
                 .withInsertHandler(new VariableInsertHandler());
-    }
-
-    private class VariableInsertHandler implements InsertHandler<LookupElement> {
-        @Override
-        public void handleInsert(InsertionContext context, LookupElement item) {
-            final Editor editor = context.getEditor();
-            final Document document = editor.getDocument();
-            context.commitDocument();
-            PsiElement element = findPreviousToken(context);
-            if (element instanceof LeafPsiElement
-                    && ((LeafPsiElement) element).getElementType() != XQueryTypes.DOLLAR_SIGN) {
-                document.insertString(context.getStartOffset(), "$");
-            }
-        }
-
-        private PsiElement findPreviousToken(InsertionContext context) {
-            final PsiFile file = context.getFile();
-            PsiElement element = file.findElementAt(context.getStartOffset() - 1);
-            if (element instanceof PsiWhiteSpace) {
-                element = file.findElementAt(element.getTextRange().getStartOffset());
-            }
-            return element;
-        }
     }
 }

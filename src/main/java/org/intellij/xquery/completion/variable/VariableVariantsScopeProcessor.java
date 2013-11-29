@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.reference.variable;
+package org.intellij.xquery.completion.variable;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
