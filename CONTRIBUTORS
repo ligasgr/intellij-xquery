@@ -1,3 +1,4 @@
 Arnost Valicek <arnost.valicek@gmail.com> - Issue #47 - Structure view should display visibility modifier
 Slawomir Wachowski <slawwach@gmail.com> - Issue #51 - Highlighting unused imports
 Michal Jedynak <m.jedynak@gmail.com> - Issue #22 - Duplicate declarations code insight
+Arnost Valicek <arnost.valicek@gmail.com> - Issue #72 - Structure view should be able to filter-out non-public functions and variables
