@@ -25,6 +25,7 @@ import com.intellij.psi.PsiElement;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryVarDecl;
+import org.intellij.xquery.psi.impl.XQueryPsiImplUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,5 +94,13 @@ public class XQueryStructureViewElement implements StructureViewTreeElement, Sor
         } else {
             return EMPTY_ARRAY;
         }
+    }
+
+    public boolean isPublic() {
+        if (element instanceof XQueryVarDecl)
+            return XQueryPsiImplUtil.variableIsPublic((XQueryVarDecl) element);
+        if (element instanceof XQueryFunctionDecl)
+            return XQueryPsiImplUtil.functionIsPublic((XQueryFunctionDecl) element);
+        return true;
     }
 }
