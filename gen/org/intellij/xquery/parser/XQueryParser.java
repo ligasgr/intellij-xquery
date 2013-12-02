@@ -306,9 +306,6 @@ public class XQueryParser implements PsiParser {
     else if (root_ == FUNCTION_NAME) {
       result_ = FunctionName(builder_, level_ + 1);
     }
-    else if (root_ == FUNCTION_NAMESPACE) {
-      result_ = FunctionNamespace(builder_, level_ + 1);
-    }
     else if (root_ == FUNCTION_TEST) {
       result_ = FunctionTest(builder_, level_ + 1);
     }
@@ -393,11 +390,11 @@ public class XQueryParser implements PsiParser {
     else if (root_ == NAMESPACE_DECL) {
       result_ = NamespaceDecl(builder_, level_ + 1);
     }
-    else if (root_ == NAMESPACE_NAME) {
-      result_ = NamespaceName(builder_, level_ + 1);
-    }
     else if (root_ == NAMESPACE_NODE_TEST) {
       result_ = NamespaceNodeTest(builder_, level_ + 1);
+    }
+    else if (root_ == NAMESPACE_PREFIX) {
+      result_ = NamespacePrefix(builder_, level_ + 1);
     }
     else if (root_ == NEXT_ITEM) {
       result_ = NextItem(builder_, level_ + 1);
@@ -614,9 +611,6 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == VAR_NAME) {
       result_ = VarName(builder_, level_ + 1);
-    }
-    else if (root_ == VAR_NAMESPACE) {
-      result_ = VarNamespace(builder_, level_ + 1);
     }
     else if (root_ == VAR_REF) {
       result_ = VarRef(builder_, level_ + 1);
@@ -4306,7 +4300,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // FunctionNamespace ':' FunctionLocalName | FunctionLocalName | URIQualifiedName
+  // Prefix ':' FunctionLocalName | FunctionLocalName | URIQualifiedName
   public static boolean FunctionName(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionName")) return false;
     if (!nextTokenIs(builder_, NCNAME) && !nextTokenIs(builder_, URIQUALIFIEDNAME)
@@ -4327,12 +4321,12 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // FunctionNamespace ':' FunctionLocalName
+  // Prefix ':' FunctionLocalName
   private static boolean FunctionName_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionName_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = FunctionNamespace(builder_, level_ + 1);
+    result_ = Prefix(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLON);
     result_ = result_ && FunctionLocalName(builder_, level_ + 1);
     if (!result_) {
@@ -4340,23 +4334,6 @@ public class XQueryParser implements PsiParser {
     }
     else {
       marker_.drop();
-    }
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // NCName
-  public static boolean FunctionNamespace(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "FunctionNamespace")) return false;
-    if (!nextTokenIs(builder_, NCNAME)) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, NCNAME);
-    if (result_) {
-      marker_.done(FUNCTION_NAMESPACE);
-    }
-    else {
-      marker_.rollbackTo();
     }
     return result_;
   }
@@ -5312,7 +5289,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "module" "namespace" NamespaceName "=" URILiteral Separator
+  // "module" "namespace" NamespacePrefix "=" URILiteral Separator
   public static boolean ModuleDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleDecl")) return false;
     boolean result_ = false;
@@ -5322,7 +5299,7 @@ public class XQueryParser implements PsiParser {
     result_ = consumeToken(builder_, K_MODULE);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, consumeToken(builder_, K_NAMESPACE));
-    result_ = pinned_ && report_error_(builder_, NamespaceName(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && report_error_(builder_, NamespacePrefix(builder_, level_ + 1)) && result_;
     result_ = pinned_ && report_error_(builder_, consumeToken(builder_, EQUAL)) && result_;
     result_ = pinned_ && report_error_(builder_, URILiteral(builder_, level_ + 1)) && result_;
     result_ = pinned_ && Separator(builder_, level_ + 1) && result_;
@@ -5366,7 +5343,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "import" "module" ("namespace" NamespaceName "=")? ModuleImportNamespace ("at" ModuleImportPath ("," ModuleImportPath)*)? Separator
+  // "import" "module" ("namespace" NamespacePrefix "=")? ModuleImportNamespace ("at" ModuleImportPath ("," ModuleImportPath)*)? Separator
   public static boolean ModuleImport(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleImport")) return false;
     if (!nextTokenIs(builder_, K_IMPORT)) return false;
@@ -5391,20 +5368,20 @@ public class XQueryParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // ("namespace" NamespaceName "=")?
+  // ("namespace" NamespacePrefix "=")?
   private static boolean ModuleImport_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleImport_2")) return false;
     ModuleImport_2_0(builder_, level_ + 1);
     return true;
   }
 
-  // "namespace" NamespaceName "="
+  // "namespace" NamespacePrefix "="
   private static boolean ModuleImport_2_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ModuleImport_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, K_NAMESPACE);
-    result_ = result_ && NamespaceName(builder_, level_ + 1);
+    result_ = result_ && NamespacePrefix(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, EQUAL);
     if (!result_) {
       marker_.rollbackTo();
@@ -5621,7 +5598,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "declare" "namespace" NamespaceName "=" URILiteral Separator
+  // "declare" "namespace" NamespacePrefix "=" URILiteral Separator
   public static boolean NamespaceDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "NamespaceDecl")) return false;
     if (!nextTokenIs(builder_, K_DECLARE)) return false;
@@ -5632,7 +5609,7 @@ public class XQueryParser implements PsiParser {
     result_ = consumeToken(builder_, K_DECLARE);
     result_ = result_ && consumeToken(builder_, K_NAMESPACE);
     pinned_ = result_; // pin = 2
-    result_ = result_ && report_error_(builder_, NamespaceName(builder_, level_ + 1));
+    result_ = result_ && report_error_(builder_, NamespacePrefix(builder_, level_ + 1));
     result_ = pinned_ && report_error_(builder_, consumeToken(builder_, EQUAL)) && result_;
     result_ = pinned_ && report_error_(builder_, URILiteral(builder_, level_ + 1)) && result_;
     result_ = pinned_ && Separator(builder_, level_ + 1) && result_;
@@ -5644,23 +5621,6 @@ public class XQueryParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
-  }
-
-  /* ********************************************************** */
-  // NCName
-  public static boolean NamespaceName(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "NamespaceName")) return false;
-    if (!nextTokenIs(builder_, NCNAME)) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, NCNAME);
-    if (result_) {
-      marker_.done(NAMESPACE_NAME);
-    }
-    else {
-      marker_.rollbackTo();
-    }
-    return result_;
   }
 
   /* ********************************************************** */
@@ -5684,6 +5644,23 @@ public class XQueryParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // NCName
+  public static boolean NamespacePrefix(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "NamespacePrefix")) return false;
+    if (!nextTokenIs(builder_, NCNAME)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, NCNAME);
+    if (result_) {
+      marker_.done(NAMESPACE_PREFIX);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
   }
 
   /* ********************************************************** */
@@ -7351,7 +7328,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "import" "schema" (("namespace" NamespaceName "=") | ("default" "element" "namespace"))? URILiteral ("at" URILiteral ("," URILiteral)*)? Separator
+  // "import" "schema" (("namespace" NamespacePrefix "=") | ("default" "element" "namespace"))? URILiteral ("at" URILiteral ("," URILiteral)*)? Separator
   public static boolean SchemaImport(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SchemaImport")) return false;
     if (!nextTokenIs(builder_, K_IMPORT)) return false;
@@ -7376,14 +7353,14 @@ public class XQueryParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // (("namespace" NamespaceName "=") | ("default" "element" "namespace"))?
+  // (("namespace" NamespacePrefix "=") | ("default" "element" "namespace"))?
   private static boolean SchemaImport_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SchemaImport_2")) return false;
     SchemaImport_2_0(builder_, level_ + 1);
     return true;
   }
 
-  // ("namespace" NamespaceName "=") | ("default" "element" "namespace")
+  // ("namespace" NamespacePrefix "=") | ("default" "element" "namespace")
   private static boolean SchemaImport_2_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SchemaImport_2_0")) return false;
     boolean result_ = false;
@@ -7399,13 +7376,13 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // "namespace" NamespaceName "="
+  // "namespace" NamespacePrefix "="
   private static boolean SchemaImport_2_0_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SchemaImport_2_0_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, K_NAMESPACE);
-    result_ = result_ && NamespaceName(builder_, level_ + 1);
+    result_ = result_ && NamespacePrefix(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, EQUAL);
     if (!result_) {
       marker_.rollbackTo();
@@ -8947,7 +8924,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // VarNamespace ':' VarLocalName | VarLocalName | URIQualifiedName
+  // Prefix ':' VarLocalName | VarLocalName | URIQualifiedName
   public static boolean VarName(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarName")) return false;
     if (!nextTokenIs(builder_, NCNAME) && !nextTokenIs(builder_, URIQUALIFIEDNAME)
@@ -8968,12 +8945,12 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // VarNamespace ':' VarLocalName
+  // Prefix ':' VarLocalName
   private static boolean VarName_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarName_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = VarNamespace(builder_, level_ + 1);
+    result_ = Prefix(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLON);
     result_ = result_ && VarLocalName(builder_, level_ + 1);
     if (!result_) {
@@ -8981,23 +8958,6 @@ public class XQueryParser implements PsiParser {
     }
     else {
       marker_.drop();
-    }
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // NCName
-  public static boolean VarNamespace(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "VarNamespace")) return false;
-    if (!nextTokenIs(builder_, NCNAME)) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, NCNAME);
-    if (result_) {
-      marker_.done(VAR_NAMESPACE);
-    }
-    else {
-      marker_.rollbackTo();
     }
     return result_;
   }
@@ -9289,7 +9249,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (NCName ":" "*")
+  // (Prefix ":" "*")
   //  | ("*" ":" NCName)
   //  | "*"
   //  | (BracedURILiteral "*")
@@ -9312,12 +9272,12 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // NCName ":" "*"
+  // Prefix ":" "*"
   private static boolean Wildcard_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Wildcard_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, NCNAME);
+    result_ = Prefix(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLON);
     result_ = result_ && consumeToken(builder_, STAR_SIGN);
     if (!result_) {

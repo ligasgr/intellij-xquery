@@ -28,7 +28,7 @@ public interface XQueryFunctionName extends XQueryNamedElement {
   XQueryFunctionLocalName getFunctionLocalName();
 
   @Nullable
-  XQueryFunctionNamespace getFunctionNamespace();
+  XQueryPrefix getPrefix();
 
   String getName();
 

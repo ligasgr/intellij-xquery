@@ -21,8 +21,9 @@ import org.intellij.xquery.annotator.duplicateFunction.Determiner;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryFunctionName;
-import org.intellij.xquery.psi.XQueryFunctionNamespace;
 import org.intellij.xquery.psi.XQueryModuleDecl;
+import org.intellij.xquery.psi.XQueryNamespacePrefix;
+import org.intellij.xquery.psi.XQueryPrefix;
 import org.intellij.xquery.psi.XQueryURILiteral;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +61,7 @@ public class DeterminerTest {
     @Mock private PsiElement notXQueryFunctionDeclaration;
     @Mock private XQueryModuleDecl moduleDeclaration;
     @Mock private XQueryURILiteral uriLiteral;
-    @Mock private XQueryFunctionNamespace functionNamespaceObject;
+    @Mock private XQueryPrefix functionNamespaceObject;
 
     @Before
     public void setUp() {
@@ -71,7 +72,7 @@ public class DeterminerTest {
         given(file.getImportedFilesThatExist(NO_CONDITION)).willReturn(newArrayList(importedFile));
         given(importedFile.getModuleDeclaration()).willReturn(moduleDeclaration);
         given(moduleDeclaration.getURILiteral()).willReturn(uriLiteral);
-        given(functionName.getFunctionNamespace()).willReturn(functionNamespaceObject);
+        given(functionName.getPrefix()).willReturn(functionNamespaceObject);
         given(functionNamespaceObject.getText()).willReturn(FUNCTION_NAMESPACE);
     }
     

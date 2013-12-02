@@ -27,7 +27,8 @@ import org.intellij.xquery.lexer.XQueryLexer;
 import org.intellij.xquery.parser.XQueryParserDefinition;
 import org.intellij.xquery.psi.XQueryFunctionName;
 import org.intellij.xquery.psi.XQueryNamedElement;
-import org.intellij.xquery.psi.XQueryNamespaceName;
+import org.intellij.xquery.psi.XQueryNamespacePrefix;
+import org.intellij.xquery.psi.XQueryPrefix;
 import org.intellij.xquery.psi.XQueryVarName;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -64,8 +65,8 @@ public class XQueryFindUsageProvider implements FindUsagesProvider {
             return "variable";
         } else if (element instanceof XQueryFunctionName) {
             return "function";
-        } else if (element instanceof XQueryNamespaceName) {
-            return "namespace name";
+        } else if (element instanceof XQueryNamespacePrefix || element instanceof XQueryPrefix) {
+            return "namespace prefix";
         } else {
             return "other";
         }

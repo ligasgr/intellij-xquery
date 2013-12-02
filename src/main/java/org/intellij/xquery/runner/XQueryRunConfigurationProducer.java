@@ -30,7 +30,13 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import org.intellij.xquery.psi.*;
+import org.intellij.xquery.psi.XQueryContextItemDecl;
+import org.intellij.xquery.psi.XQueryFile;
+import org.intellij.xquery.psi.XQueryLiteral;
+import org.intellij.xquery.psi.XQueryNamespaceSource;
+import org.intellij.xquery.psi.XQueryPrefix;
+import org.intellij.xquery.psi.XQueryVarDecl;
+import org.intellij.xquery.psi.XQueryVarDefaultValue;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.intellij.xquery.runner.state.run.XQueryRunVariable;
 import org.intellij.xquery.runner.state.run.XQueryRunVariables;
@@ -125,10 +131,10 @@ public class XQueryRunConfigurationProducer extends RuntimeConfigurationProducer
                 }
                 boolean isActive = varDefaultValue == null;
                 String name = varDecl.getVarName().getText();
-                XQueryVarNamespace namespacePrefix = varDecl.getVarName().getVarNamespace();
+                XQueryPrefix prefix = varDecl.getVarName().getPrefix();
                 String namespace = EMPTY;
-                if (namespacePrefix != null) {
-                    PsiElement resolved = namespacePrefix.getReference().resolve();
+                if (prefix != null) {
+                    PsiElement resolved = prefix.getReference().resolve();
                     if (resolved != null) {
                         namespace = ((XQueryNamespaceSource) resolved.getParent()).getNamespace();
                     }
@@ -152,7 +158,7 @@ public class XQueryRunConfigurationProducer extends RuntimeConfigurationProducer
     }
 
     private Module getModule(ConfigurationContext context, ModuleBasedConfiguration configuration) {
-        Module module = getPredefineModule(context);
+        Module module = getPredefinedModule(context);
         if (module == null)
             module = getModuleForLocation(context, configuration);
         return module;
@@ -163,9 +169,9 @@ public class XQueryRunConfigurationProducer extends RuntimeConfigurationProducer
         return findModule(configuration, contextModule);
     }
 
-    private Module getPredefineModule(ConfigurationContext context) {
+    private Module getPredefinedModule(ConfigurationContext context) {
         final RunnerAndConfigurationSettings template = getConfigurationTemplate(context);
-        return getPredefineModule(template);
+        return getPredefinedModule(template);
     }
 
     private RunnerAndConfigurationSettings getConfigurationTemplate(ConfigurationContext context) {
@@ -224,7 +230,7 @@ public class XQueryRunConfigurationProducer extends RuntimeConfigurationProducer
                 .getConfiguration()).getConfigurationModule().getModule();
     }
 
-    private Module getPredefineModule(RunnerAndConfigurationSettings template) {
+    private Module getPredefinedModule(RunnerAndConfigurationSettings template) {
         return ((ModuleBasedConfiguration) template.getConfiguration()).getConfigurationModule().getModule();
     }
 }

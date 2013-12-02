@@ -21,7 +21,7 @@ import org.intellij.xquery.functional.BaseFunctionalTestCase;
 import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryModuleImport;
 import org.intellij.xquery.psi.XQueryNamespaceDecl;
-import org.intellij.xquery.psi.XQueryVarNamespace;
+import org.intellij.xquery.psi.XQueryPrefix;
 
 import static org.intellij.xquery.functional.Assertions.assertChildOf;
 import static org.intellij.xquery.functional.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
@@ -31,54 +31,54 @@ import static org.intellij.xquery.functional.reference.ReferenceUtil.getTargetOf
  * Date: 03/07/13
  * Time: 13:49
  */
-public class XQueryVariableNamespaceNameReferenceTest extends BaseFunctionalTestCase {
+public class XQueryVariablePrefixReferenceTest extends BaseFunctionalTestCase {
     @Override
     protected String getTestDataPath() {
         return "src/test/testData/org/intellij/xquery/functional/reference/namespace";
     }
 
-    public void testVariableNamespaceReferenceForModuleDeclaration() {
-        myFixture.configureByFiles("VariableNamespaceNameReference_Module.xq");
+    public void testVariablePrefixReferenceForModuleDeclaration() {
+        myFixture.configureByFiles("VariablePrefixReference_Module.xq");
 
-        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarNamespace.class);
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryPrefix.class);
 
         assertChildOf(resolvedReference, XQueryModuleDecl.class);
     }
 
-    public void testVariableNamespaceReferenceForModuleImport() {
-        myFixture.configureByFiles("VariableNamespaceNameReference_Import.xq");
+    public void testVariablePrefixReferenceForModuleImport() {
+        myFixture.configureByFiles("VariablePrefixReference_Import.xq");
 
-        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarNamespace.class);
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryPrefix.class);
 
         assertChildOf(resolvedReference, XQueryModuleImport.class);
     }
 
-    public void testVariableNamespaceReferenceForNamespaceDeclaration() {
-        myFixture.configureByFiles("VariableNamespaceNameReference_Declaration.xq");
+    public void testVariablePrefixReferenceForNamespaceDeclaration() {
+        myFixture.configureByFiles("VariablePrefixReference_Declaration.xq");
 
-        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarNamespace.class);
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryPrefix.class);
 
         assertChildOf(resolvedReference, XQueryNamespaceDecl.class);
     }
 
-    public void testVariableNamespaceRename() {
-        myFixture.configureByFiles("VariableNamespaceNameRename.xq");
+    public void testVariablePrefixRename() {
+        myFixture.configureByFiles("VariablePrefixRename.xq");
         myFixture.renameElementAtCaret("aaa");
-        myFixture.checkResultByFile("VariableNamespaceNameRename.xq", "VariableNamespaceNameRenameAfter.xq", false);
+        myFixture.checkResultByFile("VariablePrefixRename.xq", "VariablePrefixRenameAfter.xq", false);
     }
 
-    public void testVariableNamespaceReferenceToNotExistingNamespace() {
-        myFixture.configureByFiles("VariableNamespaceReferenceToNotExistingNamespace.xq");
+    public void testVariablePrefixReferenceToNotExistingNamespace() {
+        myFixture.configureByFiles("VariablePrefixReferenceToNotExistingNamespace.xq");
 
-        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarNamespace.class);
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryPrefix.class);
 
         assertNull(resolvedReference);
     }
 
-    public void testVariableNamespaceReferenceToDuplicatedNamespace() {
-        myFixture.configureByFiles("VariableNamespaceReferenceToDuplicatedNamespace.xq");
+    public void testVariablePrefixReferenceToDuplicatedNamespace() {
+        myFixture.configureByFiles("VariablePrefixReferenceToDuplicatedNamespace.xq");
 
-        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarNamespace.class);
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryPrefix.class);
 
         assertNull(resolvedReference);
     }

@@ -23,4 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryWildcard extends XQueryElement {
 
+  @Nullable
+  XQueryPrefix getPrefix();
+
 }

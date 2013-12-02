@@ -25,21 +25,32 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
-import com.intellij.psi.PsiReference;
 
-public class XQueryFunctionNamespaceImpl extends XQueryElementImpl implements XQueryFunctionNamespace {
+public class XQueryNamespacePrefixImpl extends XQueryNamedElementImpl implements XQueryNamespacePrefix {
 
-  public XQueryFunctionNamespaceImpl(ASTNode node) {
+  public XQueryNamespacePrefixImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitFunctionNamespace(this);
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitNamespacePrefix(this);
     else super.accept(visitor);
   }
 
-  public PsiReference getReference() {
-    return XQueryPsiImplUtil.getReference(this);
+  public String getName() {
+    return XQueryPsiImplUtil.getName(this);
+  }
+
+  public PsiElement setName(String newName) {
+    return XQueryPsiImplUtil.setName(this, newName);
+  }
+
+  public PsiElement getNameIdentifier() {
+    return XQueryPsiImplUtil.getNameIdentifier(this);
+  }
+
+  public void delete() {
+    XQueryPsiImplUtil.delete(this);
   }
 
 }

@@ -22,7 +22,9 @@ import org.intellij.xquery.functional.BaseFunctionalTestCase;
 import org.intellij.xquery.psi.*;
 import org.intellij.xquery.usage.XQueryFindUsageProvider;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static org.intellij.xquery.functional.Assertions.assertChildOf;
 
@@ -130,7 +132,7 @@ public class XQueryFindUsageProviderTest extends BaseFunctionalTestCase {
         assertEquals("variable", type);
     }
 
-    public void testFindNamespaceNameUsages() {
+    public void testFindNamespacePrefixUsages() {
         Collection<UsageInfo> foundUsages = myFixture.testFindUsages("Namespace.xq");
 
         assertEquals(1, foundUsages.size());
@@ -139,22 +141,38 @@ public class XQueryFindUsageProviderTest extends BaseFunctionalTestCase {
         assertChildOf(resolved(usageInfo), XQueryNamespaceDecl.class);
     }
 
+    public void testFindPredeclaredNamespacePrefixUsages() {
+        Collection<UsageInfo> foundUsages = myFixture.testFindUsages("PredeclaredNamespacePrefixUsage.xq", "LibraryModuleUsingPredeclaredNamespace.xq");
+
+        assertEquals(3, foundUsages.size());
+        for (UsageInfo usageInfo : foundUsages) {
+            assertChildOf(usageInfo.getElement(), XQueryFunctionCall.class);
+            assertChildOf(resolved(usageInfo), XQueryFunctionCall.class);
+        }
+    }
+
     public void testNamespaceNameUsagesDescription() {
-        String description = provider.getNodeText(exampleNamespaceDeclaration().getNamespaceName(), true);
+        String description = provider.getNodeText(exampleNamespaceDeclaration().getNamespacePrefix(), true);
 
         assertEquals("example", description);
     }
 
     public void testNamespaceNameUsagesDescriptiveName() {
-        String description = provider.getDescriptiveName(exampleNamespaceDeclaration().getNamespaceName());
+        String description = provider.getDescriptiveName(exampleNamespaceDeclaration().getNamespacePrefix());
 
         assertEquals("example", description);
     }
 
-    public void testNamespaceNameUsageType() {
-        String type = provider.getType(exampleNamespaceDeclaration().getNamespaceName());
+    public void testNamespacePrefixUsageType() {
+        String type = provider.getType(exampleNamespaceDeclaration().getNamespacePrefix());
 
-        assertEquals("namespace name", type);
+        assertEquals("namespace prefix", type);
+    }
+
+    public void testPrefixUsageType() {
+        String type = provider.getType(exampleFunctionDeclaration().getFunctionName().getPrefix());
+
+        assertEquals("namespace prefix", type);
     }
 
     public void testNamespaceNameInModuleUsagesDescription() {
@@ -172,25 +190,25 @@ public class XQueryFindUsageProviderTest extends BaseFunctionalTestCase {
     public void testNamespaceNameInModuleUsageType() {
         String type = provider.getType(exampleModuleDeclaration());
 
-        assertEquals("namespace name", type);
+        assertEquals("namespace prefix", type);
     }
 
     public void testNamespaceNameInImportUsagesDescription() {
-        String description = provider.getNodeText(exampleImport().getNamespaceName(), true);
+        String description = provider.getNodeText(exampleImport().getNamespacePrefix(), true);
 
         assertEquals("dummy", description);
     }
 
     public void testNamespaceNameInImportUsagesDescriptiveName() {
-        String description = provider.getDescriptiveName(exampleImport().getNamespaceName());
+        String description = provider.getDescriptiveName(exampleImport().getNamespacePrefix());
 
         assertEquals("dummy", description);
     }
 
     public void testNamespaceNameInImportUsageType() {
-        String type = provider.getType(exampleImport().getNamespaceName());
+        String type = provider.getType(exampleImport().getNamespacePrefix());
 
-        assertEquals("namespace name", type);
+        assertEquals("namespace prefix", type);
     }
 
     public void testFileUsagesDescription() {
@@ -216,7 +234,7 @@ public class XQueryFindUsageProviderTest extends BaseFunctionalTestCase {
                 "example");
     }
 
-    private XQueryNamespaceName exampleModuleDeclaration() {
+    private XQueryNamespacePrefix exampleModuleDeclaration() {
         return XQueryElementFactory.createModuleDeclarationName(getProject(), "example");
     }
 

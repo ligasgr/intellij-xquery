@@ -36,14 +36,14 @@ public class XQueryVarNameImpl extends XQueryNamedElementImpl implements XQueryV
 
   @Override
   @Nullable
-  public XQueryVarLocalName getVarLocalName() {
-    return findChildByClass(XQueryVarLocalName.class);
+  public XQueryPrefix getPrefix() {
+    return findChildByClass(XQueryPrefix.class);
   }
 
   @Override
   @Nullable
-  public XQueryVarNamespace getVarNamespace() {
-    return findChildByClass(XQueryVarNamespace.class);
+  public XQueryVarLocalName getVarLocalName() {
+    return findChildByClass(XQueryVarLocalName.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

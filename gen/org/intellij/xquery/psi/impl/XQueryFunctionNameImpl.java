@@ -41,8 +41,8 @@ public class XQueryFunctionNameImpl extends XQueryNamedElementImpl implements XQ
 
   @Override
   @Nullable
-  public XQueryFunctionNamespace getFunctionNamespace() {
-    return findChildByClass(XQueryFunctionNamespace.class);
+  public XQueryPrefix getPrefix() {
+    return findChildByClass(XQueryPrefix.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

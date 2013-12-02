@@ -378,10 +378,6 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitNamedElement(o);
   }
 
-  public void visitFunctionNamespace(@NotNull XQueryFunctionNamespace o) {
-    visitElement(o);
-  }
-
   public void visitFunctionTest(@NotNull XQueryFunctionTest o) {
     visitElement(o);
   }
@@ -494,12 +490,12 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitNamespaceSource(o);
   }
 
-  public void visitNamespaceName(@NotNull XQueryNamespaceName o) {
-    visitNamedElement(o);
-  }
-
   public void visitNamespaceNodeTest(@NotNull XQueryNamespaceNodeTest o) {
     visitElement(o);
+  }
+
+  public void visitNamespacePrefix(@NotNull XQueryNamespacePrefix o) {
+    visitNamedElement(o);
   }
 
   public void visitNextItem(@NotNull XQueryNextItem o) {
@@ -595,7 +591,7 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitPrefix(@NotNull XQueryPrefix o) {
-    visitElement(o);
+    visitNamedElement(o);
   }
 
   public void visitPrefixExpr(@NotNull XQueryPrefixExpr o) {
@@ -788,10 +784,6 @@ public class XQueryVisitor extends PsiElementVisitor {
 
   public void visitVarName(@NotNull XQueryVarName o) {
     visitNamedElement(o);
-  }
-
-  public void visitVarNamespace(@NotNull XQueryVarNamespace o) {
-    visitElement(o);
   }
 
   public void visitVarRef(@NotNull XQueryVarRef o) {

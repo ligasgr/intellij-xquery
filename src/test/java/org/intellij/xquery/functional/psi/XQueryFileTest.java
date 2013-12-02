@@ -22,7 +22,7 @@ import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryFunctionInvocation;
 import org.intellij.xquery.psi.XQueryModuleImport;
 import org.intellij.xquery.psi.XQueryNamespaceDecl;
-import org.intellij.xquery.psi.XQueryNamespaceName;
+import org.intellij.xquery.psi.XQueryNamespacePrefix;
 import org.intellij.xquery.psi.XQueryVarDecl;
 import org.intellij.xquery.psi.XQueryVarRef;
 
@@ -59,14 +59,14 @@ public class XQueryFileTest extends BaseFunctionalTestCase {
         assertNotNull(imports);
         assertEquals(1, imports.size());
         XQueryModuleImport moduleImport = imports.iterator().next();
-        assertEquals("dummy", moduleImport.getNamespaceName().getName());
+        assertEquals("dummy", moduleImport.getNamespacePrefix().getName());
         assertEquals("'file.xq'", moduleImport.getModuleImportNamespace().getText());
     }
 
     public void testModuleNamespaceName() {
         XQueryFile file = aFile("module namespace dummy = \"my\";");
 
-        XQueryNamespaceName name = file.getModuleNamespaceName();
+        XQueryNamespacePrefix name = file.getModuleNamespaceName();
 
         assertNotNull(name);
         assertEquals("dummy", name.getName());
@@ -80,7 +80,7 @@ public class XQueryFileTest extends BaseFunctionalTestCase {
         assertNotNull(namespaceDeclarations);
         assertEquals(1, namespaceDeclarations.size());
         XQueryNamespaceDecl declaration = namespaceDeclarations.iterator().next();
-        assertEquals("dummy", declaration.getNamespaceName().getName());
+        assertEquals("dummy", declaration.getNamespacePrefix().getName());
     }
 
     public void testFunctionDeclarations() {
@@ -173,7 +173,7 @@ public class XQueryFileTest extends BaseFunctionalTestCase {
         Collection<XQueryNamespaceDecl> results = file.getNamespaceDeclarationsMatchingDefaultNamespace();
 
         assertEquals(1, results.size());
-        assertEquals("aaa", results.iterator().next().getNamespaceName().getText());
+        assertEquals("aaa", results.iterator().next().getNamespacePrefix().getText());
     }
 
     public void testContextItem() {

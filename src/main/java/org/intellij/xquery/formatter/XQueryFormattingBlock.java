@@ -192,7 +192,7 @@ public class XQueryFormattingBlock extends AbstractBlock {
                 IElementType elementType = node.getElementType();
                 if (elementType instanceof XQueryTokenType) break;
                 if (psi instanceof LeafPsiElement || psi instanceof XQueryFunctionName || psi instanceof
-                        XQueryVarName || psi instanceof XQueryNamespaceName)
+                        XQueryVarName || psi instanceof XQueryNamespacePrefix)
                     break;
             }
             block = childBlock;

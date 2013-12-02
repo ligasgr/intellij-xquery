@@ -46,8 +46,8 @@ public class XQueryModuleImportImpl extends XQueryElementImpl implements XQueryM
 
   @Override
   @Nullable
-  public XQueryNamespaceName getNamespaceName() {
-    return findChildByClass(XQueryNamespaceName.class);
+  public XQueryNamespacePrefix getNamespacePrefix() {
+    return findChildByClass(XQueryNamespacePrefix.class);
   }
 
   @Override

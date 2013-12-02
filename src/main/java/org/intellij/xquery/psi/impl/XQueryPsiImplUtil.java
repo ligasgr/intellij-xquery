@@ -22,25 +22,42 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.ResolveState;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.ResolveScopeManager;
-import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.icons.XQueryIcons;
-import org.intellij.xquery.psi.*;
+import org.intellij.xquery.psi.XQueryAnnotation;
+import org.intellij.xquery.psi.XQueryElementFactory;
+import org.intellij.xquery.psi.XQueryFile;
+import org.intellij.xquery.psi.XQueryFunctionCall;
+import org.intellij.xquery.psi.XQueryFunctionDecl;
+import org.intellij.xquery.psi.XQueryFunctionInvocation;
+import org.intellij.xquery.psi.XQueryFunctionLocalName;
+import org.intellij.xquery.psi.XQueryFunctionName;
+import org.intellij.xquery.psi.XQueryModuleDecl;
+import org.intellij.xquery.psi.XQueryModuleImport;
+import org.intellij.xquery.psi.XQueryModuleImportPath;
+import org.intellij.xquery.psi.XQueryNamedElement;
+import org.intellij.xquery.psi.XQueryNamedFunctionRef;
+import org.intellij.xquery.psi.XQueryNamespaceDecl;
+import org.intellij.xquery.psi.XQueryNamespacePrefix;
+import org.intellij.xquery.psi.XQueryPrefix;
+import org.intellij.xquery.psi.XQueryQueryBody;
+import org.intellij.xquery.psi.XQueryTypes;
+import org.intellij.xquery.psi.XQueryVarDecl;
+import org.intellij.xquery.psi.XQueryVarLocalName;
+import org.intellij.xquery.psi.XQueryVarName;
+import org.intellij.xquery.psi.XQueryVarRef;
 import org.intellij.xquery.reference.function.XQueryFunctionReference;
 import org.intellij.xquery.reference.module.XQueryModuleReference;
-import org.intellij.xquery.reference.namespace.XQueryFunctionNamespaceNameReference;
-import org.intellij.xquery.reference.namespace.XQueryVariableNamespaceNameReference;
+import org.intellij.xquery.reference.namespace.XQueryNamespacePrefixReference;
 import org.intellij.xquery.reference.variable.XQueryVariableReference;
 import org.intellij.xquery.util.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 import static org.intellij.xquery.util.StringUtils.EMPTY;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
@@ -55,27 +72,27 @@ public class XQueryPsiImplUtil {
     private static final int DOLLAR_CHAR_LENGTH = 1;
     private static final int SEPARATOR_LENGTH = 1;
 
-    public static String getName(XQueryNamespaceName element) {
+    public static String getName(XQueryNamespacePrefix element) {
         return element.getNameIdentifier().getText();
     }
 
-    public static PsiElement setName(XQueryNamespaceName element, String newName) {
-        XQueryNamespaceName name = element;
+    public static PsiElement setName(XQueryNamespacePrefix element, String newName) {
+        XQueryNamespacePrefix name = element;
         if (name != null) {
             name.replace(XQueryElementFactory.createModuleDeclarationName(element.getProject(), newName));
         }
         return element;
     }
 
-    public static PsiElement getNameIdentifier(XQueryNamespaceName element) {
+    public static PsiElement getNameIdentifier(XQueryNamespacePrefix element) {
         return element;
     }
 
     public static PsiReference getReference(XQueryVarRef element) {
         int localNameOffset = DOLLAR_CHAR_LENGTH;
         if (element.getVarName() != null) {
-            if (element.getVarName().getVarNamespace() != null) {
-                localNameOffset += element.getVarName().getVarNamespace().getTextLength() + SEPARATOR_LENGTH;
+            if (element.getVarName().getPrefix() != null) {
+                localNameOffset += element.getVarName().getPrefix().getTextLength() + SEPARATOR_LENGTH;
             }
             return new XQueryVariableReference(element, new TextRange(localNameOffset, element.getTextLength()));
         }
@@ -115,7 +132,7 @@ public class XQueryPsiImplUtil {
 
     public static PsiReference getReference(XQueryModuleImportPath element) {
         String filename = stripApostrophes(element.getURILiteral().getText());
-        if (!StringUtil.isEmptyOrSpaces(filename)) {
+        if (! StringUtil.isEmptyOrSpaces(filename)) {
             return new XQueryModuleReference(element, filename, new TextRange(1,
                     element.getURILiteral().getTextLength() - 1));
         }
@@ -126,18 +143,10 @@ public class XQueryPsiImplUtil {
         return text.replaceAll("\"", "").replaceAll("'", "");
     }
 
-    public static PsiReference getReference(XQueryVarNamespace element) {
-        return new XQueryVariableNamespaceNameReference(element, new TextRange(0, element.getTextLength()));
-    }
-
-    public static PsiReference getReference(XQueryFunctionNamespace element) {
-        return new XQueryFunctionNamespaceNameReference(element, new TextRange(0, element.getTextLength()));
-    }
-
     public static PsiReference getReference(XQueryFunctionInvocation element) {
         int localNameOffset = 0;
-        if (element.getFunctionName().getFunctionNamespace() != null) {
-            localNameOffset += element.getFunctionName().getFunctionNamespace().getTextLength() + SEPARATOR_LENGTH;
+        if (element.getFunctionName().getPrefix() != null) {
+            localNameOffset += element.getFunctionName().getPrefix().getTextLength() + SEPARATOR_LENGTH;
         }
         return new XQueryFunctionReference(element, new TextRange(localNameOffset,
                 element.getFunctionName().getTextLength()));
@@ -328,5 +337,37 @@ public class XQueryPsiImplUtil {
             return removeQuotOrApos(namespaceDecl.getURILiteral().getText());
         }
         return EMPTY;
+    }
+
+    public static PsiReference getReference(XQueryPrefix prefix) {
+        return new XQueryNamespacePrefixReference(prefix, new TextRange(0, prefix.getTextLength()));
+    }
+
+    public static String getName(XQueryPrefixImpl element) {
+        return element.getNameIdentifier().getText();
+    }
+
+    public static PsiElement setName(XQueryPrefix element, String newName) {
+        XQueryPrefix name = element;
+        if (name != null) {
+            name.replace(XQueryElementFactory.createFunctionReference(element.getProject(), newName, "any").getPrefix());
+        }
+        return element;
+    }
+
+    public static PsiElement getNameIdentifier(XQueryPrefix element) {
+        return element;
+    }
+
+    public static boolean isEquivalentTo(XQueryPrefix element, PsiElement another) {
+        if (!(another instanceof XQueryPrefix)) return false;
+        if (element.getContainingFile() instanceof XQueryFile && another.getContainingFile() instanceof XQueryFile) {
+            XQueryFile elementFile = (XQueryFile) element.getContainingFile();
+            XQueryFile anotherFile = (XQueryFile) another.getContainingFile();
+            String elementNamespace = elementFile.mapPrefixToNamespace(element.getText());
+            String anotherNamespace = anotherFile.mapPrefixToNamespace(another.getText());
+            return elementFile.equals(anotherFile) && elementNamespace.equals(anotherNamespace);
+        }
+        return false;
     }
 }

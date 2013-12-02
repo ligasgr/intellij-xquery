@@ -21,9 +21,10 @@ import com.intellij.psi.PsiElement;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryFunctionName;
-import org.intellij.xquery.psi.XQueryFunctionNamespace;
 import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryModuleImport;
+import org.intellij.xquery.psi.XQueryNamespacePrefix;
+import org.intellij.xquery.psi.XQueryPrefix;
 import org.intellij.xquery.psi.XQueryURILiteral;
 
 import java.util.Collection;
@@ -66,7 +67,7 @@ public class Determiner {
 
     private XQueryFile getImportedFileOrNull(XQueryFunctionName functionName, XQueryFile file, Collection<XQueryFile> importedFiles) {
         for (XQueryFile importedFile : importedFiles) {
-            XQueryFunctionNamespace functionNamespaceObject = functionName.getFunctionNamespace();
+            XQueryPrefix functionNamespaceObject = functionName.getPrefix();
             XQueryModuleDecl moduleDeclaration = importedFile.getModuleDeclaration();
             XQueryURILiteral uriLiteral = moduleDeclaration != null ? moduleDeclaration.getURILiteral() : null;
             if (hasDuplicatedNamespaceValue(file, functionNamespaceObject, uriLiteral)) {
@@ -76,7 +77,7 @@ public class Determiner {
         return null;
     }
 
-    private boolean hasDuplicatedNamespaceValue(XQueryFile file, XQueryFunctionNamespace functionNamespaceObject, XQueryURILiteral uriLiteral) {
+    private boolean hasDuplicatedNamespaceValue(XQueryFile file, XQueryPrefix functionNamespaceObject, XQueryURILiteral uriLiteral) {
         if (functionNamespaceObject != null && uriLiteral != null) {
             String functionNamespace = functionNamespaceObject.getText();
             String namespaceValue = file.mapPrefixToNamespace(functionNamespace);

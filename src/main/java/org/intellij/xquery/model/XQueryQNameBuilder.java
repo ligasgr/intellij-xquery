@@ -37,8 +37,8 @@ public class XQueryQNameBuilder<T> {
     public static XQueryQNameBuilder<XQueryFunctionName> aXQueryQName(XQueryFunctionName functionName) {
         XQueryFile containingFile = (XQueryFile) functionName.getContainingFile();
         XQueryQNameBuilder<XQueryFunctionName> instance = new XQueryQNameBuilder<XQueryFunctionName>();
-        if (functionName.getFunctionNamespace() != null) {
-            instance.prefix = functionName.getFunctionNamespace().getText();
+        if (functionName.getPrefix() != null) {
+            instance.prefix = functionName.getPrefix().getText();
         }
         if (functionName.getFunctionLocalName() != null) {
             instance.localName = functionName.getFunctionLocalName().getText();
@@ -50,8 +50,8 @@ public class XQueryQNameBuilder<T> {
 
     public static XQueryQNameBuilder<XQueryVarName> aXQueryQName(XQueryVarName varName) {
         XQueryQNameBuilder<XQueryVarName> instance = new XQueryQNameBuilder<XQueryVarName>();
-        if (varName.getVarNamespace() != null) {
-            instance.prefix = varName.getVarNamespace().getText();
+        if (varName.getPrefix() != null) {
+            instance.prefix = varName.getPrefix().getText();
         }
         if (varName.getVarLocalName() != null) {
             instance.localName = varName.getVarLocalName().getText();

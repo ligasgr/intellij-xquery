@@ -21,7 +21,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryNamespaceName extends XQueryNamedElement {
+public interface XQueryNamespacePrefix extends XQueryNamedElement {
 
   String getName();
 

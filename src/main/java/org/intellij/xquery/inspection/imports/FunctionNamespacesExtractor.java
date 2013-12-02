@@ -18,7 +18,8 @@ package org.intellij.xquery.inspection.imports;
 
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionInvocation;
-import org.intellij.xquery.psi.XQueryFunctionNamespace;
+import org.intellij.xquery.psi.XQueryNamespacePrefix;
+import org.intellij.xquery.psi.XQueryPrefix;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +29,7 @@ public class FunctionNamespacesExtractor {
     public Set<String> getNamespacesUsedByFunctions(XQueryFile xQueryFile) {
         Set<String> usedNamespaces = new HashSet<String>();
         for (XQueryFunctionInvocation functionInvocation : xQueryFile.getFunctionInvocations()) {
-            XQueryFunctionNamespace namespacePrefix = functionInvocation.getFunctionName().getFunctionNamespace();
+            XQueryPrefix namespacePrefix = functionInvocation.getFunctionName().getPrefix();
             String namespacePrefixText = namespacePrefix != null ? namespacePrefix.getText() : null;
             String functionNamespace = xQueryFile.mapPrefixToNamespace(namespacePrefixText);
             usedNamespaces.add(functionNamespace);

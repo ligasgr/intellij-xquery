@@ -44,9 +44,8 @@ public class XQueryVariableReferenceResolver {
 
     public XQueryVariableReferenceResolver(XQueryVarRef myElement) {
         this.myElement = myElement;
-        checkedNamespacePrefix = myElement.getVarName().getVarNamespace() != null ? myElement.getVarName()
-                .getVarNamespace
-                        ().getText() : null;
+        checkedNamespacePrefix = myElement.getVarName().getPrefix() != null ? myElement.getVarName()
+                .getPrefix().getText() : null;
     }
 
     @NotNull
@@ -97,15 +96,15 @@ public class XQueryVariableReferenceResolver {
     }
 
     private boolean variableHasNamespacePrefix() {
-        return myElement.getVarName().getVarNamespace() != null;
+        return myElement.getVarName().getPrefix() != null;
     }
 
     private Collection<XQueryFile> getFilesFromImportWithMatchingNamespacePrefix(XQueryFile file) {
         return file.getImportedFilesThatExist(new Condition<XQueryModuleImport>() {
             @Override
             public boolean value(XQueryModuleImport moduleImport) {
-                String namespacePrefix = myElement.getVarName().getVarNamespace().getText();
-                return namespacePrefix.equals(moduleImport.getNamespaceName().getText());
+                String namespacePrefix = myElement.getVarName().getPrefix().getText();
+                return namespacePrefix.equals(moduleImport.getNamespacePrefix().getText());
             }
         });
     }

@@ -32,6 +32,7 @@ public enum XQueryPredeclaredNamespace {
     XSI("xsi", "http://www.w3.org/2001/XMLSchema-instance"),
     FN("fn", "http://www.w3.org/2005/xpath-functions"),
     MATH("math", "http://www.w3.org/2005/xpath-functions/math"),
+    MAP("map", "http://www.w3.org/2005/xpath-functions/map"),
     ERR("err", "http://www.w3.org/2005/xqt-errors"),
     LOCAL("local", "http://www.w3.org/2005/xquery-local-functions");
 

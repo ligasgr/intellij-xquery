@@ -113,7 +113,6 @@ public interface XQueryTypes {
   IElementType FUNCTION_ITEM_EXPR = new XQueryElementType("FUNCTION_ITEM_EXPR");
   IElementType FUNCTION_LOCAL_NAME = new XQueryElementType("FUNCTION_LOCAL_NAME");
   IElementType FUNCTION_NAME = new XQueryElementType("FUNCTION_NAME");
-  IElementType FUNCTION_NAMESPACE = new XQueryElementType("FUNCTION_NAMESPACE");
   IElementType FUNCTION_TEST = new XQueryElementType("FUNCTION_TEST");
   IElementType GENERAL_ITEM_TYPE = new XQueryElementType("GENERAL_ITEM_TYPE");
   IElementType GROUPING_SPEC = new XQueryElementType("GROUPING_SPEC");
@@ -141,8 +140,8 @@ public interface XQueryTypes {
   IElementType MULTIPLICATIVE_EXPR = new XQueryElementType("MULTIPLICATIVE_EXPR");
   IElementType NAMED_FUNCTION_REF = new XQueryElementType("NAMED_FUNCTION_REF");
   IElementType NAMESPACE_DECL = new XQueryElementType("NAMESPACE_DECL");
-  IElementType NAMESPACE_NAME = new XQueryElementType("NAMESPACE_NAME");
   IElementType NAMESPACE_NODE_TEST = new XQueryElementType("NAMESPACE_NODE_TEST");
+  IElementType NAMESPACE_PREFIX = new XQueryElementType("NAMESPACE_PREFIX");
   IElementType NAME_TEST = new XQueryElementType("NAME_TEST");
   IElementType NEXT_ITEM = new XQueryElementType("NEXT_ITEM");
   IElementType NODE_TEST = new XQueryElementType("NODE_TEST");
@@ -216,7 +215,6 @@ public interface XQueryTypes {
   IElementType VAR_DEFAULT_VALUE = new XQueryElementType("VAR_DEFAULT_VALUE");
   IElementType VAR_LOCAL_NAME = new XQueryElementType("VAR_LOCAL_NAME");
   IElementType VAR_NAME = new XQueryElementType("VAR_NAME");
-  IElementType VAR_NAMESPACE = new XQueryElementType("VAR_NAMESPACE");
   IElementType VAR_REF = new XQueryElementType("VAR_REF");
   IElementType VAR_VALUE = new XQueryElementType("VAR_VALUE");
   IElementType VERSION_DECL = new XQueryElementType("VERSION_DECL");
@@ -699,9 +697,6 @@ public interface XQueryTypes {
       else if (type == FUNCTION_NAME) {
         return new XQueryFunctionNameImpl(node);
       }
-      else if (type == FUNCTION_NAMESPACE) {
-        return new XQueryFunctionNamespaceImpl(node);
-      }
       else if (type == FUNCTION_TEST) {
         return new XQueryFunctionTestImpl(node);
       }
@@ -783,11 +778,11 @@ public interface XQueryTypes {
       else if (type == NAMESPACE_DECL) {
         return new XQueryNamespaceDeclImpl(node);
       }
-      else if (type == NAMESPACE_NAME) {
-        return new XQueryNamespaceNameImpl(node);
-      }
       else if (type == NAMESPACE_NODE_TEST) {
         return new XQueryNamespaceNodeTestImpl(node);
+      }
+      else if (type == NAMESPACE_PREFIX) {
+        return new XQueryNamespacePrefixImpl(node);
       }
       else if (type == NAME_TEST) {
         return new XQueryNameTestImpl(node);
@@ -1007,9 +1002,6 @@ public interface XQueryTypes {
       }
       else if (type == VAR_NAME) {
         return new XQueryVarNameImpl(node);
-      }
-      else if (type == VAR_NAMESPACE) {
-        return new XQueryVarNamespaceImpl(node);
       }
       else if (type == VAR_REF) {
         return new XQueryVarRefImpl(node);

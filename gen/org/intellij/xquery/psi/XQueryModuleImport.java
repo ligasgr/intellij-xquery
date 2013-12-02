@@ -30,7 +30,7 @@ public interface XQueryModuleImport extends XQueryNamespaceSource {
   List<XQueryModuleImportPath> getModuleImportPathList();
 
   @Nullable
-  XQueryNamespaceName getNamespaceName();
+  XQueryNamespacePrefix getNamespacePrefix();
 
   @Nullable
   XQuerySeparator getSeparator();

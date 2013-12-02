@@ -20,7 +20,8 @@ import org.intellij.xquery.inspection.imports.FunctionNamespacesExtractor;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionInvocation;
 import org.intellij.xquery.psi.XQueryFunctionName;
-import org.intellij.xquery.psi.XQueryFunctionNamespace;
+import org.intellij.xquery.psi.XQueryNamespacePrefix;
+import org.intellij.xquery.psi.XQueryPrefix;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -102,9 +103,9 @@ public class FunctionNamespacesExtractorTest {
         XQueryFunctionInvocation functionInvocation = mock(XQueryFunctionInvocation.class);
         XQueryFunctionName functionName = mock(XQueryFunctionName.class);
         if (name != null) {
-            XQueryFunctionNamespace namespace = mock(XQueryFunctionNamespace.class);
+            XQueryPrefix namespace = mock(XQueryPrefix.class);
             given(namespace.getText()).willReturn(name);
-            given(functionName.getFunctionNamespace()).willReturn(namespace);
+            given(functionName.getPrefix()).willReturn(namespace);
         }
         given(functionInvocation.getFunctionName()).willReturn(functionName);
         return functionInvocation;

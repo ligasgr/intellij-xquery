@@ -35,9 +35,9 @@ import static java.util.Collections.emptyList;
  * Date: 03/07/13
  * Time: 13:11
  */
-public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQueryVarNamespace> implements
+public class XQueryNamespacePrefixReference extends PsiReferenceBase<XQueryPrefix> implements
         PsiPolyVariantReference {
-    public XQueryVariableNamespaceNameReference(XQueryVarNamespace element, TextRange textRange) {
+    public XQueryNamespacePrefixReference(XQueryPrefix element, TextRange textRange) {
         super(element, textRange);
     }
 
@@ -49,10 +49,13 @@ public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQuer
         results.addAll(getReferencesFromNamespaceDeclarations(file.getNamespaceDeclarations()));
         results.addAll(getReferencesFromModuleImports(file.getModuleImports()));
         results.addAll(getReferencesFromModuleName(file.getModuleNamespaceName()));
+        if (results.size() == 0 && isPredeclaredNamespace(myElement.getText())) {
+            results.add(new PsiElementResolveResult(getElement()));
+        }
         return results.toArray(new ResolveResult[results.size()]);
     }
 
-    private Collection<ResolveResult> getReferencesFromModuleName(XQueryNamespaceName moduleNamespaceName) {
+    private Collection<ResolveResult> getReferencesFromModuleName(XQueryNamespacePrefix moduleNamespaceName) {
         if (moduleNamespaceName != null && myElement.getText().equals(moduleNamespaceName.getText())) {
             return Arrays.asList(new ResolveResult[]{new PsiElementResolveResult(moduleNamespaceName)});
         } else {
@@ -64,9 +67,9 @@ public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQuer
         if (moduleImports.size() > 0) {
             List<ResolveResult> results = new ArrayList<ResolveResult>();
             for (XQueryModuleImport moduleImport : moduleImports) {
-                XQueryNamespaceName namespaceName = moduleImport.getNamespaceName();
+                XQueryNamespacePrefix namespaceName = moduleImport.getNamespacePrefix();
                 if (namespaceName != null && myElement.getText().equals(namespaceName.getText())) {
-                    results.add(new PsiElementResolveResult(namespaceName));
+                    results.add(new PsiElementResolveResult(moduleImport.getNamespacePrefix()));
                 }
             }
             return results;
@@ -79,9 +82,9 @@ public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQuer
                                                                                      namespaceDeclarations) {
         if (namespaceDeclarations.size() > 0) {
             List<ResolveResult> results = new ArrayList<ResolveResult>();
-            for (XQueryNamespaceDecl moduleImport : namespaceDeclarations) {
-                if (myElement.getText().equals(moduleImport.getNamespaceName().getText())) {
-                    results.add(new PsiElementResolveResult(moduleImport.getNamespaceName()));
+            for (XQueryNamespaceDecl namespaceDeclaration : namespaceDeclarations) {
+                if (myElement.getText().equals(namespaceDeclaration.getNamespacePrefix().getText())) {
+                    results.add(new PsiElementResolveResult(namespaceDeclaration.getNamespacePrefix()));
                 }
             }
             return results;
@@ -94,7 +97,12 @@ public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQuer
     @Override
     public PsiElement resolve() {
         ResolveResult[] resolveResults = multiResolve(false);
-        return resolveResults.length == 1 ? resolveResults[0].getElement() : null;
+        PsiElement result = resolveResults.length == 1 ? resolveResults[0].getElement() : null;
+        return result;
+    }
+
+    private boolean isPredeclaredNamespace(String namespacePrefix) {
+        return XQueryPredeclaredNamespace.getMappingFromPrefix().keySet().contains(namespacePrefix);
     }
 
     @NotNull
@@ -105,12 +113,15 @@ public class XQueryVariableNamespaceNameReference extends PsiReferenceBase<XQuer
 
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        myElement.replace(getUpdatedRef(newElementName).getVarNamespace());
+        myElement.replace(getUpdatedRef(newElementName).getPrefix());
         return myElement;
     }
 
-    private XQueryVarName getUpdatedRef(String newName) {
-        XQueryVarName varName = XQueryElementFactory.createVariableReference(myElement.getProject(), newName, "dummy");
-        return varName;
+    private XQueryFunctionName getUpdatedRef(String newName) {
+        XQueryFunctionName functionName = XQueryElementFactory.createFunctionReference(myElement.getProject(),
+                newName, "dummy");
+        return functionName;
     }
+
+
 }

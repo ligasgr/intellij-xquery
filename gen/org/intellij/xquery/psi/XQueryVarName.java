@@ -26,10 +26,10 @@ import com.intellij.navigation.ItemPresentation;
 public interface XQueryVarName extends XQueryNamedElement {
 
   @Nullable
-  XQueryVarLocalName getVarLocalName();
+  XQueryPrefix getPrefix();
 
   @Nullable
-  XQueryVarNamespace getVarNamespace();
+  XQueryVarLocalName getVarLocalName();
 
   String getName();
 

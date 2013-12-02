@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface XQueryNamespaceDecl extends XQueryNamespaceSource {
 
   @Nullable
-  XQueryNamespaceName getNamespaceName();
+  XQueryNamespacePrefix getNamespacePrefix();
 
   @Nullable
   XQuerySeparator getSeparator();

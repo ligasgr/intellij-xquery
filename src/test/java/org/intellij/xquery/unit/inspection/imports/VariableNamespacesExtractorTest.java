@@ -18,8 +18,9 @@ package org.intellij.xquery.unit.inspection.imports;
 
 import org.intellij.xquery.inspection.imports.VariableNamespacesExtractor;
 import org.intellij.xquery.psi.XQueryFile;
+import org.intellij.xquery.psi.XQueryNamespacePrefix;
+import org.intellij.xquery.psi.XQueryPrefix;
 import org.intellij.xquery.psi.XQueryVarName;
-import org.intellij.xquery.psi.XQueryVarNamespace;
 import org.intellij.xquery.psi.XQueryVarRef;
 import org.junit.Before;
 import org.junit.Test;
@@ -100,9 +101,9 @@ public class VariableNamespacesExtractorTest {
         XQueryVarRef varRef = mock(XQueryVarRef.class);
         XQueryVarName varName = mock(XQueryVarName.class);
         if (name != null) {
-            XQueryVarNamespace namespace = mock(XQueryVarNamespace.class);
+            XQueryPrefix namespace = mock(XQueryPrefix.class);
             given(namespace.getText()).willReturn(name);
-            given(varName.getVarNamespace()).willReturn(namespace);
+            given(varName.getPrefix()).willReturn(namespace);
         }
         given(varRef.getVarName()).willReturn(varName);
         return varRef;

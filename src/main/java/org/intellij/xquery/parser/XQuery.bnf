@@ -219,10 +219,10 @@
   ]
 
   extends(".+Expr")=ExprSingle
-  implements("NamespaceName|VarName|FunctionName")="org.intellij.xquery.psi.XQueryNamedElement"
+  implements("NamespacePrefix|VarName|FunctionName|Prefix")="org.intellij.xquery.psi.XQueryNamedElement"
   implements("NamedFunctionRef|FunctionCall")="org.intellij.xquery.psi.XQueryFunctionInvocation"
   implements("ModuleDecl|ModuleImport|NamespaceDecl")="org.intellij.xquery.psi.XQueryNamespaceSource"
-  extends("NamespaceName|VarName|FunctionName")="org.intellij.xquery.psi.impl.XQueryNamedElementImpl"
+  extends("NamespacePrefix|VarName|FunctionName|Prefix")="org.intellij.xquery.psi.impl.XQueryNamedElementImpl"
 }
 
 xqueryFile ::= Module {pin(".*")=1}
@@ -234,8 +234,8 @@ private VersionDeclEncoding ::= "encoding" StringLiteral {pin=1}
 private VersionDeclVersion ::= "version" StringLiteral ("encoding" StringLiteral)? {pin=1}
 private MainModule	   ::=   	Prolog QueryBody {pin=1}
 private LibraryModule	   ::=   	ModuleDecl Prolog {pin=1}
-ModuleDecl	   ::=   	"module" "namespace" NamespaceName "=" URILiteral Separator {pin=1 recoverUntil=ModuleDeclRecover methods=[getNamespace]}
-NamespaceName ::= NCName  {methods=[getName setName getNameIdentifier delete]}
+ModuleDecl	   ::=   	"module" "namespace" NamespacePrefix "=" URILiteral Separator {pin=1 recoverUntil=ModuleDeclRecover methods=[getNamespace]}
+NamespacePrefix ::= NCName  {methods=[getName setName getNameIdentifier delete]}
 private ModuleDeclRecover ::= !('declare' | 'import')
 private Prolog	   ::=   	FirstDecl* SecondDecl*
 private FirstDecl ::= DefaultNamespaceDecl | Setter | NamespaceDecl | Import
@@ -254,11 +254,11 @@ InheritMode	   ::=   	"inherit" | "no-inherit"
 DecimalFormatDecl	   ::=   	"declare" (("decimal-format" EQName) | ("default" "decimal-format")) (DFPropertyName "=" StringLiteral)* Separator {pin=2}
 private DFPropertyName	   ::=   	"decimal-separator" | "grouping-separator" | "infinity" | "minus-sign" | "NaN" | "percent" | "per-mille" | "zero-digit" | "digit" | "pattern-separator"
 private Import	   ::=   	SchemaImport | ModuleImport
-SchemaImport	   ::=   	"import" "schema" (("namespace" NamespaceName "=") | ("default" "element" "namespace"))? URILiteral ("at" URILiteral ("," URILiteral)*)? Separator {pin=2}
-ModuleImport	   ::=   	"import" "module" ("namespace" NamespaceName "=")? ModuleImportNamespace ("at" ModuleImportPath ("," ModuleImportPath)*)? Separator {pin=2 methods=[getNamespace]}
+SchemaImport	   ::=   	"import" "schema" (("namespace" NamespacePrefix "=") | ("default" "element" "namespace"))? URILiteral ("at" URILiteral ("," URILiteral)*)? Separator {pin=2}
+ModuleImport	   ::=   	"import" "module" ("namespace" NamespacePrefix "=")? ModuleImportNamespace ("at" ModuleImportPath ("," ModuleImportPath)*)? Separator {pin=2 methods=[getNamespace]}
 ModuleImportNamespace ::= ModuleImportPath
 ModuleImportPath ::= URILiteral {methods=[getReference]}
-NamespaceDecl	   ::=   	"declare" "namespace" NamespaceName "=" URILiteral Separator {pin=2 methods=[getNamespace]}
+NamespaceDecl	   ::=   	"declare" "namespace" NamespacePrefix "=" URILiteral Separator {pin=2 methods=[getNamespace]}
 private DefaultNamespaceDecl	   ::=   	(DefaultFunctionNamespaceDecl | DefaultElementNamespaceDecl) Separator
 DefaultFunctionNamespaceDecl	   ::=   	"declare" "default" "function" "namespace" URILiteral {pin=3}
 DefaultElementNamespaceDecl	   ::=   	"declare" "default" "element" "namespace" URILiteral {pin=3}
@@ -390,7 +390,7 @@ private ReverseAxis	   ::=   	("parent" "::")
 AbbrevReverseStep	   ::=   	".."
 NodeTest	   ::=   	KindTest | NameTest
 NameTest	   ::=   	Wildcard | EQName
-Wildcard	   ::=   	(NCName ":" "*")
+Wildcard	   ::=   	(Prefix ":" "*")
  | ("*" ":" NCName)
  | "*"
  | (BracedURILiteral "*")	/* ws: explicit */
@@ -464,7 +464,6 @@ MapEntry               ::=  ExprSingle ":=" ExprSingle
 ContentExpr	   ::=   	Expr
 CompAttrConstructor	   ::=   	"attribute" (EQName | ("{" Expr "}")) "{" Expr? "}"
 CompNamespaceConstructor	   ::=   	"namespace" (Prefix | ("{" PrefixExpr "}")) "{" URIExpr "}"
-Prefix	   ::=   	NCName
 PrefixExpr	   ::=   	Expr
 URIExpr	   ::=   	Expr
 CompTextConstructor	   ::=   	"text" "{" Expr "}"
@@ -527,11 +526,9 @@ private QName	   ::=   	PrefixedName
 			| UnprefixedName
 private PrefixedName	   ::=   	Prefix ':' LocalPart
 private UnprefixedName	   ::=   	LocalPart
-Prefix	   ::=   	NCName
+Prefix ::= NCName                   {methods=[getName setName getNameIdentifier getReference isEquivalentTo]}
 LocalPart	   ::=   	NCName
-VarName ::= VarNamespace ':' VarLocalName | VarLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset getUseScope getPresentation delete]}
-VarNamespace	   ::=   	NCName {methods=[getReference]}
+VarName ::= Prefix ':' VarLocalName | VarLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset getUseScope getPresentation delete]}
 VarLocalName	   ::=   	NCName
-FunctionName ::= FunctionNamespace ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset  getPresentation delete]}
-FunctionNamespace	   ::=   	NCName {methods=[getReference]}
+FunctionName ::= Prefix ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset getPresentation delete]}
 FunctionLocalName	   ::=   	NCName

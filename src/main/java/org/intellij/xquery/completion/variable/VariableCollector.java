@@ -89,8 +89,8 @@ public class VariableCollector {
 
     private void addProposedReferencesFromModuleImports(XQueryFile file) {
         for (XQueryModuleImport moduleImport : file.getModuleImports()) {
-            if (moduleImport.getNamespaceName() != null) {
-                String targetPrefix = moduleImport.getNamespaceName().getName();
+            if (moduleImport.getNamespacePrefix() != null) {
+                String targetPrefix = moduleImport.getNamespacePrefix().getName();
                 addProposedReferencesFromImport(targetPrefix, moduleImport);
             }
         }
