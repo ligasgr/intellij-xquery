@@ -34,9 +34,9 @@ public class XQueryVarRefImpl extends XQueryElementImpl implements XQueryVarRef 
   }
 
   @Override
-  @NotNull
+  @Nullable
   public XQueryVarName getVarName() {
-    return findNotNullChildByClass(XQueryVarName.class);
+    return findChildByClass(XQueryVarName.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

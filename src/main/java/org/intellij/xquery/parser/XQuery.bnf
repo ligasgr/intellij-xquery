@@ -395,9 +395,10 @@ Wildcard	   ::=   	(Prefix ":" "*")
  | "*"
  | (BracedURILiteral "*")	/* ws: explicit */
 PostfixExpr	   ::=   	PrimaryExpr (Predicate | ArgumentList)*
-ArgumentList	   ::=   	"(" (Argument ("," Argument)*)? ")"
+ArgumentList	   ::=   	"(" (Argument OptionalArgumentAfterComma*)? ")" {pin=1}
+private OptionalArgumentAfterComma ::= "," Argument {pin=1}
 PredicateList	   ::=   	Predicate*
-Predicate	   ::=   	"[" Expr "]"
+Predicate	   ::=   	"[" Expr "]" {pin=1}
 PrimaryExpr	   ::=   	Literal
  | VarRef
  | ParenthesizedExpr
@@ -409,7 +410,7 @@ PrimaryExpr	   ::=   	Literal
  | FunctionItemExpr {pin=1}
 Literal	   ::=   	NumericLiteral | StringLiteral
 NumericLiteral	   ::=   	IntegerLiteral | DecimalLiteral | DoubleLiteral
-VarRef	   ::=   	"$" VarName {methods=[getReference]}
+VarRef	   ::=   	"$" VarName {pin=1 methods=[getReference]}
 ParenthesizedExpr	   ::=   	"(" Expr? ")" {pin=1}
 ContextItemExpr	   ::=   	"."
 OrderedExpr	   ::=   	"ordered" "{" Expr "}" {pin=2}

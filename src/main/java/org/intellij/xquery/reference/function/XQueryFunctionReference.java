@@ -18,14 +18,19 @@ package org.intellij.xquery.reference.function;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiPolyVariantReference;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
+import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryFunctionInvocation;
 import org.intellij.xquery.psi.XQueryFunctionName;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.intellij.xquery.psi.XQueryElementFactory.createFunctionReference;
 
@@ -47,14 +52,20 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionInvo
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        return functionReferenceResolver.getResolutionResults();
+        List<XQueryFunctionName> matchingFunctionNames = functionReferenceResolver.getResolutionResults();
+        return convertToResolveResults(matchingFunctionNames);
     }
 
     @Nullable
     @Override
     public PsiElement resolve() {
-        ResolveResult[] resolveResults = multiResolve(false);
-        return resolveResults.length == 1 ? resolveResults[0].getElement() : null;
+        List<XQueryFunctionName> matchingFunctionNames = functionReferenceResolver.getResolutionResults();
+        List<XQueryFunctionName> filtered = filterByArity(myElement.getArity(), matchingFunctionNames);
+        if (filtered.size() == 1) {
+            return filtered.get(0);
+        } else {
+            return null;
+        }
     }
 
     @NotNull
@@ -74,5 +85,24 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionInvo
     @NotNull
     private XQueryFunctionName getUpdatedRef(String newName) {
         return createFunctionReference(myElement.getProject(), "dummy", newName);
+    }
+
+    private ResolveResult[] convertToResolveResults(List<XQueryFunctionName> resolveResults) {
+        ResolveResult[] convertedResults = new ResolveResult[resolveResults.size()];
+        for (int i = 0; i < resolveResults.size(); i++) {
+            convertedResults[i] = new PsiElementResolveResult(resolveResults.get(i));
+        }
+        return convertedResults;
+    }
+
+    private List<XQueryFunctionName> filterByArity(int arity, List<XQueryFunctionName> matchingFunctionNames) {
+        List<XQueryFunctionName> matchingArityFunctionNames = new ArrayList<XQueryFunctionName>();
+        for (XQueryFunctionName functionName : matchingFunctionNames) {
+            XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) functionName.getParent();
+            if (functionDeclaration.getArity() == arity) {
+                matchingArityFunctionNames.add(functionName);
+            }
+        }
+        return matchingArityFunctionNames;
     }
 }

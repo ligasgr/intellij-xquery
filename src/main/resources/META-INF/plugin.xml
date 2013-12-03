@@ -63,6 +63,7 @@
         <localInspection enabledByDefault="true" shortName="UnusedImports" groupName="XQuery"
                          displayName="Unused import"
                          implementationClass="org.intellij.xquery.inspection.imports.UnusedImportsInspection"/>
+        <codeInsight.parameterInfo language="XQuery" implementationClass="org.intellij.xquery.completion.function.parameters.XQueryParameterInfoHandler" />
     </extensions>
 
     <actions>

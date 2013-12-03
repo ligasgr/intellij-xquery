@@ -1121,32 +1121,36 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "(" (Argument ("," Argument)*)? ")"
+  // "(" (Argument OptionalArgumentAfterComma*)? ")"
   public static boolean ArgumentList(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ArgumentList")) return false;
     if (!nextTokenIs(builder_, L_PAR)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, L_PAR);
-    result_ = result_ && ArgumentList_1(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, R_PAR);
-    if (result_) {
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, ArgumentList_1(builder_, level_ + 1));
+    result_ = pinned_ && consumeToken(builder_, R_PAR) && result_;
+    if (result_ || pinned_) {
       marker_.done(ARGUMENT_LIST);
     }
     else {
       marker_.rollbackTo();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
-  // (Argument ("," Argument)*)?
+  // (Argument OptionalArgumentAfterComma*)?
   private static boolean ArgumentList_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ArgumentList_1")) return false;
     ArgumentList_1_0(builder_, level_ + 1);
     return true;
   }
 
-  // Argument ("," Argument)*
+  // Argument OptionalArgumentAfterComma*
   private static boolean ArgumentList_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ArgumentList_1_0")) return false;
     boolean result_ = false;
@@ -1162,12 +1166,12 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ("," Argument)*
+  // OptionalArgumentAfterComma*
   private static boolean ArgumentList_1_0_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ArgumentList_1_0_1")) return false;
     int offset_ = builder_.getCurrentOffset();
     while (true) {
-      if (!ArgumentList_1_0_1_0(builder_, level_ + 1)) break;
+      if (!OptionalArgumentAfterComma(builder_, level_ + 1)) break;
       int next_offset_ = builder_.getCurrentOffset();
       if (offset_ == next_offset_) {
         empty_element_parsed_guard_(builder_, offset_, "ArgumentList_1_0_1");
@@ -1176,22 +1180,6 @@ public class XQueryParser implements PsiParser {
       offset_ = next_offset_;
     }
     return true;
-  }
-
-  // "," Argument
-  private static boolean ArgumentList_1_0_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ArgumentList_1_0_1_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMMA);
-    result_ = result_ && Argument(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
   }
 
   /* ********************************************************** */
@@ -5786,6 +5774,28 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // "," Argument
+  static boolean OptionalArgumentAfterComma(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "OptionalArgumentAfterComma")) return false;
+    if (!nextTokenIs(builder_, COMMA)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
+    result_ = consumeToken(builder_, COMMA);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && Argument(builder_, level_ + 1);
+    if (!result_ && !pinned_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
   // AndExpr (OrMultipliedExpr)*
   public static boolean OrExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "OrExpr")) return false;
@@ -6584,17 +6594,21 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "Predicate")) return false;
     if (!nextTokenIs(builder_, L_BRACKET)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, L_BRACKET);
-    result_ = result_ && Expr(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, R_BRACKET);
-    if (result_) {
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, Expr(builder_, level_ + 1));
+    result_ = pinned_ && consumeToken(builder_, R_BRACKET) && result_;
+    if (result_ || pinned_) {
       marker_.done(PREDICATE);
     }
     else {
       marker_.rollbackTo();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -8968,16 +8982,20 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "VarRef")) return false;
     if (!nextTokenIs(builder_, DOLLAR_SIGN)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, DOLLAR_SIGN);
+    pinned_ = result_; // pin = 1
     result_ = result_ && VarName(builder_, level_ + 1);
-    if (result_) {
+    if (result_ || pinned_) {
       marker_.done(VAR_REF);
     }
     else {
       marker_.rollbackTo();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */

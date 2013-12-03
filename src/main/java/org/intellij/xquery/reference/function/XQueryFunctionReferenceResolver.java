@@ -50,27 +50,13 @@ public class XQueryFunctionReferenceResolver {
         this.myElement = myElement;
     }
 
-    public ResolveResult[] getResolutionResults() {
+    public List<XQueryFunctionName> getResolutionResults() {
         XQueryFile file = (XQueryFile) myElement.getContainingFile();
         matchingFunctionNames = new ArrayList<XQueryFunctionName>();
         addFunctionDeclarationReferencesFromFile(file, checkedNamespacePrefix);
         addFunctionNameReferencesFromImportedFiles(file);
 
-        return convertToResolveResults(filterByArity(myElement.getArity(), matchingFunctionNames));
-    }
-
-    private List<XQueryFunctionName> filterByArity(int arity, List<XQueryFunctionName> matchingFunctionNames) {
-        List<XQueryFunctionName> matchingArityFunctionNames = new ArrayList<XQueryFunctionName>();
-        for (XQueryFunctionName functionName : matchingFunctionNames) {
-            XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) functionName.getParent();
-            if (functionDeclaration.getArity() == arity) {
-                matchingArityFunctionNames.add(functionName);
-            }
-        }
-        if (matchingArityFunctionNames.size() > 0)
-            return matchingArityFunctionNames;
-        else
-            return matchingFunctionNames;
+        return matchingFunctionNames;
     }
 
     private void addFunctionDeclarationReferencesFromFile(XQueryFile file, String checkedNamespacePrefix) {
@@ -130,13 +116,5 @@ public class XQueryFunctionReferenceResolver {
                 }
             }
         });
-    }
-
-    private ResolveResult[] convertToResolveResults(List<XQueryFunctionName> resolveResults) {
-        ResolveResult[] convertedResults = new ResolveResult[resolveResults.size()];
-        for (int i = 0; i < resolveResults.size(); i++) {
-            convertedResults[i] = new PsiElementResolveResult(resolveResults.get(i));
-        }
-        return convertedResults;
     }
 }

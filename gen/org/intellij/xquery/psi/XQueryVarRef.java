@@ -24,7 +24,7 @@ import com.intellij.psi.PsiReference;
 
 public interface XQueryVarRef extends XQueryElement {
 
-  @NotNull
+  @Nullable
   XQueryVarName getVarName();
 
   PsiReference getReference();

@@ -17,7 +17,6 @@
 package org.intellij.xquery.inspection.imports;
 
 import org.intellij.xquery.psi.XQueryFile;
-import org.intellij.xquery.psi.XQueryNamespacePrefix;
 import org.intellij.xquery.psi.XQueryPrefix;
 import org.intellij.xquery.psi.XQueryVarRef;
 
@@ -29,9 +28,11 @@ public class VariableNamespacesExtractor {
     public Set<String> getNamespacesUsedByVariables(XQueryFile xQueryFile) {
         Set<String> usedNamespaces = new HashSet<String>();
         for (XQueryVarRef variableReference : xQueryFile.getVariableReferences()) {
-            XQueryPrefix namespacePrefix = variableReference.getVarName().getPrefix();
-            if (namespacePrefix != null) {
-                usedNamespaces.add(xQueryFile.mapPrefixToNamespace(namespacePrefix.getText()));
+            if (variableReference.getVarName() != null) {
+                XQueryPrefix namespacePrefix = variableReference.getVarName().getPrefix();
+                if (namespacePrefix != null) {
+                    usedNamespaces.add(xQueryFile.mapPrefixToNamespace(namespacePrefix.getText()));
+                }
             }
         }
 
