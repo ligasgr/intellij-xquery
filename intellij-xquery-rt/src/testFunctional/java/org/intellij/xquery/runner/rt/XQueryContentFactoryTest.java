@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.integration.runner.rt;
+package org.intellij.xquery.runner.rt;
 
 import org.intellij.xquery.runner.rt.XQueryContentFactory;
 import org.intellij.xquery.runner.rt.XQueryRunConfig;

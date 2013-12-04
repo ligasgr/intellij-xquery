@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.integration.runner.rt.datasource;
+package org.intellij.xquery.runner.rt.datasource;
 
 import org.intellij.xquery.runner.rt.XQueryRunConfig;
-import org.intellij.xquery.runner.rt.datasource.SaxonXQDataSourceFactory;
 import org.junit.Before;
 import org.junit.Test;
 

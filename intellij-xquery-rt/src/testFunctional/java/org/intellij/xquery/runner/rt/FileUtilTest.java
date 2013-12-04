@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.integration.runner.rt;
+package org.intellij.xquery.runner.rt;
 
-import org.intellij.xquery.runner.rt.FileUtil;
 import org.junit.Test;
 
 import java.io.File;

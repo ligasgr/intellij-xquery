@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.functional.runner.rt;
+package org.intellij.xquery.runner.rt;
 
-import org.intellij.xquery.runner.rt.XQueryRunConfig;
-import org.intellij.xquery.runner.rt.XQueryRunnerApp;
 import org.junit.Before;
 import org.junit.Test;
 
