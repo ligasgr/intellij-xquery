@@ -369,7 +369,7 @@ SimpleMapExpr	   ::=   	PathExpr ("!" PathExpr)*
 PathExpr	   ::=   	("/" RelativePathExpr?)
  | ("//" RelativePathExpr)
  | RelativePathExpr	/* xgc: leading-lone-slash */
-RelativePathExpr	   ::=   	StepExpr (("/" | "//") StepExpr)*
+private RelativePathExpr	   ::=   	StepExpr (("/" | "//") StepExpr)*
 StepExpr	   ::=   	PostfixExpr | AxisStep
 AxisStep	   ::=   	(ReverseStep | ForwardStep) PredicateList
 ForwardStep	   ::=   	(ForwardAxis NodeTest) | AbbrevForwardStep

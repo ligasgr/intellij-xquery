@@ -23,4 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryPathExpr extends XQueryExprSingle {
 
+  @NotNull
+  List<XQueryStepExpr> getStepExprList();
+
 }

@@ -98,6 +98,18 @@ public class XQueryFormatterAutoIndentTest extends BaseFunctionalTestCase {
         doTest();
     }
 
+    public void testBeforeStepExpr() throws Exception {
+        doTest();
+    }
+
+    public void testInsideStepExprBeforeSlash() throws Exception {
+        doTest();
+    }
+
+    public void testInsideStepExprAfterSlash() throws Exception {
+        doTest();
+    }
+
     private void doTest() throws Exception {
         final String testName = getTestName(false);
         myFixture.configureByFile(testName + ".xq");

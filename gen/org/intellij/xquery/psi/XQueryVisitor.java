@@ -630,10 +630,6 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitExprSingle(o);
   }
 
-  public void visitRelativePathExpr(@NotNull XQueryRelativePathExpr o) {
-    visitExprSingle(o);
-  }
-
   public void visitReturnClause(@NotNull XQueryReturnClause o) {
     visitElement(o);
   }

@@ -34,8 +34,8 @@ public class XQuerySimpleMapExprImpl extends XQueryExprSingleImpl implements XQu
 
   @Override
   @NotNull
-  public List<XQueryPathExpr> getPathExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryPathExpr.class);
+  public List<XQueryExprSingle> getExprSingleList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

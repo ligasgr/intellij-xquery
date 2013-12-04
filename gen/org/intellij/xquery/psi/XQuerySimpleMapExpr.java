@@ -24,6 +24,6 @@ import com.intellij.psi.PsiElement;
 public interface XQuerySimpleMapExpr extends XQueryExprSingle {
 
   @NotNull
-  List<XQueryPathExpr> getPathExprList();
+  List<XQueryExprSingle> getExprSingleList();
 
 }

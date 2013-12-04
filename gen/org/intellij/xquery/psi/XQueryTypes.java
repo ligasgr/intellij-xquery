@@ -176,7 +176,6 @@ public interface XQueryTypes {
   IElementType QUOT_ATTR_CONTENT_CHAR = new XQueryElementType("QUOT_ATTR_CONTENT_CHAR");
   IElementType QUOT_ATTR_VALUE_CONTENT = new XQueryElementType("QUOT_ATTR_VALUE_CONTENT");
   IElementType RANGE_EXPR = new XQueryElementType("RANGE_EXPR");
-  IElementType RELATIVE_PATH_EXPR = new XQueryElementType("RELATIVE_PATH_EXPR");
   IElementType RETURN_CLAUSE = new XQueryElementType("RETURN_CLAUSE");
   IElementType REVERSE_STEP = new XQueryElementType("REVERSE_STEP");
   IElementType SCHEMA_ATTRIBUTE_TEST = new XQueryElementType("SCHEMA_ATTRIBUTE_TEST");
@@ -885,9 +884,6 @@ public interface XQueryTypes {
       }
       else if (type == RANGE_EXPR) {
         return new XQueryRangeExprImpl(node);
-      }
-      else if (type == RELATIVE_PATH_EXPR) {
-        return new XQueryRelativePathExprImpl(node);
       }
       else if (type == RETURN_CLAUSE) {
         return new XQueryReturnClauseImpl(node);

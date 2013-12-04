@@ -495,9 +495,6 @@ public class XQueryParser implements PsiParser {
     else if (root_ == RANGE_EXPR) {
       result_ = RangeExpr(builder_, level_ + 1);
     }
-    else if (root_ == RELATIVE_PATH_EXPR) {
-      result_ = RelativePathExpr(builder_, level_ + 1);
-    }
     else if (root_ == RETURN_CLAUSE) {
       result_ = ReturnClause(builder_, level_ + 1);
     }
@@ -660,10 +657,10 @@ public class XQueryParser implements PsiParser {
       IF_EXPR, INLINE_FUNCTION_EXPR, INSTANCEOF_EXPR, INTERSECT_EXCEPT_EXPR,
       MULTIPLICATIVE_EXPR, ORDERED_EXPR, OR_EXPR, PARENTHESIZED_EXPR,
       PATH_EXPR, POSTFIX_EXPR, PREFIX_EXPR, PRIMARY_EXPR,
-      QUANTIFIED_EXPR, RANGE_EXPR, RELATIVE_PATH_EXPR, SIMPLE_MAP_EXPR,
-      STEP_EXPR, STRING_CONCAT_EXPR, SWITCH_EXPR, TREAT_EXPR,
-      TRY_CATCH_EXPR, TYPESWITCH_EXPR, UNARY_EXPR, UNION_EXPR,
-      UNORDERED_EXPR, URI_EXPR, VALIDATE_EXPR, VALUE_EXPR),
+      QUANTIFIED_EXPR, RANGE_EXPR, SIMPLE_MAP_EXPR, STEP_EXPR,
+      STRING_CONCAT_EXPR, SWITCH_EXPR, TREAT_EXPR, TRY_CATCH_EXPR,
+      TYPESWITCH_EXPR, UNARY_EXPR, UNION_EXPR, UNORDERED_EXPR,
+      URI_EXPR, VALIDATE_EXPR, VALUE_EXPR),
   };
 
   public static boolean type_extends_(IElementType child_, IElementType parent_) {
@@ -7062,25 +7059,18 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // StepExpr (("/" | "//") StepExpr)*
-  public static boolean RelativePathExpr(PsiBuilder builder_, int level_) {
+  static boolean RelativePathExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RelativePathExpr")) return false;
     boolean result_ = false;
-    int start_ = builder_.getCurrentOffset();
     Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<relative path expr>");
     result_ = StepExpr(builder_, level_ + 1);
     result_ = result_ && RelativePathExpr_1(builder_, level_ + 1);
-    LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
-    if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), RELATIVE_PATH_EXPR)) {
-      marker_.drop();
-    }
-    else if (result_) {
-      marker_.done(RELATIVE_PATH_EXPR);
-    }
-    else {
+    if (!result_) {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    else {
+      marker_.drop();
+    }
     return result_;
   }
 

@@ -1,0 +1,2 @@
+/path
+        <caret>/to/element

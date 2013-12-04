@@ -47,7 +47,7 @@ public class XQueryFormattingBlock extends AbstractBlock {
             K_OR, K_AND, PIPE_PIPE, K_TO, OP_PLUS, OP_MINUS, STAR_SIGN, K_DIV, K_IDIV, K_MOD,
             K_UNION, PIPE, K_INTERSECT, K_EXCEPT, K_INSTANCE, K_OF, K_TREAT, K_AS, K_CASTABLE,
             K_CAST, EQ, NE, LT, LE, GT, GE, EQUAL, NOT_EQUAL, LT_CHAR, LE_CHARS, GT_CHAR, GE_CHARS,
-            K_IS, NODECOMP_LT, NODECOMP_GT, EXCLAMATION_MARK, SLASH, SLASH_SLASH
+            K_IS, NODECOMP_LT, NODECOMP_GT, EXCLAMATION_MARK
     );
 
     private final SpacingBuilder spacingBuilder;
@@ -119,6 +119,10 @@ public class XQueryFormattingBlock extends AbstractBlock {
         }
         if (isChildOfSingleExpression()) {
             if (BIN_OPERATORS.contains(type) || BIN_OPERATORS.contains(prevType)) {
+                return Indent.getContinuationIndent();
+            }
+            if (((type == SLASH  || type == SLASH_SLASH) && (prevType == STEP_EXPR))
+                    || ((type == STEP_EXPR) && (prevType == SLASH || prevType == SLASH_SLASH))) {
                 return Indent.getContinuationIndent();
             }
         }
