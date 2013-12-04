@@ -16,7 +16,14 @@
 
 package org.intellij.xquery.formatter;
 
-import com.intellij.formatting.*;
+import com.intellij.formatting.Alignment;
+import com.intellij.formatting.Block;
+import com.intellij.formatting.ChildAttributes;
+import com.intellij.formatting.Indent;
+import com.intellij.formatting.Spacing;
+import com.intellij.formatting.SpacingBuilder;
+import com.intellij.formatting.Wrap;
+import com.intellij.formatting.WrapType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.TokenType;
@@ -26,7 +33,12 @@ import com.intellij.psi.formatter.common.AbstractBlock;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
-import org.intellij.xquery.psi.*;
+import org.intellij.xquery.psi.XQueryBasicTypes;
+import org.intellij.xquery.psi.XQueryExprSingle;
+import org.intellij.xquery.psi.XQueryFunctionName;
+import org.intellij.xquery.psi.XQueryNamespacePrefix;
+import org.intellij.xquery.psi.XQueryTokenType;
+import org.intellij.xquery.psi.XQueryVarName;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +46,71 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static org.intellij.xquery.psi.XQueryTypes.*;
+import static org.intellij.xquery.psi.XQueryTypes.ARGUMENT_LIST;
+import static org.intellij.xquery.psi.XQueryTypes.CASE_CLAUSE;
+import static org.intellij.xquery.psi.XQueryTypes.CATCH_CLAUSE;
+import static org.intellij.xquery.psi.XQueryTypes.CONTENT_EXPR;
+import static org.intellij.xquery.psi.XQueryTypes.DIR_ELEM_CONTENT;
+import static org.intellij.xquery.psi.XQueryTypes.ENCLOSED_EXPR;
+import static org.intellij.xquery.psi.XQueryTypes.EQ;
+import static org.intellij.xquery.psi.XQueryTypes.EQUAL;
+import static org.intellij.xquery.psi.XQueryTypes.EXCLAMATION_MARK;
+import static org.intellij.xquery.psi.XQueryTypes.EXPR;
+import static org.intellij.xquery.psi.XQueryTypes.FOR_BINDING;
+import static org.intellij.xquery.psi.XQueryTypes.FUNCTION_DECL;
+import static org.intellij.xquery.psi.XQueryTypes.GE;
+import static org.intellij.xquery.psi.XQueryTypes.GE_CHARS;
+import static org.intellij.xquery.psi.XQueryTypes.GT;
+import static org.intellij.xquery.psi.XQueryTypes.GT_CHAR;
+import static org.intellij.xquery.psi.XQueryTypes.IF_EXPR;
+import static org.intellij.xquery.psi.XQueryTypes.K_AND;
+import static org.intellij.xquery.psi.XQueryTypes.K_AS;
+import static org.intellij.xquery.psi.XQueryTypes.K_CAST;
+import static org.intellij.xquery.psi.XQueryTypes.K_CASTABLE;
+import static org.intellij.xquery.psi.XQueryTypes.K_DIV;
+import static org.intellij.xquery.psi.XQueryTypes.K_EXCEPT;
+import static org.intellij.xquery.psi.XQueryTypes.K_IDIV;
+import static org.intellij.xquery.psi.XQueryTypes.K_INSTANCE;
+import static org.intellij.xquery.psi.XQueryTypes.K_INTERSECT;
+import static org.intellij.xquery.psi.XQueryTypes.K_IS;
+import static org.intellij.xquery.psi.XQueryTypes.K_MOD;
+import static org.intellij.xquery.psi.XQueryTypes.K_OF;
+import static org.intellij.xquery.psi.XQueryTypes.K_OR;
+import static org.intellij.xquery.psi.XQueryTypes.K_TO;
+import static org.intellij.xquery.psi.XQueryTypes.K_TREAT;
+import static org.intellij.xquery.psi.XQueryTypes.K_UNION;
+import static org.intellij.xquery.psi.XQueryTypes.LE;
+import static org.intellij.xquery.psi.XQueryTypes.LET_BINDING;
+import static org.intellij.xquery.psi.XQueryTypes.LE_CHARS;
+import static org.intellij.xquery.psi.XQueryTypes.LT;
+import static org.intellij.xquery.psi.XQueryTypes.LT_CHAR;
+import static org.intellij.xquery.psi.XQueryTypes.L_C_BRACE;
+import static org.intellij.xquery.psi.XQueryTypes.L_PAR;
+import static org.intellij.xquery.psi.XQueryTypes.NE;
+import static org.intellij.xquery.psi.XQueryTypes.NODECOMP_GT;
+import static org.intellij.xquery.psi.XQueryTypes.NODECOMP_LT;
+import static org.intellij.xquery.psi.XQueryTypes.NOT_EQUAL;
+import static org.intellij.xquery.psi.XQueryTypes.OP_ASSIGN;
+import static org.intellij.xquery.psi.XQueryTypes.OP_MINUS;
+import static org.intellij.xquery.psi.XQueryTypes.OP_PLUS;
+import static org.intellij.xquery.psi.XQueryTypes.ORDER_SPEC;
+import static org.intellij.xquery.psi.XQueryTypes.PARAM_LIST;
+import static org.intellij.xquery.psi.XQueryTypes.PARENTHESIZED_EXPR;
+import static org.intellij.xquery.psi.XQueryTypes.PIPE;
+import static org.intellij.xquery.psi.XQueryTypes.PIPE_PIPE;
+import static org.intellij.xquery.psi.XQueryTypes.RETURN_CLAUSE;
+import static org.intellij.xquery.psi.XQueryTypes.R_PAR;
+import static org.intellij.xquery.psi.XQueryTypes.SLASH;
+import static org.intellij.xquery.psi.XQueryTypes.SLASH_SLASH;
+import static org.intellij.xquery.psi.XQueryTypes.STAR_SIGN;
+import static org.intellij.xquery.psi.XQueryTypes.STEP_EXPR;
+import static org.intellij.xquery.psi.XQueryTypes.SWITCH_CASE_CLAUSE;
+import static org.intellij.xquery.psi.XQueryTypes.SWITCH_DEFAULT_RETURN_CLAUSE;
+import static org.intellij.xquery.psi.XQueryTypes.SWITCH_RETURN_CLAUSE;
+import static org.intellij.xquery.psi.XQueryTypes.TRY_CLAUSE;
+import static org.intellij.xquery.psi.XQueryTypes.TYPESWITCH_DEFAULT_RETURN_CLAUSE;
+import static org.intellij.xquery.psi.XQueryTypes.VAR_VALUE;
+import static org.intellij.xquery.psi.XQueryTypes.WHERE_CLAUSE;
 
 /**
  * User: ligasgr
@@ -95,8 +171,9 @@ public class XQueryFormattingBlock extends AbstractBlock {
 
         if (parent == null)
             return Indent.getNoneIndent();
-        if (isExpressionAfterBrace(type, prevType) || isExpressionAfterParenthesis(type,
-                prevType) || isXmlChild(type) || isForOrLetBinding(parentType))
+        if (isExpressionAfterBrace(type, prevType) || isExpressionAfterParenthesis(type, prevType)
+                || isXmlChild(type) || isForOrLetBinding(parentType)
+                || isExprInsideOfEnclosedExpr(type, parentType))
             return Indent.getNormalIndent();
         if (isASingleExpression()) {
             if (parentType == IF_EXPR) {
@@ -121,12 +198,16 @@ public class XQueryFormattingBlock extends AbstractBlock {
             if (BIN_OPERATORS.contains(type) || BIN_OPERATORS.contains(prevType)) {
                 return Indent.getContinuationIndent();
             }
-            if (((type == SLASH  || type == SLASH_SLASH) && (prevType == STEP_EXPR))
+            if (((type == SLASH || type == SLASH_SLASH) && (prevType == STEP_EXPR))
                     || ((type == STEP_EXPR) && (prevType == SLASH || prevType == SLASH_SLASH))) {
                 return Indent.getContinuationIndent();
             }
         }
         return Indent.getNoneIndent();
+    }
+
+    private boolean isExprInsideOfEnclosedExpr(IElementType type, IElementType parentType) {
+        return type == EXPR && parentType == ENCLOSED_EXPR;
     }
 
     private boolean isExpressionAfterBrace(IElementType type, IElementType typeOfPreviousElement) {
@@ -150,9 +231,9 @@ public class XQueryFormattingBlock extends AbstractBlock {
     }
 
     private Indent calculateChildIndent(IElementType type, boolean fromCalculatedType) {
-        if (type == ENCLOSED_EXPR || type == FUNCTION_DECL || (!fromCalculatedType && type == PARENTHESIZED_EXPR)
+        if (type == ENCLOSED_EXPR || type == FUNCTION_DECL || (! fromCalculatedType && type == PARENTHESIZED_EXPR)
                 || type == LET_BINDING || type == OP_ASSIGN || (fromCalculatedType && type == RETURN_CLAUSE)
-                || (!fromCalculatedType && type == TRY_CLAUSE) || (!fromCalculatedType && type == CATCH_CLAUSE))
+                || (! fromCalculatedType && type == TRY_CLAUSE) || (! fromCalculatedType && type == CATCH_CLAUSE))
             return Indent.getNormalIndent();
         return null;
     }
@@ -186,10 +267,10 @@ public class XQueryFormattingBlock extends AbstractBlock {
     @Nullable
     private IElementType getIElementType(int newChildIndex) {
         Block block = getSubBlocks().get(newChildIndex - 1);
-        while (block instanceof XQueryFormattingBlock && !block.getSubBlocks().isEmpty()) {
+        while (block instanceof XQueryFormattingBlock && ! block.getSubBlocks().isEmpty()) {
             List<Block> subBlocks = block.getSubBlocks();
             Block childBlock = subBlocks.get(subBlocks.size() - 1);
-            if (!(childBlock instanceof XQueryFormattingBlock)) break;
+            if (! (childBlock instanceof XQueryFormattingBlock)) break;
             else {
                 ASTNode node = ((XQueryFormattingBlock) childBlock).getNode();
                 PsiElement psi = node.getPsi();
@@ -201,6 +282,7 @@ public class XQueryFormattingBlock extends AbstractBlock {
             }
             block = childBlock;
         }
-        return block instanceof XQueryFormattingBlock ? ((XQueryFormattingBlock) block).getNode().getElementType() : null;
+        return block instanceof XQueryFormattingBlock ? ((XQueryFormattingBlock) block).getNode().getElementType() :
+                null;
     }
 }
