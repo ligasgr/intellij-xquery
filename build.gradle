@@ -14,18 +14,6 @@
  * limitations under the License.
  */
 
-
-
-
-
-
-
-
-
-
-
-
-
 apply plugin: 'java'
 apply plugin: 'idea'
 apply from: 'idea.gradle'
@@ -58,6 +46,18 @@ sourceSets {
         test.compileClasspath += configurations.provided
         test.runtimeClasspath += configurations.provided
     }
+    testFunctional {
+        compileClasspath = sourceSets.main.output + configurations.testRuntime + configurations.provided
+        runtimeClasspath = output + sourceSets.main.output + configurations.testRuntime + configurations.provided
+    }
+    testGui {
+        compileClasspath = sourceSets.main.output + configurations.testRuntime + configurations.provided
+        runtimeClasspath = output + sourceSets.main.output + configurations.testRuntime + configurations.provided
+    }
+    testPerformance {
+        compileClasspath = sourceSets.main.output + configurations.testRuntime + configurations.provided
+        runtimeClasspath = output + sourceSets.main.output + configurations.testRuntime + configurations.provided
+    }
 }
 
 repositories {
@@ -85,16 +85,21 @@ dependencies {
 
 test {
     jvmArgs = ['-Didea.home.path=' + project.ext.ideaInstallationPath, '-Didea.test.group=ALL_EXCLUDE_DEFINED', '-Didea.config.path=sdk/config', '-Didea.system.path=sdk/system', '-ea']
-    include '**/org/intellij/xquery/unit/**'
-    include '**/org/intellij/xquery/functional/**'
 }
 
-task testPerformance(type: Test) {
-    include '**/org/intellij/xquery/performance/**'
+task testFunctional(type: Test) {
+    testClassesDir = sourceSets.testFunctional.output.classesDir
+    classpath = sourceSets.testFunctional.runtimeClasspath
 }
 
 task testGui(type: Test, dependsOn: ':compileForms') {
-    include '**/org/intellij/xquery/gui/**'
+    testClassesDir = sourceSets.testGui.output.classesDir
+    classpath = sourceSets.testGui.runtimeClasspath
+}
+
+task testPerformance(type: Test) {
+    testClassesDir = sourceSets.testPerformance.output.classesDir
+    classpath = sourceSets.testPerformance.runtimeClasspath
 }
 
 tasks.withType(Compile) {

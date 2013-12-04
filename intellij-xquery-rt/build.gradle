@@ -44,9 +44,3 @@ dependencies {
 tasks.withType(Compile) {
     options.compilerArgs << "-Xlint:unchecked"
 }
-
-test {
-    include '**/org/intellij/xquery/unit/**'
-    include '**/org/intellij/xquery/functional/**'
-    include '**/org/intellij/xquery/integration/**'
-}

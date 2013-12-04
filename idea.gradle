@@ -16,9 +16,14 @@
 
 
 
+
+
 // --- changes to idea plugin ---
 idea {
     module {
+	testSourceDirs += file('src/testFunctional/java')
+	testSourceDirs += file('src/testGui/java')
+        testSourceDirs += file('src/testPerformance/java')
         iml {
             whenMerged { module ->
                 removeIdeaJdkDependencies(module)

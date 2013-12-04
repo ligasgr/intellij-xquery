@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.hamcrest.Matchers.is;
-import static org.intellij.xquery.unit.runner.rt.FileTestUtil.createFileWithContents;
+import static org.intellij.xquery.runner.rt.FileTestUtil.createFileWithContents;
 import static org.junit.Assert.assertThat;
 
 /**
