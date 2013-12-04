@@ -46,7 +46,7 @@ public class XQueryFoldingBuilder extends FoldingBuilderEx {
 
         for (XQueryFunctionDecl function : file.getFunctionDeclarations()) {
             final XQueryFunctionBody functionBody = function.getFunctionBody();
-            if (functionBody != null) {
+            if (functionBody != null && functionBody.getTextLength() > 2) {
                 descriptorList.add(new FoldingDescriptor(function, functionBody.getTextRange()));
             }
         }
