@@ -24,7 +24,7 @@ public class XQueryFoldingBuilderTest extends BaseFunctionalTestCase {
 
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData/org/intellij/xquery/folding/";
+        return "src/test/testData/org/intellij/xquery/functional/folding/";
     }
 
     public void testFoldingFunctions() throws Exception {
