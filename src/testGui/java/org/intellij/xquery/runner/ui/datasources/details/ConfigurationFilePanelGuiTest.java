@@ -40,7 +40,7 @@ import static org.mockito.Mockito.verify;
  * Date: 24/10/13
  * Time: 13:42
  */
-public class ConfigurationFilePanelTest extends BaseGuiTest {
+public class ConfigurationFilePanelGuiTest extends BaseGuiTest {
     private static final XQueryDataSourceType CONFIG_FILE_SUPPORTED_TYPE = SAXON;
     private static final XQueryDataSourceType CONFIG_FILE_UNSUPPORTED_TYPE = MARKLOGIC;
     private static final boolean ENABLED = true;

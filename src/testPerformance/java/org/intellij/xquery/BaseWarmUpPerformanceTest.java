@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.intellij.xquery;
 
 import com.intellij.psi.PsiElement;
@@ -25,7 +26,7 @@ import java.util.Collection;
  * Date: 24/11/13
  * Time: 14:01
  */
-public class BaseWarmUpTest extends BasePerformanceTestCase {
+public class BaseWarmUpPerformanceTest extends BasePerformanceTestCase {
 
     public void testWarmsSystemUp() {
         String template = "declare function prefix_%s_target:example() {module_%s_0:fun<caret>ction_9()};";

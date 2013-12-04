@@ -43,7 +43,7 @@ import static org.mockito.Mockito.verify;
  * Date: 26/10/13
  * Time: 20:56
  */
-public class ConnectionParametersPanelTest extends BaseGuiTest {
+public class ConnectionParametersPanelGuiTest extends BaseGuiTest {
 
     private static final XQueryDataSourceType NO_CONNECTION_PARAMETERS_TYPE = SAXON;
     private static final XQueryDataSourceType CONNECTION_PARAMETERS_TYPE = MARKLOGIC;

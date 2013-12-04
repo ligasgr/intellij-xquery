@@ -43,7 +43,7 @@ import static org.mockito.Mockito.verify;
  * Date: 10/11/13
  * Time: 21:26
  */
-public class DataSourceSelectorTest extends BaseGuiTest {
+public class DataSourceSelectorGuiTest extends BaseGuiTest {
 
     private static final String CONFIGURATION_NAME = "myName";
     private static final String DEFAULT_NAME = "default";

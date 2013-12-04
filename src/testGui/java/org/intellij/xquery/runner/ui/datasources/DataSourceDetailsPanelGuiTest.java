@@ -41,7 +41,7 @@ import static org.mockito.Mockito.verify;
  * Date: 09/11/13
  * Time: 02:03
  */
-public class DataSourceDetailsPanelTest extends BaseGuiTest {
+public class DataSourceDetailsPanelGuiTest extends BaseGuiTest {
     private DataSourceDetailsPanel panel;
 
     @Override

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.intellij.xquery.runner.ui.datasources.details;
 
 import org.fest.swing.edt.GuiActionRunner;
@@ -41,7 +42,7 @@ import static org.mockito.Mockito.verify;
  * Date: 19/11/13
  * Time: 13:13
  */
-public class NameAndDefaultButtonPanelTest extends BaseGuiTest {
+public class NameAndDefaultButtonPanelGuiTest extends BaseGuiTest {
 
     private static final String NAME_VALUE = "myName";
     private static final String NEW_NAME_VALUE = "newValue";

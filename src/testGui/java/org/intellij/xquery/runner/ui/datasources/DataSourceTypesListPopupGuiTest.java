@@ -44,7 +44,7 @@ import static org.mockito.Mockito.verify;
  * Date: 02/11/13
  * Time: 12:51
  */
-public class DataSourceTypesListPopupTest extends BaseGuiTest {
+public class DataSourceTypesListPopupGuiTest extends BaseGuiTest {
 
     private JPanel mainPanel;
     private DataSourceTypesListPopup popup;

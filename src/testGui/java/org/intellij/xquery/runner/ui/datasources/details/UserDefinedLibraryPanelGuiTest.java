@@ -53,7 +53,7 @@ import static org.mockito.Mockito.verify;
  * Date: 26/10/13
  * Time: 21:36
  */
-public class UserDefinedLibraryPanelTest extends BaseGuiTest {
+public class UserDefinedLibraryPanelGuiTest extends BaseGuiTest {
 
     private static final String PATH_JAR = "/my/path/to.jar";
     private static final boolean ENABLED = true;

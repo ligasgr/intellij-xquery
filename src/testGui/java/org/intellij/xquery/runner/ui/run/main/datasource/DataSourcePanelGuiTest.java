@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.intellij.xquery.runner.ui.run.main.datasource;
 
 import org.intellij.xquery.BaseGuiTest;
@@ -38,7 +39,7 @@ import static org.mockito.Mockito.verify;
  * Date: 19/11/13
  * Time: 23:07
  */
-public class DataSourcePanelTest extends BaseGuiTest {
+public class DataSourcePanelGuiTest extends BaseGuiTest {
     private TestDataSourcePanel panel;
     private ActionListener actionListener;
     private DataSourceSelector dataSourceSelector;

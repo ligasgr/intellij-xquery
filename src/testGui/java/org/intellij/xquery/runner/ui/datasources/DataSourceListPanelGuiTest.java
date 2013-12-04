@@ -55,7 +55,7 @@ import static org.mockito.Mockito.verify;
  * Date: 03/11/13
  * Time: 19:23
  */
-public class DataSourceListPanelTest extends BaseGuiTest {
+public class DataSourceListPanelGuiTest extends BaseGuiTest {
     private TestingDataSourceListPanel panel;
     private DataSourceDetailsPanel dataSourceDetailsPanel;
     private XQueryDataSourceConfiguration defaultDataSource =
@@ -278,7 +278,7 @@ public class DataSourceListPanelTest extends BaseGuiTest {
         protected void showAddDataSourcePopupWithActionExecutor(XQueryDataSourceTypeBasedActionExecutor
                                                                         addDataSourceActionExecutor) {
             showPopupInvoked = true;
-            DataSourceListPanelTest.this.addDataSourceActionExecutor = addDataSourceActionExecutor;
+            DataSourceListPanelGuiTest.this.addDataSourceActionExecutor = addDataSourceActionExecutor;
         }
 
         @Override

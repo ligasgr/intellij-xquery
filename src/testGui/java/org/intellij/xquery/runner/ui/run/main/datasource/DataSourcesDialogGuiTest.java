@@ -48,7 +48,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
  * Time: 00:50
  */
 @RunWith(CacioTestRunner.class)
-public class DataSourcesDialogTest {
+public class DataSourcesDialogGuiTest {
 
     private JPanel parent;
     private DataSourceSelector selector;
@@ -177,7 +177,7 @@ public class DataSourcesDialogTest {
             @Override
             public void run() {
                 Action okAction = dialog.getOKAction();
-                ActionEvent event = new ActionEvent(DataSourcesDialogTest.this, 0, "command");
+                ActionEvent event = new ActionEvent(DataSourcesDialogGuiTest.this, 0, "command");
                 okAction.actionPerformed(event);
             }
         });
@@ -188,7 +188,7 @@ public class DataSourcesDialogTest {
             @Override
             public void run() {
                 Action cancelAction = dialog.getCancelAction();
-                ActionEvent event = new ActionEvent(DataSourcesDialogTest.this, 0, "command");
+                ActionEvent event = new ActionEvent(DataSourcesDialogGuiTest.this, 0, "command");
                 cancelAction.actionPerformed(event);
             }
         });

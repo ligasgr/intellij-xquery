@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.intellij.xquery.runner.ui.run.main.variables;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -50,7 +51,7 @@ import static org.mockito.Mockito.verify;
  * Date: 20/11/13
  * Time: 20:54
  */
-public class VariablesPanelTest extends BaseGuiTest {
+public class VariablesPanelGuiTest extends BaseGuiTest {
     private static final String NAME = "name";
     private static final String NAMESPACE = "namespace";
     private static final String TYPE = "xs:string";

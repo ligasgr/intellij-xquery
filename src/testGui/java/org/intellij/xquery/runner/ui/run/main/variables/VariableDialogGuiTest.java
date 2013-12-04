@@ -40,7 +40,7 @@ import static org.junit.Assert.assertThat;
  * Date: 11/11/13
  * Time: 14:17
  */
-public class VariableDialogTest extends BaseGuiTest {
+public class VariableDialogGuiTest extends BaseGuiTest {
     private VariableDialog dialog;
     private static final String VALUE = "my value";
     private static final String TYPE = XQJType.XS_STRING.getDescription();

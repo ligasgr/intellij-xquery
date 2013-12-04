@@ -56,7 +56,7 @@ import static org.mockito.Mockito.mock;
  * Date: 09/11/13
  * Time: 15:29
  */
-public class ContextItemPanelTest extends BaseGuiTest {
+public class ContextItemPanelGuiTest extends BaseGuiTest {
     private static final String CONTEXT_ITEM_PATH_BUTTON = "contextItemPathButton";
     private TestContextItemPanel panel;
     private static final String TYPE = "xs:string";

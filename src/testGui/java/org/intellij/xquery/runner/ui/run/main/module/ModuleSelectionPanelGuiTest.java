@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.intellij.xquery.runner.ui.run.main.module;
 
 import com.intellij.openapi.project.Project;
@@ -35,7 +36,7 @@ import static org.mockito.Mockito.verify;
  * Date: 21/11/13
  * Time: 14:12
  */
-public class ModuleSelectionPanelTest extends BaseGuiTest {
+public class ModuleSelectionPanelGuiTest extends BaseGuiTest {
     private static final String MAIN_FILE_NAME = "name.xq";
     private TestModuleSelectionPanel panel;
     private TestModuleSelector moduleSelector;

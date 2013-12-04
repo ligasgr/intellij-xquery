@@ -36,7 +36,7 @@ import static org.junit.Assert.assertThat;
  * Date: 09/11/13
  * Time: 02:28
  */
-public class DataSourcesSettingsFormTest extends BaseGuiTest {
+public class DataSourcesSettingsFormGuiTest extends BaseGuiTest {
     private DataSourceDetailsPanel dataSourceDetailsPanel;
     private TestDataSourceListPanel dataSourceListPanel;
     private TestDataSourcesSettingsForm form;

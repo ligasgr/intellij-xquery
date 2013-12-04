@@ -32,7 +32,7 @@ import static org.mockito.Mockito.mock;
  * Date: 01/11/13
  * Time: 19:49
  */
-public class DataSourceConfigurationAggregatingPanelTest extends BaseGuiTest {
+public class DataSourceConfigurationAggregatingPanelGuiTest extends BaseGuiTest {
 
     private DataSourceConfigurationAggregatingPanel panel;
     private ConfigurationChangeListener nameChangedListener;
