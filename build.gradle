@@ -71,7 +71,7 @@ repositories {
 
 dependencies {
     compile project(':intellij-xquery-rt') {
-        transitive = false
+        ext.transitive = false
     }
     provided fileTree(dir: project.ext.ideaInstallationPath + '/lib', include: '*.jar')
     provided files("${System.properties['java.home']}/../lib/tools.jar")
