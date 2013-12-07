@@ -79,11 +79,10 @@ public class XQueryCompletionContributor extends CompletionContributor {
                     protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context,
                                                   @NotNull CompletionResultSet result) {
                         XQueryFile originalFile = (XQueryFile) parameters.getOriginalFile();
-                        FunctionCollector functionCollector = new FunctionCollector(originalFile);
                         VariableCollector variableCollector = new VariableCollector(parameters
                                 .getPosition());
 
-                        result.addAllElements(functionCollector.getProposedLookUpItems());
+                        result.addAllElements(FunctionCollector.getLookUpItems(originalFile));
                         result.addAllElements(variableCollector.getProposedLookUpItems());
                     }
                 });

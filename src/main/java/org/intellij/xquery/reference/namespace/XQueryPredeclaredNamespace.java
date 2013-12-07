@@ -36,13 +36,13 @@ public enum XQueryPredeclaredNamespace {
     ERR("err", "http://www.w3.org/2005/xqt-errors"),
     LOCAL("local", "http://www.w3.org/2005/xquery-local-functions");
 
-    private static final Map<String, String> mappingFromPrefix = new HashMap<String, String>();
+    private static final Map<String, String> prefixToNamespaceMap = new HashMap<String, String>();
     private String prefix;
     private String namespace;
 
     static {
         for (XQueryPredeclaredNamespace value : values()) {
-            mappingFromPrefix.put(value.getPrefix(), value.getNamespace());
+            prefixToNamespaceMap.put(value.getPrefix(), value.getNamespace());
         }
     }
 
@@ -59,7 +59,7 @@ public enum XQueryPredeclaredNamespace {
         return namespace;
     }
 
-    public static Map<String, String> getMappingFromPrefix() {
-        return unmodifiableMap(mappingFromPrefix);
+    public static Map<String, String> getPrefixToNamespaceMap() {
+        return unmodifiableMap(prefixToNamespaceMap);
     }
 }

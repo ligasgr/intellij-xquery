@@ -75,7 +75,7 @@ public class VariableNamespacesExtractorTest {
     public void shouldReturnNullWhenNamespaceReturnedByMappingFunctionIsNull() {
         XQueryVarRef varRef = varRefWithNamespace(NAME);
         given(file.getVariableReferences()).willReturn(asList(varRef));
-        given(file.mapPrefixToNamespace(NAME)).willReturn(null);
+        given(file.mapFunctionPrefixToNamespace(NAME)).willReturn(null);
 
         Set<String> result = extractor.getNamespacesUsedByVariables(file);
 
@@ -87,7 +87,7 @@ public class VariableNamespacesExtractorTest {
     public void shouldReturnNamespaceReturnedByMappingFunction() {
         XQueryVarRef varRef = varRefWithNamespace(NAME);
         given(file.getVariableReferences()).willReturn(asList(varRef));
-        given(file.mapPrefixToNamespace(NAME)).willReturn(NAMESPACE);
+        given(file.mapFunctionPrefixToNamespace(NAME)).willReturn(NAMESPACE);
 
         Set<String> result = extractor.getNamespacesUsedByVariables(file);
 

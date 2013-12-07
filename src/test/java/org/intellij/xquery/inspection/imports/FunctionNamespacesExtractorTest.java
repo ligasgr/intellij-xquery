@@ -65,7 +65,7 @@ public class FunctionNamespacesExtractorTest {
     public void shouldReturnNullWhenNamespaceReturnedByMappingFunctionIsNull() {
         XQueryFunctionInvocation functionInvocation = functionInvocationWithNamespace(NAME);
         given(file.getFunctionInvocations()).willReturn(asList(functionInvocation));
-        given(file.mapPrefixToNamespace(NAME)).willReturn(null);
+        given(file.mapFunctionPrefixToNamespace(NAME)).willReturn(null);
 
         Set<String> result = extractor.getNamespacesUsedByFunctions(file);
 
@@ -77,7 +77,7 @@ public class FunctionNamespacesExtractorTest {
     public void shouldReturnNamespaceReturnedByMappingFunctionWhenFunctionInvocationWithoutNamespacePrefix() {
         XQueryFunctionInvocation functionInvocation = functionInvocationWithNamespace(EMPTY);
         given(file.getFunctionInvocations()).willReturn(asList(functionInvocation));
-        given(file.mapPrefixToNamespace(null)).willReturn(NAMESPACE);
+        given(file.mapFunctionPrefixToNamespace(null)).willReturn(NAMESPACE);
 
         Set<String> result = extractor.getNamespacesUsedByFunctions(file);
 
@@ -89,7 +89,7 @@ public class FunctionNamespacesExtractorTest {
     public void shouldReturnNamespaceReturnedByMappingFunction() {
         XQueryFunctionInvocation functionInvocation = functionInvocationWithNamespace(NAME);
         given(file.getFunctionInvocations()).willReturn(asList(functionInvocation));
-        given(file.mapPrefixToNamespace(NAME)).willReturn(NAMESPACE);
+        given(file.mapFunctionPrefixToNamespace(NAME)).willReturn(NAMESPACE);
 
         Set<String> result = extractor.getNamespacesUsedByFunctions(file);
 

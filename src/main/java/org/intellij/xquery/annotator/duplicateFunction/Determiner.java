@@ -23,7 +23,6 @@ import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryFunctionName;
 import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryModuleImport;
-import org.intellij.xquery.psi.XQueryNamespacePrefix;
 import org.intellij.xquery.psi.XQueryPrefix;
 import org.intellij.xquery.psi.XQueryURILiteral;
 
@@ -80,7 +79,7 @@ public class Determiner {
     private boolean hasDuplicatedNamespaceValue(XQueryFile file, XQueryPrefix functionNamespaceObject, XQueryURILiteral uriLiteral) {
         if (functionNamespaceObject != null && uriLiteral != null) {
             String functionNamespace = functionNamespaceObject.getText();
-            String namespaceValue = file.mapPrefixToNamespace(functionNamespace);
+            String namespaceValue = file.mapFunctionPrefixToNamespace(functionNamespace);
             String importedFileNamespaceValue = removeQuotOrAposIfNeeded(uriLiteral.getText());
             if (importedFileNamespaceValue.equals(namespaceValue)) {
                 return true;

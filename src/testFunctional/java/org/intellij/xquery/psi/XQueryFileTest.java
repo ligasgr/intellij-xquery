@@ -22,7 +22,7 @@ import java.util.Collection;
 
 import static org.intellij.xquery.psi.XQueryElementFactory.createFile;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;
-import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.getMappingFromPrefix;
+import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.getPrefixToNamespaceMap;
 
 /**
  * User: ligasgr
@@ -113,45 +113,45 @@ public class XQueryFileTest extends BaseFunctionalTestCase {
     public void testNamespaceMappingsForPredeclaredNamespaces() {
         XQueryFile file = aFile("()");
 
-        for (String key : getMappingFromPrefix().keySet()) {
-            assertEquals(getMappingFromPrefix().get(key), file.mapPrefixToNamespace(key));
+        for (String key : getPrefixToNamespaceMap().keySet()) {
+            assertEquals(getPrefixToNamespaceMap().get(key), file.mapFunctionPrefixToNamespace(key));
         }
     }
 
     public void testNamespaceMappingsWhenDefaultFunctionNamespaceNotDeclared() {
         XQueryFile file = aFile("()");
 
-        assertEquals(FN.getNamespace(), file.mapPrefixToNamespace(null));
+        assertEquals(FN.getNamespace(), file.mapFunctionPrefixToNamespace(null));
     }
 
     public void testNamespaceMappingsWhenDefaultFunctionNamespaceDeclared() {
         XQueryFile file = aFile("declare default function namespace 'xxx';()");
 
-        assertEquals("xxx", file.mapPrefixToNamespace(null));
+        assertEquals("xxx", file.mapFunctionPrefixToNamespace(null));
     }
 
     public void testNamespaceMappingsWhenNamespaceDeclared() {
         XQueryFile file = aFile("declare namespace ex = 'xxx';");
 
-        assertEquals("xxx", file.mapPrefixToNamespace("ex"));
+        assertEquals("xxx", file.mapFunctionPrefixToNamespace("ex"));
     }
 
     public void testNamespaceMappingsWhenModuleDeclared() {
         XQueryFile file = aFile("module namespace ex = 'xxx';");
 
-        assertEquals("xxx", file.mapPrefixToNamespace("ex"));
+        assertEquals("xxx", file.mapFunctionPrefixToNamespace("ex"));
     }
 
     public void testNamespaceMappingsWhenModuleImportedWithName() {
         XQueryFile file = aFile("import module namespace ex = 'xxx';");
 
-        assertEquals("xxx", file.mapPrefixToNamespace("ex"));
+        assertEquals("xxx", file.mapFunctionPrefixToNamespace("ex"));
     }
 
     public void testNamespaceMappingsWhenModuleImportedWithoutName() {
         XQueryFile file = aFile("import module 'xxx';");
 
-        assertNull(file.mapPrefixToNamespace("ex"));
+        assertNull(file.mapFunctionPrefixToNamespace("ex"));
     }
 
     public void testNamespaceDeclarationsMatchingDefaultFunctionNamespace() {

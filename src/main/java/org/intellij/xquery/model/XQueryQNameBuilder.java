@@ -43,7 +43,7 @@ public class XQueryQNameBuilder<T> {
         if (functionName.getFunctionLocalName() != null) {
             instance.localName = functionName.getFunctionLocalName().getText();
         }
-        instance.namespace = containingFile.mapPrefixToNamespace(instance.prefix);
+        instance.namespace = containingFile.mapFunctionPrefixToNamespace(instance.prefix);
         instance.namedObject = functionName;
         return instance;
     }

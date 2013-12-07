@@ -42,4 +42,8 @@ public interface XQueryFunctionName extends XQueryNamedElement {
 
   void delete();
 
+  String getPrefixText();
+
+  String getLocalNameText();
+
 }

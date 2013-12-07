@@ -31,7 +31,7 @@ public class VariableNamespacesExtractor {
             if (variableReference.getVarName() != null) {
                 XQueryPrefix namespacePrefix = variableReference.getVarName().getPrefix();
                 if (namespacePrefix != null) {
-                    usedNamespaces.add(xQueryFile.mapPrefixToNamespace(namespacePrefix.getText()));
+                    usedNamespaces.add(xQueryFile.mapFunctionPrefixToNamespace(namespacePrefix.getText()));
                 }
             }
         }

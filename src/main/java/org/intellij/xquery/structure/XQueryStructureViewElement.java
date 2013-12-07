@@ -100,7 +100,7 @@ public class XQueryStructureViewElement implements StructureViewTreeElement, Sor
         if (element instanceof XQueryVarDecl)
             return XQueryPsiImplUtil.variableIsPublic((XQueryVarDecl) element);
         if (element instanceof XQueryFunctionDecl)
-            return XQueryPsiImplUtil.functionIsPublic((XQueryFunctionDecl) element);
+            return ((XQueryFunctionDecl) element).isPublic();
         return true;
     }
 }

@@ -102,7 +102,7 @@ public class XQueryNamespacePrefixReference extends PsiReferenceBase<XQueryPrefi
     }
 
     private boolean isPredeclaredNamespace(String namespacePrefix) {
-        return XQueryPredeclaredNamespace.getMappingFromPrefix().keySet().contains(namespacePrefix);
+        return XQueryPredeclaredNamespace.getPrefixToNamespaceMap().keySet().contains(namespacePrefix);
     }
 
     @NotNull

@@ -29,7 +29,7 @@ import org.intellij.xquery.XQueryLanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import javax.swing.Icon;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -38,7 +38,7 @@ import java.util.Map;
 import static com.intellij.util.containers.ContainerUtil.findAll;
 import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInImport;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;
-import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.getMappingFromPrefix;
+import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.getPrefixToNamespaceMap;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
 
 /**
@@ -287,48 +287,44 @@ public class XQueryFile extends PsiFileBase {
         return PsiTreeUtil.findChildOfType(this, XQueryDefaultFunctionNamespaceDecl.class);
     }
 
-    public String mapPrefixToNamespace(String prefix) {
-        return getNamespaceMapping().get(prefix);
+    public String mapFunctionPrefixToNamespace(String prefix) {
+        return getFunctionPrefixToNamespaceMap().get(prefix);
     }
 
-    private Map<String, String> getNamespaceMapping() {
+    private Map<String, String> getFunctionPrefixToNamespaceMap() {
         if (myNamespaceMapping == null) {
             myNamespaceMapping = CachedValuesManager
                     .getManager(getProject())
                     .createCachedValue(new CachedValueProvider<Map<String, String>>() {
                         @Override
                         public Result<Map<String, String>> compute() {
-                            return CachedValueProvider.Result.create(calcNamespaceMapping(), XQueryFile.this);
+                            return CachedValueProvider.Result.create(calcFunctionPrefixToNamespaceMap(),
+                                    XQueryFile.this);
                         }
                     }, false);
         }
         return myNamespaceMapping.getValue();
     }
 
-    private Map<String, String> calcNamespaceMapping() {
+    private Map<String, String> calcFunctionPrefixToNamespaceMap() {
         XQueryNamespacePrefix moduleNamespaceName = getModuleNamespaceName();
         Collection<XQueryNamespaceDecl> namespaceDeclarations = getNamespaceDeclarations();
-        Collection<XQueryModuleImport> moduleImports = getModuleImports();
-        Map<String, String> namespaceMapping = new HashMap<String, String>(getMappingFromPrefix());
+        Map<String, String> namespaceMapping = new HashMap<String, String>(getPrefixToNamespaceMap());
         namespaceMapping.put(null, getDefaultFunctionNamespace());
         if (moduleNamespaceName != null && getModuleDeclaration().getURILiteral() != null) {
             namespaceMapping.put(moduleNamespaceName.getName(),
                     removeQuotOrApos(getModuleDeclaration().getURILiteral().getText()));
         }
-        if (namespaceDeclarations != null) {
-            for (XQueryNamespaceDecl namespaceDeclaration : namespaceDeclarations) {
-                if (namespaceDeclaration.getNamespacePrefix() != null && namespaceDeclaration.getURILiteral() != null) {
-                    namespaceMapping.put(namespaceDeclaration.getNamespacePrefix().getText(),
-                            removeQuotOrApos(namespaceDeclaration.getURILiteral().getText()));
-                }
+        for (XQueryNamespaceDecl namespaceDeclaration : namespaceDeclarations) {
+            if (namespaceDeclaration.getNamespacePrefix() != null && namespaceDeclaration.getURILiteral() != null) {
+                namespaceMapping.put(namespaceDeclaration.getNamespacePrefix().getText(),
+                        removeQuotOrApos(namespaceDeclaration.getURILiteral().getText()));
             }
         }
-        if (moduleImports != null) {
-            for (XQueryModuleImport moduleImport : moduleImports) {
-                if (moduleImport.getNamespacePrefix() != null && moduleImport.getModuleImportNamespace() != null) {
-                    namespaceMapping.put(moduleImport.getNamespacePrefix().getText(),
-                            removeQuotOrApos(moduleImport.getModuleImportNamespace().getText()));
-                }
+        for (XQueryModuleImport moduleImport : getModuleImports()) {
+            if (moduleImport.getNamespacePrefix() != null && moduleImport.getModuleImportNamespace() != null) {
+                namespaceMapping.put(moduleImport.getNamespacePrefix().getText(),
+                        removeQuotOrApos(moduleImport.getModuleImportNamespace().getText()));
             }
         }
 
@@ -342,5 +338,9 @@ public class XQueryFile extends PsiFileBase {
 
     public XQueryContextItemDecl getContextItem() {
         return PsiTreeUtil.findChildOfType(this, XQueryContextItemDecl.class);
+    }
+
+    public boolean isPrefixForDefaultFunctionNamespace(String prefix) {
+        return getDefaultFunctionNamespace().equals(mapFunctionPrefixToNamespace(prefix));
     }
 }

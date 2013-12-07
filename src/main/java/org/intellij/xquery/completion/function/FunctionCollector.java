@@ -16,26 +16,11 @@
 
 package org.intellij.xquery.completion.function;
 
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import org.intellij.xquery.icons.XQueryIcons;
-import org.intellij.xquery.model.XQueryQName;
 import org.intellij.xquery.psi.XQueryFile;
-import org.intellij.xquery.psi.XQueryFunctionDecl;
-import org.intellij.xquery.psi.XQueryFunctionName;
-import org.intellij.xquery.psi.XQueryModuleImport;
-import org.intellij.xquery.psi.XQueryNamespaceDecl;
-import org.intellij.xquery.psi.impl.XQueryPsiImplUtil;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.intellij.xquery.model.XQueryQNameBuilder.aXQueryQName;
-import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInImport;
 
 /**
  * User: ligasgr
@@ -44,110 +29,10 @@ import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInI
  */
 public class FunctionCollector {
 
-    private List<XQueryQName<XQueryFunctionName>> proposedReferences;
-    private XQueryFile file;
-
-    public FunctionCollector(XQueryFile file) {
-        this.file = file;
-    }
-
-    public List<LookupElement> getProposedLookUpItems() {
-        proposedReferences = new LinkedList<XQueryQName<XQueryFunctionName>>();
-        addProposedReferencesFromFile(file);
-        addProposedReferencesFromModuleImports(file);
-        return convertToLookupElements(proposedReferences);
-    }
-
-    private void addProposedReferencesFromFile(XQueryFile file) {
-        for (XQueryFunctionDecl functionDecl : file.getFunctionDeclarations()) {
-            if (functionNameExists(functionDecl)) {
-                XQueryQName<XQueryFunctionName> basicQName = aXQueryQName(functionDecl.getFunctionName()).build();
-                boolean isInDefaultNamespace = file.getDefaultFunctionNamespace().equals(basicQName.getNamespace());
-                XQueryFunctionName functionName = functionDecl.getFunctionName();
-                if (functionName.getPrefix() != null && isInDefaultNamespace) {
-                    proposedReferences.add(aXQueryQName(functionDecl.getFunctionName()).withPrefix(null).build());
-                } else if (isInDefaultNamespace) {
-                    Collection<XQueryNamespaceDecl> matchingNamespaceDeclarations = file
-                            .getNamespaceDeclarationsMatchingDefaultNamespace();
-                    for (XQueryNamespaceDecl namespaceDeclaration : matchingNamespaceDeclarations) {
-                        proposedReferences.add(aXQueryQName(functionDecl.getFunctionName()).withPrefix
-                                (namespaceDeclaration.getNamespacePrefix().getText()).build());
-                    }
-                }
-                proposedReferences.add(basicQName);
-            }
-        }
-    }
-
-    private void addProposedReferencesFromModuleImports(XQueryFile file) {
-        for (XQueryModuleImport moduleImport : file.getModuleImports()) {
-            String targetPrefix = null;
-            if (moduleImport.getNamespacePrefix() != null) {
-                targetPrefix = moduleImport.getNamespacePrefix().getName();
-            }
-            addProposedReferencesFromImport(targetPrefix, moduleImport);
-        }
-    }
-
-    private void addProposedReferencesFromImport(String targetPrefix, XQueryModuleImport moduleImport) {
-        for (XQueryFile file : getReferencesToExistingFilesInImport(moduleImport)) {
-            addProposedReferencesFromImportedFile(targetPrefix, file, (XQueryFile) moduleImport.getContainingFile());
-        }
-    }
-
-    private void addProposedReferencesFromImportedFile(String targetPrefix, XQueryFile importedFile, XQueryFile file) {
-        for (final XQueryFunctionDecl functionDecl : importedFile.getFunctionDeclarations()) {
-            if (functionNameExists(functionDecl) && XQueryPsiImplUtil.functionIsPublic(functionDecl)) {
-                XQueryQName<XQueryFunctionName> basicQName = aXQueryQName(functionDecl.getFunctionName()).withPrefix
-                        (targetPrefix).build();
-                boolean isInDefaultNamespace = file.getDefaultFunctionNamespace().equals(basicQName.getNamespace());
-                if (targetPrefix != null && isInDefaultNamespace) {
-                    proposedReferences.add(aXQueryQName(functionDecl.getFunctionName()).withPrefix(null).build());
-                } else if (isInDefaultNamespace) {
-                    Collection<XQueryNamespaceDecl> matchingNamespaceDeclarations = file
-                            .getNamespaceDeclarationsMatchingDefaultNamespace();
-                    for (XQueryNamespaceDecl namespaceDeclaration : matchingNamespaceDeclarations) {
-                        proposedReferences.add(aXQueryQName(functionDecl.getFunctionName()).withPrefix
-                                (namespaceDeclaration.getNamespacePrefix().getText()).build());
-                    }
-                }
-                proposedReferences.add(basicQName);
-            }
-        }
-    }
-
-    private boolean functionNameExists(XQueryFunctionDecl functionDecl) {
-        return functionDecl.getFunctionName() != null && functionDecl.getFunctionName().getTextLength() > 0;
-    }
-
-    private List<LookupElement> convertToLookupElements(List<XQueryQName<XQueryFunctionName>> proposedReferences) {
-        List<LookupElement> lookupElements = new ArrayList<LookupElement>(proposedReferences.size());
-        for (int i = 0; i < proposedReferences.size(); i++) {
-            lookupElements.add(convertToLookupElement(proposedReferences.get(i)));
-        }
-        return lookupElements;
-    }
-
-    private LookupElement convertToLookupElement(XQueryQName<XQueryFunctionName> qName) {
-        XQueryFunctionName functionName = qName.getNamedObject();
-        XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) functionName.getParent();
-        return createLookupElement(functionDeclaration, qName.getTextRepresentation());
-    }
-
-    private LookupElement createLookupElement(XQueryFunctionDecl functionDeclaration, String key) {
-        String tailText = functionDeclaration.getParamList() != null ? functionDeclaration.getParamList().getText() :
-                "";
-        String typeText = functionDeclaration.getSequenceType() != null ? functionDeclaration.getSequenceType()
-                .getText() : "item()*";
-        return LookupElementBuilder.create(functionDeclaration, key)
-                .withIcon(XQueryIcons.FUNCTION_ICON)
-                .withTailText(tailText, true)
-                .withTypeText(typeText)
-                .withInsertHandler(new ParenthesesInsertHandler<LookupElement>() {
-                    @Override
-                    protected boolean placeCaretInsideParentheses(InsertionContext context, LookupElement item) {
-                        return true;
-                    }
-                });
+    public static List<LookupElement> getLookUpItems(XQueryFile file) {
+        List<LookupElement> lookupItems = new LinkedList<LookupElement>();
+        lookupItems.addAll(FunctionCollectorForCurrentFile.getLookupItems(file));
+        lookupItems.addAll(FunctionCollectorForImportedFiles.getLookupItems(file));
+        return lookupItems;
     }
 }

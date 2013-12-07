@@ -133,7 +133,7 @@ public class DeterminerTest {
 
     @Test
     public void shouldReturnNullWhenThereAreNoDuplicatedNamespaces() {
-        given(file.mapPrefixToNamespace(FUNCTION_NAMESPACE)).willReturn(NAMESPACE_VALUE);
+        given(file.mapFunctionPrefixToNamespace(FUNCTION_NAMESPACE)).willReturn(NAMESPACE_VALUE);
         given(uriLiteral.getText()).willReturn(DIFFERENT_NAMESPACE_VALUE);
 
         XQueryFile result = determiner.getImportedFileWithDuplicatedDeclaration(functionName, file);
@@ -143,7 +143,7 @@ public class DeterminerTest {
 
     @Test
     public void shouldReturnImportedFileWhenDeclarationIsDuplicated() {
-        given(file.mapPrefixToNamespace(FUNCTION_NAMESPACE)).willReturn(NAMESPACE_VALUE);
+        given(file.mapFunctionPrefixToNamespace(FUNCTION_NAMESPACE)).willReturn(NAMESPACE_VALUE);
         given(uriLiteral.getText()).willReturn(NAMESPACE_VALUE);
         given(importedFile.getFunctionDeclarations()).willReturn(newArrayList(functionDeclaration, otherFunctionDeclaration));
         givenFunctionsAreTheSame();

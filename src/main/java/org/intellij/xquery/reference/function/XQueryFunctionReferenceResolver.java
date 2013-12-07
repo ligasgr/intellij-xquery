@@ -17,8 +17,6 @@
 package org.intellij.xquery.reference.function;
 
 import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiElementResolveResult;
-import com.intellij.psi.ResolveResult;
 import org.intellij.xquery.model.XQueryQName;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
@@ -109,7 +107,7 @@ public class XQueryFunctionReferenceResolver {
                     if (myElement.getFunctionName().getPrefix() != null) {
                         namespacePrefix = myElement.getFunctionName().getPrefix().getText();
                     }
-                    String namespace = file.mapPrefixToNamespace(namespacePrefix);
+                    String namespace = file.mapFunctionPrefixToNamespace(namespacePrefix);
                     return removeQuotOrApos(moduleImport.getModuleImportNamespace().getText()).equals(namespace);
                 } else {
                     return false;

@@ -74,4 +74,12 @@ public class XQueryFunctionNameImpl extends XQueryNamedElementImpl implements XQ
     XQueryPsiImplUtil.delete(this);
   }
 
+  public String getPrefixText() {
+    return XQueryPsiImplUtil.getPrefixText(this);
+  }
+
+  public String getLocalNameText() {
+    return XQueryPsiImplUtil.getLocalNameText(this);
+  }
+
 }

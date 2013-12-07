@@ -270,7 +270,7 @@ ExternalVarPart ::= "external" (":=" VarDefaultValue)?
 VarValue	   ::=   	ExprSingle
 VarDefaultValue	   ::=   	ExprSingle
 ContextItemDecl	   ::=   	"declare" "context" "item" ("as" ItemType)? ((":=" VarValue) | ("external" (":=" VarDefaultValue)?)) Separator {pin=2}
-FunctionDecl	   ::=   	"declare" Annotation* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external")  	/* xgc: reserved-function-names */ {pin=3 methods=[getPresentation getArity] recoverUntil=FunctionDeclRec}
+FunctionDecl	   ::=   	"declare" Annotation* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external")  	/* xgc: reserved-function-names */ {pin=3 methods=[getPresentation getArity hasValidFunctionName isPublic] recoverUntil=FunctionDeclRec}
 private FunctionDeclRec ::= !(';')
 ParamList	   ::=   	"(" (Param ("," Param)*)? ")"
 Param	   ::=   	"$" VarName TypeDeclaration?
@@ -531,5 +531,5 @@ Prefix ::= NCName                   {methods=[getName setName getNameIdentifier 
 LocalPart	   ::=   	NCName
 VarName ::= Prefix ':' VarLocalName | VarLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset getUseScope getPresentation delete]}
 VarLocalName	   ::=   	NCName
-FunctionName ::= Prefix ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset getPresentation delete]}
+FunctionName ::= Prefix ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset getPresentation delete getPrefixText getLocalNameText]}
 FunctionLocalName	   ::=   	NCName

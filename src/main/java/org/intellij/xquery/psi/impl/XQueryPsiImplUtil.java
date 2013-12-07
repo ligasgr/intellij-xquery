@@ -160,6 +160,22 @@ public class XQueryPsiImplUtil {
         }
     }
 
+    public static String getPrefixText(XQueryFunctionName element) {
+        if (element.getPrefix() != null) {
+            return element.getPrefix().getText();
+        } else {
+            return null;
+        }
+    }
+
+    public static String getLocalNameText(XQueryFunctionName element) {
+        if (element.getFunctionLocalName() != null) {
+            return element.getFunctionLocalName().getText();
+        } else {
+            return null;
+        }
+    }
+
     public static PsiElement setName(XQueryFunctionName element, String newName) {
         XQueryFunctionName name = element;
         if (name != null) {
@@ -216,7 +232,7 @@ public class XQueryPsiImplUtil {
             @Nullable
             @Override
             public Icon getIcon(boolean unused) {
-                return functionIsPublic(element) ? XQueryIcons.FUNCTION_PUBLIC_ICON : XQueryIcons.FUNCTION_PRIVATE_ICON;
+                return element.isPublic() ? XQueryIcons.FUNCTION_PUBLIC_ICON : XQueryIcons.FUNCTION_PRIVATE_ICON;
             }
         };
     }
@@ -277,6 +293,19 @@ public class XQueryPsiImplUtil {
             return 0;
     }
 
+    public static boolean hasValidFunctionName(XQueryFunctionDecl functionDecl) {
+        return functionDecl.getFunctionName() != null && functionDecl.getFunctionName().getTextLength() > 0;
+    }
+
+    public static boolean isPublic(XQueryFunctionDecl functionDecl) {
+        boolean result = true;
+        for (XQueryAnnotation annotation : functionDecl.getAnnotationList()) {
+            if ("private".equals(annotation.getAnnotationName().getText()))
+                return false;
+        }
+        return result;
+    }
+
     public static void delete(XQueryNamedElement namedElement) {
         PsiElement declarationElement = namedElement.getParent();
         final ASTNode parentNode = declarationElement.getParent().getNode();
@@ -293,15 +322,6 @@ public class XQueryPsiImplUtil {
                 next = node.getTreeNext();
             }
         }
-    }
-
-    public static boolean functionIsPublic(XQueryFunctionDecl functionDecl) {
-        boolean result = true;
-        for (XQueryAnnotation annotation : functionDecl.getAnnotationList()) {
-            if ("private".equals(annotation.getAnnotationName().getText()))
-                return false;
-        }
-        return result;
     }
 
     public static boolean variableIsPublic(XQueryVarDecl variableDeclaration) {
@@ -364,8 +384,8 @@ public class XQueryPsiImplUtil {
         if (element.getContainingFile() instanceof XQueryFile && another.getContainingFile() instanceof XQueryFile) {
             XQueryFile elementFile = (XQueryFile) element.getContainingFile();
             XQueryFile anotherFile = (XQueryFile) another.getContainingFile();
-            String elementNamespace = elementFile.mapPrefixToNamespace(element.getText());
-            String anotherNamespace = anotherFile.mapPrefixToNamespace(another.getText());
+            String elementNamespace = elementFile.mapFunctionPrefixToNamespace(element.getText());
+            String anotherNamespace = anotherFile.mapFunctionPrefixToNamespace(another.getText());
             return elementFile.equals(anotherFile) && elementNamespace.equals(anotherNamespace);
         }
         return false;

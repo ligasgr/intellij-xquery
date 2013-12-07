@@ -43,4 +43,8 @@ public interface XQueryFunctionDecl extends XQueryElement {
 
   int getArity();
 
+  boolean hasValidFunctionName();
+
+  boolean isPublic();
+
 }
