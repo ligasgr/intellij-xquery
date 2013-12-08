@@ -42,7 +42,7 @@ public class BuiltInFunctionSignature implements Comparable<BuiltInFunctionSigna
     }
 
     public String getArguments() {
-        return "(" + (arguments != null ? arguments : "") + ")";
+        return arguments != null ? arguments : "";
     }
 
     public String getName() {

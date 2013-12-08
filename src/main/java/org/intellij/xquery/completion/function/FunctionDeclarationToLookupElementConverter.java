@@ -16,8 +16,6 @@
 
 package org.intellij.xquery.completion.function;
 
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import org.intellij.xquery.icons.XQueryIcons;
@@ -34,12 +32,7 @@ public class FunctionDeclarationToLookupElementConverter {
                 .withIcon(XQueryIcons.FUNCTION_ICON)
                 .withTailText(getTailText(functionDeclaration), true)
                 .withTypeText(getTypeText(functionDeclaration))
-                .withInsertHandler(new ParenthesesInsertHandler<LookupElement>() {
-                    @Override
-                    protected boolean placeCaretInsideParentheses(InsertionContext context, LookupElement item) {
-                        return true;
-                    }
-                });
+                .withInsertHandler(new XQueryFunctionInsertHandler());
     }
 
     private static String getTypeText(XQueryFunctionDecl functionDeclaration) {

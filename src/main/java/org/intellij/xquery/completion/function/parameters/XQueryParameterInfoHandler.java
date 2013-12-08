@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.intellij.xquery.completion.function.parameters;
 
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -29,7 +30,10 @@ import com.intellij.psi.ResolveResult;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
+import org.intellij.xquery.completion.function.BuiltInFunctionSignature;
+import org.intellij.xquery.completion.function.BuiltInFunctionTable;
 import org.intellij.xquery.psi.XQueryArgumentList;
+import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionCall;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryFunctionName;
@@ -53,7 +57,7 @@ import static org.intellij.xquery.util.StringUtils.compressWhitespaces;
 public class XQueryParameterInfoHandler implements ParameterInfoHandler<XQueryArgumentList, Object> {
     @Override
     public boolean couldShowInLookup() {
-        return false;
+        return true;
     }
 
     @Nullable
@@ -94,13 +98,17 @@ public class XQueryParameterInfoHandler implements ParameterInfoHandler<XQueryAr
         }
     }
 
-    private void addItemsToShow(CreateParameterInfoContext context, XQueryFunctionCall
-            functionCall) {
+    private void addItemsToShow(CreateParameterInfoContext context, XQueryFunctionCall functionCall) {
         ResolveResult[] resolveResults = getFunctionWithAllArities(functionCall);
         List<XQueryFunctionDecl> functionDeclarations = extractFunctionDeclarations(resolveResults);
         if (functionDeclarations.size() > 0) {
             Collections.sort(functionDeclarations, getParameterListSizeComparator());
             context.setItemsToShow(ArrayUtil.toObjectArray(functionDeclarations));
+        } else {
+            String name = functionCall.getFunctionName().getLocalNameText();
+            String prefix = functionCall.getFunctionName().getPrefixText();
+            String namespace = ((XQueryFile) functionCall.getContainingFile()).mapFunctionPrefixToNamespace(prefix);
+            context.setItemsToShow(ArrayUtil.toObjectArray(BuiltInFunctionTable.getFunctionsSignatures(namespace, name)));
         }
     }
 
@@ -158,10 +166,33 @@ public class XQueryParameterInfoHandler implements ParameterInfoHandler<XQueryAr
         ParameterPresentation presentation = null;
         if (p instanceof XQueryFunctionDecl) {
             presentation = buildUserFunctionPresentation((XQueryFunctionDecl) p, index);
+        } else if (p instanceof BuiltInFunctionSignature) {
+            presentation = buildBuiltInFunctionPresentation((BuiltInFunctionSignature) p, index);
         }
         context.setupUIComponentPresentation(presentation.text, presentation.start, presentation.end,
                 presentation.disabled, false, true,
                 context.getDefaultParameterColor());
+    }
+
+    private ParameterPresentation buildBuiltInFunctionPresentation(BuiltInFunctionSignature functionSignature,
+                                                                   int index) {
+        StringBuilder builder = new StringBuilder();
+        int start = 0;
+        int end = 0;
+        boolean disabled = false;
+
+        String arguments = functionSignature.getArguments();
+        builder.append(arguments);
+        for (int i = 0; i < index && start != - 1; ++ i) {
+            start = arguments.indexOf(',', start + 1);
+        }
+        if (start == - 1) {
+            disabled = true;
+        } else {
+            end = arguments.indexOf(',', start + 1);
+            end = (end == - 1 ? arguments.length() : end);
+        }
+        return new ParameterPresentation(builder.toString(), start, end, disabled);
     }
 
     private ParameterPresentation buildUserFunctionPresentation(XQueryFunctionDecl functionDecl, int index) {
@@ -169,7 +200,8 @@ public class XQueryParameterInfoHandler implements ParameterInfoHandler<XQueryAr
         int start = 0;
         int end = 0;
         boolean disabled;
-        List<XQueryParam> args = functionDecl.getParamList() != null ? functionDecl.getParamList().getParamList() : ContainerUtil.<XQueryParam>emptyList();
+        List<XQueryParam> args = functionDecl.getParamList() != null ? functionDecl.getParamList().getParamList() :
+                ContainerUtil.<XQueryParam>emptyList();
 
         for (int i = 0; i < args.size(); i++) {
             if (i != 0) builder.append(", ");

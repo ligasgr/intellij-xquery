@@ -19,7 +19,9 @@ package org.intellij.xquery.completion.function;
 import com.intellij.util.containers.MultiMap;
 import org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.TreeSet;
 
 /**
@@ -60,6 +62,14 @@ public class BuiltInFunctionTable {
         fnMap.putValue(ns("fn"), bif("fn", "compare", 2, "$comparand1 as xs:string?, $comparand2 as xs:string?", "xs:integer?"));
         fnMap.putValue(ns("fn"), bif("fn", "compare", 3, "$comparand1 as xs:string?, $comparand2 as xs:string?, $collation as xs:string", "xs:integer?"));
         fnMap.putValue(ns("fn"), bif("fn", "concat", 2, "$arg1 as xs:anyAtomicType?, $arg2 as xs:anyAtomicType?", "xs:string"));
+        fnMap.putValue(ns("fn"), bif("fn", "concat", 3, "$arg1 as xs:anyAtomicType?, $arg2 as xs:anyAtomicType?, $arg3 as xs:anyAtomicType?", "xs:string"));
+        fnMap.putValue(ns("fn"), bif("fn", "concat", 4, "$arg1 as xs:anyAtomicType?, $arg2 as xs:anyAtomicType?, $arg3 as xs:anyAtomicType?, $arg4 as xs:anyAtomicType?", "xs:string"));
+        fnMap.putValue(ns("fn"), bif("fn", "concat", 5, "$arg1 as xs:anyAtomicType?, $arg2 as xs:anyAtomicType?, $arg3 as xs:anyAtomicType?, $arg4 as xs:anyAtomicType?, $arg5 as xs:anyAtomicType?", "xs:string"));
+        fnMap.putValue(ns("fn"), bif("fn", "concat", 6, "$arg1 as xs:anyAtomicType?, $arg2 as xs:anyAtomicType?, $arg3 as xs:anyAtomicType?, $arg4 as xs:anyAtomicType?, $arg5 as xs:anyAtomicType?, $arg6 as xs:anyAtomicType?", "xs:string"));
+        fnMap.putValue(ns("fn"), bif("fn", "concat", 7, "$arg1 as xs:anyAtomicType?, $arg2 as xs:anyAtomicType?, $arg3 as xs:anyAtomicType?, $arg4 as xs:anyAtomicType?, $arg5 as xs:anyAtomicType?, $arg6 as xs:anyAtomicType?, $arg7 as xs:anyAtomicType?", "xs:string"));
+        fnMap.putValue(ns("fn"), bif("fn", "concat", 8, "$arg1 as xs:anyAtomicType?, $arg2 as xs:anyAtomicType?, $arg3 as xs:anyAtomicType?, $arg4 as xs:anyAtomicType?, $arg5 as xs:anyAtomicType?, $arg6 as xs:anyAtomicType?, $arg7 as xs:anyAtomicType?, $arg8 as xs:anyAtomicType?", "xs:string"));
+        fnMap.putValue(ns("fn"), bif("fn", "concat", 9, "$arg1 as xs:anyAtomicType?, $arg2 as xs:anyAtomicType?, $arg3 as xs:anyAtomicType?, $arg4 as xs:anyAtomicType?, $arg5 as xs:anyAtomicType?, $arg6 as xs:anyAtomicType?, $arg7 as xs:anyAtomicType?, $arg8 as xs:anyAtomicType?, $arg9 as xs:anyAtomicType?", "xs:string"));
+        fnMap.putValue(ns("fn"), bif("fn", "concat", 10, "$arg1 as xs:anyAtomicType?, $arg2 as xs:anyAtomicType?, $arg3 as xs:anyAtomicType?, $arg4 as xs:anyAtomicType?, $arg5 as xs:anyAtomicType?, $arg6 as xs:anyAtomicType?, $arg7 as xs:anyAtomicType?, $arg8 as xs:anyAtomicType?, $arg9 as xs:anyAtomicType?, $arg10 as xs:anyAtomicType?", "xs:string"));
         fnMap.putValue(ns("fn"), bif("fn", "contains", 2, "$arg1 as xs:string?, $arg2 as xs:string?", "xs:boolean"));
         fnMap.putValue(ns("fn"), bif("fn", "contains", 3, "$arg1 as xs:string?, $arg2 as xs:string?, $collation as xs:string", "xs:boolean"));
         fnMap.putValue(ns("fn"), bif("fn", "count", 1, "$arg as item()*", "xs:integer"));
@@ -266,5 +276,15 @@ public class BuiltInFunctionTable {
 
     public static Collection<BuiltInFunctionSignature> getFunctionsSignatures(String namespace) {
         return fnMap.get(namespace);
+    }
+
+    public static Collection<BuiltInFunctionSignature> getFunctionsSignatures(String namespace, String name) {
+        final List<BuiltInFunctionSignature> signatures = new ArrayList<BuiltInFunctionSignature>();
+        for (BuiltInFunctionSignature signature : fnMap.get(namespace)) {
+            if (name.equals(signature.getName())) {
+                signatures.add(signature);
+            }
+        }
+        return signatures;
     }
 }

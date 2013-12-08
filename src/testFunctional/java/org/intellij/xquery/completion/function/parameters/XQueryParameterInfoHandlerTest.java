@@ -28,20 +28,41 @@ import org.intellij.xquery.psi.XQueryArgumentList;
 public class XQueryParameterInfoHandlerTest extends BaseFunctionalTestCase {
 
     private static final String TWO_PARAMETERS_FUNCTION = "declare function fun($a, $b){()};";
+    private static final String ONE_AND_TWO_PARAMETERS_FUNCTION = "declare function fun($a){()};" + TWO_PARAMETERS_FUNCTION;
 
-    public void testShouldHighlightFirstParameter() {
-        doTest(TWO_PARAMETERS_FUNCTION + "fun(<caret>)", 0);
+    public void testShouldNotPointToAnyParameter() {
+        doTest(TWO_PARAMETERS_FUNCTION + "fu<caret>n()", -1, 0);
     }
 
-    public void testShouldHighlightSecondParameter() {
-        doTest(TWO_PARAMETERS_FUNCTION + "fun('a', <caret>)", 1);
+    public void testShouldPointToFirstParameter() {
+        doTest(TWO_PARAMETERS_FUNCTION + "fun(<caret>)", 0, 1);
     }
 
-    public void testShouldHighlightNothing() {
-        doTest(TWO_PARAMETERS_FUNCTION + "fun('a', 'b', <caret>)", 2);
+    public void testShouldPointToFirstParameterAndShowTwoItems() {
+        doTest(ONE_AND_TWO_PARAMETERS_FUNCTION + "fun(<caret>)", 0, 2);
     }
 
-    private void doTest(String text, int highlightedParameterIndex) {
+    public void testShouldPointToSecondParameter() {
+        doTest(TWO_PARAMETERS_FUNCTION + "fun('a', <caret>)", 1, 1);
+    }
+
+    public void testShouldPointToSecondParameterAndShowTwoItems() {
+        doTest(ONE_AND_TWO_PARAMETERS_FUNCTION + "fun('a', <caret>)", 1, 2);
+    }
+
+    public void testShouldPointToThirdParameter() {
+        doTest(TWO_PARAMETERS_FUNCTION + "fun('a', 'b', <caret>)", 2, 1);
+    }
+
+    public void testShouldPointToFirstParameterForBuiltInFunctionAndShowOneItem() {
+        doTest("fn:true(<caret>)", 0, 1);
+    }
+
+    public void testShouldPointToFirstParameterForBuiltInFunctionAndShowTwoItems() {
+        doTest("fn:starts-with(<caret>)", 0, 2);
+    }
+
+    private void doTest(String text, int highlightedParameterIndex, int shownItems) {
         myFixture.configureByText("a.xq", text);
         final XQueryParameterInfoHandler parameterInfoHandler = new XQueryParameterInfoHandler();
         final CreateParameterInfoContext createContext = new FakeCreateParameterInfoContext(myFixture.getEditor(), myFixture.getFile());
@@ -52,7 +73,7 @@ public class XQueryParameterInfoHandlerTest extends BaseFunctionalTestCase {
             parameterInfoHandler.showParameterInfo(list, createContext);
             Object[] itemsToShow = createContext.getItemsToShow();
             assertNotNull(itemsToShow);
-            assertTrue(itemsToShow.length > 0);
+            assertEquals(shownItems, itemsToShow.length);
         }
         FakeUpdateParameterInfoContext updateContext = new FakeUpdateParameterInfoContext(myFixture.getEditor(), myFixture.getFile());
         final XQueryArgumentList element = parameterInfoHandler.findElementForUpdatingParameterInfo(updateContext);
