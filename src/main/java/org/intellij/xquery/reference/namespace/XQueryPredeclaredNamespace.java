@@ -62,4 +62,12 @@ public enum XQueryPredeclaredNamespace {
     public static Map<String, String> getPrefixToNamespaceMap() {
         return unmodifiableMap(prefixToNamespaceMap);
     }
+
+    public static boolean isPredeclaredNamespace(String namespace) {
+        return prefixToNamespaceMap.containsValue(namespace);
+    }
+
+    public static String getNamespaceForPrefix(String prefix) {
+        return prefixToNamespaceMap.get(prefix);
+    }
 }

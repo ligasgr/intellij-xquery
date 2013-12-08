@@ -33,6 +33,7 @@ public class FunctionCollector {
         List<LookupElement> lookupItems = new LinkedList<LookupElement>();
         lookupItems.addAll(FunctionCollectorForCurrentFile.getLookupItems(file));
         lookupItems.addAll(FunctionCollectorForImportedFiles.getLookupItems(file));
+        lookupItems.addAll(FunctionCollectorForBuiltIn.getLookupItems(file));
         return lookupItems;
     }
 }

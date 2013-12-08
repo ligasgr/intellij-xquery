@@ -291,7 +291,7 @@ public class XQueryFile extends PsiFileBase {
         return getFunctionPrefixToNamespaceMap().get(prefix);
     }
 
-    private Map<String, String> getFunctionPrefixToNamespaceMap() {
+    public Map<String, String> getFunctionPrefixToNamespaceMap() {
         if (myNamespaceMapping == null) {
             myNamespaceMapping = CachedValuesManager
                     .getManager(getProject())
@@ -341,6 +341,10 @@ public class XQueryFile extends PsiFileBase {
     }
 
     public boolean isPrefixForDefaultFunctionNamespace(String prefix) {
-        return getDefaultFunctionNamespace().equals(mapFunctionPrefixToNamespace(prefix));
+        return isDefaultFunctionNamespace(mapFunctionPrefixToNamespace(prefix));
+    }
+
+    public boolean isDefaultFunctionNamespace(String namespace) {
+        return getDefaultFunctionNamespace().equals(namespace);
     }
 }

@@ -24,6 +24,10 @@ import org.intellij.xquery.reference.MatchingStringCondition;
 import java.util.List;
 
 import static com.intellij.util.containers.ContainerUtil.findAll;
+import static org.intellij.xquery.completion.function.BuiltInFunctionTable.getFunctionsSignatures;
+import static org.intellij.xquery.lexer.XQueryLexer.KEYWORDS;
+import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;
+import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.MATH;
 
 /**
  * User: ligasgr
@@ -171,5 +175,61 @@ public class FunctionCollectorTest extends BaseFunctionalTestCase {
         myFixture.type(Lookup.NORMAL_SELECT_CHAR);
 
         myFixture.checkResultByFile("FunctionCompletionWithParenthesesAddedAfter.xq");
+    }
+
+    public void testFunctionCompletionForBuiltIn() {
+        myFixture.configureByFiles("FunctionCompletionForBuiltIn.xq");
+
+        myFixture.complete(CompletionType.BASIC, 1);
+
+        List<String> strings = myFixture.getLookupElementStrings();
+
+        assertCorrectBuiltInFunctionLookupItems(strings, 2, "", FN.getPrefix() + ":");
+    }
+
+    public void testFunctionCompletionForBuiltInWhenFnPrefixOverwritten() {
+        myFixture.configureByFiles("FunctionCompletionForBuiltInWhenFnPrefixOverwritten.xq");
+
+        myFixture.complete(CompletionType.BASIC, 1);
+
+        List<String> strings = myFixture.getLookupElementStrings();
+
+        assertCorrectBuiltInFunctionLookupItems(strings, 1, "");
+    }
+
+    public void testFunctionCompletionForBuiltInWhenDefaultFunctionNamespaceOverwritten() {
+        myFixture.configureByFiles("FunctionCompletionForBuiltInWhenDefaultFunctionNamespaceOverwritten.xq");
+
+        myFixture.complete(CompletionType.BASIC, 1);
+
+        List<String> strings = myFixture.getLookupElementStrings();
+
+        assertCorrectBuiltInFunctionLookupItems(strings, 1, FN.getPrefix() + ":");
+    }
+
+    public void testFunctionCompletionForBuiltInWithAdditionalPrefixForFunctions() {
+        myFixture.configureByFiles("FunctionCompletionForBuiltInWithAdditionalPrefixForFunctions.xq");
+
+        myFixture.complete(CompletionType.BASIC, 1);
+
+        List<String> strings = myFixture.getLookupElementStrings();
+
+        assertCorrectBuiltInFunctionLookupItems(strings, 3, "", FN.getPrefix() + ":", "my:");
+    }
+
+    private void assertCorrectBuiltInFunctionLookupItems(List<String> functions, int timesBuiltInFunctionsAppear,
+                                                         String... functionPrefixes) {
+        for (BuiltInFunctionSignature builtInFunctionSignature : getFunctionsSignatures(FN.getNamespace())) {
+            for (String functionPrefix : functionPrefixes) {
+                assertTrue(functions.contains(functionPrefix + builtInFunctionSignature.getName()));
+            }
+        }
+        for (BuiltInFunctionSignature builtInFunctionSignature : getFunctionsSignatures(MATH.getNamespace())) {
+            assertTrue(functions.contains(MATH.getPrefix() + ":" + builtInFunctionSignature.getName()));
+        }
+        int builtInLookupItemsSize = getFunctionsSignatures(FN.getNamespace()).size() * timesBuiltInFunctionsAppear
+                + getFunctionsSignatures(MATH.getNamespace()).size()
+                + KEYWORDS.getTypes().length;
+        assertEquals(builtInLookupItemsSize, functions.size());
     }
 }
