@@ -138,6 +138,10 @@ public class XQueryParserTest extends ParsingTestCase {
         doTest(true);
     }
 
+    public void testMultipleBindingsInForLet() throws Exception {
+        doTest(true);
+    }
+
     @Override
     protected boolean skipSpaces() {
         return false;
