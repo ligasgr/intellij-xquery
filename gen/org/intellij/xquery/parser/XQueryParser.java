@@ -378,6 +378,9 @@ public class XQueryParser implements PsiParser {
     else if (root_ == MODULE_IMPORT_PATH) {
       result_ = ModuleImportPath(builder_, level_ + 1);
     }
+    else if (root_ == MULTI_VARIABLE_BINDING) {
+      result_ = MultiVariableBinding(builder_, level_ + 1);
+    }
     else if (root_ == MULTIPLICATIVE_EXPR) {
       result_ = MultiplicativeExpr(builder_, level_ + 1);
     }
@@ -2475,7 +2478,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // EQName
+  // VarName
   public static boolean CurrentItem(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CurrentItem")) return false;
     if (!nextTokenIs(builder_, NCNAME) && !nextTokenIs(builder_, URIQUALIFIEDNAME)
@@ -2483,7 +2486,7 @@ public class XQueryParser implements PsiParser {
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<current item>");
-    result_ = EQName(builder_, level_ + 1);
+    result_ = VarName(builder_, level_ + 1);
     if (result_) {
       marker_.done(CURRENT_ITEM);
     }
@@ -5469,6 +5472,34 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // "$" VarName TypeDeclaration? "in" ExprSingle
+  public static boolean MultiVariableBinding(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MultiVariableBinding")) return false;
+    if (!nextTokenIs(builder_, DOLLAR_SIGN)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, DOLLAR_SIGN);
+    result_ = result_ && VarName(builder_, level_ + 1);
+    result_ = result_ && MultiVariableBinding_2(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, K_IN);
+    result_ = result_ && ExprSingle(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(MULTI_VARIABLE_BINDING);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  // TypeDeclaration?
+  private static boolean MultiVariableBinding_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MultiVariableBinding_2")) return false;
+    TypeDeclaration(builder_, level_ + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
   // UnionExpr ( ("*" | "div" | "idiv" | "mod") UnionExpr )*
   public static boolean MultiplicativeExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MultiplicativeExpr")) return false;
@@ -5650,7 +5681,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // EQName
+  // VarName
   public static boolean NextItem(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "NextItem")) return false;
     if (!nextTokenIs(builder_, NCNAME) && !nextTokenIs(builder_, URIQUALIFIEDNAME)
@@ -5658,7 +5689,7 @@ public class XQueryParser implements PsiParser {
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<next item>");
-    result_ = EQName(builder_, level_ + 1);
+    result_ = VarName(builder_, level_ + 1);
     if (result_) {
       marker_.done(NEXT_ITEM);
     }
@@ -6706,7 +6737,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // EQName
+  // VarName
   public static boolean PreviousItem(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "PreviousItem")) return false;
     if (!nextTokenIs(builder_, NCNAME) && !nextTokenIs(builder_, URIQUALIFIEDNAME)
@@ -6714,7 +6745,7 @@ public class XQueryParser implements PsiParser {
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<previous item>");
-    result_ = EQName(builder_, level_ + 1);
+    result_ = VarName(builder_, level_ + 1);
     if (result_) {
       marker_.done(PREVIOUS_ITEM);
     }
@@ -6833,7 +6864,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ("some" | "every") "$" VarName TypeDeclaration? "in" ExprSingle ("," "$" VarName TypeDeclaration? "in" ExprSingle)* "satisfies" ExprSingle
+  // ("some" | "every") MultiVariableBinding ("," MultiVariableBinding)* "satisfies" ExprSingle
   public static boolean QuantifiedExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "QuantifiedExpr")) return false;
     if (!nextTokenIs(builder_, K_EVERY) && !nextTokenIs(builder_, K_SOME)
@@ -6845,12 +6876,8 @@ public class XQueryParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<quantified expr>");
     result_ = QuantifiedExpr_0(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, consumeToken(builder_, DOLLAR_SIGN));
-    result_ = pinned_ && report_error_(builder_, VarName(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && report_error_(builder_, QuantifiedExpr_3(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, K_IN)) && result_;
-    result_ = pinned_ && report_error_(builder_, ExprSingle(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && report_error_(builder_, QuantifiedExpr_6(builder_, level_ + 1)) && result_;
+    result_ = result_ && report_error_(builder_, MultiVariableBinding(builder_, level_ + 1));
+    result_ = pinned_ && report_error_(builder_, QuantifiedExpr_2(builder_, level_ + 1)) && result_;
     result_ = pinned_ && report_error_(builder_, consumeToken(builder_, K_SATISFIES)) && result_;
     result_ = pinned_ && ExprSingle(builder_, level_ + 1) && result_;
     LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
@@ -6883,22 +6910,15 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // TypeDeclaration?
-  private static boolean QuantifiedExpr_3(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "QuantifiedExpr_3")) return false;
-    TypeDeclaration(builder_, level_ + 1);
-    return true;
-  }
-
-  // ("," "$" VarName TypeDeclaration? "in" ExprSingle)*
-  private static boolean QuantifiedExpr_6(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "QuantifiedExpr_6")) return false;
+  // ("," MultiVariableBinding)*
+  private static boolean QuantifiedExpr_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "QuantifiedExpr_2")) return false;
     int offset_ = builder_.getCurrentOffset();
     while (true) {
-      if (!QuantifiedExpr_6_0(builder_, level_ + 1)) break;
+      if (!QuantifiedExpr_2_0(builder_, level_ + 1)) break;
       int next_offset_ = builder_.getCurrentOffset();
       if (offset_ == next_offset_) {
-        empty_element_parsed_guard_(builder_, offset_, "QuantifiedExpr_6");
+        empty_element_parsed_guard_(builder_, offset_, "QuantifiedExpr_2");
         break;
       }
       offset_ = next_offset_;
@@ -6906,17 +6926,13 @@ public class XQueryParser implements PsiParser {
     return true;
   }
 
-  // "," "$" VarName TypeDeclaration? "in" ExprSingle
-  private static boolean QuantifiedExpr_6_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "QuantifiedExpr_6_0")) return false;
+  // "," MultiVariableBinding
+  private static boolean QuantifiedExpr_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "QuantifiedExpr_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, COMMA);
-    result_ = result_ && consumeToken(builder_, DOLLAR_SIGN);
-    result_ = result_ && VarName(builder_, level_ + 1);
-    result_ = result_ && QuantifiedExpr_6_0_3(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, K_IN);
-    result_ = result_ && ExprSingle(builder_, level_ + 1);
+    result_ = result_ && MultiVariableBinding(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -6924,13 +6940,6 @@ public class XQueryParser implements PsiParser {
       marker_.drop();
     }
     return result_;
-  }
-
-  // TypeDeclaration?
-  private static boolean QuantifiedExpr_6_0_3(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "QuantifiedExpr_6_0_3")) return false;
-    TypeDeclaration(builder_, level_ + 1);
-    return true;
   }
 
   /* ********************************************************** */

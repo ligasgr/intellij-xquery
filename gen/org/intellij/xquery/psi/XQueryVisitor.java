@@ -474,6 +474,10 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
+  public void visitMultiVariableBinding(@NotNull XQueryMultiVariableBinding o) {
+    visitElement(o);
+  }
+
   public void visitMultiplicativeExpr(@NotNull XQueryMultiplicativeExpr o) {
     visitExprSingle(o);
   }

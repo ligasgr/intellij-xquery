@@ -19,11 +19,16 @@ package org.intellij.xquery.reference.variable;
 import com.intellij.psi.PsiElement;
 import org.intellij.xquery.Assertions;
 import org.intellij.xquery.BaseFunctionalTestCase;
+import org.intellij.xquery.psi.XQueryCurrentItem;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryLetBinding;
+import org.intellij.xquery.psi.XQueryNextItem;
 import org.intellij.xquery.psi.XQueryParam;
+import org.intellij.xquery.psi.XQueryPositionalVar;
+import org.intellij.xquery.psi.XQueryPreviousItem;
 import org.intellij.xquery.psi.XQueryVarDecl;
 import org.intellij.xquery.psi.XQueryVarRef;
+import org.intellij.xquery.psi.XQueryWindowClause;
 
 import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
@@ -148,5 +153,45 @@ public class XQueryVariableReferenceTest extends BaseFunctionalTestCase {
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
 
         assertNull(resolvedReference);
+    }
+
+    public void testVariableReferenceOfCurrentItemInTumblingWindow() {
+        myFixture.configureByFiles("VariableReferenceOfCurrentItemInTumblingWindow.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        Assertions.assertChildOf(resolvedReference, XQueryCurrentItem.class);
+        Assertions.assertChildOf(resolvedReference, XQueryWindowClause.class);
+        Assertions.assertNotChildOf(resolvedReference, XQueryVarRef.class);
+    }
+
+    public void testVariableReferenceOfNextItemInTumblingWindow() {
+        myFixture.configureByFiles("VariableReferenceOfNextItemInTumblingWindow.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        Assertions.assertChildOf(resolvedReference, XQueryNextItem.class);
+        Assertions.assertChildOf(resolvedReference, XQueryWindowClause.class);
+        Assertions.assertNotChildOf(resolvedReference, XQueryVarRef.class);
+    }
+
+    public void testVariableReferenceOfPreviousItemInTumblingWindow() {
+        myFixture.configureByFiles("VariableReferenceOfPreviousItemInTumblingWindow.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        Assertions.assertChildOf(resolvedReference, XQueryPreviousItem.class);
+        Assertions.assertChildOf(resolvedReference, XQueryWindowClause.class);
+        Assertions.assertNotChildOf(resolvedReference, XQueryVarRef.class);
+    }
+
+    public void testVariableReferenceOfPositionalVarInTumblingWindow() {
+        myFixture.configureByFiles("VariableReferenceOfPositionalVarInTumblingWindow.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        Assertions.assertChildOf(resolvedReference, XQueryPositionalVar.class);
+        Assertions.assertChildOf(resolvedReference, XQueryWindowClause.class);
+        Assertions.assertNotChildOf(resolvedReference, XQueryVarRef.class);
     }
 }

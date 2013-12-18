@@ -306,9 +306,9 @@ private SlidingWindowDetails ::= "window" "$" VarName TypeDeclaration? "in" Expr
 private WindowStartCondition	   ::=   	"start" WindowVars "when" ExprSingle
 private WindowEndCondition	   ::=   	"only"? "end" WindowVars "when" ExprSingle
 private WindowVars	   ::=   	("$" CurrentItem)? PositionalVar? ("previous" "$" PreviousItem)? ("next" "$" NextItem)?
-CurrentItem	   ::=   	EQName
-PreviousItem	   ::=   	EQName
-NextItem	   ::=   	EQName
+CurrentItem	   ::=   	VarName
+PreviousItem	   ::=   	VarName
+NextItem	   ::=   	VarName
 CountClause	   ::=   	"count" "$" VarName {pin=1 recoverUntil=FLWORExprRecover}
 WhereClause	   ::=   	"where" ExprSingle {pin=1 recoverUntil=FLWORExprRecover}
 GroupByClause	   ::=   	"group" "by" GroupingSpecList {pin=2 recoverUntil=FLWORExprRecover}
@@ -320,7 +320,8 @@ OrderSpecList	   ::=   	OrderSpec ("," OrderSpec)*
 OrderSpec	   ::=   	ExprSingle OrderModifier
 private OrderModifier	   ::=   	("ascending" | "descending")? ("empty" ("greatest" | "least"))? ("collation" URILiteral)?
 ReturnClause	   ::=   	"return" ExprSingle {pin=1}
-QuantifiedExpr	   ::=   	("some" | "every") "$" VarName TypeDeclaration? "in" ExprSingle ("," "$" VarName TypeDeclaration? "in" ExprSingle)* "satisfies" ExprSingle {pin=1}
+QuantifiedExpr	   ::=   	("some" | "every") MultiVariableBinding ("," MultiVariableBinding)* "satisfies" ExprSingle {pin=1}
+MultiVariableBinding ::= "$" VarName TypeDeclaration? "in" ExprSingle
 SwitchExpr	   ::=   	"switch" "(" Expr ")" SwitchCaseClause+ SwitchDefaultReturnClause {pin=1}
 SwitchDefaultReturnClause ::= "default" SwitchReturnClause {pin=1}
 SwitchCaseClause	   ::=   	("case" SwitchCaseOperand)+ SwitchReturnClause

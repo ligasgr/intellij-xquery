@@ -33,15 +33,9 @@ public class XQueryNextItemImpl extends XQueryElementImpl implements XQueryNextI
   }
 
   @Override
-  @Nullable
-  public XQueryLocalPart getLocalPart() {
-    return findChildByClass(XQueryLocalPart.class);
-  }
-
-  @Override
-  @Nullable
-  public XQueryPrefix getPrefix() {
-    return findChildByClass(XQueryPrefix.class);
+  @NotNull
+  public XQueryVarName getVarName() {
+    return findNotNullChildByClass(XQueryVarName.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

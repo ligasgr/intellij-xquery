@@ -23,13 +23,10 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryQuantifiedExpr extends XQueryExprSingle {
 
-  @NotNull
-  List<XQueryExprSingle> getExprSingleList();
+  @Nullable
+  XQueryExprSingle getExprSingle();
 
   @NotNull
-  List<XQueryTypeDeclaration> getTypeDeclarationList();
-
-  @NotNull
-  List<XQueryVarName> getVarNameList();
+  List<XQueryMultiVariableBinding> getMultiVariableBindingList();
 
 }

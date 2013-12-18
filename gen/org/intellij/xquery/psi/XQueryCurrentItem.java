@@ -23,10 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryCurrentItem extends XQueryElement {
 
-  @Nullable
-  XQueryLocalPart getLocalPart();
-
-  @Nullable
-  XQueryPrefix getPrefix();
+  @NotNull
+  XQueryVarName getVarName();
 
 }

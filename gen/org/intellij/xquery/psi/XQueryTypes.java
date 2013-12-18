@@ -138,6 +138,7 @@ public interface XQueryTypes {
   IElementType MODULE_IMPORT_NAMESPACE = new XQueryElementType("MODULE_IMPORT_NAMESPACE");
   IElementType MODULE_IMPORT_PATH = new XQueryElementType("MODULE_IMPORT_PATH");
   IElementType MULTIPLICATIVE_EXPR = new XQueryElementType("MULTIPLICATIVE_EXPR");
+  IElementType MULTI_VARIABLE_BINDING = new XQueryElementType("MULTI_VARIABLE_BINDING");
   IElementType NAMED_FUNCTION_REF = new XQueryElementType("NAMED_FUNCTION_REF");
   IElementType NAMESPACE_DECL = new XQueryElementType("NAMESPACE_DECL");
   IElementType NAMESPACE_NODE_TEST = new XQueryElementType("NAMESPACE_NODE_TEST");
@@ -770,6 +771,9 @@ public interface XQueryTypes {
       }
       else if (type == MULTIPLICATIVE_EXPR) {
         return new XQueryMultiplicativeExprImpl(node);
+      }
+      else if (type == MULTI_VARIABLE_BINDING) {
+        return new XQueryMultiVariableBindingImpl(node);
       }
       else if (type == NAMED_FUNCTION_REF) {
         return new XQueryNamedFunctionRefImpl(node);

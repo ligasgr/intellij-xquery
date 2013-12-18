@@ -26,26 +26,32 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryQuantifiedExprImpl extends XQueryExprSingleImpl implements XQueryQuantifiedExpr {
+public class XQueryMultiVariableBindingImpl extends XQueryElementImpl implements XQueryMultiVariableBinding {
 
-  public XQueryQuantifiedExprImpl(ASTNode node) {
+  public XQueryMultiVariableBindingImpl(ASTNode node) {
     super(node);
   }
 
   @Override
-  @Nullable
+  @NotNull
   public XQueryExprSingle getExprSingle() {
-    return findChildByClass(XQueryExprSingle.class);
+    return findNotNullChildByClass(XQueryExprSingle.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryTypeDeclaration getTypeDeclaration() {
+    return findChildByClass(XQueryTypeDeclaration.class);
   }
 
   @Override
   @NotNull
-  public List<XQueryMultiVariableBinding> getMultiVariableBindingList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryMultiVariableBinding.class);
+  public XQueryVarName getVarName() {
+    return findNotNullChildByClass(XQueryVarName.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitQuantifiedExpr(this);
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitMultiVariableBinding(this);
     else super.accept(visitor);
   }
 

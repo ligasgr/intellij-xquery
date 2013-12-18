@@ -21,7 +21,13 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryNextItem extends XQueryElement {
+public interface XQueryMultiVariableBinding extends XQueryElement {
+
+  @NotNull
+  XQueryExprSingle getExprSingle();
+
+  @Nullable
+  XQueryTypeDeclaration getTypeDeclaration();
 
   @NotNull
   XQueryVarName getVarName();
