@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Icon;
+import javax.xml.XMLConstants;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -67,21 +68,22 @@ public class XQueryFile extends PsiFileBase {
         return super.getIcon(flags);
     }
 
-    private CachedValue<Collection<XQueryVarDecl>> myVariables;
-    private CachedValue<Collection<XQueryModuleImport>> myModulesImports;
-    private CachedValue<Collection<XQueryNamespaceDecl>> myNamespaceDeclarations;
-    private CachedValue<Collection<XQueryFunctionDecl>> myFunctions;
+    private CachedValue<Collection<XQueryVarDecl>> variableDeclarations;
+    private CachedValue<Collection<XQueryModuleImport>> moduleImports;
+    private CachedValue<Collection<XQueryNamespaceDecl>> namespaceDeclarations;
+    private CachedValue<Collection<XQueryFunctionDecl>> functionDeclarations;
     private CachedValue<Collection<XQueryFunctionInvocation>> functionInvocations;
-    private CachedValue<Collection<XQueryVarRef>> referencedVariables;
-    private CachedValue<Collection<XQueryNamespaceDecl>> myNamespacesMatchingDefault;
-    private CachedValue<String> myDefaultFunctionNamespace;
-    private CachedValue<Map<String, String>> myNamespaceMapping;
-    private CachedValue<XQueryModuleDecl> myModuleDeclaration;
+    private CachedValue<Collection<XQueryVarRef>> variableReferences;
+    private CachedValue<Collection<XQueryNamespaceDecl>> namespacesMatchingDefault;
+    private CachedValue<String> defaultFunctionNamespace;
+    private CachedValue<Map<String, String>> functionPrefixToNamespaceMapping;
+    private CachedValue<XQueryModuleDecl> moduleDeclaration;
+    private CachedValue<Map<String, String>> variablePrefixToNamespaceMapping;
 
     @NotNull
     public Collection<XQueryVarDecl> getVariableDeclarations() {
-        if (myVariables == null) {
-            myVariables = CachedValuesManager
+        if (variableDeclarations == null) {
+            variableDeclarations = CachedValuesManager
                     .getManager(getProject())
                     .createCachedValue(new CachedValueProvider<Collection<XQueryVarDecl>>() {
                         @Override
@@ -90,13 +92,13 @@ public class XQueryFile extends PsiFileBase {
                         }
                     }, false);
         }
-        return myVariables.getValue();
+        return variableDeclarations.getValue();
     }
 
     @NotNull
     public Collection<XQueryModuleImport> getModuleImports() {
-        if (myModulesImports == null) {
-            myModulesImports = CachedValuesManager
+        if (moduleImports == null) {
+            moduleImports = CachedValuesManager
                     .getManager(getProject())
                     .createCachedValue(new CachedValueProvider<Collection<XQueryModuleImport>>() {
                         @Override
@@ -105,13 +107,13 @@ public class XQueryFile extends PsiFileBase {
                         }
                     }, false);
         }
-        return myModulesImports.getValue();
+        return moduleImports.getValue();
     }
 
     @NotNull
     public Collection<XQueryNamespaceDecl> getNamespaceDeclarations() {
-        if (myNamespaceDeclarations == null) {
-            myNamespaceDeclarations = CachedValuesManager
+        if (namespaceDeclarations == null) {
+            namespaceDeclarations = CachedValuesManager
                     .getManager(getProject())
                     .createCachedValue(new CachedValueProvider<Collection<XQueryNamespaceDecl>>() {
                         @Override
@@ -120,13 +122,13 @@ public class XQueryFile extends PsiFileBase {
                         }
                     }, false);
         }
-        return myNamespaceDeclarations.getValue();
+        return namespaceDeclarations.getValue();
     }
 
     @NotNull
     public Collection<XQueryFunctionDecl> getFunctionDeclarations() {
-        if (myFunctions == null) {
-            myFunctions = CachedValuesManager
+        if (functionDeclarations == null) {
+            functionDeclarations = CachedValuesManager
                     .getManager(getProject())
                     .createCachedValue(new CachedValueProvider<Collection<XQueryFunctionDecl>>() {
                         @Override
@@ -135,12 +137,12 @@ public class XQueryFile extends PsiFileBase {
                         }
                     }, false);
         }
-        return myFunctions.getValue();
+        return functionDeclarations.getValue();
     }
 
     public Collection<XQueryVarRef> getVariableReferences() {
-        if (referencedVariables == null) {
-            referencedVariables = CachedValuesManager
+        if (variableReferences == null) {
+            variableReferences = CachedValuesManager
                     .getManager(getProject())
                     .createCachedValue(new CachedValueProvider<Collection<XQueryVarRef>>() {
                         @Override
@@ -149,7 +151,7 @@ public class XQueryFile extends PsiFileBase {
                         }
                     }, false);
         }
-        return referencedVariables.getValue();
+        return variableReferences.getValue();
     }
 
     @NotNull
@@ -169,8 +171,8 @@ public class XQueryFile extends PsiFileBase {
 
     @NotNull
     public Collection<XQueryNamespaceDecl> getNamespaceDeclarationsMatchingDefaultNamespace() {
-        if (myNamespacesMatchingDefault == null) {
-            myNamespacesMatchingDefault = CachedValuesManager
+        if (namespacesMatchingDefault == null) {
+            namespacesMatchingDefault = CachedValuesManager
                     .getManager(getProject())
                     .createCachedValue(new CachedValueProvider<Collection<XQueryNamespaceDecl>>() {
                         @Override
@@ -180,13 +182,13 @@ public class XQueryFile extends PsiFileBase {
                         }
                     }, false);
         }
-        return myNamespacesMatchingDefault.getValue();
+        return namespacesMatchingDefault.getValue();
     }
 
     @NotNull
     public String getDefaultFunctionNamespace() {
-        if (myDefaultFunctionNamespace == null) {
-            myDefaultFunctionNamespace = CachedValuesManager
+        if (defaultFunctionNamespace == null) {
+            defaultFunctionNamespace = CachedValuesManager
                     .getManager(getProject())
                     .createCachedValue(new CachedValueProvider<String>() {
                         @Override
@@ -196,13 +198,13 @@ public class XQueryFile extends PsiFileBase {
                         }
                     }, false);
         }
-        return myDefaultFunctionNamespace.getValue();
+        return defaultFunctionNamespace.getValue();
     }
 
     @Nullable
     public XQueryModuleDecl getModuleDeclaration() {
-        if (myModuleDeclaration == null) {
-            myModuleDeclaration = CachedValuesManager
+        if (moduleDeclaration == null) {
+            moduleDeclaration = CachedValuesManager
                     .getManager(getProject())
                     .createCachedValue(new CachedValueProvider<XQueryModuleDecl>() {
                         @Override
@@ -212,7 +214,7 @@ public class XQueryFile extends PsiFileBase {
                         }
                     }, false);
         }
-        return myModuleDeclaration.getValue();
+        return moduleDeclaration.getValue();
     }
 
     private Collection<XQueryVarDecl> calcVariableDeclarations() {
@@ -292,8 +294,8 @@ public class XQueryFile extends PsiFileBase {
     }
 
     public Map<String, String> getFunctionPrefixToNamespaceMap() {
-        if (myNamespaceMapping == null) {
-            myNamespaceMapping = CachedValuesManager
+        if (functionPrefixToNamespaceMapping == null) {
+            functionPrefixToNamespaceMapping = CachedValuesManager
                     .getManager(getProject())
                     .createCachedValue(new CachedValueProvider<Map<String, String>>() {
                         @Override
@@ -303,14 +305,19 @@ public class XQueryFile extends PsiFileBase {
                         }
                     }, false);
         }
-        return myNamespaceMapping.getValue();
+        return functionPrefixToNamespaceMapping.getValue();
     }
 
     private Map<String, String> calcFunctionPrefixToNamespaceMap() {
+        Map<String, String> namespaceMapping = calcPrefixToNamespaceMap();
+        namespaceMapping.put(null, getDefaultFunctionNamespace());
+        return namespaceMapping;
+    }
+
+    private Map<String, String> calcPrefixToNamespaceMap() {
         XQueryNamespacePrefix moduleNamespaceName = getModuleNamespaceName();
         Collection<XQueryNamespaceDecl> namespaceDeclarations = getNamespaceDeclarations();
         Map<String, String> namespaceMapping = new HashMap<String, String>(getPrefixToNamespaceMap());
-        namespaceMapping.put(null, getDefaultFunctionNamespace());
         if (moduleNamespaceName != null && getModuleDeclaration().getURILiteral() != null) {
             namespaceMapping.put(moduleNamespaceName.getName(),
                     removeQuotOrApos(getModuleDeclaration().getURILiteral().getText()));
@@ -346,5 +353,30 @@ public class XQueryFile extends PsiFileBase {
 
     public boolean isDefaultFunctionNamespace(String namespace) {
         return getDefaultFunctionNamespace().equals(namespace);
+    }
+
+    private Map<String, String> calcVariablePrefixToNamespaceMap() {
+        Map<String, String> namespaceMapping = calcPrefixToNamespaceMap();
+        namespaceMapping.put(null, XMLConstants.NULL_NS_URI);
+        return namespaceMapping;
+    }
+
+    public String mapVariablePrefixToNamespace(String prefix) {
+        return getVariablePrefixToNamespaceMap().get(prefix);
+    }
+
+    public Map<String, String> getVariablePrefixToNamespaceMap() {
+        if (variablePrefixToNamespaceMapping == null) {
+            variablePrefixToNamespaceMapping = CachedValuesManager
+                    .getManager(getProject())
+                    .createCachedValue(new CachedValueProvider<Map<String, String>>() {
+                        @Override
+                        public Result<Map<String, String>> compute() {
+                            return CachedValueProvider.Result.create(calcVariablePrefixToNamespaceMap(),
+                                    XQueryFile.this);
+                        }
+                    }, false);
+        }
+        return variablePrefixToNamespaceMapping.getValue();
     }
 }

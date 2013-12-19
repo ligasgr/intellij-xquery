@@ -65,6 +65,7 @@
                          displayName="Unused import"
                          implementationClass="org.intellij.xquery.inspection.imports.UnusedImportsInspection"/>
         <codeInsight.parameterInfo language="XQuery" implementationClass="org.intellij.xquery.completion.function.parameters.XQueryParameterInfoHandler" />
+        <lang.documentationProvider language="XQuery" implementationClass="org.intellij.xquery.documentation.XQueryDocumentationProvider"/>
     </extensions>
 
     <actions>
