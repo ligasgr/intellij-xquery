@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.intellij.xquery.highlighting;
 
 import com.intellij.openapi.editor.colors.TextAttributesKey;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Icon;
+import java.util.Map;
 
 /**
  * User: ligasgr
@@ -43,6 +45,8 @@ public class XQueryColorSettingsPage implements ColorSettingsPage {
             new AttributesDescriptor("Brackets", XQuerySyntaxHighlighter.BRACKET),
             new AttributesDescriptor("Braces", XQuerySyntaxHighlighter.BRACE),
             new AttributesDescriptor("Comment", XQuerySyntaxHighlighter.COMMENT),
+            new AttributesDescriptor("XQDoc Comment", XQuerySyntaxHighlighter.DOC_COMMENT),
+            new AttributesDescriptor("XQDoc Tag", XQuerySyntaxHighlighter.DOC_COMMENT_TAG),
             new AttributesDescriptor("Xml Comment", XQuerySyntaxHighlighter.XML_COMMENT),
             new AttributesDescriptor("Xml Tag", XQuerySyntaxHighlighter.XML_TAG),
             new AttributesDescriptor("Xml Tag name", XQuerySyntaxHighlighter.XML_TAG_NAME),
@@ -69,9 +73,10 @@ public class XQueryColorSettingsPage implements ColorSettingsPage {
         return "xquery version \"1.0\";\n" +
                 "\n" +
                 "(:~\n" +
-                " :Just testing\n" +
+                " : Function description\n" +
                 " :)\n" +
                 "declare function test($argument) {\n" +
+                "    (: comment :)\n" +
                 "    (1 + 2 - 3 mod 4 * 4, true eq false, 5 > 6)\n" +
                 "};\n" +
                 "\n" +
@@ -88,7 +93,7 @@ public class XQueryColorSettingsPage implements ColorSettingsPage {
 
     @Nullable
     @Override
-    public java.util.Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
+    public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
         return null;
     }
 

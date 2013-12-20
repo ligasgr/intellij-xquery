@@ -69,8 +69,6 @@ PredefinedEntityRef="&" ("lt" | "gt" | "amp" | "quot" | "apos" | "bdquo" | "brvb
 EscapeQuot="\"\""
 EscapeApos="''"
 Digits=[0-9]+
-Comment="(:" ({CommentContents} | {Comment})* ":)"                                          /* ws: explicit */ /* gn: comments */
-CommentContents=({Char}+ - ({Char}* ("(:" | ":)") {Char}*))
 DirCommentContents=(({Char} - '-') | ('-' ({Char} - '-')))*                                 /* ws: explicit */
 PITarget={Name} - (("X" | "x") ("M" | "m") ("L" | "l"))                                     /* xgc: xml-version */
 CharRef="&#" [0-9]+ ";" | "&#x" [0-9a-fA-F]+ ";"                                            /* xgc: xml-version */
@@ -105,6 +103,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 %state TAG_QNAME
 %state ATTR_LIST
 %state ATTR_QNAME
+%state DOC_COMMENT
 // helper states for better support of live syntax highlighting
 %state XQUERY_RECOGNITION
 %state DECLARATION_RECOGNITION
@@ -121,6 +120,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
 "'"                                        {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
 "Q{"                                       {pushState(URIQUALIFIED); yypushback(2);}
+"(:~"                                      {pushState(DOC_COMMENT);return XQueryBasicTypes.DOC_COMMENT_START;}
 "(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
 "<<"                                       {return XQueryTypes.NODECOMP_LT;}
 ">>"                                       {return XQueryTypes.NODECOMP_GT;}
@@ -293,6 +293,11 @@ SC=({S} | "(:" {Char}* ~":)")+
 {Char}                                     {return XQueryBasicTypes.EXPR_COMMENT_CONTENT;}
 }
 
+<DOC_COMMENT> {
+":)"                                       {popState(); return XQueryBasicTypes.DOC_COMMENT_END;}
+{Char}                                     {return XQueryBasicTypes.DOC_COMMENT_CONTENT;}
+}
+
 <START_TAG> {
 {S}                                        {return TokenType.WHITE_SPACE;}
 {NCName}                                   {pushState(TAG_QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
@@ -397,6 +402,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 
 <DECLARATION_RECOGNITION> {
 {S}                                        {return TokenType.WHITE_SPACE;}
+"(:~"                                      {pushState(DOC_COMMENT);return XQueryBasicTypes.DOC_COMMENT_START;}
 "(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
 "="                                        {return XQueryTypes.EQUAL;}
 "\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
@@ -467,6 +473,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 {S}                                        {return TokenType.WHITE_SPACE;}
 "\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
 "'"                                        {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"(:~"                                      {pushState(DOC_COMMENT);return XQueryBasicTypes.DOC_COMMENT_START;}
 "(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
 "import" / {SC} ("schema"|"module")        {return XQueryTypes.K_IMPORT;}
 "schema" / {SC} ("namespace"|"default"|"\""|"'") {return XQueryTypes.K_SCHEMA;}
@@ -483,6 +490,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 
 <MODULE_RECOGNITION> {
 {S}                                        {return TokenType.WHITE_SPACE;}
+"(:~"                                      {pushState(DOC_COMMENT);return XQueryBasicTypes.DOC_COMMENT_START;}
 "(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
 "module" / {SC} ("namespace"|"\""|"'")     {return XQueryTypes.K_MODULE;}
 "namespace" / {SC} {NCName}                {return XQueryTypes.K_NAMESPACE;}

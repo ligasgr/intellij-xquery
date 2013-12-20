@@ -57,6 +57,10 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
             DefaultLanguageHighlighterColors.BRACES);
     public static final TextAttributesKey COMMENT = createTextAttributesKey("XQUERY_COMMENT",
             DefaultLanguageHighlighterColors.BLOCK_COMMENT);
+    public static final TextAttributesKey DOC_COMMENT = createTextAttributesKey("XQUERY_DOC_COMMENT",
+            DefaultLanguageHighlighterColors.DOC_COMMENT);
+    public static final TextAttributesKey DOC_COMMENT_TAG = createTextAttributesKey("XQUERY_DOC_COMMENT_TAG",
+            DefaultLanguageHighlighterColors.DOC_COMMENT_TAG);
     public static final TextAttributesKey XML_COMMENT = createTextAttributesKey("XQUERY_XML_COMMENT",
             DefaultLanguageHighlighterColors.LINE_COMMENT);
     public static final TextAttributesKey XML_TAG = createTextAttributesKey("XQUERY_XML_TAG",
@@ -79,6 +83,7 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] BRACKETS = pack(BRACKET);
     private static final TextAttributesKey[] BRACES = pack(BRACE);
     private static final TextAttributesKey[] COMMENTS = pack(COMMENT);
+    private static final TextAttributesKey[] DOC_COMMENTS = pack(DOC_COMMENT);
     private static final TextAttributesKey[] XML_COMMENTS = pack(XML_COMMENT);
     private static final TextAttributesKey[] XML_TAGS = pack(XML_TAG);
     private static final TextAttributesKey[] XML_TAG_NAMES = pack(XML_TAG, XML_TAG_NAME);
@@ -99,6 +104,11 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType == XQueryBasicTypes.EXPR_COMMENT_END
                 || tokenType == XQueryBasicTypes.EXPR_COMMENT_START) {
             return COMMENTS;
+        }
+        if (tokenType == XQueryBasicTypes.DOC_COMMENT_CONTENT
+                || tokenType == XQueryBasicTypes.DOC_COMMENT_END
+                || tokenType == XQueryBasicTypes.DOC_COMMENT_START) {
+            return DOC_COMMENTS;
         }
         if (tokenType == XQueryTypes.XMLEMPTYELEMENTEND
                 || tokenType == XQueryTypes.XMLENDTAGSTART

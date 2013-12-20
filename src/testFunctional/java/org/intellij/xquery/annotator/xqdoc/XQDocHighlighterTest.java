@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.psi;
+package org.intellij.xquery.annotator.xqdoc;
 
-import com.intellij.psi.tree.IElementType;
+import org.intellij.xquery.BaseFunctionalTestCase;
 
 /**
  * User: ligasgr
- * Date: 25/03/13
- * Time: 20:22
+ * Date: 20/12/13
+ * Time: 20:59
  */
-public interface XQueryBasicTypes {
+public class XQDocHighlighterTest extends BaseFunctionalTestCase {
 
-    IElementType EXPR_COMMENT_CONTENT = new XQueryTokenType("ExprCommentContent");
-    IElementType EXPR_COMMENT_START = new XQueryTokenType("ExprCommentStart");
-    IElementType EXPR_COMMENT_END = new XQueryTokenType("ExprCommentEnd");
-    IElementType DOC_COMMENT_CONTENT = new XQueryTokenType("DocCommentContent");
-    IElementType DOC_COMMENT_START = new XQueryTokenType("DocCommentStart");
-    IElementType DOC_COMMENT_END = new XQueryTokenType("DocCommentEnd");
+    public void testHighlightingXQDocTag() {
+        myFixture.configureByText("a.xq", "(:~ test <info>@param</info> :)\n()");
+        myFixture.checkHighlighting(true, true, true);
+    }
 }
