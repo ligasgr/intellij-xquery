@@ -16,8 +16,11 @@
 
 package org.intellij.xquery.documentation;
 
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.containers.ContainerUtil;
 import org.intellij.xquery.BaseFunctionalTestCase;
 import org.intellij.xquery.psi.XQueryFunctionName;
 import org.intellij.xquery.psi.XQueryVarName;
@@ -81,7 +84,7 @@ public class XQueryDocumentationProviderTest extends BaseFunctionalTestCase {
                 VARIABLE_DECLARATION + HTML_BR + HTML_BR +
                 "my description",
                 "module namespace ns = '" + NAMESPACE + "';\n" +
-                        "(: my description :)" +
+                        "(:~ my description :)" +
                         "declare variable $ns:v<caret>ar as xs:string := 'var';");
     }
 
@@ -175,6 +178,18 @@ public class XQueryDocumentationProviderTest extends BaseFunctionalTestCase {
                                 VARIABLE_DECLARATION + ";"));
     }
 
+    public void testLookupItemForVariableWithDocComment() throws Exception {
+        doTestGenerateLookupItemDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                VARIABLE_DECLARATION + HTML_BR + HTML_BR +
+                "my description",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ my description :)\n" +
+                        VARIABLE_DECLARATION + ";\n" +
+                        "declare function ns:x() {$ns:<caret>};",
+                XQueryVarName.class);
+    }
+
     public void testUserFunctionReference() throws Exception {
         doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
                 NAMESPACE_LABEL + NAMESPACE + HTML_BR +
@@ -215,28 +230,104 @@ public class XQueryDocumentationProviderTest extends BaseFunctionalTestCase {
                 "declare function x:f<caret>un() {()};");
     }
 
-    public void testUserFunctionDeclarationWithComment() throws Exception {
+    public void testUserFunctionDeclarationWithDocComment() throws Exception {
         doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
                 NAMESPACE_LABEL + NAMESPACE + HTML_BR +
                 "declare function ns:f()" + HTML_BR + HTML_BR +
                 "my description",
                 "module namespace ns = '" + NAMESPACE + "';\n" +
-                        "(: my description :)" +
+                        "(:~ my description :)" +
                         "declare function ns:<caret>f() {()};");
     }
 
-    public void testUserFunctionDeclarationWithMultiLineComment() throws Exception {
+    public void testUserFunctionDeclarationWithMultiLineDocComment() throws Exception {
         doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
                 NAMESPACE_LABEL + NAMESPACE + HTML_BR +
                 "declare function ns:f()" + HTML_BR + HTML_BR +
                 "my description in multiple lines",
                 "module namespace ns = '" + NAMESPACE + "';\n" +
-                        "(: my description\n" +
+                        "(:~ my description\n" +
                         " : in\n" +
                         " : multiple\n" +
                         " :lines\n" +
                         " :)" +
                         "declare function ns:<caret>f() {()};");
+    }
+
+    public void testUserFunctionDeclarationWithDocCommentForPreviousFunction() throws Exception {
+        doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f()",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ my description :)" +
+                        "declare function ns:a() {()};\n" +
+                        "declare function ns:<caret>f() {()};");
+    }
+
+    public void testUserFunctionDeclarationWithNonDocComment() throws Exception {
+        doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f()",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(: my description :)" +
+                        "declare function ns:<caret>f() {()};");
+    }
+
+    public void testLookupItemForUserFunctionDeclarationWithDocComment() throws Exception {
+        doTestGenerateLookupItemDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f()" + HTML_BR + HTML_BR +
+                "my description",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ my description :)" +
+                        "declare function ns:f() {(<caret>)};",
+                XQueryFunctionName.class);
+    }
+
+    public void testUserFunctionDeclarationWithDocCommentWithParameter() throws Exception {
+        doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f($a)" + HTML_BR + HTML_BR +
+                "my description" + HTML_BR + HTML_BR +
+                "<b>Parameters:</b>" + HTML_BR +
+                "a - my parameter",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ my description\n" +
+                        " : @param a my parameter\n" +
+                        " :)" +
+                        "declare function ns:<caret>f($a) {()};");
+    }
+
+    public void testUserFunctionDeclarationWithDocCommentWithParameterWithDollar() throws Exception {
+        doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f($a)" + HTML_BR + HTML_BR +
+                "my description" + HTML_BR + HTML_BR +
+                "<b>Parameters:</b>" + HTML_BR +
+                "a - my parameter",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ my description\n" +
+                        " : @param $a my parameter\n" +
+                        " :)" +
+                        "declare function ns:<caret>f($a) {()};");
+    }
+
+    public void testUserFunctionDeclarationWithDocCommentWithParameters() throws Exception {
+        doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f($a, $b, $c)" + HTML_BR + HTML_BR +
+                "my description" + HTML_BR + HTML_BR +
+                "<b>Parameters:</b>" + HTML_BR +
+                "a - my parameter" + HTML_BR +
+                "b - my parameter 1" + HTML_BR +
+                "c - my parameter 2",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ my description\n" +
+                        " : @param a my parameter\n" +
+                        " : @param b my parameter 1\n" +
+                        " : @param c my parameter 2\n" +
+                        " :)" +
+                        "declare function ns:<caret>f($a, $b, $c) {()};");
     }
 
     private void doTestGenerateVariableDoc(@NotNull String expected, @NotNull String text,
@@ -247,6 +338,23 @@ public class XQueryDocumentationProviderTest extends BaseFunctionalTestCase {
     private void doTestGenerateFunctionDoc(@NotNull String expected, @NotNull String text,
                                            FileData... otherFiles) throws Exception {
         doTestGenerateDoc(expected, text, XQueryFunctionName.class, otherFiles);
+    }
+
+    private void doTestGenerateLookupItemDoc(@NotNull String expected, @NotNull String text,
+                                             final Class<? extends PsiElement> documentationSourceClass) throws
+            Exception {
+        myFixture.configureByText(SOURCE_FILE_NAME, text);
+        LookupElement[] lookupItems = myFixture.completeBasic();
+        LookupElement interestingElement = ContainerUtil.find(lookupItems, new Condition<LookupElement>() {
+            @Override
+            public boolean value(LookupElement lookupElement) {
+                return documentationSourceClass.isAssignableFrom(lookupElement.getObject().getClass());
+            }
+        });
+        assertNotNull(interestingElement);
+        PsiElement sourceOfDocumentation = documentationProvider.getDocumentationElementForLookupItem(getPsiManager()
+                , interestingElement.getObject(), null);
+        assertEquals(expected, documentationProvider.generateDoc(sourceOfDocumentation, null));
     }
 
     private void doTestGenerateDoc(@NotNull String expected, @NotNull String text,

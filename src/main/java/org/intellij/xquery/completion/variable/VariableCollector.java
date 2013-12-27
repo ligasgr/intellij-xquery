@@ -143,7 +143,7 @@ public class VariableCollector {
                 typeText = varDecl.getTypeDeclaration().getSequenceType().getText();
             }
         }
-        return LookupElementBuilder.create(key)
+        return LookupElementBuilder.create(psiElement, key)
                 .withIcon(icon)
                 .withTypeText(typeText)
                 .withInsertHandler(new VariableInsertHandler());

@@ -39,4 +39,17 @@ public class StringUtils {
     public static String compressWhitespaces(String text) {
         return text.replaceAll("\\s+", " ");
     }
+
+    public static String[] splitByFirstWhiteSpaceSequence(String text) {
+        int indexOfWhiteSpace = text.indexOf(" ");
+        if (indexOfWhiteSpace > - 1) {
+            return new String[]{text.substring(0, indexOfWhiteSpace).trim(), text.substring(indexOfWhiteSpace).trim()};
+        } else {
+            return new String[]{text};
+        }
+    }
+
+    public static String normalizeWhitespaces(String text) {
+        return compressWhitespaces(text).trim();
+    }
 }

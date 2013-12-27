@@ -28,7 +28,7 @@ import org.intellij.xquery.psi.XQueryFunctionDecl;
  */
 public class FunctionDeclarationToLookupElementConverter {
     public static LookupElement convert(XQueryFunctionDecl functionDeclaration, String key) {
-        return LookupElementBuilder.create(functionDeclaration, key)
+        return LookupElementBuilder.create(functionDeclaration.getFunctionName(), key)
                 .withIcon(XQueryIcons.FUNCTION_ICON)
                 .withTailText(getTailText(functionDeclaration), true)
                 .withTypeText(getTypeText(functionDeclaration))

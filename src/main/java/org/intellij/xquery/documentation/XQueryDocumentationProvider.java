@@ -19,7 +19,8 @@ package org.intellij.xquery.documentation;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiWhiteSpace;
 import org.intellij.xquery.psi.XQueryAnnotation;
 import org.intellij.xquery.psi.XQueryCaseClause;
 import org.intellij.xquery.psi.XQueryFile;
@@ -37,11 +38,14 @@ import org.intellij.xquery.psi.XQueryVarDecl;
 import org.intellij.xquery.psi.XQueryVarName;
 import org.intellij.xquery.psi.XQueryVarRef;
 import org.intellij.xquery.psi.XQueryWindowClause;
-import org.intellij.xquery.util.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.intellij.xquery.documentation.XQDocTransformer.transformXQDoc;
+import static org.intellij.xquery.psi.XQueryBasicTypes.DOC_COMMENT_CONTENT;
+import static org.intellij.xquery.util.StringUtils.compressWhitespaces;
+import static org.intellij.xquery.util.StringUtils.normalizeWhitespaces;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrAposIfNeeded;
 
 /**
@@ -53,6 +57,15 @@ public class XQueryDocumentationProvider extends AbstractDocumentationProvider {
     static final String HTML_BR = "<br/>";
     static final String NAMESPACE_LABEL = "namespace: ";
     static final String FILE_LINK_TEMPLATE = "<a href='psi_element://%s'>%s</a>";
+
+    @Override
+    public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
+        if (object instanceof PsiElement)
+            return (PsiElement) object;
+        else {
+            return null;
+        }
+    }
 
     @Override
     public String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {
@@ -92,11 +105,22 @@ public class XQueryDocumentationProvider extends AbstractDocumentationProvider {
     }
 
     private String getXQDocDescription(PsiElement source) {
-        final PsiComment comment = PsiTreeUtil.getPrevSiblingOfType(source, PsiComment.class);
+        final PsiComment comment = getPreviousComment(source);
         if (comment != null) {
-            String documentationComment = PsiTreeUtil.getPrevSiblingOfType(comment, PsiComment.class).getText();
-            documentationComment = documentationComment.replaceAll("\\n\\s+:", " ");
-            return StringUtils.compressWhitespaces(documentationComment).trim();
+            String documentationComment = comment.getText();
+            return transformXQDoc(documentationComment);
+        }
+        return null;
+    }
+
+    private PsiComment getPreviousComment(PsiElement sibling) {
+        if (sibling == null) return null;
+        for (PsiElement child = sibling.getPrevSibling();
+             child != null && (child instanceof PsiWhiteSpace || child instanceof PsiComment);
+             child = child.getPrevSibling()) {
+            if (PsiComment.class.isInstance(child) && child.getNode().getElementType() == DOC_COMMENT_CONTENT) {
+                return (PsiComment) child;
+            }
         }
         return null;
     }
@@ -122,7 +146,7 @@ public class XQueryDocumentationProvider extends AbstractDocumentationProvider {
             sb.append(" as ");
             sb.append(fun.getSequenceType().getText());
         }
-        return StringUtils.compressWhitespaces(sb.toString());
+        return compressWhitespaces(sb.toString());
     }
 
     private String getAnnotations(XQueryFunctionDecl fun) {
@@ -172,7 +196,7 @@ public class XQueryDocumentationProvider extends AbstractDocumentationProvider {
             XQueryQuantifiedExpr expr = getParentOfType(elementToProduceDescription, XQueryQuantifiedExpr.class, true);
             descriptionPrefix = expr.getText().split(" ")[0] + " ";
         }
-        return StringUtils.compressWhitespaces(descriptionPrefix + descriptionSuffix).trim();
+        return normalizeWhitespaces(descriptionPrefix + descriptionSuffix);
     }
 
     private PsiElement getElementToProduceDescription(XQueryVarName varName) {
