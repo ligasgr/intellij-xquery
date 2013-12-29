@@ -26,9 +26,9 @@ import org.intellij.xquery.psi.XQueryFunctionName;
 import org.intellij.xquery.psi.XQueryVarName;
 import org.jetbrains.annotations.NotNull;
 
-import static org.intellij.xquery.documentation.XQueryDocumentationProvider.FILE_LINK_TEMPLATE;
-import static org.intellij.xquery.documentation.XQueryDocumentationProvider.HTML_BR;
-import static org.intellij.xquery.documentation.XQueryDocumentationProvider.NAMESPACE_LABEL;
+import static org.intellij.xquery.documentation.CommentAndSignatureBasedDocumentation.FILE_LINK_TEMPLATE;
+import static org.intellij.xquery.documentation.CommentAndSignatureBasedDocumentation.HTML_BR;
+import static org.intellij.xquery.documentation.CommentAndSignatureBasedDocumentation.NAMESPACE_LABEL;
 
 /**
  * User: ligasgr
@@ -328,6 +328,146 @@ public class XQueryDocumentationProviderTest extends BaseFunctionalTestCase {
                         " : @param c my parameter 2\n" +
                         " :)" +
                         "declare function ns:<caret>f($a, $b, $c) {()};");
+    }
+
+    public void testUserFunctionDeclarationWithDocCommentWithParametersWithoutDescriptions() throws Exception {
+        doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f($a, $b, $c)" + HTML_BR + HTML_BR +
+                "my description" + HTML_BR + HTML_BR +
+                "<b>Parameters:</b>" + HTML_BR +
+                "a - " + HTML_BR +
+                "b - " + HTML_BR +
+                "c -",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ my description\n" +
+                        " : @param a\n" +
+                        " : @param b\n" +
+                        " : @param c\n" +
+                        " :)" +
+                        "declare function ns:<caret>f($a, $b, $c) {()};");
+    }
+
+    public void testUserFunctionDeclarationWithDocCommentWithAuthor() throws Exception {
+        doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f()" + HTML_BR + HTML_BR +
+                "<b>Author:</b>" + HTML_BR +
+                "author with spaces",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ @author author with spaces :)" +
+                        "declare function ns:<caret>f() {()};");
+    }
+
+    public void testUserFunctionDeclarationWithDocCommentWithVersion() throws Exception {
+        doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f()" + HTML_BR + HTML_BR +
+                "<b>Version:</b>" + HTML_BR +
+                "1.0",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ \n" +
+                        " : @version 1.0\n" +
+                        " :)" +
+                        "declare function ns:<caret>f() {()};");
+    }
+
+    public void testUserFunctionDeclarationWithDocCommentWithReturn() throws Exception {
+        doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f()" + HTML_BR + HTML_BR +
+                "<b>Returns:</b>" + HTML_BR +
+                "value described",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ \n" +
+                        " : @return value described\n" +
+                        " :)" +
+                        "declare function ns:<caret>f() {()};");
+    }
+
+    public void testUserFunctionDeclarationWithDocCommentWithError() throws Exception {
+        doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f()" + HTML_BR + HTML_BR +
+                "<b>Throws errors:</b>" + HTML_BR +
+                "err:SomeError - if condition is met",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ \n" +
+                        " : @error err:SomeError if condition is met\n" +
+                        " :)" +
+                        "declare function ns:<caret>f() {()};");
+    }
+
+    public void testUserFunctionDeclarationWithDocCommentWithSince() throws Exception {
+        doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f()" + HTML_BR + HTML_BR +
+                "<b>Since:</b>" + HTML_BR +
+                "2.3",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ \n" +
+                        " : @since 2.3\n" +
+                        " :)" +
+                        "declare function ns:<caret>f() {()};");
+    }
+
+    public void testUserFunctionDeclarationWithDocCommentWithSee() throws Exception {
+        doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f()" + HTML_BR + HTML_BR +
+                "<b>See:</b>" + HTML_BR +
+                "anotherModule.xq",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ \n" +
+                        " : @see anotherModule.xq\n" +
+                        " :)" +
+                        "declare function ns:<caret>f() {()};");
+    }
+
+    public void testUserFunctionDeclarationWithDocCommentWithDeprecated() throws Exception {
+        doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f()" + HTML_BR + HTML_BR +
+                "<b>Deprecated</b> because of a reason",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ \n" +
+                        " : @deprecated because of a reason\n" +
+                        " :)" +
+                        "declare function ns:<caret>f() {()};");
+    }
+
+    public void testUserFunctionDeclarationWithDocCommentForAllTags() throws Exception {
+        doTestGenerateFunctionDoc(FILE_LINK + HTML_BR +
+                NAMESPACE_LABEL + NAMESPACE + HTML_BR +
+                "declare function ns:f()" + HTML_BR + HTML_BR +
+                "my comment" + HTML_BR + HTML_BR +
+                "<b>Author:</b>" + HTML_BR +
+                "author with spaces" + HTML_BR + HTML_BR +
+                "<b>Version:</b>" + HTML_BR +
+                "2.0" + HTML_BR + HTML_BR +
+                "<b>Since:</b>" + HTML_BR +
+                "1.0" + HTML_BR + HTML_BR +
+                "<b>Deprecated</b> because of a reason" + HTML_BR + HTML_BR +
+                "<b>Parameters:</b>" + HTML_BR +
+                "a - my parameter" + HTML_BR + HTML_BR +
+                "<b>Returns:</b>" + HTML_BR +
+                "value described" + HTML_BR + HTML_BR +
+                "<b>Throws errors:</b>" + HTML_BR +
+                "err:SomeError - if condition is met" + HTML_BR + HTML_BR +
+                "<b>See:</b>" + HTML_BR +
+                "anotherModule.xq",
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "(:~ my comment\n" +
+                        " : @author author with spaces\n" +
+                        " : @version 2.0\n" +
+                        " : @since 1.0\n" +
+                        " : @deprecated because of a reason\n" +
+                        " : @param $a my parameter\n" +
+                        " : @return value described\n" +
+                        " : @error err:SomeError if condition is met\n" +
+                        " : @see anotherModule.xq\n" +
+                        " :)" +
+                        "declare function ns:<caret>f() {()};");
     }
 
     private void doTestGenerateVariableDoc(@NotNull String expected, @NotNull String text,
