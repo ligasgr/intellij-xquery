@@ -17,6 +17,7 @@
 package org.intellij.xquery.documentation;
 
 import com.intellij.psi.PsiElement;
+import org.intellij.xquery.completion.function.BuiltInFunctionTable;
 import org.intellij.xquery.psi.XQueryAnnotation;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
@@ -34,18 +35,42 @@ import static org.intellij.xquery.util.StringUtils.removeQuotOrAposIfNeeded;
  * Time: 09:24
  */
 public class FunctionDocumentationProvider implements PsiBasedDocumentationProvider<XQueryFunctionName> {
+
+    private static final String XQUERY_STYLE = "<style type=\"text/css\">dt {font-weight: bold}</style>\n";
+
+    private static String wrappedWithHtmlAndStyle(String doc) {
+        return "<html>\n" + XQUERY_STYLE + "<body>\n" + doc + "</body></html>\n";
+    }
+
     @Override
     public String generateDoc(XQueryFunctionName functionName) {
         XQueryFunctionDecl elementToProduceDescription = getElementToProduceDescription(functionName);
         if (elementToProduceDescription != null) {
             return getDocumentationFromFunctionDeclaration(functionName, elementToProduceDescription).getText();
         } else {
-            return null;
+            String name = functionName.getLocalNameText();
+            String prefix = functionName.getPrefixText();
+            String namespace = ((XQueryFile) functionName.getContainingFile()).mapFunctionPrefixToNamespace(prefix);
+            if (BuiltInFunctionTable.isBuiltInFunction(namespace, name)) {
+                return getDocumentationFromExternalFile(namespace, name);
+            } else {
+                return null;
+            }
         }
     }
 
-    private CommentAndSignatureBasedDocumentation getDocumentationFromFunctionDeclaration(XQueryFunctionName functionName, XQueryFunctionDecl
-            elementToProduceDescription) {
+    private String getDocumentationFromExternalFile(String namespace, String name) {
+        String doc = ExternalDocumentationFetcher.fetch(name);
+        if (doc != null)
+            return wrappedWithHtmlAndStyle(doc);
+        else
+            return null;
+    }
+
+    private CommentAndSignatureBasedDocumentation getDocumentationFromFunctionDeclaration(XQueryFunctionName
+                                                                                                  functionName,
+                                                                                          XQueryFunctionDecl
+                                                                                                  elementToProduceDescription) {
         String containingFileName = elementToProduceDescription.getContainingFile().getName();
         XQueryFile xqueryFile = (XQueryFile) functionName.getContainingFile();
         String prefix = functionName.getPrefix() != null ? functionName.getPrefix().getText() : null;
@@ -54,7 +79,8 @@ public class FunctionDocumentationProvider implements PsiBasedDocumentationProvi
         String description = getDescription(elementToProduceDescription);
         String xqDocDescription = XQDocDescriptionExtractor.getXQDocDescription(elementToProduceDescription);
 
-        return new CommentAndSignatureBasedDocumentation(containingFileName, containingFileName, namespace, description, xqDocDescription);
+        return new CommentAndSignatureBasedDocumentation(containingFileName, containingFileName, namespace,
+                description, xqDocDescription);
     }
 
     private XQueryFunctionDecl getElementToProduceDescription(XQueryFunctionName functionName) {

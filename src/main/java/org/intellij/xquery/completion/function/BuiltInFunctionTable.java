@@ -269,7 +269,7 @@ public class BuiltInFunctionTable {
         return XQueryPredeclaredNamespace.getNamespaceForPrefix(prefix);
     }
 
-    private static BuiltInFunctionSignature bif(String prefix, String name, int arity, String arguments, 
+    private static BuiltInFunctionSignature bif(String prefix, String name, int arity, String arguments,
                                                 String returnType) {
         return new BuiltInFunctionSignature(ns(prefix), name, arity, arguments, returnType);
     }
@@ -286,5 +286,9 @@ public class BuiltInFunctionTable {
             }
         }
         return signatures;
+    }
+
+    public static boolean isBuiltInFunction(String namespace, String name) {
+        return getFunctionsSignatures(namespace, name).size() > 0;
     }
 }

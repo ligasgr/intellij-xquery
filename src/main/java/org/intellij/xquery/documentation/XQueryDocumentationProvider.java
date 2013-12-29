@@ -19,7 +19,6 @@ package org.intellij.xquery.documentation;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
-import org.intellij.xquery.psi.XQueryFile;
 import org.jetbrains.annotations.Nullable;
 
 import static org.intellij.xquery.documentation.DocumentationProviderFactory.getDocumentationProvider;
