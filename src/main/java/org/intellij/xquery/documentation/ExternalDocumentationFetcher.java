@@ -70,35 +70,33 @@ public class ExternalDocumentationFetcher {
 
     private static String doRetrieveDoc(BufferedReader reader, String name) throws IOException {
         String line;
-        String remainingPart = "";
         boolean functionDocFound = false;
         while ((line = reader.readLine()) != null) {
             if (isDocBegin(line, name)) {
                 functionDocFound = true;
-                String tagName = getTagName(line);
-                if (line.contains("</" + tagName + ">")) {
-                    break;
-                } else {
-                    while ((line = reader.readLine()) != null) {
-                        if (line.contains("</" + tagName + ">")) {
-                            remainingPart = findAllAfterTagEnd(line, tagName);
-                            break;
-                        }
-                    }
-                    break;
-                }
+                break;
             }
         }
         if (!functionDocFound) {
             return null;
         }
+        while ((line = reader.readLine()) != null && !isDefinitionStart(line));
         final StringBuilder builder = new StringBuilder(1024);
-        builder.append(remainingPart);
-        while ((line = reader.readLine()) != null && !isDocEnd(line)) {
+        builder.append(line);
+        while ((line = reader.readLine()) != null && !isDefinitionEnd(line)) {
             builder.append(line);
             builder.append("\n");
         }
+        builder.append(line);
         return builder.toString();
+    }
+
+    private static boolean isDefinitionEnd(String line) {
+        return line.startsWith("</dl>");
+    }
+
+    private static boolean isDefinitionStart(String line) {
+        return line.startsWith("<dl>");
     }
 
     private static String findAllAfterTagEnd(String line, String tagName) {

@@ -22,7 +22,10 @@ import java.util.Collection;
 import java.util.Set;
 
 import static com.intellij.util.containers.ContainerUtil.set;
-import static org.intellij.xquery.documentation.CommentAndSignatureBasedDocumentation.HTML_BR;
+import static org.intellij.xquery.documentation.DocumentationStylist.HTML_BR;
+import static org.intellij.xquery.documentation.DocumentationStylist.HYPHEN_WITH_SPACES;
+import static org.intellij.xquery.documentation.DocumentationStylist.def;
+import static org.intellij.xquery.documentation.DocumentationStylist.defList;
 import static org.intellij.xquery.util.StringUtils.EMPTY;
 import static org.intellij.xquery.util.StringUtils.normalizeWhitespaces;
 import static org.intellij.xquery.util.StringUtils.splitByFirstWhiteSpaceSequence;
@@ -33,9 +36,8 @@ import static org.intellij.xquery.util.StringUtils.splitByFirstWhiteSpaceSequenc
  * Time: 11:15
  */
 public class XQDocTransformer {
-    private static final String PARAMETERS_LABEL = "Parameters:";
-    private static final String HYPHEN_WITH_SPACES = " - ";
-    private static final boolean WITH_SPACE = false;
+    public static final String PARAMETERS_LABEL = "Parameters";
+    private static final String SUMMARY_LABEL = "Summary";
     public static Set<String> XQ_DOC_TAGS = set(
             "@author", "@version", "@param", "@return", "@deprecated", "@error", "@since", "@see"
     );
@@ -48,15 +50,16 @@ public class XQDocTransformer {
             return getBasicAndTagDescriptions(commentWithoutSeparators.substring(0, indexOfFirstTag),
                     commentWithoutSeparators.substring(indexOfFirstTag, commentWithoutSeparators.length()));
         } else {
-            return HTML_BR + HTML_BR + normalizeWhitespaces(commentWithoutSeparators);
+            return defList(def(SUMMARY_LABEL, normalizeWhitespaces(commentWithoutSeparators)));
         }
     }
 
     private static String getBasicAndTagDescriptions(String basicDescription, String tagsSection) {
         String xqDocTagsDescription = getXQDocTagsDescription(tagsSection);
-        String normalizedBasicDescription = normalizeWhitespaces(basicDescription);
-        return (normalizedBasicDescription.length() > 0 ? HTML_BR + HTML_BR + normalizedBasicDescription : "") +
-                normalizeWhitespaces(xqDocTagsDescription);
+        String desc = normalizeWhitespaces(basicDescription);
+        String basicDescriptionContents = desc.length() > 0 ? def(SUMMARY_LABEL, desc) : "";
+        String contents = basicDescriptionContents + normalizeWhitespaces(xqDocTagsDescription);
+        return HTML_BR + HTML_BR + defList(contents);
     }
 
     private static String removeSeparators(String documentationComment) {
@@ -74,40 +77,36 @@ public class XQDocTransformer {
 
     private static String formatTags(MultiMap<String, String> xqDocTags) {
         StringBuilder sb = new StringBuilder();
-        sb.append(formatTagValuesIfExist("@author", "Author:", xqDocTags));
-        sb.append(formatTagValuesIfExist("@version", "Version:", xqDocTags));
-        sb.append(formatTagValuesIfExist("@since", "Since:", xqDocTags));
-        sb.append(formatTagValuesIfExist("@deprecated", "Deprecated", xqDocTags, WITH_SPACE));
+        sb.append(formatTagValuesIfExist("@author", "Author", xqDocTags));
+        sb.append(formatTagValuesIfExist("@version", "Version", xqDocTags));
+        sb.append(formatTagValuesIfExist("@since", "Since", xqDocTags));
+        sb.append(formatTagValuesIfExist("@deprecated", "Deprecated", xqDocTags));
         sb.append(formatTagValuesIfExist("@param", PARAMETERS_LABEL, xqDocTags));
-        sb.append(formatTagValuesIfExist("@return", "Returns:", xqDocTags));
-        sb.append(formatTagValuesIfExist("@error", "Throws errors:", xqDocTags));
-        sb.append(formatTagValuesIfExist("@see", "See:", xqDocTags));
+        sb.append(formatTagValuesIfExist("@return", "Returns", xqDocTags));
+        sb.append(formatTagValuesIfExist("@error", "Throws errors", xqDocTags));
+        sb.append(formatTagValuesIfExist("@see", "See", xqDocTags));
         return sb.toString();
     }
 
     private static String formatTagValuesIfExist(String tag, String tagLabel, MultiMap<String, String> xqDocTags) {
-        return formatTagValuesIfExist(tag, tagLabel, xqDocTags, true);
-    }
-
-    private static String formatTagValuesIfExist(String tag, String tagLabel, MultiMap<String, String> xqDocTags, boolean withNewLine) {
         if (xqDocTags.get(tag).size() > 0) {
-            return formatTagValues(tagLabel, xqDocTags.get(tag), withNewLine);
+            return formatTagValues(tagLabel, xqDocTags.get(tag));
         } else {
             return EMPTY;
         }
     }
 
-    private static String formatTagValues(String tagLabel, Collection<String> tagDescriptions, boolean withNewLine) {
+    private static String formatTagValues(String tagLabel, Collection<String> tagDescriptions) {
         StringBuilder formattedTags = new StringBuilder();
+        int i = 0;
         for (String paramDescription : tagDescriptions) {
-            if (withNewLine) {
-                formattedTags.append(crlf());
-            } else {
-                formattedTags.append(" ");
+            if (i != 0) {
+                formattedTags.append(HTML_BR);
             }
+            i++;
             formattedTags.append(paramDescription);
         }
-        return crlf() + crlf() + bold(tagLabel) + formattedTags.toString();
+        return def(tagLabel, formattedTags.toString());
     }
 
     private static MultiMap<String, String> getXQDocTags(String tagsSection) {
@@ -168,13 +167,5 @@ public class XQDocTransformer {
             }
         }
         return found ? min : -1;
-    }
-
-    private static String crlf() {
-        return HTML_BR;
-    }
-
-    private static String bold(String text) {
-        return "<b>" + text + "</b>";
     }
 }

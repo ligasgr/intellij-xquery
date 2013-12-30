@@ -17,6 +17,7 @@
 package org.intellij.xquery.documentation;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.intellij.xquery.documentation.DocumentationStylist.HTML_BR;
 
 /**
  * User: ligasgr
@@ -24,7 +25,6 @@ import static javax.xml.XMLConstants.NULL_NS_URI;
  * Time: 09:15
  */
 public class CommentAndSignatureBasedDocumentation {
-    static final String HTML_BR = "<br/>";
     static final String NAMESPACE_LABEL = "namespace: ";
     static final String FILE_LINK_TEMPLATE = "<a href='psi_element://%s'>%s</a>";
     private String fullFilePath;

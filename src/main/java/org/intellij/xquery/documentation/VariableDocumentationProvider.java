@@ -33,6 +33,7 @@ import org.intellij.xquery.psi.XQueryWindowClause;
 
 import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.intellij.xquery.documentation.DocumentationStylist.wrapWithHtmlAndStyle;
 import static org.intellij.xquery.util.StringUtils.normalizeWhitespaces;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrAposIfNeeded;
 
@@ -46,14 +47,14 @@ public class VariableDocumentationProvider implements PsiBasedDocumentationProvi
     public String generateDoc(XQueryVarName varName) {
         PsiElement elementToProduceDescription = getElementToProduceDescription(varName);
         if (elementToProduceDescription != null) {
-            return getDocumentationFromVariableSource(varName, elementToProduceDescription).getText();
+            return wrapWithHtmlAndStyle(getDocFromVariableSource(varName, elementToProduceDescription).getText());
         } else {
             return null;
         }
     }
 
-    private CommentAndSignatureBasedDocumentation getDocumentationFromVariableSource(XQueryVarName varName,
-                                                             PsiElement elementToProduceDescription) {
+    private CommentAndSignatureBasedDocumentation getDocFromVariableSource(XQueryVarName varName,
+                                                                           PsiElement elementToProduceDescription) {
         String containingFileName = elementToProduceDescription.getContainingFile().getName();
         XQueryFile xqueryFile = (XQueryFile) varName.getContainingFile();
         String prefix = varName.getPrefix() != null ? varName.getPrefix().getText() : null;
