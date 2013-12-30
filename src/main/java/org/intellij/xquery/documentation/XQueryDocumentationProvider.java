@@ -19,6 +19,7 @@ package org.intellij.xquery.documentation;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
+import org.intellij.xquery.completion.function.BuiltInFunctionSignature;
 import org.jetbrains.annotations.Nullable;
 
 import static org.intellij.xquery.documentation.DocumentationProviderFactory.getDocumentationProvider;
@@ -34,6 +35,10 @@ public class XQueryDocumentationProvider extends AbstractDocumentationProvider {
     public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
         if (object instanceof PsiElement) {
             return (PsiElement) object;
+        }
+        if (object instanceof BuiltInFunctionSignature) {
+            final BuiltInFunctionSignature functionSignature = ((BuiltInFunctionSignature)object);
+            return new XQueryDocElement(psiManager, element, functionSignature.getNamespace(), functionSignature.getName());
         }
         return super.getDocumentationElementForLookupItem(psiManager, object, element);
     }

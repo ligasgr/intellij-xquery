@@ -22,6 +22,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.intellij.xquery.BaseFunctionalTestCase;
+import org.intellij.xquery.completion.function.BuiltInFunctionSignature;
 import org.intellij.xquery.psi.XQueryFunctionName;
 import org.intellij.xquery.psi.XQueryVarName;
 import org.jetbrains.annotations.NotNull;
@@ -236,7 +237,7 @@ public class XQueryDocumentationProviderTest extends BaseFunctionalTestCase {
                 NAMESPACE_LABEL + NAMESPACE + HTML_BR +
                 VARIABLE_DECLARATION +
                 DL_START +
-                LABEL_START  + "Summary" + LABEL_END + DD_START+ "my description" + DD_END +
+                LABEL_START + "Summary" + LABEL_END + DD_START + "my description" + DD_END +
                 DL_END +
                 WRAPPER_END,
                 "module namespace ns = '" + NAMESPACE + "';\n" +
@@ -573,6 +574,27 @@ public class XQueryDocumentationProviderTest extends BaseFunctionalTestCase {
                 "fn:<caret>true()");
     }
 
+    public void testLookupItemForBuiltInFunction() throws Exception {
+        doTestGenerateLookupItemDoc(WRAPPER_START +
+                "<dl><dt class=\"label\">Summary</dt> <dd> <p>Returns the <code>xs:boolean</code> value " +
+                "<code>true</code>.</p> </dd> <dt class=\"label\">Signature</dt> <dd> <div class=\"exampleInner\"> " +
+                "<div class=\"proto\"><code class= \"function\">fn:true</code>()<code class= \"as\">&#160;as&#160;" +
+                "</code><code class= \"return-type\">xs:boolean</code></div> </div> </dd> <dt " +
+                "class=\"label\">Properties</dt> <dd> <p>This function is <a title=\"deterministic\" " +
+                "class=\"termref\" href= \"#dt-deterministic\"><span class= \"arrow\">·</span>deterministic<span " +
+                "class=\"arrow\">·</span></a>, <a title=\"context-independent\" class=\"termref\" href= " +
+                "\"#dt-context-independent\"><span class= \"arrow\">·</span>context-independent<span class= " +
+                "\"arrow\">·</span></a>, and <a title=\"focus-dependent\" class= \"termref\" " +
+                "href=\"#dt-focus-independent\"><span class= \"arrow\">·</span>focus-independent<span class= " +
+                "\"arrow\">·</span></a>.</p> </dd> <dt class=\"label\">Rules</dt> <dd> <p>The result is equivalent to" +
+                " <code>xs:boolean(\"1\")</code>.</p> </dd> <dt class=\"label\">Examples</dt> <dd> <p>The expression " +
+                "<code>fn:true()</code> returns <code>xs:boolean(1)</code>.</p> </dd> </dl>" +
+                WRAPPER_END,
+                "module namespace ns = '" + NAMESPACE + "';\n" +
+                        "declare variable $v := fn:tru<caret>;",
+                BuiltInFunctionSignature.class);
+    }
+
     private void doTestGenerateVariableDoc(@NotNull String expected, @NotNull String text,
                                            FileData... otherFiles) throws Exception {
         doTestGenerateDoc(expected, text, XQueryVarName.class, otherFiles);
@@ -584,7 +606,7 @@ public class XQueryDocumentationProviderTest extends BaseFunctionalTestCase {
     }
 
     private void doTestGenerateLookupItemDoc(@NotNull String expected, @NotNull String text,
-                                             final Class<? extends PsiElement> documentationSourceClass) throws
+                                             final Class documentationSourceClass) throws
             Exception {
         myFixture.configureByText(SOURCE_FILE_NAME, text);
         LookupElement[] lookupItems = myFixture.completeBasic();

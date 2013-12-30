@@ -49,6 +49,10 @@ public class BuiltInFunctionSignature implements Comparable<BuiltInFunctionSigna
         return name;
     }
 
+    public String getNamespace() {
+        return namespace;
+    }
+
     @Override
     public int compareTo(BuiltInFunctionSignature that) {
         int result = namespace.compareTo(that.namespace);

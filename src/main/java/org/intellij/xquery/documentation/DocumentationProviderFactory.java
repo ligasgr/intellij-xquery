@@ -30,11 +30,14 @@ public class DocumentationProviderFactory {
 
     public static PsiBasedDocumentationProvider<? extends PsiElement> getDocumentationProvider(PsiElement element) {
         if (! (element.getContainingFile() instanceof XQueryFile)) new NullDocumentationProvider();
+        if (element instanceof XQueryVarName) {
+            return new VariableDocumentationProvider();
+        }
         if (element instanceof XQueryFunctionName) {
             return new FunctionDocumentationProvider();
         }
-        if (element instanceof XQueryVarName) {
-            return new VariableDocumentationProvider();
+        if (element instanceof XQueryDocElement) {
+            return new LookupItemBuiltInFunctionDocumentationProvider();
         }
         return new NullDocumentationProvider();
     }
