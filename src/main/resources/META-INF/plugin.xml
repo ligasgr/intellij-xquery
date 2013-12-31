@@ -17,20 +17,32 @@
 <idea-plugin url="http://ligasgr.github.io/intellij-xquery/" version="2">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <vendor email="ligasgr@gmail.com">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0</description>
 
     <change-notes>
         <![CDATA[
-            <p>0.1.0-SNAPSHOT:</p>
+            <p>1.0.0:</p>
             <ul>
+                <li>Minor tweaks & bug fixes.</li>
+                <li>Documentation for built in functions.</li>
+                <li>Documentation for functions and variables based on xqDoc.</li>
+                <li>Highlighting of xml content.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/27">#27</a> - Colours page.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/32">#32</a> - XQuery 3.0 standard built-in function completion.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/64">#64</a> - Parameter info tooltip.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/73">#73</a> - Annotations with literals don't work.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/74">#74</a> - FLWOR formatting issues while typing.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/78">#78</a> - Formatting issues with keywords which are first token in block.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/82">#82</a> - Adding visibility filter - structure view is able to filter non-public functions/variables (by <a href="https://github.com/arnostv">Arnost Valicek</a>).</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/83">#83</a> - Folding of functions, namespace declarations and imports (by <a href="https://github.com/arnostv">Arnost Valicek</a>).</li>
             </ul>
         ]]>
     </change-notes>
 
-    <idea-version since-build="126.47"/>
+    <idea-version since-build="126.47" until-build="129.9999"/>
 
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="java-lang.xml">com.intellij.modules.java</depends>
