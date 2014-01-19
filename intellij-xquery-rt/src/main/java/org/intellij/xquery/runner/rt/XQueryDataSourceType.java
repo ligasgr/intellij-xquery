@@ -1,5 +1,6 @@
 /*
- * Copyright 2013 Grzegorz Ligas <ligasgr@gmail.com> and other contributors (see the CONTRIBUTORS file).
+ * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +17,16 @@
 
 package org.intellij.xquery.runner.rt;
 
-import org.intellij.xquery.runner.rt.datasource.*;
+import org.intellij.xquery.runner.rt.vendor.saxon.SaxonRunnerAppFactory;
+import org.intellij.xquery.runner.rt.xqj.XQJRunnerAppFactory;
+import org.intellij.xquery.runner.rt.xqj.datasource.BaseXXQDataSourceFactory;
+import org.intellij.xquery.runner.rt.xqj.datasource.ExistXQDataSourceFactory;
+import org.intellij.xquery.runner.rt.xqj.datasource.MarklogicXQDataSourceFactory;
+import org.intellij.xquery.runner.rt.xqj.datasource.SednaXQDataSourceFactory;
+import org.intellij.xquery.runner.rt.xqj.datasource.XQDataSourceFactory;
+import org.intellij.xquery.runner.rt.xqj.datasource.ZorbaXQDataSourceFactory;
 
-import javax.swing.*;
+import javax.swing.Icon;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -29,29 +37,53 @@ import static java.util.Arrays.asList;
  * Time: 14:19
  */
 public enum XQueryDataSourceType {
-    SAXON("Saxon", true, false, asList("saxon9he.jar"), true, SaxonXQDataSourceFactory.class),
+    SAXON("Saxon", true, false, asList("saxon9he.jar"), SaxonRunnerAppFactory.class),
     MARKLOGIC("MarkLogic", false, true, asList("marklogic-xqj-1.0.0.jar"), false, MarklogicXQDataSourceFactory.class),
     EXIST("eXist", false, true, asList("exist-xqj-1.0.1.jar"), false, ExistXQDataSourceFactory.class),
     BASEX("BaseX", false, true, asList("basex-xqj-1.2.3.jar"), false, BaseXXQDataSourceFactory.class),
     SEDNA("Sedna", false, true, asList("sedna-xqj-1.0.0.jar"), false, SednaXQDataSourceFactory.class),
     ZORBA("Zorba", false, false, asList("zorba_xqj.jar", "zorba_api.jar"), false, ZorbaXQDataSourceFactory.class);
-
+    private final List<String> classpathEntries;
+    private final boolean jarContainsXqjApi;
+    private final Class<? extends XQDataSourceFactory> xqDataSourceFactoryClass;
+    private final Class<? extends RunnerAppFactory> runnerAppFactoryClass;
     private String presentableName;
     private boolean configFileSupported;
     private boolean database;
-    private final List<String> classpathEntries;
-    private final boolean jarContainsXqjApi;
-    private final Class<? extends XQDataSourceFactory> dataSourceFactoryClass;
+
+    private XQueryDataSourceType(String presentableName, boolean configFileSupported, boolean database,
+                                 List<String> classpathEntries,
+                                 Class<? extends RunnerAppFactory> runnerAppFactoryClass) {
+        this(presentableName, configFileSupported, database, classpathEntries, true, null, runnerAppFactoryClass);
+    }
 
     private XQueryDataSourceType(String presentableName, boolean configFileSupported, boolean database,
                                  List<String> classpathEntries, boolean jarContainsXqjApi,
-                                 Class<? extends XQDataSourceFactory> dataSourceFactoryClass) {
+                                 Class<? extends XQDataSourceFactory> xqDataSourceFactoryClass) {
+        this(presentableName, configFileSupported, database, classpathEntries, jarContainsXqjApi,
+                xqDataSourceFactoryClass, XQJRunnerAppFactory.class);
+    }
+
+    private XQueryDataSourceType(String presentableName, boolean configFileSupported, boolean database,
+                                 List<String> classpathEntries, boolean jarContainsXqjApi,
+                                 Class<? extends XQDataSourceFactory> xqDataSourceFactoryClass,
+                                 Class<? extends RunnerAppFactory> runnerAppFactoryClass) {
         this.presentableName = presentableName;
         this.configFileSupported = configFileSupported;
         this.database = database;
         this.classpathEntries = classpathEntries;
         this.jarContainsXqjApi = jarContainsXqjApi;
-        this.dataSourceFactoryClass = dataSourceFactoryClass;
+        this.xqDataSourceFactoryClass = xqDataSourceFactoryClass;
+        this.runnerAppFactoryClass = runnerAppFactoryClass;
+    }
+
+    public static XQueryDataSourceType getForName(String name) {
+        for (XQueryDataSourceType dataSourceType : XQueryDataSourceType.values()) {
+            if (dataSourceType.toString().equals(name)) {
+                return dataSourceType;
+            }
+        }
+        return null;
     }
 
     public String getPresentableName() {
@@ -70,14 +102,6 @@ public enum XQueryDataSourceType {
         return null;
     }
 
-    public static XQueryDataSourceType getForName(String name) {
-        for (XQueryDataSourceType dataSourceType : XQueryDataSourceType.values()) {
-            if (dataSourceType.toString().equals(name))
-                return dataSourceType;
-        }
-        return null;
-    }
-
     public List<String> getClasspathEntries() {
         return classpathEntries;
     }
@@ -86,7 +110,11 @@ public enum XQueryDataSourceType {
         return jarContainsXqjApi;
     }
 
-    public Class<? extends XQDataSourceFactory> getDataSourceFactoryClass() {
-        return dataSourceFactoryClass;
+    public Class<? extends XQDataSourceFactory> getXQDataSourceFactoryClass() {
+        return xqDataSourceFactoryClass;
+    }
+
+    public Class<? extends RunnerAppFactory> getRunnerAppFactoryClass() {
+        return runnerAppFactoryClass;
     }
 }

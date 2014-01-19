@@ -25,7 +25,7 @@ import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiTask;
 import org.intellij.xquery.BaseGuiTest;
 import org.intellij.xquery.PanelTestingFrame;
-import org.intellij.xquery.runner.rt.XQJType;
+import org.intellij.xquery.runner.rt.XQueryItemType;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.junit.Test;
 
@@ -219,7 +219,7 @@ public class ContextItemPanelGuiTest extends BaseGuiTest {
     }
 
     private List<String> getSortedTypes() {
-        List<String> sortedTypes = new ArrayList<String>(XQJType.getAll());
+        List<String> sortedTypes = new ArrayList<String>(XQueryItemType.getAll());
         sort(sortedTypes, new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {

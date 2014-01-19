@@ -15,23 +15,21 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.rt;
+package org.intellij.xquery.runner.rt.xqj.binding;
 
-import java.io.PrintStream;
+import javax.xml.namespace.QName;
+import javax.xml.xquery.XQConnection;
+import javax.xml.xquery.XQPreparedExpression;
 
 /**
  * User: ligasgr
- * Date: 15/08/13
- * Time: 13:56
+ * Date: 14/10/13
+ * Time: 13:39
  */
-public class XQueryRunnerApp {
-
-    public static void main(String[] args) throws Exception {
-        runConfigForOutputStream(new XQueryRunConfig(FileUtil.readFile(args[0])), System.out);
-    }
-
-    public static void runConfigForOutputStream(XQueryRunConfig config, PrintStream output) throws Exception {
-        RunnerApp app = XQueryRunnerAppFactory.getInstance(config, output);
-        app.run();
+public class DocumentBinder implements TypeBinder {
+    @Override
+    public void bind(XQPreparedExpression expression, XQConnection connection, QName name, String value,
+                                 String type) throws Exception {
+        expression.bindDocument(name, value, null, null);
     }
 }

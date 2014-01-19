@@ -15,23 +15,24 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.rt;
+package org.intellij.xquery.runner.rt.vendor.saxon;
+
+import net.sf.saxon.trans.XPathException;
+import org.intellij.xquery.runner.rt.RunnerApp;
+import org.intellij.xquery.runner.rt.RunnerAppFactory;
+import org.intellij.xquery.runner.rt.XQueryRunConfig;
 
 import java.io.PrintStream;
 
 /**
  * User: ligasgr
- * Date: 15/08/13
- * Time: 13:56
+ * Date: 06/01/14
+ * Time: 22:56
  */
-public class XQueryRunnerApp {
+public class SaxonRunnerAppFactory implements RunnerAppFactory {
 
-    public static void main(String[] args) throws Exception {
-        runConfigForOutputStream(new XQueryRunConfig(FileUtil.readFile(args[0])), System.out);
-    }
-
-    public static void runConfigForOutputStream(XQueryRunConfig config, PrintStream output) throws Exception {
-        RunnerApp app = XQueryRunnerAppFactory.getInstance(config, output);
-        app.run();
+    @Override
+    public RunnerApp getInstance(XQueryRunConfig config, PrintStream output) throws XPathException {
+        return new SaxonRunnerApp(config, output);
     }
 }

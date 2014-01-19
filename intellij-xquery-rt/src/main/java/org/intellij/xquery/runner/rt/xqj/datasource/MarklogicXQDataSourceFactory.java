@@ -15,23 +15,21 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.rt;
+package org.intellij.xquery.runner.rt.xqj.datasource;
 
-import java.io.PrintStream;
+import net.xqj.marklogic.MarkLogicXQDataSource;
+import org.intellij.xquery.runner.rt.XQueryRunConfig;
+
+import javax.xml.xquery.XQDataSource;
 
 /**
  * User: ligasgr
- * Date: 15/08/13
- * Time: 13:56
+ * Date: 11/10/13
+ * Time: 08:04
  */
-public class XQueryRunnerApp {
-
-    public static void main(String[] args) throws Exception {
-        runConfigForOutputStream(new XQueryRunConfig(FileUtil.readFile(args[0])), System.out);
-    }
-
-    public static void runConfigForOutputStream(XQueryRunConfig config, PrintStream output) throws Exception {
-        RunnerApp app = XQueryRunnerAppFactory.getInstance(config, output);
-        app.run();
+public class MarklogicXQDataSourceFactory implements XQDataSourceFactory {
+    @Override
+    public XQDataSource getXQDataSource(XQueryRunConfig config) throws Exception {
+        return new MarkLogicXQDataSource();
     }
 }

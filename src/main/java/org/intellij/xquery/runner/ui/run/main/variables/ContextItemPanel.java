@@ -33,7 +33,7 @@ import com.intellij.ui.PanelWithAnchor;
 import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.components.JBCheckBox;
 import net.miginfocom.swing.MigLayout;
-import org.intellij.xquery.runner.rt.XQJType;
+import org.intellij.xquery.runner.rt.XQueryItemType;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.jetbrains.annotations.Nullable;
 
@@ -239,7 +239,7 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
     }
 
     private void populateTypesList() {
-        for (String type : XQJType.getAll()) {
+        for (String type : XQueryItemType.getAll()) {
             typesModel.add(type);
         }
     }

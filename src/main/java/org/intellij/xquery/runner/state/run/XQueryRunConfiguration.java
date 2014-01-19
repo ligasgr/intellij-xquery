@@ -23,7 +23,12 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.ExternalizablePath;
 import com.intellij.execution.configuration.EnvironmentVariablesComponent;
-import com.intellij.execution.configurations.*;
+import com.intellij.execution.configurations.ConfigurationFactory;
+import com.intellij.execution.configurations.ModuleBasedConfiguration;
+import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.execution.configurations.RunConfigurationWithSuppressedDefaultDebugAction;
+import com.intellij.execution.configurations.RunProfileState;
+import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.components.PathMacroManager;
@@ -35,6 +40,9 @@ import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import org.intellij.xquery.runner.XQueryRunConfigurationType;
 import org.intellij.xquery.runner.XQueryRunProfileState;
+import org.intellij.xquery.runner.rt.XQueryDataSourceType;
+import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
+import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.intellij.xquery.runner.ui.run.RunConfigurationJavaTab;
 import org.intellij.xquery.runner.ui.run.main.RunConfigurationMainTab;
 import org.jdom.Element;
@@ -55,10 +63,10 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
         CommonJavaRunConfigurationParameters, RunConfigurationWithSuppressedDefaultDebugAction {
     public static final String RUNNER_CLASS = "org.intellij.xquery.runner.rt.XQueryRunnerApp";
     private final VariablesValidator variablesValidator;
-    private ContextItemValidator contextItemValidator;
     private final DataSourceValidator dataSourceValidator;
     private final AlternativeJreValidator alternativeJreValidator;
     private final ModuleValidator moduleValidator;
+    private ContextItemValidator contextItemValidator;
     private String mainFileName;
     private String vmParameters;
     private String programParameters;
@@ -119,8 +127,8 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
 
     @Nullable
     @Override
-    public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws
-            ExecutionException {
+    public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env)
+            throws ExecutionException {
         XQueryRunProfileState state = new XQueryRunProfileState(env, (XQueryRunConfiguration) env
                 .getRunnerAndConfigurationSettings().getConfiguration());
         XQueryRunConfigurationModule module = getConfigurationModule();
@@ -163,12 +171,12 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
                 XQueryRunConfigurationType.getInstance().getConfigurationFactories()[0]);
     }
 
-    public void setVariables(XQueryRunVariables variables) {
-        this.variables = variables;
-    }
-
     public XQueryRunVariables getVariables() {
         return variables;
+    }
+
+    public void setVariables(XQueryRunVariables variables) {
+        this.variables = variables;
     }
 
     public String getMainFileName() {
@@ -211,12 +219,12 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
         this.contextItemFile = contextItemFile;
     }
 
-    public void setDataSourceName(String dataSourceName) {
-        this.dataSourceName = dataSourceName;
-    }
-
     public String getDataSourceName() {
         return dataSourceName;
+    }
+
+    public void setDataSourceName(String dataSourceName) {
+        this.dataSourceName = dataSourceName;
     }
 
     public String getContextItemType() {
@@ -235,15 +243,14 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
         this.workingDirectory = workingDirectory;
     }
 
+    @Override
+    public String getVMParameters() {
+        return vmParameters;
+    }
 
     @Override
     public void setVMParameters(String vmParameters) {
         this.vmParameters = vmParameters;
-    }
-
-    @Override
-    public String getVMParameters() {
-        return vmParameters;
     }
 
     @Override
@@ -278,11 +285,6 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
         return null;
     }
 
-    @Override
-    public void setProgramParameters(@Nullable String value) {
-        programParameters = value;
-    }
-
     @Nullable
     @Override
     public String getProgramParameters() {
@@ -290,8 +292,8 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
     }
 
     @Override
-    public void setWorkingDirectory(@Nullable String value) {
-        workingDirectory = ExternalizablePath.urlValue(value);
+    public void setProgramParameters(@Nullable String value) {
+        programParameters = value;
     }
 
     @Nullable
@@ -300,8 +302,9 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
         return ExternalizablePath.localPathValue(workingDirectory);
     }
 
-    public void setPassParentEnvs(boolean passParentEnvs) {
-        this.passParentEnvs = passParentEnvs;
+    @Override
+    public void setWorkingDirectory(@Nullable String value) {
+        workingDirectory = ExternalizablePath.urlValue(value);
     }
 
     @NotNull
@@ -316,5 +319,19 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
 
     public boolean isPassParentEnvs() {
         return passParentEnvs;
+    }
+
+    public void setPassParentEnvs(boolean passParentEnvs) {
+        this.passParentEnvs = passParentEnvs;
+    }
+
+    public XQueryDataSourceType getDataSourceType() {
+        XQueryDataSourceConfiguration dataSourceConfiguration = getDataSourcesSettings()
+                .getDataSourceConfigurationForName(dataSourceName);
+        return dataSourceConfiguration.TYPE;
+    }
+
+    protected XQueryDataSourcesSettings getDataSourcesSettings() {
+        return XQueryDataSourcesSettings.getInstance();
     }
 }

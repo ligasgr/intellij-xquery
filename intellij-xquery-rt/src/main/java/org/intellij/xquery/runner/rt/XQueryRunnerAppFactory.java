@@ -21,17 +21,12 @@ import java.io.PrintStream;
 
 /**
  * User: ligasgr
- * Date: 15/08/13
- * Time: 13:56
+ * Date: 04/01/14
+ * Time: 19:02
  */
-public class XQueryRunnerApp {
-
-    public static void main(String[] args) throws Exception {
-        runConfigForOutputStream(new XQueryRunConfig(FileUtil.readFile(args[0])), System.out);
-    }
-
-    public static void runConfigForOutputStream(XQueryRunConfig config, PrintStream output) throws Exception {
-        RunnerApp app = XQueryRunnerAppFactory.getInstance(config, output);
-        app.run();
+public class XQueryRunnerAppFactory {
+    static RunnerApp getInstance(XQueryRunConfig config, PrintStream output) throws Exception {
+        Class<? extends RunnerAppFactory> runnerAppFactoryClass = config.getDataSourceType().getRunnerAppFactoryClass();
+        return runnerAppFactoryClass.newInstance().getInstance(config, output);
     }
 }

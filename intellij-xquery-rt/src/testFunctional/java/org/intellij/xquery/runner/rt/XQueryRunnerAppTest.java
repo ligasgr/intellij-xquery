@@ -1,5 +1,6 @@
 /*
- * Copyright 2013 Grzegorz Ligas <ligasgr@gmail.com> and other contributors (see the CONTRIBUTORS file).
+ * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 
 import static org.hamcrest.Matchers.is;
@@ -65,18 +64,5 @@ public class XQueryRunnerAppTest {
                 "type=\"SAXON\" " +
                 "/>\n" +
                 "</run>\n";
-    }
-
-    private class StringOutputStream extends OutputStream {
-        StringBuilder buffer = new StringBuilder();
-
-        @Override
-        public void write(int b) throws IOException {
-            buffer.append((char) b);
-        }
-
-        public String getString() {
-            return buffer.toString();
-        }
     }
 }

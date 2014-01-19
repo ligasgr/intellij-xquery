@@ -17,21 +17,23 @@
 
 package org.intellij.xquery.runner.rt;
 
-import java.io.PrintStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
- * User: ligasgr
- * Date: 15/08/13
- * Time: 13:56
- */
-public class XQueryRunnerApp {
+* User: ligasgr
+* Date: 09/01/14
+* Time: 17:33
+*/
+public class StringOutputStream extends OutputStream {
+    StringBuilder buffer = new StringBuilder();
 
-    public static void main(String[] args) throws Exception {
-        runConfigForOutputStream(new XQueryRunConfig(FileUtil.readFile(args[0])), System.out);
+    @Override
+    public void write(int b) throws IOException {
+        buffer.append((char) b);
     }
 
-    public static void runConfigForOutputStream(XQueryRunConfig config, PrintStream output) throws Exception {
-        RunnerApp app = XQueryRunnerAppFactory.getInstance(config, output);
-        app.run();
+    public String getString() {
+        return buffer.toString();
     }
 }

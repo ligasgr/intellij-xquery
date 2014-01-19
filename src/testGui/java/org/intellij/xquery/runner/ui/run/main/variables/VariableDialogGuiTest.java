@@ -20,7 +20,7 @@ package org.intellij.xquery.runner.ui.run.main.variables;
 import com.intellij.openapi.ui.ValidationInfo;
 import org.intellij.xquery.BaseGuiTest;
 import org.intellij.xquery.PanelTestingFrame;
-import org.intellij.xquery.runner.rt.XQJType;
+import org.intellij.xquery.runner.rt.XQueryItemType;
 import org.intellij.xquery.runner.state.run.XQueryRunVariable;
 import org.junit.Test;
 
@@ -44,7 +44,7 @@ import static org.junit.Assert.assertThat;
 public class VariableDialogGuiTest extends BaseGuiTest {
     private VariableDialog dialog;
     private static final String VALUE = "my value";
-    private static final String TYPE = XQJType.XS_STRING.getDescription();
+    private static final String TYPE = XQueryItemType.XS_STRING.getTextRepresentation();
     private static final String NAME = "my name";
     private static final String NAMESPACE = "my namespace";
     private XQueryRunVariable variable;
@@ -223,7 +223,7 @@ public class VariableDialogGuiTest extends BaseGuiTest {
     }
 
     private List<String> getSortedTypes() {
-        List<String> sortedTypes = new ArrayList<String>(XQJType.getAll());
+        List<String> sortedTypes = new ArrayList<String>(XQueryItemType.getAll());
         sort(sortedTypes, new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {

@@ -22,7 +22,7 @@ import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.ComboboxSpeedSearch;
 import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.components.JBCheckBox;
-import org.intellij.xquery.runner.rt.XQJType;
+import org.intellij.xquery.runner.rt.XQueryItemType;
 import org.intellij.xquery.runner.state.run.XQueryRunVariable;
 
 import javax.swing.JComboBox;
@@ -74,7 +74,7 @@ public class VariableDialog {
     }
 
     private void populateTypesList() {
-        for (String type : XQJType.getAll()) {
+        for (String type : XQueryItemType.getAll()) {
             typesModel.add(type);
         }
     }

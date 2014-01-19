@@ -17,21 +17,11 @@
 
 package org.intellij.xquery.runner.rt;
 
-import java.io.PrintStream;
-
 /**
  * User: ligasgr
- * Date: 15/08/13
- * Time: 13:56
+ * Date: 10/01/14
+ * Time: 22:17
  */
-public class XQueryRunnerApp {
-
-    public static void main(String[] args) throws Exception {
-        runConfigForOutputStream(new XQueryRunConfig(FileUtil.readFile(args[0])), System.out);
-    }
-
-    public static void runConfigForOutputStream(XQueryRunConfig config, PrintStream output) throws Exception {
-        RunnerApp app = XQueryRunnerAppFactory.getInstance(config, output);
-        app.run();
-    }
+public interface TypeMapper<T> {
+    T getType(XQueryItemType itemType);
 }
