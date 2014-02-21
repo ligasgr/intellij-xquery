@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templateSet group="xquery">
+
+    <template name="declvar" value="declare variable $$$NAME$ := $VALUE$;" description="declare variable" toReformat="false" toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="XQUERY_CODE" value="true" />
+        </context>
+    </template>
+
+</templateSet>
+
