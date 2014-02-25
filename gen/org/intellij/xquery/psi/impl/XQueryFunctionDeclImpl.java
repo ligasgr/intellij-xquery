@@ -85,4 +85,8 @@ public class XQueryFunctionDeclImpl extends XQueryElementImpl implements XQueryF
     return XQueryPsiImplUtil.isPublic(this);
   }
 
+  @Override
+  public int getTextOffset() {
+    return getFunctionName().getTextOffset();
+  }
 }
