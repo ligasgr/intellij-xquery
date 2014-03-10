@@ -17,11 +17,7 @@
 
 package org.intellij.xquery.inspection.imports;
 
-import com.intellij.codeInspection.LocalInspectionTool;
 import org.intellij.xquery.BaseFunctionalTestCase;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
 
@@ -31,53 +27,43 @@ public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
     }
 
     public void testIncorrectFileType() {
-        executeTest("IncorrectFileType.txt");
+        executeInspectionTest("IncorrectFileType.txt");
     }
 
     public void testImportWithDefaultNamespaceForFunctionCall() {
-        executeTest();
+        executeInspectionTest();
     }
 
     public void testImportWithDefaultNamespaceForNamedFunctionRef() {
-        executeTest();
+        executeInspectionTest();
     }
 
     public void testImportWithDefaultNamespaceForVariableRef() {
-        executeTest();
+        executeInspectionTest();
     }
 
     public void testImportWithDefaultNamespaceUnused() {
-        executeTest();
+        executeInspectionTest();
     }
 
     public void testImportWithoutPrefixWithDeclaredNamespace() {
-        executeTest();
+        executeInspectionTest();
     }
 
     public void testImportWithoutPrefixWithoutDeclaredNamespace() {
-        executeTest();
+        executeInspectionTest();
     }
 
     public void testImportWithPrefix() {
-        executeTest();
+        executeInspectionTest();
     }
 
-    private void executeTest(String... fileNames) {
-        if (fileNames != null && fileNames.length > 0) {
-            for (String filename : fileNames) {
-                executeTest(filename);
-            }
-        } else {
-            executeTest(getDefaultFileName());
-        }
+    private void executeInspectionTest() {
+        executeInspectionTest(getDefaultFileName());
     }
 
-    private void executeTest(String filename) {
-        Collection<Class<? extends LocalInspectionTool>> inspections = new ArrayList<Class<? extends
-                LocalInspectionTool>>();
-        inspections.add(UnusedImportsInspection.class);
-        myFixture.enableInspections(inspections);
-
+    private void executeInspectionTest(String filename) {
+        myFixture.enableInspections(UnusedImportsInspection.class);
         myFixture.testHighlighting(true, false, false, filename);
     }
 }
