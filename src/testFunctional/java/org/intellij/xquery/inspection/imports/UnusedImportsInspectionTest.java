@@ -17,7 +17,11 @@
 
 package org.intellij.xquery.inspection.imports;
 
+import com.intellij.codeInsight.intention.IntentionAction;
+import com.intellij.util.containers.ContainerUtil;
 import org.intellij.xquery.BaseFunctionalTestCase;
+
+import java.util.List;
 
 public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
 
@@ -56,6 +60,20 @@ public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
 
     public void testImportWithPrefix() {
         executeInspectionTest();
+    }
+
+    public void testRemoveUnusedImportQuickFix() {
+        final String testName = getTestName(false);
+
+        myFixture.enableInspections(UnusedImportsInspection.class);
+        myFixture.configureByFile(String.format("%s.xq", testName));
+
+        List<IntentionAction> availableIntentions = myFixture.filterAvailableIntentions(UnusedImportsInspection.REMOVE_UNUSED_IMPORT_QUICKFIX_NAME);
+        IntentionAction action = ContainerUtil.getFirstItem(availableIntentions);
+        assertNotNull(action);
+        myFixture.launchAction(action);
+
+        myFixture.checkResultByFile(String.format("%s_after.xq", testName));
     }
 
     private void executeInspectionTest() {

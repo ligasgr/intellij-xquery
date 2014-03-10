@@ -19,8 +19,8 @@ package org.intellij.xquery.inspection.imports;
 
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.compiler.RemoveElementQuickFix;
 import com.intellij.psi.PsiFile;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryModuleImport;
@@ -32,6 +32,9 @@ import java.util.List;
 import static com.intellij.codeInspection.ProblemHighlightType.LIKE_UNUSED_SYMBOL;
 
 public class UnusedImportsInspection extends LocalInspectionTool {
+
+    public static final String UNUSED_IMPORT = "Unused import";
+    public static final String REMOVE_UNUSED_IMPORT_QUICKFIX_NAME = "Remove unused import";
 
     private FunctionNamespacesExtractor functionNamespacesExtractor = new FunctionNamespacesExtractor();
     private VariableNamespacesExtractor variableNamespacesExtractor = new VariableNamespacesExtractor();
@@ -51,8 +54,8 @@ public class UnusedImportsInspection extends LocalInspectionTool {
         Collection<XQueryModuleImport> unusedImports = unusedImportsFinder.getUnusedImports(xQueryFile);
         List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
         for (XQueryModuleImport unused : unusedImports) {
-            problems.add(manager.createProblemDescriptor(unused, "Unused import", (LocalQuickFix) null,
-                    LIKE_UNUSED_SYMBOL, true));
+            problems.add(manager.createProblemDescriptor(unused, UNUSED_IMPORT,
+                    new RemoveElementQuickFix(REMOVE_UNUSED_IMPORT_QUICKFIX_NAME), LIKE_UNUSED_SYMBOL, true));
         }
 
         return problems;
