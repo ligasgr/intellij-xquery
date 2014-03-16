@@ -19,15 +19,24 @@ package org.intellij.xquery.runner.rt.vendor.saxon;
 
 import org.intellij.xquery.runner.rt.RunnerAppTest;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
-import org.junit.Test;
+import org.junit.experimental.theories.DataPoints;
 
 import static org.intellij.xquery.runner.rt.XQueryItemType.TEXT;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_ANY_URI;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_BYTE;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DATE_TIME_STAMP;
+import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DURATION;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_LANGUAGE;
+import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NEGATIVE_INTEGER;
+import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NON_NEGATIVE_INTEGER;
+import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NON_POSITIVE_INTEGER;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NORMALIZED_STRING;
+import static org.intellij.xquery.runner.rt.XQueryItemType.XS_POSITIVE_INTEGER;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_TOKEN;
+import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_BYTE;
+import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_INT;
+import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_LONG;
+import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_SHORT;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED_ATOMIC;
 
@@ -38,61 +47,32 @@ import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED_ATOMIC;
  */
 public class SaxonRunnerAppTest extends RunnerAppTest {
 
+    @DataPoints
+    public static DataPair[] getSaxonCompatibleData() {
+        return new DataPair[]{
+                DataPair.pair(XS_NON_NEGATIVE_INTEGER, NUMERIC_VALUE),
+                DataPair.pair(XS_POSITIVE_INTEGER, NUMERIC_VALUE),
+                DataPair.pair(XS_NON_POSITIVE_INTEGER, NEGATIVE_NUMERIC_VALUE),
+                DataPair.pair(XS_NEGATIVE_INTEGER, NEGATIVE_NUMERIC_VALUE),
+                DataPair.pair(XS_UNSIGNED_INT, NUMERIC_VALUE),
+                DataPair.pair(XS_UNSIGNED_SHORT, NUMERIC_VALUE),
+                DataPair.pair(XS_UNSIGNED_LONG, NUMERIC_VALUE),
+                DataPair.pair(XS_UNSIGNED_BYTE, "10"),
+                DataPair.pair(XS_DURATION, "P3Y6M4DT12H30M5S"),
+                DataPair.pair(XS_BYTE, "32"),
+                DataPair.pair(XS_NORMALIZED_STRING, VALUE),
+                DataPair.pair(XS_TOKEN, VALUE),
+                DataPair.pair(XS_LANGUAGE, VALUE),
+                DataPair.pair(XS_DATE_TIME_STAMP, "2013-12-31T23:59:59Z"),
+                DataPair.pair(XS_UNTYPED, VALUE),
+                DataPair.pair(XS_UNTYPED_ATOMIC, VALUE),
+                DataPair.pair(XS_ANY_URI, VALUE),
+                DataPair.pair(TEXT, VALUE),
+        };
+    }
+
     @Override
     protected String getDataSourceType() {
         return XQueryDataSourceType.SAXON.toString();
     }
-
-    @Test
-    public void shouldBindVariableForXsByte() throws Exception {
-        String variableValue = "32";
-        String variableType = XS_BYTE.getTextRepresentation();
-        assertBindsVariable(variableType, variableValue, "32");
-    }
-
-    @Test
-    public void shouldBindContextItemForXsNormalizedString() throws Exception {
-        assertBindsContextItem(XS_NORMALIZED_STRING.getTextRepresentation(), VALUE);
-    }
-
-    @Test
-    public void shouldBindVariableForXsNormalizedString() throws Exception {
-        assertBindsVariable(XS_NORMALIZED_STRING.getTextRepresentation(), VALUE);
-    }
-
-    @Test
-    public void shouldBindVariableForXsToken() throws Exception {
-        assertBindsVariable(XS_TOKEN.getTextRepresentation(), VALUE);
-    }
-
-    @Test
-    public void shouldBindVariableForXsLanguage() throws Exception {
-        assertBindsVariable(XS_LANGUAGE.getTextRepresentation(), VALUE);
-    }
-
-    @Test
-    public void shouldBindVariableForXsDateTimeStamp() throws Exception {
-        assertBindsVariable(XS_DATE_TIME_STAMP.getTextRepresentation(), "2013-12-31T23:59:59Z");
-    }
-
-    @Test
-    public void shouldBindVariableForXsUntyped() throws Exception {
-        assertBindsVariable(XS_UNTYPED.getTextRepresentation(), VALUE);
-    }
-    @Test
-    public void shouldBindVariableForXsUntypedAtomic() throws Exception {
-        assertBindsVariable(XS_UNTYPED_ATOMIC.getTextRepresentation(), VALUE);
-    }
-
-    @Test
-    public void shouldBindVariableForXsAnyUri() throws Exception {
-        assertBindsVariable(XS_ANY_URI.getTextRepresentation(), VALUE);
-    }
-
-    @Test
-    public void shouldBindVariableForXsText() throws Exception {
-        assertBindsVariable(TEXT.getTextRepresentation(), VALUE);
-    }
-
-
 }

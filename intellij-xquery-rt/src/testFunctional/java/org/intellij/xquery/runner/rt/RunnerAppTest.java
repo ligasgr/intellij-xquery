@@ -36,7 +36,6 @@ import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DATE_TIME;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DAY_TIME_DURATION;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DECIMAL;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DOUBLE;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DURATION;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_FLOAT;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_G_DAY;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_G_MONTH;
@@ -47,17 +46,9 @@ import static org.intellij.xquery.runner.rt.XQueryItemType.XS_HEX_BINARY;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_INT;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_INTEGER;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_LONG;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NEGATIVE_INTEGER;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NON_NEGATIVE_INTEGER;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NON_POSITIVE_INTEGER;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_POSITIVE_INTEGER;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_SHORT;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_STRING;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_TIME;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_BYTE;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_INT;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_LONG;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_SHORT;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_YEAR_MONTH_DURATION;
 import static org.junit.Assert.assertThat;
 
@@ -70,35 +61,26 @@ import static org.junit.Assert.assertThat;
 public abstract class RunnerAppTest {
     private static final String RETURN_CONTEXT_ITEM_XQUERY = ".";
     protected static final String VALUE = "val";
-    private static final String NUMERIC_VALUE = "123";
-    private static final String NEGATIVE_NUMERIC_VALUE = "-123";
-    private static final String FLOATING_POINT_VALUE = "123.456";
-    private static final String RETURN_VARIABLE_XQUERY = "declare variable $v external; $v";
+    protected static final String NUMERIC_VALUE = "123";
+    protected static final String NEGATIVE_NUMERIC_VALUE = "-123";
+    protected static final String FLOATING_POINT_VALUE = "123.456";
+    protected static final String RETURN_VARIABLE_XQUERY = "declare variable $v external; $v";
     private StringOutputStream outputStream;
     private PrintStream printStream;
 
     @DataPoints
-    public static DataPair[] getData() {
+    public static DataPair[] getFullyCompatibleData() {
         return new DataPair[]{
                 DataPair.pair(XS_INTEGER, NUMERIC_VALUE),
-                DataPair.pair(XS_NON_NEGATIVE_INTEGER, NUMERIC_VALUE),
-                DataPair.pair(XS_POSITIVE_INTEGER, NUMERIC_VALUE),
-                DataPair.pair(XS_NON_POSITIVE_INTEGER, NEGATIVE_NUMERIC_VALUE),
-                DataPair.pair(XS_NEGATIVE_INTEGER, NEGATIVE_NUMERIC_VALUE),
                 DataPair.pair(XS_INT, NUMERIC_VALUE),
-                DataPair.pair(XS_UNSIGNED_INT, NUMERIC_VALUE),
                 DataPair.pair(XS_SHORT, NUMERIC_VALUE),
-                DataPair.pair(XS_UNSIGNED_SHORT, NUMERIC_VALUE),
                 DataPair.pair(XS_LONG, NUMERIC_VALUE),
-                DataPair.pair(XS_UNSIGNED_LONG, NUMERIC_VALUE),
-                DataPair.pair(XS_UNSIGNED_BYTE, "10"),
                 DataPair.pair(XS_DECIMAL, FLOATING_POINT_VALUE),
                 DataPair.pair(XS_DOUBLE, FLOATING_POINT_VALUE),
                 DataPair.pair(XS_FLOAT, FLOATING_POINT_VALUE),
                 DataPair.pair(XS_BOOLEAN, "true"),
                 DataPair.pair(XS_STRING, VALUE),
                 DataPair.pair(XS_HEX_BINARY, "FFFF"),
-                DataPair.pair(XS_DURATION, "P3Y6M4DT12H30M5S"),
                 DataPair.pair(XS_DAY_TIME_DURATION, "P4DT12H30M5S"),
                 DataPair.pair(XS_YEAR_MONTH_DURATION, "P3Y6M"),
                 DataPair.pair(XS_DATE, "2013-12-31"),

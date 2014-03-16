@@ -20,9 +20,9 @@ package org.intellij.xquery.runner.rt.xqj;
 import org.intellij.xquery.runner.rt.RunnerAppTest;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.junit.Ignore;
-import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theory;
+
+import java.io.File;
 
 import static org.intellij.xquery.runner.rt.XQueryItemType.TEXT;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_ANY_URI;
@@ -45,50 +45,61 @@ import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED_ATOMIC;
 
 /**
  * User: ligasgr
- * Date: 12/01/14
- * Time: 19:16
+ * Date: 16/03/14
+ * Time: 16:08
  */
-@Ignore("works only when zorba_api is present on LD_LIBRARY_PATH")
-public class ZorbaRunnerAppTest extends RunnerAppTest {
+@Ignore("works only when Marklogic instance is up")
+public class SednaRunnerAppTest extends RunnerAppTest {
+
 
     @DataPoints
-    public static DataPair[] getZorbaCompatibleData() {
+    public static DataPair[] getSaxonCompatibleData() {
         return new DataPair[]{
-                DataPair.pair(XS_NON_NEGATIVE_INTEGER, NUMERIC_VALUE),
-                DataPair.pair(XS_POSITIVE_INTEGER, NUMERIC_VALUE),
-                DataPair.pair(XS_NON_POSITIVE_INTEGER, NEGATIVE_NUMERIC_VALUE),
-                DataPair.pair(XS_NEGATIVE_INTEGER, NEGATIVE_NUMERIC_VALUE),
-                DataPair.pair(XS_UNSIGNED_INT, NUMERIC_VALUE),
-                DataPair.pair(XS_UNSIGNED_SHORT, NUMERIC_VALUE),
-                DataPair.pair(XS_UNSIGNED_LONG, NUMERIC_VALUE),
-                DataPair.pair(XS_UNSIGNED_BYTE, "10"),
                 DataPair.pair(XS_DURATION, "P3Y6M4DT12H30M5S"),
+                DataPair.pair(XS_BYTE, "32"),
+                DataPair.pair(XS_NORMALIZED_STRING, VALUE),
+                DataPair.pair(XS_TOKEN, VALUE),
+                DataPair.pair(XS_LANGUAGE, VALUE),
+                DataPair.pair(XS_UNTYPED_ATOMIC, VALUE),
                 DataPair.pair(XS_ANY_URI, VALUE),
         };
     }
 
     @Override
     protected String getDataSourceType() {
-        return XQueryDataSourceType.ZORBA.toString();
+        return XQueryDataSourceType.SEDNA.toString();
     }
 
-    @Test
-    public void shouldBindVariableForXsByte() throws Exception {
-        char byteValue = (char)32;
-        String variableValue = "" + byteValue;
-        String variableType = XS_BYTE.getTextRepresentation();
-        assertBindsVariable(variableType, variableValue, "32");
+    protected String prepareConfigurationWithContextItemForMainFile(File xqueryMainFile, String contextItemValue,
+                                                                    String contextItemType) {
+        return "<run>\n" +
+                "<xQueryConfiguration " +
+                "mainFileName=\"" + xqueryMainFile.getAbsolutePath() + "\" " +
+                "contextItemEnabled=\"true\" contextItemFromEditorEnabled=\"true\" contextItemType=\"" +
+                contextItemType + "\">" +
+                "<contextItemText>" + contextItemValue + "</contextItemText>" +
+                "</xQueryConfiguration>\n" +
+                "<data-source-configuration " +
+                "type=\"SEDNA\" configEnabled=\"false\" configFile=\"\" host=\"localhost\" port=\"\" username=\"\" " +
+                "password=\"\" userDefinedLibraryEnabled=\"false\" databaseName=\"auction\"" +
+                "/>\n" +
+                "</run>";
     }
 
-    @Theory
-    @Ignore("Zorba XQJ client doesn't support context item binding")
-    public void shouldBindContextItem(DataPair dataPair) throws Exception {
-        super.shouldBindContextItem(dataPair);
-    }
-
-    @Test
-    @Ignore("Zorba XQJ client doesn't support context item binding")
-    public void shouldBindContextItemForDocumentNode() throws Exception {
-        super.shouldBindContextItemForDocumentNode();
+    protected String prepareConfigurationWithVariableForMainFile(File xqueryMainFile, String value, String type) {
+        return "<run>\n" +
+                "<xQueryConfiguration " +
+                "mainFileName=\"" + xqueryMainFile.getAbsolutePath() + "\" " +
+                "contextItemEnabled=\"false\"/>\n" +
+                "<variables>" +
+                "<list>" +
+                "<variable name=\"v\" active=\"true\" type=\"" + type + "\">" + value + "</variable>" +
+                "</list>" +
+                "</variables>" +
+                "<data-source-configuration " +
+                "type=\"SEDNA\" configEnabled=\"false\" configFile=\"\" host=\"localhost\" port=\"\" username=\"\" " +
+                "password=\"\" userDefinedLibraryEnabled=\"false\" databaseName=\"auction\"" +
+                "/>\n" +
+                "</run>";
     }
 }

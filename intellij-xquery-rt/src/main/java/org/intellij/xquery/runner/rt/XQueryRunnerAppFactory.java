@@ -25,7 +25,7 @@ import java.io.PrintStream;
  * Time: 19:02
  */
 public class XQueryRunnerAppFactory {
-    static RunnerApp getInstance(XQueryRunConfig config, PrintStream output) throws Exception {
+    public static RunnerApp getInstance(XQueryRunConfig config, PrintStream output) throws Exception {
         Class<? extends RunnerAppFactory> runnerAppFactoryClass = config.getDataSourceType().getRunnerAppFactoryClass();
         return runnerAppFactoryClass.newInstance().getInstance(config, output);
     }
