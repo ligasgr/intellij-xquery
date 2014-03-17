@@ -24,24 +24,14 @@ import org.junit.experimental.theories.DataPoints;
 
 import java.io.File;
 
-import static org.intellij.xquery.runner.rt.XQueryItemType.TEXT;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_ANY_URI;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_BYTE;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DATE_TIME_STAMP;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DURATION;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_LANGUAGE;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NEGATIVE_INTEGER;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NON_NEGATIVE_INTEGER;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NON_POSITIVE_INTEGER;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NORMALIZED_STRING;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_POSITIVE_INTEGER;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_TOKEN;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_BYTE;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_INT;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_LONG;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_SHORT;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED_ATOMIC;
+import static org.intellij.xquery.runner.rt.XQueryRunConfigBuilder.runConfig;
 
 /**
  * User: ligasgr
@@ -70,36 +60,24 @@ public class SednaRunnerAppTest extends RunnerAppTest {
         return XQueryDataSourceType.SEDNA.toString();
     }
 
+
     protected String prepareConfigurationWithContextItemForMainFile(File xqueryMainFile, String contextItemValue,
                                                                     String contextItemType) {
-        return "<run>\n" +
-                "<xQueryConfiguration " +
-                "mainFileName=\"" + xqueryMainFile.getAbsolutePath() + "\" " +
-                "contextItemEnabled=\"true\" contextItemFromEditorEnabled=\"true\" contextItemType=\"" +
-                contextItemType + "\">" +
-                "<contextItemText>" + contextItemValue + "</contextItemText>" +
-                "</xQueryConfiguration>\n" +
-                "<data-source-configuration " +
-                "type=\"SEDNA\" configEnabled=\"false\" configFile=\"\" host=\"localhost\" port=\"\" username=\"\" " +
-                "password=\"\" userDefinedLibraryEnabled=\"false\" databaseName=\"auction\"" +
-                "/>\n" +
-                "</run>";
+        return runConfig()
+                .withTypeName(getDataSourceType())
+                .withMainFileName(xqueryMainFile.getAbsolutePath())
+                .withContextItemType(contextItemType)
+                .withContextItemValue(contextItemValue)
+                .withDatabase("auction")
+                .build();
     }
 
     protected String prepareConfigurationWithVariableForMainFile(File xqueryMainFile, String value, String type) {
-        return "<run>\n" +
-                "<xQueryConfiguration " +
-                "mainFileName=\"" + xqueryMainFile.getAbsolutePath() + "\" " +
-                "contextItemEnabled=\"false\"/>\n" +
-                "<variables>" +
-                "<list>" +
-                "<variable name=\"v\" active=\"true\" type=\"" + type + "\">" + value + "</variable>" +
-                "</list>" +
-                "</variables>" +
-                "<data-source-configuration " +
-                "type=\"SEDNA\" configEnabled=\"false\" configFile=\"\" host=\"localhost\" port=\"\" username=\"\" " +
-                "password=\"\" userDefinedLibraryEnabled=\"false\" databaseName=\"auction\"" +
-                "/>\n" +
-                "</run>";
+        return runConfig()
+                .withTypeName(getDataSourceType())
+                .withMainFileName(xqueryMainFile.getAbsolutePath())
+                .withVariable("v", value, type)
+                .withDatabase("auction")
+                .build();
     }
 }

@@ -23,6 +23,8 @@ import org.junit.Ignore;
 
 import java.io.File;
 
+import static org.intellij.xquery.runner.rt.XQueryRunConfigBuilder.runConfig;
+
 /**
  * User: ligasgr
  * Date: 16/03/14
@@ -38,34 +40,21 @@ public class BaseXRunnerAppTest extends RunnerAppTest {
 
     protected String prepareConfigurationWithContextItemForMainFile(File xqueryMainFile, String contextItemValue,
                                                                     String contextItemType) {
-        return "<run>\n" +
-                "<xQueryConfiguration " +
-                "mainFileName=\"" + xqueryMainFile.getAbsolutePath() + "\" " +
-                "contextItemEnabled=\"true\" contextItemFromEditorEnabled=\"true\" contextItemType=\"" +
-                contextItemType + "\">" +
-                "<contextItemText>" + contextItemValue + "</contextItemText>" +
-                "</xQueryConfiguration>\n" +
-                "<data-source-configuration " +
-                "type=\"" + getDataSourceType() + "\" " +
-                "host=\"localhost\" port=\"1984\" username=\"admin\" password=\"admin\"" +
-                "/>\n" +
-                "</run>";
+        return runConfig()
+                .withTypeName(getDataSourceType())
+                .withMainFileName(xqueryMainFile.getAbsolutePath())
+                .withContextItemType(contextItemType)
+                .withContextItemValue(contextItemValue)
+                .withConnectionData("localhost", "1984", "admin", "admin")
+                .build();
     }
 
     protected String prepareConfigurationWithVariableForMainFile(File xqueryMainFile, String value, String type) {
-        return "<run>\n" +
-                "<xQueryConfiguration " +
-                "mainFileName=\"" + xqueryMainFile.getAbsolutePath() + "\" " +
-                "contextItemEnabled=\"false\"/>\n" +
-                "<variables>" +
-                "<list>" +
-                "<variable name=\"v\" active=\"true\" type=\"" + type + "\">" + value + "</variable>" +
-                "</list>" +
-                "</variables>" +
-                "<data-source-configuration " +
-                "type=\"" + getDataSourceType() + "\" " +
-                "host=\"localhost\" port=\"1984\" username=\"admin\" password=\"admin\"" +
-                "/>\n" +
-                "</run>";
+        return runConfig()
+                .withTypeName(getDataSourceType())
+                .withMainFileName(xqueryMainFile.getAbsolutePath())
+                .withVariable("v", value, type)
+                .withConnectionData("localhost", "1984", "admin", "admin")
+                .build();
     }
 }

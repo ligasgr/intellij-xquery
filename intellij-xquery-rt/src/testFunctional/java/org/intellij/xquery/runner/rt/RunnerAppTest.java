@@ -50,6 +50,7 @@ import static org.intellij.xquery.runner.rt.XQueryItemType.XS_SHORT;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_STRING;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_TIME;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_YEAR_MONTH_DURATION;
+import static org.intellij.xquery.runner.rt.XQueryRunConfigBuilder.runConfig;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -169,33 +170,20 @@ public abstract class RunnerAppTest {
 
     protected String prepareConfigurationWithContextItemForMainFile(File xqueryMainFile, String contextItemValue,
                                                                     String contextItemType) {
-        return "<run>\n" +
-                "<xQueryConfiguration " +
-                "mainFileName=\"" + xqueryMainFile.getAbsolutePath() + "\" " +
-                "contextItemEnabled=\"true\" contextItemFromEditorEnabled=\"true\" contextItemType=\"" +
-                contextItemType + "\">" +
-                "<contextItemText>" + contextItemValue + "</contextItemText>" +
-                "</xQueryConfiguration>\n" +
-                "<data-source-configuration " +
-                "type=\"" + getDataSourceType() + "\" " +
-                "/>\n" +
-                "</run>";
+        return runConfig()
+                .withTypeName(getDataSourceType())
+                .withMainFileName(xqueryMainFile.getAbsolutePath())
+                .withContextItemType(contextItemType)
+                .withContextItemValue(contextItemValue)
+                .build();
     }
 
     protected String prepareConfigurationWithVariableForMainFile(File xqueryMainFile, String value, String type) {
-        return "<run>\n" +
-                "<xQueryConfiguration " +
-                "mainFileName=\"" + xqueryMainFile.getAbsolutePath() + "\" " +
-                "contextItemEnabled=\"false\"/>\n" +
-                "<variables>" +
-                "<list>" +
-                "<variable name=\"v\" active=\"true\" type=\"" + type + "\">" + value + "</variable>" +
-                "</list>" +
-                "</variables>" +
-                "<data-source-configuration " +
-                "type=\"" + getDataSourceType() + "\" " +
-                "/>\n" +
-                "</run>";
+        return  runConfig()
+                .withTypeName(getDataSourceType())
+                .withMainFileName(xqueryMainFile.getAbsolutePath())
+                .withVariable("v", value, type)
+                .build();
     }
 
     protected abstract String getDataSourceType();

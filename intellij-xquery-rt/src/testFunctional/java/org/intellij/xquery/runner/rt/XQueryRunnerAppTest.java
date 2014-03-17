@@ -25,6 +25,8 @@ import java.io.PrintStream;
 
 import static org.hamcrest.Matchers.is;
 import static org.intellij.xquery.runner.rt.FileTestUtil.createFileWithContents;
+import static org.intellij.xquery.runner.rt.XQueryDataSourceType.SAXON;
+import static org.intellij.xquery.runner.rt.XQueryRunConfigBuilder.runConfig;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -55,14 +57,9 @@ public class XQueryRunnerAppTest {
     }
 
     private String prepareConfigurationForMainFile(File xqueryMainFile) {
-        return "<run>\n" +
-                "<xQueryConfiguration " +
-                "mainFileName=\"" + xqueryMainFile.getAbsolutePath() + "\" " +
-                "contextItemEnabled=\"false\">" +
-                "</xQueryConfiguration>\n" +
-                "<data-source-configuration " +
-                "type=\"SAXON\" " +
-                "/>\n" +
-                "</run>\n";
+        return runConfig()
+                .withTypeName(SAXON.toString())
+                .withMainFileName(xqueryMainFile.getAbsolutePath())
+                .build();
     }
 }
