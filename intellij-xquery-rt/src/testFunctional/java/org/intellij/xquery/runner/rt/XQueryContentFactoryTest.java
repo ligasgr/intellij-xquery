@@ -17,8 +17,6 @@
 
 package org.intellij.xquery.runner.rt;
 
-import org.intellij.xquery.runner.rt.XQueryContentFactory;
-import org.intellij.xquery.runner.rt.XQueryRunConfig;
 import org.junit.Test;
 
 import java.io.BufferedReader;
