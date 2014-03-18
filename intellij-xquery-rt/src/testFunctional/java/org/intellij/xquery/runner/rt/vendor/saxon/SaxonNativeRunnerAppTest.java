@@ -45,7 +45,7 @@ import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED_ATOMIC;
  * Date: 12/01/14
  * Time: 19:14
  */
-public class SaxonRunnerAppTest extends RunnerAppTest {
+public class SaxonNativeRunnerAppTest extends RunnerAppTest {
 
     @DataPoints
     public static DataPair[] getSaxonCompatibleData() {
@@ -73,6 +73,6 @@ public class SaxonRunnerAppTest extends RunnerAppTest {
 
     @Override
     protected String getDataSourceType() {
-        return XQueryDataSourceType.SAXON.toString();
+        return XQueryDataSourceType.SAXON_NATIVE.toString();
     }
 }

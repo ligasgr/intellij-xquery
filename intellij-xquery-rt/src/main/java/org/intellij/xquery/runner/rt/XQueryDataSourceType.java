@@ -22,6 +22,7 @@ import org.intellij.xquery.runner.rt.xqj.XQJRunnerAppFactory;
 import org.intellij.xquery.runner.rt.xqj.datasource.BaseXXQDataSourceFactory;
 import org.intellij.xquery.runner.rt.xqj.datasource.ExistXQDataSourceFactory;
 import org.intellij.xquery.runner.rt.xqj.datasource.MarklogicXQDataSourceFactory;
+import org.intellij.xquery.runner.rt.xqj.datasource.SaxonXQDataSourceFactory;
 import org.intellij.xquery.runner.rt.xqj.datasource.SednaXQDataSourceFactory;
 import org.intellij.xquery.runner.rt.xqj.datasource.XQDataSourceFactory;
 import org.intellij.xquery.runner.rt.xqj.datasource.ZorbaXQDataSourceFactory;
@@ -37,12 +38,14 @@ import static java.util.Arrays.asList;
  * Time: 14:19
  */
 public enum XQueryDataSourceType {
-    SAXON("Saxon", true, false, asList("saxon9he.jar"), SaxonRunnerAppFactory.class),
+    SAXON("Saxon", true, false, asList("saxon9he.jar"), true, SaxonXQDataSourceFactory.class),
     MARKLOGIC("MarkLogic", false, true, asList("marklogic-xqj-1.0.0.jar"), false, MarklogicXQDataSourceFactory.class),
     EXIST("eXist", false, true, asList("exist-xqj-1.0.1.jar"), false, ExistXQDataSourceFactory.class),
     BASEX("BaseX", false, true, asList("basex-xqj-1.2.3.jar"), false, BaseXXQDataSourceFactory.class),
     SEDNA("Sedna", false, true, asList("sedna-xqj-1.0.0.jar"), false, SednaXQDataSourceFactory.class),
-    ZORBA("Zorba", false, false, asList("zorba_xqj.jar", "zorba_api.jar"), false, ZorbaXQDataSourceFactory.class);
+    ZORBA("Zorba", false, false, asList("zorba_xqj.jar", "zorba_api.jar"), false, ZorbaXQDataSourceFactory.class),
+    SAXON_NATIVE("Saxon (Native)", true, false, asList("saxon9he.jar"), SaxonRunnerAppFactory.class);
+
     private final List<String> classpathEntries;
     private final boolean jarContainsXqjApi;
     private final Class<? extends XQDataSourceFactory> xqDataSourceFactoryClass;

@@ -34,6 +34,6 @@ public class StringOutputStream extends OutputStream {
     }
 
     public String getString() {
-        return buffer.toString();
+        return buffer.toString().replaceAll("\n","");
     }
 }
