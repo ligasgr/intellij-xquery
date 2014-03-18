@@ -37,16 +37,21 @@ public class DataSourceFactory {
         XQueryDataSourceType dataSourceType = config.getDataSourceType();
         XQDataSource dataSource = getXQDataSource(dataSourceType, config);
         if (dataSourceType.connectionPropertiesAreSupported()) {
-            dataSource.setProperty(SERVER_NAME, config.getHost());
-            if (config.getPort() != null && config.getPort().length() > 0)
+            if (config.getHost() != null && config.getHost().length() > 0) {
+                dataSource.setProperty(SERVER_NAME, config.getHost());
+            }
+            if (config.getPort() != null && config.getPort().length() > 0) {
                 dataSource.setProperty(PORT, config.getPort());
-            if (config.getDatabaseName() != null && config.getDatabaseName().length() > 0)
+            }
+            if (config.getDatabaseName() != null && config.getDatabaseName().length() > 0) {
                 dataSource.setProperty(DATABASE_NAME, config.getDatabaseName());
+            }
         }
         return dataSource;
     }
 
-    protected XQDataSource getXQDataSource(XQueryDataSourceType dataSourceType, XQueryRunConfig config) throws Exception {
+    protected XQDataSource getXQDataSource(XQueryDataSourceType dataSourceType,
+                                           XQueryRunConfig config) throws Exception {
         return getXQDataSourceFactory(dataSourceType).getXQDataSource(config);
     }
 

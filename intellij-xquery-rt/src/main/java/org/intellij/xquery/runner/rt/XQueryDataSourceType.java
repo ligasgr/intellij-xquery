@@ -19,6 +19,7 @@ package org.intellij.xquery.runner.rt;
 
 import org.intellij.xquery.runner.rt.vendor.saxon.SaxonRunnerAppFactory;
 import org.intellij.xquery.runner.rt.xqj.XQJRunnerAppFactory;
+import org.intellij.xquery.runner.rt.xqj.datasource.BaseXLocalXQDataSourceFactory;
 import org.intellij.xquery.runner.rt.xqj.datasource.BaseXXQDataSourceFactory;
 import org.intellij.xquery.runner.rt.xqj.datasource.ExistXQDataSourceFactory;
 import org.intellij.xquery.runner.rt.xqj.datasource.MarklogicXQDataSourceFactory;
@@ -44,36 +45,41 @@ public enum XQueryDataSourceType {
     BASEX("BaseX", false, true, asList("basex-xqj-1.2.3.jar"), false, BaseXXQDataSourceFactory.class),
     SEDNA("Sedna", false, true, asList("sedna-xqj-1.0.0.jar"), false, SednaXQDataSourceFactory.class),
     ZORBA("Zorba", false, false, asList("zorba_xqj.jar", "zorba_api.jar"), false, ZorbaXQDataSourceFactory.class),
-    SAXON_NATIVE("Saxon (Native)", true, false, asList("saxon9he.jar"), SaxonRunnerAppFactory.class);
-
+    SAXON_NATIVE("Saxon (native)", true, false, asList("saxon9he.jar"), SaxonRunnerAppFactory.class),
+    BASEX_LOCAL("BaseX (embedded)", false, false, asList("basex-xqj-1.3.0.jar", "basex-7.8.1.jar"), false,
+            BaseXLocalXQDataSourceFactory.class);
     private final List<String> classpathEntries;
     private final boolean jarContainsXqjApi;
     private final Class<? extends XQDataSourceFactory> xqDataSourceFactoryClass;
     private final Class<? extends RunnerAppFactory> runnerAppFactoryClass;
     private String presentableName;
     private boolean configFileSupported;
-    private boolean database;
+    private boolean connectionPropertiesSupported;
 
-    private XQueryDataSourceType(String presentableName, boolean configFileSupported, boolean database,
+    private XQueryDataSourceType(String presentableName, boolean configFileSupported,
+                                 boolean connectionPropertiesSupported,
                                  List<String> classpathEntries,
                                  Class<? extends RunnerAppFactory> runnerAppFactoryClass) {
-        this(presentableName, configFileSupported, database, classpathEntries, true, null, runnerAppFactoryClass);
+        this(presentableName, configFileSupported, connectionPropertiesSupported, classpathEntries, true, null,
+                runnerAppFactoryClass);
     }
 
-    private XQueryDataSourceType(String presentableName, boolean configFileSupported, boolean database,
+    private XQueryDataSourceType(String presentableName, boolean configFileSupported,
+                                 boolean connectionPropertiesSupported,
                                  List<String> classpathEntries, boolean jarContainsXqjApi,
                                  Class<? extends XQDataSourceFactory> xqDataSourceFactoryClass) {
-        this(presentableName, configFileSupported, database, classpathEntries, jarContainsXqjApi,
+        this(presentableName, configFileSupported, connectionPropertiesSupported, classpathEntries, jarContainsXqjApi,
                 xqDataSourceFactoryClass, XQJRunnerAppFactory.class);
     }
 
-    private XQueryDataSourceType(String presentableName, boolean configFileSupported, boolean database,
+    private XQueryDataSourceType(String presentableName, boolean configFileSupported,
+                                 boolean connectionPropertiesSupported,
                                  List<String> classpathEntries, boolean jarContainsXqjApi,
                                  Class<? extends XQDataSourceFactory> xqDataSourceFactoryClass,
                                  Class<? extends RunnerAppFactory> runnerAppFactoryClass) {
         this.presentableName = presentableName;
         this.configFileSupported = configFileSupported;
-        this.database = database;
+        this.connectionPropertiesSupported = connectionPropertiesSupported;
         this.classpathEntries = classpathEntries;
         this.jarContainsXqjApi = jarContainsXqjApi;
         this.xqDataSourceFactoryClass = xqDataSourceFactoryClass;
@@ -98,7 +104,7 @@ public enum XQueryDataSourceType {
     }
 
     public boolean connectionPropertiesAreSupported() {
-        return database;
+        return connectionPropertiesSupported;
     }
 
     public Icon getIcon() {
