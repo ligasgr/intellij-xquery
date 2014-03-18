@@ -22,9 +22,7 @@ import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.junit.experimental.theories.DataPoints;
 
 import static org.intellij.xquery.runner.rt.XQueryItemType.TEXT;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_ANY_URI;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_BYTE;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DATE_TIME_STAMP;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DURATION;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_LANGUAGE;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NEGATIVE_INTEGER;
@@ -37,7 +35,6 @@ import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_BYTE;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_INT;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_LONG;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_SHORT;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED_ATOMIC;
 
 /**
@@ -64,7 +61,6 @@ public class SaxonRunnerAppTest extends RunnerAppTest {
                 DataPair.pair(XS_TOKEN, VALUE),
                 DataPair.pair(XS_LANGUAGE, VALUE),
                 DataPair.pair(XS_UNTYPED_ATOMIC, VALUE),
-                DataPair.pair(XS_ANY_URI, VALUE),
                 DataPair.pair(TEXT, VALUE),
         };
     }

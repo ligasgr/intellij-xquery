@@ -24,24 +24,16 @@ import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theory;
 
-import static org.intellij.xquery.runner.rt.XQueryItemType.TEXT;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_ANY_URI;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_BYTE;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DATE_TIME_STAMP;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DURATION;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_LANGUAGE;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NEGATIVE_INTEGER;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NON_NEGATIVE_INTEGER;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NON_POSITIVE_INTEGER;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NORMALIZED_STRING;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_POSITIVE_INTEGER;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_TOKEN;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_BYTE;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_INT;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_LONG;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNSIGNED_SHORT;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED_ATOMIC;
 
 /**
  * User: ligasgr
@@ -63,7 +55,6 @@ public class ZorbaRunnerAppTest extends RunnerAppTest {
                 DataPair.pair(XS_UNSIGNED_LONG, NUMERIC_VALUE),
                 DataPair.pair(XS_UNSIGNED_BYTE, "10"),
                 DataPair.pair(XS_DURATION, "P3Y6M4DT12H30M5S"),
-                DataPair.pair(XS_ANY_URI, VALUE),
         };
     }
 

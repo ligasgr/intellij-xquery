@@ -22,7 +22,6 @@ import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.junit.experimental.theories.DataPoints;
 
 import static org.intellij.xquery.runner.rt.XQueryItemType.TEXT;
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_ANY_URI;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_BYTE;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DATE_TIME_STAMP;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DURATION;
@@ -66,7 +65,6 @@ public class SaxonNativeRunnerAppTest extends RunnerAppTest {
                 DataPair.pair(XS_DATE_TIME_STAMP, "2013-12-31T23:59:59Z"),
                 DataPair.pair(XS_UNTYPED, VALUE),
                 DataPair.pair(XS_UNTYPED_ATOMIC, VALUE),
-                DataPair.pair(XS_ANY_URI, VALUE),
                 DataPair.pair(TEXT, VALUE),
         };
     }

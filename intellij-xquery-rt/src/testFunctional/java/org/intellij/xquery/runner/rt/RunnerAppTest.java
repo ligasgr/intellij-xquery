@@ -30,6 +30,7 @@ import java.io.PrintStream;
 import static org.hamcrest.Matchers.is;
 import static org.intellij.xquery.runner.rt.FileTestUtil.createFileWithContents;
 import static org.intellij.xquery.runner.rt.XQueryItemType.DOCUMENT;
+import static org.intellij.xquery.runner.rt.XQueryItemType.XS_ANY_URI;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_BOOLEAN;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DATE;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DATE_TIME;
@@ -92,6 +93,7 @@ public abstract class RunnerAppTest {
                 DataPair.pair(XS_G_MONTH_DAY, "--01-01"),
                 DataPair.pair(XS_G_YEAR, "0001"),
                 DataPair.pair(XS_G_YEAR_MONTH, "0001-01"),
+                DataPair.pair(XS_ANY_URI, VALUE),
         };
     }
 

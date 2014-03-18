@@ -24,7 +24,6 @@ import org.junit.experimental.theories.DataPoints;
 
 import java.io.File;
 
-import static org.intellij.xquery.runner.rt.XQueryItemType.XS_ANY_URI;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_BYTE;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DURATION;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_LANGUAGE;
@@ -38,9 +37,8 @@ import static org.intellij.xquery.runner.rt.XQueryRunConfigBuilder.runConfig;
  * Date: 16/03/14
  * Time: 16:08
  */
-@Ignore("works only when Marklogic instance is up")
+@Ignore("works only when Sedna instance is up")
 public class SednaRunnerAppTest extends RunnerAppTest {
-
 
     @DataPoints
     public static DataPair[] getSaxonCompatibleData() {
@@ -51,7 +49,6 @@ public class SednaRunnerAppTest extends RunnerAppTest {
                 DataPair.pair(XS_TOKEN, VALUE),
                 DataPair.pair(XS_LANGUAGE, VALUE),
                 DataPair.pair(XS_UNTYPED_ATOMIC, VALUE),
-                DataPair.pair(XS_ANY_URI, VALUE),
         };
     }
 
