@@ -49,6 +49,11 @@ public class XQDataSourceFactoryTest {
     }
 
     @Test
+    public void shouldReturnXQDataSourceForBaseXLocalFactory() throws Exception {
+        assertThat(new BaseXLocalXQDataSourceFactory().getXQDataSource(config), is(not(nullValue())));
+    }
+
+    @Test
     public void shouldReturnXQDataSourceForExistFactory() throws Exception {
         assertThat(new ExistXQDataSourceFactory().getXQDataSource(config), is(not(nullValue())));
     }

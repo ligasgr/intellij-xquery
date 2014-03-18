@@ -23,7 +23,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.xml.xquery.XQDataSource;
-import javax.xml.xquery.XQException;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -74,84 +73,92 @@ public class DataSourceFactoryTest {
     }
 
     @Test
-    public void shouldSetServerNameOnDataSourceWhenConnectionPropertiesSupported() throws Exception {
+    public void shouldSetHostOnDataSourceWhenConnectionPropertiesSupportedAndHostNotEmpty() throws Exception {
         given(config.getDataSourceType()).willReturn(XQueryDataSourceType.SEDNA);
         given(config.getHost()).willReturn(HOST);
 
         factory.getDataSource();
 
-        verifyHostSet();
+        verify(dataSource).setProperty(SERVER_NAME, HOST);
+    }
+
+    @Test
+    public void shouldNotSetHostOnDataSourceWhenConnectionPropertiesSupportedAndHostEmpty() throws Exception {
+        given(config.getDataSourceType()).willReturn(XQueryDataSourceType.SEDNA);
+        given(config.getHost()).willReturn("");
+
+        factory.getDataSource();
+
+        verifyNoMoreInteractions(dataSource);
+    }
+
+    @Test
+    public void shouldNotSetHostOnDataSourceWhenConnectionPropertiesSupportedAndHostNotSet() throws Exception {
+        given(config.getDataSourceType()).willReturn(XQueryDataSourceType.SEDNA);
+        given(config.getHost()).willReturn(null);
+
+        factory.getDataSource();
+
+        verifyNoMoreInteractions(dataSource);
     }
 
     @Test
     public void shouldSetPortOnDataSourceWhenConnectionPropertiesSupportedAndPortNotEmpty() throws Exception {
         given(config.getDataSourceType()).willReturn(XQueryDataSourceType.SEDNA);
-        given(config.getHost()).willReturn(HOST);
         given(config.getPort()).willReturn(PORT_VALUE);
 
         factory.getDataSource();
 
-        verifyHostSet();
         verify(dataSource).setProperty(PORT, PORT_VALUE);
     }
 
     @Test
     public void shouldNotSetPortOnDataSourceWhenConnectionPropertiesSupportedAndPortEmpty() throws Exception {
         given(config.getDataSourceType()).willReturn(XQueryDataSourceType.SEDNA);
-        given(config.getHost()).willReturn(HOST);
         given(config.getPort()).willReturn("");
 
         factory.getDataSource();
 
-        verifyHostSet();
         verifyNoMoreInteractions(dataSource);
     }
 
     @Test
     public void shouldNotSetPortOnDataSourceWhenConnectionPropertiesSupportedAndPortNotSet() throws Exception {
         given(config.getDataSourceType()).willReturn(XQueryDataSourceType.SEDNA);
-        given(config.getHost()).willReturn(HOST);
         given(config.getPort()).willReturn(null);
 
         factory.getDataSource();
 
-        verifyHostSet();
         verifyNoMoreInteractions(dataSource);
     }
 
     @Test
     public void shouldSetDbNameOnDataSourceWhenConnectionPropertiesSupportedAndDbNameNotEmpty() throws Exception {
         given(config.getDataSourceType()).willReturn(XQueryDataSourceType.SEDNA);
-        given(config.getHost()).willReturn(HOST);
         given(config.getDatabaseName()).willReturn(DB_NAME);
 
         factory.getDataSource();
 
-        verifyHostSet();
         verify(dataSource).setProperty(DATABASE_NAME, DB_NAME);
     }
 
     @Test
     public void shouldNotSetDbNameOnDataSourceWhenConnectionPropertiesSupportedAndDbNameEmpty() throws Exception {
         given(config.getDataSourceType()).willReturn(XQueryDataSourceType.SEDNA);
-        given(config.getHost()).willReturn(HOST);
         given(config.getDatabaseName()).willReturn("");
 
         factory.getDataSource();
 
-        verifyHostSet();
         verifyNoMoreInteractions(dataSource);
     }
 
     @Test
     public void shouldNotSetDbNameOnDataSourceWhenConnectionPropertiesSupportedAndDbNameNotSet() throws Exception {
         given(config.getDataSourceType()).willReturn(XQueryDataSourceType.SEDNA);
-        given(config.getHost()).willReturn(HOST);
         given(config.getDatabaseName()).willReturn(null);
 
         factory.getDataSource();
 
-        verifyHostSet();
         verifyNoMoreInteractions(dataSource);
     }
 
@@ -165,9 +172,5 @@ public class DataSourceFactoryTest {
         XQDataSource result = factory.getDataSource();
 
         assertThat(result, is(not(nullValue())));
-    }
-
-    private void verifyHostSet() throws XQException {
-        verify(dataSource).setProperty(SERVER_NAME, HOST);
     }
 }

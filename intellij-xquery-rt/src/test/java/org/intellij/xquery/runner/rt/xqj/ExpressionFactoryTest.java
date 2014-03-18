@@ -70,18 +70,18 @@ public class ExpressionFactoryTest {
         verify(contentFactory).getXQueryContentAsStream();
         verify(connection).prepareExpression(inputStream);
     }
-//
-//    @Test
-//    public void shouldBindContextItem() throws Exception {
-//        factory.getExpression(connection);
-//
-//        verify(contextItemBinder).bindContextItem(connection, expression);
-//    }
-//
-//    @Test
-//    public void shouldBindVariables() throws Exception {
-//        factory.getExpression(connection);
-//
-//        verify(variablesBinder).bindVariables(connection, expression);
-//    }
+
+    @Test
+    public void shouldBindContextItem() throws Exception {
+        factory.getExpression(connection);
+
+        verify(contextItemBinder).bindContextItem(connection, expression);
+    }
+
+    @Test
+    public void shouldBindVariables() throws Exception {
+        factory.getExpression(connection);
+
+        verify(variablesBinder).bindVariables(connection, expression);
+    }
 }

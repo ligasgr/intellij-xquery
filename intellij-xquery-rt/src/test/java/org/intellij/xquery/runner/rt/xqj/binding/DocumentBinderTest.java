@@ -23,10 +23,8 @@ import org.junit.Test;
 import javax.xml.namespace.QName;
 import javax.xml.xquery.XQConnection;
 import javax.xml.xquery.XQException;
-import javax.xml.xquery.XQItemType;
 import javax.xml.xquery.XQPreparedExpression;
 
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -43,14 +41,12 @@ public class DocumentBinderTest {
     private XQConnection connection;
     private DocumentBinder binder;
     private final QName qName = new QName("local");
-    private XQItemType xqItemType;
 
     @Before
     public void setUp() throws XQException {
         expression = mock(XQPreparedExpression.class);
         connection = mock(XQConnection.class);
         binder = new DocumentBinder();
-        xqItemType = mock(XQItemType.class);
     }
 
     @Test
