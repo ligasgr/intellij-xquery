@@ -4,6 +4,6 @@ import module "used" at "file1.xq";
 <caret>import module "unused" at "file2.xq";
 declare default function namespace "used";
 
-declare function local:testDefaultNamespace() {
+declare function local:testUnusedImport() {
     test()
 };
