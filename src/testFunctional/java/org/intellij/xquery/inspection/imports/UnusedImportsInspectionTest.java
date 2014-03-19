@@ -17,11 +17,11 @@
 
 package org.intellij.xquery.inspection.imports;
 
-import com.intellij.codeInspection.LocalInspectionTool;
+import com.intellij.codeInsight.intention.IntentionAction;
+import com.intellij.util.containers.ContainerUtil;
 import org.intellij.xquery.BaseFunctionalTestCase;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
 
@@ -31,53 +31,57 @@ public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
     }
 
     public void testIncorrectFileType() {
-        executeTest("IncorrectFileType.txt");
+        executeInspectionTest("IncorrectFileType.txt");
     }
 
     public void testImportWithDefaultNamespaceForFunctionCall() {
-        executeTest();
+        executeInspectionTest();
     }
 
     public void testImportWithDefaultNamespaceForNamedFunctionRef() {
-        executeTest();
+        executeInspectionTest();
     }
 
     public void testImportWithDefaultNamespaceForVariableRef() {
-        executeTest();
+        executeInspectionTest();
     }
 
     public void testImportWithDefaultNamespaceUnused() {
-        executeTest();
+        executeInspectionTest();
     }
 
     public void testImportWithoutPrefixWithDeclaredNamespace() {
-        executeTest();
+        executeInspectionTest();
     }
 
     public void testImportWithoutPrefixWithoutDeclaredNamespace() {
-        executeTest();
+        executeInspectionTest();
     }
 
     public void testImportWithPrefix() {
-        executeTest();
+        executeInspectionTest();
     }
 
-    private void executeTest(String... fileNames) {
-        if (fileNames != null && fileNames.length > 0) {
-            for (String filename : fileNames) {
-                executeTest(filename);
-            }
-        } else {
-            executeTest(getDefaultFileName());
-        }
+    public void testRemoveUnusedImportQuickFix() {
+        final String testName = getTestName(false);
+
+        myFixture.enableInspections(UnusedImportsInspection.class);
+        myFixture.configureByFile(String.format("%s.xq", testName));
+
+        List<IntentionAction> availableIntentions = myFixture.filterAvailableIntentions(UnusedImportsInspection.REMOVE_UNUSED_IMPORT_QUICKFIX_NAME);
+        IntentionAction action = ContainerUtil.getFirstItem(availableIntentions);
+        assertNotNull(action);
+        myFixture.launchAction(action);
+
+        myFixture.checkResultByFile(String.format("%s_after.xq", testName));
     }
 
-    private void executeTest(String filename) {
-        Collection<Class<? extends LocalInspectionTool>> inspections = new ArrayList<Class<? extends
-                LocalInspectionTool>>();
-        inspections.add(UnusedImportsInspection.class);
-        myFixture.enableInspections(inspections);
+    private void executeInspectionTest() {
+        executeInspectionTest(getDefaultFileName());
+    }
 
+    private void executeInspectionTest(String filename) {
+        myFixture.enableInspections(UnusedImportsInspection.class);
         myFixture.testHighlighting(true, false, false, filename);
     }
 }
