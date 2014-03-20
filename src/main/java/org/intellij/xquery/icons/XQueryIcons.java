@@ -22,7 +22,7 @@ import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.RowIcon;
 import com.intellij.util.PlatformIcons;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 /**
  * User: ligasgr
@@ -38,6 +38,7 @@ public class XQueryIcons {
     public static final Icon FUNCTION_PUBLIC_ICON = createRowIcon(AllIcons.Nodes.Method, PlatformIcons.PUBLIC_ICON);
     public static final Icon VARIABLE_PRIVATE_ICON = createRowIcon(AllIcons.Nodes.Variable, PlatformIcons.PRIVATE_ICON);
     public static final Icon VARIABLE_PUBLIC_ICON = createRowIcon(AllIcons.Nodes.Variable, PlatformIcons.PUBLIC_ICON);
+    public static final Icon QUERY_BODY = AllIcons.Nodes.HomeFolder;
 
     private static Icon createRowIcon(Icon icon1, Icon icon2) {
         RowIcon rowIcon = new RowIcon(2);

@@ -380,4 +380,8 @@ public class XQueryFile extends PsiFileBase {
         }
         return variablePrefixToNamespaceMapping.getValue();
     }
+
+    public XQueryQueryBody getQueryBody() {
+        return PsiTreeUtil.findChildOfType(this, XQueryQueryBody.class);
+    }
 }

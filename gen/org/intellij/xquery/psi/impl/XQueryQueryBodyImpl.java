@@ -26,6 +26,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
+import com.intellij.navigation.ItemPresentation;
 
 public class XQueryQueryBodyImpl extends XQueryElementImpl implements XQueryQueryBody {
 
@@ -42,6 +43,10 @@ public class XQueryQueryBodyImpl extends XQueryElementImpl implements XQueryQuer
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitQueryBody(this);
     else super.accept(visitor);
+  }
+
+  public ItemPresentation getPresentation() {
+    return XQueryPsiImplUtil.getPresentation(this);
   }
 
 }

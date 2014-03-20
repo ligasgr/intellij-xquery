@@ -91,6 +91,9 @@ public class XQueryStructureViewElement implements StructureViewTreeElement, Sor
             for (XQueryFunctionDecl functionDeclaration : file.getFunctionDeclarations()) {
                 treeElements.add(new XQueryStructureViewElement(functionDeclaration));
             }
+            if (file.getQueryBody() != null) {
+                treeElements.add(new XQueryStructureViewElement(file.getQueryBody()));
+            }
             return treeElements.toArray(new TreeElement[treeElements.size()]);
         } else {
             return EMPTY_ARRAY;

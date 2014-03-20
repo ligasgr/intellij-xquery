@@ -272,6 +272,29 @@ public class XQueryPsiImplUtil {
         return null;
     }
 
+
+    public static ItemPresentation getPresentation(final XQueryQueryBody element) {
+        return new ItemPresentation() {
+            @Nullable
+            @Override
+            public String getPresentableText() {
+                return "Query Body";
+            }
+
+            @Nullable
+            @Override
+            public String getLocationString() {
+                return null;
+            }
+
+            @Nullable
+            @Override
+            public Icon getIcon(boolean unused) {
+                return XQueryIcons.QUERY_BODY;
+            }
+        };
+    }
+
     public static ItemPresentation getPresentation(final XQueryFunctionName element) {
         if (element.getParent() instanceof XQueryFunctionDecl) {
             return ((XQueryFunctionDecl) element.getParent()).getPresentation();
