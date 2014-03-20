@@ -42,7 +42,7 @@ public enum XQueryDataSourceType {
     SAXON("Saxon", true, false, asList("saxon9he.jar"), true, SaxonXQDataSourceFactory.class),
     MARKLOGIC("MarkLogic", false, true, asList("marklogic-xqj-1.0.0.jar"), false, MarklogicXQDataSourceFactory.class),
     EXIST("eXist", false, true, asList("exist-xqj-1.0.1.jar"), false, ExistXQDataSourceFactory.class),
-    BASEX("BaseX", false, true, asList("basex-xqj-1.2.3.jar"), false, BaseXXQDataSourceFactory.class),
+    BASEX("BaseX", false, true, asList("basex-xqj-1.3.0.jar"), false, BaseXXQDataSourceFactory.class),
     SEDNA("Sedna", false, true, asList("sedna-xqj-1.0.0.jar"), false, SednaXQDataSourceFactory.class),
     ZORBA("Zorba", false, false, asList("zorba_xqj.jar", "zorba_api.jar"), false, ZorbaXQDataSourceFactory.class),
     SAXON_NATIVE("Saxon (native)", true, false, asList("saxon9he.jar"), SaxonRunnerAppFactory.class),
