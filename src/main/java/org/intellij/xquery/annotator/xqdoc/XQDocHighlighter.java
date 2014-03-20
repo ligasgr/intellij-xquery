@@ -40,27 +40,36 @@ import static org.intellij.xquery.psi.XQueryBasicTypes.DOC_COMMENT_CONTENT;
  */
 public class XQDocHighlighter {
 
+    public void highlightXQDocTags(PsiComment comment, AnnotationHolder holder) {
+        IElementType tokenType = comment.getTokenType();
+        if (tokenType == DOC_COMMENT_CONTENT) {
+            highlightCommentContent(comment, holder);
+        }
+    }
+
+    private void highlightCommentContent(PsiComment comment, AnnotationHolder holder) {
+        String commentText = comment.getText();
+        for (Pair<String, Integer> wordWithOffset : StringUtil.getWordsWithOffset(commentText)) {
+            highlightWordIfTag(comment, holder, wordWithOffset);
+        }
+    }
+
+    private void highlightWordIfTag(PsiComment comment, AnnotationHolder holder, Pair<String, Integer> pair) {
+        Integer offset = pair.second;
+        String tag = pair.first;
+        if (XQ_DOC_TAGS.contains(tag)) {
+            highlightTextRange(holder, comment.getTextOffset() + offset, tag.length());
+        }
+    }
+
+    private void highlightTextRange(AnnotationHolder holder, int absoluteOffset, int length) {
+        TextRange range = TextRange.from(absoluteOffset, length);
+        setHighlighting(range, holder, DOC_COMMENT_TAG);
+    }
+
     private static void setHighlighting(@NotNull TextRange range, @NotNull AnnotationHolder holder,
                                         @NotNull TextAttributesKey key) {
         holder.createInfoAnnotation(range, null).setEnforcedTextAttributes(EditorColorsManager.getInstance()
                 .getGlobalScheme().getAttributes(key));
-    }
-
-    public void highlightXQDocTags(PsiComment comment, AnnotationHolder holder) {
-        IElementType tokenType = comment.getTokenType();
-        if (tokenType == DOC_COMMENT_CONTENT) {
-            String commentText = comment.getText();
-            List<Pair<String, Integer>> wordsWithOffset = StringUtil.getWordsWithOffset(commentText);
-            for (Pair<String, Integer> pair : wordsWithOffset) {
-                Integer offset = pair.second;
-                String tag = pair.first;
-                if (XQ_DOC_TAGS.contains(tag)) {
-                    TextRange range = TextRange.from(comment.getTextOffset() + offset, tag.length());
-                    setHighlighting(range, holder, DOC_COMMENT_TAG);
-                }
-            }
-        } else {
-            return;
-        }
     }
 }
