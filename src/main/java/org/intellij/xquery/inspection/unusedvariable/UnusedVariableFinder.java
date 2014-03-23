@@ -41,7 +41,7 @@ public class UnusedVariableFinder {
 
         for (XQueryExprSingle exprSingle : exprSingleList) {
             if (exprSingle instanceof XQueryFLWORExpr) {
-                List<XQueryVarName> unusedBindingsInExpression = findUnusedLetBindings((XQueryFLWORExpr) exprSingle);
+                List<XQueryVarName> unusedBindingsInExpression = findUnusedVariableBindings((XQueryFLWORExpr) exprSingle);
                 unusedBindings.addAll(unusedBindingsInExpression);
             }
         }
@@ -49,7 +49,7 @@ public class UnusedVariableFinder {
         return unusedBindings;
     }
 
-    private List<XQueryVarName> findUnusedLetBindings(XQueryFLWORExpr expressionFLWOR) {
+    private List<XQueryVarName> findUnusedVariableBindings(XQueryFLWORExpr expressionFLWOR) {
         List<XQueryVarName> varNames = findAllDeclaredVarNames(expressionFLWOR);
         List<XQueryVarRef> variableUsages = findVariableUsages(expressionFLWOR);
 
@@ -91,11 +91,10 @@ public class UnusedVariableFinder {
         List<XQueryVarName> unusedVariables = new ArrayList<XQueryVarName>();
         for (XQueryVarName declaredVarName : declaredVariableNames) {
             boolean found = false;
-            final String letBindingName = declaredVarName.getName();
             for (XQueryVarRef varRef : variableReferences) {
                 final XQueryVarName varRefVarName = varRef.getVarName();
-                final String varRefName = varRefVarName != null ? varRefVarName.getName() : null;
-                if (StringUtils.equals(varRefName, letBindingName)) {
+
+                if (varNamesAreEqual(declaredVarName, varRefVarName)) {
                     found = true;
                     break;
                 }
@@ -107,6 +106,24 @@ public class UnusedVariableFinder {
         }
 
         return unusedVariables;
+    }
+
+    private boolean varNamesAreEqual(XQueryVarName declaredVarName, XQueryVarName varRefVarName) {
+        final String declaredVarWithPrefix = nameWithNamespacePrefix(declaredVarName);
+        final String varRefWithPrefix = nameWithNamespacePrefix(varRefVarName);
+
+        return StringUtils.equals(varRefWithPrefix, declaredVarWithPrefix);
+    }
+
+    private String nameWithNamespacePrefix(XQueryVarName varRefVarName) {
+        if (varRefVarName == null) {
+            return null;
+        }
+        if (varRefVarName.getPrefix()!=null) {
+            return varRefVarName.getPrefix().getName() + ":" +  varRefVarName.getName();
+        } else {
+            return varRefVarName.getName();
+        }
     }
 
     private List<XQueryVarRef> findVariableUsages(XQueryFLWORExpr expressionFLWOR) {

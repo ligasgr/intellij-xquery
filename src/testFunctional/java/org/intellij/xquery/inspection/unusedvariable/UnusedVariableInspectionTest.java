@@ -47,6 +47,10 @@ public class UnusedVariableInspectionTest extends BaseFunctionalTestCase {
         executeTest();
     }
 
+    public void testUnusedVariableFromOtherNamespace() {
+        executeTest();
+    }
+
     private void executeTest() {
         executeTest(getDefaultFileName());
     }
