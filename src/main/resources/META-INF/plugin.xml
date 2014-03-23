@@ -58,6 +58,8 @@
 
         <defaultLiveTemplatesProvider implementation="org.intellij.xquery.livetemplate.XQueryLiveTemplatesProvider"/>
         <liveTemplateContext implementation="org.intellij.xquery.livetemplate.XQueryContextType$Generic"/>
+        <liveTemplateContext implementation="org.intellij.xquery.livetemplate.XQueryContextType$Prolog"/>
+        <liveTemplateContext implementation="org.intellij.xquery.livetemplate.XQueryContextType$Expression"/>
 
         <langCodeStyleSettingsProvider implementation="org.intellij.xquery.formatter.settings.XQueryLanguageCodeStyleSettingsProvider"/>
         <quoteHandler fileType="XQuery file" className="org.intellij.xquery.quotes.XQueryQuoteHandler"/>

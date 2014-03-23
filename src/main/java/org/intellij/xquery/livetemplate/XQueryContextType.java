@@ -21,32 +21,42 @@ import com.intellij.codeInsight.template.EverywhereContextType;
 import com.intellij.codeInsight.template.TemplateContextType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import org.intellij.xquery.XQueryLanguage;
+import org.intellij.xquery.psi.XQueryExpr;
+import org.intellij.xquery.psi.XQueryExprSingle;
+import org.intellij.xquery.psi.XQueryFile;
+import org.intellij.xquery.psi.XQueryModuleDecl;
+import org.intellij.xquery.psi.XQueryQueryBody;
+import org.intellij.xquery.psi.XQueryTypes;
+import org.intellij.xquery.psi.impl.XQueryPsiImplUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class XQueryContextType extends TemplateContextType {
 
-    protected XQueryContextType(@NotNull @NonNls String id, @NotNull String presentableName, @Nullable Class<? extends TemplateContextType> baseContextType) {
+    protected XQueryContextType(@NotNull @NonNls String id, @NotNull String presentableName,
+                                @Nullable Class<? extends TemplateContextType> baseContextType) {
         super(id, presentableName, baseContextType);
     }
 
     @Override
     public boolean isInContext(@NotNull PsiFile file, int offset) {
         if (!PsiUtilBase.getLanguageAtOffset(file, offset).isKindOf(XQueryLanguage.INSTANCE)) return false;
-        PsiElement element = file.findElementAt(offset);
-        if (element instanceof PsiWhiteSpace) {
-            return false;
-        }
+        PsiElement elementAt = file.findElementAt(offset);
+        PsiElement element = XQueryPsiImplUtil.getNextNonWhiteSpaceElement(elementAt);
         return element != null && isInContext(element);
     }
 
     protected abstract boolean isInContext(PsiElement element);
 
-
+    protected boolean isNotBeforeModuleDeclaration(PsiElement topmostElement) {
+        PsiElement nextModuleKeyword = XQueryPsiImplUtil.getNextSiblingOfElementType(topmostElement, XQueryTypes.K_MODULE);
+        PsiElement nextModuleDeclaration = PsiTreeUtil.getNextSiblingOfType(topmostElement, XQueryModuleDecl.class);
+        return nextModuleKeyword == null && nextModuleDeclaration == null;
+    }
 
     public static class Generic extends XQueryContextType {
 
@@ -57,6 +67,37 @@ public abstract class XQueryContextType extends TemplateContextType {
         @Override
         protected boolean isInContext(PsiElement element) {
             return true;
+        }
+    }
+
+    public static class Prolog extends XQueryContextType {
+        protected Prolog() {
+            super("XQUERY_PROLOG", "Prolog", Generic.class);
+        }
+
+        @Override
+        protected boolean isInContext(PsiElement element) {
+            PsiElement topmostElement = XQueryPsiImplUtil.getTopmostElementWithTheSameOffset(element);
+            boolean isOnTheTopLevelOfTheStructure = topmostElement.getParent() instanceof XQueryFile;
+            return isOnTheTopLevelOfTheStructure && isBeforeQueryBody(topmostElement) && isNotBeforeModuleDeclaration(topmostElement);
+        }
+
+        private boolean isBeforeQueryBody(PsiElement topmostElement) {
+            PsiElement previousQueryBody = PsiTreeUtil.getPrevSiblingOfType(topmostElement, XQueryQueryBody.class);
+            return previousQueryBody == null;
+        }
+    }
+
+    public static class Expression extends XQueryContextType {
+        protected Expression() {
+            super("XQUERY_EXPR", "Expression", Generic.class);
+        }
+
+        @Override
+        protected boolean isInContext(PsiElement element) {
+            PsiElement topmostExpressionElement = PsiTreeUtil.getTopmostParentOfType(element, XQueryExprSingle.class);
+            PsiElement topmostElement = XQueryPsiImplUtil.getTopmostElementWithTheSameOffset(element);
+            return topmostExpressionElement != null && isNotBeforeModuleDeclaration(topmostElement);
         }
     }
 }

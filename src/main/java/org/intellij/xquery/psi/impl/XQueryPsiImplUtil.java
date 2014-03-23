@@ -22,11 +22,14 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.ResolveScopeManager;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.icons.XQueryIcons;
 import org.intellij.xquery.psi.XQueryAnnotation;
@@ -413,5 +416,48 @@ public class XQueryPsiImplUtil {
             return elementFile.equals(anotherFile) && elementNamespace.equals(anotherNamespace);
         }
         return false;
+    }
+
+    public static PsiElement getTopmostElementWithTheSameOffset(PsiElement element) {
+        if (element == null) return null;
+        PsiElement lastElement = element;
+        int offset = element.getTextOffset();
+
+        while (element != null) {
+            if (offset == element.getTextOffset() && !(element instanceof PsiFile)) {
+                lastElement = element;
+                element = element.getParent();
+            } else {
+                return lastElement;
+            }
+        }
+
+        return lastElement;
+    }
+
+    public static PsiElement getNextNonWhiteSpaceElement(PsiElement element) {
+        if (isNotWhitespace(element)) {
+            return element;
+        }
+        PsiElement nextSibling = element.getNextSibling();
+        while (nextSibling != null) {
+            if (isNotWhitespace(nextSibling)) {
+                return nextSibling;
+            }
+            nextSibling = element.getNextSibling();
+        }
+        return null;
+    }
+
+    private static boolean isNotWhitespace(PsiElement element) {
+        return !(element instanceof PsiWhiteSpace);
+    }
+
+    public static PsiElement getNextSiblingOfElementType(PsiElement element, IElementType elementType) {
+        for (PsiElement nextSibling = element.getNextSibling(); nextSibling != null; nextSibling = nextSibling.getNextSibling()) {
+            if (nextSibling.getNode() != null && nextSibling.getNode().getElementType() == elementType)
+                return nextSibling;
+        }
+        return null;
     }
 }

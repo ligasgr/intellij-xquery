@@ -1,13 +1,246 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<templateSet group="xquery">
+<!--
+  ~ Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+  ~ (see the CONTRIBUTORS file).
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
-    <template name="declvar" value="declare variable $$$NAME$ := $VALUE$;" description="declare variable" toReformat="false" toShortenFQNames="true">
-        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
-        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+<templateSet group="XQuery">
+
+    <template name="var" value="declare variable $$$NAME$ := $END$;" description="variable declaration"
+              toReformat="false"
+              toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
         <context>
-            <option name="XQUERY_CODE" value="true" />
+            <option name="XQUERY_PROLOG" value="true"/>
+        </context>
+    </template>
+    <template name="vvar" value="declare $ANNOTATIONS$ variable $$$NAME$ as $RETURN_TYPE$ := $END$;"
+              description="variable declaration with annotations and return type" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="ANNOTATIONS" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="RETURN_TYPE" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_PROLOG" value="true"/>
+        </context>
+    </template>
+    <template name="fun" value="declare function $NAME$() {&#10;    $END$&#10;};"
+              description="simplest function declaration" toReformat="false" toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_PROLOG" value="true"/>
+        </context>
+    </template>
+    <template name="ffun" value="declare $ANNOTATIONS$ function $NAME$($PARAM$) as $RETURN_TYPE$ {&#10;    $END$&#10;};"
+              description="function declaration with annotations, parameter and return type" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="ANNOTATIONS" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="PARAM" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="RETURN_TYPE" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_PROLOG" value="true"/>
+        </context>
+    </template>
+    <template name="ns" value="declare namespace $NAME$ = &quot;$URI$&quot;;&#10;$END$"
+              description="namespace declaration" toReformat="false" toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="URI" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_PROLOG" value="true"/>
+        </context>
+    </template>
+    <template name="imp" value="import module namespace $NAME$ = &quot;$URI$&quot;;&#10;$END$"
+              description="module import" toReformat="false" toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="URI" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_PROLOG" value="true"/>
+        </context>
+    </template>
+    <template name="mod" value="module namespace $NAME$ = &quot;$URI$&quot;;&#10;$END$" description="module declaration"
+              toReformat="false" toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="URI" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_PROLOG" value="true"/>
+        </context>
+    </template>
+    <template name="opt" value="declare option $NAME$ &quot;$VALUE$&quot;;&#10;$END$"
+              description="option declaration" toReformat="false" toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_PROLOG" value="true"/>
         </context>
     </template>
 
-</templateSet>
+    <template name="cr" value="&amp;xD;" description="carriage return" toReformat="false" toShortenFQNames="true">
+        <context>
+            <option name="XQUERY_CODE" value="true"/>
+        </context>
+    </template>
+    <template name="nl" value="&amp;xA;" description="new line" toReformat="false" toShortenFQNames="true">
+        <context>
+            <option name="XQUERY_CODE" value="true"/>
+        </context>
+    </template>
+    <template name="tab" value="&amp;#x9;" description="tab" toReformat="false" toShortenFQNames="true">
+        <context>
+            <option name="XQUERY_CODE" value="true"/>
+        </context>
+    </template>
 
+    <template name="let" value="let $$$NAME$ := $VALUE$&#10;return $END$" description="let clause" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="for" value="for $$$NAME$ in $SEQUENCE$&#10;return $END$" description="for clause" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="SEQUENCE" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="order" value="order by $EXPRESSION$" description="order by clause" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="EXPRESSION" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="group" value="group by $EXPRESSION$" description="group by clause" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="EXPRESSION" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="some" value="some $$$NAME$ in $COLLECTION$&#10;satisfies $END$"
+              description="some quantified expression"
+              toReformat="false"
+              toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="COLLECTION" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="all" value="all $$$NAME$ in $COLLECTION$&#10;satisfies $END$"
+              description="all quantified expression"
+              toReformat="false"
+              toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="COLLECTION" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="switch"
+              value="switch ($EXPRESSION$)&#10;    case $VARIANT$ return $CASE$&#10;    default return $DEFAULT$"
+              description="switch expression" toReformat="false" toShortenFQNames="true">
+        <variable name="EXPRESSION" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="VARIANT" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="CASE" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="DEFAULT" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="typeswitch"
+              value="typeswitch ($EXPRESSION$)&#10;    case $TYPE$ return $CASE$&#10;    default return $DEFAULT$"
+              description="typeswitch expression" toReformat="false" toShortenFQNames="true">
+        <variable name="EXPRESSION" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="TYPE" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="CASE" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="DEFAULT" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="try" value="try {&#10;    $EXPRESSION$&#10;} catch * {&#10;    $END$&#10;}"
+              description="try catch expression"
+              toReformat="false" toShortenFQNames="true">
+        <variable name="EXPRESSION" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="trace" value="trace($EXPRESSION$, 'Info: ')" description="trace" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="EXPRESSION" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <!--
+    Waiting for full text search and update facilities support
+    <template name="ct" value="contains text " description="contains text" toReformat="false" toShortenFQNames="true">
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="insert" value="insert node $NODE$ into $END$" description="insert" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="NODE" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="copy" value="copy $$$NAME$ := $COPY$&#10;modify $END$&#10;return " description="copy" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="COPY" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="delete" value="delete node $NODE$" description="delete" toReformat="false" toShortenFQNames="true">
+        <variable name="NODE" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="rename" value="rename node $NODE$ as $RENAMED$" description="rename" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="NODE" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="RENAMED" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="replace value" value="replace value of node $NODE$ with $REPLACED$" description="replace value"
+              toReformat="false" toShortenFQNames="true">
+        <variable name="NODE" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="REPLACED" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    <template name="replace" value="replace node $NODE$ with $REPLACED$" description="replace node" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="NODE" expression="" defaultValue="" alwaysStopAt="true"/>
+        <variable name="REPLACED" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XQUERY_EXPR" value="true"/>
+        </context>
+    </template>
+    -->
+</templateSet>

@@ -1,4 +1,4 @@
 xquery version "3.0";
-module namespace DeclareVariableTemplate = "DeclareVariableTemplate";
+module namespace template = "template";
 
-declare variable $ := ;
+declare variable $name := 'value'<caret>;

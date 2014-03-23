@@ -1,4 +1,4 @@
 xquery version "3.0";
 module namespace template = "template";
 
-var<caret>
+declare %private variable $name as xs:string := 'value'<caret>;
