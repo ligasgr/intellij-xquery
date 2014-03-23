@@ -56,9 +56,10 @@ public class XQDocHighlighter {
 
     private void highlightWordIfTag(PsiComment comment, AnnotationHolder holder, Pair<String, Integer> pair) {
         Integer offset = pair.second;
-        String tag = pair.first;
-        if (XQ_DOC_TAGS.contains(tag)) {
-            highlightTextRange(holder, comment.getTextOffset() + offset, tag.length());
+        String word = pair.first;
+        if (XQ_DOC_TAGS.contains(word)) {
+            int absoluteOffset = comment.getTextOffset() + offset;
+            highlightTextRange(holder, absoluteOffset, word.length());
         }
     }
 
