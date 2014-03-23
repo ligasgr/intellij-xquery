@@ -4,3 +4,4 @@ Michal Jedynak <m.jedynak@gmail.com> - Issue #22 - Duplicate declarations code i
 Arnost Valicek <arnost.valicek@gmail.com> - Issue #72 - Structure view should be able to filter-out non-public functions and variables
 Arnost Valicek <arnost.valicek@gmail.com> - Issue #50 - Folding of functions
 Arnost Valicek <arnost.valicek@gmail.com> - Issue #23 - Imports and namespaces declarations folding
+Arnost Valicek <arnost.valicek@gmail.com> - Issue #21 - Unused variables highlighting
