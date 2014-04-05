@@ -33,15 +33,15 @@ public class XQueryAbbrevForwardStepImpl extends XQueryElementImpl implements XQ
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAbbrevForwardStep(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryNodeTest getNodeTest() {
     return findNotNullChildByClass(XQueryNodeTest.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAbbrevForwardStep(this);
-    else super.accept(visitor);
   }
 
 }

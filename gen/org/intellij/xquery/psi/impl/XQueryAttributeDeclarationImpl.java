@@ -33,15 +33,15 @@ public class XQueryAttributeDeclarationImpl extends XQueryElementImpl implements
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAttributeDeclaration(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryAttributeName getAttributeName() {
     return findNotNullChildByClass(XQueryAttributeName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAttributeDeclaration(this);
-    else super.accept(visitor);
   }
 
 }

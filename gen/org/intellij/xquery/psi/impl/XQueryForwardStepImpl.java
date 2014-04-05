@@ -33,6 +33,11 @@ public class XQueryForwardStepImpl extends XQueryElementImpl implements XQueryFo
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitForwardStep(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryAbbrevForwardStep getAbbrevForwardStep() {
@@ -43,11 +48,6 @@ public class XQueryForwardStepImpl extends XQueryElementImpl implements XQueryFo
   @Nullable
   public XQueryNodeTest getNodeTest() {
     return findChildByClass(XQueryNodeTest.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitForwardStep(this);
-    else super.accept(visitor);
   }
 
 }

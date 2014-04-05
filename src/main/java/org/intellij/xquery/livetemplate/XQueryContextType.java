@@ -24,7 +24,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import org.intellij.xquery.XQueryLanguage;
-import org.intellij.xquery.psi.XQueryExpr;
 import org.intellij.xquery.psi.XQueryExprSingle;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryModuleDecl;
@@ -53,9 +52,9 @@ public abstract class XQueryContextType extends TemplateContextType {
     protected abstract boolean isInContext(PsiElement element);
 
     protected boolean isNotBeforeModuleDeclaration(PsiElement topmostElement) {
-        PsiElement nextModuleKeyword = XQueryPsiImplUtil.getNextSiblingOfElementType(topmostElement, XQueryTypes.K_MODULE);
+        PsiElement[] moduleKeywords = XQueryPsiImplUtil.findChildrenOfType(topmostElement.getNextSibling(), XQueryTypes.K_MODULE);
         PsiElement nextModuleDeclaration = PsiTreeUtil.getNextSiblingOfType(topmostElement, XQueryModuleDecl.class);
-        return nextModuleKeyword == null && nextModuleDeclaration == null;
+        return moduleKeywords.length == 0&& nextModuleDeclaration == null;
     }
 
     public static class Generic extends XQueryContextType {

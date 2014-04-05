@@ -33,6 +33,11 @@ public class XQueryPragmaImpl extends XQueryElementImpl implements XQueryPragma 
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitPragma(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryLocalPart getLocalPart() {
@@ -49,11 +54,6 @@ public class XQueryPragmaImpl extends XQueryElementImpl implements XQueryPragma 
   @Nullable
   public XQueryPrefix getPrefix() {
     return findChildByClass(XQueryPrefix.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitPragma(this);
-    else super.accept(visitor);
   }
 
 }

@@ -33,6 +33,11 @@ public class XQueryPrimaryExprImpl extends XQueryExprSingleImpl implements XQuer
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitPrimaryExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryConstructor getConstructor() {
@@ -55,11 +60,6 @@ public class XQueryPrimaryExprImpl extends XQueryExprSingleImpl implements XQuer
   @Nullable
   public XQueryVarRef getVarRef() {
     return findChildByClass(XQueryVarRef.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitPrimaryExpr(this);
-    else super.accept(visitor);
   }
 
 }

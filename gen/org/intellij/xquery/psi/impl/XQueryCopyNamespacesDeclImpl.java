@@ -33,6 +33,11 @@ public class XQueryCopyNamespacesDeclImpl extends XQueryElementImpl implements X
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCopyNamespacesDecl(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryInheritMode getInheritMode() {
@@ -49,11 +54,6 @@ public class XQueryCopyNamespacesDeclImpl extends XQueryElementImpl implements X
   @Nullable
   public XQuerySeparator getSeparator() {
     return findChildByClass(XQuerySeparator.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCopyNamespacesDecl(this);
-    else super.accept(visitor);
   }
 
 }

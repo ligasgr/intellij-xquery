@@ -33,6 +33,11 @@ public class XQueryQuotAttrValueContentImpl extends XQueryElementImpl implements
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitQuotAttrValueContent(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryCommonContent getCommonContent() {
@@ -43,11 +48,6 @@ public class XQueryQuotAttrValueContentImpl extends XQueryElementImpl implements
   @Nullable
   public XQueryQuotAttrContentChar getQuotAttrContentChar() {
     return findChildByClass(XQueryQuotAttrContentChar.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitQuotAttrValueContent(this);
-    else super.accept(visitor);
   }
 
 }

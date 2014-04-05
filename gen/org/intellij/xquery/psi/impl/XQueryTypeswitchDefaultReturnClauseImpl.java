@@ -33,6 +33,11 @@ public class XQueryTypeswitchDefaultReturnClauseImpl extends XQueryElementImpl i
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitTypeswitchDefaultReturnClause(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQuerySwitchReturnClause getSwitchReturnClause() {
@@ -43,11 +48,6 @@ public class XQueryTypeswitchDefaultReturnClauseImpl extends XQueryElementImpl i
   @Nullable
   public XQueryVarName getVarName() {
     return findChildByClass(XQueryVarName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitTypeswitchDefaultReturnClause(this);
-    else super.accept(visitor);
   }
 
 }

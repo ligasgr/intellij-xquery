@@ -33,6 +33,11 @@ public class XQueryFLWORExprImpl extends XQueryExprSingleImpl implements XQueryF
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitFLWORExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryCountClause> getCountClauseList() {
@@ -79,11 +84,6 @@ public class XQueryFLWORExprImpl extends XQueryExprSingleImpl implements XQueryF
   @NotNull
   public List<XQueryWindowClause> getWindowClauseList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryWindowClause.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitFLWORExpr(this);
-    else super.accept(visitor);
   }
 
 }

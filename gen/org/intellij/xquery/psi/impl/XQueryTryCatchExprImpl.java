@@ -33,6 +33,11 @@ public class XQueryTryCatchExprImpl extends XQueryExprSingleImpl implements XQue
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitTryCatchExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryCatchClause> getCatchClauseList() {
@@ -43,11 +48,6 @@ public class XQueryTryCatchExprImpl extends XQueryExprSingleImpl implements XQue
   @NotNull
   public XQueryTryClause getTryClause() {
     return findNotNullChildByClass(XQueryTryClause.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitTryCatchExpr(this);
-    else super.accept(visitor);
   }
 
 }

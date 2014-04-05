@@ -33,6 +33,11 @@ public class XQueryCastExprImpl extends XQueryExprSingleImpl implements XQueryCa
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCastExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryExprSingle getExprSingle() {
@@ -43,11 +48,6 @@ public class XQueryCastExprImpl extends XQueryExprSingleImpl implements XQueryCa
   @Nullable
   public XQuerySingleType getSingleType() {
     return findChildByClass(XQuerySingleType.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCastExpr(this);
-    else super.accept(visitor);
   }
 
 }

@@ -33,6 +33,11 @@ public class XQueryNamespaceDeclImpl extends XQueryElementImpl implements XQuery
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitNamespaceDecl(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryNamespacePrefix getNamespacePrefix() {
@@ -49,11 +54,6 @@ public class XQueryNamespaceDeclImpl extends XQueryElementImpl implements XQuery
   @Nullable
   public XQueryURILiteral getURILiteral() {
     return findChildByClass(XQueryURILiteral.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitNamespaceDecl(this);
-    else super.accept(visitor);
   }
 
   public String getNamespace() {

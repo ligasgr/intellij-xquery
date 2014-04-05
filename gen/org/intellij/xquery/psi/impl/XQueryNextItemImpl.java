@@ -33,15 +33,15 @@ public class XQueryNextItemImpl extends XQueryElementImpl implements XQueryNextI
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitNextItem(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryVarName getVarName() {
     return findNotNullChildByClass(XQueryVarName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitNextItem(this);
-    else super.accept(visitor);
   }
 
 }

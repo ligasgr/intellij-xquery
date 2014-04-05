@@ -33,6 +33,11 @@ public class XQueryParamImpl extends XQueryElementImpl implements XQueryParam {
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitParam(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryTypeDeclaration getTypeDeclaration() {
@@ -43,11 +48,6 @@ public class XQueryParamImpl extends XQueryElementImpl implements XQueryParam {
   @NotNull
   public XQueryVarName getVarName() {
     return findNotNullChildByClass(XQueryVarName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitParam(this);
-    else super.accept(visitor);
   }
 
 }

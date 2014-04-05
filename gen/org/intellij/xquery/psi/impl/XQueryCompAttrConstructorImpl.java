@@ -33,6 +33,11 @@ public class XQueryCompAttrConstructorImpl extends XQueryElementImpl implements 
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCompAttrConstructor(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryExpr> getExprList() {
@@ -49,11 +54,6 @@ public class XQueryCompAttrConstructorImpl extends XQueryElementImpl implements 
   @Nullable
   public XQueryPrefix getPrefix() {
     return findChildByClass(XQueryPrefix.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCompAttrConstructor(this);
-    else super.accept(visitor);
   }
 
 }

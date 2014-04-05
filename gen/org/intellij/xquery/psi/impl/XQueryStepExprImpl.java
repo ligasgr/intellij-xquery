@@ -33,15 +33,15 @@ public class XQueryStepExprImpl extends XQueryExprSingleImpl implements XQuerySt
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitStepExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryAxisStep getAxisStep() {
     return findChildByClass(XQueryAxisStep.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitStepExpr(this);
-    else super.accept(visitor);
   }
 
 }

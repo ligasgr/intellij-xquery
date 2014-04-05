@@ -33,15 +33,15 @@ public class XQuerySimpleMapExprImpl extends XQueryExprSingleImpl implements XQu
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSimpleMapExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryExprSingle> getExprSingleList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSimpleMapExpr(this);
-    else super.accept(visitor);
   }
 
 }

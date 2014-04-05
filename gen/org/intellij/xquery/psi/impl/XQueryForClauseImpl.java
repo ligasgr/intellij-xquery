@@ -33,15 +33,15 @@ public class XQueryForClauseImpl extends XQueryElementImpl implements XQueryForC
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitForClause(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryForBinding> getForBindingList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryForBinding.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitForClause(this);
-    else super.accept(visitor);
   }
 
 }

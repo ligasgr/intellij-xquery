@@ -33,6 +33,11 @@ public class XQueryConstructorImpl extends XQueryElementImpl implements XQueryCo
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitConstructor(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryComputedConstructor getComputedConstructor() {
@@ -43,11 +48,6 @@ public class XQueryConstructorImpl extends XQueryElementImpl implements XQueryCo
   @Nullable
   public XQueryDirectConstructor getDirectConstructor() {
     return findChildByClass(XQueryDirectConstructor.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitConstructor(this);
-    else super.accept(visitor);
   }
 
 }

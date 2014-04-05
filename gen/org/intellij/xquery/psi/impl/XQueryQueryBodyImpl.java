@@ -34,15 +34,15 @@ public class XQueryQueryBodyImpl extends XQueryElementImpl implements XQueryQuer
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitQueryBody(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryExpr getExpr() {
     return findNotNullChildByClass(XQueryExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitQueryBody(this);
-    else super.accept(visitor);
   }
 
   public ItemPresentation getPresentation() {

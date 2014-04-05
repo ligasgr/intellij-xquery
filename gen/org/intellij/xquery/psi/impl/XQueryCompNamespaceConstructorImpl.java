@@ -33,6 +33,11 @@ public class XQueryCompNamespaceConstructorImpl extends XQueryElementImpl implem
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCompNamespaceConstructor(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryExprSingle> getExprSingleList() {
@@ -43,11 +48,6 @@ public class XQueryCompNamespaceConstructorImpl extends XQueryElementImpl implem
   @Nullable
   public XQueryPrefix getPrefix() {
     return findChildByClass(XQueryPrefix.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCompNamespaceConstructor(this);
-    else super.accept(visitor);
   }
 
 }

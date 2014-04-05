@@ -33,6 +33,11 @@ public class XQueryFunctionTestImpl extends XQueryElementImpl implements XQueryF
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitFunctionTest(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryAnnotation> getAnnotationList() {
@@ -49,11 +54,6 @@ public class XQueryFunctionTestImpl extends XQueryElementImpl implements XQueryF
   @Nullable
   public XQueryTypedFunctionTest getTypedFunctionTest() {
     return findChildByClass(XQueryTypedFunctionTest.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitFunctionTest(this);
-    else super.accept(visitor);
   }
 
 }

@@ -33,15 +33,15 @@ public class XQueryCommonContentImpl extends XQueryElementImpl implements XQuery
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCommonContent(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryEnclosedExpr getEnclosedExpr() {
     return findChildByClass(XQueryEnclosedExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCommonContent(this);
-    else super.accept(visitor);
   }
 
 }

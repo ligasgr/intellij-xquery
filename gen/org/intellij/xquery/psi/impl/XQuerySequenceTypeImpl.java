@@ -33,6 +33,11 @@ public class XQuerySequenceTypeImpl extends XQueryElementImpl implements XQueryS
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSequenceType(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryItemType getItemType() {
@@ -43,11 +48,6 @@ public class XQuerySequenceTypeImpl extends XQueryElementImpl implements XQueryS
   @Nullable
   public XQueryOccurrenceIndicator getOccurrenceIndicator() {
     return findChildByClass(XQueryOccurrenceIndicator.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSequenceType(this);
-    else super.accept(visitor);
   }
 
 }

@@ -33,15 +33,15 @@ public class XQueryGroupingSpecListImpl extends XQueryElementImpl implements XQu
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitGroupingSpecList(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryGroupingSpec> getGroupingSpecList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryGroupingSpec.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitGroupingSpecList(this);
-    else super.accept(visitor);
   }
 
 }

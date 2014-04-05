@@ -33,6 +33,11 @@ public class XQueryInlineFunctionExprImpl extends XQueryExprSingleImpl implement
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitInlineFunctionExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryAnnotation> getAnnotationList() {
@@ -55,11 +60,6 @@ public class XQueryInlineFunctionExprImpl extends XQueryExprSingleImpl implement
   @Nullable
   public XQuerySequenceType getSequenceType() {
     return findChildByClass(XQuerySequenceType.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitInlineFunctionExpr(this);
-    else super.accept(visitor);
   }
 
 }

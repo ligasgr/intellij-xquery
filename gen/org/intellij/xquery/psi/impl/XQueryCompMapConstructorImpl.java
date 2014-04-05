@@ -33,15 +33,15 @@ public class XQueryCompMapConstructorImpl extends XQueryElementImpl implements X
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCompMapConstructor(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryMapEntryList getMapEntryList() {
     return findChildByClass(XQueryMapEntryList.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCompMapConstructor(this);
-    else super.accept(visitor);
   }
 
 }

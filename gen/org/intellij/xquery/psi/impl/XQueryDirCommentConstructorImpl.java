@@ -33,15 +33,15 @@ public class XQueryDirCommentConstructorImpl extends XQueryElementImpl implement
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirCommentConstructor(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryDirCommentContents getDirCommentContents() {
     return findNotNullChildByClass(XQueryDirCommentContents.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirCommentConstructor(this);
-    else super.accept(visitor);
   }
 
 }

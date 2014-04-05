@@ -33,15 +33,15 @@ public class XQueryLiteralImpl extends XQueryElementImpl implements XQueryLitera
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitLiteral(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryNumericLiteral getNumericLiteral() {
     return findChildByClass(XQueryNumericLiteral.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitLiteral(this);
-    else super.accept(visitor);
   }
 
 }

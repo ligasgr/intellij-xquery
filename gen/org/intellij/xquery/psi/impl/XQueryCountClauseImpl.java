@@ -33,15 +33,15 @@ public class XQueryCountClauseImpl extends XQueryElementImpl implements XQueryCo
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCountClause(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryVarName getVarName() {
     return findChildByClass(XQueryVarName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCountClause(this);
-    else super.accept(visitor);
   }
 
 }

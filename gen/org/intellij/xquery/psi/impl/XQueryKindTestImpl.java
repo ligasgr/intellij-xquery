@@ -33,6 +33,11 @@ public class XQueryKindTestImpl extends XQueryElementImpl implements XQueryKindT
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitKindTest(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryAnyKindTest getAnyKindTest() {
@@ -97,11 +102,6 @@ public class XQueryKindTestImpl extends XQueryElementImpl implements XQueryKindT
   @Nullable
   public XQueryTextTest getTextTest() {
     return findChildByClass(XQueryTextTest.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitKindTest(this);
-    else super.accept(visitor);
   }
 
 }

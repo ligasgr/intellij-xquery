@@ -33,15 +33,15 @@ public class XQueryDefaultElementNamespaceDeclImpl extends XQueryElementImpl imp
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDefaultElementNamespaceDecl(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryURILiteral getURILiteral() {
     return findChildByClass(XQueryURILiteral.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDefaultElementNamespaceDecl(this);
-    else super.accept(visitor);
   }
 
 }

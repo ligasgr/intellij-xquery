@@ -33,6 +33,11 @@ public class XQueryDirElemContentImpl extends XQueryElementImpl implements XQuer
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirElemContent(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryCDataSection getCDataSection() {
@@ -49,11 +54,6 @@ public class XQueryDirElemContentImpl extends XQueryElementImpl implements XQuer
   @Nullable
   public XQueryDirectConstructor getDirectConstructor() {
     return findChildByClass(XQueryDirectConstructor.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirElemContent(this);
-    else super.accept(visitor);
   }
 
 }

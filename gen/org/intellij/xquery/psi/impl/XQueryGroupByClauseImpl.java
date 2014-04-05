@@ -33,15 +33,15 @@ public class XQueryGroupByClauseImpl extends XQueryElementImpl implements XQuery
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitGroupByClause(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryGroupingSpecList getGroupingSpecList() {
     return findChildByClass(XQueryGroupingSpecList.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitGroupByClause(this);
-    else super.accept(visitor);
   }
 
 }

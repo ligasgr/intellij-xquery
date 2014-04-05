@@ -33,15 +33,15 @@ public class XQueryPrefixExprImpl extends XQueryExprSingleImpl implements XQuery
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitPrefixExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryExpr getExpr() {
     return findNotNullChildByClass(XQueryExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitPrefixExpr(this);
-    else super.accept(visitor);
   }
 
 }

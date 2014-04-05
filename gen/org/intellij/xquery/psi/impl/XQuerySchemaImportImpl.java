@@ -33,6 +33,11 @@ public class XQuerySchemaImportImpl extends XQueryElementImpl implements XQueryS
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSchemaImport(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryNamespacePrefix getNamespacePrefix() {
@@ -49,11 +54,6 @@ public class XQuerySchemaImportImpl extends XQueryElementImpl implements XQueryS
   @NotNull
   public List<XQueryURILiteral> getURILiteralList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryURILiteral.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSchemaImport(this);
-    else super.accept(visitor);
   }
 
 }

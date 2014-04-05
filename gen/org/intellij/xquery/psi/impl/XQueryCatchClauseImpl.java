@@ -33,6 +33,11 @@ public class XQueryCatchClauseImpl extends XQueryElementImpl implements XQueryCa
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCatchClause(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryCatchErrorList getCatchErrorList() {
@@ -43,11 +48,6 @@ public class XQueryCatchClauseImpl extends XQueryElementImpl implements XQueryCa
   @Nullable
   public XQueryExpr getExpr() {
     return findChildByClass(XQueryExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCatchClause(this);
-    else super.accept(visitor);
   }
 
 }

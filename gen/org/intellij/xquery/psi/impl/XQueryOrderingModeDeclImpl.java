@@ -33,15 +33,15 @@ public class XQueryOrderingModeDeclImpl extends XQueryElementImpl implements XQu
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitOrderingModeDecl(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQuerySeparator getSeparator() {
     return findChildByClass(XQuerySeparator.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitOrderingModeDecl(this);
-    else super.accept(visitor);
   }
 
 }

@@ -33,15 +33,15 @@ public class XQueryArgumentListImpl extends XQueryElementImpl implements XQueryA
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitArgumentList(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryArgument> getArgumentList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryArgument.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitArgumentList(this);
-    else super.accept(visitor);
   }
 
 }

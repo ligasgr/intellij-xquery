@@ -33,6 +33,11 @@ public class XQueryOrderSpecImpl extends XQueryElementImpl implements XQueryOrde
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitOrderSpec(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryExprSingle getExprSingle() {
@@ -43,11 +48,6 @@ public class XQueryOrderSpecImpl extends XQueryElementImpl implements XQueryOrde
   @Nullable
   public XQueryURILiteral getURILiteral() {
     return findChildByClass(XQueryURILiteral.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitOrderSpec(this);
-    else super.accept(visitor);
   }
 
 }

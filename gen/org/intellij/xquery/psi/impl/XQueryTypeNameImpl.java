@@ -33,6 +33,11 @@ public class XQueryTypeNameImpl extends XQueryElementImpl implements XQueryTypeN
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitTypeName(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryLocalPart getLocalPart() {
@@ -43,11 +48,6 @@ public class XQueryTypeNameImpl extends XQueryElementImpl implements XQueryTypeN
   @Nullable
   public XQueryPrefix getPrefix() {
     return findChildByClass(XQueryPrefix.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitTypeName(this);
-    else super.accept(visitor);
   }
 
 }

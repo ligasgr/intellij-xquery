@@ -33,15 +33,15 @@ public class XQueryReturnClauseImpl extends XQueryElementImpl implements XQueryR
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitReturnClause(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryExprSingle getExprSingle() {
     return findChildByClass(XQueryExprSingle.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitReturnClause(this);
-    else super.accept(visitor);
   }
 
 }

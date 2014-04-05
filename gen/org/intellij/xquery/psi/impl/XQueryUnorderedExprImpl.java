@@ -33,15 +33,15 @@ public class XQueryUnorderedExprImpl extends XQueryExprSingleImpl implements XQu
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitUnorderedExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryExpr getExpr() {
     return findChildByClass(XQueryExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitUnorderedExpr(this);
-    else super.accept(visitor);
   }
 
 }

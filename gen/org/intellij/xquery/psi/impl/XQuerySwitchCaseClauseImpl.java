@@ -33,6 +33,11 @@ public class XQuerySwitchCaseClauseImpl extends XQueryElementImpl implements XQu
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSwitchCaseClause(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQuerySwitchCaseOperand> getSwitchCaseOperandList() {
@@ -43,11 +48,6 @@ public class XQuerySwitchCaseClauseImpl extends XQueryElementImpl implements XQu
   @NotNull
   public XQuerySwitchReturnClause getSwitchReturnClause() {
     return findNotNullChildByClass(XQuerySwitchReturnClause.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSwitchCaseClause(this);
-    else super.accept(visitor);
   }
 
 }

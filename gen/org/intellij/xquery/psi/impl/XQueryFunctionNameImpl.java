@@ -34,6 +34,11 @@ public class XQueryFunctionNameImpl extends XQueryNamedElementImpl implements XQ
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitFunctionName(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryFunctionLocalName getFunctionLocalName() {
@@ -44,11 +49,6 @@ public class XQueryFunctionNameImpl extends XQueryNamedElementImpl implements XQ
   @Nullable
   public XQueryPrefix getPrefix() {
     return findChildByClass(XQueryPrefix.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitFunctionName(this);
-    else super.accept(visitor);
   }
 
   public String getName() {

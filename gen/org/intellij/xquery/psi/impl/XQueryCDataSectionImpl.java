@@ -33,15 +33,15 @@ public class XQueryCDataSectionImpl extends XQueryElementImpl implements XQueryC
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCDataSection(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryCDataSectionContents getCDataSectionContents() {
     return findNotNullChildByClass(XQueryCDataSectionContents.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCDataSection(this);
-    else super.accept(visitor);
   }
 
 }

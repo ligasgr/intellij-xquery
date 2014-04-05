@@ -34,6 +34,11 @@ public class XQueryNamedFunctionRefImpl extends XQueryElementImpl implements XQu
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitNamedFunctionRef(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryFunctionArity getFunctionArity() {
@@ -44,11 +49,6 @@ public class XQueryNamedFunctionRefImpl extends XQueryElementImpl implements XQu
   @NotNull
   public XQueryFunctionName getFunctionName() {
     return findNotNullChildByClass(XQueryFunctionName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitNamedFunctionRef(this);
-    else super.accept(visitor);
   }
 
   public int getArity() {

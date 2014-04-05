@@ -33,6 +33,11 @@ public class XQueryReverseStepImpl extends XQueryElementImpl implements XQueryRe
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitReverseStep(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryAbbrevReverseStep getAbbrevReverseStep() {
@@ -43,11 +48,6 @@ public class XQueryReverseStepImpl extends XQueryElementImpl implements XQueryRe
   @Nullable
   public XQueryNodeTest getNodeTest() {
     return findChildByClass(XQueryNodeTest.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitReverseStep(this);
-    else super.accept(visitor);
   }
 
 }

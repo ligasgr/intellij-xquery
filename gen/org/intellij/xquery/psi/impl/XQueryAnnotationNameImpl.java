@@ -33,6 +33,11 @@ public class XQueryAnnotationNameImpl extends XQueryElementImpl implements XQuer
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAnnotationName(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryLocalPart getLocalPart() {
@@ -43,11 +48,6 @@ public class XQueryAnnotationNameImpl extends XQueryElementImpl implements XQuer
   @Nullable
   public XQueryPrefix getPrefix() {
     return findChildByClass(XQueryPrefix.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAnnotationName(this);
-    else super.accept(visitor);
   }
 
 }

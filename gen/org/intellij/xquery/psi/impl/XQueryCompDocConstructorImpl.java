@@ -33,15 +33,15 @@ public class XQueryCompDocConstructorImpl extends XQueryElementImpl implements X
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCompDocConstructor(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryExpr getExpr() {
     return findNotNullChildByClass(XQueryExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCompDocConstructor(this);
-    else super.accept(visitor);
   }
 
 }

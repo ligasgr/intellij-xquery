@@ -33,6 +33,11 @@ public class XQueryDocumentTestImpl extends XQueryElementImpl implements XQueryD
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDocumentTest(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryElementTest getElementTest() {
@@ -43,11 +48,6 @@ public class XQueryDocumentTestImpl extends XQueryElementImpl implements XQueryD
   @Nullable
   public XQuerySchemaElementTest getSchemaElementTest() {
     return findChildByClass(XQuerySchemaElementTest.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDocumentTest(this);
-    else super.accept(visitor);
   }
 
 }

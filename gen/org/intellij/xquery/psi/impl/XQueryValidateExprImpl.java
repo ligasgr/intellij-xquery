@@ -33,6 +33,11 @@ public class XQueryValidateExprImpl extends XQueryExprSingleImpl implements XQue
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitValidateExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryExpr getExpr() {
@@ -43,11 +48,6 @@ public class XQueryValidateExprImpl extends XQueryExprSingleImpl implements XQue
   @Nullable
   public XQueryTypeName getTypeName() {
     return findChildByClass(XQueryTypeName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitValidateExpr(this);
-    else super.accept(visitor);
   }
 
 }

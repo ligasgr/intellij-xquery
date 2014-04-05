@@ -33,15 +33,15 @@ public class XQuerySingleTypeImpl extends XQueryElementImpl implements XQuerySin
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSingleType(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQuerySimpleTypeName getSimpleTypeName() {
     return findNotNullChildByClass(XQuerySimpleTypeName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSingleType(this);
-    else super.accept(visitor);
   }
 
 }

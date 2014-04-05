@@ -33,15 +33,15 @@ public class XQueryTypeDeclarationImpl extends XQueryElementImpl implements XQue
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitTypeDeclaration(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQuerySequenceType getSequenceType() {
     return findNotNullChildByClass(XQuerySequenceType.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitTypeDeclaration(this);
-    else super.accept(visitor);
   }
 
 }

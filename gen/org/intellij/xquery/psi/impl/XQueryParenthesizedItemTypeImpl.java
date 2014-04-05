@@ -33,15 +33,15 @@ public class XQueryParenthesizedItemTypeImpl extends XQueryElementImpl implement
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitParenthesizedItemType(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryItemType getItemType() {
     return findNotNullChildByClass(XQueryItemType.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitParenthesizedItemType(this);
-    else super.accept(visitor);
   }
 
 }

@@ -33,6 +33,11 @@ public class XQueryPostfixExprImpl extends XQueryExprSingleImpl implements XQuer
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitPostfixExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryArgumentList> getArgumentListList() {
@@ -49,11 +54,6 @@ public class XQueryPostfixExprImpl extends XQueryExprSingleImpl implements XQuer
   @NotNull
   public XQueryPrimaryExpr getPrimaryExpr() {
     return findNotNullChildByClass(XQueryPrimaryExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitPostfixExpr(this);
-    else super.accept(visitor);
   }
 
 }

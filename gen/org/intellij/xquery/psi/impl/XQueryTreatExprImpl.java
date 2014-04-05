@@ -33,6 +33,11 @@ public class XQueryTreatExprImpl extends XQueryExprSingleImpl implements XQueryT
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitTreatExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryExprSingle getExprSingle() {
@@ -43,11 +48,6 @@ public class XQueryTreatExprImpl extends XQueryExprSingleImpl implements XQueryT
   @Nullable
   public XQuerySequenceType getSequenceType() {
     return findChildByClass(XQuerySequenceType.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitTreatExpr(this);
-    else super.accept(visitor);
   }
 
 }

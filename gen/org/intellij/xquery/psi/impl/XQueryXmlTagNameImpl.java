@@ -33,6 +33,11 @@ public class XQueryXmlTagNameImpl extends XQueryElementImpl implements XQueryXml
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitXmlTagName(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryXmlTagLocalName getXmlTagLocalName() {
@@ -43,11 +48,6 @@ public class XQueryXmlTagNameImpl extends XQueryElementImpl implements XQueryXml
   @Nullable
   public XQueryXmlTagNamespace getXmlTagNamespace() {
     return findChildByClass(XQueryXmlTagNamespace.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitXmlTagName(this);
-    else super.accept(visitor);
   }
 
 }

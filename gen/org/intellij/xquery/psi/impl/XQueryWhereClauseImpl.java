@@ -33,15 +33,15 @@ public class XQueryWhereClauseImpl extends XQueryElementImpl implements XQueryWh
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitWhereClause(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryExprSingle getExprSingle() {
     return findChildByClass(XQueryExprSingle.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitWhereClause(this);
-    else super.accept(visitor);
   }
 
 }

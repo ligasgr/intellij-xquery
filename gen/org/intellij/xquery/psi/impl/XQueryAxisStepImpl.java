@@ -33,6 +33,11 @@ public class XQueryAxisStepImpl extends XQueryElementImpl implements XQueryAxisS
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAxisStep(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryForwardStep getForwardStep() {
@@ -49,11 +54,6 @@ public class XQueryAxisStepImpl extends XQueryElementImpl implements XQueryAxisS
   @Nullable
   public XQueryReverseStep getReverseStep() {
     return findChildByClass(XQueryReverseStep.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAxisStep(this);
-    else super.accept(visitor);
   }
 
 }

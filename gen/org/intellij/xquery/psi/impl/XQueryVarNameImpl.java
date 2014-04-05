@@ -26,13 +26,18 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
-import com.intellij.psi.search.SearchScope;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.search.SearchScope;
 
 public class XQueryVarNameImpl extends XQueryNamedElementImpl implements XQueryVarName {
 
   public XQueryVarNameImpl(ASTNode node) {
     super(node);
+  }
+
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitVarName(this);
+    else super.accept(visitor);
   }
 
   @Override
@@ -45,11 +50,6 @@ public class XQueryVarNameImpl extends XQueryNamedElementImpl implements XQueryV
   @Nullable
   public XQueryVarLocalName getVarLocalName() {
     return findChildByClass(XQueryVarLocalName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitVarName(this);
-    else super.accept(visitor);
   }
 
   public String getName() {

@@ -33,6 +33,11 @@ public class XQueryBaseURIDeclImpl extends XQueryElementImpl implements XQueryBa
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitBaseURIDecl(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQuerySeparator getSeparator() {
@@ -43,11 +48,6 @@ public class XQueryBaseURIDeclImpl extends XQueryElementImpl implements XQueryBa
   @Nullable
   public XQueryURILiteral getURILiteral() {
     return findChildByClass(XQueryURILiteral.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitBaseURIDecl(this);
-    else super.accept(visitor);
   }
 
 }

@@ -33,15 +33,15 @@ public class XQueryParamListImpl extends XQueryElementImpl implements XQueryPara
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitParamList(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryParam> getParamList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryParam.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitParamList(this);
-    else super.accept(visitor);
   }
 
 }

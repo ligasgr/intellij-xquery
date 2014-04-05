@@ -33,6 +33,11 @@ public class XQueryArgumentImpl extends XQueryElementImpl implements XQueryArgum
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitArgument(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryArgumentPlaceholder getArgumentPlaceholder() {
@@ -43,11 +48,6 @@ public class XQueryArgumentImpl extends XQueryElementImpl implements XQueryArgum
   @Nullable
   public XQueryExprSingle getExprSingle() {
     return findChildByClass(XQueryExprSingle.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitArgument(this);
-    else super.accept(visitor);
   }
 
 }

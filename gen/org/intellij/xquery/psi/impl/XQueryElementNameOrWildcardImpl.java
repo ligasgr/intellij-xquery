@@ -33,15 +33,15 @@ public class XQueryElementNameOrWildcardImpl extends XQueryElementImpl implement
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitElementNameOrWildcard(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryElementName getElementName() {
     return findChildByClass(XQueryElementName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitElementNameOrWildcard(this);
-    else super.accept(visitor);
   }
 
 }

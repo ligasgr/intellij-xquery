@@ -33,6 +33,11 @@ public class XQueryAposAttrValueContentImpl extends XQueryElementImpl implements
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAposAttrValueContent(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryAposAttrContentChar getAposAttrContentChar() {
@@ -43,11 +48,6 @@ public class XQueryAposAttrValueContentImpl extends XQueryElementImpl implements
   @Nullable
   public XQueryCommonContent getCommonContent() {
     return findChildByClass(XQueryCommonContent.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAposAttrValueContent(this);
-    else super.accept(visitor);
   }
 
 }

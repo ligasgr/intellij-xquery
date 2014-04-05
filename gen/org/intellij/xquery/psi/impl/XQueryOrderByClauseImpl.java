@@ -33,15 +33,15 @@ public class XQueryOrderByClauseImpl extends XQueryElementImpl implements XQuery
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitOrderByClause(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryOrderSpecList getOrderSpecList() {
     return findChildByClass(XQueryOrderSpecList.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitOrderByClause(this);
-    else super.accept(visitor);
   }
 
 }

@@ -33,15 +33,15 @@ public class XQueryModuleImportNamespaceImpl extends XQueryElementImpl implement
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitModuleImportNamespace(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryModuleImportPath getModuleImportPath() {
     return findNotNullChildByClass(XQueryModuleImportPath.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitModuleImportNamespace(this);
-    else super.accept(visitor);
   }
 
 }

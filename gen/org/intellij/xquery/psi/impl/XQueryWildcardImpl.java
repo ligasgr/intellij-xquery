@@ -33,15 +33,15 @@ public class XQueryWildcardImpl extends XQueryElementImpl implements XQueryWildc
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitWildcard(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryPrefix getPrefix() {
     return findChildByClass(XQueryPrefix.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitWildcard(this);
-    else super.accept(visitor);
   }
 
 }

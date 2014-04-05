@@ -33,15 +33,15 @@ public class XQueryPathExprImpl extends XQueryExprSingleImpl implements XQueryPa
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitPathExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryStepExpr> getStepExprList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryStepExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitPathExpr(this);
-    else super.accept(visitor);
   }
 
 }

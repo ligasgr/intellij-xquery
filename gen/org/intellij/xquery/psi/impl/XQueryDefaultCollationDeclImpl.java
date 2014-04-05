@@ -33,6 +33,11 @@ public class XQueryDefaultCollationDeclImpl extends XQueryElementImpl implements
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDefaultCollationDecl(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQuerySeparator getSeparator() {
@@ -43,11 +48,6 @@ public class XQueryDefaultCollationDeclImpl extends XQueryElementImpl implements
   @Nullable
   public XQueryURILiteral getURILiteral() {
     return findChildByClass(XQueryURILiteral.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDefaultCollationDecl(this);
-    else super.accept(visitor);
   }
 
 }

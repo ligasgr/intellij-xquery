@@ -33,6 +33,11 @@ public class XQueryDecimalFormatDeclImpl extends XQueryElementImpl implements XQ
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDecimalFormatDecl(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryLocalPart getLocalPart() {
@@ -49,11 +54,6 @@ public class XQueryDecimalFormatDeclImpl extends XQueryElementImpl implements XQ
   @Nullable
   public XQuerySeparator getSeparator() {
     return findChildByClass(XQuerySeparator.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDecimalFormatDecl(this);
-    else super.accept(visitor);
   }
 
 }

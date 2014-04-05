@@ -33,6 +33,11 @@ public class XQueryExtensionExprImpl extends XQueryExprSingleImpl implements XQu
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitExtensionExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryExpr getExpr() {
@@ -43,11 +48,6 @@ public class XQueryExtensionExprImpl extends XQueryExprSingleImpl implements XQu
   @NotNull
   public List<XQueryPragma> getPragmaList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryPragma.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitExtensionExpr(this);
-    else super.accept(visitor);
   }
 
 }

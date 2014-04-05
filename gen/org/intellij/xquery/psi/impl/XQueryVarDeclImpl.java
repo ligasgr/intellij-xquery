@@ -34,6 +34,11 @@ public class XQueryVarDeclImpl extends XQueryElementImpl implements XQueryVarDec
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitVarDecl(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryAnnotation> getAnnotationList() {
@@ -62,11 +67,6 @@ public class XQueryVarDeclImpl extends XQueryElementImpl implements XQueryVarDec
   @Nullable
   public XQueryVarValue getVarValue() {
     return findChildByClass(XQueryVarValue.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitVarDecl(this);
-    else super.accept(visitor);
   }
 
   public ItemPresentation getPresentation() {

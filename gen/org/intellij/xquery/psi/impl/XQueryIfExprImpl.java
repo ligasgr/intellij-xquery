@@ -33,6 +33,11 @@ public class XQueryIfExprImpl extends XQueryExprSingleImpl implements XQueryIfEx
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitIfExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryExpr getExpr() {
@@ -43,11 +48,6 @@ public class XQueryIfExprImpl extends XQueryExprSingleImpl implements XQueryIfEx
   @NotNull
   public List<XQueryExprSingle> getExprSingleList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitIfExpr(this);
-    else super.accept(visitor);
   }
 
 }

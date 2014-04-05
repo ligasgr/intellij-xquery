@@ -33,6 +33,11 @@ public class XQueryLetBindingImpl extends XQueryElementImpl implements XQueryLet
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitLetBinding(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryExprSingle getExprSingle() {
@@ -49,11 +54,6 @@ public class XQueryLetBindingImpl extends XQueryElementImpl implements XQueryLet
   @NotNull
   public XQueryVarName getVarName() {
     return findNotNullChildByClass(XQueryVarName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitLetBinding(this);
-    else super.accept(visitor);
   }
 
 }

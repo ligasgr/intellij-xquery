@@ -33,6 +33,11 @@ public class XQueryAnnotationImpl extends XQueryElementImpl implements XQueryAnn
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAnnotation(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryAnnotationName getAnnotationName() {
@@ -43,11 +48,6 @@ public class XQueryAnnotationImpl extends XQueryElementImpl implements XQueryAnn
   @NotNull
   public List<XQueryLiteral> getLiteralList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryLiteral.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAnnotation(this);
-    else super.accept(visitor);
   }
 
 }

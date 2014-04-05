@@ -33,6 +33,11 @@ public class XQueryDirAttributeNameImpl extends XQueryElementImpl implements XQu
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirAttributeName(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryAttrLocalName getAttrLocalName() {
@@ -43,11 +48,6 @@ public class XQueryDirAttributeNameImpl extends XQueryElementImpl implements XQu
   @Nullable
   public XQueryAttrNamespace getAttrNamespace() {
     return findChildByClass(XQueryAttrNamespace.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirAttributeName(this);
-    else super.accept(visitor);
   }
 
 }

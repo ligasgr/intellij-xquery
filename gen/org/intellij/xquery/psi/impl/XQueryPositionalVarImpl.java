@@ -33,15 +33,15 @@ public class XQueryPositionalVarImpl extends XQueryElementImpl implements XQuery
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitPositionalVar(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryVarName getVarName() {
     return findNotNullChildByClass(XQueryVarName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitPositionalVar(this);
-    else super.accept(visitor);
   }
 
 }

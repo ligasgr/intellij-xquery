@@ -33,6 +33,11 @@ public class XQueryNameTestImpl extends XQueryElementImpl implements XQueryNameT
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitNameTest(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryLocalPart getLocalPart() {
@@ -49,11 +54,6 @@ public class XQueryNameTestImpl extends XQueryElementImpl implements XQueryNameT
   @Nullable
   public XQueryWildcard getWildcard() {
     return findChildByClass(XQueryWildcard.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitNameTest(this);
-    else super.accept(visitor);
   }
 
 }

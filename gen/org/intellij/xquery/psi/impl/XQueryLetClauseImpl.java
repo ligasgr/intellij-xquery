@@ -33,15 +33,15 @@ public class XQueryLetClauseImpl extends XQueryElementImpl implements XQueryLetC
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitLetClause(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryLetBinding> getLetBindingList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryLetBinding.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitLetClause(this);
-    else super.accept(visitor);
   }
 
 }

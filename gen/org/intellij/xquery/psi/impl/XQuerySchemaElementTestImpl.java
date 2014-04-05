@@ -33,15 +33,15 @@ public class XQuerySchemaElementTestImpl extends XQueryElementImpl implements XQ
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSchemaElementTest(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryElementDeclaration getElementDeclaration() {
     return findChildByClass(XQueryElementDeclaration.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSchemaElementTest(this);
-    else super.accept(visitor);
   }
 
 }

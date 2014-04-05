@@ -33,15 +33,15 @@ public class XQueryDirPIConstructorImpl extends XQueryElementImpl implements XQu
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirPIConstructor(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryDirPIContents getDirPIContents() {
     return findChildByClass(XQueryDirPIContents.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirPIConstructor(this);
-    else super.accept(visitor);
   }
 
 }

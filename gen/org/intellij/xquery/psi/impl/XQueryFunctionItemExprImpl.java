@@ -33,15 +33,15 @@ public class XQueryFunctionItemExprImpl extends XQueryExprSingleImpl implements 
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitFunctionItemExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryNamedFunctionRef getNamedFunctionRef() {
     return findChildByClass(XQueryNamedFunctionRef.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitFunctionItemExpr(this);
-    else super.accept(visitor);
   }
 
 }

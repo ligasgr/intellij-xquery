@@ -30,6 +30,7 @@ import com.intellij.psi.impl.ResolveScopeManager;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.util.PsiElementFilter;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.icons.XQueryIcons;
 import org.intellij.xquery.psi.XQueryAnnotation;
@@ -61,7 +62,7 @@ import org.intellij.xquery.reference.variable.XQueryVariableReference;
 import org.intellij.xquery.util.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.Icon;
+import javax.swing.*;
 
 import static org.intellij.xquery.util.StringUtils.EMPTY;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
@@ -453,11 +454,12 @@ public class XQueryPsiImplUtil {
         return !(element instanceof PsiWhiteSpace);
     }
 
-    public static PsiElement getNextSiblingOfElementType(PsiElement element, IElementType elementType) {
-        for (PsiElement nextSibling = element.getNextSibling(); nextSibling != null; nextSibling = nextSibling.getNextSibling()) {
-            if (nextSibling.getNode() != null && nextSibling.getNode().getElementType() == elementType)
-                return nextSibling;
-        }
-        return null;
+    public static PsiElement[] findChildrenOfType(PsiElement startingElement, final IElementType elementType) {
+        return PsiTreeUtil.collectElements(startingElement, new PsiElementFilter() {
+            @Override
+            public boolean isAccepted(PsiElement element) {
+                return element.getNode() != null && element.getNode().getElementType() == elementType;
+            }
+        });
     }
 }

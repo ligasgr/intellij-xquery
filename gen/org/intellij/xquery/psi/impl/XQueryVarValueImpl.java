@@ -33,15 +33,15 @@ public class XQueryVarValueImpl extends XQueryElementImpl implements XQueryVarVa
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitVarValue(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryExprSingle getExprSingle() {
     return findNotNullChildByClass(XQueryExprSingle.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitVarValue(this);
-    else super.accept(visitor);
   }
 
 }

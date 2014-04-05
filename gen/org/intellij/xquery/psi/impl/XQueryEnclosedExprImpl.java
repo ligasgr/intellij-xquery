@@ -33,15 +33,15 @@ public class XQueryEnclosedExprImpl extends XQueryExprSingleImpl implements XQue
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitEnclosedExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryExpr getExpr() {
     return findChildByClass(XQueryExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitEnclosedExpr(this);
-    else super.accept(visitor);
   }
 
 }

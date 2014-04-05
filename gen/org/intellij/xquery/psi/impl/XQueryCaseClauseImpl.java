@@ -33,6 +33,11 @@ public class XQueryCaseClauseImpl extends XQueryElementImpl implements XQueryCas
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCaseClause(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQuerySequenceTypeUnion getSequenceTypeUnion() {
@@ -49,11 +54,6 @@ public class XQueryCaseClauseImpl extends XQueryElementImpl implements XQueryCas
   @Nullable
   public XQueryVarName getVarName() {
     return findChildByClass(XQueryVarName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCaseClause(this);
-    else super.accept(visitor);
   }
 
 }

@@ -33,15 +33,15 @@ public class XQueryAdditiveExprImpl extends XQueryExprSingleImpl implements XQue
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAdditiveExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryExprSingle> getExprSingleList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAdditiveExpr(this);
-    else super.accept(visitor);
   }
 
 }

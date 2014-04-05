@@ -33,15 +33,15 @@ public class XQueryGroupingVariableImpl extends XQueryElementImpl implements XQu
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitGroupingVariable(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryVarName getVarName() {
     return findNotNullChildByClass(XQueryVarName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitGroupingVariable(this);
-    else super.accept(visitor);
   }
 
 }

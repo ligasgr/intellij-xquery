@@ -33,6 +33,11 @@ public class XQuerySwitchExprImpl extends XQueryExprSingleImpl implements XQuery
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSwitchExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryExpr getExpr() {
@@ -49,11 +54,6 @@ public class XQuerySwitchExprImpl extends XQueryExprSingleImpl implements XQuery
   @Nullable
   public XQuerySwitchDefaultReturnClause getSwitchDefaultReturnClause() {
     return findChildByClass(XQuerySwitchDefaultReturnClause.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSwitchExpr(this);
-    else super.accept(visitor);
   }
 
 }

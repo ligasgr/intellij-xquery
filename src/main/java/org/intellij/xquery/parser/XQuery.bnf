@@ -19,7 +19,7 @@
  */
 {
   parserClass="org.intellij.xquery.parser.XQueryParser"
-  parserUtilClass="org.intellij.xquery.parser.GeneratedParserUtilBase"
+  parserUtilClass="com.intellij.lang.parser.GeneratedParserUtilBase"
 
   implements="org.intellij.xquery.psi.XQueryElement"
   extends="org.intellij.xquery.psi.impl.XQueryElementImpl"
@@ -228,13 +228,13 @@
 xqueryFile ::= Module {pin(".*")=1}
 
 private Module	   ::=   	VersionDecl? (LibraryModule | MainModule)
-VersionDecl	   ::=   	"xquery" ((VersionDeclEncoding) | (VersionDeclVersion)) Separator {pin=1 recoverUntil=VersionDeclRecover}
-private VersionDeclRecover ::= !('$' | '%' | '(#' | '(' | '*' | '+' | '-' | '.' | '..' | '/' | '//' | '<!--' | '<' | '<?' | '@' | 'ancestor' | 'ancestor-or-self' | 'attribute' | 'child' | 'comment' | 'declare' | 'descendant' | 'descendant-or-self' | 'document' | 'document-node' | 'element' | 'every' | 'following' | 'following-sibling' | 'for' | 'function' | 'if' | 'import' | 'let' | 'module' | 'namespace' | 'namespace-node' | 'node' | 'ordered' | 'parent' | 'preceding' | 'preceding-sibling' | 'processing-instruction' | 'schema-attribute' | 'schema-element' | 'self' | 'some' | 'switch' | 'text' | 'try' | 'typeswitch' | 'unordered' | 'validate' | -eof- | BracedURILiteral | DecimalLiteral | DoubleLiteral | IntegerLiteral | NCName | QName | StringLiteral | URIQualifiedName)
+VersionDecl	   ::=   	"xquery" ((VersionDeclEncoding) | (VersionDeclVersion)) Separator {pin=1 recoverWhile=VersionDeclRecover}
+private VersionDeclRecover ::= !('$' | '%' | '(#' | '(' | '*' | '+' | '-' | '.' | '..' | '/' | '//' | '<!--' | XmlStartTagStart | '<?' | '@' | 'ancestor' | 'ancestor-or-self' | 'attribute' | 'child' | 'comment' | 'declare' | 'descendant' | 'descendant-or-self' | 'document' | 'document-node' | 'element' | 'every' | 'following' | 'following-sibling' | 'for' | 'function' | 'if' | 'import' | 'let' | 'module' | 'namespace' | 'namespace-node' | 'node' | 'ordered' | 'parent' | 'preceding' | 'preceding-sibling' | 'processing-instruction' | 'schema-attribute' | 'schema-element' | 'self' | 'some' | 'switch' | 'text' | 'try' | 'typeswitch' | 'unordered' | 'validate' | <<eof>> | BracedURILiteral | DecimalLiteral | DoubleLiteral | IntegerLiteral | NCName | StringLiteral | URIQualifiedName | '"' | "'" | Char)
 private VersionDeclEncoding ::= "encoding" StringLiteral {pin=1}
 private VersionDeclVersion ::= "version" StringLiteral ("encoding" StringLiteral)? {pin=1}
 private MainModule	   ::=   	Prolog QueryBody {pin=1}
 private LibraryModule	   ::=   	ModuleDecl Prolog {pin=1}
-ModuleDecl	   ::=   	"module" "namespace" NamespacePrefix "=" URILiteral Separator {pin=1 recoverUntil=ModuleDeclRecover methods=[getNamespace]}
+ModuleDecl	   ::=   	"module" "namespace" NamespacePrefix "=" URILiteral Separator {pin=1 recoverWhile=ModuleDeclRecover methods=[getNamespace]}
 NamespacePrefix ::= NCName  {methods=[getName setName getNameIdentifier delete]}
 private ModuleDeclRecover ::= !('declare' | 'import')
 private Prolog	   ::=   	FirstDecl* SecondDecl*
@@ -270,7 +270,7 @@ ExternalVarPart ::= "external" (":=" VarDefaultValue)?
 VarValue	   ::=   	ExprSingle
 VarDefaultValue	   ::=   	ExprSingle
 ContextItemDecl	   ::=   	"declare" "context" "item" ("as" ItemType)? ((":=" VarValue) | ("external" (":=" VarDefaultValue)?)) Separator {pin=2}
-FunctionDecl	   ::=   	"declare" Annotation* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external")  	/* xgc: reserved-function-names */ {pin=3 methods=[getPresentation getArity hasValidFunctionName isPublic] recoverUntil=FunctionDeclRec}
+FunctionDecl	   ::=   	"declare" Annotation* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external")  	/* xgc: reserved-function-names */ {pin=3 methods=[getPresentation getArity hasValidFunctionName isPublic] recoverWhile=FunctionDeclRec}
 private FunctionDeclRec ::= !(';')
 ParamList	   ::=   	"(" (Param ("," Param)*)? ")"
 Param	   ::=   	"$" VarName TypeDeclaration?
@@ -288,34 +288,34 @@ ExprSingle	   ::=   	FLWORExpr
  | TryCatchExpr
  | OrExpr
 FLWORExpr	   ::=   	InitialClause IntermediateClause* ReturnClause {pin=1}
-private FLWORExprRecover ::= !('count' | 'for' | 'group' | 'let' | 'order' | 'return' | 'stable' | 'where' | '}' | '<' TagName | '</' TagName | ',')
+private FLWORExprRecover ::= !('count' | 'for' | 'group' | 'let' | 'order' | 'return' | 'stable' | 'where' | '}' | XmlEndTagStart TagName | XmlStartTagStart TagName | ',')
 private InitialClause	   ::=   	ForClause | WindowClause | LetClause {pin=1}
 private IntermediateClause	   ::=   	InitialClause | WhereClause | GroupByClause | OrderByClause | CountClause
 ForClause	   ::=   	"for" ForBinding ("," ForBinding)* {pin=2}
 ForBinding	   ::=   	"$" ForBindingDetails {pin=1}
-private ForBindingDetails ::= VarName TypeDeclaration? AllowingEmpty? PositionalVar? "in" ExprSingle {recoverUntil=FLWORExprRecover}
+private ForBindingDetails ::= VarName TypeDeclaration? AllowingEmpty? PositionalVar? "in" ExprSingle {recoverWhile=FLWORExprRecover}
 AllowingEmpty	   ::=   	"allowing" "empty"
 PositionalVar	   ::=   	"at" "$" VarName
 LetClause	   ::=   	"let" LetBinding ("," LetBinding)* {pin=1}
-LetBinding	   ::=   	"$" VarName TypeDeclaration? ":=" ExprSingle {recoverUntil=FLWORExprRecover}
+LetBinding	   ::=   	"$" VarName TypeDeclaration? ":=" ExprSingle {recoverWhile=FLWORExprRecover}
 WindowClause	   ::=   	"for" (TumblingWindowClause | SlidingWindowClause) {pin=2}
 private TumblingWindowClause	   ::=   	"tumbling" TumblingWindowDetails {pin=1}
-private TumblingWindowDetails ::= "window" "$" VarName TypeDeclaration? "in" ExprSingle WindowStartCondition WindowEndCondition? {recoverUntil=FLWORExprRecover}
+private TumblingWindowDetails ::= "window" "$" VarName TypeDeclaration? "in" ExprSingle WindowStartCondition WindowEndCondition? {recoverWhile=FLWORExprRecover}
 private SlidingWindowClause	   ::=   	"sliding" SlidingWindowDetails {pin=1}
-private SlidingWindowDetails ::= "window" "$" VarName TypeDeclaration? "in" ExprSingle WindowStartCondition WindowEndCondition {recoverUntil=FLWORExprRecover}
+private SlidingWindowDetails ::= "window" "$" VarName TypeDeclaration? "in" ExprSingle WindowStartCondition WindowEndCondition {recoverWhile=FLWORExprRecover}
 private WindowStartCondition	   ::=   	"start" WindowVars "when" ExprSingle
 private WindowEndCondition	   ::=   	"only"? "end" WindowVars "when" ExprSingle
 private WindowVars	   ::=   	("$" CurrentItem)? PositionalVar? ("previous" "$" PreviousItem)? ("next" "$" NextItem)?
 CurrentItem	   ::=   	VarName
 PreviousItem	   ::=   	VarName
 NextItem	   ::=   	VarName
-CountClause	   ::=   	"count" "$" VarName {pin=1 recoverUntil=FLWORExprRecover}
-WhereClause	   ::=   	"where" ExprSingle {pin=1 recoverUntil=FLWORExprRecover}
-GroupByClause	   ::=   	"group" "by" GroupingSpecList {pin=2 recoverUntil=FLWORExprRecover}
+CountClause	   ::=   	"count" "$" VarName {pin=1 recoverWhile=FLWORExprRecover}
+WhereClause	   ::=   	"where" ExprSingle {pin=1 recoverWhile=FLWORExprRecover}
+GroupByClause	   ::=   	"group" "by" GroupingSpecList {pin=2 recoverWhile=FLWORExprRecover}
 GroupingSpecList	   ::=   	GroupingSpec ("," GroupingSpec)*
 GroupingSpec	   ::=   	GroupingVariable (TypeDeclaration? ":=" ExprSingle)? ("collation" URILiteral)?
 GroupingVariable	   ::=   	"$" VarName
-OrderByClause	   ::=   	(("order" "by") | ("stable" "order" "by")) OrderSpecList {pin=1 recoverUntil=FLWORExprRecover}
+OrderByClause	   ::=   	(("order" "by") | ("stable" "order" "by")) OrderSpecList {pin=1 recoverWhile=FLWORExprRecover}
 OrderSpecList	   ::=   	OrderSpec ("," OrderSpec)*
 OrderSpec	   ::=   	ExprSingle OrderModifier
 private OrderModifier	   ::=   	("ascending" | "descending")? ("empty" ("greatest" | "least"))? ("collation" URILiteral)?

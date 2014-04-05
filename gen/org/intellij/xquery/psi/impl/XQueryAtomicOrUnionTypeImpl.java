@@ -33,6 +33,11 @@ public class XQueryAtomicOrUnionTypeImpl extends XQueryElementImpl implements XQ
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAtomicOrUnionType(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryLocalPart getLocalPart() {
@@ -43,11 +48,6 @@ public class XQueryAtomicOrUnionTypeImpl extends XQueryElementImpl implements XQ
   @Nullable
   public XQueryPrefix getPrefix() {
     return findChildByClass(XQueryPrefix.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAtomicOrUnionType(this);
-    else super.accept(visitor);
   }
 
 }

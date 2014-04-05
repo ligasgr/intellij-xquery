@@ -33,6 +33,11 @@ public class XQueryDirElemConstructorImpl extends XQueryElementImpl implements X
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirElemConstructor(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryDirAttributeList getDirAttributeList() {
@@ -49,11 +54,6 @@ public class XQueryDirElemConstructorImpl extends XQueryElementImpl implements X
   @NotNull
   public List<XQueryXmlTagName> getXmlTagNameList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryXmlTagName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirElemConstructor(this);
-    else super.accept(visitor);
   }
 
 }

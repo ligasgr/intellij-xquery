@@ -34,15 +34,15 @@ public class XQueryModuleImportPathImpl extends XQueryElementImpl implements XQu
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitModuleImportPath(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryURILiteral getURILiteral() {
     return findNotNullChildByClass(XQueryURILiteral.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitModuleImportPath(this);
-    else super.accept(visitor);
   }
 
   public PsiReference getReference() {

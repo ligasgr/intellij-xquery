@@ -33,6 +33,11 @@ public class XQueryMapTestImpl extends XQueryElementImpl implements XQueryMapTes
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitMapTest(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryAtomicOrUnionType getAtomicOrUnionType() {
@@ -43,11 +48,6 @@ public class XQueryMapTestImpl extends XQueryElementImpl implements XQueryMapTes
   @Nullable
   public XQuerySequenceType getSequenceType() {
     return findChildByClass(XQuerySequenceType.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitMapTest(this);
-    else super.accept(visitor);
   }
 
 }

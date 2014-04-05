@@ -33,15 +33,15 @@ public class XQueryPredicateListImpl extends XQueryElementImpl implements XQuery
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitPredicateList(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryPredicate> getPredicateList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryPredicate.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitPredicateList(this);
-    else super.accept(visitor);
   }
 
 }

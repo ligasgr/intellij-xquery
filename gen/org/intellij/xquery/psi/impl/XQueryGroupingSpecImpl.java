@@ -33,6 +33,11 @@ public class XQueryGroupingSpecImpl extends XQueryElementImpl implements XQueryG
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitGroupingSpec(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryExprSingle getExprSingle() {
@@ -55,11 +60,6 @@ public class XQueryGroupingSpecImpl extends XQueryElementImpl implements XQueryG
   @Nullable
   public XQueryURILiteral getURILiteral() {
     return findChildByClass(XQueryURILiteral.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitGroupingSpec(this);
-    else super.accept(visitor);
   }
 
 }

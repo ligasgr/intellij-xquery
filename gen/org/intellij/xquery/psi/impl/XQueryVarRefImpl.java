@@ -34,15 +34,15 @@ public class XQueryVarRefImpl extends XQueryElementImpl implements XQueryVarRef 
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitVarRef(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryVarName getVarName() {
     return findChildByClass(XQueryVarName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitVarRef(this);
-    else super.accept(visitor);
   }
 
   public PsiReference getReference() {

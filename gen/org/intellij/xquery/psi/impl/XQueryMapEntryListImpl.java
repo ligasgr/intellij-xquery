@@ -33,15 +33,15 @@ public class XQueryMapEntryListImpl extends XQueryElementImpl implements XQueryM
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitMapEntryList(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryMapEntry> getMapEntryList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryMapEntry.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitMapEntryList(this);
-    else super.accept(visitor);
   }
 
 }

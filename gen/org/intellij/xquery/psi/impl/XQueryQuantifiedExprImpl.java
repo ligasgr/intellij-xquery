@@ -33,6 +33,11 @@ public class XQueryQuantifiedExprImpl extends XQueryExprSingleImpl implements XQ
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitQuantifiedExpr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryExprSingle getExprSingle() {
@@ -43,11 +48,6 @@ public class XQueryQuantifiedExprImpl extends XQueryExprSingleImpl implements XQ
   @NotNull
   public List<XQueryMultiVariableBinding> getMultiVariableBindingList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryMultiVariableBinding.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitQuantifiedExpr(this);
-    else super.accept(visitor);
   }
 
 }

@@ -33,6 +33,11 @@ public class XQueryForBindingImpl extends XQueryElementImpl implements XQueryFor
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitForBinding(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryAllowingEmpty getAllowingEmpty() {
@@ -61,11 +66,6 @@ public class XQueryForBindingImpl extends XQueryElementImpl implements XQueryFor
   @Nullable
   public XQueryVarName getVarName() {
     return findChildByClass(XQueryVarName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitForBinding(this);
-    else super.accept(visitor);
   }
 
 }

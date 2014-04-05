@@ -33,15 +33,15 @@ public class XQueryFunctionBodyImpl extends XQueryElementImpl implements XQueryF
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitFunctionBody(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryEnclosedExpr getEnclosedExpr() {
     return findNotNullChildByClass(XQueryEnclosedExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitFunctionBody(this);
-    else super.accept(visitor);
   }
 
 }

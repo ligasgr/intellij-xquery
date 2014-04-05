@@ -33,15 +33,15 @@ public class XQueryCompPIConstructorImpl extends XQueryElementImpl implements XQ
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCompPIConstructor(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryExpr> getExprList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCompPIConstructor(this);
-    else super.accept(visitor);
   }
 
 }

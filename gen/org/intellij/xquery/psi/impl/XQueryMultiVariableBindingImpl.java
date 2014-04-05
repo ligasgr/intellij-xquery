@@ -33,6 +33,11 @@ public class XQueryMultiVariableBindingImpl extends XQueryElementImpl implements
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitMultiVariableBinding(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public XQueryExprSingle getExprSingle() {
@@ -49,11 +54,6 @@ public class XQueryMultiVariableBindingImpl extends XQueryElementImpl implements
   @NotNull
   public XQueryVarName getVarName() {
     return findNotNullChildByClass(XQueryVarName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitMultiVariableBinding(this);
-    else super.accept(visitor);
   }
 
 }

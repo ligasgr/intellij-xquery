@@ -33,15 +33,15 @@ public class XQueryEmptyOrderDeclImpl extends XQueryElementImpl implements XQuer
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitEmptyOrderDecl(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQuerySeparator getSeparator() {
     return findChildByClass(XQuerySeparator.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitEmptyOrderDecl(this);
-    else super.accept(visitor);
   }
 
 }

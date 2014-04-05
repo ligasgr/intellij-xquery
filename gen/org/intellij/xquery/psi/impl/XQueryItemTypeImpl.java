@@ -33,6 +33,11 @@ public class XQueryItemTypeImpl extends XQueryElementImpl implements XQueryItemT
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitItemType(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryAtomicOrUnionType getAtomicOrUnionType() {
@@ -61,11 +66,6 @@ public class XQueryItemTypeImpl extends XQueryElementImpl implements XQueryItemT
   @Nullable
   public XQueryParenthesizedItemType getParenthesizedItemType() {
     return findChildByClass(XQueryParenthesizedItemType.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitItemType(this);
-    else super.accept(visitor);
   }
 
 }

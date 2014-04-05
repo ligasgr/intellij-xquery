@@ -33,15 +33,15 @@ public class XQuerySequenceTypeUnionImpl extends XQueryElementImpl implements XQ
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSequenceTypeUnion(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQuerySequenceType> getSequenceTypeList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQuerySequenceType.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitSequenceTypeUnion(this);
-    else super.accept(visitor);
   }
 
 }

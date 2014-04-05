@@ -33,6 +33,11 @@ public class XQueryWindowClauseImpl extends XQueryElementImpl implements XQueryW
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitWindowClause(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryCurrentItem> getCurrentItemList() {
@@ -73,11 +78,6 @@ public class XQueryWindowClauseImpl extends XQueryElementImpl implements XQueryW
   @Nullable
   public XQueryVarName getVarName() {
     return findChildByClass(XQueryVarName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitWindowClause(this);
-    else super.accept(visitor);
   }
 
 }

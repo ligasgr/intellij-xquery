@@ -33,6 +33,11 @@ public class XQueryDirAttributeValueImpl extends XQueryElementImpl implements XQ
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirAttributeValue(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryAposAttrValueContent> getAposAttrValueContentList() {
@@ -55,11 +60,6 @@ public class XQueryDirAttributeValueImpl extends XQueryElementImpl implements XQ
   @NotNull
   public List<XQueryQuotAttrValueContent> getQuotAttrValueContentList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryQuotAttrValueContent.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirAttributeValue(this);
-    else super.accept(visitor);
   }
 
 }

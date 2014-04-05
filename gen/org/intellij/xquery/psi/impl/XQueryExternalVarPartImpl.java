@@ -33,15 +33,15 @@ public class XQueryExternalVarPartImpl extends XQueryElementImpl implements XQue
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitExternalVarPart(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryVarDefaultValue getVarDefaultValue() {
     return findChildByClass(XQueryVarDefaultValue.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitExternalVarPart(this);
-    else super.accept(visitor);
   }
 
 }

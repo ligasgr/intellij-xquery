@@ -33,6 +33,11 @@ public class XQueryModuleImportImpl extends XQueryElementImpl implements XQueryM
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitModuleImport(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryModuleImportNamespace getModuleImportNamespace() {
@@ -55,11 +60,6 @@ public class XQueryModuleImportImpl extends XQueryElementImpl implements XQueryM
   @Nullable
   public XQuerySeparator getSeparator() {
     return findChildByClass(XQuerySeparator.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitModuleImport(this);
-    else super.accept(visitor);
   }
 
   public String getNamespace() {

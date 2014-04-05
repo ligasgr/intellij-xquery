@@ -33,15 +33,15 @@ public class XQueryCatchErrorListImpl extends XQueryElementImpl implements XQuer
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCatchErrorList(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<XQueryNameTest> getNameTestList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryNameTest.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCatchErrorList(this);
-    else super.accept(visitor);
   }
 
 }

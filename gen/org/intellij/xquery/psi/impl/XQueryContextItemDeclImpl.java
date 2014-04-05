@@ -33,6 +33,11 @@ public class XQueryContextItemDeclImpl extends XQueryElementImpl implements XQue
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitContextItemDecl(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public XQueryItemType getItemType() {
@@ -55,11 +60,6 @@ public class XQueryContextItemDeclImpl extends XQueryElementImpl implements XQue
   @Nullable
   public XQueryVarValue getVarValue() {
     return findChildByClass(XQueryVarValue.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitContextItemDecl(this);
-    else super.accept(visitor);
   }
 
 }
