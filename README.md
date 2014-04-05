@@ -7,8 +7,8 @@ Provides support for [XQuery](http://www.w3schools.com/xquery/) language in vers
 
 [Changelog](http://ligasgr.github.io/intellij-xquery/changelog.html) - For info about historical releases
 
-[Plugin in JetBrains Plugin Repository](http://plugins.jetbrains.com/plugin/7262?pr=) - Official plugin repository page
+Cloudbees Jenkins status: [![Status](https://buildhive.cloudbees.com/job/ligasgr/job/intellij-xquery/badge/icon)](https://buildhive.cloudbees.com/job/ligasgr/job/intellij-xquery/)
 
 [GitHub Issues](https://github.com/ligasgr/intellij-xquery/issues) - request bug fixes, new features, enhancements, track current release
 
-Cloudbees Jenkins status: [![Build Status](https://buildhive.cloudbees.com/job/ligasgr/job/intellij-xquery/badge/icon)](https://buildhive.cloudbees.com/job/ligasgr/job/intellij-xquery/)
+[Plugin in JetBrains Plugin Repository](http://plugins.jetbrains.com/plugin/7262?pr=) - Official plugin repository page
