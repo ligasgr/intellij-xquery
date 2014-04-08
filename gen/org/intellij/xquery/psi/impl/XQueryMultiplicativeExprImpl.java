@@ -44,4 +44,10 @@ public class XQueryMultiplicativeExprImpl extends XQueryExprSingleImpl implement
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
   }
 
+  @Override
+  @NotNull
+  public List<XQueryMultiplicativeOperator> getMultiplicativeOperatorList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryMultiplicativeOperator.class);
+  }
+
 }

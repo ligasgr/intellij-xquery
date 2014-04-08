@@ -25,6 +25,9 @@ import com.intellij.psi.PsiElement;
 public interface XQueryStringConcatExpr extends XQueryExprSingle {
 
   @NotNull
+  List<XQueryConcatOperator> getConcatOperatorList();
+
+  @NotNull
   List<XQueryExprSingle> getExprSingleList();
 
 }

@@ -845,6 +845,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testValidate() throws Exception {
         assertProducedTokens("validate {'string'}", new String[]{
+                "WHITE_SPACE", "",
                 "validate", "validate",
                 "WHITE_SPACE", " ",
                 "{", "{",
@@ -856,6 +857,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testValidateLax() throws Exception {
         assertProducedTokens("validate lax {'string'}", new String[]{
+                "WHITE_SPACE", "",
                 "validate", "validate",
                 "WHITE_SPACE", " ",
                 "lax", "lax",
@@ -1787,6 +1789,30 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", "",
                 "StringLiteral", "''",
                 "}", "}"
+        });
+    }
+
+    public void testTreatExpression() {
+        assertProducedTokens("1 treat as xs:integer", new String[]{
+                "IntegerLiteral", "1",
+                "WHITE_SPACE", " ",
+                "treat", "treat",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "WHITE_SPACE", " ",
+                "NCName", "xs",
+                ":", ":",
+                "NCName", "integer"
+        });
+    }
+
+    public void testIncompleteTreatExpression() {
+        assertProducedTokens("1 treat as", new String[]{
+                "IntegerLiteral", "1",
+                "WHITE_SPACE", " ",
+                "treat", "treat",
+                "WHITE_SPACE", " ",
+                "as", "as"
         });
     }
 }

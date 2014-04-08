@@ -30,4 +30,7 @@ public interface XQueryTreatExpr extends XQueryExprSingle {
   @Nullable
   XQuerySequenceType getSequenceType();
 
+  @Nullable
+  XQueryTreatOperator getTreatOperator();
+
 }

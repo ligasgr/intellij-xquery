@@ -40,6 +40,12 @@ public class XQueryPathExprImpl extends XQueryExprSingleImpl implements XQueryPa
 
   @Override
   @NotNull
+  public List<XQueryRelativePathOperator> getRelativePathOperatorList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryRelativePathOperator.class);
+  }
+
+  @Override
+  @NotNull
   public List<XQueryStepExpr> getStepExprList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryStepExpr.class);
   }

@@ -44,4 +44,10 @@ public class XQueryIntersectExceptExprImpl extends XQueryExprSingleImpl implemen
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
   }
 
+  @Override
+  @NotNull
+  public List<XQueryIntersectExceptOperator> getIntersectExceptOperatorList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryIntersectExceptOperator.class);
+  }
+
 }

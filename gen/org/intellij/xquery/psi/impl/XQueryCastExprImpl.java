@@ -39,6 +39,12 @@ public class XQueryCastExprImpl extends XQueryExprSingleImpl implements XQueryCa
   }
 
   @Override
+  @Nullable
+  public XQueryCastOperator getCastOperator() {
+    return findChildByClass(XQueryCastOperator.class);
+  }
+
+  @Override
   @NotNull
   public XQueryExprSingle getExprSingle() {
     return findNotNullChildByClass(XQueryExprSingle.class);

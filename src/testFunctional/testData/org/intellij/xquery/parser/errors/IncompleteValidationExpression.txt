@@ -1,0 +1,9 @@
+XQuery File(0,12)
+  XQueryQueryBodyImpl(QUERY_BODY)(0,12)
+    XQueryExprImpl(EXPR)(0,12)
+      XQueryValidateExprImpl(VALIDATE_EXPR)(0,12)
+        PsiElement(validate)('validate')(0,8)
+        PsiWhiteSpace(' ')(8,9)
+        PsiElement(lax)('lax')(9,12)
+        PsiErrorElement:'{' expected, unexpected end of file(12,12)
+          <empty list>

@@ -44,4 +44,10 @@ public class XQueryUnionExprImpl extends XQueryExprSingleImpl implements XQueryU
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
   }
 
+  @Override
+  @NotNull
+  public List<XQueryUnionOperator> getUnionOperatorList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryUnionOperator.class);
+  }
+
 }

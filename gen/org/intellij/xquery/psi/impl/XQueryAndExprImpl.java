@@ -40,6 +40,12 @@ public class XQueryAndExprImpl extends XQueryExprSingleImpl implements XQueryAnd
 
   @Override
   @NotNull
+  public List<XQueryAndOperator> getAndOperatorList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryAndOperator.class);
+  }
+
+  @Override
+  @NotNull
   public List<XQueryExprSingle> getExprSingleList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
   }

@@ -27,4 +27,7 @@ public interface XQuerySimpleMapExpr extends XQueryExprSingle {
   @NotNull
   List<XQueryExprSingle> getExprSingleList();
 
+  @NotNull
+  List<XQuerySimpleMapOperator> getSimpleMapOperatorList();
+
 }

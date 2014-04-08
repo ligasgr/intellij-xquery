@@ -24,6 +24,9 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryCastExpr extends XQueryExprSingle {
 
+  @Nullable
+  XQueryCastOperator getCastOperator();
+
   @NotNull
   XQueryExprSingle getExprSingle();
 

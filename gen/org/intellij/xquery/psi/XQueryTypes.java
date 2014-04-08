@@ -28,8 +28,10 @@ public interface XQueryTypes {
   IElementType ABBREV_FORWARD_STEP = new XQueryElementType("ABBREV_FORWARD_STEP");
   IElementType ABBREV_REVERSE_STEP = new XQueryElementType("ABBREV_REVERSE_STEP");
   IElementType ADDITIVE_EXPR = new XQueryElementType("ADDITIVE_EXPR");
+  IElementType ADDITIVE_OPERATOR = new XQueryElementType("ADDITIVE_OPERATOR");
   IElementType ALLOWING_EMPTY = new XQueryElementType("ALLOWING_EMPTY");
   IElementType AND_EXPR = new XQueryElementType("AND_EXPR");
+  IElementType AND_OPERATOR = new XQueryElementType("AND_OPERATOR");
   IElementType ANNOTATION = new XQueryElementType("ANNOTATION");
   IElementType ANNOTATION_NAME = new XQueryElementType("ANNOTATION_NAME");
   IElementType ANY_FUNCTION_TEST = new XQueryElementType("ANY_FUNCTION_TEST");
@@ -51,7 +53,9 @@ public interface XQueryTypes {
   IElementType BOUNDARY_SPACE_DECL = new XQueryElementType("BOUNDARY_SPACE_DECL");
   IElementType CASE_CLAUSE = new XQueryElementType("CASE_CLAUSE");
   IElementType CASTABLE_EXPR = new XQueryElementType("CASTABLE_EXPR");
+  IElementType CASTABLE_OPERATOR = new XQueryElementType("CASTABLE_OPERATOR");
   IElementType CAST_EXPR = new XQueryElementType("CAST_EXPR");
+  IElementType CAST_OPERATOR = new XQueryElementType("CAST_OPERATOR");
   IElementType CATCH_CLAUSE = new XQueryElementType("CATCH_CLAUSE");
   IElementType CATCH_ERROR_LIST = new XQueryElementType("CATCH_ERROR_LIST");
   IElementType COMMENT_TEST = new XQueryElementType("COMMENT_TEST");
@@ -66,6 +70,7 @@ public interface XQueryTypes {
   IElementType COMP_NAMESPACE_CONSTRUCTOR = new XQueryElementType("COMP_NAMESPACE_CONSTRUCTOR");
   IElementType COMP_PI_CONSTRUCTOR = new XQueryElementType("COMP_PI_CONSTRUCTOR");
   IElementType COMP_TEXT_CONSTRUCTOR = new XQueryElementType("COMP_TEXT_CONSTRUCTOR");
+  IElementType CONCAT_OPERATOR = new XQueryElementType("CONCAT_OPERATOR");
   IElementType CONSTRUCTION_DECL = new XQueryElementType("CONSTRUCTION_DECL");
   IElementType CONSTRUCTOR = new XQueryElementType("CONSTRUCTOR");
   IElementType CONTENT_EXPR = new XQueryElementType("CONTENT_EXPR");
@@ -97,6 +102,7 @@ public interface XQueryTypes {
   IElementType ELEMENT_TEST = new XQueryElementType("ELEMENT_TEST");
   IElementType EMPTY_ORDER_DECL = new XQueryElementType("EMPTY_ORDER_DECL");
   IElementType ENCLOSED_EXPR = new XQueryElementType("ENCLOSED_EXPR");
+  IElementType EQUALITY_COMP = new XQueryElementType("EQUALITY_COMP");
   IElementType ESCAPE_APOS = new XQueryElementType("ESCAPE_APOS");
   IElementType ESCAPE_QUOT = new XQueryElementType("ESCAPE_QUOT");
   IElementType EXPR = new XQueryElementType("EXPR");
@@ -124,7 +130,9 @@ public interface XQueryTypes {
   IElementType INHERIT_MODE = new XQueryElementType("INHERIT_MODE");
   IElementType INLINE_FUNCTION_EXPR = new XQueryElementType("INLINE_FUNCTION_EXPR");
   IElementType INSTANCEOF_EXPR = new XQueryElementType("INSTANCEOF_EXPR");
+  IElementType INSTANCE_OF_OPERATOR = new XQueryElementType("INSTANCE_OF_OPERATOR");
   IElementType INTERSECT_EXCEPT_EXPR = new XQueryElementType("INTERSECT_EXCEPT_EXPR");
+  IElementType INTERSECT_EXCEPT_OPERATOR = new XQueryElementType("INTERSECT_EXCEPT_OPERATOR");
   IElementType ITEM_TYPE = new XQueryElementType("ITEM_TYPE");
   IElementType KIND_TEST = new XQueryElementType("KIND_TEST");
   IElementType LET_BINDING = new XQueryElementType("LET_BINDING");
@@ -139,6 +147,7 @@ public interface XQueryTypes {
   IElementType MODULE_IMPORT_NAMESPACE = new XQueryElementType("MODULE_IMPORT_NAMESPACE");
   IElementType MODULE_IMPORT_PATH = new XQueryElementType("MODULE_IMPORT_PATH");
   IElementType MULTIPLICATIVE_EXPR = new XQueryElementType("MULTIPLICATIVE_EXPR");
+  IElementType MULTIPLICATIVE_OPERATOR = new XQueryElementType("MULTIPLICATIVE_OPERATOR");
   IElementType MULTI_VARIABLE_BINDING = new XQueryElementType("MULTI_VARIABLE_BINDING");
   IElementType NAMED_FUNCTION_REF = new XQueryElementType("NAMED_FUNCTION_REF");
   IElementType NAMESPACE_DECL = new XQueryElementType("NAMESPACE_DECL");
@@ -146,6 +155,7 @@ public interface XQueryTypes {
   IElementType NAMESPACE_PREFIX = new XQueryElementType("NAMESPACE_PREFIX");
   IElementType NAME_TEST = new XQueryElementType("NAME_TEST");
   IElementType NEXT_ITEM = new XQueryElementType("NEXT_ITEM");
+  IElementType NODE_COMP = new XQueryElementType("NODE_COMP");
   IElementType NODE_TEST = new XQueryElementType("NODE_TEST");
   IElementType NUMERIC_LITERAL = new XQueryElementType("NUMERIC_LITERAL");
   IElementType OCCURRENCE_INDICATOR = new XQueryElementType("OCCURRENCE_INDICATOR");
@@ -156,6 +166,7 @@ public interface XQueryTypes {
   IElementType ORDER_SPEC = new XQueryElementType("ORDER_SPEC");
   IElementType ORDER_SPEC_LIST = new XQueryElementType("ORDER_SPEC_LIST");
   IElementType OR_EXPR = new XQueryElementType("OR_EXPR");
+  IElementType OR_OPERATOR = new XQueryElementType("OR_OPERATOR");
   IElementType PARAM = new XQueryElementType("PARAM");
   IElementType PARAM_LIST = new XQueryElementType("PARAM_LIST");
   IElementType PARENTHESIZED_EXPR = new XQueryElementType("PARENTHESIZED_EXPR");
@@ -178,6 +189,8 @@ public interface XQueryTypes {
   IElementType QUOT_ATTR_CONTENT_CHAR = new XQueryElementType("QUOT_ATTR_CONTENT_CHAR");
   IElementType QUOT_ATTR_VALUE_CONTENT = new XQueryElementType("QUOT_ATTR_VALUE_CONTENT");
   IElementType RANGE_EXPR = new XQueryElementType("RANGE_EXPR");
+  IElementType RELATIONAL_COMP = new XQueryElementType("RELATIONAL_COMP");
+  IElementType RELATIVE_PATH_OPERATOR = new XQueryElementType("RELATIVE_PATH_OPERATOR");
   IElementType RETURN_CLAUSE = new XQueryElementType("RETURN_CLAUSE");
   IElementType REVERSE_STEP = new XQueryElementType("REVERSE_STEP");
   IElementType SCHEMA_ATTRIBUTE_TEST = new XQueryElementType("SCHEMA_ATTRIBUTE_TEST");
@@ -187,6 +200,7 @@ public interface XQueryTypes {
   IElementType SEQUENCE_TYPE = new XQueryElementType("SEQUENCE_TYPE");
   IElementType SEQUENCE_TYPE_UNION = new XQueryElementType("SEQUENCE_TYPE_UNION");
   IElementType SIMPLE_MAP_EXPR = new XQueryElementType("SIMPLE_MAP_EXPR");
+  IElementType SIMPLE_MAP_OPERATOR = new XQueryElementType("SIMPLE_MAP_OPERATOR");
   IElementType SIMPLE_TYPE_NAME = new XQueryElementType("SIMPLE_TYPE_NAME");
   IElementType SINGLE_TYPE = new XQueryElementType("SINGLE_TYPE");
   IElementType STEP_EXPR = new XQueryElementType("STEP_EXPR");
@@ -197,7 +211,9 @@ public interface XQueryTypes {
   IElementType SWITCH_EXPR = new XQueryElementType("SWITCH_EXPR");
   IElementType SWITCH_RETURN_CLAUSE = new XQueryElementType("SWITCH_RETURN_CLAUSE");
   IElementType TEXT_TEST = new XQueryElementType("TEXT_TEST");
+  IElementType TO_OPERATOR = new XQueryElementType("TO_OPERATOR");
   IElementType TREAT_EXPR = new XQueryElementType("TREAT_EXPR");
+  IElementType TREAT_OPERATOR = new XQueryElementType("TREAT_OPERATOR");
   IElementType TRY_CATCH_EXPR = new XQueryElementType("TRY_CATCH_EXPR");
   IElementType TRY_CLAUSE = new XQueryElementType("TRY_CLAUSE");
   IElementType TYPED_FUNCTION_TEST = new XQueryElementType("TYPED_FUNCTION_TEST");
@@ -207,10 +223,12 @@ public interface XQueryTypes {
   IElementType TYPE_NAME = new XQueryElementType("TYPE_NAME");
   IElementType UNARY_EXPR = new XQueryElementType("UNARY_EXPR");
   IElementType UNION_EXPR = new XQueryElementType("UNION_EXPR");
+  IElementType UNION_OPERATOR = new XQueryElementType("UNION_OPERATOR");
   IElementType UNORDERED_EXPR = new XQueryElementType("UNORDERED_EXPR");
   IElementType URI_EXPR = new XQueryElementType("URI_EXPR");
   IElementType URI_LITERAL = new XQueryElementType("URI_LITERAL");
   IElementType VALIDATE_EXPR = new XQueryElementType("VALIDATE_EXPR");
+  IElementType VALUE_COMP = new XQueryElementType("VALUE_COMP");
   IElementType VALUE_EXPR = new XQueryElementType("VALUE_EXPR");
   IElementType VAR_DECL = new XQueryElementType("VAR_DECL");
   IElementType VAR_DEFAULT_VALUE = new XQueryElementType("VAR_DEFAULT_VALUE");
@@ -440,11 +458,17 @@ public interface XQueryTypes {
       else if (type == ADDITIVE_EXPR) {
         return new XQueryAdditiveExprImpl(node);
       }
+      else if (type == ADDITIVE_OPERATOR) {
+        return new XQueryAdditiveOperatorImpl(node);
+      }
       else if (type == ALLOWING_EMPTY) {
         return new XQueryAllowingEmptyImpl(node);
       }
       else if (type == AND_EXPR) {
         return new XQueryAndExprImpl(node);
+      }
+      else if (type == AND_OPERATOR) {
+        return new XQueryAndOperatorImpl(node);
       }
       else if (type == ANNOTATION) {
         return new XQueryAnnotationImpl(node);
@@ -509,8 +533,14 @@ public interface XQueryTypes {
       else if (type == CASTABLE_EXPR) {
         return new XQueryCastableExprImpl(node);
       }
+      else if (type == CASTABLE_OPERATOR) {
+        return new XQueryCastableOperatorImpl(node);
+      }
       else if (type == CAST_EXPR) {
         return new XQueryCastExprImpl(node);
+      }
+      else if (type == CAST_OPERATOR) {
+        return new XQueryCastOperatorImpl(node);
       }
       else if (type == CATCH_CLAUSE) {
         return new XQueryCatchClauseImpl(node);
@@ -553,6 +583,9 @@ public interface XQueryTypes {
       }
       else if (type == COMP_TEXT_CONSTRUCTOR) {
         return new XQueryCompTextConstructorImpl(node);
+      }
+      else if (type == CONCAT_OPERATOR) {
+        return new XQueryConcatOperatorImpl(node);
       }
       else if (type == CONSTRUCTION_DECL) {
         return new XQueryConstructionDeclImpl(node);
@@ -647,6 +680,9 @@ public interface XQueryTypes {
       else if (type == ENCLOSED_EXPR) {
         return new XQueryEnclosedExprImpl(node);
       }
+      else if (type == EQUALITY_COMP) {
+        return new XQueryEqualityCompImpl(node);
+      }
       else if (type == ESCAPE_APOS) {
         return new XQueryEscapeAposImpl(node);
       }
@@ -728,8 +764,14 @@ public interface XQueryTypes {
       else if (type == INSTANCEOF_EXPR) {
         return new XQueryInstanceofExprImpl(node);
       }
+      else if (type == INSTANCE_OF_OPERATOR) {
+        return new XQueryInstanceOfOperatorImpl(node);
+      }
       else if (type == INTERSECT_EXCEPT_EXPR) {
         return new XQueryIntersectExceptExprImpl(node);
+      }
+      else if (type == INTERSECT_EXCEPT_OPERATOR) {
+        return new XQueryIntersectExceptOperatorImpl(node);
       }
       else if (type == ITEM_TYPE) {
         return new XQueryItemTypeImpl(node);
@@ -773,6 +815,9 @@ public interface XQueryTypes {
       else if (type == MULTIPLICATIVE_EXPR) {
         return new XQueryMultiplicativeExprImpl(node);
       }
+      else if (type == MULTIPLICATIVE_OPERATOR) {
+        return new XQueryMultiplicativeOperatorImpl(node);
+      }
       else if (type == MULTI_VARIABLE_BINDING) {
         return new XQueryMultiVariableBindingImpl(node);
       }
@@ -793,6 +838,9 @@ public interface XQueryTypes {
       }
       else if (type == NEXT_ITEM) {
         return new XQueryNextItemImpl(node);
+      }
+      else if (type == NODE_COMP) {
+        return new XQueryNodeCompImpl(node);
       }
       else if (type == NODE_TEST) {
         return new XQueryNodeTestImpl(node);
@@ -823,6 +871,9 @@ public interface XQueryTypes {
       }
       else if (type == OR_EXPR) {
         return new XQueryOrExprImpl(node);
+      }
+      else if (type == OR_OPERATOR) {
+        return new XQueryOrOperatorImpl(node);
       }
       else if (type == PARAM) {
         return new XQueryParamImpl(node);
@@ -890,6 +941,12 @@ public interface XQueryTypes {
       else if (type == RANGE_EXPR) {
         return new XQueryRangeExprImpl(node);
       }
+      else if (type == RELATIONAL_COMP) {
+        return new XQueryRelationalCompImpl(node);
+      }
+      else if (type == RELATIVE_PATH_OPERATOR) {
+        return new XQueryRelativePathOperatorImpl(node);
+      }
       else if (type == RETURN_CLAUSE) {
         return new XQueryReturnClauseImpl(node);
       }
@@ -916,6 +973,9 @@ public interface XQueryTypes {
       }
       else if (type == SIMPLE_MAP_EXPR) {
         return new XQuerySimpleMapExprImpl(node);
+      }
+      else if (type == SIMPLE_MAP_OPERATOR) {
+        return new XQuerySimpleMapOperatorImpl(node);
       }
       else if (type == SIMPLE_TYPE_NAME) {
         return new XQuerySimpleTypeNameImpl(node);
@@ -947,8 +1007,14 @@ public interface XQueryTypes {
       else if (type == TEXT_TEST) {
         return new XQueryTextTestImpl(node);
       }
+      else if (type == TO_OPERATOR) {
+        return new XQueryToOperatorImpl(node);
+      }
       else if (type == TREAT_EXPR) {
         return new XQueryTreatExprImpl(node);
+      }
+      else if (type == TREAT_OPERATOR) {
+        return new XQueryTreatOperatorImpl(node);
       }
       else if (type == TRY_CATCH_EXPR) {
         return new XQueryTryCatchExprImpl(node);
@@ -977,6 +1043,9 @@ public interface XQueryTypes {
       else if (type == UNION_EXPR) {
         return new XQueryUnionExprImpl(node);
       }
+      else if (type == UNION_OPERATOR) {
+        return new XQueryUnionOperatorImpl(node);
+      }
       else if (type == UNORDERED_EXPR) {
         return new XQueryUnorderedExprImpl(node);
       }
@@ -988,6 +1057,9 @@ public interface XQueryTypes {
       }
       else if (type == VALIDATE_EXPR) {
         return new XQueryValidateExprImpl(node);
+      }
+      else if (type == VALUE_COMP) {
+        return new XQueryValueCompImpl(node);
       }
       else if (type == VALUE_EXPR) {
         return new XQueryValueExprImpl(node);

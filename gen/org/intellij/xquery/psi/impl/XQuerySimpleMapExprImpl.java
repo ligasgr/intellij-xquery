@@ -44,4 +44,10 @@ public class XQuerySimpleMapExprImpl extends XQueryExprSingleImpl implements XQu
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
   }
 
+  @Override
+  @NotNull
+  public List<XQuerySimpleMapOperator> getSimpleMapOperatorList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQuerySimpleMapOperator.class);
+  }
+
 }

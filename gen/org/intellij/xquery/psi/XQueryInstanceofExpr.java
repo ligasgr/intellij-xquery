@@ -28,6 +28,9 @@ public interface XQueryInstanceofExpr extends XQueryExprSingle {
   XQueryExprSingle getExprSingle();
 
   @Nullable
+  XQueryInstanceOfOperator getInstanceOfOperator();
+
+  @Nullable
   XQuerySequenceType getSequenceType();
 
 }

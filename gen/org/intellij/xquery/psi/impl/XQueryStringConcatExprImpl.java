@@ -40,6 +40,12 @@ public class XQueryStringConcatExprImpl extends XQueryExprSingleImpl implements 
 
   @Override
   @NotNull
+  public List<XQueryConcatOperator> getConcatOperatorList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryConcatOperator.class);
+  }
+
+  @Override
+  @NotNull
   public List<XQueryExprSingle> getExprSingleList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
   }

@@ -24,7 +24,19 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryComparisonExpr extends XQueryExprSingle {
 
+  @Nullable
+  XQueryEqualityComp getEqualityComp();
+
   @NotNull
   List<XQueryExprSingle> getExprSingleList();
+
+  @Nullable
+  XQueryNodeComp getNodeComp();
+
+  @Nullable
+  XQueryRelationalComp getRelationalComp();
+
+  @Nullable
+  XQueryValueComp getValueComp();
 
 }

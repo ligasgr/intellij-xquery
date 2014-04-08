@@ -27,4 +27,7 @@ public interface XQueryRangeExpr extends XQueryExprSingle {
   @NotNull
   List<XQueryExprSingle> getExprSingleList();
 
+  @Nullable
+  XQueryToOperator getToOperator();
+
 }

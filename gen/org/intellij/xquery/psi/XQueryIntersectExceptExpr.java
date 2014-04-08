@@ -27,4 +27,7 @@ public interface XQueryIntersectExceptExpr extends XQueryExprSingle {
   @NotNull
   List<XQueryExprSingle> getExprSingleList();
 
+  @NotNull
+  List<XQueryIntersectExceptOperator> getIntersectExceptOperatorList();
+
 }

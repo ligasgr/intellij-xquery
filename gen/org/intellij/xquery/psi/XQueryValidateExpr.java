@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryValidateExpr extends XQueryExprSingle {
 
-  @NotNull
+  @Nullable
   XQueryExpr getExpr();
 
   @Nullable

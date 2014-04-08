@@ -1,0 +1,7 @@
+XQuery File(0,2)
+  XQueryQueryBodyImpl(QUERY_BODY)(0,2)
+    XQueryExprImpl(EXPR)(0,2)
+      XQueryPathExprImpl(PATH_EXPR)(0,2)
+        PsiElement(//)('//')(0,2)
+        PsiErrorElement:<step expr> expected, unexpected end of file(2,2)
+          <empty list>

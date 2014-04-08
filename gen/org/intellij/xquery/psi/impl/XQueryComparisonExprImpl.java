@@ -39,9 +39,33 @@ public class XQueryComparisonExprImpl extends XQueryExprSingleImpl implements XQ
   }
 
   @Override
+  @Nullable
+  public XQueryEqualityComp getEqualityComp() {
+    return findChildByClass(XQueryEqualityComp.class);
+  }
+
+  @Override
   @NotNull
   public List<XQueryExprSingle> getExprSingleList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryNodeComp getNodeComp() {
+    return findChildByClass(XQueryNodeComp.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryRelationalComp getRelationalComp() {
+    return findChildByClass(XQueryRelationalComp.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryValueComp getValueComp() {
+    return findChildByClass(XQueryValueComp.class);
   }
 
 }

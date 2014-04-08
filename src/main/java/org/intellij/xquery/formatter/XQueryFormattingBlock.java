@@ -47,14 +47,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static org.intellij.xquery.psi.XQueryTypes.ADDITIVE_OPERATOR;
+import static org.intellij.xquery.psi.XQueryTypes.AND_OPERATOR;
 import static org.intellij.xquery.psi.XQueryTypes.ARGUMENT_LIST;
 import static org.intellij.xquery.psi.XQueryTypes.CASE_CLAUSE;
+import static org.intellij.xquery.psi.XQueryTypes.CASTABLE_OPERATOR;
+import static org.intellij.xquery.psi.XQueryTypes.CAST_OPERATOR;
 import static org.intellij.xquery.psi.XQueryTypes.CATCH_CLAUSE;
 import static org.intellij.xquery.psi.XQueryTypes.CONTENT_EXPR;
 import static org.intellij.xquery.psi.XQueryTypes.DIR_ELEM_CONTENT;
 import static org.intellij.xquery.psi.XQueryTypes.ENCLOSED_EXPR;
 import static org.intellij.xquery.psi.XQueryTypes.EQ;
 import static org.intellij.xquery.psi.XQueryTypes.EQUAL;
+import static org.intellij.xquery.psi.XQueryTypes.EQUALITY_COMP;
 import static org.intellij.xquery.psi.XQueryTypes.EXCLAMATION_MARK;
 import static org.intellij.xquery.psi.XQueryTypes.EXPR;
 import static org.intellij.xquery.psi.XQueryTypes.FOR_BINDING;
@@ -64,6 +69,8 @@ import static org.intellij.xquery.psi.XQueryTypes.GE_CHARS;
 import static org.intellij.xquery.psi.XQueryTypes.GT;
 import static org.intellij.xquery.psi.XQueryTypes.GT_CHAR;
 import static org.intellij.xquery.psi.XQueryTypes.IF_EXPR;
+import static org.intellij.xquery.psi.XQueryTypes.INSTANCE_OF_OPERATOR;
+import static org.intellij.xquery.psi.XQueryTypes.INTERSECT_EXCEPT_OPERATOR;
 import static org.intellij.xquery.psi.XQueryTypes.K_AND;
 import static org.intellij.xquery.psi.XQueryTypes.K_AS;
 import static org.intellij.xquery.psi.XQueryTypes.K_CAST;
@@ -87,18 +94,22 @@ import static org.intellij.xquery.psi.XQueryTypes.LT;
 import static org.intellij.xquery.psi.XQueryTypes.LT_CHAR;
 import static org.intellij.xquery.psi.XQueryTypes.L_C_BRACE;
 import static org.intellij.xquery.psi.XQueryTypes.L_PAR;
+import static org.intellij.xquery.psi.XQueryTypes.MULTIPLICATIVE_OPERATOR;
 import static org.intellij.xquery.psi.XQueryTypes.NE;
 import static org.intellij.xquery.psi.XQueryTypes.NODECOMP_GT;
 import static org.intellij.xquery.psi.XQueryTypes.NODECOMP_LT;
+import static org.intellij.xquery.psi.XQueryTypes.NODE_COMP;
 import static org.intellij.xquery.psi.XQueryTypes.NOT_EQUAL;
 import static org.intellij.xquery.psi.XQueryTypes.OP_ASSIGN;
 import static org.intellij.xquery.psi.XQueryTypes.OP_MINUS;
 import static org.intellij.xquery.psi.XQueryTypes.OP_PLUS;
 import static org.intellij.xquery.psi.XQueryTypes.ORDER_SPEC;
+import static org.intellij.xquery.psi.XQueryTypes.OR_OPERATOR;
 import static org.intellij.xquery.psi.XQueryTypes.PARAM_LIST;
 import static org.intellij.xquery.psi.XQueryTypes.PARENTHESIZED_EXPR;
 import static org.intellij.xquery.psi.XQueryTypes.PIPE;
 import static org.intellij.xquery.psi.XQueryTypes.PIPE_PIPE;
+import static org.intellij.xquery.psi.XQueryTypes.RELATIONAL_COMP;
 import static org.intellij.xquery.psi.XQueryTypes.RETURN_CLAUSE;
 import static org.intellij.xquery.psi.XQueryTypes.R_PAR;
 import static org.intellij.xquery.psi.XQueryTypes.SLASH;
@@ -108,8 +119,12 @@ import static org.intellij.xquery.psi.XQueryTypes.STEP_EXPR;
 import static org.intellij.xquery.psi.XQueryTypes.SWITCH_CASE_CLAUSE;
 import static org.intellij.xquery.psi.XQueryTypes.SWITCH_DEFAULT_RETURN_CLAUSE;
 import static org.intellij.xquery.psi.XQueryTypes.SWITCH_RETURN_CLAUSE;
+import static org.intellij.xquery.psi.XQueryTypes.TO_OPERATOR;
+import static org.intellij.xquery.psi.XQueryTypes.TREAT_OPERATOR;
 import static org.intellij.xquery.psi.XQueryTypes.TRY_CLAUSE;
 import static org.intellij.xquery.psi.XQueryTypes.TYPESWITCH_DEFAULT_RETURN_CLAUSE;
+import static org.intellij.xquery.psi.XQueryTypes.UNION_OPERATOR;
+import static org.intellij.xquery.psi.XQueryTypes.VALUE_COMP;
 import static org.intellij.xquery.psi.XQueryTypes.VAR_VALUE;
 import static org.intellij.xquery.psi.XQueryTypes.WHERE_CLAUSE;
 
@@ -124,7 +139,9 @@ public class XQueryFormattingBlock extends AbstractBlock {
             K_OR, K_AND, PIPE_PIPE, K_TO, OP_PLUS, OP_MINUS, STAR_SIGN, K_DIV, K_IDIV, K_MOD,
             K_UNION, PIPE, K_INTERSECT, K_EXCEPT, K_INSTANCE, K_OF, K_TREAT, K_AS, K_CASTABLE,
             K_CAST, EQ, NE, LT, LE, GT, GE, EQUAL, NOT_EQUAL, LT_CHAR, LE_CHARS, GT_CHAR, GE_CHARS,
-            K_IS, NODECOMP_LT, NODECOMP_GT, EXCLAMATION_MARK
+            K_IS, NODECOMP_LT, NODECOMP_GT, EXCLAMATION_MARK, AND_OPERATOR, OR_OPERATOR, TO_OPERATOR,
+            MULTIPLICATIVE_OPERATOR, ADDITIVE_OPERATOR, UNION_OPERATOR, INTERSECT_EXCEPT_OPERATOR, INSTANCE_OF_OPERATOR,
+            TREAT_OPERATOR, CASTABLE_OPERATOR, CAST_OPERATOR, EQUALITY_COMP, RELATIONAL_COMP, VALUE_COMP, NODE_COMP
     );
 
     private final SpacingBuilder spacingBuilder;

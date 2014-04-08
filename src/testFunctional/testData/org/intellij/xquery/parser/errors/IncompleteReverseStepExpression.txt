@@ -1,0 +1,12 @@
+XQuery File(0,10)
+  XQueryQueryBodyImpl(QUERY_BODY)(0,10)
+    XQueryExprImpl(EXPR)(0,10)
+      XQueryStepExprImpl(STEP_EXPR)(0,10)
+        XQueryAxisStepImpl(AXIS_STEP)(0,10)
+          XQueryReverseStepImpl(REVERSE_STEP)(0,10)
+            PsiElement(ancestor)('ancestor')(0,8)
+            PsiElement(::)('::')(8,10)
+            PsiErrorElement:<node test> expected, unexpected end of file(10,10)
+              <empty list>
+          XQueryPredicateListImpl(PREDICATE_LIST)(10,10)
+            <empty list>

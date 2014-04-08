@@ -27,4 +27,7 @@ public interface XQueryOrExpr extends XQueryExprSingle {
   @NotNull
   List<XQueryExprSingle> getExprSingleList();
 
+  @NotNull
+  List<XQueryOrOperator> getOrOperatorList();
+
 }

@@ -19,7 +19,7 @@
  */
 {
   parserClass="org.intellij.xquery.parser.XQueryParser"
-  parserUtilClass="com.intellij.lang.parser.GeneratedParserUtilBase"
+  parserUtilClass="org.intellij.grammar.parser.GeneratedParserUtilBase"
 
   implements="org.intellij.xquery.psi.XQueryElement"
   extends="org.intellij.xquery.psi.impl.XQueryElementImpl"
@@ -338,43 +338,70 @@ TryClause ::= "try" "{" TryTargetExpr "}" {pin=1}
 private TryTargetExpr ::= Expr
 CatchClause ::= "catch" CatchErrorList "{" Expr "}" {pin=1}
 CatchErrorList ::= NameTest ("|" NameTest)*
-OrExpr ::= AndExpr (OrMultipliedExpr)*
-private OrMultipliedExpr ::= "or" AndExpr {pin=1}
-AndExpr ::= ComparisonExpr (AndMultipliedExpr)*
-private AndMultipliedExpr ::= "and" ComparisonExpr {pin=1}
-ComparisonExpr ::= StringConcatExpr ( (ValueComp
- | GeneralComp
- | NodeComp) StringConcatExpr )?
-StringConcatExpr ::= RangeExpr (StringConcatMultipliedExpr)*
-private StringConcatMultipliedExpr ::= "||" RangeExpr {pin=1}
-RangeExpr ::= AdditiveExpr (RangeOptionalExpr)?
-private RangeOptionalExpr ::= "to" AdditiveExpr {pin=1}
-AdditiveExpr ::= MultiplicativeExpr ( ("+" | "-") MultiplicativeExpr )*
-MultiplicativeExpr ::= UnionExpr ( ("*" | "div" | "idiv" | "mod") UnionExpr )*
-UnionExpr ::= IntersectExceptExpr ( ("union" | "|") IntersectExceptExpr )*
-IntersectExceptExpr ::= InstanceofExpr ( ("intersect" | "except") InstanceofExpr )*
-InstanceofExpr ::= TreatExpr ( "instance" "of" SequenceType )?
-TreatExpr ::= CastableExpr ( "treat" "as" SequenceType )?
-CastableExpr ::= CastExpr ( "castable" "as" SingleType )?
-CastExpr ::= UnaryExpr ( "cast" "as" SingleType )?
+OrExpr ::= AndExpr OrMultipliedExpr*
+private OrMultipliedExpr ::= OrOperator AndExpr {pin=1}
+OrOperator ::= "or"
+AndExpr ::= ComparisonExpr AndMultipliedExpr*
+private AndMultipliedExpr ::= AndOperator ComparisonExpr {pin=1}
+AndOperator ::= "and"
+ComparisonExpr ::= StringConcatExpr ComparisonOptionalExpr ?
+private ComparisonOptionalExpr ::= Comparison StringConcatExpr {pin=1}
+private Comparison ::= ValueComp | GeneralComp | NodeComp
+StringConcatExpr ::= RangeExpr StringConcatMultipliedExpr*
+private StringConcatMultipliedExpr ::= ConcatOperator RangeExpr {pin=1}
+ConcatOperator ::= "||"
+RangeExpr ::= AdditiveExpr RangeOptionalExpr?
+private RangeOptionalExpr ::= ToOperator AdditiveExpr {pin=1}
+ToOperator ::= "to"
+AdditiveExpr ::= MultiplicativeExpr AdditiveOptionalExpr*
+private AdditiveOptionalExpr ::= AdditiveOperator MultiplicativeExpr {pin=1}
+AdditiveOperator ::= "+" | "-"
+MultiplicativeExpr ::= UnionExpr MultiplicativeOptionalExpr*
+private MultiplicativeOptionalExpr ::= MultiplicativeOperator UnionExpr {pin=1}
+MultiplicativeOperator ::= "*" | "div" | "idiv" | "mod"
+UnionExpr ::= IntersectExceptExpr UnionOptionalExpr*
+private UnionOptionalExpr ::= UnionOperator IntersectExceptExpr {pin=1}
+UnionOperator ::= "union" | "|"
+IntersectExceptExpr ::= InstanceofExpr IntersectExceptOptionalExpr*
+private IntersectExceptOptionalExpr ::= IntersectExceptOperator InstanceofExpr {pin=1}
+IntersectExceptOperator ::= "intersect" | "except"
+InstanceofExpr ::= TreatExpr InstanceOfOptionalExpr?
+private InstanceOfOptionalExpr ::= InstanceOfOperator SequenceType {pin=1}
+InstanceOfOperator ::= "instance" "of"
+TreatExpr ::= CastableExpr TreatOptionalExpr?
+private TreatOptionalExpr ::= TreatOperator SequenceType {pin=1}
+TreatOperator ::= "treat" "as"
+CastableExpr ::= CastExpr CastableOptionalExpr?
+private CastableOptionalExpr ::= CastableOperator SingleType {pin=1}
+CastableOperator ::= "castable" "as"
+CastExpr ::= UnaryExpr CastOptionalExpr?
+private CastOptionalExpr ::= CastOperator SingleType {pin=1}
+CastOperator ::= "cast" "as"
 UnaryExpr ::= ("-" | "+")* ValueExpr
 ValueExpr ::= ValidateExpr | ExtensionExpr | SimpleMapExpr
-private GeneralComp ::= "=" | "!=" | "<" | "<=" | ">" | ">="
-private ValueComp ::= "eq" | "ne" | "lt" | "le" | "gt" | "ge"
-private NodeComp ::= "is" | "<<" | ">>"
-ValidateExpr ::= "validate" (ValidationMode | ("type" TypeName))? "{" Expr "}"
+private GeneralComp ::= EqualityComp  | RelationalComp
+EqualityComp ::= "=" | "!="
+RelationalComp ::= "<" | "<=" | ">" | ">="
+ValueComp ::= "eq" | "ne" | "lt" | "le" | "gt" | "ge"
+NodeComp ::= "is" | "<<" | ">>"
+ValidateExpr ::= "validate" (ValidationMode | ("type" TypeName))? "{" Expr "}" {pin=1}
 private ValidationMode ::= "lax" | "strict"
-ExtensionExpr ::= Pragma+ "{" Expr? "}"
-Pragma ::= "(#" S? EQName (S PragmaContents)? "#)" /* ws: explicit */
+ExtensionExpr ::= Pragma+ "{" Expr? "}" {pin=1}
+Pragma ::= "(#" S? EQName (S PragmaContents)? "#)" /* ws: explicit */ {pin=1}
 PragmaContents ::= PragmaContentChar*
-SimpleMapExpr ::= PathExpr ("!" PathExpr)*
-PathExpr ::= ("/" RelativePathExpr?)
- | ("//" RelativePathExpr)
- | RelativePathExpr /* xgc: leading-lone-slash */
-private RelativePathExpr ::= StepExpr (("/" | "//") StepExpr)*
+SimpleMapExpr ::= PathExpr SimpleMapOptionalExpr*
+private SimpleMapOptionalExpr ::= SimpleMapOperator PathExpr {pin=1}
+SimpleMapOperator ::= "!"
+PathExpr ::= RootPathExpr | RootPathOrChildExpr | RelativePathExpr
+private RootPathExpr ::= "/" RelativePathExpr? /* xgc: leading-lone-slash */
+private RootPathOrChildExpr ::= "//" RelativePathExpr {pin=1}
+private RelativePathExpr ::= StepExpr RelativePathOptionalExpr*
+private RelativePathOptionalExpr ::= (RelativePathOperator) StepExpr {pin=1}
+RelativePathOperator ::= "/" | "//"
 StepExpr ::= PostfixExpr | AxisStep
 AxisStep ::= (ReverseStep | ForwardStep) PredicateList
-ForwardStep ::= (ForwardAxis NodeTest) | AbbrevForwardStep
+ForwardStep ::= FullForwardStep | AbbrevForwardStep
+private FullForwardStep ::= ForwardAxis NodeTest {pin=1}
 private ForwardAxis ::= ("child" "::")
  | ("descendant" "::")
  | ("attribute" "::")
@@ -383,7 +410,8 @@ private ForwardAxis ::= ("child" "::")
  | ("following-sibling" "::")
  | ("following" "::")
 AbbrevForwardStep ::= "@"? NodeTest
-ReverseStep ::= (ReverseAxis NodeTest) | AbbrevReverseStep
+ReverseStep ::= FullReverseStep | AbbrevReverseStep
+private FullReverseStep ::= ReverseAxis NodeTest {pin=1}
 private ReverseAxis ::= ("parent" "::")
  | ("ancestor" "::")
  | ("preceding-sibling" "::")
@@ -409,7 +437,7 @@ PrimaryExpr ::= Literal
  | OrderedExpr
  | UnorderedExpr
  | Constructor
- | FunctionItemExpr {pin=1}
+ | FunctionItemExpr
 Literal ::= NumericLiteral | StringLiteral
 NumericLiteral ::= IntegerLiteral | DecimalLiteral | DoubleLiteral
 VarRef ::= "$" VarName {pin=1 methods=[getReference]}

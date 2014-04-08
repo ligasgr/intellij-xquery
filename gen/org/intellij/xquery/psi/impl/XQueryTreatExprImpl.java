@@ -50,4 +50,10 @@ public class XQueryTreatExprImpl extends XQueryExprSingleImpl implements XQueryT
     return findChildByClass(XQuerySequenceType.class);
   }
 
+  @Override
+  @Nullable
+  public XQueryTreatOperator getTreatOperator() {
+    return findChildByClass(XQueryTreatOperator.class);
+  }
+
 }

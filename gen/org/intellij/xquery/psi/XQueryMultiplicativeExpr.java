@@ -27,4 +27,7 @@ public interface XQueryMultiplicativeExpr extends XQueryExprSingle {
   @NotNull
   List<XQueryExprSingle> getExprSingleList();
 
+  @NotNull
+  List<XQueryMultiplicativeOperator> getMultiplicativeOperatorList();
+
 }

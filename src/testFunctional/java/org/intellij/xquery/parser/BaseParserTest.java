@@ -24,7 +24,7 @@ import com.intellij.testFramework.ParsingTestCase;
  * Date: 08/04/14
  * Time: 21:01
  */
-public class BaseParserTest extends ParsingTestCase {
+public abstract class BaseParserTest extends ParsingTestCase {
 
     public BaseParserTest(String subtype) {
         super(subtype, "xq", new XQueryParserDefinition());

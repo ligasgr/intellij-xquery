@@ -39,9 +39,9 @@ public class XQueryValidateExprImpl extends XQueryExprSingleImpl implements XQue
   }
 
   @Override
-  @NotNull
+  @Nullable
   public XQueryExpr getExpr() {
-    return findNotNullChildByClass(XQueryExpr.class);
+    return findChildByClass(XQueryExpr.class);
   }
 
   @Override

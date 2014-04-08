@@ -29,6 +29,7 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.TokenSet;
 import org.intellij.xquery.XQueryLanguage;
 import org.intellij.xquery.formatter.settings.XQueryCodeStyleSettings;
+import org.intellij.xquery.psi.XQueryTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,16 +64,17 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
         CommonCodeStyleSettings commonSettings = settings.getCommonSettings(XQueryLanguage.INSTANCE);
         XQueryCodeStyleSettings xQuerySettings = settings.getCustomSettings(XQueryCodeStyleSettings.class);
         final XQueryFormattingBlock block = new XQueryFormattingBlock(element.getNode(), null, null, commonSettings,
-                createSpacingBuilder(commonSettings, xQuerySettings));
+                createSpacingBuilder(commonSettings, xQuerySettings, settings));
         FormattingModel result = createFormattingModelForPsiFile(element.getContainingFile(), block, settings);
         return result;
     }
 
     private static SpacingBuilder createSpacingBuilder(CommonCodeStyleSettings settings,
-                                                       XQueryCodeStyleSettings xQuerySettings) {
-        return new SpacingBuilder(settings.getRootSettings())
+                                                       XQueryCodeStyleSettings xQuerySettings,
+                                                       CodeStyleSettings codeStyleSettings) {
+        return new SpacingBuilder(codeStyleSettings, XQueryLanguage.INSTANCE)
                 .before(SEPARATOR).none()
-                .aroundInside(EQUAL, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_EQUALITY_OPERATORS)
+                .around(EQUALITY_COMP).spaceIf(settings.SPACE_AROUND_EQUALITY_OPERATORS)
 
                 .aroundInside(EQUAL, MODULE_DECL).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
                 .aroundInside(EQUAL, SCHEMA_IMPORT).spaceIf(xQuerySettings.SPACE_AROUND_ASSIGNMENT_IN_PROLOG)
@@ -83,21 +85,16 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
                 .aroundInside(ATTREQUAL, DIR_ATTRIBUTE_LIST).spaceIf(xQuerySettings
                         .SPACE_AROUND_ASSIGNMENT_IN_XML_ATTRIBUTE)
 
-                .aroundInside(NOT_EQUAL, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_EQUALITY_OPERATORS)
-                .aroundInside(LT_CHAR, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_RELATIONAL_OPERATORS)
-                .aroundInside(LE_CHARS, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_RELATIONAL_OPERATORS)
-                .aroundInside(GT_CHAR, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_RELATIONAL_OPERATORS)
-                .aroundInside(GE_CHARS, COMPARISON_EXPR).spaceIf(settings.SPACE_AROUND_RELATIONAL_OPERATORS)
+                .around(RELATIONAL_COMP).spaceIf(settings.SPACE_AROUND_RELATIONAL_OPERATORS)
 
                 .afterInside(OP_PLUS, UNARY_EXPR).spaceIf(settings.SPACE_AROUND_UNARY_OPERATOR)
                 .afterInside(OP_MINUS, UNARY_EXPR).spaceIf(settings.SPACE_AROUND_UNARY_OPERATOR)
 
-                .around(OP_PLUS).spaceIf(settings.SPACE_AROUND_ADDITIVE_OPERATORS)
-                .around(OP_MINUS).spaceIf(settings.SPACE_AROUND_ADDITIVE_OPERATORS)
+                .around(ADDITIVE_OPERATOR).spaceIf(settings.SPACE_AROUND_ADDITIVE_OPERATORS)
 
                 .around(COLON_COLON).spaceIf(xQuerySettings.SPACE_AROUND_AXIS_OPERATOR)
 
-                .aroundInside(STAR_SIGN, MULTIPLICATIVE_EXPR).spaceIf(settings.SPACE_AROUND_MULTIPLICATIVE_OPERATORS)
+                .around(MULTIPLICATIVE_OPERATOR).spaceIf(settings.SPACE_AROUND_MULTIPLICATIVE_OPERATORS)
 
                 .around(OP_ASSIGN).spaceIf(settings.SPACE_AROUND_ASSIGNMENT_OPERATORS)
                 .around(EQUAL).spaceIf(settings.SPACE_AROUND_ASSIGNMENT_OPERATORS)
@@ -164,6 +161,18 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
                 .around(TYPE_DECLARATION).spaces(1)
                 .around(TRY_CLAUSE).spaces(1)
                 .around(CATCH_CLAUSE).spaces(1)
+                .around(TO_OPERATOR).spaces(1)
+                .around(AND_OPERATOR).spaces(1)
+                .around(OR_OPERATOR).spaces(1)
+                .around(UNION_OPERATOR).spaces(1)
+                .around(CONCAT_OPERATOR).spaces(1)
+                .around(INTERSECT_EXCEPT_OPERATOR).spaces(1)
+                .around(INSTANCE_OF_OPERATOR).spaces(1)
+                .around(TREAT_OPERATOR).spaces(1)
+                .around(CASTABLE_OPERATOR).spaces(1)
+                .around(CAST_OPERATOR).spaces(1)
+                .around(NODE_COMP).spaces(1)
+                .around(VALUE_COMP).spaces(1)
 
                 .after(L_BRACKET).none()
                 .before(R_BRACKET).none()

@@ -25,6 +25,9 @@ import com.intellij.psi.PsiElement;
 public interface XQueryAndExpr extends XQueryExprSingle {
 
   @NotNull
+  List<XQueryAndOperator> getAndOperatorList();
+
+  @NotNull
   List<XQueryExprSingle> getExprSingleList();
 
 }

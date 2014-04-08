@@ -35,4 +35,84 @@ public class XQueryParserSyntaxErrorsHandlingTest extends BaseParserTest {
     public void testIncompleteAposString() {
         doTest(true);
     }
+
+    public void testIncompleteOrExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteAndExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteValueComparisonExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteStringConcatExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteRangeExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteAdditiveExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteMultiplicativeExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteUnionExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteIntersectExceptExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteInstanceOfExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteTreatAsExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteCastableAsExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteCastAsExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteValidationExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteExtensionExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteSimpleMapExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteRootPathOrChildExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteRelativePathExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteForwardStepExpression() {
+        doTest(true);
+    }
+
+    public void testIncompleteReverseStepExpression() {
+        doTest(true);
+    }
 }

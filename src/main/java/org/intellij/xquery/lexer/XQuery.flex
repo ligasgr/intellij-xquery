@@ -109,6 +109,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 %state DECLARATION_RECOGNITION
 %state IMPORT_RECOGNITION
 %state MODULE_RECOGNITION
+%state AS_RECOGNITION
+%state VALIDATE_RECOGNITION
 %%
 
 
@@ -251,16 +253,12 @@ SC=({S} | "(:" {Char}* ~":)")+
 "union"                                    {return XQueryTypes.K_UNION;}
 "intersect"                                {return XQueryTypes.K_INTERSECT;}
 "except"                                   {return XQueryTypes.K_EXCEPT;}
-"treat" / {SC} "as"                        {return XQueryTypes.K_TREAT;}
-"castable" / {SC} "as"                     {return XQueryTypes.K_CASTABLE;}
-"cast" / {SC} "as"                         {return XQueryTypes.K_CAST;}
+"treat" / {SC} "as"                        {pushState(AS_RECOGNITION); return XQueryTypes.K_TREAT;}
+"castable" / {SC} "as"                     {pushState(AS_RECOGNITION); return XQueryTypes.K_CASTABLE;}
+"cast" / {SC} "as"                         {pushState(AS_RECOGNITION); return XQueryTypes.K_CAST;}
 "is"                                       {return XQueryTypes.K_IS;}
-"type" / {SC} ({NCName}|"Q{")              {return XQueryTypes.K_TYPE;}
-"lax" / {SC}? "{"                          {return XQueryTypes.K_LAX;}
-"strict" / {SC}? "{"                       {return XQueryTypes.K_STRICT;}
 "external" / {SC}? (":="|";")              {return XQueryTypes.K_EXTERNAL;}
-"validate" / {SC} ("lax"|"strict"|"type")  {return XQueryTypes.K_VALIDATE;}
-"validate" / {SC}? "{"                     {return XQueryTypes.K_VALIDATE;}
+"validate"                                 {yypushback(yylength()); pushState(VALIDATE_RECOGNITION); return TokenType.WHITE_SPACE;}
 "order" / {SC} "by"                        {return XQueryTypes.K_ORDER;}
 "map" / {SC}? ("("|"{")                    {return XQueryTypes.K_MAP;}
 "attribute" / ({SC}?"("|{SC}?"{"|{SC}{NCName})     {return XQueryTypes.K_ATTRIBUTE;}
@@ -548,6 +546,25 @@ SC=({S} | "(:" {Char}* ~":)")+
 <PI_CONTENT> {
 {Char}                                     {return XQueryTypes.DIRPICONTENTCHAR;}
 "?>"                                       {popState();return XQueryTypes.PI_END;}
+}
+
+<AS_RECOGNITION> {
+{S}                                        {return TokenType.WHITE_SPACE;}
+"(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
+"as"                                       {popState();return XQueryTypes.K_AS;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+}
+
+<VALIDATE_RECOGNITION> {
+{S}                                        {return TokenType.WHITE_SPACE;}
+"(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
+"validate" / {SC} ("lax"|"strict"|"type")  {return XQueryTypes.K_VALIDATE;}
+"validate" / {SC}? "{"                     {return XQueryTypes.K_VALIDATE;}
+"lax"                                      {return XQueryTypes.K_LAX;}
+"strict"                                   {return XQueryTypes.K_STRICT;}
+"type"                                     {return XQueryTypes.K_TYPE;}
+{NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 .                                          {return TokenType.BAD_CHARACTER;}

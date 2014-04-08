@@ -1,0 +1,18 @@
+XQuery File(0,2)
+  XQueryQueryBodyImpl(QUERY_BODY)(0,2)
+    XQueryExprImpl(EXPR)(0,2)
+      XQueryPathExprImpl(PATH_EXPR)(0,2)
+        XQueryStepExprImpl(STEP_EXPR)(0,1)
+          XQueryAxisStepImpl(AXIS_STEP)(0,1)
+            XQueryForwardStepImpl(FORWARD_STEP)(0,1)
+              XQueryAbbrevForwardStepImpl(ABBREV_FORWARD_STEP)(0,1)
+                XQueryNodeTestImpl(NODE_TEST)(0,1)
+                  XQueryNameTestImpl(NAME_TEST)(0,1)
+                    XQueryLocalPartImpl(LOCAL_PART)(0,1)
+                      PsiElement(NCName)('a')(0,1)
+            XQueryPredicateListImpl(PREDICATE_LIST)(1,1)
+              <empty list>
+        XQueryRelativePathOperatorImpl(RELATIVE_PATH_OPERATOR)(1,2)
+          PsiElement(/)('/')(1,2)
+        PsiErrorElement:<step expr> expected, unexpected end of file(2,2)
+          <empty list>

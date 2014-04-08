@@ -27,4 +27,7 @@ public interface XQueryUnionExpr extends XQueryExprSingle {
   @NotNull
   List<XQueryExprSingle> getExprSingleList();
 
+  @NotNull
+  List<XQueryUnionOperator> getUnionOperatorList();
+
 }

@@ -46,6 +46,12 @@ public class XQueryInstanceofExprImpl extends XQueryExprSingleImpl implements XQ
 
   @Override
   @Nullable
+  public XQueryInstanceOfOperator getInstanceOfOperator() {
+    return findChildByClass(XQueryInstanceOfOperator.class);
+  }
+
+  @Override
+  @Nullable
   public XQuerySequenceType getSequenceType() {
     return findChildByClass(XQuerySequenceType.class);
   }

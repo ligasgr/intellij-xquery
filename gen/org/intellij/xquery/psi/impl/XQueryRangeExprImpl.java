@@ -44,4 +44,10 @@ public class XQueryRangeExprImpl extends XQueryExprSingleImpl implements XQueryR
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
   }
 
+  @Override
+  @Nullable
+  public XQueryToOperator getToOperator() {
+    return findChildByClass(XQueryToOperator.class);
+  }
+
 }

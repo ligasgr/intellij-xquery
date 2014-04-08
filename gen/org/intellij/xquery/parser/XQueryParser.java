@@ -22,7 +22,7 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.openapi.diagnostic.Logger;
 import static org.intellij.xquery.psi.XQueryTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static org.intellij.grammar.parser.GeneratedParserUtilBase.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
@@ -46,11 +46,17 @@ public class XQueryParser implements PsiParser {
     else if (root_ == ADDITIVE_EXPR) {
       result_ = AdditiveExpr(builder_, 0);
     }
+    else if (root_ == ADDITIVE_OPERATOR) {
+      result_ = AdditiveOperator(builder_, 0);
+    }
     else if (root_ == ALLOWING_EMPTY) {
       result_ = AllowingEmpty(builder_, 0);
     }
     else if (root_ == AND_EXPR) {
       result_ = AndExpr(builder_, 0);
+    }
+    else if (root_ == AND_OPERATOR) {
+      result_ = AndOperator(builder_, 0);
     }
     else if (root_ == ANNOTATION) {
       result_ = Annotation(builder_, 0);
@@ -121,8 +127,14 @@ public class XQueryParser implements PsiParser {
     else if (root_ == CAST_EXPR) {
       result_ = CastExpr(builder_, 0);
     }
+    else if (root_ == CAST_OPERATOR) {
+      result_ = CastOperator(builder_, 0);
+    }
     else if (root_ == CASTABLE_EXPR) {
       result_ = CastableExpr(builder_, 0);
+    }
+    else if (root_ == CASTABLE_OPERATOR) {
+      result_ = CastableOperator(builder_, 0);
     }
     else if (root_ == CATCH_CLAUSE) {
       result_ = CatchClause(builder_, 0);
@@ -165,6 +177,9 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == COMPUTED_CONSTRUCTOR) {
       result_ = ComputedConstructor(builder_, 0);
+    }
+    else if (root_ == CONCAT_OPERATOR) {
+      result_ = ConcatOperator(builder_, 0);
     }
     else if (root_ == CONSTRUCTION_DECL) {
       result_ = ConstructionDecl(builder_, 0);
@@ -253,6 +268,9 @@ public class XQueryParser implements PsiParser {
     else if (root_ == ENCLOSED_EXPR) {
       result_ = EnclosedExpr(builder_, 0);
     }
+    else if (root_ == EQUALITY_COMP) {
+      result_ = EqualityComp(builder_, 0);
+    }
     else if (root_ == ESCAPE_APOS) {
       result_ = EscapeApos(builder_, 0);
     }
@@ -331,11 +349,17 @@ public class XQueryParser implements PsiParser {
     else if (root_ == INLINE_FUNCTION_EXPR) {
       result_ = InlineFunctionExpr(builder_, 0);
     }
+    else if (root_ == INSTANCE_OF_OPERATOR) {
+      result_ = InstanceOfOperator(builder_, 0);
+    }
     else if (root_ == INSTANCEOF_EXPR) {
       result_ = InstanceofExpr(builder_, 0);
     }
     else if (root_ == INTERSECT_EXCEPT_EXPR) {
       result_ = IntersectExceptExpr(builder_, 0);
+    }
+    else if (root_ == INTERSECT_EXCEPT_OPERATOR) {
+      result_ = IntersectExceptOperator(builder_, 0);
     }
     else if (root_ == ITEM_TYPE) {
       result_ = ItemType(builder_, 0);
@@ -382,6 +406,9 @@ public class XQueryParser implements PsiParser {
     else if (root_ == MULTIPLICATIVE_EXPR) {
       result_ = MultiplicativeExpr(builder_, 0);
     }
+    else if (root_ == MULTIPLICATIVE_OPERATOR) {
+      result_ = MultiplicativeOperator(builder_, 0);
+    }
     else if (root_ == NAME_TEST) {
       result_ = NameTest(builder_, 0);
     }
@@ -400,6 +427,9 @@ public class XQueryParser implements PsiParser {
     else if (root_ == NEXT_ITEM) {
       result_ = NextItem(builder_, 0);
     }
+    else if (root_ == NODE_COMP) {
+      result_ = NodeComp(builder_, 0);
+    }
     else if (root_ == NODE_TEST) {
       result_ = NodeTest(builder_, 0);
     }
@@ -414,6 +444,9 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == OR_EXPR) {
       result_ = OrExpr(builder_, 0);
+    }
+    else if (root_ == OR_OPERATOR) {
+      result_ = OrOperator(builder_, 0);
     }
     else if (root_ == ORDER_BY_CLAUSE) {
       result_ = OrderByClause(builder_, 0);
@@ -496,6 +529,12 @@ public class XQueryParser implements PsiParser {
     else if (root_ == RANGE_EXPR) {
       result_ = RangeExpr(builder_, 0);
     }
+    else if (root_ == RELATIONAL_COMP) {
+      result_ = RelationalComp(builder_, 0);
+    }
+    else if (root_ == RELATIVE_PATH_OPERATOR) {
+      result_ = RelativePathOperator(builder_, 0);
+    }
     else if (root_ == RETURN_CLAUSE) {
       result_ = ReturnClause(builder_, 0);
     }
@@ -522,6 +561,9 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == SIMPLE_MAP_EXPR) {
       result_ = SimpleMapExpr(builder_, 0);
+    }
+    else if (root_ == SIMPLE_MAP_OPERATOR) {
+      result_ = SimpleMapOperator(builder_, 0);
     }
     else if (root_ == SIMPLE_TYPE_NAME) {
       result_ = SimpleTypeName(builder_, 0);
@@ -553,8 +595,14 @@ public class XQueryParser implements PsiParser {
     else if (root_ == TEXT_TEST) {
       result_ = TextTest(builder_, 0);
     }
+    else if (root_ == TO_OPERATOR) {
+      result_ = ToOperator(builder_, 0);
+    }
     else if (root_ == TREAT_EXPR) {
       result_ = TreatExpr(builder_, 0);
+    }
+    else if (root_ == TREAT_OPERATOR) {
+      result_ = TreatOperator(builder_, 0);
     }
     else if (root_ == TRY_CATCH_EXPR) {
       result_ = TryCatchExpr(builder_, 0);
@@ -589,11 +637,17 @@ public class XQueryParser implements PsiParser {
     else if (root_ == UNION_EXPR) {
       result_ = UnionExpr(builder_, 0);
     }
+    else if (root_ == UNION_OPERATOR) {
+      result_ = UnionOperator(builder_, 0);
+    }
     else if (root_ == UNORDERED_EXPR) {
       result_ = UnorderedExpr(builder_, 0);
     }
     else if (root_ == VALIDATE_EXPR) {
       result_ = ValidateExpr(builder_, 0);
+    }
+    else if (root_ == VALUE_COMP) {
+      result_ = ValueComp(builder_, 0);
     }
     else if (root_ == VALUE_EXPR) {
       result_ = ValueExpr(builder_, 0);
@@ -693,7 +747,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // MultiplicativeExpr ( ("+" | "-") MultiplicativeExpr )*
+  // MultiplicativeExpr AdditiveOptionalExpr*
   public static boolean AdditiveExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "AdditiveExpr")) return false;
     boolean result_ = false;
@@ -704,38 +758,44 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ( ("+" | "-") MultiplicativeExpr )*
+  // AdditiveOptionalExpr*
   private static boolean AdditiveExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "AdditiveExpr_1")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
-      if (!AdditiveExpr_1_0(builder_, level_ + 1)) break;
+      if (!AdditiveOptionalExpr(builder_, level_ + 1)) break;
       if (!empty_element_parsed_guard_(builder_, "AdditiveExpr_1", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
   }
 
-  // ("+" | "-") MultiplicativeExpr
-  private static boolean AdditiveExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "AdditiveExpr_1_0")) return false;
+  /* ********************************************************** */
+  // "+" | "-"
+  public static boolean AdditiveOperator(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "AdditiveOperator")) return false;
+    if (!nextTokenIs(builder_, "<additive operator>", OP_PLUS, OP_MINUS)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = AdditiveExpr_1_0_0(builder_, level_ + 1);
-    result_ = result_ && MultiplicativeExpr(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<additive operator>");
+    result_ = consumeToken(builder_, OP_PLUS);
+    if (!result_) result_ = consumeToken(builder_, OP_MINUS);
+    exit_section_(builder_, level_, marker_, ADDITIVE_OPERATOR, result_, false, null);
     return result_;
   }
 
-  // "+" | "-"
-  private static boolean AdditiveExpr_1_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "AdditiveExpr_1_0_0")) return false;
+  /* ********************************************************** */
+  // AdditiveOperator MultiplicativeExpr
+  static boolean AdditiveOptionalExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "AdditiveOptionalExpr")) return false;
+    if (!nextTokenIs(builder_, "", OP_PLUS, OP_MINUS)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, OP_PLUS);
-    if (!result_) result_ = consumeToken(builder_, OP_MINUS);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = AdditiveOperator(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && MultiplicativeExpr(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -752,7 +812,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ComparisonExpr (AndMultipliedExpr)*
+  // ComparisonExpr AndMultipliedExpr*
   public static boolean AndExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "AndExpr")) return false;
     boolean result_ = false;
@@ -763,41 +823,43 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // (AndMultipliedExpr)*
+  // AndMultipliedExpr*
   private static boolean AndExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "AndExpr_1")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
-      if (!AndExpr_1_0(builder_, level_ + 1)) break;
+      if (!AndMultipliedExpr(builder_, level_ + 1)) break;
       if (!empty_element_parsed_guard_(builder_, "AndExpr_1", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
   }
 
-  // (AndMultipliedExpr)
-  private static boolean AndExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "AndExpr_1_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = AndMultipliedExpr(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
   /* ********************************************************** */
-  // "and" ComparisonExpr
+  // AndOperator ComparisonExpr
   static boolean AndMultipliedExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "AndMultipliedExpr")) return false;
     if (!nextTokenIs(builder_, K_AND)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = consumeToken(builder_, K_AND);
+    result_ = AndOperator(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && ComparisonExpr(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
     return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // "and"
+  public static boolean AndOperator(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "AndOperator")) return false;
+    if (!nextTokenIs(builder_, K_AND)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_AND);
+    exit_section_(builder_, marker_, AND_OPERATOR, result_);
+    return result_;
   }
 
   /* ********************************************************** */
@@ -1282,7 +1344,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // UnaryExpr ( "cast" "as" SingleType )?
+  // UnaryExpr CastOptionalExpr?
   public static boolean CastExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CastExpr")) return false;
     boolean result_ = false;
@@ -1293,27 +1355,43 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ( "cast" "as" SingleType )?
+  // CastOptionalExpr?
   private static boolean CastExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CastExpr_1")) return false;
-    CastExpr_1_0(builder_, level_ + 1);
+    CastOptionalExpr(builder_, level_ + 1);
     return true;
   }
 
-  // "cast" "as" SingleType
-  private static boolean CastExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "CastExpr_1_0")) return false;
+  /* ********************************************************** */
+  // "cast" "as"
+  public static boolean CastOperator(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "CastOperator")) return false;
+    if (!nextTokenIs(builder_, K_CAST)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, K_CAST);
     result_ = result_ && consumeToken(builder_, K_AS);
-    result_ = result_ && SingleType(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
+    exit_section_(builder_, marker_, CAST_OPERATOR, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // CastExpr ( "castable" "as" SingleType )?
+  // CastOperator SingleType
+  static boolean CastOptionalExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "CastOptionalExpr")) return false;
+    if (!nextTokenIs(builder_, K_CAST)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = CastOperator(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && SingleType(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // CastExpr CastableOptionalExpr?
   public static boolean CastableExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CastableExpr")) return false;
     boolean result_ = false;
@@ -1324,23 +1402,39 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ( "castable" "as" SingleType )?
+  // CastableOptionalExpr?
   private static boolean CastableExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CastableExpr_1")) return false;
-    CastableExpr_1_0(builder_, level_ + 1);
+    CastableOptionalExpr(builder_, level_ + 1);
     return true;
   }
 
-  // "castable" "as" SingleType
-  private static boolean CastableExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "CastableExpr_1_0")) return false;
+  /* ********************************************************** */
+  // "castable" "as"
+  public static boolean CastableOperator(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "CastableOperator")) return false;
+    if (!nextTokenIs(builder_, K_CASTABLE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, K_CASTABLE);
     result_ = result_ && consumeToken(builder_, K_AS);
-    result_ = result_ && SingleType(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
+    exit_section_(builder_, marker_, CASTABLE_OPERATOR, result_);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // CastableOperator SingleType
+  static boolean CastableOptionalExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "CastableOptionalExpr")) return false;
+    if (!nextTokenIs(builder_, K_CASTABLE)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = CastableOperator(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && SingleType(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -1672,9 +1766,20 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // StringConcatExpr ( (ValueComp
-  //  | GeneralComp
-  //  | NodeComp) StringConcatExpr )?
+  // ValueComp | GeneralComp | NodeComp
+  static boolean Comparison(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Comparison")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = ValueComp(builder_, level_ + 1);
+    if (!result_) result_ = GeneralComp(builder_, level_ + 1);
+    if (!result_) result_ = NodeComp(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // StringConcatExpr ComparisonOptionalExpr ?
   public static boolean ComparisonExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ComparisonExpr")) return false;
     boolean result_ = false;
@@ -1685,40 +1790,25 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ( (ValueComp
-  //  | GeneralComp
-  //  | NodeComp) StringConcatExpr )?
+  // ComparisonOptionalExpr ?
   private static boolean ComparisonExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ComparisonExpr_1")) return false;
-    ComparisonExpr_1_0(builder_, level_ + 1);
+    ComparisonOptionalExpr(builder_, level_ + 1);
     return true;
   }
 
-  // (ValueComp
-  //  | GeneralComp
-  //  | NodeComp) StringConcatExpr
-  private static boolean ComparisonExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ComparisonExpr_1_0")) return false;
+  /* ********************************************************** */
+  // Comparison StringConcatExpr
+  static boolean ComparisonOptionalExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ComparisonOptionalExpr")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = ComparisonExpr_1_0_0(builder_, level_ + 1);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = Comparison(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
     result_ = result_ && StringConcatExpr(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // ValueComp
-  //  | GeneralComp
-  //  | NodeComp
-  private static boolean ComparisonExpr_1_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ComparisonExpr_1_0_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = ValueComp(builder_, level_ + 1);
-    if (!result_) result_ = GeneralComp(builder_, level_ + 1);
-    if (!result_) result_ = NodeComp(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -1743,6 +1833,18 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = CompCommentConstructor(builder_, level_ + 1);
     if (!result_) result_ = CompPIConstructor(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, COMPUTED_CONSTRUCTOR, result_, false, null);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // "||"
+  public static boolean ConcatOperator(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConcatOperator")) return false;
+    if (!nextTokenIs(builder_, PIPE_PIPE)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, PIPE_PIPE);
+    exit_section_(builder_, marker_, CONCAT_OPERATOR, result_);
     return result_;
   }
 
@@ -2613,6 +2715,19 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // "=" | "!="
+  public static boolean EqualityComp(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "EqualityComp")) return false;
+    if (!nextTokenIs(builder_, "<equality comp>", NOT_EQUAL, EQUAL)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<equality comp>");
+    result_ = consumeToken(builder_, EQUAL);
+    if (!result_) result_ = consumeToken(builder_, NOT_EQUAL);
+    exit_section_(builder_, level_, marker_, EQUALITY_COMP, result_, false, null);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // "''"
   public static boolean EscapeApos(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "EscapeApos")) return false;
@@ -2704,13 +2819,15 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ExtensionExpr")) return false;
     if (!nextTokenIs(builder_, PRAGMA_BEGIN)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = ExtensionExpr_0(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, L_C_BRACE);
-    result_ = result_ && ExtensionExpr_2(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, R_C_BRACE);
-    exit_section_(builder_, marker_, EXTENSION_EXPR, result_);
-    return result_;
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, consumeToken(builder_, L_C_BRACE));
+    result_ = pinned_ && report_error_(builder_, ExtensionExpr_2(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && consumeToken(builder_, R_C_BRACE) && result_;
+    exit_section_(builder_, level_, marker_, EXTENSION_EXPR, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // Pragma+
@@ -3034,26 +3151,43 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (ForwardAxis NodeTest) | AbbrevForwardStep
+  // FullForwardStep | AbbrevForwardStep
   public static boolean ForwardStep(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ForwardStep")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<forward step>");
-    result_ = ForwardStep_0(builder_, level_ + 1);
+    result_ = FullForwardStep(builder_, level_ + 1);
     if (!result_) result_ = AbbrevForwardStep(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, FORWARD_STEP, result_, false, null);
     return result_;
   }
 
+  /* ********************************************************** */
   // ForwardAxis NodeTest
-  private static boolean ForwardStep_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ForwardStep_0")) return false;
+  static boolean FullForwardStep(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FullForwardStep")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = ForwardAxis(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
     result_ = result_ && NodeTest(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // ReverseAxis NodeTest
+  static boolean FullReverseStep(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FullReverseStep")) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = ReverseAxis(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && NodeTest(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -3225,8 +3359,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Annotation* (AnyFunctionTest
-  //  | TypedFunctionTest)
+  // Annotation* (AnyFunctionTest | TypedFunctionTest)
   public static boolean FunctionTest(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionTest")) return false;
     if (!nextTokenIs(builder_, "<function test>", PERCENT, K_FUNCTION)) return false;
@@ -3250,8 +3383,7 @@ public class XQueryParser implements PsiParser {
     return true;
   }
 
-  // AnyFunctionTest
-  //  | TypedFunctionTest
+  // AnyFunctionTest | TypedFunctionTest
   private static boolean FunctionTest_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionTest_1")) return false;
     boolean result_ = false;
@@ -3263,17 +3395,13 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "=" | "!=" | "<" | "<=" | ">" | ">="
+  // EqualityComp  | RelationalComp
   static boolean GeneralComp(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "GeneralComp")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, EQUAL);
-    if (!result_) result_ = consumeToken(builder_, NOT_EQUAL);
-    if (!result_) result_ = consumeToken(builder_, LT_CHAR);
-    if (!result_) result_ = consumeToken(builder_, LE_CHARS);
-    if (!result_) result_ = consumeToken(builder_, GT_CHAR);
-    if (!result_) result_ = consumeToken(builder_, GE_CHARS);
+    result_ = EqualityComp(builder_, level_ + 1);
+    if (!result_) result_ = RelationalComp(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -3524,7 +3652,35 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // TreatExpr ( "instance" "of" SequenceType )?
+  // "instance" "of"
+  public static boolean InstanceOfOperator(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "InstanceOfOperator")) return false;
+    if (!nextTokenIs(builder_, K_INSTANCE)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_INSTANCE);
+    result_ = result_ && consumeToken(builder_, K_OF);
+    exit_section_(builder_, marker_, INSTANCE_OF_OPERATOR, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // InstanceOfOperator SequenceType
+  static boolean InstanceOfOptionalExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "InstanceOfOptionalExpr")) return false;
+    if (!nextTokenIs(builder_, K_INSTANCE)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = InstanceOfOperator(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && SequenceType(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // TreatExpr InstanceOfOptionalExpr?
   public static boolean InstanceofExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "InstanceofExpr")) return false;
     boolean result_ = false;
@@ -3535,23 +3691,11 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ( "instance" "of" SequenceType )?
+  // InstanceOfOptionalExpr?
   private static boolean InstanceofExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "InstanceofExpr_1")) return false;
-    InstanceofExpr_1_0(builder_, level_ + 1);
+    InstanceOfOptionalExpr(builder_, level_ + 1);
     return true;
-  }
-
-  // "instance" "of" SequenceType
-  private static boolean InstanceofExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "InstanceofExpr_1_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, K_INSTANCE);
-    result_ = result_ && consumeToken(builder_, K_OF);
-    result_ = result_ && SequenceType(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
   }
 
   /* ********************************************************** */
@@ -3570,7 +3714,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // InstanceofExpr ( ("intersect" | "except") InstanceofExpr )*
+  // InstanceofExpr IntersectExceptOptionalExpr*
   public static boolean IntersectExceptExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "IntersectExceptExpr")) return false;
     boolean result_ = false;
@@ -3581,38 +3725,44 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ( ("intersect" | "except") InstanceofExpr )*
+  // IntersectExceptOptionalExpr*
   private static boolean IntersectExceptExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "IntersectExceptExpr_1")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
-      if (!IntersectExceptExpr_1_0(builder_, level_ + 1)) break;
+      if (!IntersectExceptOptionalExpr(builder_, level_ + 1)) break;
       if (!empty_element_parsed_guard_(builder_, "IntersectExceptExpr_1", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
   }
 
-  // ("intersect" | "except") InstanceofExpr
-  private static boolean IntersectExceptExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "IntersectExceptExpr_1_0")) return false;
+  /* ********************************************************** */
+  // "intersect" | "except"
+  public static boolean IntersectExceptOperator(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "IntersectExceptOperator")) return false;
+    if (!nextTokenIs(builder_, "<intersect except operator>", K_EXCEPT, K_INTERSECT)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = IntersectExceptExpr_1_0_0(builder_, level_ + 1);
-    result_ = result_ && InstanceofExpr(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<intersect except operator>");
+    result_ = consumeToken(builder_, K_INTERSECT);
+    if (!result_) result_ = consumeToken(builder_, K_EXCEPT);
+    exit_section_(builder_, level_, marker_, INTERSECT_EXCEPT_OPERATOR, result_, false, null);
     return result_;
   }
 
-  // "intersect" | "except"
-  private static boolean IntersectExceptExpr_1_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "IntersectExceptExpr_1_0_0")) return false;
+  /* ********************************************************** */
+  // IntersectExceptOperator InstanceofExpr
+  static boolean IntersectExceptOptionalExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "IntersectExceptOptionalExpr")) return false;
+    if (!nextTokenIs(builder_, "", K_EXCEPT, K_INTERSECT)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, K_INTERSECT);
-    if (!result_) result_ = consumeToken(builder_, K_EXCEPT);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = IntersectExceptOperator(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && InstanceofExpr(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -4069,7 +4219,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // UnionExpr ( ("*" | "div" | "idiv" | "mod") UnionExpr )*
+  // UnionExpr MultiplicativeOptionalExpr*
   public static boolean MultiplicativeExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MultiplicativeExpr")) return false;
     boolean result_ = false;
@@ -4080,40 +4230,44 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ( ("*" | "div" | "idiv" | "mod") UnionExpr )*
+  // MultiplicativeOptionalExpr*
   private static boolean MultiplicativeExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MultiplicativeExpr_1")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
-      if (!MultiplicativeExpr_1_0(builder_, level_ + 1)) break;
+      if (!MultiplicativeOptionalExpr(builder_, level_ + 1)) break;
       if (!empty_element_parsed_guard_(builder_, "MultiplicativeExpr_1", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
   }
 
-  // ("*" | "div" | "idiv" | "mod") UnionExpr
-  private static boolean MultiplicativeExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "MultiplicativeExpr_1_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = MultiplicativeExpr_1_0_0(builder_, level_ + 1);
-    result_ = result_ && UnionExpr(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
+  /* ********************************************************** */
   // "*" | "div" | "idiv" | "mod"
-  private static boolean MultiplicativeExpr_1_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "MultiplicativeExpr_1_0_0")) return false;
+  public static boolean MultiplicativeOperator(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MultiplicativeOperator")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<multiplicative operator>");
     result_ = consumeToken(builder_, STAR_SIGN);
     if (!result_) result_ = consumeToken(builder_, K_DIV);
     if (!result_) result_ = consumeToken(builder_, K_IDIV);
     if (!result_) result_ = consumeToken(builder_, K_MOD);
-    exit_section_(builder_, marker_, null, result_);
+    exit_section_(builder_, level_, marker_, MULTIPLICATIVE_OPERATOR, result_, false, null);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // MultiplicativeOperator UnionExpr
+  static boolean MultiplicativeOptionalExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MultiplicativeOptionalExpr")) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = MultiplicativeOperator(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && UnionExpr(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -4203,14 +4357,14 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // "is" | "<<" | ">>"
-  static boolean NodeComp(PsiBuilder builder_, int level_) {
+  public static boolean NodeComp(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "NodeComp")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<node comp>");
     result_ = consumeToken(builder_, K_IS);
     if (!result_) result_ = consumeToken(builder_, NODECOMP_LT);
     if (!result_) result_ = consumeToken(builder_, NODECOMP_GT);
-    exit_section_(builder_, marker_, null, result_);
+    exit_section_(builder_, level_, marker_, NODE_COMP, result_, false, null);
     return result_;
   }
 
@@ -4286,7 +4440,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // AndExpr (OrMultipliedExpr)*
+  // AndExpr OrMultipliedExpr*
   public static boolean OrExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "OrExpr")) return false;
     boolean result_ = false;
@@ -4297,41 +4451,43 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // (OrMultipliedExpr)*
+  // OrMultipliedExpr*
   private static boolean OrExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "OrExpr_1")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
-      if (!OrExpr_1_0(builder_, level_ + 1)) break;
+      if (!OrMultipliedExpr(builder_, level_ + 1)) break;
       if (!empty_element_parsed_guard_(builder_, "OrExpr_1", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
   }
 
-  // (OrMultipliedExpr)
-  private static boolean OrExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "OrExpr_1_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = OrMultipliedExpr(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
   /* ********************************************************** */
-  // "or" AndExpr
+  // OrOperator AndExpr
   static boolean OrMultipliedExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "OrMultipliedExpr")) return false;
     if (!nextTokenIs(builder_, K_OR)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = consumeToken(builder_, K_OR);
+    result_ = OrOperator(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && AndExpr(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
     return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // "or"
+  public static boolean OrOperator(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "OrOperator")) return false;
+    if (!nextTokenIs(builder_, K_OR)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_OR);
+    exit_section_(builder_, marker_, OR_OPERATOR, result_);
+    return result_;
   }
 
   /* ********************************************************** */
@@ -4701,46 +4857,15 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ("/" RelativePathExpr?)
-  //  | ("//" RelativePathExpr)
-  //  | RelativePathExpr
+  // RootPathExpr | RootPathOrChildExpr | RelativePathExpr
   public static boolean PathExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "PathExpr")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<path expr>");
-    result_ = PathExpr_0(builder_, level_ + 1);
-    if (!result_) result_ = PathExpr_1(builder_, level_ + 1);
+    result_ = RootPathExpr(builder_, level_ + 1);
+    if (!result_) result_ = RootPathOrChildExpr(builder_, level_ + 1);
     if (!result_) result_ = RelativePathExpr(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, PATH_EXPR, result_, false, null);
-    return result_;
-  }
-
-  // "/" RelativePathExpr?
-  private static boolean PathExpr_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "PathExpr_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, SLASH);
-    result_ = result_ && PathExpr_0_1(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // RelativePathExpr?
-  private static boolean PathExpr_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "PathExpr_0_1")) return false;
-    RelativePathExpr(builder_, level_ + 1);
-    return true;
-  }
-
-  // "//" RelativePathExpr
-  private static boolean PathExpr_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "PathExpr_1")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, SLASH_SLASH);
-    result_ = result_ && RelativePathExpr(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
@@ -4799,14 +4924,16 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "Pragma")) return false;
     if (!nextTokenIs(builder_, PRAGMA_BEGIN)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, PRAGMA_BEGIN);
-    result_ = result_ && Pragma_1(builder_, level_ + 1);
-    result_ = result_ && EQName(builder_, level_ + 1);
-    result_ = result_ && Pragma_3(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, PRAGMA_END);
-    exit_section_(builder_, marker_, PRAGMA, result_);
-    return result_;
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, Pragma_1(builder_, level_ + 1));
+    result_ = pinned_ && report_error_(builder_, EQName(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && report_error_(builder_, Pragma_3(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && consumeToken(builder_, PRAGMA_END) && result_;
+    exit_section_(builder_, level_, marker_, PRAGMA, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // S?
@@ -5007,7 +5134,7 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // PrefixedName
-  // 			| UnprefixedName
+  //  | UnprefixedName
   static boolean QName(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "QName")) return false;
     if (!nextTokenIs(builder_, NCNAME)) return false;
@@ -5119,7 +5246,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // AdditiveExpr (RangeOptionalExpr)?
+  // AdditiveExpr RangeOptionalExpr?
   public static boolean RangeExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RangeExpr")) return false;
     boolean result_ = false;
@@ -5130,32 +5257,22 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // (RangeOptionalExpr)?
+  // RangeOptionalExpr?
   private static boolean RangeExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RangeExpr_1")) return false;
-    RangeExpr_1_0(builder_, level_ + 1);
+    RangeOptionalExpr(builder_, level_ + 1);
     return true;
   }
 
-  // (RangeOptionalExpr)
-  private static boolean RangeExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "RangeExpr_1_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = RangeOptionalExpr(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
   /* ********************************************************** */
-  // "to" AdditiveExpr
+  // ToOperator AdditiveExpr
   static boolean RangeOptionalExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RangeOptionalExpr")) return false;
     if (!nextTokenIs(builder_, K_TO)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = consumeToken(builder_, K_TO);
+    result_ = ToOperator(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && AdditiveExpr(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
@@ -5163,7 +5280,21 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // StepExpr (("/" | "//") StepExpr)*
+  // "<" | "<=" | ">" | ">="
+  public static boolean RelationalComp(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "RelationalComp")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<relational comp>");
+    result_ = consumeToken(builder_, LT_CHAR);
+    if (!result_) result_ = consumeToken(builder_, LE_CHARS);
+    if (!result_) result_ = consumeToken(builder_, GT_CHAR);
+    if (!result_) result_ = consumeToken(builder_, GE_CHARS);
+    exit_section_(builder_, level_, marker_, RELATIONAL_COMP, result_, false, null);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // StepExpr RelativePathOptionalExpr*
   static boolean RelativePathExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RelativePathExpr")) return false;
     boolean result_ = false;
@@ -5174,36 +5305,52 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // (("/" | "//") StepExpr)*
+  // RelativePathOptionalExpr*
   private static boolean RelativePathExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RelativePathExpr_1")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
-      if (!RelativePathExpr_1_0(builder_, level_ + 1)) break;
+      if (!RelativePathOptionalExpr(builder_, level_ + 1)) break;
       if (!empty_element_parsed_guard_(builder_, "RelativePathExpr_1", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
   }
 
-  // ("/" | "//") StepExpr
-  private static boolean RelativePathExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "RelativePathExpr_1_0")) return false;
+  /* ********************************************************** */
+  // "/" | "//"
+  public static boolean RelativePathOperator(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "RelativePathOperator")) return false;
+    if (!nextTokenIs(builder_, "<relative path operator>", SLASH, SLASH_SLASH)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = RelativePathExpr_1_0_0(builder_, level_ + 1);
-    result_ = result_ && StepExpr(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<relative path operator>");
+    result_ = consumeToken(builder_, SLASH);
+    if (!result_) result_ = consumeToken(builder_, SLASH_SLASH);
+    exit_section_(builder_, level_, marker_, RELATIVE_PATH_OPERATOR, result_, false, null);
     return result_;
   }
 
-  // "/" | "//"
-  private static boolean RelativePathExpr_1_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "RelativePathExpr_1_0_0")) return false;
+  /* ********************************************************** */
+  // (RelativePathOperator) StepExpr
+  static boolean RelativePathOptionalExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "RelativePathOptionalExpr")) return false;
+    if (!nextTokenIs(builder_, "", SLASH, SLASH_SLASH)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = RelativePathOptionalExpr_0(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && StepExpr(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // (RelativePathOperator)
+  private static boolean RelativePathOptionalExpr_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "RelativePathOptionalExpr_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, SLASH);
-    if (!result_) result_ = consumeToken(builder_, SLASH_SLASH);
+    result_ = RelativePathOperator(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -5298,26 +5445,50 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (ReverseAxis NodeTest) | AbbrevReverseStep
+  // FullReverseStep | AbbrevReverseStep
   public static boolean ReverseStep(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ReverseStep")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<reverse step>");
-    result_ = ReverseStep_0(builder_, level_ + 1);
+    result_ = FullReverseStep(builder_, level_ + 1);
     if (!result_) result_ = AbbrevReverseStep(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, REVERSE_STEP, result_, false, null);
     return result_;
   }
 
-  // ReverseAxis NodeTest
-  private static boolean ReverseStep_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ReverseStep_0")) return false;
+  /* ********************************************************** */
+  // "/" RelativePathExpr?
+  static boolean RootPathExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "RootPathExpr")) return false;
+    if (!nextTokenIs(builder_, SLASH)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = ReverseAxis(builder_, level_ + 1);
-    result_ = result_ && NodeTest(builder_, level_ + 1);
+    result_ = consumeToken(builder_, SLASH);
+    result_ = result_ && RootPathExpr_1(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
+  }
+
+  // RelativePathExpr?
+  private static boolean RootPathExpr_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "RootPathExpr_1")) return false;
+    RelativePathExpr(builder_, level_ + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // "//" RelativePathExpr
+  static boolean RootPathOrChildExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "RootPathOrChildExpr")) return false;
+    if (!nextTokenIs(builder_, SLASH_SLASH)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = consumeToken(builder_, SLASH_SLASH);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && RelativePathExpr(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -5581,7 +5752,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // PathExpr ("!" PathExpr)*
+  // PathExpr SimpleMapOptionalExpr*
   public static boolean SimpleMapExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SimpleMapExpr")) return false;
     boolean result_ = false;
@@ -5592,27 +5763,43 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ("!" PathExpr)*
+  // SimpleMapOptionalExpr*
   private static boolean SimpleMapExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SimpleMapExpr_1")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
-      if (!SimpleMapExpr_1_0(builder_, level_ + 1)) break;
+      if (!SimpleMapOptionalExpr(builder_, level_ + 1)) break;
       if (!empty_element_parsed_guard_(builder_, "SimpleMapExpr_1", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
   }
 
-  // "!" PathExpr
-  private static boolean SimpleMapExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "SimpleMapExpr_1_0")) return false;
+  /* ********************************************************** */
+  // "!"
+  public static boolean SimpleMapOperator(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SimpleMapOperator")) return false;
+    if (!nextTokenIs(builder_, EXCLAMATION_MARK)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, EXCLAMATION_MARK);
-    result_ = result_ && PathExpr(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
+    exit_section_(builder_, marker_, SIMPLE_MAP_OPERATOR, result_);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // SimpleMapOperator PathExpr
+  static boolean SimpleMapOptionalExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SimpleMapOptionalExpr")) return false;
+    if (!nextTokenIs(builder_, EXCLAMATION_MARK)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = SimpleMapOperator(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && PathExpr(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -5700,7 +5887,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // RangeExpr (StringConcatMultipliedExpr)*
+  // RangeExpr StringConcatMultipliedExpr*
   public static boolean StringConcatExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "StringConcatExpr")) return false;
     boolean result_ = false;
@@ -5711,37 +5898,27 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // (StringConcatMultipliedExpr)*
+  // StringConcatMultipliedExpr*
   private static boolean StringConcatExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "StringConcatExpr_1")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
-      if (!StringConcatExpr_1_0(builder_, level_ + 1)) break;
+      if (!StringConcatMultipliedExpr(builder_, level_ + 1)) break;
       if (!empty_element_parsed_guard_(builder_, "StringConcatExpr_1", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
   }
 
-  // (StringConcatMultipliedExpr)
-  private static boolean StringConcatExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "StringConcatExpr_1_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = StringConcatMultipliedExpr(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
   /* ********************************************************** */
-  // "||" RangeExpr
+  // ConcatOperator RangeExpr
   static boolean StringConcatMultipliedExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "StringConcatMultipliedExpr")) return false;
     if (!nextTokenIs(builder_, PIPE_PIPE)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = consumeToken(builder_, PIPE_PIPE);
+    result_ = ConcatOperator(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && RangeExpr(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
@@ -5879,7 +6056,19 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // CastableExpr ( "treat" "as" SequenceType )?
+  // "to"
+  public static boolean ToOperator(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ToOperator")) return false;
+    if (!nextTokenIs(builder_, K_TO)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_TO);
+    exit_section_(builder_, marker_, TO_OPERATOR, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // CastableExpr TreatOptionalExpr?
   public static boolean TreatExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TreatExpr")) return false;
     boolean result_ = false;
@@ -5890,23 +6079,39 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ( "treat" "as" SequenceType )?
+  // TreatOptionalExpr?
   private static boolean TreatExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TreatExpr_1")) return false;
-    TreatExpr_1_0(builder_, level_ + 1);
+    TreatOptionalExpr(builder_, level_ + 1);
     return true;
   }
 
-  // "treat" "as" SequenceType
-  private static boolean TreatExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TreatExpr_1_0")) return false;
+  /* ********************************************************** */
+  // "treat" "as"
+  public static boolean TreatOperator(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TreatOperator")) return false;
+    if (!nextTokenIs(builder_, K_TREAT)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, K_TREAT);
     result_ = result_ && consumeToken(builder_, K_AS);
-    result_ = result_ && SequenceType(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
+    exit_section_(builder_, marker_, TREAT_OPERATOR, result_);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // TreatOperator SequenceType
+  static boolean TreatOptionalExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TreatOptionalExpr")) return false;
+    if (!nextTokenIs(builder_, K_TREAT)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = TreatOperator(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && SequenceType(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -6223,7 +6428,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IntersectExceptExpr ( ("union" | "|") IntersectExceptExpr )*
+  // IntersectExceptExpr UnionOptionalExpr*
   public static boolean UnionExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "UnionExpr")) return false;
     boolean result_ = false;
@@ -6234,38 +6439,44 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ( ("union" | "|") IntersectExceptExpr )*
+  // UnionOptionalExpr*
   private static boolean UnionExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "UnionExpr_1")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
-      if (!UnionExpr_1_0(builder_, level_ + 1)) break;
+      if (!UnionOptionalExpr(builder_, level_ + 1)) break;
       if (!empty_element_parsed_guard_(builder_, "UnionExpr_1", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
   }
 
-  // ("union" | "|") IntersectExceptExpr
-  private static boolean UnionExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "UnionExpr_1_0")) return false;
+  /* ********************************************************** */
+  // "union" | "|"
+  public static boolean UnionOperator(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "UnionOperator")) return false;
+    if (!nextTokenIs(builder_, "<union operator>", K_UNION, PIPE)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = UnionExpr_1_0_0(builder_, level_ + 1);
-    result_ = result_ && IntersectExceptExpr(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<union operator>");
+    result_ = consumeToken(builder_, K_UNION);
+    if (!result_) result_ = consumeToken(builder_, PIPE);
+    exit_section_(builder_, level_, marker_, UNION_OPERATOR, result_, false, null);
     return result_;
   }
 
-  // "union" | "|"
-  private static boolean UnionExpr_1_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "UnionExpr_1_0_0")) return false;
+  /* ********************************************************** */
+  // UnionOperator IntersectExceptExpr
+  static boolean UnionOptionalExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "UnionOptionalExpr")) return false;
+    if (!nextTokenIs(builder_, "", K_UNION, PIPE)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, K_UNION);
-    if (!result_) result_ = consumeToken(builder_, PIPE);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = UnionOperator(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && IntersectExceptExpr(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -6297,14 +6508,16 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ValidateExpr")) return false;
     if (!nextTokenIs(builder_, K_VALIDATE)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, K_VALIDATE);
-    result_ = result_ && ValidateExpr_1(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, L_C_BRACE);
-    result_ = result_ && Expr(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, R_C_BRACE);
-    exit_section_(builder_, marker_, VALIDATE_EXPR, result_);
-    return result_;
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, ValidateExpr_1(builder_, level_ + 1));
+    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, L_C_BRACE)) && result_;
+    result_ = pinned_ && report_error_(builder_, Expr(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && consumeToken(builder_, R_C_BRACE) && result_;
+    exit_section_(builder_, level_, marker_, VALIDATE_EXPR, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // (ValidationMode | ("type" TypeName))?
@@ -6351,17 +6564,17 @@ public class XQueryParser implements PsiParser {
 
   /* ********************************************************** */
   // "eq" | "ne" | "lt" | "le" | "gt" | "ge"
-  static boolean ValueComp(PsiBuilder builder_, int level_) {
+  public static boolean ValueComp(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ValueComp")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<value comp>");
     result_ = consumeToken(builder_, EQ);
     if (!result_) result_ = consumeToken(builder_, NE);
     if (!result_) result_ = consumeToken(builder_, LT);
     if (!result_) result_ = consumeToken(builder_, LE);
     if (!result_) result_ = consumeToken(builder_, GT);
     if (!result_) result_ = consumeToken(builder_, GE);
-    exit_section_(builder_, marker_, null, result_);
+    exit_section_(builder_, level_, marker_, VALUE_COMP, result_, false, null);
     return result_;
   }
 

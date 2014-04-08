@@ -1,0 +1,13 @@
+XQuery File(0,4)
+  XQueryQueryBodyImpl(QUERY_BODY)(0,4)
+    XQueryExprImpl(EXPR)(0,4)
+      XQueryComparisonExprImpl(COMPARISON_EXPR)(0,4)
+        XQueryPrimaryExprImpl(PRIMARY_EXPR)(0,1)
+          XQueryLiteralImpl(LITERAL)(0,1)
+            XQueryNumericLiteralImpl(NUMERIC_LITERAL)(0,1)
+              PsiElement(IntegerLiteral)('1')(0,1)
+        PsiWhiteSpace(' ')(1,2)
+        XQueryValueCompImpl(VALUE_COMP)(2,4)
+          PsiElement(eq)('eq')(2,4)
+        PsiErrorElement:<unary expr> expected, unexpected end of file(4,4)
+          <empty list>

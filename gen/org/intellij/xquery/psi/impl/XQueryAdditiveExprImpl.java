@@ -40,6 +40,12 @@ public class XQueryAdditiveExprImpl extends XQueryExprSingleImpl implements XQue
 
   @Override
   @NotNull
+  public List<XQueryAdditiveOperator> getAdditiveOperatorList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryAdditiveOperator.class);
+  }
+
+  @Override
+  @NotNull
   public List<XQueryExprSingle> getExprSingleList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
   }

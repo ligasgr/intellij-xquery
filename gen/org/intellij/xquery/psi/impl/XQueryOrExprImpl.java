@@ -44,4 +44,10 @@ public class XQueryOrExprImpl extends XQueryExprSingleImpl implements XQueryOrEx
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
   }
 
+  @Override
+  @NotNull
+  public List<XQueryOrOperator> getOrOperatorList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryOrOperator.class);
+  }
+
 }

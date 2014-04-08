@@ -1,0 +1,13 @@
+XQuery File(0,3)
+  XQueryQueryBodyImpl(QUERY_BODY)(0,3)
+    XQueryExprImpl(EXPR)(0,3)
+      XQueryAdditiveExprImpl(ADDITIVE_EXPR)(0,3)
+        XQueryPrimaryExprImpl(PRIMARY_EXPR)(0,1)
+          XQueryLiteralImpl(LITERAL)(0,1)
+            XQueryNumericLiteralImpl(NUMERIC_LITERAL)(0,1)
+              PsiElement(IntegerLiteral)('1')(0,1)
+        PsiWhiteSpace(' ')(1,2)
+        XQueryAdditiveOperatorImpl(ADDITIVE_OPERATOR)(2,3)
+          PsiElement(+)('+')(2,3)
+        PsiErrorElement:<unary expr> expected, unexpected end of file(3,3)
+          <empty list>
