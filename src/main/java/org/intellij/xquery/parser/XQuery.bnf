@@ -277,7 +277,8 @@ Param ::= "$" VarName TypeDeclaration?
 FunctionBody ::= EnclosedExpr
 EnclosedExpr ::= "{" Expr "}" {pin=1}
 OptionDecl ::= "declare" "option" EQName StringLiteral Separator {pin=2}
-QueryBody ::= Expr {pin=1 methods=[getPresentation]}
+QueryBody ::= Expr {pin=1 methods=[getPresentation] recoverWhile=QueryBodyRecover}
+private QueryBodyRecover ::= !<<eof>>
 Expr ::= ExprSingle ExprSingleAfterComma* {pin=1}
 private ExprSingleAfterComma ::= "," ExprSingle {pin=1}
 ExprSingle ::= FLWORExpr
