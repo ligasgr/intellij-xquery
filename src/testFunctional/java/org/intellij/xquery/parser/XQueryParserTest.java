@@ -17,22 +17,15 @@
 
 package org.intellij.xquery.parser;
 
-import com.intellij.testFramework.ParsingTestCase;
-
 /**
  * User: ligasgr
  * Date: 14/06/13
  * Time: 21:01
  */
-public class XQueryParserTest extends ParsingTestCase {
+public class XQueryParserTest extends BaseParserTest {
 
     public XQueryParserTest() {
-        super("parser", "xq", new XQueryParserDefinition());
-    }
-
-    @Override
-    protected String getTestDataPath() {
-        return "src/testFunctional/testData/org/intellij/xquery";
+        super("valid");
     }
 
     public void testTour() {
@@ -107,14 +100,6 @@ public class XQueryParserTest extends ParsingTestCase {
         doTest(true);
     }
 
-    public void testIncompleteQuotString() {
-        doTest(true);
-    }
-
-    public void testIncompleteAposString() {
-        doTest(true);
-    }
-
     public void testPragma() throws Exception {
         doTest(true);
     }
@@ -141,15 +126,5 @@ public class XQueryParserTest extends ParsingTestCase {
 
     public void testMultipleBindingsInForLet() throws Exception {
         doTest(true);
-    }
-
-    @Override
-    protected boolean skipSpaces() {
-        return false;
-    }
-
-    @Override
-    protected boolean includeRanges() {
-        return true;
     }
 }
