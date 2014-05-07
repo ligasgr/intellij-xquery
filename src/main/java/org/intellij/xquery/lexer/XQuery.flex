@@ -352,6 +352,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 {NCName}                                   {return XQueryTypes.XMLTAGNCNAME;}
 ":"                                        {return XQueryTypes.XMLCOLON;}
 ">"                                        {popState(); return XQueryTypes.XMLTAGEND;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 <QUOT_STRING> {

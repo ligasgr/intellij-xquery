@@ -110,6 +110,7 @@ import static org.intellij.xquery.psi.XQueryTypes.PARENTHESIZED_EXPR;
 import static org.intellij.xquery.psi.XQueryTypes.PIPE;
 import static org.intellij.xquery.psi.XQueryTypes.PIPE_PIPE;
 import static org.intellij.xquery.psi.XQueryTypes.RELATIONAL_COMP;
+import static org.intellij.xquery.psi.XQueryTypes.RELATIVE_PATH_OPERATOR;
 import static org.intellij.xquery.psi.XQueryTypes.RETURN_CLAUSE;
 import static org.intellij.xquery.psi.XQueryTypes.R_PAR;
 import static org.intellij.xquery.psi.XQueryTypes.SLASH;
@@ -216,8 +217,8 @@ public class XQueryFormattingBlock extends AbstractBlock {
             if (BIN_OPERATORS.contains(type) || BIN_OPERATORS.contains(prevType)) {
                 return Indent.getContinuationIndent();
             }
-            if (((type == SLASH || type == SLASH_SLASH) && (prevType == STEP_EXPR))
-                    || ((type == STEP_EXPR) && (prevType == SLASH || prevType == SLASH_SLASH))) {
+            if (((type == SLASH || type == SLASH_SLASH || type == RELATIVE_PATH_OPERATOR) && (prevType == STEP_EXPR))
+                    || ((type == STEP_EXPR) && (prevType == SLASH || prevType == SLASH_SLASH || prevType == RELATIVE_PATH_OPERATOR))) {
                 return Indent.getContinuationIndent();
             }
         }

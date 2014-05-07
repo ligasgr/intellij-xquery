@@ -454,7 +454,11 @@ Constructor ::= DirectConstructor
 DirectConstructor ::= DirElemConstructor
  | DirCommentConstructor
  | DirPIConstructor
-DirElemConstructor ::= XmlStartTagStart XmlTagName DirAttributeList? (XmlEmptyElementEnd | (XmlTagEnd DirElemContent* XmlEndTagStart XmlTagName XmlTagEnd)) /* ws: explicit */ {pin=1}
+private DirElemConstructor ::= XmlEmptyTag | XmlFullTag /* ws: explicit */
+XmlEmptyTag ::= XmlStartTagStart XmlTagName DirAttributeList? XmlEmptyElementEnd
+XmlFullTag ::= XmlOpeningTagPart DirElemContent* XmlClosingTagPart
+private XmlOpeningTagPart ::= XmlStartTagStart XmlTagName DirAttributeList? XmlTagEnd {pin=1}
+private XmlClosingTagPart ::= XmlEndTagStart XmlTagName XmlTagEnd {pin=1}
 XmlTagName ::= XmlTagNamespace XmlColon XmlTagLocalName | XmlTagLocalName
 XmlTagNamespace ::= XmlTagNCName
 XmlTagLocalName ::= XmlTagNCName

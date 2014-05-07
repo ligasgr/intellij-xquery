@@ -91,7 +91,6 @@ public interface XQueryTypes {
   IElementType DIR_ATTRIBUTE_VALUE = new XQueryElementType("DIR_ATTRIBUTE_VALUE");
   IElementType DIR_COMMENT_CONSTRUCTOR = new XQueryElementType("DIR_COMMENT_CONSTRUCTOR");
   IElementType DIR_COMMENT_CONTENTS = new XQueryElementType("DIR_COMMENT_CONTENTS");
-  IElementType DIR_ELEM_CONSTRUCTOR = new XQueryElementType("DIR_ELEM_CONSTRUCTOR");
   IElementType DIR_ELEM_CONTENT = new XQueryElementType("DIR_ELEM_CONTENT");
   IElementType DIR_PI_CONSTRUCTOR = new XQueryElementType("DIR_PI_CONSTRUCTOR");
   IElementType DIR_PI_CONTENTS = new XQueryElementType("DIR_PI_CONTENTS");
@@ -240,6 +239,8 @@ public interface XQueryTypes {
   IElementType WHERE_CLAUSE = new XQueryElementType("WHERE_CLAUSE");
   IElementType WILDCARD = new XQueryElementType("WILDCARD");
   IElementType WINDOW_CLAUSE = new XQueryElementType("WINDOW_CLAUSE");
+  IElementType XML_EMPTY_TAG = new XQueryElementType("XML_EMPTY_TAG");
+  IElementType XML_FULL_TAG = new XQueryElementType("XML_FULL_TAG");
   IElementType XML_TAG_LOCAL_NAME = new XQueryElementType("XML_TAG_LOCAL_NAME");
   IElementType XML_TAG_NAME = new XQueryElementType("XML_TAG_NAME");
   IElementType XML_TAG_NAMESPACE = new XQueryElementType("XML_TAG_NAMESPACE");
@@ -646,9 +647,6 @@ public interface XQueryTypes {
       }
       else if (type == DIR_COMMENT_CONTENTS) {
         return new XQueryDirCommentContentsImpl(node);
-      }
-      else if (type == DIR_ELEM_CONSTRUCTOR) {
-        return new XQueryDirElemConstructorImpl(node);
       }
       else if (type == DIR_ELEM_CONTENT) {
         return new XQueryDirElemContentImpl(node);
@@ -1093,6 +1091,12 @@ public interface XQueryTypes {
       }
       else if (type == WINDOW_CLAUSE) {
         return new XQueryWindowClauseImpl(node);
+      }
+      else if (type == XML_EMPTY_TAG) {
+        return new XQueryXmlEmptyTagImpl(node);
+      }
+      else if (type == XML_FULL_TAG) {
+        return new XQueryXmlFullTagImpl(node);
       }
       else if (type == XML_TAG_LOCAL_NAME) {
         return new XQueryXmlTagLocalNameImpl(node);

@@ -115,4 +115,12 @@ public class XQueryParserSyntaxErrorsHandlingTest extends BaseParserTest {
     public void testIncompleteReverseStepExpression() {
         doTest(true);
     }
+
+    public void testIncompleteXmlOpeningTag() {
+        doTest(true);
+    }
+
+    public void testIncompleteXmlClosingTag() {
+        doTest(true);
+    }
 }

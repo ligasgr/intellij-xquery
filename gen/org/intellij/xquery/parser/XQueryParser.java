@@ -232,9 +232,6 @@ public class XQueryParser implements PsiParser {
     else if (root_ == DIR_COMMENT_CONTENTS) {
       result_ = DirCommentContents(builder_, 0);
     }
-    else if (root_ == DIR_ELEM_CONSTRUCTOR) {
-      result_ = DirElemConstructor(builder_, 0);
-    }
     else if (root_ == DIR_ELEM_CONTENT) {
       result_ = DirElemContent(builder_, 0);
     }
@@ -681,6 +678,12 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == WINDOW_CLAUSE) {
       result_ = WindowClause(builder_, 0);
+    }
+    else if (root_ == XML_EMPTY_TAG) {
+      result_ = XmlEmptyTag(builder_, 0);
+    }
+    else if (root_ == XML_FULL_TAG) {
+      result_ = XmlFullTag(builder_, 0);
     }
     else if (root_ == XML_TAG_LOCAL_NAME) {
       result_ = XmlTagLocalName(builder_, 0);
@@ -2383,64 +2386,16 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // XmlStartTagStart XmlTagName DirAttributeList? (XmlEmptyElementEnd | (XmlTagEnd DirElemContent* XmlEndTagStart XmlTagName XmlTagEnd))
-  public static boolean DirElemConstructor(PsiBuilder builder_, int level_) {
+  // XmlEmptyTag | XmlFullTag
+  static boolean DirElemConstructor(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DirElemConstructor")) return false;
     if (!nextTokenIs(builder_, XMLSTARTTAGSTART)) return false;
     boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = consumeToken(builder_, XMLSTARTTAGSTART);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, XmlTagName(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, DirElemConstructor_2(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && DirElemConstructor_3(builder_, level_ + 1) && result_;
-    exit_section_(builder_, level_, marker_, DIR_ELEM_CONSTRUCTOR, result_, pinned_, null);
-    return result_ || pinned_;
-  }
-
-  // DirAttributeList?
-  private static boolean DirElemConstructor_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "DirElemConstructor_2")) return false;
-    DirAttributeList(builder_, level_ + 1);
-    return true;
-  }
-
-  // XmlEmptyElementEnd | (XmlTagEnd DirElemContent* XmlEndTagStart XmlTagName XmlTagEnd)
-  private static boolean DirElemConstructor_3(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "DirElemConstructor_3")) return false;
-    boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, XMLEMPTYELEMENTEND);
-    if (!result_) result_ = DirElemConstructor_3_1(builder_, level_ + 1);
+    result_ = XmlEmptyTag(builder_, level_ + 1);
+    if (!result_) result_ = XmlFullTag(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
-  }
-
-  // XmlTagEnd DirElemContent* XmlEndTagStart XmlTagName XmlTagEnd
-  private static boolean DirElemConstructor_3_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "DirElemConstructor_3_1")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, XMLTAGEND);
-    result_ = result_ && DirElemConstructor_3_1_1(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, XMLENDTAGSTART);
-    result_ = result_ && XmlTagName(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, XMLTAGEND);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // DirElemContent*
-  private static boolean DirElemConstructor_3_1_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "DirElemConstructor_3_1_1")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!DirElemContent(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "DirElemConstructor_3_1_1", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
-    return true;
   }
 
   /* ********************************************************** */
@@ -7109,6 +7064,94 @@ public class XQueryParser implements PsiParser {
     result_ = result_ && NextItem(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // XmlEndTagStart XmlTagName XmlTagEnd
+  static boolean XmlClosingTagPart(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "XmlClosingTagPart")) return false;
+    if (!nextTokenIs(builder_, XMLENDTAGSTART)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = consumeToken(builder_, XMLENDTAGSTART);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, XmlTagName(builder_, level_ + 1));
+    result_ = pinned_ && consumeToken(builder_, XMLTAGEND) && result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // XmlStartTagStart XmlTagName DirAttributeList? XmlEmptyElementEnd
+  public static boolean XmlEmptyTag(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "XmlEmptyTag")) return false;
+    if (!nextTokenIs(builder_, XMLSTARTTAGSTART)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, XMLSTARTTAGSTART);
+    result_ = result_ && XmlTagName(builder_, level_ + 1);
+    result_ = result_ && XmlEmptyTag_2(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, XMLEMPTYELEMENTEND);
+    exit_section_(builder_, marker_, XML_EMPTY_TAG, result_);
+    return result_;
+  }
+
+  // DirAttributeList?
+  private static boolean XmlEmptyTag_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "XmlEmptyTag_2")) return false;
+    DirAttributeList(builder_, level_ + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // XmlOpeningTagPart DirElemContent* XmlClosingTagPart
+  public static boolean XmlFullTag(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "XmlFullTag")) return false;
+    if (!nextTokenIs(builder_, XMLSTARTTAGSTART)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = XmlOpeningTagPart(builder_, level_ + 1);
+    result_ = result_ && XmlFullTag_1(builder_, level_ + 1);
+    result_ = result_ && XmlClosingTagPart(builder_, level_ + 1);
+    exit_section_(builder_, marker_, XML_FULL_TAG, result_);
+    return result_;
+  }
+
+  // DirElemContent*
+  private static boolean XmlFullTag_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "XmlFullTag_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!DirElemContent(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "XmlFullTag_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // XmlStartTagStart XmlTagName DirAttributeList? XmlTagEnd
+  static boolean XmlOpeningTagPart(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "XmlOpeningTagPart")) return false;
+    if (!nextTokenIs(builder_, XMLSTARTTAGSTART)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = consumeToken(builder_, XMLSTARTTAGSTART);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, XmlTagName(builder_, level_ + 1));
+    result_ = pinned_ && report_error_(builder_, XmlOpeningTagPart_2(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && consumeToken(builder_, XMLTAGEND) && result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // DirAttributeList?
+  private static boolean XmlOpeningTagPart_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "XmlOpeningTagPart_2")) return false;
+    DirAttributeList(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */

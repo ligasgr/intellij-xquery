@@ -27,14 +27,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryDirElemConstructorImpl extends XQueryElementImpl implements XQueryDirElemConstructor {
+public class XQueryXmlFullTagImpl extends XQueryElementImpl implements XQueryXmlFullTag {
 
-  public XQueryDirElemConstructorImpl(ASTNode node) {
+  public XQueryXmlFullTagImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirElemConstructor(this);
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitXmlFullTag(this);
     else super.accept(visitor);
   }
 

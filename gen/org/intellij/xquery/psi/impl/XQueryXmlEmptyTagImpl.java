@@ -16,24 +16,38 @@
  */
 
 // This is a generated file. Not intended for manual editing.
-package org.intellij.xquery.psi;
+package org.intellij.xquery.psi.impl;
 
 import java.util.List;
 import org.jetbrains.annotations.*;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
+import static org.intellij.xquery.psi.XQueryTypes.*;
+import org.intellij.xquery.psi.*;
 
-public interface XQueryDirectConstructor extends XQueryElement {
+public class XQueryXmlEmptyTagImpl extends XQueryElementImpl implements XQueryXmlEmptyTag {
 
+  public XQueryXmlEmptyTagImpl(ASTNode node) {
+    super(node);
+  }
+
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitXmlEmptyTag(this);
+    else super.accept(visitor);
+  }
+
+  @Override
   @Nullable
-  XQueryDirCommentConstructor getDirCommentConstructor();
+  public XQueryDirAttributeList getDirAttributeList() {
+    return findChildByClass(XQueryDirAttributeList.class);
+  }
 
-  @Nullable
-  XQueryDirPIConstructor getDirPIConstructor();
-
-  @Nullable
-  XQueryXmlEmptyTag getXmlEmptyTag();
-
-  @Nullable
-  XQueryXmlFullTag getXmlFullTag();
+  @Override
+  @NotNull
+  public XQueryXmlTagName getXmlTagName() {
+    return findNotNullChildByClass(XQueryXmlTagName.class);
+  }
 
 }

@@ -283,10 +283,6 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitElement(o);
   }
 
-  public void visitDirElemConstructor(@NotNull XQueryDirElemConstructor o) {
-    visitElement(o);
-  }
-
   public void visitDirElemContent(@NotNull XQueryDirElemContent o) {
     visitElement(o);
   }
@@ -880,6 +876,14 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitWindowClause(@NotNull XQueryWindowClause o) {
+    visitElement(o);
+  }
+
+  public void visitXmlEmptyTag(@NotNull XQueryXmlEmptyTag o) {
+    visitElement(o);
+  }
+
+  public void visitXmlFullTag(@NotNull XQueryXmlFullTag o) {
     visitElement(o);
   }
 

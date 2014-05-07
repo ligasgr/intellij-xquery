@@ -22,18 +22,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryDirectConstructor extends XQueryElement {
+public interface XQueryXmlEmptyTag extends XQueryElement {
 
   @Nullable
-  XQueryDirCommentConstructor getDirCommentConstructor();
+  XQueryDirAttributeList getDirAttributeList();
 
-  @Nullable
-  XQueryDirPIConstructor getDirPIConstructor();
-
-  @Nullable
-  XQueryXmlEmptyTag getXmlEmptyTag();
-
-  @Nullable
-  XQueryXmlFullTag getXmlFullTag();
+  @NotNull
+  XQueryXmlTagName getXmlTagName();
 
 }

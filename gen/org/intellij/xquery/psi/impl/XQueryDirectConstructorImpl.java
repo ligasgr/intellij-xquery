@@ -46,14 +46,20 @@ public class XQueryDirectConstructorImpl extends XQueryElementImpl implements XQ
 
   @Override
   @Nullable
-  public XQueryDirElemConstructor getDirElemConstructor() {
-    return findChildByClass(XQueryDirElemConstructor.class);
+  public XQueryDirPIConstructor getDirPIConstructor() {
+    return findChildByClass(XQueryDirPIConstructor.class);
   }
 
   @Override
   @Nullable
-  public XQueryDirPIConstructor getDirPIConstructor() {
-    return findChildByClass(XQueryDirPIConstructor.class);
+  public XQueryXmlEmptyTag getXmlEmptyTag() {
+    return findChildByClass(XQueryXmlEmptyTag.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryXmlFullTag getXmlFullTag() {
+    return findChildByClass(XQueryXmlFullTag.class);
   }
 
 }
