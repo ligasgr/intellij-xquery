@@ -7110,12 +7110,14 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "XmlFullTag")) return false;
     if (!nextTokenIs(builder_, XMLSTARTTAGSTART)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = XmlOpeningTagPart(builder_, level_ + 1);
-    result_ = result_ && XmlFullTag_1(builder_, level_ + 1);
-    result_ = result_ && XmlClosingTagPart(builder_, level_ + 1);
-    exit_section_(builder_, marker_, XML_FULL_TAG, result_);
-    return result_;
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, XmlFullTag_1(builder_, level_ + 1));
+    result_ = pinned_ && XmlClosingTagPart(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, XML_FULL_TAG, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // DirElemContent*
