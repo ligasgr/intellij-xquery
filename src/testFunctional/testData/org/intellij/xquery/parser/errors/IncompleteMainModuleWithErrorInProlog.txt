@@ -1,0 +1,17 @@
+XQuery File(0,21)
+  XQueryVarDeclImpl(VAR_DECL)(0,21)
+    PsiElement(declare)('declare')(0,7)
+    PsiWhiteSpace(' ')(7,8)
+    PsiElement(variable)('variable')(8,16)
+    PsiWhiteSpace(' ')(16,17)
+    PsiElement($)('$')(17,18)
+    XQueryVarNameImpl(VAR_NAME)(18,19)
+      XQueryVarLocalNameImpl(VAR_LOCAL_NAME)(18,19)
+        PsiElement(NCName)('x')(18,19)
+    PsiErrorElement:':', ':=', as or external expected, got ';'(19,19)
+      <empty list>
+    PsiWhiteSpace(' ')(19,20)
+    XQuerySeparatorImpl(SEPARATOR)(20,21)
+      PsiElement(;)(';')(20,21)
+  PsiErrorElement:<expr single> or declare expected, unexpected end of file(21,21)
+    <empty list>

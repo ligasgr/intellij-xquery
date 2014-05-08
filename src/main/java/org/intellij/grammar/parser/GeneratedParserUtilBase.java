@@ -498,7 +498,7 @@ public class GeneratedParserUtilBase {
                 state.clearVariants(false, 0);
                 state.lastExpectedVariantOffset = -1;
             }
-        } else if (!result && pinned && frame.errorReportedAt < 0) {
+        } else if (!result && pinned) {
             // do not report if there're errors after current offset
             if (getLastVariantOffset(state, initialOffset) == initialOffset) {
                 // do not force, inner recoverRoot might have skipped some tokens

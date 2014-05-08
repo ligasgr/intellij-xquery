@@ -135,4 +135,8 @@ public class XQueryParserSyntaxErrorsHandlingTest extends BaseParserTest {
     public void testIncompleteFunctionDeclaration() {
         doTest(true);
     }
+
+    public void testIncompleteMainModuleWithErrorInProlog() {
+        doTest(true);
+    }
 }
