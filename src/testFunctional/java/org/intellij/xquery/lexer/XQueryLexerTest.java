@@ -1598,6 +1598,22 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testIncompleteVariableDeclaration() throws Exception {
+        assertProducedTokens("declare variable", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "variable", "variable"
+        });
+    }
+
+    public void testVariableWithoutDeclaration() throws Exception {
+        assertProducedTokens("variable", new String[]{
+                "WHITE_SPACE", "",
+                "NCName", "variable"
+        });
+    }
+
     public void testFunctionDeclaration() throws Exception {
         assertProducedTokens("declare function x() {()};", new String[]{
                 "WHITE_SPACE", "",
@@ -1614,6 +1630,33 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ")", ")",
                 "}", "}",
                 ";", ";"
+        });
+    }
+
+    public void testIncompleteFunctionDeclaration() throws Exception {
+        assertProducedTokens("declare function", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "function", "function"
+        });
+    }
+
+    public void testFunctionDeclarationWithNameVariable() throws Exception {
+        assertProducedTokens("declare function variable", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "function", "function",
+                "WHITE_SPACE", " ",
+                "NCName", "variable"
+        });
+    }
+
+    public void testFunctionWithoutDeclaration() throws Exception {
+        assertProducedTokens("function", new String[]{
+                "WHITE_SPACE", "",
+                "NCName", "function"
         });
     }
 

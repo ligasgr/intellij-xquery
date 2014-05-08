@@ -38,6 +38,9 @@ public interface XQueryFunctionDecl extends XQueryElement {
   XQueryParamList getParamList();
 
   @Nullable
+  XQuerySeparator getSeparator();
+
+  @Nullable
   XQuerySequenceType getSequenceType();
 
   ItemPresentation getPresentation();

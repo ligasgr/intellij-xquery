@@ -65,6 +65,12 @@ public class XQueryFunctionDeclImpl extends XQueryElementImpl implements XQueryF
 
   @Override
   @Nullable
+  public XQuerySeparator getSeparator() {
+    return findChildByClass(XQuerySeparator.class);
+  }
+
+  @Override
+  @Nullable
   public XQuerySequenceType getSequenceType() {
     return findChildByClass(XQuerySequenceType.class);
   }

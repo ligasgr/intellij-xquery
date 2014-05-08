@@ -127,4 +127,12 @@ public class XQueryParserSyntaxErrorsHandlingTest extends BaseParserTest {
     public void testIncompleteXmlTag() {
         doTest(true);
     }
+
+    public void testIncompleteVariableDeclaration() {
+        doTest(true);
+    }
+
+    public void testIncompleteFunctionDeclaration() {
+        doTest(true);
+    }
 }

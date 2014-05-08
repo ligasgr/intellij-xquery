@@ -111,6 +111,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 %state MODULE_RECOGNITION
 %state AS_RECOGNITION
 %state VALIDATE_RECOGNITION
+%state WS_BEFORE_QNAME
 %%
 
 
@@ -380,6 +381,10 @@ SC=({S} | "(:" {Char}* ~":)")+
 {URIQualifiedName}                         {popState(); return XQueryTypes.URIQUALIFIEDNAME;}
 }
 
+<WS_BEFORE_QNAME> {
+{S}                                        {popState(); pushState(QNAME); return TokenType.WHITE_SPACE;}
+.                                          {yypushback(yylength()); popState(); pushState(QNAME); return TokenType.WHITE_SPACE;}
+}
 <QNAME> {
 {NCName} ":" {NameStartCharWithoutFirst}   {yypushback(2); return XQueryTypes.NCNAME;}
 {NCName}                                   {popState(); return XQueryTypes.NCNAME;}
@@ -410,9 +415,9 @@ SC=({S} | "(:" {Char}* ~":)")+
 "default" / {SC} ("collation"|"order"|"decimal-format"|"element"|"function") {return XQueryTypes.K_DEFAULT;}
 "base-uri" / {SC} ("\""|"'")               {return XQueryTypes.K_BASE_URI;}
 "option" / {SC} {NCName}                   {return XQueryTypes.K_OPTION;}
-"variable" / {SC} "$"                      {return XQueryTypes.K_VARIABLE;}
+"variable"                                 {return XQueryTypes.K_VARIABLE;}
 "function" / {SC} "namespace" {SC} {StringLiteral} {return XQueryTypes.K_FUNCTION;}
-"function"                                 {pushState(QNAME); return XQueryTypes.K_FUNCTION;}
+"function"                                 {pushState(WS_BEFORE_QNAME); return XQueryTypes.K_FUNCTION;}
 "boundary-space" / {SC} ("preserve"|"strip") {return XQueryTypes.K_BOUNDARY_SPACE;}
 "construction" / {SC} ("preserve"|"strip") {return XQueryTypes.K_CONSTRUCTION;}
 "ordering" / {SC} ("ordered"|"unordered")  {return XQueryTypes.K_ORDERING;}

@@ -866,23 +866,10 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (VarDecl | FunctionDecl) Separator
+  // VarDecl | FunctionDecl
   static boolean AnnotatedDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "AnnotatedDecl")) return false;
     if (!nextTokenIs(builder_, K_DECLARE)) return false;
-    boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = AnnotatedDecl_0(builder_, level_ + 1);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && Separator(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
-    return result_ || pinned_;
-  }
-
-  // VarDecl | FunctionDecl
-  private static boolean AnnotatedDecl_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "AnnotatedDecl_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = VarDecl(builder_, level_ + 1);
@@ -1904,7 +1891,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "declare" "context" "item" ("as" ItemType)? ((":=" VarValue) | ("external" (":=" VarDefaultValue)?)) Separator
+  // "declare" "context" "item" ("as" ItemType)? (VarValueAssignment | ("external" (":=" VarDefaultValue)?)) Separator
   public static boolean ContextItemDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ContextItemDecl")) return false;
     if (!nextTokenIs(builder_, K_DECLARE)) return false;
@@ -1940,24 +1927,13 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // (":=" VarValue) | ("external" (":=" VarDefaultValue)?)
+  // VarValueAssignment | ("external" (":=" VarDefaultValue)?)
   private static boolean ContextItemDecl_4(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ContextItemDecl_4")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = ContextItemDecl_4_0(builder_, level_ + 1);
+    result_ = VarValueAssignment(builder_, level_ + 1);
     if (!result_) result_ = ContextItemDecl_4_1(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // ":=" VarValue
-  private static boolean ContextItemDecl_4_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ContextItemDecl_4_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, OP_ASSIGN);
-    result_ = result_ && VarValue(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -2814,11 +2790,13 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ExternalVarPart")) return false;
     if (!nextTokenIs(builder_, K_EXTERNAL)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, K_EXTERNAL);
+    pinned_ = result_; // pin = 1
     result_ = result_ && ExternalVarPart_1(builder_, level_ + 1);
-    exit_section_(builder_, marker_, EXTERNAL_VAR_PART, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, EXTERNAL_VAR_PART, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // (":=" VarDefaultValue)?
@@ -3183,12 +3161,13 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "declare" Annotation* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external")
+  // "declare" Annotation* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external") Separator
   public static boolean FunctionDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionDecl")) return false;
+    if (!nextTokenIs(builder_, K_DECLARE)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<function decl>");
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, K_DECLARE);
     result_ = result_ && FunctionDecl_1(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, K_FUNCTION);
@@ -3196,8 +3175,9 @@ public class XQueryParser implements PsiParser {
     result_ = result_ && report_error_(builder_, FunctionName(builder_, level_ + 1));
     result_ = pinned_ && report_error_(builder_, ParamList(builder_, level_ + 1)) && result_;
     result_ = pinned_ && report_error_(builder_, FunctionDecl_5(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && FunctionDecl_6(builder_, level_ + 1) && result_;
-    exit_section_(builder_, level_, marker_, FUNCTION_DECL, result_, pinned_, FunctionDeclRec_parser_);
+    result_ = pinned_ && report_error_(builder_, FunctionDecl_6(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && Separator(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, FUNCTION_DECL, result_, pinned_, null);
     return result_ || pinned_;
   }
 
@@ -3238,27 +3218,6 @@ public class XQueryParser implements PsiParser {
     Marker marker_ = enter_section_(builder_);
     result_ = FunctionBody(builder_, level_ + 1);
     if (!result_) result_ = consumeToken(builder_, K_EXTERNAL);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // !(';')
-  static boolean FunctionDeclRec(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "FunctionDeclRec")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NOT_, null);
-    result_ = !FunctionDeclRec_0(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, null, result_, false, null);
-    return result_;
-  }
-
-  // (';')
-  private static boolean FunctionDeclRec_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "FunctionDeclRec_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, SEMICOLON);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -4725,12 +4684,14 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ParamList")) return false;
     if (!nextTokenIs(builder_, L_PAR)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, L_PAR);
-    result_ = result_ && ParamList_1(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, R_PAR);
-    exit_section_(builder_, marker_, PARAM_LIST, result_);
-    return result_;
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, ParamList_1(builder_, level_ + 1));
+    result_ = pinned_ && consumeToken(builder_, R_PAR) && result_;
+    exit_section_(builder_, level_, marker_, PARAM_LIST, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // (Param ("," Param)*)?
@@ -6547,7 +6508,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "declare" Annotation* "variable" "$" VarName TypeDeclaration? ((":=" VarValue) | ExternalVarPart)
+  // "declare" Annotation* "variable" "$" VarName TypeDeclaration? (VarDetails) Separator
   public static boolean VarDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarDecl")) return false;
     if (!nextTokenIs(builder_, K_DECLARE)) return false;
@@ -6561,7 +6522,8 @@ public class XQueryParser implements PsiParser {
     result_ = result_ && report_error_(builder_, consumeToken(builder_, DOLLAR_SIGN));
     result_ = pinned_ && report_error_(builder_, VarName(builder_, level_ + 1)) && result_;
     result_ = pinned_ && report_error_(builder_, VarDecl_5(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && VarDecl_6(builder_, level_ + 1) && result_;
+    result_ = pinned_ && report_error_(builder_, VarDecl_6(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && Separator(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, VAR_DECL, result_, pinned_, null);
     return result_ || pinned_;
   }
@@ -6585,24 +6547,12 @@ public class XQueryParser implements PsiParser {
     return true;
   }
 
-  // (":=" VarValue) | ExternalVarPart
+  // (VarDetails)
   private static boolean VarDecl_6(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarDecl_6")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = VarDecl_6_0(builder_, level_ + 1);
-    if (!result_) result_ = ExternalVarPart(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // ":=" VarValue
-  private static boolean VarDecl_6_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "VarDecl_6_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, OP_ASSIGN);
-    result_ = result_ && VarValue(builder_, level_ + 1);
+    result_ = VarDetails(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -6615,6 +6565,19 @@ public class XQueryParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<var default value>");
     result_ = ExprSingle(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, VAR_DEFAULT_VALUE, result_, false, null);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // VarValueAssignment | ExternalVarPart
+  static boolean VarDetails(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarDetails")) return false;
+    if (!nextTokenIs(builder_, "", OP_ASSIGN, K_EXTERNAL)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = VarValueAssignment(builder_, level_ + 1);
+    if (!result_) result_ = ExternalVarPart(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
@@ -6680,6 +6643,21 @@ public class XQueryParser implements PsiParser {
     result_ = ExprSingle(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, VAR_VALUE, result_, false, null);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // ":=" VarValue
+  static boolean VarValueAssignment(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarValueAssignment")) return false;
+    if (!nextTokenIs(builder_, OP_ASSIGN)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = consumeToken(builder_, OP_ASSIGN);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && VarValue(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -7214,11 +7192,6 @@ public class XQueryParser implements PsiParser {
   final static Parser FLWORExprRecover_parser_ = new Parser() {
     public boolean parse(PsiBuilder builder_, int level_) {
       return FLWORExprRecover(builder_, level_ + 1);
-    }
-  };
-  final static Parser FunctionDeclRec_parser_ = new Parser() {
-    public boolean parse(PsiBuilder builder_, int level_) {
-      return FunctionDeclRec(builder_, level_ + 1);
     }
   };
   final static Parser ModuleDeclRecover_parser_ = new Parser() {

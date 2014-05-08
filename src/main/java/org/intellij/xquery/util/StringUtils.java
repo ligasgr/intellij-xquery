@@ -53,4 +53,8 @@ public class StringUtils {
     public static String normalizeWhitespaces(String text) {
         return compressWhitespaces(text).trim();
     }
+
+    public static String stripSeparator(String text) {
+        return text.replaceAll(";","");
+    }
 }

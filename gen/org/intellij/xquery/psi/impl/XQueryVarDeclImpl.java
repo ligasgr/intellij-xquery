@@ -53,6 +53,12 @@ public class XQueryVarDeclImpl extends XQueryElementImpl implements XQueryVarDec
 
   @Override
   @Nullable
+  public XQuerySeparator getSeparator() {
+    return findChildByClass(XQuerySeparator.class);
+  }
+
+  @Override
+  @Nullable
   public XQueryTypeDeclaration getTypeDeclaration() {
     return findChildByClass(XQueryTypeDeclaration.class);
   }

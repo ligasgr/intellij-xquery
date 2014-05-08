@@ -31,6 +31,7 @@ import org.intellij.xquery.psi.XQueryVarDecl;
 import org.intellij.xquery.psi.XQueryVarName;
 import org.intellij.xquery.psi.XQueryVarRef;
 import org.intellij.xquery.psi.XQueryWindowClause;
+import org.intellij.xquery.util.StringUtils;
 
 import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static javax.xml.XMLConstants.NULL_NS_URI;
@@ -68,7 +69,7 @@ public class VariableDocumentationProvider implements PsiBasedDocumentationProvi
     }
 
     private String getDescription(PsiElement elementToProduceDescription) {
-        String descriptionSuffix = elementToProduceDescription.getText();
+        String descriptionSuffix = StringUtils.stripSeparator(elementToProduceDescription.getText());
         String descriptionPrefix = "";
         if (elementToProduceDescription instanceof XQueryLetBinding) {
             descriptionPrefix = "let ";

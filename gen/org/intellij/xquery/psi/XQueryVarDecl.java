@@ -32,6 +32,9 @@ public interface XQueryVarDecl extends XQueryElement {
   XQueryExternalVarPart getExternalVarPart();
 
   @Nullable
+  XQuerySeparator getSeparator();
+
+  @Nullable
   XQueryTypeDeclaration getTypeDeclaration();
 
   @Nullable

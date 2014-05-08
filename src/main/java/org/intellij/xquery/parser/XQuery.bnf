@@ -262,17 +262,18 @@ NamespaceDecl ::= "declare" "namespace" NamespacePrefix "=" URILiteral Separator
 private DefaultNamespaceDecl ::= (DefaultFunctionNamespaceDecl | DefaultElementNamespaceDecl) Separator
 DefaultFunctionNamespaceDecl ::= "declare" "default" "function" "namespace" URILiteral {pin=3}
 DefaultElementNamespaceDecl ::= "declare" "default" "element" "namespace" URILiteral {pin=3}
-private AnnotatedDecl ::= (VarDecl | FunctionDecl) Separator {pin=1}
+private AnnotatedDecl ::= (VarDecl | FunctionDecl)
 Annotation ::= "%" AnnotationName ("(" Literal ("," Literal)* ")")?
 AnnotationName ::= EQName
-VarDecl ::= "declare" Annotation* "variable" "$" VarName TypeDeclaration? ((":=" VarValue) | ExternalVarPart) {pin=3 methods=[getPresentation isExternal]}
-ExternalVarPart ::= "external" (":=" VarDefaultValue)?
+VarDecl ::= "declare" Annotation* "variable" "$" VarName TypeDeclaration? (VarDetails) Separator {pin=3 methods=[getPresentation isExternal]}
+private VarDetails ::= VarValueAssignment | ExternalVarPart
+private VarValueAssignment ::= ":=" VarValue {pin=1}
+ExternalVarPart ::= "external" (":=" VarDefaultValue)? {pin=1}
 VarValue ::= ExprSingle
 VarDefaultValue ::= ExprSingle
-ContextItemDecl ::= "declare" "context" "item" ("as" ItemType)? ((":=" VarValue) | ("external" (":=" VarDefaultValue)?)) Separator {pin=2}
-FunctionDecl ::= "declare" Annotation* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external") /* xgc: reserved-function-names */ {pin=3 methods=[getPresentation getArity hasValidFunctionName isPublic] recoverWhile=FunctionDeclRec}
-private FunctionDeclRec ::= !(';')
-ParamList ::= "(" (Param ("," Param)*)? ")"
+ContextItemDecl ::= "declare" "context" "item" ("as" ItemType)? (VarValueAssignment | ("external" (":=" VarDefaultValue)?)) Separator {pin=2}
+FunctionDecl ::= "declare" Annotation* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external") Separator /* xgc: reserved-function-names */ {pin=3 methods=[getPresentation getArity hasValidFunctionName isPublic]}
+ParamList ::= "(" (Param ("," Param)*)? ")" {pin=1}
 Param ::= "$" VarName TypeDeclaration?
 FunctionBody ::= EnclosedExpr
 EnclosedExpr ::= "{" Expr "}" {pin=1}
