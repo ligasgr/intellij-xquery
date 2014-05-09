@@ -464,6 +464,13 @@ public class XQueryPsiImplUtil {
     }
 
     public static int getTextOffset(XQueryFunctionDecl functionDecl) {
+        if (functionDecl.getFunctionName() == null) return endOfFunctionKeyword(functionDecl);
         return functionDecl.getFunctionName().getTextOffset();
+    }
+
+    private static int endOfFunctionKeyword(XQueryFunctionDecl functionDecl) {
+        String keyword = XQueryTypes.K_FUNCTION.toString();
+        int namePositionOffset = functionDecl.getText().indexOf(keyword) + keyword.length();
+        return functionDecl.getNode().getStartOffset() + namePositionOffset;
     }
 }
