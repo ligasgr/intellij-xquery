@@ -462,4 +462,8 @@ public class XQueryPsiImplUtil {
             }
         });
     }
+
+    public static int getTextOffset(XQueryFunctionDecl functionDecl) {
+        return functionDecl.getFunctionName().getTextOffset();
+    }
 }

@@ -51,4 +51,6 @@ public interface XQueryFunctionDecl extends XQueryElement {
 
   boolean isPublic();
 
+  int getTextOffset();
+
 }

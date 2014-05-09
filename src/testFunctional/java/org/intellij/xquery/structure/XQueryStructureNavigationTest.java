@@ -58,5 +58,4 @@ public class XQueryStructureNavigationTest extends BaseFunctionalTestCase {
 
         myFixture.checkResultByFile(afterFile);
     }
-
 }
