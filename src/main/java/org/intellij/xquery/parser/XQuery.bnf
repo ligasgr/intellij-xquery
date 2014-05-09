@@ -563,7 +563,7 @@ private PrefixedName ::= Prefix ':' LocalPart
 private UnprefixedName ::= LocalPart
 Prefix ::= NCName {methods=[getName setName getNameIdentifier getReference isEquivalentTo]}
 LocalPart ::= NCName
-VarName ::= Prefix ':' VarLocalName | VarLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset getUseScope getPresentation delete]}
+VarName ::= Prefix ':' VarLocalName | VarLocalName | URIQualifiedName {pin(".*")=2 methods=[getName setName getNameIdentifier getTextOffset getUseScope getPresentation delete]}
 VarLocalName ::= NCName
-FunctionName ::= Prefix ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {methods=[getName setName getNameIdentifier getTextOffset getPresentation delete getPrefixText getLocalNameText]}
+FunctionName ::= Prefix ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {pin(".*")=2 methods=[getName setName getNameIdentifier getTextOffset getPresentation delete getPrefixText getLocalNameText]}
 FunctionLocalName ::= NCName

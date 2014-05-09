@@ -3264,12 +3264,14 @@ public class XQueryParser implements PsiParser {
   private static boolean FunctionName_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionName_0")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = Prefix(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLON);
+    pinned_ = result_; // pin = 2
     result_ = result_ && FunctionLocalName(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -6611,12 +6613,14 @@ public class XQueryParser implements PsiParser {
   private static boolean VarName_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarName_0")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = Prefix(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLON);
+    pinned_ = result_; // pin = 2
     result_ = result_ && VarLocalName(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
