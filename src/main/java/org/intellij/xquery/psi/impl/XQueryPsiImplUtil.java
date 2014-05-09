@@ -200,8 +200,19 @@ public class XQueryPsiImplUtil {
     }
 
     public static int getTextOffset(XQueryFunctionName element) {
-        if (element == null || element.getFunctionLocalName() == null) return 0;
-        return getNameIdentifier(element).getTextOffset();
+        if (element == null) return 0;
+        PsiElement nameIdentifier = getNameIdentifier(element);
+        if (nameIdentifier == null) return endOfColon(element);
+        return nameIdentifier.getTextOffset();
+    }
+
+    private static int endOfColon(XQueryFunctionName functionName) {
+        if (functionName.getPrefix() != null) {
+            String colon = XQueryTypes.COLON.toString();
+            int offset = functionName.getText().indexOf(colon) + colon.length();
+            return functionName.getNode().getStartOffset() + offset;
+        }
+        return 0;
     }
 
     public static SearchScope getUseScope(XQueryVarName element) {
