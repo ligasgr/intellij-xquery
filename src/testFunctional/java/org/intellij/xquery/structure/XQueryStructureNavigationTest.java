@@ -29,14 +29,24 @@ public class XQueryStructureNavigationTest extends BaseFunctionalTestCase {
         return "src/testFunctional/testData/org/intellij/xquery/structure";
     }
 
-    public void testMainFileMoveUp() {
+    public void testMainModuleMoveUp() {
         MethodUpAction methodUpAction = new MethodUpAction();
         doTest("MainModuleNavigationBottom.xq", "MainModuleNavigationTop.xq", 4, methodUpAction);
     }
 
-    public void testMainFileMoveDown() {
+    public void testMainModuleMoveDown() {
         MethodDownAction methodDownAction = new MethodDownAction();
         doTest("MainModuleNavigationTop.xq", "MainModuleNavigationBottom.xq", 4, methodDownAction);
+    }
+
+    public void testLibraryModuleMoveUp() {
+        MethodUpAction methodUpAction = new MethodUpAction();
+        doTest("LibraryModuleNavigationBottom.xq", "LibraryModuleNavigationTop.xq", 4, methodUpAction);
+    }
+
+    public void testLibraryModuleMoveDown() {
+        MethodDownAction methodDownAction = new MethodDownAction();
+        doTest("LibraryModuleNavigationTop.xq", "LibraryModuleNavigationBottom.xq", 4, methodDownAction);
     }
 
     private void doTest(String beforeFile, String afterFile, int repeatActionTimes, BaseCodeInsightAction action) {
