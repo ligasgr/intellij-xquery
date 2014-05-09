@@ -6,3 +6,4 @@ Arnost Valicek <arnost.valicek@gmail.com> - Issue #50 - Folding of functions
 Arnost Valicek <arnost.valicek@gmail.com> - Issue #23 - Imports and namespaces declarations folding
 Arnost Valicek <arnost.valicek@gmail.com> - Issue #91 - XQuery context for live templates
 Dirk Kirsten <dk@basex.org> - Issue #91 - Live templates
+Mateusz Rudnicki <nicklamer@gmail.com> - Issue #93 - Enhance next/previous method navigation

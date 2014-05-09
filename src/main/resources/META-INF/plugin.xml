@@ -74,6 +74,7 @@
                          implementationClass="org.intellij.xquery.inspection.imports.UnusedImportsInspection"/>
         <codeInsight.parameterInfo language="XQuery" implementationClass="org.intellij.xquery.completion.function.parameters.XQueryParameterInfoHandler" />
         <lang.documentationProvider language="XQuery" implementationClass="org.intellij.xquery.documentation.XQueryDocumentationProvider"/>
+        <methodNavigationOffsetProvider implementation="org.intellij.xquery.navigation.XQueryFunctionNavigationOffsetProvider"/>
     </extensions>
 
     <actions>
