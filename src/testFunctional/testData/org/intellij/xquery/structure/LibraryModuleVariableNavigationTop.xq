@@ -1,6 +1,6 @@
 module namespace module = 'module';
 
-<caret>declare variable $module:One := ();
+declare variable $module:<caret>One := ();
 
 declare variable $module:Two := ();
 

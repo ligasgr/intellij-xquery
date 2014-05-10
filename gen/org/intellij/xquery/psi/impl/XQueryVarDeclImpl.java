@@ -83,4 +83,8 @@ public class XQueryVarDeclImpl extends XQueryElementImpl implements XQueryVarDec
     return XQueryPsiImplUtil.isExternal(this);
   }
 
+  public int getTextOffset() {
+    return XQueryPsiImplUtil.getTextOffset(this);
+  }
+
 }

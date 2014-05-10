@@ -4,4 +4,4 @@ declare variable $module:One := ();
 
 declare variable $module:Two := ();
 
-<caret>declare variable $module:Three := ();
+declare variable $module:<caret>Three := ();

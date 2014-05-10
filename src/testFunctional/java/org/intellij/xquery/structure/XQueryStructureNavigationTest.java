@@ -69,6 +69,26 @@ public class XQueryStructureNavigationTest extends BaseFunctionalTestCase {
         doTest("LibraryModuleVariableNavigationTop.xq", "LibraryModuleVariableNavigationBottom.xq", 4, methodDownAction);
     }
 
+    public void testBrokenVariablesPart1MoveUp() {
+        MethodUpAction methodUpAction = new MethodUpAction();
+        doTest("BrokenVariablesPart1Bottom.xq", "BrokenVariablesPart1Top.xq", 1, methodUpAction);
+    }
+
+    public void testBrokenVariablesPart1MoveDown() {
+        MethodDownAction methodDownAction = new MethodDownAction();
+        doTest("BrokenVariablesPart1Top.xq", "BrokenVariablesPart1Bottom.xq", 1, methodDownAction);
+    }
+
+    public void testBrokenVariablesPart2MoveUp() {
+        MethodUpAction methodUpAction = new MethodUpAction();
+        doTest("BrokenVariablesPart2Bottom.xq", "BrokenVariablesPart2Top.xq", 1, methodUpAction);
+    }
+
+    public void testBrokenVariablesPart2MoveDown() {
+        MethodDownAction methodDownAction = new MethodDownAction();
+        doTest("BrokenVariablesPart2Top.xq", "BrokenVariablesPart2Bottom.xq", 1, methodDownAction);
+    }
+
     private void doTest(String beforeFile, String afterFile, int repeatActionTimes, BaseCodeInsightAction action) {
         myFixture.configureByFile(beforeFile);
 

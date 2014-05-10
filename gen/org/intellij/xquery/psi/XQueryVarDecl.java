@@ -47,4 +47,6 @@ public interface XQueryVarDecl extends XQueryElement {
 
   boolean isExternal();
 
+  int getTextOffset();
+
 }

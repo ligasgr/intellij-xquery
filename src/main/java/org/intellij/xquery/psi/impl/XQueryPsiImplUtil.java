@@ -131,8 +131,19 @@ public class XQueryPsiImplUtil {
     }
 
     public static int getTextOffset(XQueryVarName element) {
-        if (element == null || element.getVarLocalName() == null) return 0;
-        return getNameIdentifier(element).getTextOffset();
+        if (element == null) return 0;
+        PsiElement nameIdentifier = getNameIdentifier(element);
+        if (nameIdentifier == null) return endOfColon(element);
+        return nameIdentifier.getTextOffset();
+    }
+
+    private static int endOfColon(XQueryVarName varName) {
+        if (varName.getPrefix() != null) {
+            String colon = XQueryTypes.COLON.toString();
+            int offset = varName.getText().indexOf(colon) + colon.length();
+            return varName.getNode().getStartOffset() + offset;
+        }
+        return 0;
     }
 
     public static PsiReference getReference(XQueryModuleImportPath element) {
@@ -483,5 +494,20 @@ public class XQueryPsiImplUtil {
         String keyword = XQueryTypes.K_FUNCTION.toString();
         int namePositionOffset = functionDecl.getText().indexOf(keyword) + keyword.length();
         return functionDecl.getNode().getStartOffset() + namePositionOffset;
+    }
+
+    public static int getTextOffset(XQueryVarDecl varDecl) {
+        if (varDecl.getVarName() == null) return endOfDollarOrVariableKeyword(varDecl);;
+        return varDecl.getVarName().getTextOffset();
+    }
+
+    private static int endOfDollarOrVariableKeyword(XQueryVarDecl varDecl) {
+        String dollarSign = XQueryTypes.DOLLAR_SIGN.toString();
+        int indexOfDollar = varDecl.getText().indexOf(dollarSign);
+        int dollarOffset = varDecl.getNode().getStartOffset() + indexOfDollar + dollarSign.length();
+        String keyword = XQueryTypes.K_VARIABLE.toString();
+        int namePositionOffset = varDecl.getText().indexOf(keyword) + keyword.length();
+        int variableOffset = varDecl.getNode().getStartOffset() + namePositionOffset;
+        return indexOfDollar > -1 ? dollarOffset : variableOffset;
     }
 }
