@@ -39,14 +39,14 @@ public class XQueryStructureNavigationTest extends BaseFunctionalTestCase {
         doTest("MainModuleNavigationTop.xq", "MainModuleNavigationBottom.xq", 4, methodDownAction);
     }
 
-    public void testLibraryModuleMoveUp() {
+    public void testLibraryModuleFunctionMoveUp() {
         MethodUpAction methodUpAction = new MethodUpAction();
-        doTest("LibraryModuleNavigationBottom.xq", "LibraryModuleNavigationTop.xq", 4, methodUpAction);
+        doTest("LibraryModuleFunctionNavigationBottom.xq", "LibraryModuleFunctionNavigationTop.xq", 4, methodUpAction);
     }
 
-    public void testLibraryModuleMoveDown() {
+    public void testLibraryModuleFunctionMoveDown() {
         MethodDownAction methodDownAction = new MethodDownAction();
-        doTest("LibraryModuleNavigationTop.xq", "LibraryModuleNavigationBottom.xq", 4, methodDownAction);
+        doTest("LibraryModuleFunctionNavigationTop.xq", "LibraryModuleFunctionNavigationBottom.xq", 4, methodDownAction);
     }
 
     public void testBrokenFunctionsMoveUp() {
@@ -57,6 +57,16 @@ public class XQueryStructureNavigationTest extends BaseFunctionalTestCase {
     public void testBrokenFunctionsMoveDown() {
         MethodDownAction methodDownAction = new MethodDownAction();
         doTest("BrokenFunctionsTop.xq", "BrokenFunctionsBottom.xq", 1, methodDownAction);
+    }
+
+    public void testLibraryModuleVariableMoveUp() {
+        MethodUpAction methodUpAction = new MethodUpAction();
+        doTest("LibraryModuleVariableNavigationBottom.xq", "LibraryModuleVariableNavigationTop.xq", 4, methodUpAction);
+    }
+
+    public void testLibraryModuleVariableMoveDown() {
+        MethodDownAction methodDownAction = new MethodDownAction();
+        doTest("LibraryModuleVariableNavigationTop.xq", "LibraryModuleVariableNavigationBottom.xq", 4, methodDownAction);
     }
 
     private void doTest(String beforeFile, String afterFile, int repeatActionTimes, BaseCodeInsightAction action) {
