@@ -112,6 +112,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 %state AS_RECOGNITION
 %state VALIDATE_RECOGNITION
 %state WS_BEFORE_QNAME
+%state ITEM_TYPE
 %%
 
 
@@ -215,7 +216,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "case"                                     {return XQueryTypes.K_CASE;}
 "and"                                      {return XQueryTypes.K_AND;}
 "or"                                       {return XQueryTypes.K_OR;}
-"as"/ ({SC}? "(" {SC}?|{SC}) (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "(" | {NCName})                        {return XQueryTypes.K_AS;}
+"as"/ ({SC}? "(" {SC}?|{SC}) (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "(" | {NCName})                        {pushState(ITEM_TYPE); return XQueryTypes.K_AS;}
 "to"                                       {return XQueryTypes.K_TO;}
 "where"                                    {return XQueryTypes.K_WHERE;}
 "group" / {SC} "by"                        {return XQueryTypes.K_GROUP;}
@@ -261,19 +262,23 @@ SC=({S} | "(:" {Char}* ~":)")+
 "external" / {SC}? (":="|";")              {return XQueryTypes.K_EXTERNAL;}
 "validate"                                 {yypushback(yylength()); pushState(VALIDATE_RECOGNITION); return TokenType.WHITE_SPACE;}
 "order" / {SC} "by"                        {return XQueryTypes.K_ORDER;}
-"map" / {SC}? ("("|"{")                    {return XQueryTypes.K_MAP;}
-"attribute" / ({SC}?"("|{SC}?"{"|{SC}{NCName})     {return XQueryTypes.K_ATTRIBUTE;}
+"map" / {SC}? "("                          {pushState(ITEM_TYPE); return XQueryTypes.K_MAP;}
+"attribute" / {SC}?"("                     {pushState(ITEM_TYPE); return XQueryTypes.K_ATTRIBUTE;}
+"document-node" / {SC}? "("                {pushState(ITEM_TYPE); return XQueryTypes.K_DOCUMENT_NODE;}
+"element" / {SC}?"("                       {pushState(ITEM_TYPE); return XQueryTypes.K_ELEMENT;}
+"function" / {SC}? "("                     {pushState(ITEM_TYPE); return XQueryTypes.K_FUNCTION;}
+"processing-instruction" / {SC}? "("       {pushState(ITEM_TYPE); return XQueryTypes.K_PI;}
+"schema-attribute" / {SC}? "("             {pushState(ITEM_TYPE); return XQueryTypes.K_SCHEMA_ATTRIBUTE;}
+"schema-element" / {SC}? "("               {pushState(ITEM_TYPE); return XQueryTypes.K_SCHEMA_ELEMENT;}
+"empty-sequence" / {SC}? "("               {return XQueryTypes.K_EMPTY_SEQUENCE;}
+"item" / {SC}? "("                         {return XQueryTypes.K_ITEM;}
+"node" / {SC}? "("                         {return XQueryTypes.K_NODE;}
+"namespace-node" / {SC}? "("               {return XQueryTypes.K_NAMESPACE_NODE;}
+"map" / {SC}? "{"                          {return XQueryTypes.K_MAP;}
+"attribute" / ({SC}?"{"|{SC}{NCName})      {return XQueryTypes.K_ATTRIBUTE;}
 "comment" / {SC}? ("("|"{")                {return XQueryTypes.K_COMMENT;}
-"document-node" / {SC}? ("(")              {return XQueryTypes.K_DOCUMENT_NODE;}
-"element" / ({SC}?"("|{SC}?"{"| {SC}{NCName})       {return XQueryTypes.K_ELEMENT;}
-"empty-sequence" / {SC}? ("(")             {return XQueryTypes.K_EMPTY_SEQUENCE;}
-"function" / {SC}? ("(")                   {return XQueryTypes.K_FUNCTION;}
-"item" / {SC}? ("(")                       {return XQueryTypes.K_ITEM;}
-"namespace-node" / {SC}? ("(")             {return XQueryTypes.K_NAMESPACE_NODE;}
-"node" / {SC}? ("(")                       {return XQueryTypes.K_NODE;}
-"processing-instruction" / {SC}? ("("|"{"|{NCName}) {return XQueryTypes.K_PI;}
-"schema-attribute" / {SC}? ("(")           {return XQueryTypes.K_SCHEMA_ATTRIBUTE;}
-"schema-element" / {SC}? ("(")             {return XQueryTypes.K_SCHEMA_ELEMENT;}
+"element" / ({SC}?"{"| {SC}{NCName})       {return XQueryTypes.K_ELEMENT;}
+"processing-instruction" / {SC}? ("{"|{NCName}) {return XQueryTypes.K_PI;}
 "text" / {SC}? ("("|"{")                   {return XQueryTypes.K_TEXT;}
 "switch" / {SC}? ("(")                     {return XQueryTypes.K_SWITCH;}
 "if" / {SC}? ("(")                         {return XQueryTypes.K_IF;}
@@ -440,7 +445,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "namespace" / {SC} ({NCName}|"\""|"'"|"{") {return XQueryTypes.K_NAMESPACE;}
 "context" / {SC} "item"                    {return XQueryTypes.K_CONTEXT;}
 "item" / {SC} ("external"|":="|"as")       {return XQueryTypes.K_ITEM;}
-"as"/ ({SC}? "(" {SC}?|{SC}) (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "(" | {NCName})                        {return XQueryTypes.K_AS;}
+"as"/ ({SC}? "(" {SC}?|{SC}) (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "(" | {NCName})                        {pushState(ITEM_TYPE); return XQueryTypes.K_AS;}
 "map" / {SC}? ("(")                        {return XQueryTypes.K_MAP;}
 "attribute" / {SC}? ("(")                  {return XQueryTypes.K_ATTRIBUTE;}
 "comment" / {SC}? ("(")                    {return XQueryTypes.K_COMMENT;}
@@ -557,7 +562,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 <AS_RECOGNITION> {
 {S}                                        {return TokenType.WHITE_SPACE;}
 "(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
-"as"                                       {popState();return XQueryTypes.K_AS;}
+"as"                                       {popState(); pushState(ITEM_TYPE); return XQueryTypes.K_AS;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
@@ -570,6 +575,34 @@ SC=({S} | "(:" {Char}* ~":)")+
 "strict"                                   {return XQueryTypes.K_STRICT;}
 "type"                                     {return XQueryTypes.K_TYPE;}
 {NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+}
+
+<ITEM_TYPE> {
+{S}                                        {return TokenType.WHITE_SPACE;}
+"(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
+"("                                        {return XQueryTypes.L_PAR;}
+")"                                        {popState(); return XQueryTypes.R_PAR;}
+","                                        {return XQueryTypes.COMMA;}
+"*"                                        {return XQueryTypes.STAR_SIGN;}
+"+"                                        {return XQueryTypes.OP_PLUS;}
+"?"                                        {return XQueryTypes.QUESTIONMARK;}
+"%"                                        {return XQueryTypes.PERCENT;}
+"map" / {SC}? "("                          {return XQueryTypes.K_MAP;}
+"attribute" / {SC}?"("                     {return XQueryTypes.K_ATTRIBUTE;}
+"document-node" / {SC}? "("                {return XQueryTypes.K_DOCUMENT_NODE;}
+"element" / {SC}?"("                       {return XQueryTypes.K_ELEMENT;}
+"function" / {SC}? "("                     {return XQueryTypes.K_FUNCTION;}
+"processing-instruction" / {SC}? "("       {return XQueryTypes.K_PI;}
+"schema-attribute" / {SC}? "("             {return XQueryTypes.K_SCHEMA_ATTRIBUTE;}
+"schema-element" / {SC}? "("               {return XQueryTypes.K_SCHEMA_ELEMENT;}
+"empty-sequence" / {SC}? "("               {return XQueryTypes.K_EMPTY_SEQUENCE;}
+"item" / {SC}? "("                         {return XQueryTypes.K_ITEM;}
+"node" / {SC}? "("                         {return XQueryTypes.K_NODE;}
+"namespace-node" / {SC}? "("               {return XQueryTypes.K_NAMESPACE_NODE;}
+"comment" / {SC}? "("                      {return XQueryTypes.K_COMMENT;}
+"text" / {SC}? "("                         {return XQueryTypes.K_TEXT;}
+{NCName}                                   {popState(); pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 

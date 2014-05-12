@@ -1858,4 +1858,47 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "as", "as"
         });
     }
+
+    public void testKeywordInElementSequenceType() {
+        assertProducedTokens("/div treat as element(div)", new String[]{
+                "/", "/",
+                "NCName", "div",
+                "WHITE_SPACE", " ",
+                "treat", "treat",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "WHITE_SPACE", " ",
+                "element", "element",
+                "(", "(",
+                "WHITE_SPACE", "",
+                "NCName", "div",
+                ")", ")"
+        });
+    }
+
+    public void testKeywordInSequenceTypeWhenAlmostLikeElementTest() {
+        assertProducedTokens("/div treat as element", new String[]{
+                "/", "/",
+                "NCName", "div",
+                "WHITE_SPACE", " ",
+                "treat", "treat",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "WHITE_SPACE", " ",
+                "NCName", "element"
+        });
+    }
+
+    public void testKeywordInSequenceType() {
+        assertProducedTokens("/div treat as div", new String[]{
+                "/", "/",
+                "NCName", "div",
+                "WHITE_SPACE", " ",
+                "treat", "treat",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "WHITE_SPACE", " ",
+                "NCName", "div"
+        });
+    }
 }
