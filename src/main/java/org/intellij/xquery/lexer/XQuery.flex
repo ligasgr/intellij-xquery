@@ -391,6 +391,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 .                                          {yypushback(yylength()); popState(); pushState(QNAME); return TokenType.WHITE_SPACE;}
 }
 <QNAME> {
+"*"                                        {return XQueryTypes.STAR_SIGN;}
 {NCName} ":" {NameStartCharWithoutFirst}   {yypushback(2); return XQueryTypes.NCNAME;}
 {NCName}                                   {popState(); return XQueryTypes.NCNAME;}
 ":"                                        {return XQueryTypes.COLON;}

@@ -350,6 +350,15 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testQueryWithWildcard() throws Exception {
+        assertProducedTokens("/*:div", new String[]{
+                "/", "/",
+                "*", "*",
+                ":", ":",
+                "NCName", "div"
+        });
+    }
+
     public void testGroupBy() throws Exception {
         assertProducedTokens("for $x in 1 to 20 group by $key := $x mod 2 return $x", new String[]{
                 "for", "for",
