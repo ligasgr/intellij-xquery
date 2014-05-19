@@ -23,6 +23,8 @@
 
 
 
+
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply from: 'idea.gradle'
@@ -58,7 +60,16 @@ tasks.withType(Compile) {
     options.compilerArgs << "-Xlint:unchecked"
 }
 
+test {
+    testLogging {
+        events "started", "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+}
+
 task testFunctional(type: Test) {
     testClassesDir = sourceSets.testFunctional.output.classesDir
     classpath = sourceSets.testFunctional.runtimeClasspath
+    testLogging {
+        events "started", "passed", "skipped", "failed", "standardOut", "standardError"
+    }
 }
