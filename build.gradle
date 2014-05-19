@@ -21,6 +21,8 @@
 
 
 
+
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply from: 'idea.gradle'
@@ -92,16 +94,23 @@ dependencies {
 
 test {
     jvmArgs = ['-Didea.home.path=' + project.ext.ideaInstallationPath, '-Didea.test.group=ALL_EXCLUDE_DEFINED', '-Didea.config.path=sdk/config', '-Didea.system.path=sdk/system', '-ea']
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
 }
 
 task testFunctional(type: Test) {
     testClassesDir = sourceSets.testFunctional.output.classesDir
     classpath = sourceSets.testFunctional.runtimeClasspath
+    events "passed", "skipped", "failed", "standardOut", "standardError"
 }
 
 task testGui(type: Test, dependsOn: ':compileForms') {
     testClassesDir = sourceSets.testGui.output.classesDir
     classpath = sourceSets.testGui.runtimeClasspath
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
 }
 
 task testPerformance(type: Test) {
