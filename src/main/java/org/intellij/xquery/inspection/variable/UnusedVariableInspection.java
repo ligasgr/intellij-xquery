@@ -23,6 +23,7 @@ import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.psi.PsiFile;
 import org.intellij.xquery.psi.XQueryFile;
+import org.intellij.xquery.psi.XQueryParam;
 import org.intellij.xquery.psi.XQueryVarDecl;
 import org.intellij.xquery.psi.XQueryVarName;
 import org.intellij.xquery.psi.XQueryVarRef;
@@ -84,11 +85,16 @@ public class UnusedVariableInspection extends LocalInspectionTool {
         ProblemDescriptor[] problemDescriptors = new ProblemDescriptor[unusedVariables.size()];
         int ind = 0;
         for (XQueryVarName varName : unusedVariables) {
-            final ProblemDescriptor problemDescriptor = manager.createProblemDescriptor(varName, "Variable '#ref' is never used", (LocalQuickFix) null,
+            final ProblemDescriptor problemDescriptor = manager.createProblemDescriptor(varName, getDescription(varName), (LocalQuickFix) null,
                     LIKE_UNUSED_SYMBOL, true);
             problemDescriptors[ind++] = problemDescriptor;
         }
         return problemDescriptors;
+    }
+
+    private String getDescription(XQueryVarName varName) {
+        String variableType = varName.getParent() instanceof XQueryParam ? "Parameter": "Variable";
+        return String.format("%s '#ref' is never used", variableType);
     }
 
 }
