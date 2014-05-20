@@ -61,7 +61,7 @@ public class UnusedVariableInspection extends LocalInspectionTool {
     }
 
     private boolean isPublicDeclaredVariable(XQueryVarName varName) {
-        if (varName.getParent() instanceof XQueryVarDecl && isPublic((XQueryVarDecl) varName.getParent())) {
+        if (varName.getParent() instanceof XQueryVarDecl && ((XQueryVarDecl) varName.getParent()).isPublic()) {
             return true;
         }
         return false;

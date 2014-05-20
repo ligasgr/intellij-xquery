@@ -265,7 +265,7 @@ DefaultElementNamespaceDecl ::= "declare" "default" "element" "namespace" URILit
 private AnnotatedDecl ::= (VarDecl | FunctionDecl)
 Annotation ::= "%" AnnotationName ("(" Literal ("," Literal)* ")")?
 AnnotationName ::= EQName
-VarDecl ::= "declare" Annotation* "variable" "$" VarName TypeDeclaration? (VarDetails) Separator {pin=3 methods=[getPresentation isExternal getTextOffset]}
+VarDecl ::= "declare" Annotation* "variable" "$" VarName TypeDeclaration? (VarDetails) Separator {pin=3 methods=[getPresentation isExternal getTextOffset isPublic]}
 private VarDetails ::= VarValueAssignment | ExternalVarPart
 private VarValueAssignment ::= ":=" VarValue {pin=1}
 ExternalVarPart ::= "external" (":=" VarDefaultValue)? {pin=1}

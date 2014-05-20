@@ -49,4 +49,6 @@ public interface XQueryVarDecl extends XQueryElement {
 
   int getTextOffset();
 
+  boolean isPublic();
+
 }
