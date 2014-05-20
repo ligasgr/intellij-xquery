@@ -61,8 +61,8 @@ public class UnusedVariableInspection extends LocalInspectionTool {
     private ProblemDescriptor[] buildProblemDescriptionsForUnsusedVariables(InspectionManager manager, List<XQueryVarName> unusedVariables) {
         ProblemDescriptor[] problemDescriptors = new ProblemDescriptor[unusedVariables.size()];
         int ind = 0;
-        for (PsiElement element : unusedVariables) {
-            final ProblemDescriptor problemDescriptor = manager.createProblemDescriptor(element, "Unused variable", (LocalQuickFix) null,
+        for (XQueryVarName varName : unusedVariables) {
+            final ProblemDescriptor problemDescriptor = manager.createProblemDescriptor(varName, "Variable '#ref' is never used", (LocalQuickFix) null,
                     LIKE_UNUSED_SYMBOL, true);
             problemDescriptors[ind++] = problemDescriptor;
         }

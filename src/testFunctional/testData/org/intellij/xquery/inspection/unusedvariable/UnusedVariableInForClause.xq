@@ -2,14 +2,14 @@ module namespace local = "local";
 
 
 declare function local:testVariableDefinedInForClauseButNotUsed() {
-    for $<warning descr="Unused variable">var</warning> in (1, 2, 3, 4)
+    for $<warning descr="Variable 'var' is never used">var</warning> in (1, 2, 3, 4)
         where 2 < 3
         return "foo"
 };
 
 declare function local:testVariableDefinedInForThenUsedInLetWhichIsNotUsed() {
     for $var in (1, 2, 3, 4)
-        let $<warning descr="Unused variable">bar</warning> := $var * 2
+        let $<warning descr="Variable 'bar' is never used">bar</warning> := $var * 2
         where 2 < 3
         return "foo"
 };
