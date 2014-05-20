@@ -30,7 +30,6 @@ public class UnusedVariableInspectionTest extends BaseFunctionalTestCase {
         return "src/testFunctional/testData/org/intellij/xquery/inspection/variable/";
     }
 
-
     public void testUnusedVariableInLetClause() {
         executeTest();
     }
@@ -48,6 +47,14 @@ public class UnusedVariableInspectionTest extends BaseFunctionalTestCase {
     }
 
     public void testUnusedVariableFromOtherNamespace() {
+        executeTest();
+    }
+
+    public void testUnusedPrivateVariableDeclaration() {
+        executeTest();
+    }
+
+    public void testUnusedParameter() {
         executeTest();
     }
 

@@ -356,6 +356,15 @@ public class XQueryPsiImplUtil {
         return result;
     }
 
+    public static boolean isPublic(XQueryVarDecl varDecl) {
+        boolean result = true;
+        for (XQueryAnnotation annotation : varDecl.getAnnotationList()) {
+            if ("private".equals(annotation.getAnnotationName().getText()))
+                return false;
+        }
+        return result;
+    }
+
     public static void delete(XQueryNamedElement namedElement) {
         PsiElement declarationElement = namedElement.getParent();
         final ASTNode parentNode = declarationElement.getParent().getNode();

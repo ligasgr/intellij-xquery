@@ -75,6 +75,7 @@ public class XQueryFile extends PsiFileBase {
     private CachedValue<Collection<XQueryFunctionDecl>> functionDeclarations;
     private CachedValue<Collection<XQueryFunctionInvocation>> functionInvocations;
     private CachedValue<Collection<XQueryVarRef>> variableReferences;
+    private CachedValue<Collection<XQueryVarName>> variableNames;
     private CachedValue<Collection<XQueryNamespaceDecl>> namespacesMatchingDefault;
     private CachedValue<String> defaultFunctionNamespace;
     private CachedValue<Map<String, String>> functionPrefixToNamespaceMapping;
@@ -155,6 +156,20 @@ public class XQueryFile extends PsiFileBase {
         return variableReferences.getValue();
     }
 
+    public Collection<XQueryVarName> getVariableNames() {
+        if (variableNames == null) {
+            variableNames = CachedValuesManager
+                    .getManager(getProject())
+                    .createCachedValue(new CachedValueProvider<Collection<XQueryVarName>>() {
+                        @Override
+                        public Result<Collection<XQueryVarName>> compute() {
+                            return CachedValueProvider.Result.create(calcVariableNames(), XQueryFile.this);
+                        }
+                    }, false);
+        }
+        return variableNames.getValue();
+    }
+
     @NotNull
     public Collection<XQueryFunctionInvocation> getFunctionInvocations() {
         if (functionInvocations == null) {
@@ -226,6 +241,11 @@ public class XQueryFile extends PsiFileBase {
     private Collection<XQueryVarRef> calcVariableReferences() {
         Collection<XQueryVarRef> variableReferences = PsiTreeUtil.findChildrenOfType(this, XQueryVarRef.class);
         return variableReferences;
+    }
+
+    private Collection<XQueryVarName> calcVariableNames() {
+        Collection<XQueryVarName> variableNames = PsiTreeUtil.findChildrenOfType(this, XQueryVarName.class);
+        return variableNames;
     }
 
     private Collection<XQueryModuleImport> calcModuleImports() {

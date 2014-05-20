@@ -23,13 +23,15 @@ import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.psi.PsiFile;
 import org.intellij.xquery.psi.XQueryFile;
-import org.intellij.xquery.psi.XQueryFunctionDecl;
+import org.intellij.xquery.psi.XQueryVarDecl;
 import org.intellij.xquery.psi.XQueryVarName;
+import org.intellij.xquery.psi.XQueryVarRef;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.intellij.codeInspection.ProblemHighlightType.LIKE_UNUSED_SYMBOL;
+import static org.intellij.xquery.psi.impl.XQueryPsiImplUtil.isPublic;
 
 public class UnusedVariableInspection extends LocalInspectionTool {
 
@@ -43,21 +45,42 @@ public class UnusedVariableInspection extends LocalInspectionTool {
         List<XQueryVarName> unusedVariables = new ArrayList<XQueryVarName>();
 
         XQueryFile xQueryFile = (XQueryFile) file;
-        for (XQueryFunctionDecl functionDecl : xQueryFile.getFunctionDeclarations()) {
-            UnusedVariableFinder unusedVariableFinder = new UnusedVariableFinder(functionDecl);
-            List<XQueryVarName> functionUnusedVariables = unusedVariableFinder.findUnusedVariables();
-            unusedVariables.addAll(functionUnusedVariables);
+        for (XQueryVarName varName : xQueryFile.getVariableNames()) {
+            if (isReference(varName) || isPublicDeclaredVariable(varName)) continue;
+            if (variableIsNotUsed(varName, xQueryFile))
+                unusedVariables.add(varName);
         }
 
         if (unusedVariables.size() > 0) {
-            return buildProblemDescriptionsForUnsusedVariables(manager, unusedVariables);
+            return buildProblemDescriptionsForUnusedVariables(manager, unusedVariables);
         } else {
             return null;
         }
 
     }
 
-    private ProblemDescriptor[] buildProblemDescriptionsForUnsusedVariables(InspectionManager manager, List<XQueryVarName> unusedVariables) {
+    private boolean isPublicDeclaredVariable(XQueryVarName varName) {
+        if (varName.getParent() instanceof XQueryVarDecl && isPublic((XQueryVarDecl) varName.getParent())) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isReference(XQueryVarName varName) {
+        return varName.getParent() instanceof XQueryVarRef;
+    }
+
+    private boolean variableIsNotUsed(XQueryVarName varName, XQueryFile xQueryFile) {
+        boolean used = false;
+        for (XQueryVarRef varRef : xQueryFile.getVariableReferences()) {
+            if (varRef.getReference().isReferenceTo(varName)) {
+                used = true;
+            }
+        }
+        return !used;
+    }
+
+    private ProblemDescriptor[] buildProblemDescriptionsForUnusedVariables(InspectionManager manager, List<XQueryVarName> unusedVariables) {
         ProblemDescriptor[] problemDescriptors = new ProblemDescriptor[unusedVariables.size()];
         int ind = 0;
         for (XQueryVarName varName : unusedVariables) {

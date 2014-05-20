@@ -205,6 +205,15 @@ public class XQueryFileTest extends BaseFunctionalTestCase {
         assertEquals("test", variableReference.getVarName().getText());
     }
 
+    public void testVariableNames() {
+        XQueryFile file = aFile("$test");
+
+        Collection<XQueryVarName> results = file.getVariableNames();
+
+        XQueryVarName variableName = results.iterator().next();
+        assertEquals("test", variableName.getText());
+    }
+
     private XQueryFile aFile(String content) {
         return createFile(getProject(), content);
     }
