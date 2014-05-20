@@ -62,8 +62,7 @@ public class UnusedVariableInspection extends LocalInspectionTool {
         ProblemDescriptor[] problemDescriptors = new ProblemDescriptor[unusedVariables.size()];
         int ind = 0;
         for (PsiElement element : unusedVariables) {
-            final PsiElement parent = element.getParent();
-            final ProblemDescriptor problemDescriptor = manager.createProblemDescriptor(parent, "Unused variable", (LocalQuickFix) null,
+            final ProblemDescriptor problemDescriptor = manager.createProblemDescriptor(element, "Unused variable", (LocalQuickFix) null,
                     LIKE_UNUSED_SYMBOL, true);
             problemDescriptors[ind++] = problemDescriptor;
         }
