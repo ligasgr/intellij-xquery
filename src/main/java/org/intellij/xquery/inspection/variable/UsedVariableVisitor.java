@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.inspection.unusedvariable;
+package org.intellij.xquery.inspection.variable;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;

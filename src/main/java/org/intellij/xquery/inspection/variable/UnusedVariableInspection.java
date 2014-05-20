@@ -15,13 +15,12 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.inspection.unusedvariable;
+package org.intellij.xquery.inspection.variable;
 
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionDecl;

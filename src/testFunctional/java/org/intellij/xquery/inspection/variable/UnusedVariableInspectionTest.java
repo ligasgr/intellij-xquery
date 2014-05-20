@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.inspection.unusedvariable;
+package org.intellij.xquery.inspection.variable;
 
 import com.intellij.codeInspection.LocalInspectionTool;
 import org.intellij.xquery.BaseFunctionalTestCase;
@@ -27,7 +27,7 @@ public class UnusedVariableInspectionTest extends BaseFunctionalTestCase {
 
     @Override
     protected String getTestDataPath() {
-        return "src/testFunctional/testData/org/intellij/xquery/inspection/unusedvariable/";
+        return "src/testFunctional/testData/org/intellij/xquery/inspection/variable/";
     }
 
 

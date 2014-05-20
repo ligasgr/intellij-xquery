@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.inspection.unusedvariable;
+package org.intellij.xquery.inspection.variable;
 
 import org.apache.commons.lang.StringUtils;
 import org.intellij.xquery.psi.*;
