@@ -53,6 +53,7 @@
         <completion.contributor language="XQuery" implementationClass="org.intellij.xquery.completion.XQueryCompletionContributor"/>
         <lang.psiStructureViewFactory language="XQuery" implementationClass="org.intellij.xquery.structure.XQueryStructureViewFactory"/>
         <lang.formatter language="XQuery" implementationClass="org.intellij.xquery.formatter.XQueryFormattingModelBuilder"/>
+        <lang.importOptimizer language="XQuery" implementationClass="org.intellij.xquery.formatter.XQueryImportOptimizer"/>
         <lang.foldingBuilder language="XQuery" implementationClass="org.intellij.xquery.folding.XQueryFoldingBuilder"/>
         <codeStyleSettingsProvider implementation="org.intellij.xquery.formatter.settings.XQueryCodeStyleSettingsProvider"/>
 
