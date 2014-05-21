@@ -74,7 +74,7 @@ public class UnusedVariableInspection extends LocalInspectionTool {
     private boolean variableIsNotUsed(XQueryVarName varName, XQueryFile xQueryFile) {
         boolean used = false;
         for (XQueryVarRef varRef : xQueryFile.getVariableReferences()) {
-            if (varRef.getReference().isReferenceTo(varName)) {
+            if (varRef.getReference() != null && varRef.getReference().isReferenceTo(varName)) {
                 used = true;
             }
         }
