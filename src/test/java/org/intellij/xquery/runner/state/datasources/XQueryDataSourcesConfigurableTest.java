@@ -117,7 +117,7 @@ public class XQueryDataSourcesConfigurableTest {
     }
 
     @Test
-    public void shouldConfigurationsInFormWithConfigurationsFromDataSourceSettings() throws ConfigurationException {
+    public void shouldPopulateConfigurationsInFormWithConfigurationsFromDataSourceSettings() throws ConfigurationException {
         given(dataSourcesSettings.getDataSourceConfigurations()).willReturn(CONFIGURATIONS);
         configurable.createComponent();
 
