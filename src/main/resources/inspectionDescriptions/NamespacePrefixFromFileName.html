@@ -1,0 +1,16 @@
+<html>
+<body>
+<font face="verdana" size="-1">
+This inspection checks if namespace prefix is derived from file name part in namespace URI.
+Inspection expects that URI is based on real file name. File extension should not be part of namespace prefix.
+For example in module with namespace URI <code><b>my://sample/namespace/myFirstModule.xq</b></code> namespace prefix should be <code><b>myModuleOne</b></code>.
+<pre>
+module namespace <b>myFirstModule</b> = "my://sample/namespace/<b>myFirstModule</b>.xq";
+
+declare function myFirstModule:someFunction() {
+  fn:true()
+};
+</pre>
+</font>
+</body>
+</html>
