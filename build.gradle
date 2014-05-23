@@ -25,6 +25,8 @@
 
 
 
+
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply from: 'idea.gradle'
@@ -121,6 +123,8 @@ task testPerformance(type: Test) {
     testClassesDir = sourceSets.testPerformance.output.classesDir
     classpath = sourceSets.testPerformance.runtimeClasspath
 }
+
+task allTests(dependsOn: [test, testFunctional, testGui])
 
 tasks.withType(Compile) {
     options.compilerArgs << "-Xlint:unchecked"
