@@ -18,11 +18,17 @@
 package org.intellij.xquery.reference.function;
 
 import com.intellij.psi.PsiElement;
+import org.intellij.xquery.Assertions;
 import org.intellij.xquery.BaseFunctionalTestCase;
+import org.intellij.xquery.XQueryFlavour;
 import org.intellij.xquery.psi.XQueryFunctionCall;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryNamedFunctionRef;
+import org.intellij.xquery.psi.XQueryVarDecl;
+import org.intellij.xquery.psi.XQueryVarRef;
+import org.intellij.xquery.settings.XQuerySettings;
 
+import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static org.intellij.xquery.Assertions.assertChildOf;
 import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
@@ -209,5 +215,19 @@ public class XQueryFunctionReferenceTest extends BaseFunctionalTestCase {
         assertChildOf(resolvedReference, XQueryFunctionDecl.class);
         XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) resolvedReference.getParent();
         assertEquals(2, functionDeclaration.getArity());
+    }
+
+    public void testFunctionReferenceFromAnotherFileWhenMarkLogicFlavourUsed() {
+        XQuerySettings settings = XQuerySettings.getInstance(myFixture.getProject());
+        XQueryFlavour previous = settings.getFlavour();
+        settings.setFlavour(XQueryFlavour.MARKLOGIC);
+        myFixture.configureByFiles("MarkLogicReferenceFromAnotherFile.xq", "MarkLogicReferencedFile.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        settings.setFlavour(previous);
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+        XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) resolvedReference.getParent();
+        assertEquals("MarkLogicReferencedFile.xq", functionDeclaration.getContainingFile().getName());
     }
 }

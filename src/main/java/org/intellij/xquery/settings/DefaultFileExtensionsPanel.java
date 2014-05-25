@@ -22,7 +22,6 @@ import com.intellij.ui.SortedComboBoxModel;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import java.util.Comparator;
 import java.util.List;
 
 public class DefaultFileExtensionsPanel extends SettingsPanel {
@@ -31,8 +30,8 @@ public class DefaultFileExtensionsPanel extends SettingsPanel {
     public static final String LIBRARY_MODULE_FILE_EXTENSION = "libraryModuleFileExtension";
     private final LabeledComponent<JComboBox> mainModuleFileExtension;
     private final LabeledComponent<JComboBox> libraryModuleFileExtension;
-    private final SortedComboBoxModel<Object> mainModuleFileExtensionModel = comboBoxModel();
-    private final SortedComboBoxModel<Object> libraryModuleFileExtensionModel = comboBoxModel();
+    private final SortedComboBoxModel<Object> mainModuleFileExtensionModel = UIUtils.comboBoxModel();
+    private final SortedComboBoxModel<Object> libraryModuleFileExtensionModel = UIUtils.comboBoxModel();
     private final String defaultMainModuleExtension;
     private final String defaultLibraryModuleExtension;
 
@@ -40,8 +39,8 @@ public class DefaultFileExtensionsPanel extends SettingsPanel {
         this.defaultMainModuleExtension = defaultMainModuleExtension;
         this.defaultLibraryModuleExtension = defaultLibraryModuleExtension;
         setLayout(new MigLayout("ins 0, gap 5, fill, flowy"));
-        mainModuleFileExtension = comboBox("&Main module", MAIN_MODULE_FILE_EXTENSION, mainModuleFileExtensionModel);
-        libraryModuleFileExtension = comboBox("&Library module", LIBRARY_MODULE_FILE_EXTENSION, libraryModuleFileExtensionModel);
+        mainModuleFileExtension = UIUtils.comboBox("&Main module", MAIN_MODULE_FILE_EXTENSION, mainModuleFileExtensionModel);
+        libraryModuleFileExtension = UIUtils.comboBox("&Library module", LIBRARY_MODULE_FILE_EXTENSION, libraryModuleFileExtensionModel);
         add(mainModuleFileExtension);
         add(libraryModuleFileExtension);
 
@@ -70,24 +69,5 @@ public class DefaultFileExtensionsPanel extends SettingsPanel {
             model.add(type);
         }
         model.setSelectedItem(defaultItem);
-    }
-
-    private SortedComboBoxModel<Object> comboBoxModel() {
-        return new SortedComboBoxModel<Object>(new Comparator<Object>() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                return ((String) o1).compareToIgnoreCase((String) o2);
-            }
-        });
-    }
-
-    private LabeledComponent<JComboBox> comboBox(String text, String name, SortedComboBoxModel<Object> model) {
-        LabeledComponent<JComboBox> comboBox = new LabeledComponent<JComboBox>();
-        comboBox.setText(text);
-        comboBox.setLabelLocation("West");
-        comboBox.setComponent(new JComboBox());
-        comboBox.getComponent().setName(name);
-        comboBox.getComponent().setModel(model);
-        return comboBox;
     }
 }

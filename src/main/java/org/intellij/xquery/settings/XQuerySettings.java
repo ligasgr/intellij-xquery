@@ -25,8 +25,10 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.components.StorageScheme;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.ModificationTracker;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.Tag;
+import org.intellij.xquery.XQueryFlavour;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -35,10 +37,12 @@ import org.jetbrains.annotations.Nullable;
         @Storage(id = "xqueryInDirectory", file = StoragePathMacros.PROJECT_CONFIG_DIR + "/xquery.xml",
                 scheme = StorageScheme.DIRECTORY_BASED)
 })
-public class XQuerySettings implements PersistentStateComponent<XQuerySettings> {
+public class XQuerySettings implements PersistentStateComponent<XQuerySettings>, ModificationTracker {
 
     private String defaultMainModuleExtension;
     private String defaultLibraryModuleExtension;
+    private XQueryFlavour flavour;
+    private long modificationCount = 0;
 
     public static XQuerySettings getInstance(Project project) {
         return ServiceManager.getService(project, XQuerySettings.class);
@@ -52,6 +56,9 @@ public class XQuerySettings implements PersistentStateComponent<XQuerySettings> 
 
     @Override
     public void loadState(XQuerySettings state) {
+        if (!this.equals(state)) {
+            modificationCount++;
+        }
         XmlSerializerUtil.copyBean(state, this);
     }
 
@@ -73,17 +80,27 @@ public class XQuerySettings implements PersistentStateComponent<XQuerySettings> 
         this.defaultLibraryModuleExtension = defaultLibraryModuleExtension;
     }
 
+    @Tag("flavour")
+    public XQueryFlavour getFlavour() {
+        return flavour;
+    }
+
+    public void setFlavour(XQueryFlavour flavour) {
+        this.flavour = flavour;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        XQuerySettings that = (XQuerySettings) o;
+        XQuerySettings settings = (XQuerySettings) o;
 
-        if (defaultLibraryModuleExtension != null ? !defaultLibraryModuleExtension.equals(that.defaultLibraryModuleExtension) : that.defaultLibraryModuleExtension != null)
+        if (defaultLibraryModuleExtension != null ? !defaultLibraryModuleExtension.equals(settings.defaultLibraryModuleExtension) : settings.defaultLibraryModuleExtension != null)
             return false;
-        if (defaultMainModuleExtension != null ? !defaultMainModuleExtension.equals(that.defaultMainModuleExtension) : that.defaultMainModuleExtension != null)
+        if (defaultMainModuleExtension != null ? !defaultMainModuleExtension.equals(settings.defaultMainModuleExtension) : settings.defaultMainModuleExtension != null)
             return false;
+        if (flavour != settings.flavour) return false;
 
         return true;
     }
@@ -92,6 +109,12 @@ public class XQuerySettings implements PersistentStateComponent<XQuerySettings> 
     public int hashCode() {
         int result = defaultMainModuleExtension != null ? defaultMainModuleExtension.hashCode() : 0;
         result = 31 * result + (defaultLibraryModuleExtension != null ? defaultLibraryModuleExtension.hashCode() : 0);
+        result = 31 * result + (flavour != null ? flavour.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public long getModificationCount() {
+        return modificationCount;
     }
 }

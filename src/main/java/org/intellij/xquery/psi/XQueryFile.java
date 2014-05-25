@@ -26,7 +26,9 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryFileType;
+import org.intellij.xquery.XQueryFlavour;
 import org.intellij.xquery.XQueryLanguage;
+import org.intellij.xquery.settings.XQuerySettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -290,6 +292,9 @@ public class XQueryFile extends PsiFileBase {
         XQueryDefaultFunctionNamespaceDecl defaultFunctionNamespaceDecl = getDefaultNamespaceFunctionDeclaration();
         if (defaultFunctionNamespaceDecl != null && defaultFunctionNamespaceDecl.getURILiteral() != null)
             return removeQuotOrApos(defaultFunctionNamespaceDecl.getURILiteral().getText());
+        else if (isLibraryModule() && XQueryFlavour.MARKLOGIC.equals(getSettings().getFlavour()) && getModuleDeclaration().getURILiteral() != null) {
+            return removeQuotOrApos(getModuleDeclaration().getURILiteral().getText());
+        }
         return FN.getNamespace();
     }
 
@@ -378,8 +383,15 @@ public class XQueryFile extends PsiFileBase {
 
     private Map<String, String> calcVariablePrefixToNamespaceMap() {
         Map<String, String> namespaceMapping = calcPrefixToNamespaceMap();
-        namespaceMapping.put(null, XMLConstants.NULL_NS_URI);
+        namespaceMapping.put(null, getVariableDefaultNamespace());
         return namespaceMapping;
+    }
+
+    private String getVariableDefaultNamespace() {
+        if (isLibraryModule() && XQueryFlavour.MARKLOGIC.equals(getSettings().getFlavour()) && getModuleDeclaration().getURILiteral() != null) {
+            return removeQuotOrApos(getModuleDeclaration().getURILiteral().getText());
+        }
+        return XMLConstants.NULL_NS_URI;
     }
 
     public String mapVariablePrefixToNamespace(String prefix) {
@@ -394,7 +406,7 @@ public class XQueryFile extends PsiFileBase {
                         @Override
                         public Result<Map<String, String>> compute() {
                             return CachedValueProvider.Result.create(calcVariablePrefixToNamespaceMap(),
-                                    XQueryFile.this);
+                                    XQueryFile.this, getSettings());
                         }
                     }, false);
         }
@@ -403,5 +415,9 @@ public class XQueryFile extends PsiFileBase {
 
     public XQueryQueryBody getQueryBody() {
         return PsiTreeUtil.findChildOfType(this, XQueryQueryBody.class);
+    }
+
+    private XQuerySettings getSettings() {
+        return XQuerySettings.getInstance(getProject());
     }
 }

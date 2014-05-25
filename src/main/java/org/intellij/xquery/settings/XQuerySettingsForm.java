@@ -23,16 +23,18 @@ import javax.swing.*;
 
 public class XQuerySettingsForm {
     public static final String SETTINGS_PANEL_NAME = "settingsPanel";
-    private final SettingsPanel defaultFileExtensionsPanel;
+    private final SettingsPanel[] panels;
     private JPanel rootPanel;
     private XQuerySettings originalSettings;
 
-    public XQuerySettingsForm(SettingsPanel defaultFileExtensionsPanel) {
+    public XQuerySettingsForm(SettingsPanel... panels) {
         rootPanel = new JPanel();
-        rootPanel.setLayout(new MigLayout("ins 0, gap 5, fill, flowy"));
+        rootPanel.setLayout(new MigLayout("ins 0, gap 5, flowx"));
         rootPanel.setName(SETTINGS_PANEL_NAME);
-        rootPanel.add(defaultFileExtensionsPanel, "growx, ay top");
-        this.defaultFileExtensionsPanel = defaultFileExtensionsPanel;
+        for (SettingsPanel panel : panels) {
+            rootPanel.add(panel, "growx, pushx, wrap");
+        }
+        this.panels = panels;
     }
 
     public JComponent getFormComponent() {
@@ -45,12 +47,17 @@ public class XQuerySettingsForm {
 
     public XQuerySettings getSettings() {
         XQuerySettings newSettings = new XQuerySettings();
-        defaultFileExtensionsPanel.updateSettings(newSettings);
+        for (SettingsPanel panel : panels) {
+            panel.updateSettings(newSettings);
+        }
         return newSettings;
     }
 
     public void setSettings(XQuerySettings settings) {
         this.originalSettings = settings;
-        defaultFileExtensionsPanel.updatePanel(settings);
+        for (SettingsPanel panel : panels) {
+            panel.updatePanel(settings);
+        }
+
     }
 }

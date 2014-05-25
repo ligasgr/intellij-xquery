@@ -20,6 +20,7 @@ package org.intellij.xquery.reference.variable;
 import com.intellij.psi.PsiElement;
 import org.intellij.xquery.Assertions;
 import org.intellij.xquery.BaseFunctionalTestCase;
+import org.intellij.xquery.XQueryFlavour;
 import org.intellij.xquery.psi.XQueryCurrentItem;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryLetBinding;
@@ -30,6 +31,7 @@ import org.intellij.xquery.psi.XQueryPreviousItem;
 import org.intellij.xquery.psi.XQueryVarDecl;
 import org.intellij.xquery.psi.XQueryVarRef;
 import org.intellij.xquery.psi.XQueryWindowClause;
+import org.intellij.xquery.settings.XQuerySettings;
 
 import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
@@ -194,5 +196,19 @@ public class XQueryVariableReferenceTest extends BaseFunctionalTestCase {
         Assertions.assertChildOf(resolvedReference, XQueryPositionalVar.class);
         Assertions.assertChildOf(resolvedReference, XQueryWindowClause.class);
         Assertions.assertNotChildOf(resolvedReference, XQueryVarRef.class);
+    }
+
+    public void testVariableReferenceFromAnotherFileWhenMarkLogicFlavourUsed() {
+        XQuerySettings settings = XQuerySettings.getInstance(myFixture.getProject());
+        XQueryFlavour previous = settings.getFlavour();
+        settings.setFlavour(XQueryFlavour.MARKLOGIC);
+        myFixture.configureByFiles("MarkLogicReferenceFromAnotherFile.xq", "MarkLogicReferencedFile.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        settings.setFlavour(previous);
+        Assertions.assertChildOf(resolvedReference, XQueryVarDecl.class);
+        XQueryVarDecl varDecl = getParentOfType(resolvedReference, XQueryVarDecl.class);
+        assertEquals("MarkLogicReferencedFile.xq", varDecl.getContainingFile().getName());
     }
 }

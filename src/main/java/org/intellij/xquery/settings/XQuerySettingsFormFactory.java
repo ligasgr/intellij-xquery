@@ -17,6 +17,8 @@
 
 package org.intellij.xquery.settings;
 
+import org.intellij.xquery.XQueryFlavour;
+
 import java.util.List;
 
 import static org.intellij.xquery.XQueryFileType.ALL_EXTENSIONS_LIST;
@@ -28,6 +30,7 @@ public class XQuerySettingsFormFactory {
         String defExt = DEFAULT_EXTENSION;
         List<String> allExt = ALL_EXTENSIONS_LIST;
         SettingsPanel fileExtensionsPanel = new DefaultFileExtensionsPanel(defExt, defExt, allExt);
-        return new XQuerySettingsForm(fileExtensionsPanel);
+        SettingsPanel otherOptionsPanel = new OtherOptionsPanel(XQueryFlavour.STANDARD_30);
+        return new XQuerySettingsForm(fileExtensionsPanel, otherOptionsPanel);
     }
 }

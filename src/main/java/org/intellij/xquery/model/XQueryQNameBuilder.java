@@ -50,6 +50,7 @@ public class XQueryQNameBuilder<T> {
     }
 
     public static XQueryQNameBuilder<XQueryVarName> aXQueryQName(XQueryVarName varName) {
+        XQueryFile containingFile = (XQueryFile) varName.getContainingFile();
         XQueryQNameBuilder<XQueryVarName> instance = new XQueryQNameBuilder<XQueryVarName>();
         if (varName.getPrefix() != null) {
             instance.prefix = varName.getPrefix().getText();
@@ -57,6 +58,7 @@ public class XQueryQNameBuilder<T> {
         if (varName.getVarLocalName() != null) {
             instance.localName = varName.getVarLocalName().getText();
         }
+        instance.namespace = containingFile.mapVariablePrefixToNamespace(instance.prefix);
         instance.namedObject = varName;
         return instance;
     }
