@@ -76,6 +76,10 @@
         <localInspection enabledByDefault="true" shortName="UnusedVariable" groupName="XQuery"
                          displayName="Unused variable"
                          implementationClass="org.intellij.xquery.inspection.variable.UnusedVariableInspection"/>
+        <localInspection enabledByDefault="false" shortName="NamespacePrefixFromFileName" groupName="XQuery"
+                         displayName="Namespace prefix derived from file name"
+                         implementationClass="org.intellij.xquery.inspection.namespaceprefix.NamespacePrefixFromFileName"/>
+        
         <codeInsight.parameterInfo language="XQuery" implementationClass="org.intellij.xquery.completion.function.parameters.XQueryParameterInfoHandler" />
         <lang.documentationProvider language="XQuery" implementationClass="org.intellij.xquery.documentation.XQueryDocumentationProvider"/>
         <projectConfigurable instance="org.intellij.xquery.settings.XQueryConfigurable"/>

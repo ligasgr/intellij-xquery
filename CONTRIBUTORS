@@ -9,3 +9,4 @@ Dirk Kirsten <dk@basex.org> - Issue #91 - Live templates
 Mateusz Rudnicki <nicklamer@gmail.com> - Issue #93 - Enhance next/previous method navigation
 Arnost Valicek <arnost.valicek@gmail.com> - Issue #21 - Unused variables highlighting
 Arnost Valicek <arnost.valicek@gmail.com> - Issue #100 - Optimize imports in xquery files
+Arnost Valicek <arnost.valicek@gmail.com> - Issue #104 - Inspection - check if module namespace prefix is same as module file name
