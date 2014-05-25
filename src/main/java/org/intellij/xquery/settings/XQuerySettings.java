@@ -37,7 +37,8 @@ import org.jetbrains.annotations.Nullable;
 })
 public class XQuerySettings implements PersistentStateComponent<XQuerySettings> {
 
-    private String flavour = "XQuery 3.0 Standard";
+    private String defaultMainModuleExtension;
+    private String defaultLibraryModuleExtension;
 
     public static XQuerySettings getInstance(Project project) {
         return ServiceManager.getService(project, XQuerySettings.class);
@@ -54,8 +55,43 @@ public class XQuerySettings implements PersistentStateComponent<XQuerySettings> 
         XmlSerializerUtil.copyBean(state, this);
     }
 
-    @Tag("flavour")
-    public String getFlavour() {
-        return flavour;
+    @Tag("defaultMainModuleExtension")
+    public String getDefaultMainModuleExtension() {
+        return defaultMainModuleExtension;
+    }
+
+    public void setDefaultMainModuleExtension(String defaultMainModuleExtension) {
+        this.defaultMainModuleExtension = defaultMainModuleExtension;
+    }
+
+    @Tag("defaultLibraryModuleExtension")
+    public String getDefaultLibraryModuleExtension() {
+        return defaultLibraryModuleExtension;
+    }
+
+    public void setDefaultLibraryModuleExtension(String defaultLibraryModuleExtension) {
+        this.defaultLibraryModuleExtension = defaultLibraryModuleExtension;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        XQuerySettings that = (XQuerySettings) o;
+
+        if (defaultLibraryModuleExtension != null ? !defaultLibraryModuleExtension.equals(that.defaultLibraryModuleExtension) : that.defaultLibraryModuleExtension != null)
+            return false;
+        if (defaultMainModuleExtension != null ? !defaultMainModuleExtension.equals(that.defaultMainModuleExtension) : that.defaultMainModuleExtension != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = defaultMainModuleExtension != null ? defaultMainModuleExtension.hashCode() : 0;
+        result = 31 * result + (defaultLibraryModuleExtension != null ? defaultLibraryModuleExtension.hashCode() : 0);
+        return result;
     }
 }

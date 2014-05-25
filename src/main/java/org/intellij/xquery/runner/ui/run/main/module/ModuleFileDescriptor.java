@@ -19,7 +19,8 @@ package org.intellij.xquery.runner.ui.run.main.module;
 
 import com.intellij.openapi.fileChooser.FileTypeDescriptor;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.intellij.xquery.XQueryFileType;
+
+import static org.intellij.xquery.XQueryFileType.ALL_EXTENSIONS_LIST;
 
 /**
  * User: ligasgr
@@ -28,11 +29,10 @@ import org.intellij.xquery.XQueryFileType;
  */
 public class ModuleFileDescriptor extends FileTypeDescriptor {
 
-    private static final String EXTENSION_SEPARATOR = ";";
     private ModuleTypeValidator moduleTypeValidator;
 
     public ModuleFileDescriptor(ModuleTypeValidator moduleTypeValidator) {
-        super("XQuery module", XQueryFileType.ALL_EXTENSIONS.split(EXTENSION_SEPARATOR));
+        super("XQuery module", ALL_EXTENSIONS_LIST.toArray(new String[ALL_EXTENSIONS_LIST.size()]));
         this.moduleTypeValidator = moduleTypeValidator;
     }
 

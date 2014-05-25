@@ -17,17 +17,9 @@
 
 package org.intellij.xquery.settings;
 
-import java.util.List;
+import javax.swing.*;
 
-import static org.intellij.xquery.XQueryFileType.ALL_EXTENSIONS_LIST;
-import static org.intellij.xquery.XQueryFileType.DEFAULT_EXTENSION;
-
-public class XQuerySettingsFormFactory {
-
-    public XQuerySettingsForm getSettingsForm() {
-        String defExt = DEFAULT_EXTENSION;
-        List<String> allExt = ALL_EXTENSIONS_LIST;
-        SettingsPanel fileExtensionsPanel = new DefaultFileExtensionsPanel(defExt, defExt, allExt);
-        return new XQuerySettingsForm(fileExtensionsPanel);
-    }
+public abstract class SettingsPanel extends JPanel {
+    public abstract XQuerySettings updateSettings(XQuerySettings settings);
+    public abstract void updatePanel(XQuerySettings settings);
 }

@@ -23,6 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.List;
+
+import static java.util.Arrays.asList;
 
 /**
  * User: ligasgr
@@ -34,6 +37,8 @@ public class XQueryFileType extends LanguageFileType {
     public static final String DEFAULT_EXTENSION = "xq";
     public static final String DEFAULT_EXTENSION_WITH_DOT = "." + DEFAULT_EXTENSION;
     public static final String ALL_EXTENSIONS = "xq;xqi;xql;xqm;xqy;xqws;xquery";
+    static final String EXTENSION_SEPARATOR = ";";
+    public static final List<String> ALL_EXTENSIONS_LIST = asList(ALL_EXTENSIONS.split(EXTENSION_SEPARATOR));
 
     private XQueryFileType() {
         super(XQueryLanguage.INSTANCE);

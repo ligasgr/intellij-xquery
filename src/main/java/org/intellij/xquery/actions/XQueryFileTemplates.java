@@ -15,19 +15,9 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.settings;
+package org.intellij.xquery.actions;
 
-import java.util.List;
-
-import static org.intellij.xquery.XQueryFileType.ALL_EXTENSIONS_LIST;
-import static org.intellij.xquery.XQueryFileType.DEFAULT_EXTENSION;
-
-public class XQuerySettingsFormFactory {
-
-    public XQuerySettingsForm getSettingsForm() {
-        String defExt = DEFAULT_EXTENSION;
-        List<String> allExt = ALL_EXTENSIONS_LIST;
-        SettingsPanel fileExtensionsPanel = new DefaultFileExtensionsPanel(defExt, defExt, allExt);
-        return new XQuerySettingsForm(fileExtensionsPanel);
-    }
+public class XQueryFileTemplates {
+    public static final String LIBRARY_MODULE = "XQuery Library Module";
+    public static final String MAIN_MODULE = "XQuery Main Module";
 }

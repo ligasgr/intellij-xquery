@@ -21,7 +21,6 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.BDDMockito;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;

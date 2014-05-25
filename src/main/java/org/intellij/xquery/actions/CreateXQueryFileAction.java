@@ -25,7 +25,12 @@ import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
+import org.intellij.xquery.XQueryFileType;
 import org.intellij.xquery.icons.XQueryIcons;
+
+import static org.intellij.xquery.XQueryFileType.DEFAULT_EXTENSION_WITH_DOT;
+import static org.intellij.xquery.actions.XQueryFileTemplates.LIBRARY_MODULE;
+import static org.intellij.xquery.actions.XQueryFileTemplates.MAIN_MODULE;
 
 /**
  * User: ligasgr
@@ -55,8 +60,8 @@ public class CreateXQueryFileAction extends CreateFileFromTemplateAction impleme
             builder) {
         builder
                 .setTitle(NEW_XQUERY_FILE)
-                .addKind("Library Module", XQueryIcons.FILE, "XQuery Library Module.xq")
-                .addKind("Main Module", XQueryIcons.FILE, "XQuery Main Module.xq")
+                .addKind("Library Module", XQueryIcons.FILE, LIBRARY_MODULE + DEFAULT_EXTENSION_WITH_DOT)
+                .addKind("Main Module", XQueryIcons.FILE, MAIN_MODULE + DEFAULT_EXTENSION_WITH_DOT)
                 .setValidator(getValidator());
     }
 
@@ -81,7 +86,7 @@ public class CreateXQueryFileAction extends CreateFileFromTemplateAction impleme
             public String getErrorText(String inputString) {
                 String error = " is not a valid XQuery Module name";
                 if (StringUtil.isEmpty(inputString)) return null;
-                if (inputString != null && inputString.equals(FileUtil.sanitizeFileName(inputString))) {
+                if (inputString.equals(FileUtil.sanitizeFileName(inputString))) {
                     return null;
                 }
                 return "'" + inputString + "'" + error;

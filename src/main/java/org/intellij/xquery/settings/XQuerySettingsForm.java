@@ -17,28 +17,40 @@
 
 package org.intellij.xquery.settings;
 
+import net.miginfocom.swing.MigLayout;
+
 import javax.swing.*;
 
 public class XQuerySettingsForm {
     public static final String SETTINGS_PANEL_NAME = "settingsPanel";
-    private XQuerySettings settings;
+    private final SettingsPanel defaultFileExtensionsPanel;
     private JPanel rootPanel;
+    private XQuerySettings originalSettings;
+
+    public XQuerySettingsForm(SettingsPanel defaultFileExtensionsPanel) {
+        rootPanel = new JPanel();
+        rootPanel.setLayout(new MigLayout("ins 0, gap 5, fill, flowy"));
+        rootPanel.setName(SETTINGS_PANEL_NAME);
+        rootPanel.add(defaultFileExtensionsPanel, "growx, ay top");
+        this.defaultFileExtensionsPanel = defaultFileExtensionsPanel;
+    }
 
     public JComponent getFormComponent() {
-        rootPanel = new JPanel();
-        rootPanel.setName(SETTINGS_PANEL_NAME);
         return rootPanel;
     }
 
     public boolean isModified() {
-        return false;
+        return !originalSettings.equals(getSettings());
     }
 
     public XQuerySettings getSettings() {
-        return settings;
+        XQuerySettings newSettings = new XQuerySettings();
+        defaultFileExtensionsPanel.updateSettings(newSettings);
+        return newSettings;
     }
 
     public void setSettings(XQuerySettings settings) {
-        this.settings = settings;
+        this.originalSettings = settings;
+        defaultFileExtensionsPanel.updatePanel(settings);
     }
 }
