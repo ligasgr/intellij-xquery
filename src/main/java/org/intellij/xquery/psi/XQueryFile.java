@@ -311,7 +311,7 @@ public class XQueryFile extends PsiFileBase {
         return result;
     }
 
-    private XQueryDefaultFunctionNamespaceDecl getDefaultNamespaceFunctionDeclaration() {
+    public XQueryDefaultFunctionNamespaceDecl getDefaultNamespaceFunctionDeclaration() {
         return PsiTreeUtil.findChildOfType(this, XQueryDefaultFunctionNamespaceDecl.class);
     }
 

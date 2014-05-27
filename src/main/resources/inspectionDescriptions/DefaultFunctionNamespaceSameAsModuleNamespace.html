@@ -1,0 +1,24 @@
+<html>
+<body>
+<font face="verdana" size="-1">
+This inspection checks if default function namespace is same as module namespace.
+<br>
+For example in module with namespace URI <code><b>my://sample/namespace/myModule</b></code> default function namespace
+should be <code><b>my://sample/namespace/myModule</b></code>.
+<br><br>
+<pre>
+module namespace myModule = "<b>my://sample/namespace/myModule</b>";
+
+declare default function namespace "<b>my://sample/namespace/myModule</b>";
+
+declare function myModule:someFunction() {
+  fn:true()
+};
+</pre>
+<p>
+Note: Exception to this rule is if default function namespace is declared as
+<code>http://www.w3.org/2005/xpath-functions</code> (namespace of <code>fn:</code> prefix).
+
+</font>
+</body>
+</html>

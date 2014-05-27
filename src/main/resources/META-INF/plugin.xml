@@ -90,6 +90,9 @@
         <localInspection enabledByDefault="true" shortName="UnusedVariable" groupName="XQuery"
                          displayName="Unused variable"
                          implementationClass="org.intellij.xquery.inspection.variable.UnusedVariableInspection"/>
+        <localInspection enabledByDefault="true" shortName="DefaultFunctionNamespaceSameAsModuleNamespace" groupName="XQuery"
+                         displayName="Default function namespace is same as module namespace"
+                         implementationClass="org.intellij.xquery.inspection.defaultfunctionnamespace.DefaultFunctionNamespaceSameAsModuleNamespace"/>
         <localInspection enabledByDefault="false" shortName="NamespacePrefixFromFileName" groupName="XQuery"
                          displayName="Namespace prefix derived from file name"
                          implementationClass="org.intellij.xquery.inspection.namespaceprefix.NamespacePrefixFromFileName"/>
