@@ -46,6 +46,12 @@ public class XQueryVarDeclImpl extends XQueryElementImpl implements XQueryVarDec
   }
 
   @Override
+  @NotNull
+  public List<XQueryCompatibilityAnnotation> getCompatibilityAnnotationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryCompatibilityAnnotation.class);
+  }
+
+  @Override
   @Nullable
   public XQueryExternalVarPart getExternalVarPart() {
     return findChildByClass(XQueryExternalVarPart.class);

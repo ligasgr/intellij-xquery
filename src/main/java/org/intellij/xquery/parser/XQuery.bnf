@@ -209,7 +209,24 @@
   K_TYPE                 =  "type"
   K_LAX                  =  "lax"
   K_STRICT               =  "strict"
-  K_EXTERNAL               =  "external"
+  K_EXTERNAL             =  "external"
+  K_REVALIDATION         =  "revalidation"
+  K_UPDATING             =  "updating"
+  K_SKIP                 =  "skip"
+  K_INSERT               =  "insert"
+  K_NODES                =  "nodes"
+  K_FIRST                =  "first"
+  K_LAST                 =  "last"
+  K_INTO                 =  "into"
+  K_AFTER                =  "after"
+  K_BEFORE               =  "before"
+  K_DELETE               =  "delete"
+  K_VALUE                =  "value"
+  K_WITH                 =  "with"
+  K_COPY                 =  "copy"
+  K_MODIFY               =  "modify"
+  K_RENAME               =  "replace"
+  K_REPLACE              =  "rename"
 //  IntegerLiteral = "regexp:[0-9]+"
 //  DecimalLiteral = "regexp:(\.[0-9]+|[0-9]+\.[0-9]*)"
 //  DoubleLiteral  = "regexp:(\.[0-9]+|[0-9]+(\.[0-9]*)?)[eE][+-]?[0-9]+"
@@ -241,7 +258,7 @@ private Prolog ::= FirstDecl* SecondDecl*
 private FirstDecl ::= DefaultNamespaceDecl | Setter | NamespaceDecl | Import
 private SecondDecl ::= ContextItemDecl | OptionDecl | AnnotatedDecl
 Separator ::= ";"
-private Setter ::= BoundarySpaceDecl | DefaultCollationDecl | BaseURIDecl | ConstructionDecl | OrderingModeDecl | EmptyOrderDecl | CopyNamespacesDecl | DecimalFormatDecl
+private Setter ::= BoundarySpaceDecl | DefaultCollationDecl | BaseURIDecl | ConstructionDecl | OrderingModeDecl | EmptyOrderDecl | RevalidationDecl | CopyNamespacesDecl | DecimalFormatDecl
 BoundarySpaceDecl ::= "declare" "boundary-space" ("preserve" | "strip") Separator {pin=2}
 DefaultCollationDecl ::= "declare" "default" "collation" URILiteral Separator {pin=3}
 BaseURIDecl ::= "declare" "base-uri" URILiteral Separator {pin=2}
@@ -263,16 +280,17 @@ private DefaultNamespaceDecl ::= (DefaultFunctionNamespaceDecl | DefaultElementN
 DefaultFunctionNamespaceDecl ::= "declare" "default" "function" "namespace" URILiteral {pin=3}
 DefaultElementNamespaceDecl ::= "declare" "default" "element" "namespace" URILiteral {pin=3}
 private AnnotatedDecl ::= (VarDecl | FunctionDecl)
+CompatibilityAnnotation	   ::=   	"updating"
 Annotation ::= "%" AnnotationName ("(" Literal ("," Literal)* ")")?
 AnnotationName ::= EQName
-VarDecl ::= "declare" Annotation* "variable" "$" VarName TypeDeclaration? (VarDetails) Separator {pin=3 methods=[getPresentation isExternal getTextOffset isPublic]}
+VarDecl ::= "declare" (CompatibilityAnnotation | Annotation)* "variable" "$" VarName TypeDeclaration? (VarDetails) Separator {pin=3 methods=[getPresentation isExternal getTextOffset isPublic]}
 private VarDetails ::= VarValueAssignment | ExternalVarPart
 private VarValueAssignment ::= ":=" VarValue {pin=1}
 ExternalVarPart ::= "external" (":=" VarDefaultValue)? {pin=1}
 VarValue ::= ExprSingle
 VarDefaultValue ::= ExprSingle
 ContextItemDecl ::= "declare" "context" "item" ("as" ItemType)? (VarValueAssignment | ("external" (":=" VarDefaultValue)?)) Separator {pin=2}
-FunctionDecl ::= "declare" Annotation* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external") Separator /* xgc: reserved-function-names */ {pin=3 methods=[getPresentation getArity hasValidFunctionName isPublic getTextOffset]}
+FunctionDecl ::= "declare" (CompatibilityAnnotation | Annotation)* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external") Separator /* xgc: reserved-function-names */ {pin=3 methods=[getPresentation getArity hasValidFunctionName isPublic getTextOffset]}
 ParamList ::= "(" (Param ("," Param)*)? ")" {pin=1}
 Param ::= "$" VarName TypeDeclaration?
 FunctionBody ::= EnclosedExpr
@@ -288,6 +306,11 @@ ExprSingle ::= FLWORExpr
  | TypeswitchExpr
  | IfExpr
  | TryCatchExpr
+ | InsertExpr
+ | DeleteExpr
+ | RenameExpr
+ | ReplaceExpr
+ | TransformExpr
  | OrExpr
 FLWORExpr ::= InitialClause IntermediateClause* ReturnClause {pin=1}
 private FLWORExprRecover ::= !('count' | 'for' | 'group' | 'let' | 'order' | 'return' | 'stable' | 'where' | '}' | XmlEndTagStart TagName | XmlStartTagStart TagName | ',')
@@ -567,3 +590,15 @@ VarName ::= Prefix ':' VarLocalName | VarLocalName | URIQualifiedName {pin(".*")
 VarLocalName ::= NCName
 FunctionName ::= Prefix ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {pin(".*")=2 methods=[getName setName getNameIdentifier getTextOffset getPresentation delete getPrefixText getLocalNameText]}
 FunctionLocalName ::= NCName
+RevalidationDecl ::= "declare" "revalidation" ("strict" | "lax" | "skip")
+InsertExprTargetChoice ::= (("as" ("first" | "last"))? "into")
+ | "after"
+ | "before"
+InsertExpr ::= "insert" ("node" | "nodes") SourceExpr InsertExprTargetChoice TargetExpr
+DeleteExpr ::= "delete" ("node" | "nodes") TargetExpr
+ReplaceExpr ::= "replace" ("value" "of")? "node" TargetExpr "with" ExprSingle
+RenameExpr ::= "rename" "node" TargetExpr "as" NewNameExpr
+SourceExpr ::= ExprSingle
+TargetExpr ::= ExprSingle
+NewNameExpr ::= ExprSingle
+TransformExpr ::= "copy" "$" VarName ":=" ExprSingle ("," "$" VarName ":=" ExprSingle)* "modify" ExprSingle "return" ExprSingle

@@ -175,6 +175,9 @@ public class XQueryParser implements PsiParser {
     else if (root_ == COMPARISON_EXPR) {
       result_ = ComparisonExpr(builder_, 0);
     }
+    else if (root_ == COMPATIBILITY_ANNOTATION) {
+      result_ = CompatibilityAnnotation(builder_, 0);
+    }
     else if (root_ == COMPUTED_CONSTRUCTOR) {
       result_ = ComputedConstructor(builder_, 0);
     }
@@ -216,6 +219,9 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == DEFAULT_FUNCTION_NAMESPACE_DECL) {
       result_ = DefaultFunctionNamespaceDecl(builder_, 0);
+    }
+    else if (root_ == DELETE_EXPR) {
+      result_ = DeleteExpr(builder_, 0);
     }
     else if (root_ == DIR_ATTRIBUTE_LIST) {
       result_ = DirAttributeList(builder_, 0);
@@ -346,6 +352,12 @@ public class XQueryParser implements PsiParser {
     else if (root_ == INLINE_FUNCTION_EXPR) {
       result_ = InlineFunctionExpr(builder_, 0);
     }
+    else if (root_ == INSERT_EXPR) {
+      result_ = InsertExpr(builder_, 0);
+    }
+    else if (root_ == INSERT_EXPR_TARGET_CHOICE) {
+      result_ = InsertExprTargetChoice(builder_, 0);
+    }
     else if (root_ == INSTANCE_OF_OPERATOR) {
       result_ = InstanceOfOperator(builder_, 0);
     }
@@ -420,6 +432,9 @@ public class XQueryParser implements PsiParser {
     }
     else if (root_ == NAMESPACE_PREFIX) {
       result_ = NamespacePrefix(builder_, 0);
+    }
+    else if (root_ == NEW_NAME_EXPR) {
+      result_ = NewNameExpr(builder_, 0);
     }
     else if (root_ == NEXT_ITEM) {
       result_ = NextItem(builder_, 0);
@@ -532,8 +547,17 @@ public class XQueryParser implements PsiParser {
     else if (root_ == RELATIVE_PATH_OPERATOR) {
       result_ = RelativePathOperator(builder_, 0);
     }
+    else if (root_ == RENAME_EXPR) {
+      result_ = RenameExpr(builder_, 0);
+    }
+    else if (root_ == REPLACE_EXPR) {
+      result_ = ReplaceExpr(builder_, 0);
+    }
     else if (root_ == RETURN_CLAUSE) {
       result_ = ReturnClause(builder_, 0);
+    }
+    else if (root_ == REVALIDATION_DECL) {
+      result_ = RevalidationDecl(builder_, 0);
     }
     else if (root_ == REVERSE_STEP) {
       result_ = ReverseStep(builder_, 0);
@@ -568,6 +592,9 @@ public class XQueryParser implements PsiParser {
     else if (root_ == SINGLE_TYPE) {
       result_ = SingleType(builder_, 0);
     }
+    else if (root_ == SOURCE_EXPR) {
+      result_ = SourceExpr(builder_, 0);
+    }
     else if (root_ == STEP_EXPR) {
       result_ = StepExpr(builder_, 0);
     }
@@ -589,11 +616,17 @@ public class XQueryParser implements PsiParser {
     else if (root_ == SWITCH_RETURN_CLAUSE) {
       result_ = SwitchReturnClause(builder_, 0);
     }
+    else if (root_ == TARGET_EXPR) {
+      result_ = TargetExpr(builder_, 0);
+    }
     else if (root_ == TEXT_TEST) {
       result_ = TextTest(builder_, 0);
     }
     else if (root_ == TO_OPERATOR) {
       result_ = ToOperator(builder_, 0);
+    }
+    else if (root_ == TRANSFORM_EXPR) {
+      result_ = TransformExpr(builder_, 0);
     }
     else if (root_ == TREAT_EXPR) {
       result_ = TreatExpr(builder_, 0);
@@ -707,13 +740,15 @@ public class XQueryParser implements PsiParser {
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(ADDITIVE_EXPR, AND_EXPR, CASTABLE_EXPR, CAST_EXPR,
-      COMPARISON_EXPR, CONTENT_EXPR, CONTEXT_ITEM_EXPR, ENCLOSED_EXPR,
-      EXPR_SINGLE, EXTENSION_EXPR, FLWOR_EXPR, FUNCTION_ITEM_EXPR,
-      IF_EXPR, INLINE_FUNCTION_EXPR, INSTANCEOF_EXPR, INTERSECT_EXCEPT_EXPR,
-      MULTIPLICATIVE_EXPR, ORDERED_EXPR, OR_EXPR, PARENTHESIZED_EXPR,
-      PATH_EXPR, POSTFIX_EXPR, PREFIX_EXPR, PRIMARY_EXPR,
-      QUANTIFIED_EXPR, RANGE_EXPR, SIMPLE_MAP_EXPR, STEP_EXPR,
-      STRING_CONCAT_EXPR, SWITCH_EXPR, TREAT_EXPR, TRY_CATCH_EXPR,
+      COMPARISON_EXPR, CONTENT_EXPR, CONTEXT_ITEM_EXPR, DELETE_EXPR,
+      ENCLOSED_EXPR, EXPR_SINGLE, EXTENSION_EXPR, FLWOR_EXPR,
+      FUNCTION_ITEM_EXPR, IF_EXPR, INLINE_FUNCTION_EXPR, INSERT_EXPR,
+      INSTANCEOF_EXPR, INTERSECT_EXCEPT_EXPR, MULTIPLICATIVE_EXPR, NEW_NAME_EXPR,
+      ORDERED_EXPR, OR_EXPR, PARENTHESIZED_EXPR, PATH_EXPR,
+      POSTFIX_EXPR, PREFIX_EXPR, PRIMARY_EXPR, QUANTIFIED_EXPR,
+      RANGE_EXPR, RENAME_EXPR, REPLACE_EXPR, SIMPLE_MAP_EXPR,
+      SOURCE_EXPR, STEP_EXPR, STRING_CONCAT_EXPR, SWITCH_EXPR,
+      TARGET_EXPR, TRANSFORM_EXPR, TREAT_EXPR, TRY_CATCH_EXPR,
       TYPESWITCH_EXPR, UNARY_EXPR, UNION_EXPR, UNORDERED_EXPR,
       URI_EXPR, VALIDATE_EXPR, VALUE_EXPR),
   };
@@ -1802,6 +1837,18 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // "updating"
+  public static boolean CompatibilityAnnotation(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "CompatibilityAnnotation")) return false;
+    if (!nextTokenIs(builder_, K_UPDATING)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_UPDATING);
+    exit_section_(builder_, marker_, COMPATIBILITY_ANNOTATION, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // CompDocConstructor
   //  | CompElemConstructor
   //  | CompMapConstructor
@@ -2193,6 +2240,31 @@ public class XQueryParser implements PsiParser {
     Marker marker_ = enter_section_(builder_);
     result_ = DefaultFunctionNamespaceDecl(builder_, level_ + 1);
     if (!result_) result_ = DefaultElementNamespaceDecl(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // "delete" ("node" | "nodes") TargetExpr
+  public static boolean DeleteExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "DeleteExpr")) return false;
+    if (!nextTokenIs(builder_, K_DELETE)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_DELETE);
+    result_ = result_ && DeleteExpr_1(builder_, level_ + 1);
+    result_ = result_ && TargetExpr(builder_, level_ + 1);
+    exit_section_(builder_, marker_, DELETE_EXPR, result_);
+    return result_;
+  }
+
+  // "node" | "nodes"
+  private static boolean DeleteExpr_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "DeleteExpr_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_NODE);
+    if (!result_) result_ = consumeToken(builder_, K_NODES);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -2713,6 +2785,11 @@ public class XQueryParser implements PsiParser {
   //  | TypeswitchExpr
   //  | IfExpr
   //  | TryCatchExpr
+  //  | InsertExpr
+  //  | DeleteExpr
+  //  | RenameExpr
+  //  | ReplaceExpr
+  //  | TransformExpr
   //  | OrExpr
   public static boolean ExprSingle(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ExprSingle")) return false;
@@ -2724,6 +2801,11 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = TypeswitchExpr(builder_, level_ + 1);
     if (!result_) result_ = IfExpr(builder_, level_ + 1);
     if (!result_) result_ = TryCatchExpr(builder_, level_ + 1);
+    if (!result_) result_ = InsertExpr(builder_, level_ + 1);
+    if (!result_) result_ = DeleteExpr(builder_, level_ + 1);
+    if (!result_) result_ = RenameExpr(builder_, level_ + 1);
+    if (!result_) result_ = ReplaceExpr(builder_, level_ + 1);
+    if (!result_) result_ = TransformExpr(builder_, level_ + 1);
     if (!result_) result_ = OrExpr(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, EXPR_SINGLE, result_, false, null);
     return result_;
@@ -3161,7 +3243,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "declare" Annotation* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external") Separator
+  // "declare" (CompatibilityAnnotation | Annotation)* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external") Separator
   public static boolean FunctionDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionDecl")) return false;
     if (!nextTokenIs(builder_, K_DECLARE)) return false;
@@ -3181,16 +3263,27 @@ public class XQueryParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // Annotation*
+  // (CompatibilityAnnotation | Annotation)*
   private static boolean FunctionDecl_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionDecl_1")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
-      if (!Annotation(builder_, level_ + 1)) break;
+      if (!FunctionDecl_1_0(builder_, level_ + 1)) break;
       if (!empty_element_parsed_guard_(builder_, "FunctionDecl_1", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
+  }
+
+  // CompatibilityAnnotation | Annotation
+  private static boolean FunctionDecl_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FunctionDecl_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = CompatibilityAnnotation(builder_, level_ + 1);
+    if (!result_) result_ = Annotation(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
   }
 
   // ("as" SequenceType)?
@@ -3563,6 +3656,88 @@ public class XQueryParser implements PsiParser {
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, K_AS);
     result_ = result_ && SequenceType(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // "insert" ("node" | "nodes") SourceExpr InsertExprTargetChoice TargetExpr
+  public static boolean InsertExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "InsertExpr")) return false;
+    if (!nextTokenIs(builder_, K_INSERT)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_INSERT);
+    result_ = result_ && InsertExpr_1(builder_, level_ + 1);
+    result_ = result_ && SourceExpr(builder_, level_ + 1);
+    result_ = result_ && InsertExprTargetChoice(builder_, level_ + 1);
+    result_ = result_ && TargetExpr(builder_, level_ + 1);
+    exit_section_(builder_, marker_, INSERT_EXPR, result_);
+    return result_;
+  }
+
+  // "node" | "nodes"
+  private static boolean InsertExpr_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "InsertExpr_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_NODE);
+    if (!result_) result_ = consumeToken(builder_, K_NODES);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // (("as" ("first" | "last"))? "into")
+  //  | "after"
+  //  | "before"
+  public static boolean InsertExprTargetChoice(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "InsertExprTargetChoice")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<insert expr target choice>");
+    result_ = InsertExprTargetChoice_0(builder_, level_ + 1);
+    if (!result_) result_ = consumeToken(builder_, K_AFTER);
+    if (!result_) result_ = consumeToken(builder_, K_BEFORE);
+    exit_section_(builder_, level_, marker_, INSERT_EXPR_TARGET_CHOICE, result_, false, null);
+    return result_;
+  }
+
+  // ("as" ("first" | "last"))? "into"
+  private static boolean InsertExprTargetChoice_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "InsertExprTargetChoice_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = InsertExprTargetChoice_0_0(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, K_INTO);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // ("as" ("first" | "last"))?
+  private static boolean InsertExprTargetChoice_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "InsertExprTargetChoice_0_0")) return false;
+    InsertExprTargetChoice_0_0_0(builder_, level_ + 1);
+    return true;
+  }
+
+  // "as" ("first" | "last")
+  private static boolean InsertExprTargetChoice_0_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "InsertExprTargetChoice_0_0_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_AS);
+    result_ = result_ && InsertExprTargetChoice_0_0_0_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // "first" | "last"
+  private static boolean InsertExprTargetChoice_0_0_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "InsertExprTargetChoice_0_0_0_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_FIRST);
+    if (!result_) result_ = consumeToken(builder_, K_LAST);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -4256,6 +4431,17 @@ public class XQueryParser implements PsiParser {
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, NCNAME);
     exit_section_(builder_, marker_, NAMESPACE_PREFIX, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // ExprSingle
+  public static boolean NewNameExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "NewNameExpr")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<new name expr>");
+    result_ = ExprSingle(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, NEW_NAME_EXPR, result_, false, null);
     return result_;
   }
 
@@ -5274,6 +5460,57 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // "rename" "node" TargetExpr "as" NewNameExpr
+  public static boolean RenameExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "RenameExpr")) return false;
+    if (!nextTokenIs(builder_, K_REPLACE)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_REPLACE);
+    result_ = result_ && consumeToken(builder_, K_NODE);
+    result_ = result_ && TargetExpr(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, K_AS);
+    result_ = result_ && NewNameExpr(builder_, level_ + 1);
+    exit_section_(builder_, marker_, RENAME_EXPR, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // "replace" ("value" "of")? "node" TargetExpr "with" ExprSingle
+  public static boolean ReplaceExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ReplaceExpr")) return false;
+    if (!nextTokenIs(builder_, K_RENAME)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_RENAME);
+    result_ = result_ && ReplaceExpr_1(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, K_NODE);
+    result_ = result_ && TargetExpr(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, K_WITH);
+    result_ = result_ && ExprSingle(builder_, level_ + 1);
+    exit_section_(builder_, marker_, REPLACE_EXPR, result_);
+    return result_;
+  }
+
+  // ("value" "of")?
+  private static boolean ReplaceExpr_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ReplaceExpr_1")) return false;
+    ReplaceExpr_1_0(builder_, level_ + 1);
+    return true;
+  }
+
+  // "value" "of"
+  private static boolean ReplaceExpr_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ReplaceExpr_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_VALUE);
+    result_ = result_ && consumeToken(builder_, K_OF);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // "return" ExprSingle
   public static boolean ReturnClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ReturnClause")) return false;
@@ -5286,6 +5523,32 @@ public class XQueryParser implements PsiParser {
     result_ = result_ && ExprSingle(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, RETURN_CLAUSE, result_, pinned_, null);
     return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // "declare" "revalidation" ("strict" | "lax" | "skip")
+  public static boolean RevalidationDecl(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "RevalidationDecl")) return false;
+    if (!nextTokenIs(builder_, K_DECLARE)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_DECLARE);
+    result_ = result_ && consumeToken(builder_, K_REVALIDATION);
+    result_ = result_ && RevalidationDecl_2(builder_, level_ + 1);
+    exit_section_(builder_, marker_, REVALIDATION_DECL, result_);
+    return result_;
+  }
+
+  // "strict" | "lax" | "skip"
+  private static boolean RevalidationDecl_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "RevalidationDecl_2")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_STRICT);
+    if (!result_) result_ = consumeToken(builder_, K_LAX);
+    if (!result_) result_ = consumeToken(builder_, K_SKIP);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
   }
 
   /* ********************************************************** */
@@ -5651,7 +5914,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // BoundarySpaceDecl | DefaultCollationDecl | BaseURIDecl | ConstructionDecl | OrderingModeDecl | EmptyOrderDecl | CopyNamespacesDecl | DecimalFormatDecl
+  // BoundarySpaceDecl | DefaultCollationDecl | BaseURIDecl | ConstructionDecl | OrderingModeDecl | EmptyOrderDecl | RevalidationDecl | CopyNamespacesDecl | DecimalFormatDecl
   static boolean Setter(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Setter")) return false;
     if (!nextTokenIs(builder_, K_DECLARE)) return false;
@@ -5663,6 +5926,7 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = ConstructionDecl(builder_, level_ + 1);
     if (!result_) result_ = OrderingModeDecl(builder_, level_ + 1);
     if (!result_) result_ = EmptyOrderDecl(builder_, level_ + 1);
+    if (!result_) result_ = RevalidationDecl(builder_, level_ + 1);
     if (!result_) result_ = CopyNamespacesDecl(builder_, level_ + 1);
     if (!result_) result_ = DecimalFormatDecl(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
@@ -5790,6 +6054,17 @@ public class XQueryParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "SlidingWindowDetails_3")) return false;
     TypeDeclaration(builder_, level_ + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // ExprSingle
+  public static boolean SourceExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SourceExpr")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<source expr>");
+    result_ = ExprSingle(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, SOURCE_EXPR, result_, false, null);
+    return result_;
   }
 
   /* ********************************************************** */
@@ -5958,6 +6233,17 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // ExprSingle
+  public static boolean TargetExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TargetExpr")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<target expr>");
+    result_ = ExprSingle(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, TARGET_EXPR, result_, false, null);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // "text" "(" ")"
   public static boolean TextTest(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TextTest")) return false;
@@ -5982,6 +6268,53 @@ public class XQueryParser implements PsiParser {
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, K_TO);
     exit_section_(builder_, marker_, TO_OPERATOR, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // "copy" "$" VarName ":=" ExprSingle ("," "$" VarName ":=" ExprSingle)* "modify" ExprSingle "return" ExprSingle
+  public static boolean TransformExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TransformExpr")) return false;
+    if (!nextTokenIs(builder_, K_COPY)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_COPY);
+    result_ = result_ && consumeToken(builder_, DOLLAR_SIGN);
+    result_ = result_ && VarName(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, OP_ASSIGN);
+    result_ = result_ && ExprSingle(builder_, level_ + 1);
+    result_ = result_ && TransformExpr_5(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, K_MODIFY);
+    result_ = result_ && ExprSingle(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, K_RETURN);
+    result_ = result_ && ExprSingle(builder_, level_ + 1);
+    exit_section_(builder_, marker_, TRANSFORM_EXPR, result_);
+    return result_;
+  }
+
+  // ("," "$" VarName ":=" ExprSingle)*
+  private static boolean TransformExpr_5(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TransformExpr_5")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!TransformExpr_5_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "TransformExpr_5", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // "," "$" VarName ":=" ExprSingle
+  private static boolean TransformExpr_5_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TransformExpr_5_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, COMMA);
+    result_ = result_ && consumeToken(builder_, DOLLAR_SIGN);
+    result_ = result_ && VarName(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, OP_ASSIGN);
+    result_ = result_ && ExprSingle(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
@@ -6510,7 +6843,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "declare" Annotation* "variable" "$" VarName TypeDeclaration? (VarDetails) Separator
+  // "declare" (CompatibilityAnnotation | Annotation)* "variable" "$" VarName TypeDeclaration? (VarDetails) Separator
   public static boolean VarDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarDecl")) return false;
     if (!nextTokenIs(builder_, K_DECLARE)) return false;
@@ -6530,16 +6863,27 @@ public class XQueryParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // Annotation*
+  // (CompatibilityAnnotation | Annotation)*
   private static boolean VarDecl_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarDecl_1")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
-      if (!Annotation(builder_, level_ + 1)) break;
+      if (!VarDecl_1_0(builder_, level_ + 1)) break;
       if (!empty_element_parsed_guard_(builder_, "VarDecl_1", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
+  }
+
+  // CompatibilityAnnotation | Annotation
+  private static boolean VarDecl_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarDecl_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = CompatibilityAnnotation(builder_, level_ + 1);
+    if (!result_) result_ = Annotation(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
   }
 
   // TypeDeclaration?

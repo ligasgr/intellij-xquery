@@ -61,6 +61,7 @@ public interface XQueryTypes {
   IElementType COMMENT_TEST = new XQueryElementType("COMMENT_TEST");
   IElementType COMMON_CONTENT = new XQueryElementType("COMMON_CONTENT");
   IElementType COMPARISON_EXPR = new XQueryElementType("COMPARISON_EXPR");
+  IElementType COMPATIBILITY_ANNOTATION = new XQueryElementType("COMPATIBILITY_ANNOTATION");
   IElementType COMPUTED_CONSTRUCTOR = new XQueryElementType("COMPUTED_CONSTRUCTOR");
   IElementType COMP_ATTR_CONSTRUCTOR = new XQueryElementType("COMP_ATTR_CONSTRUCTOR");
   IElementType COMP_COMMENT_CONSTRUCTOR = new XQueryElementType("COMP_COMMENT_CONSTRUCTOR");
@@ -85,6 +86,7 @@ public interface XQueryTypes {
   IElementType DEFAULT_COLLATION_DECL = new XQueryElementType("DEFAULT_COLLATION_DECL");
   IElementType DEFAULT_ELEMENT_NAMESPACE_DECL = new XQueryElementType("DEFAULT_ELEMENT_NAMESPACE_DECL");
   IElementType DEFAULT_FUNCTION_NAMESPACE_DECL = new XQueryElementType("DEFAULT_FUNCTION_NAMESPACE_DECL");
+  IElementType DELETE_EXPR = new XQueryElementType("DELETE_EXPR");
   IElementType DIRECT_CONSTRUCTOR = new XQueryElementType("DIRECT_CONSTRUCTOR");
   IElementType DIR_ATTRIBUTE_LIST = new XQueryElementType("DIR_ATTRIBUTE_LIST");
   IElementType DIR_ATTRIBUTE_NAME = new XQueryElementType("DIR_ATTRIBUTE_NAME");
@@ -128,6 +130,8 @@ public interface XQueryTypes {
   IElementType IF_EXPR = new XQueryElementType("IF_EXPR");
   IElementType INHERIT_MODE = new XQueryElementType("INHERIT_MODE");
   IElementType INLINE_FUNCTION_EXPR = new XQueryElementType("INLINE_FUNCTION_EXPR");
+  IElementType INSERT_EXPR = new XQueryElementType("INSERT_EXPR");
+  IElementType INSERT_EXPR_TARGET_CHOICE = new XQueryElementType("INSERT_EXPR_TARGET_CHOICE");
   IElementType INSTANCEOF_EXPR = new XQueryElementType("INSTANCEOF_EXPR");
   IElementType INSTANCE_OF_OPERATOR = new XQueryElementType("INSTANCE_OF_OPERATOR");
   IElementType INTERSECT_EXCEPT_EXPR = new XQueryElementType("INTERSECT_EXCEPT_EXPR");
@@ -153,6 +157,7 @@ public interface XQueryTypes {
   IElementType NAMESPACE_NODE_TEST = new XQueryElementType("NAMESPACE_NODE_TEST");
   IElementType NAMESPACE_PREFIX = new XQueryElementType("NAMESPACE_PREFIX");
   IElementType NAME_TEST = new XQueryElementType("NAME_TEST");
+  IElementType NEW_NAME_EXPR = new XQueryElementType("NEW_NAME_EXPR");
   IElementType NEXT_ITEM = new XQueryElementType("NEXT_ITEM");
   IElementType NODE_COMP = new XQueryElementType("NODE_COMP");
   IElementType NODE_TEST = new XQueryElementType("NODE_TEST");
@@ -190,7 +195,10 @@ public interface XQueryTypes {
   IElementType RANGE_EXPR = new XQueryElementType("RANGE_EXPR");
   IElementType RELATIONAL_COMP = new XQueryElementType("RELATIONAL_COMP");
   IElementType RELATIVE_PATH_OPERATOR = new XQueryElementType("RELATIVE_PATH_OPERATOR");
+  IElementType RENAME_EXPR = new XQueryElementType("RENAME_EXPR");
+  IElementType REPLACE_EXPR = new XQueryElementType("REPLACE_EXPR");
   IElementType RETURN_CLAUSE = new XQueryElementType("RETURN_CLAUSE");
+  IElementType REVALIDATION_DECL = new XQueryElementType("REVALIDATION_DECL");
   IElementType REVERSE_STEP = new XQueryElementType("REVERSE_STEP");
   IElementType SCHEMA_ATTRIBUTE_TEST = new XQueryElementType("SCHEMA_ATTRIBUTE_TEST");
   IElementType SCHEMA_ELEMENT_TEST = new XQueryElementType("SCHEMA_ELEMENT_TEST");
@@ -202,6 +210,7 @@ public interface XQueryTypes {
   IElementType SIMPLE_MAP_OPERATOR = new XQueryElementType("SIMPLE_MAP_OPERATOR");
   IElementType SIMPLE_TYPE_NAME = new XQueryElementType("SIMPLE_TYPE_NAME");
   IElementType SINGLE_TYPE = new XQueryElementType("SINGLE_TYPE");
+  IElementType SOURCE_EXPR = new XQueryElementType("SOURCE_EXPR");
   IElementType STEP_EXPR = new XQueryElementType("STEP_EXPR");
   IElementType STRING_CONCAT_EXPR = new XQueryElementType("STRING_CONCAT_EXPR");
   IElementType SWITCH_CASE_CLAUSE = new XQueryElementType("SWITCH_CASE_CLAUSE");
@@ -209,8 +218,10 @@ public interface XQueryTypes {
   IElementType SWITCH_DEFAULT_RETURN_CLAUSE = new XQueryElementType("SWITCH_DEFAULT_RETURN_CLAUSE");
   IElementType SWITCH_EXPR = new XQueryElementType("SWITCH_EXPR");
   IElementType SWITCH_RETURN_CLAUSE = new XQueryElementType("SWITCH_RETURN_CLAUSE");
+  IElementType TARGET_EXPR = new XQueryElementType("TARGET_EXPR");
   IElementType TEXT_TEST = new XQueryElementType("TEXT_TEST");
   IElementType TO_OPERATOR = new XQueryElementType("TO_OPERATOR");
+  IElementType TRANSFORM_EXPR = new XQueryElementType("TRANSFORM_EXPR");
   IElementType TREAT_EXPR = new XQueryElementType("TREAT_EXPR");
   IElementType TREAT_OPERATOR = new XQueryElementType("TREAT_OPERATOR");
   IElementType TRY_CATCH_EXPR = new XQueryElementType("TRY_CATCH_EXPR");
@@ -282,6 +293,7 @@ public interface XQueryTypes {
   IElementType GT_CHAR = new XQueryTokenType(">");
   IElementType HASH = new XQueryTokenType("#");
   IElementType INTEGERLITERAL = new XQueryTokenType("IntegerLiteral");
+  IElementType K_AFTER = new XQueryTokenType("after");
   IElementType K_ALLOWING = new XQueryTokenType("allowing");
   IElementType K_ANCESTOR = new XQueryTokenType("ancestor");
   IElementType K_ANCESTOR_OR_SELF = new XQueryTokenType("ancestor-or-self");
@@ -291,6 +303,7 @@ public interface XQueryTypes {
   IElementType K_AT = new XQueryTokenType("at");
   IElementType K_ATTRIBUTE = new XQueryTokenType("attribute");
   IElementType K_BASE_URI = new XQueryTokenType("base-uri");
+  IElementType K_BEFORE = new XQueryTokenType("before");
   IElementType K_BOUNDARY_SPACE = new XQueryTokenType("boundary-space");
   IElementType K_BY = new XQueryTokenType("by");
   IElementType K_CASE = new XQueryTokenType("case");
@@ -302,12 +315,14 @@ public interface XQueryTypes {
   IElementType K_COMMENT = new XQueryTokenType("comment");
   IElementType K_CONSTRUCTION = new XQueryTokenType("construction");
   IElementType K_CONTEXT = new XQueryTokenType("context");
+  IElementType K_COPY = new XQueryTokenType("copy");
   IElementType K_COPY_NAMESPACES = new XQueryTokenType("copy-namespaces");
   IElementType K_COUNT = new XQueryTokenType("count");
   IElementType K_DECIMAL_FORMAT = new XQueryTokenType("decimal-format");
   IElementType K_DECIMAL_SEPARATOR = new XQueryTokenType("decimal-separator");
   IElementType K_DECLARE = new XQueryTokenType("declare");
   IElementType K_DEFAULT = new XQueryTokenType("default");
+  IElementType K_DELETE = new XQueryTokenType("delete");
   IElementType K_DESCENDANT = new XQueryTokenType("descendant");
   IElementType K_DESCENDANT_OR_SELF = new XQueryTokenType("descendant-or-self");
   IElementType K_DESCENDING = new XQueryTokenType("descending");
@@ -324,6 +339,7 @@ public interface XQueryTypes {
   IElementType K_EVERY = new XQueryTokenType("every");
   IElementType K_EXCEPT = new XQueryTokenType("except");
   IElementType K_EXTERNAL = new XQueryTokenType("external");
+  IElementType K_FIRST = new XQueryTokenType("first");
   IElementType K_FOLLOWING = new XQueryTokenType("following");
   IElementType K_FOLLOWING_SIBLING = new XQueryTokenType("following-sibling");
   IElementType K_FOR = new XQueryTokenType("for");
@@ -337,22 +353,27 @@ public interface XQueryTypes {
   IElementType K_IN = new XQueryTokenType("in");
   IElementType K_INFINITY = new XQueryTokenType("infinity");
   IElementType K_INHERIT = new XQueryTokenType("inherit");
+  IElementType K_INSERT = new XQueryTokenType("insert");
   IElementType K_INSTANCE = new XQueryTokenType("instance");
   IElementType K_INTERSECT = new XQueryTokenType("intersect");
+  IElementType K_INTO = new XQueryTokenType("into");
   IElementType K_IS = new XQueryTokenType("is");
   IElementType K_ITEM = new XQueryTokenType("item");
+  IElementType K_LAST = new XQueryTokenType("last");
   IElementType K_LAX = new XQueryTokenType("lax");
   IElementType K_LEAST = new XQueryTokenType("least");
   IElementType K_LET = new XQueryTokenType("let");
   IElementType K_MAP = new XQueryTokenType("map");
   IElementType K_MINUS_SIGN = new XQueryTokenType("minus-sign");
   IElementType K_MOD = new XQueryTokenType("mod");
+  IElementType K_MODIFY = new XQueryTokenType("modify");
   IElementType K_MODULE = new XQueryTokenType("module");
   IElementType K_NAMESPACE = new XQueryTokenType("namespace");
   IElementType K_NAMESPACE_NODE = new XQueryTokenType("namespace-node");
   IElementType K_NAN = new XQueryTokenType("NaN");
   IElementType K_NEXT = new XQueryTokenType("next");
   IElementType K_NODE = new XQueryTokenType("node");
+  IElementType K_NODES = new XQueryTokenType("nodes");
   IElementType K_NO_INHERIT = new XQueryTokenType("no-inherit");
   IElementType K_NO_PRESERVE = new XQueryTokenType("no-preserve");
   IElementType K_OF = new XQueryTokenType("of");
@@ -371,12 +392,16 @@ public interface XQueryTypes {
   IElementType K_PRECEDING_SIBLING = new XQueryTokenType("preceding-sibling");
   IElementType K_PRESERVE = new XQueryTokenType("preserve");
   IElementType K_PREVIOUS = new XQueryTokenType("previous");
+  IElementType K_RENAME = new XQueryTokenType("replace");
+  IElementType K_REPLACE = new XQueryTokenType("rename");
   IElementType K_RETURN = new XQueryTokenType("return");
+  IElementType K_REVALIDATION = new XQueryTokenType("revalidation");
   IElementType K_SATISFIES = new XQueryTokenType("satisfies");
   IElementType K_SCHEMA = new XQueryTokenType("schema");
   IElementType K_SCHEMA_ATTRIBUTE = new XQueryTokenType("schema-attribute");
   IElementType K_SCHEMA_ELEMENT = new XQueryTokenType("schema-element");
   IElementType K_SELF = new XQueryTokenType("self");
+  IElementType K_SKIP = new XQueryTokenType("skip");
   IElementType K_SLIDING = new XQueryTokenType("sliding");
   IElementType K_SOME = new XQueryTokenType("some");
   IElementType K_STABLE = new XQueryTokenType("stable");
@@ -394,12 +419,15 @@ public interface XQueryTypes {
   IElementType K_TYPESWITCH = new XQueryTokenType("typeswitch");
   IElementType K_UNION = new XQueryTokenType("union");
   IElementType K_UNORDERED = new XQueryTokenType("unordered");
+  IElementType K_UPDATING = new XQueryTokenType("updating");
   IElementType K_VALIDATE = new XQueryTokenType("validate");
+  IElementType K_VALUE = new XQueryTokenType("value");
   IElementType K_VARIABLE = new XQueryTokenType("variable");
   IElementType K_VERSION = new XQueryTokenType("version");
   IElementType K_WHEN = new XQueryTokenType("when");
   IElementType K_WHERE = new XQueryTokenType("where");
   IElementType K_WINDOW = new XQueryTokenType("window");
+  IElementType K_WITH = new XQueryTokenType("with");
   IElementType K_XQUERY = new XQueryTokenType("xquery");
   IElementType K_ZERO_DIGIT = new XQueryTokenType("zero-digit");
   IElementType LE = new XQueryTokenType("le");
@@ -558,6 +586,9 @@ public interface XQueryTypes {
       else if (type == COMPARISON_EXPR) {
         return new XQueryComparisonExprImpl(node);
       }
+      else if (type == COMPATIBILITY_ANNOTATION) {
+        return new XQueryCompatibilityAnnotationImpl(node);
+      }
       else if (type == COMPUTED_CONSTRUCTOR) {
         return new XQueryComputedConstructorImpl(node);
       }
@@ -629,6 +660,9 @@ public interface XQueryTypes {
       }
       else if (type == DEFAULT_FUNCTION_NAMESPACE_DECL) {
         return new XQueryDefaultFunctionNamespaceDeclImpl(node);
+      }
+      else if (type == DELETE_EXPR) {
+        return new XQueryDeleteExprImpl(node);
       }
       else if (type == DIRECT_CONSTRUCTOR) {
         return new XQueryDirectConstructorImpl(node);
@@ -759,6 +793,12 @@ public interface XQueryTypes {
       else if (type == INLINE_FUNCTION_EXPR) {
         return new XQueryInlineFunctionExprImpl(node);
       }
+      else if (type == INSERT_EXPR) {
+        return new XQueryInsertExprImpl(node);
+      }
+      else if (type == INSERT_EXPR_TARGET_CHOICE) {
+        return new XQueryInsertExprTargetChoiceImpl(node);
+      }
       else if (type == INSTANCEOF_EXPR) {
         return new XQueryInstanceofExprImpl(node);
       }
@@ -833,6 +873,9 @@ public interface XQueryTypes {
       }
       else if (type == NAME_TEST) {
         return new XQueryNameTestImpl(node);
+      }
+      else if (type == NEW_NAME_EXPR) {
+        return new XQueryNewNameExprImpl(node);
       }
       else if (type == NEXT_ITEM) {
         return new XQueryNextItemImpl(node);
@@ -945,8 +988,17 @@ public interface XQueryTypes {
       else if (type == RELATIVE_PATH_OPERATOR) {
         return new XQueryRelativePathOperatorImpl(node);
       }
+      else if (type == RENAME_EXPR) {
+        return new XQueryRenameExprImpl(node);
+      }
+      else if (type == REPLACE_EXPR) {
+        return new XQueryReplaceExprImpl(node);
+      }
       else if (type == RETURN_CLAUSE) {
         return new XQueryReturnClauseImpl(node);
+      }
+      else if (type == REVALIDATION_DECL) {
+        return new XQueryRevalidationDeclImpl(node);
       }
       else if (type == REVERSE_STEP) {
         return new XQueryReverseStepImpl(node);
@@ -981,6 +1033,9 @@ public interface XQueryTypes {
       else if (type == SINGLE_TYPE) {
         return new XQuerySingleTypeImpl(node);
       }
+      else if (type == SOURCE_EXPR) {
+        return new XQuerySourceExprImpl(node);
+      }
       else if (type == STEP_EXPR) {
         return new XQueryStepExprImpl(node);
       }
@@ -1002,11 +1057,17 @@ public interface XQueryTypes {
       else if (type == SWITCH_RETURN_CLAUSE) {
         return new XQuerySwitchReturnClauseImpl(node);
       }
+      else if (type == TARGET_EXPR) {
+        return new XQueryTargetExprImpl(node);
+      }
       else if (type == TEXT_TEST) {
         return new XQueryTextTestImpl(node);
       }
       else if (type == TO_OPERATOR) {
         return new XQueryToOperatorImpl(node);
+      }
+      else if (type == TRANSFORM_EXPR) {
+        return new XQueryTransformExprImpl(node);
       }
       else if (type == TREAT_EXPR) {
         return new XQueryTreatExprImpl(node);

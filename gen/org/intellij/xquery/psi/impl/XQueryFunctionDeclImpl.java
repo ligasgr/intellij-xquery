@@ -46,6 +46,12 @@ public class XQueryFunctionDeclImpl extends XQueryElementImpl implements XQueryF
   }
 
   @Override
+  @NotNull
+  public List<XQueryCompatibilityAnnotation> getCompatibilityAnnotationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryCompatibilityAnnotation.class);
+  }
+
+  @Override
   @Nullable
   public XQueryFunctionBody getFunctionBody() {
     return findChildByClass(XQueryFunctionBody.class);

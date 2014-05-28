@@ -28,6 +28,9 @@ public interface XQueryFunctionDecl extends XQueryElement {
   @NotNull
   List<XQueryAnnotation> getAnnotationList();
 
+  @NotNull
+  List<XQueryCompatibilityAnnotation> getCompatibilityAnnotationList();
+
   @Nullable
   XQueryFunctionBody getFunctionBody();
 
