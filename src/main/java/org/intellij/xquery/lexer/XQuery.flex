@@ -417,7 +417,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "="                                        {return XQueryTypes.EQUAL;}
 "\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
 "'"                                        {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
-"declare" / {SC} ("boundary-space"|"default"|"base-uri"|"construction"|"ordering"|"copy-namespaces"|"decimal-format"|"namespace"|"context"|"option"|"function"|"variable"|"%") {return XQueryTypes.K_DECLARE;}
+"declare" / {SC} ("boundary-space"|"default"|"base-uri"|"construction"|"ordering"|"copy-namespaces"|"decimal-format"|"namespace"|"context"|"option"|"function"|"variable"|"%"|"updating") {return XQueryTypes.K_DECLARE;}
 "default" / {SC} ("collation"|"order"|"decimal-format"|"element"|"function") {return XQueryTypes.K_DEFAULT;}
 "base-uri" / {SC} ("\""|"'")               {return XQueryTypes.K_BASE_URI;}
 "option" / {SC} {NCName}                   {return XQueryTypes.K_OPTION;}
@@ -465,7 +465,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "empty" / {SC} ("greatest"|"least")        {return XQueryTypes.K_EMPTY;}
 "strip" / {SC}? ";"                        {return XQueryTypes.K_STRIP;}
 "collation" / {SC} ("\""|"'")              {return XQueryTypes.K_COLLATION;}
-"%"                                        {return XQueryTypes.PERCENT;}
+"%"                                        {pushState(QNAME); return XQueryTypes.PERCENT;}
 "element" / ({SC}?"("|{SC}?"{"| {SC}{NCName})       {return XQueryTypes.K_ELEMENT;}
 "("                                        {return XQueryTypes.L_PAR;}
 ")"                                        {return XQueryTypes.R_PAR;}
@@ -475,6 +475,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "least" / {SC}? (";"|",")                  {return XQueryTypes.K_LEAST;}
 "inherit" / {SC}? ";"                      {return XQueryTypes.K_INHERIT;}
 "no-inherit" / {SC}? ";"                   {return XQueryTypes.K_NO_INHERIT;}
+"updating" / {SC} ("%"|"function"|"variable") {return XQueryTypes.K_UPDATING;}
 {NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }

@@ -1642,6 +1642,49 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testUpdatingFunctionDeclaration() throws Exception {
+        assertProducedTokens("declare updating function x() {()};", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "updating", "updating",
+                "WHITE_SPACE", " ",
+                "function", "function",
+                "WHITE_SPACE", " ",
+                "NCName", "x",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "(", "(",
+                ")", ")",
+                "}", "}",
+                ";", ";"
+        });
+    }
+
+    public void testUpdatingAnnotatedFunctionDeclaration() throws Exception {
+        assertProducedTokens("declare %updating function x() {()};", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "%", "%",
+                "NCName", "updating",
+                "WHITE_SPACE", " ",
+                "function", "function",
+                "WHITE_SPACE", " ",
+                "NCName", "x",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "(", "(",
+                ")", ")",
+                "}", "}",
+                ";", ";"
+        });
+    }
+
     public void testIncompleteFunctionDeclaration() throws Exception {
         assertProducedTokens("declare function", new String[]{
                 "WHITE_SPACE", "",
@@ -1700,7 +1743,6 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "declare", "declare",
                 "WHITE_SPACE", " ",
                 "%", "%",
-                "WHITE_SPACE", "",
                 "NCName", "rest",
                 ":", ":",
                 "NCName", "path",
@@ -1725,7 +1767,6 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "declare", "declare",
                 "WHITE_SPACE", " ",
                 "%", "%",
-                "WHITE_SPACE", "",
                 "NCName", "rest",
                 ":", ":",
                 "NCName", "path",
@@ -1759,7 +1800,6 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "declare", "declare",
                 "WHITE_SPACE", " ",
                 "%", "%",
-                "WHITE_SPACE", "",
                 "NCName", "rest",
                 ":", ":",
                 "NCName", "path",
