@@ -475,7 +475,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "least" / {SC}? (";"|",")                  {return XQueryTypes.K_LEAST;}
 "inherit" / {SC}? ";"                      {return XQueryTypes.K_INHERIT;}
 "no-inherit" / {SC}? ";"                   {return XQueryTypes.K_NO_INHERIT;}
-"updating" / {SC} ("%"|"function"|"variable") {return XQueryTypes.K_UPDATING;}
+"updating"                                 {return XQueryTypes.K_UPDATING;}
 {NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
