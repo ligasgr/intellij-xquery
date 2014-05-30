@@ -417,7 +417,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "="                                        {return XQueryTypes.EQUAL;}
 "\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
 "'"                                        {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
-"declare" / {SC} ("boundary-space"|"default"|"base-uri"|"construction"|"ordering"|"copy-namespaces"|"decimal-format"|"namespace"|"context"|"option"|"function"|"variable"|"%"|"updating") {return XQueryTypes.K_DECLARE;}
+"declare" / {SC} ("boundary-space"|"default"|"base-uri"|"construction"|"ordering"|"copy-namespaces"|"decimal-format"|"namespace"|"context"|"option"|"function"|"variable"|"%"|"updating"|"revalidation") {return XQueryTypes.K_DECLARE;}
 "default" / {SC} ("collation"|"order"|"decimal-format"|"element"|"function") {return XQueryTypes.K_DEFAULT;}
 "base-uri" / {SC} ("\""|"'")               {return XQueryTypes.K_BASE_URI;}
 "option" / {SC} {NCName}                   {return XQueryTypes.K_OPTION;}
@@ -463,7 +463,10 @@ SC=({S} | "(:" {Char}* ~":)")+
 "text" / {SC}? ("(")                       {return XQueryTypes.K_TEXT;}
 "external" / {SC}? (":="|";")              {return XQueryTypes.K_EXTERNAL;}
 "empty" / {SC} ("greatest"|"least")        {return XQueryTypes.K_EMPTY;}
+"strict" / {SC}? ";"                       {return XQueryTypes.K_STRICT;}
 "strip" / {SC}? ";"                        {return XQueryTypes.K_STRIP;}
+"lax" / {SC}? ";"                          {return XQueryTypes.K_LAX;}
+"skip" / {SC}? ";"                         {return XQueryTypes.K_SKIP;}
 "collation" / {SC} ("\""|"'")              {return XQueryTypes.K_COLLATION;}
 "%"                                        {pushState(QNAME); return XQueryTypes.PERCENT;}
 "element" / ({SC}?"("|{SC}?"{"| {SC}{NCName})       {return XQueryTypes.K_ELEMENT;}
@@ -476,6 +479,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "inherit" / {SC}? ";"                      {return XQueryTypes.K_INHERIT;}
 "no-inherit" / {SC}? ";"                   {return XQueryTypes.K_NO_INHERIT;}
 "updating"                                 {return XQueryTypes.K_UPDATING;}
+"revalidation"                             {return XQueryTypes.K_REVALIDATION;}
 {NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }

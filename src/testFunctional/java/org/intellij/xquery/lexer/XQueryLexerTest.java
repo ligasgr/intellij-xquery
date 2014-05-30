@@ -1950,4 +1950,17 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "NCName", "div"
         });
     }
+
+    public void testRevalidation() {
+        assertProducedTokens("declare revalidation skip;", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "revalidation", "revalidation",
+                "WHITE_SPACE", " ",
+                "skip", "skip",
+                "WHITE_SPACE", "",
+                ";", ";"
+        });
+    }
 }
