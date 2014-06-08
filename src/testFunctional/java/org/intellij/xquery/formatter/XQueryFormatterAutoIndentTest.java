@@ -117,4 +117,9 @@ public class XQueryFormatterAutoIndentTest extends BaseFunctionalTestCase {
         myFixture.type("\n");
         myFixture.checkResultByFile(String.format("%s_after.xq", testName));
     }
+
+    @Override
+    protected boolean isWriteActionRequired() {
+        return true;
+    }
 }
