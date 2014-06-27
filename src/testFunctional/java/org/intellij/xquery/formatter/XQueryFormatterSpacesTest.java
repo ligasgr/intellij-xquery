@@ -371,4 +371,9 @@ public class XQueryFormatterSpacesTest extends XQueryFormattingModelBuilderTest 
 
         executeTest(withDuplicatedSpace, withSpace);
     }
+
+    @Override
+    protected boolean isWriteActionRequired() {
+        return true;
+    }
 }

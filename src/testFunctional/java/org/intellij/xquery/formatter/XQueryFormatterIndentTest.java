@@ -96,4 +96,9 @@ public class XQueryFormatterIndentTest extends XQueryFormattingModelBuilderTest 
     public void testIndentCommentInsideOfFunction() {
         executeTest();
     }
+
+    @Override
+    protected boolean isWriteActionRequired() {
+        return true;
+    }
 }
