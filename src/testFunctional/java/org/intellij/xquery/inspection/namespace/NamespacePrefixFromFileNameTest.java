@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.inspection.namespaceprefix;
+package org.intellij.xquery.inspection.namespace;
 
 import com.intellij.codeInspection.LocalInspectionTool;
 import org.intellij.xquery.BaseFunctionalTestCase;
@@ -27,7 +27,7 @@ public class NamespacePrefixFromFileNameTest extends BaseFunctionalTestCase {
 
     @Override
     protected String getTestDataPath() {
-        return "src/testFunctional/testData/org/intellij/xquery/inspection/namespaceprefix/";
+        return "src/testFunctional/testData/org/intellij/xquery/inspection/namespace/";
     }
 
 
