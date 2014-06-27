@@ -1,1 +1,1 @@
-try {<caret>
+try {<caret>}

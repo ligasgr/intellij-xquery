@@ -1,4 +1,4 @@
 try {
     'a'
 }
-catch * {<caret>
+catch * {<caret>}

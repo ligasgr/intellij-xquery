@@ -116,7 +116,6 @@ public class XQueryFormatterAutoIndentTest extends BaseFunctionalTestCase {
         final String testName = getTestName(false);
         myFixture.configureByFile(testName + ".xq");
         myFixture.type("\n");
-        PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
         myFixture.checkResultByFile(String.format("%s_after.xq", testName));
     }
 
