@@ -216,7 +216,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 "case"                                     {return XQueryTypes.K_CASE;}
 "and"                                      {return XQueryTypes.K_AND;}
 "or"                                       {return XQueryTypes.K_OR;}
-"as"/ ({SC}? "(" {SC}?|{SC}) (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "(" | {NCName})                        {pushState(ITEM_TYPE); return XQueryTypes.K_AS;}
+"as"/ ({SC}? "(" {SC}?|{SC}) (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "(")                        {pushState(ITEM_TYPE); return XQueryTypes.K_AS;}
+"as"                                       {return XQueryTypes.K_AS;}
 "to"                                       {return XQueryTypes.K_TO;}
 "where"                                    {return XQueryTypes.K_WHERE;}
 "group" / {SC} "by"                        {return XQueryTypes.K_GROUP;}
@@ -288,6 +289,21 @@ SC=({S} | "(:" {Char}* ~":)")+
 "stable" / {SC} "order"                    {return XQueryTypes.K_STABLE;}
 "ordered" / {SC}? "{"                      {return XQueryTypes.K_ORDERED;}
 "unordered" / {SC}? "{"                    {return XQueryTypes.K_UNORDERED;}
+"insert" / {SC} ("node"|"nodes")           {return XQueryTypes.K_INSERT;}
+"delete" / {SC} ("node"|"nodes")           {return XQueryTypes.K_DELETE;}
+"node"                                     {return XQueryTypes.K_NODE;}
+"nodes"                                    {return XQueryTypes.K_NODES;}
+"after"                                    {return XQueryTypes.K_AFTER;}
+"before"                                   {return XQueryTypes.K_BEFORE;}
+"first" / {SC} "into"                      {return XQueryTypes.K_FIRST;}
+"last" / {SC} "into"                       {return XQueryTypes.K_LAST;}
+"into"                                     {return XQueryTypes.K_INTO;}
+"replace" / {SC} ("value"|"node")          {return XQueryTypes.K_REPLACE;}
+"value" / {SC} "of"                        {return XQueryTypes.K_VALUE;}
+"with"                                     {return XQueryTypes.K_WITH;}
+"rename" / {SC} "node"                     {return XQueryTypes.K_RENAME;}
+"copy" / {SC} "$"                          {return XQueryTypes.K_COPY;}
+"modify"                                   {return XQueryTypes.K_MODIFY;}
 {NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 }
 

@@ -1963,4 +1963,112 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ";", ";"
         });
     }
+
+    public void testInsert() {
+        assertProducedTokens("insert node <a>a</a> as last into /a/z", new String[]{
+                "insert", "insert",
+                "WHITE_SPACE", " ",
+                "node", "node",
+                "WHITE_SPACE", " ",
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "a",
+                "WHITE_SPACE", "",
+                "XmlTagEnd", ">",
+                "ElementContentChar", "a",
+                "XmlEndTagStart", "</",
+                "XmlTagNCName", "a",
+                "XmlTagEnd", ">",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "WHITE_SPACE", " ",
+                "last", "last",
+                "WHITE_SPACE", " ",
+                "into", "into",
+                "WHITE_SPACE", " ",
+                "/", "/",
+                "NCName", "a",
+                "/", "/",
+                "NCName", "z"
+        });
+    }
+
+    public void testDelete() {
+        assertProducedTokens("delete nodes /email/message", new String[]{
+                "delete", "delete",
+                "WHITE_SPACE", " ",
+                "nodes", "nodes",
+                "WHITE_SPACE", " ",
+                "/", "/",
+                "NCName", "email",
+                "/", "/",
+                "NCName", "message"
+        });
+    }
+
+    public void testReplace() {
+        assertProducedTokens("replace node /a/z with element w", new String[]{
+                "replace", "replace",
+                "WHITE_SPACE", " ",
+                "node", "node",
+                "WHITE_SPACE", " ",
+                "/", "/",
+                "NCName", "a",
+                "/", "/",
+                "NCName", "z",
+                "WHITE_SPACE", " ",
+                "with", "with",
+                "WHITE_SPACE", " ",
+                "element", "element",
+                "WHITE_SPACE", " ",
+                "NCName", "w"
+        });
+    }
+
+    public void testRename() {
+        assertProducedTokens("rename node /a/z as 'a'", new String[]{
+                "rename", "rename",
+                "WHITE_SPACE", " ",
+                "node", "node",
+                "WHITE_SPACE", " ",
+                "/", "/",
+                "NCName", "a",
+                "/", "/",
+                "NCName", "z",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'a'"
+        });
+    }
+
+    public void testTransform() {
+        assertProducedTokens("copy $j := /e modify delete node $j/z return $j", new String[]{
+                "copy", "copy",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "j",
+                "WHITE_SPACE", " ",
+                ":=", ":=",
+                "WHITE_SPACE", " ",
+                "/", "/",
+                "NCName", "e",
+                "WHITE_SPACE", " ",
+                "modify", "modify",
+                "WHITE_SPACE", " ",
+                "delete", "delete",
+                "WHITE_SPACE", " ",
+                "node", "node",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "j",
+                "/","/",
+                "NCName", "z",
+                "WHITE_SPACE", " ",
+                "return", "return",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "j"
+        });
+    }
 }

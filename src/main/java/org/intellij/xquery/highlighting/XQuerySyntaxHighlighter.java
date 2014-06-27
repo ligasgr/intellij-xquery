@@ -309,6 +309,23 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType == XQueryTypes.K_ATTRIBUTE
                 || tokenType == XQueryTypes.K_SCHEMA_ATTRIBUTE
                 || tokenType == XQueryTypes.K_SCHEMA_ELEMENT
+                || tokenType == XQueryTypes.K_REVALIDATION
+                || tokenType == XQueryTypes.K_UPDATING
+                || tokenType == XQueryTypes.K_SKIP
+                || tokenType == XQueryTypes.K_INSERT
+                || tokenType == XQueryTypes.K_NODES
+                || tokenType == XQueryTypes.K_FIRST
+                || tokenType == XQueryTypes.K_LAST
+                || tokenType == XQueryTypes.K_INTO
+                || tokenType == XQueryTypes.K_AFTER
+                || tokenType == XQueryTypes.K_BEFORE
+                || tokenType == XQueryTypes.K_DELETE
+                || tokenType == XQueryTypes.K_VALUE
+                || tokenType == XQueryTypes.K_WITH
+                || tokenType == XQueryTypes.K_COPY
+                || tokenType == XQueryTypes.K_MODIFY
+                || tokenType == XQueryTypes.K_RENAME
+                || tokenType == XQueryTypes.K_REPLACE
                 ) {
             return KEYWORDS;
         }

@@ -392,8 +392,8 @@ public interface XQueryTypes {
   IElementType K_PRECEDING_SIBLING = new XQueryTokenType("preceding-sibling");
   IElementType K_PRESERVE = new XQueryTokenType("preserve");
   IElementType K_PREVIOUS = new XQueryTokenType("previous");
-  IElementType K_RENAME = new XQueryTokenType("replace");
-  IElementType K_REPLACE = new XQueryTokenType("rename");
+  IElementType K_RENAME = new XQueryTokenType("rename");
+  IElementType K_REPLACE = new XQueryTokenType("replace");
   IElementType K_RETURN = new XQueryTokenType("return");
   IElementType K_REVALIDATION = new XQueryTokenType("revalidation");
   IElementType K_SATISFIES = new XQueryTokenType("satisfies");

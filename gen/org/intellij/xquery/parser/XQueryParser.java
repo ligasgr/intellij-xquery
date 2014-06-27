@@ -5463,10 +5463,10 @@ public class XQueryParser implements PsiParser {
   // "rename" "node" TargetExpr "as" NewNameExpr
   public static boolean RenameExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RenameExpr")) return false;
-    if (!nextTokenIs(builder_, K_REPLACE)) return false;
+    if (!nextTokenIs(builder_, K_RENAME)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, K_REPLACE);
+    result_ = consumeToken(builder_, K_RENAME);
     result_ = result_ && consumeToken(builder_, K_NODE);
     result_ = result_ && TargetExpr(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, K_AS);
@@ -5479,10 +5479,10 @@ public class XQueryParser implements PsiParser {
   // "replace" ("value" "of")? "node" TargetExpr "with" ExprSingle
   public static boolean ReplaceExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ReplaceExpr")) return false;
-    if (!nextTokenIs(builder_, K_RENAME)) return false;
+    if (!nextTokenIs(builder_, K_REPLACE)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, K_RENAME);
+    result_ = consumeToken(builder_, K_REPLACE);
     result_ = result_ && ReplaceExpr_1(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, K_NODE);
     result_ = result_ && TargetExpr(builder_, level_ + 1);

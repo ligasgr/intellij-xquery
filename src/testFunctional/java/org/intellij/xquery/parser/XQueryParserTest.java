@@ -127,4 +127,8 @@ public class XQueryParserTest extends BaseParserTest {
     public void testMultipleBindingsInForLet() throws Exception {
         doTest(true);
     }
+
+    public void testUpdatingFacility() {
+        doTest(true);
+    }
 }
