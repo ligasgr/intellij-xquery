@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.inspection.namespaceprefix;
+package org.intellij.xquery.inspection.namespace;
 
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalInspectionTool;

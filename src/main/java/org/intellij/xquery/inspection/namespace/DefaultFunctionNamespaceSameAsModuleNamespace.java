@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.inspection.defaultfunctionnamespace;
+package org.intellij.xquery.inspection.namespace;
 
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalInspectionTool;
@@ -27,7 +27,6 @@ import org.intellij.xquery.psi.XQueryDefaultFunctionNamespaceDecl;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryURILiteral;
-import org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace;
 
 import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;

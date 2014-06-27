@@ -78,10 +78,10 @@
                          implementationClass="org.intellij.xquery.inspection.variable.UnusedVariableInspection"/>
         <localInspection enabledByDefault="true" shortName="DefaultFunctionNamespaceSameAsModuleNamespace" groupName="XQuery"
                          displayName="Default function namespace is same as module namespace"
-                         implementationClass="org.intellij.xquery.inspection.defaultfunctionnamespace.DefaultFunctionNamespaceSameAsModuleNamespace"/>
+                         implementationClass="org.intellij.xquery.inspection.namespace.DefaultFunctionNamespaceSameAsModuleNamespace"/>
         <localInspection enabledByDefault="false" shortName="NamespacePrefixFromFileName" groupName="XQuery"
                          displayName="Namespace prefix derived from file name"
-                         implementationClass="org.intellij.xquery.inspection.namespaceprefix.NamespacePrefixFromFileName"/>
+                         implementationClass="org.intellij.xquery.inspection.namespace.NamespacePrefixFromFileName"/>
         
         <codeInsight.parameterInfo language="XQuery" implementationClass="org.intellij.xquery.completion.function.parameters.XQueryParameterInfoHandler" />
         <lang.documentationProvider language="XQuery" implementationClass="org.intellij.xquery.documentation.XQueryDocumentationProvider"/>

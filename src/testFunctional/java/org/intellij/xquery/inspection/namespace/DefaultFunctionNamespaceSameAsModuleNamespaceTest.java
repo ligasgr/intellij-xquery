@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.inspection.namespaceprefix;
+package org.intellij.xquery.inspection.namespace;
 
 import com.intellij.codeInspection.LocalInspectionTool;
 import org.intellij.xquery.BaseFunctionalTestCase;
@@ -23,31 +23,30 @@ import org.intellij.xquery.BaseFunctionalTestCase;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class NamespacePrefixFromFileNameTest extends BaseFunctionalTestCase {
+public class DefaultFunctionNamespaceSameAsModuleNamespaceTest extends BaseFunctionalTestCase {
 
     @Override
     protected String getTestDataPath() {
-        return "src/testFunctional/testData/org/intellij/xquery/inspection/namespaceprefix/";
+        return "src/testFunctional/testData/org/intellij/xquery/inspection/namespace/";
     }
 
-
-    public void testModuleNamespaceSameAsFilename() {
+    public void testMainModule() {
         executeTest();
     }
 
-    public void testModuleNamespaceDifferentThanFilename() {
+    public void testModuleNamespaceSameAsDefaultFunctionNamespace() {
         executeTest();
     }
 
-    public void testModuleNamespaceSameAsFilenameCaseSensitive() {
+    public void testModuleNamespaceDifferentThanDefaultFunctionNamespace() {
         executeTest();
     }
 
-    public void testModuleNamespaceSameAsFilenameWithoutExtension() {
+    public void testModuleWithoutDefaultFunctionNamespace() {
         executeTest();
     }
 
-    public void testMainModuleWithoutNamespaceDeclaration() {
+    public void testModuleNamespaceDifferentThanDefaultFnNamespaceIsOk() {
         executeTest();
     }
 
@@ -58,7 +57,7 @@ public class NamespacePrefixFromFileNameTest extends BaseFunctionalTestCase {
     private void executeTest(String filename) {
         Collection<Class<? extends LocalInspectionTool>> inspections = new ArrayList<Class<? extends
                 LocalInspectionTool>>();
-        inspections.add(NamespacePrefixFromFileName.class);
+        inspections.add(DefaultFunctionNamespaceSameAsModuleNamespace.class);
         myFixture.enableInspections(inspections);
 
         myFixture.testHighlighting(true, false, false, filename);
