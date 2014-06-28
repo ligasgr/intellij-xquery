@@ -19,18 +19,22 @@ package org.intellij.xquery.annotator;
 
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import org.intellij.xquery.annotator.duplicateFunction.ErrorAnnotationCreator;
+import org.intellij.xquery.annotator.variable.UnresolvedVariableChecker;
 import org.intellij.xquery.annotator.xqdoc.XQDocHighlighter;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionName;
+import org.intellij.xquery.psi.XQueryVarRef;
 import org.jetbrains.annotations.NotNull;
 
-public class XQueryAnnotator implements Annotator {
+public class XQueryAnnotator implements Annotator, DumbAware {
 
     private ErrorAnnotationCreator duplicateFunctionErrorCreator = new ErrorAnnotationCreator();
     private XQDocHighlighter xQDocHighlighter = new XQDocHighlighter();
+    private UnresolvedVariableChecker unresolvedVariableChecker = new UnresolvedVariableChecker();
 
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
@@ -39,6 +43,9 @@ public class XQueryAnnotator implements Annotator {
         }
         if (element instanceof PsiComment) {
             xQDocHighlighter.highlightXQDocTags((PsiComment) element, holder);
+        }
+        if (element instanceof XQueryVarRef) {
+            unresolvedVariableChecker.check((XQueryVarRef) element, holder);
         }
     }
 }

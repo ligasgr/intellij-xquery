@@ -5,5 +5,5 @@ module namespace local = "local";
 declare default function namespace "should_not_be_used";
 
 declare function local:testDefaultNamespace() {
-    $test
+    ()
 };

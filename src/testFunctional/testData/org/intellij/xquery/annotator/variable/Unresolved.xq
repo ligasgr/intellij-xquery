@@ -1,0 +1,1 @@
+$<error descr="Cannot resolve variable 'var'">var</error>

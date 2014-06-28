@@ -105,7 +105,10 @@ public class XQueryVariableReferenceResolver {
             @Override
             public boolean value(XQueryModuleImport moduleImport) {
                 String namespacePrefix = myElement.getVarName().getPrefix().getText();
-                return namespacePrefix.equals(moduleImport.getNamespacePrefix().getText());
+                String prefixFromImport = moduleImport.getNamespacePrefix() != null
+                        ? moduleImport.getNamespacePrefix().getText()
+                        : null;
+                return namespacePrefix.equals(prefixFromImport);
             }
         });
     }
