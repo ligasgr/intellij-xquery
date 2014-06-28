@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryBaseURIDecl extends XQueryElement {
+public interface XQueryBaseURIDecl extends XQueryPsiElement {
 
   @Nullable
   XQuerySeparator getSeparator();

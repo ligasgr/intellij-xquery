@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryFunctionTest extends XQueryElement {
+public interface XQueryFunctionTest extends XQueryPsiElement {
 
   @NotNull
   List<XQueryAnnotation> getAnnotationList();

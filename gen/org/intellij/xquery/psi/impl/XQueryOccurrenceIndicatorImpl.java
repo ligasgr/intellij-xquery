@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryOccurrenceIndicatorImpl extends XQueryElementImpl implements XQueryOccurrenceIndicator {
+public class XQueryOccurrenceIndicatorImpl extends XQueryPsiElementImpl implements XQueryOccurrenceIndicator {
 
   public XQueryOccurrenceIndicatorImpl(ASTNode node) {
     super(node);

@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryForwardStep extends XQueryElement {
+public interface XQueryForwardStep extends XQueryPsiElement {
 
   @Nullable
   XQueryAbbrevForwardStep getAbbrevForwardStep();

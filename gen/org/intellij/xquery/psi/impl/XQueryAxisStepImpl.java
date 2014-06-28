@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryAxisStepImpl extends XQueryElementImpl implements XQueryAxisStep {
+public class XQueryAxisStepImpl extends XQueryPsiElementImpl implements XQueryAxisStep {
 
   public XQueryAxisStepImpl(ASTNode node) {
     super(node);

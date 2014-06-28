@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryAllowingEmptyImpl extends XQueryElementImpl implements XQueryAllowingEmpty {
+public class XQueryAllowingEmptyImpl extends XQueryPsiElementImpl implements XQueryAllowingEmpty {
 
   public XQueryAllowingEmptyImpl(ASTNode node) {
     super(node);

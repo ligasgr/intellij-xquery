@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQuerySequenceTypeUnion extends XQueryElement {
+public interface XQuerySequenceTypeUnion extends XQueryPsiElement {
 
   @NotNull
   List<XQuerySequenceType> getSequenceTypeList();

@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryDirCommentConstructorImpl extends XQueryElementImpl implements XQueryDirCommentConstructor {
+public class XQueryDirCommentConstructorImpl extends XQueryPsiElementImpl implements XQueryDirCommentConstructor {
 
   public XQueryDirCommentConstructorImpl(ASTNode node) {
     super(node);

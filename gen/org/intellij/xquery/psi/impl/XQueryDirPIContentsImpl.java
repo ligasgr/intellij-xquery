@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryDirPIContentsImpl extends XQueryElementImpl implements XQueryDirPIContents {
+public class XQueryDirPIContentsImpl extends XQueryPsiElementImpl implements XQueryDirPIContents {
 
   public XQueryDirPIContentsImpl(ASTNode node) {
     super(node);

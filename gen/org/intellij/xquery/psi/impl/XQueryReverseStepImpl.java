@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryReverseStepImpl extends XQueryElementImpl implements XQueryReverseStep {
+public class XQueryReverseStepImpl extends XQueryPsiElementImpl implements XQueryReverseStep {
 
   public XQueryReverseStepImpl(ASTNode node) {
     super(node);

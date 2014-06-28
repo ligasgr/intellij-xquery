@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryCompMapConstructor extends XQueryElement {
+public interface XQueryCompMapConstructor extends XQueryPsiElement {
 
   @Nullable
   XQueryMapEntryList getMapEntryList();

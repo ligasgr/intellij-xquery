@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQuerySeparatorImpl extends XQueryElementImpl implements XQuerySeparator {
+public class XQuerySeparatorImpl extends XQueryPsiElementImpl implements XQuerySeparator {
 
   public XQuerySeparatorImpl(ASTNode node) {
     super(node);

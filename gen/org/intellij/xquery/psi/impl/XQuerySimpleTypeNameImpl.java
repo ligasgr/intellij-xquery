@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQuerySimpleTypeNameImpl extends XQueryElementImpl implements XQuerySimpleTypeName {
+public class XQuerySimpleTypeNameImpl extends XQueryPsiElementImpl implements XQuerySimpleTypeName {
 
   public XQuerySimpleTypeNameImpl(ASTNode node) {
     super(node);

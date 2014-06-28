@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryNumericLiteralImpl extends XQueryElementImpl implements XQueryNumericLiteral {
+public class XQueryNumericLiteralImpl extends XQueryPsiElementImpl implements XQueryNumericLiteral {
 
   public XQueryNumericLiteralImpl(ASTNode node) {
     super(node);

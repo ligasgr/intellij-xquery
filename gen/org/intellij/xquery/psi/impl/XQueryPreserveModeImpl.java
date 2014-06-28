@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryPreserveModeImpl extends XQueryElementImpl implements XQueryPreserveMode {
+public class XQueryPreserveModeImpl extends XQueryPsiElementImpl implements XQueryPreserveMode {
 
   public XQueryPreserveModeImpl(ASTNode node) {
     super(node);

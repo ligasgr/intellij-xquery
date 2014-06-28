@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryAposAttrContentCharImpl extends XQueryElementImpl implements XQueryAposAttrContentChar {
+public class XQueryAposAttrContentCharImpl extends XQueryPsiElementImpl implements XQueryAposAttrContentChar {
 
   public XQueryAposAttrContentCharImpl(ASTNode node) {
     super(node);

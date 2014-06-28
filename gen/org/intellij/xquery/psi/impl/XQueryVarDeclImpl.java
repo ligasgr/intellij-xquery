@@ -28,7 +28,7 @@ import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 import com.intellij.navigation.ItemPresentation;
 
-public class XQueryVarDeclImpl extends XQueryElementImpl implements XQueryVarDecl {
+public class XQueryVarDeclImpl extends XQueryPsiElementImpl implements XQueryVarDecl {
 
   public XQueryVarDeclImpl(ASTNode node) {
     super(node);

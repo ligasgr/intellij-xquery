@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryElementName extends XQueryElement {
+public interface XQueryElementName extends XQueryPsiElement {
 
   @Nullable
   XQueryLocalPart getLocalPart();

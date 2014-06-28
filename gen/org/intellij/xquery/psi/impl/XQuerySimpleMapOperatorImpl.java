@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQuerySimpleMapOperatorImpl extends XQueryElementImpl implements XQuerySimpleMapOperator {
+public class XQuerySimpleMapOperatorImpl extends XQueryPsiElementImpl implements XQuerySimpleMapOperator {
 
   public XQuerySimpleMapOperatorImpl(ASTNode node) {
     super(node);

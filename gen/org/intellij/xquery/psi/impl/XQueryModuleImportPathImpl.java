@@ -28,7 +28,7 @@ import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 import com.intellij.psi.PsiReference;
 
-public class XQueryModuleImportPathImpl extends XQueryElementImpl implements XQueryModuleImportPath {
+public class XQueryModuleImportPathImpl extends XQueryPsiElementImpl implements XQueryModuleImportPath {
 
   public XQueryModuleImportPathImpl(ASTNode node) {
     super(node);

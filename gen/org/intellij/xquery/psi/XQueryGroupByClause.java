@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryGroupByClause extends XQueryElement {
+public interface XQueryGroupByClause extends XQueryPsiElement {
 
   @Nullable
   XQueryGroupingSpecList getGroupingSpecList();

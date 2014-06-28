@@ -22,7 +22,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import org.intellij.xquery.psi.XQueryElement;
+import org.intellij.xquery.psi.XQueryPsiElement;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -30,9 +30,9 @@ import org.jetbrains.annotations.NotNull;
  * Date: 11/06/13
  * Time: 00:04
  */
-public class XQueryElementImpl extends ASTWrapperPsiElement implements XQueryElement {
+public class XQueryPsiElementImpl extends ASTWrapperPsiElement implements XQueryPsiElement {
 
-    public XQueryElementImpl(@NotNull ASTNode node) {
+    public XQueryPsiElementImpl(@NotNull ASTNode node) {
         super(node);
     }
 

@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryWindowClause extends XQueryElement {
+public interface XQueryWindowClause extends XQueryPsiElement {
 
   @NotNull
   List<XQueryCurrentItem> getCurrentItemList();

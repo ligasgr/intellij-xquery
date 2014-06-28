@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryGroupingSpecImpl extends XQueryElementImpl implements XQueryGroupingSpec {
+public class XQueryGroupingSpecImpl extends XQueryPsiElementImpl implements XQueryGroupingSpec {
 
   public XQueryGroupingSpecImpl(ASTNode node) {
     super(node);

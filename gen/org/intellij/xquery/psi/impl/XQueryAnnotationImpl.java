@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryAnnotationImpl extends XQueryElementImpl implements XQueryAnnotation {
+public class XQueryAnnotationImpl extends XQueryPsiElementImpl implements XQueryAnnotation {
 
   public XQueryAnnotationImpl(ASTNode node) {
     super(node);

@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryParenthesizedItemType extends XQueryElement {
+public interface XQueryParenthesizedItemType extends XQueryPsiElement {
 
   @NotNull
   XQueryItemType getItemType();

@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryAtomicOrUnionType extends XQueryElement {
+public interface XQueryAtomicOrUnionType extends XQueryPsiElement {
 
   @Nullable
   XQueryLocalPart getLocalPart();

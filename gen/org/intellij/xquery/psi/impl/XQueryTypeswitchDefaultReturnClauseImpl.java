@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryTypeswitchDefaultReturnClauseImpl extends XQueryElementImpl implements XQueryTypeswitchDefaultReturnClause {
+public class XQueryTypeswitchDefaultReturnClauseImpl extends XQueryPsiElementImpl implements XQueryTypeswitchDefaultReturnClause {
 
   public XQueryTypeswitchDefaultReturnClauseImpl(ASTNode node) {
     super(node);

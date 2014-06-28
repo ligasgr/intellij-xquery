@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryXmlTagLocalNameImpl extends XQueryElementImpl implements XQueryXmlTagLocalName {
+public class XQueryXmlTagLocalNameImpl extends XQueryPsiElementImpl implements XQueryXmlTagLocalName {
 
   public XQueryXmlTagLocalNameImpl(ASTNode node) {
     super(node);

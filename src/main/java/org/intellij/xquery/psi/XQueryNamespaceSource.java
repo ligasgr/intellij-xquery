@@ -22,6 +22,6 @@ package org.intellij.xquery.psi;
  * Date: 18/10/13
  * Time: 23:49
  */
-public interface XQueryNamespaceSource extends XQueryElement  {
+public interface XQueryNamespaceSource extends XQueryPsiElement {
     String getNamespace();
 }

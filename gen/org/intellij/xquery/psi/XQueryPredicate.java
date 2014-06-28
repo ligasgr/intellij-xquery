@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryPredicate extends XQueryElement {
+public interface XQueryPredicate extends XQueryPsiElement {
 
   @Nullable
   XQueryExpr getExpr();

@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryXmlEmptyTagImpl extends XQueryElementImpl implements XQueryXmlEmptyTag {
+public class XQueryXmlEmptyTagImpl extends XQueryPsiElementImpl implements XQueryXmlEmptyTag {
 
   public XQueryXmlEmptyTagImpl(ASTNode node) {
     super(node);

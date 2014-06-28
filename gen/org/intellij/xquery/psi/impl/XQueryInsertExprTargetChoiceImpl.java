@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryInsertExprTargetChoiceImpl extends XQueryElementImpl implements XQueryInsertExprTargetChoice {
+public class XQueryInsertExprTargetChoiceImpl extends XQueryPsiElementImpl implements XQueryInsertExprTargetChoice {
 
   public XQueryInsertExprTargetChoiceImpl(ASTNode node) {
     super(node);

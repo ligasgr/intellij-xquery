@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryXmlTagName extends XQueryElement {
+public interface XQueryXmlTagName extends XQueryPsiElement {
 
   @NotNull
   XQueryXmlTagLocalName getXmlTagLocalName();

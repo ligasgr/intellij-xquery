@@ -24,5 +24,5 @@ import com.intellij.psi.PsiNameIdentifierOwner;
  * Date: 08/06/13
  * Time: 21:30
  */
-public interface XQueryNamedElement extends PsiNameIdentifierOwner {
+public interface XQueryNamedElement extends PsiNameIdentifierOwner, XQueryPsiElement {
 }

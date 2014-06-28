@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryCopyNamespacesDecl extends XQueryElement {
+public interface XQueryCopyNamespacesDecl extends XQueryPsiElement {
 
   @Nullable
   XQueryInheritMode getInheritMode();

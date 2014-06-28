@@ -23,7 +23,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 
-public interface XQueryModuleImportPath extends XQueryElement {
+public interface XQueryModuleImportPath extends XQueryPsiElement {
 
   @NotNull
   XQueryURILiteral getURILiteral();

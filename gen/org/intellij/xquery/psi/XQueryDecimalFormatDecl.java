@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryDecimalFormatDecl extends XQueryElement {
+public interface XQueryDecimalFormatDecl extends XQueryPsiElement {
 
   @Nullable
   XQueryLocalPart getLocalPart();

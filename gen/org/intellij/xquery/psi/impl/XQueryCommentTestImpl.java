@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryCommentTestImpl extends XQueryElementImpl implements XQueryCommentTest {
+public class XQueryCommentTestImpl extends XQueryPsiElementImpl implements XQueryCommentTest {
 
   public XQueryCommentTestImpl(ASTNode node) {
     super(node);

@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQuerySwitchCaseClauseImpl extends XQueryElementImpl implements XQuerySwitchCaseClause {
+public class XQuerySwitchCaseClauseImpl extends XQueryPsiElementImpl implements XQuerySwitchCaseClause {
 
   public XQuerySwitchCaseClauseImpl(ASTNode node) {
     super(node);

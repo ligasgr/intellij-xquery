@@ -23,7 +23,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 
-public interface XQueryVarRef extends XQueryElement {
+public interface XQueryVarRef extends XQueryPsiElement {
 
   @Nullable
   XQueryVarName getVarName();

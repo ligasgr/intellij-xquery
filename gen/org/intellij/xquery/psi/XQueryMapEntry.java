@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryMapEntry extends XQueryElement {
+public interface XQueryMapEntry extends XQueryPsiElement {
 
   @NotNull
   List<XQueryExprSingle> getExprSingleList();

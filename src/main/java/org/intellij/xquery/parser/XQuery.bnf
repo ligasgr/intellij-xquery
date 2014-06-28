@@ -21,8 +21,8 @@
   parserClass="org.intellij.xquery.parser.XQueryParser"
   parserUtilClass="org.intellij.grammar.parser.GeneratedParserUtilBase"
 
-  implements="org.intellij.xquery.psi.XQueryElement"
-  extends="org.intellij.xquery.psi.impl.XQueryElementImpl"
+  implements="org.intellij.xquery.psi.XQueryPsiElement"
+  extends="org.intellij.xquery.psi.impl.XQueryPsiElementImpl"
 
   psiClassPrefix="XQuery"
   psiImplClassSuffix="Impl"

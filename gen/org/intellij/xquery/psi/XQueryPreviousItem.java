@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryPreviousItem extends XQueryElement {
+public interface XQueryPreviousItem extends XQueryPsiElement {
 
   @NotNull
   XQueryVarName getVarName();

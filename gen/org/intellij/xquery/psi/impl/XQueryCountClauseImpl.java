@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryCountClauseImpl extends XQueryElementImpl implements XQueryCountClause {
+public class XQueryCountClauseImpl extends XQueryPsiElementImpl implements XQueryCountClause {
 
   public XQueryCountClauseImpl(ASTNode node) {
     super(node);

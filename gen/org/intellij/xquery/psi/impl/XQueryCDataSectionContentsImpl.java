@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryCDataSectionContentsImpl extends XQueryElementImpl implements XQueryCDataSectionContents {
+public class XQueryCDataSectionContentsImpl extends XQueryPsiElementImpl implements XQueryCDataSectionContents {
 
   public XQueryCDataSectionContentsImpl(ASTNode node) {
     super(node);

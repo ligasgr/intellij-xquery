@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryCopyNamespacesDeclImpl extends XQueryElementImpl implements XQueryCopyNamespacesDecl {
+public class XQueryCopyNamespacesDeclImpl extends XQueryPsiElementImpl implements XQueryCopyNamespacesDecl {
 
   public XQueryCopyNamespacesDeclImpl(ASTNode node) {
     super(node);

@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryPreviousItemImpl extends XQueryElementImpl implements XQueryPreviousItem {
+public class XQueryPreviousItemImpl extends XQueryPsiElementImpl implements XQueryPreviousItem {
 
   public XQueryPreviousItemImpl(ASTNode node) {
     super(node);

@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryDirAttributeValue extends XQueryElement {
+public interface XQueryDirAttributeValue extends XQueryPsiElement {
 
   @NotNull
   List<XQueryAposAttrValueContent> getAposAttrValueContentList();

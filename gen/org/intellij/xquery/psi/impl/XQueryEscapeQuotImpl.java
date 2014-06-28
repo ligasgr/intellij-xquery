@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryEscapeQuotImpl extends XQueryElementImpl implements XQueryEscapeQuot {
+public class XQueryEscapeQuotImpl extends XQueryPsiElementImpl implements XQueryEscapeQuot {
 
   public XQueryEscapeQuotImpl(ASTNode node) {
     super(node);

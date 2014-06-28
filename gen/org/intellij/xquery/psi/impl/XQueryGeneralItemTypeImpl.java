@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryGeneralItemTypeImpl extends XQueryElementImpl implements XQueryGeneralItemType {
+public class XQueryGeneralItemTypeImpl extends XQueryPsiElementImpl implements XQueryGeneralItemType {
 
   public XQueryGeneralItemTypeImpl(ASTNode node) {
     super(node);

@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryMultiVariableBindingImpl extends XQueryElementImpl implements XQueryMultiVariableBinding {
+public class XQueryMultiVariableBindingImpl extends XQueryPsiElementImpl implements XQueryMultiVariableBinding {
 
   public XQueryMultiVariableBindingImpl(ASTNode node) {
     super(node);

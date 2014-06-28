@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryGroupingVariableImpl extends XQueryElementImpl implements XQueryGroupingVariable {
+public class XQueryGroupingVariableImpl extends XQueryPsiElementImpl implements XQueryGroupingVariable {
 
   public XQueryGroupingVariableImpl(ASTNode node) {
     super(node);

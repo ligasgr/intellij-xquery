@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQuerySwitchCaseClause extends XQueryElement {
+public interface XQuerySwitchCaseClause extends XQueryPsiElement {
 
   @NotNull
   List<XQuerySwitchCaseOperand> getSwitchCaseOperandList();

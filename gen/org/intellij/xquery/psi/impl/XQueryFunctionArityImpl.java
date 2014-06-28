@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryFunctionArityImpl extends XQueryElementImpl implements XQueryFunctionArity {
+public class XQueryFunctionArityImpl extends XQueryPsiElementImpl implements XQueryFunctionArity {
 
   public XQueryFunctionArityImpl(ASTNode node) {
     super(node);

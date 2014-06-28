@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryQuotAttrContentCharImpl extends XQueryElementImpl implements XQueryQuotAttrContentChar {
+public class XQueryQuotAttrContentCharImpl extends XQueryPsiElementImpl implements XQueryQuotAttrContentChar {
 
   public XQueryQuotAttrContentCharImpl(ASTNode node) {
     super(node);

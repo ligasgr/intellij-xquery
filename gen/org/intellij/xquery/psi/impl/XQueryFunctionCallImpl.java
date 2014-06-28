@@ -28,7 +28,7 @@ import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 import com.intellij.psi.PsiReference;
 
-public class XQueryFunctionCallImpl extends XQueryElementImpl implements XQueryFunctionCall {
+public class XQueryFunctionCallImpl extends XQueryPsiElementImpl implements XQueryFunctionCall {
 
   public XQueryFunctionCallImpl(ASTNode node) {
     super(node);

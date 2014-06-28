@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryWindowClauseImpl extends XQueryElementImpl implements XQueryWindowClause {
+public class XQueryWindowClauseImpl extends XQueryPsiElementImpl implements XQueryWindowClause {
 
   public XQueryWindowClauseImpl(ASTNode node) {
     super(node);

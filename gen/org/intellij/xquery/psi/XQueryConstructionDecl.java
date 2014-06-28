@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryConstructionDecl extends XQueryElement {
+public interface XQueryConstructionDecl extends XQueryPsiElement {
 
   @Nullable
   XQuerySeparator getSeparator();

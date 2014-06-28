@@ -22,6 +22,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryNamespaceNodeTest extends XQueryElement {
+public interface XQueryNamespaceNodeTest extends XQueryPsiElement {
 
 }

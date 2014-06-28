@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryDecimalFormatDeclImpl extends XQueryElementImpl implements XQueryDecimalFormatDecl {
+public class XQueryDecimalFormatDeclImpl extends XQueryPsiElementImpl implements XQueryDecimalFormatDecl {
 
   public XQueryDecimalFormatDeclImpl(ASTNode node) {
     super(node);

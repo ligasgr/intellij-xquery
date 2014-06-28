@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryDefaultFunctionNamespaceDeclImpl extends XQueryElementImpl implements XQueryDefaultFunctionNamespaceDecl {
+public class XQueryDefaultFunctionNamespaceDeclImpl extends XQueryPsiElementImpl implements XQueryDefaultFunctionNamespaceDecl {
 
   public XQueryDefaultFunctionNamespaceDeclImpl(ASTNode node) {
     super(node);

@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryXmlTagNamespaceImpl extends XQueryElementImpl implements XQueryXmlTagNamespace {
+public class XQueryXmlTagNamespaceImpl extends XQueryPsiElementImpl implements XQueryXmlTagNamespace {
 
   public XQueryXmlTagNamespaceImpl(ASTNode node) {
     super(node);

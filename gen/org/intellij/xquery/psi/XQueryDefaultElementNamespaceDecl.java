@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryDefaultElementNamespaceDecl extends XQueryElement {
+public interface XQueryDefaultElementNamespaceDecl extends XQueryPsiElement {
 
   @Nullable
   XQueryURILiteral getURILiteral();

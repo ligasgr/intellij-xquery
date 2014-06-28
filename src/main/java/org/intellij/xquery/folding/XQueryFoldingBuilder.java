@@ -42,8 +42,8 @@ public class XQueryFoldingBuilder extends FoldingBuilderEx {
         List<FoldingDescriptor> descriptorList = new ArrayList<FoldingDescriptor>();
 
 
-        updateImportFoldingDescriptors(descriptorList, new ArrayList<XQueryElement>(file.getModuleImports()));
-        updateImportFoldingDescriptors(descriptorList, new ArrayList<XQueryElement>(file.getNamespaceDeclarations()));
+        updateImportFoldingDescriptors(descriptorList, new ArrayList<XQueryPsiElement>(file.getModuleImports()));
+        updateImportFoldingDescriptors(descriptorList, new ArrayList<XQueryPsiElement>(file.getNamespaceDeclarations()));
 
         for (XQueryFunctionDecl function : file.getFunctionDeclarations()) {
             final XQueryFunctionBody functionBody = function.getFunctionBody();
@@ -55,15 +55,15 @@ public class XQueryFoldingBuilder extends FoldingBuilderEx {
         return descriptorList.toArray(new FoldingDescriptor[descriptorList.size()]);
     }
 
-    private void updateImportFoldingDescriptors(List<FoldingDescriptor> descriptorList, Collection<XQueryElement> elementsToFold) {
+    private void updateImportFoldingDescriptors(List<FoldingDescriptor> descriptorList, Collection<XQueryPsiElement> elementsToFold) {
         if (elementsToFold.size() < 2) {
             return;
         }
 
         FoldingDescriptor folding = null;
         int numberOfAdjacentElement = 0;
-        for (Iterator<XQueryElement> i = elementsToFold.iterator(); i.hasNext(); ) {
-            final XQueryElement element = i.next();
+        for (Iterator<XQueryPsiElement> i = elementsToFold.iterator(); i.hasNext(); ) {
+            final XQueryPsiElement element = i.next();
             final TextRange elementTextRange = element.getTextRange();
             if (folding == null) {
                  folding = buildNewFoldingDescriptor(element, elementTextRange);
@@ -94,7 +94,7 @@ public class XQueryFoldingBuilder extends FoldingBuilderEx {
         }
     }
 
-    private FoldingDescriptor buildNewFoldingDescriptor(XQueryElement element, TextRange elementTextRange) {
+    private FoldingDescriptor buildNewFoldingDescriptor(XQueryPsiElement element, TextRange elementTextRange) {
         FoldingDescriptor folding;
         folding = new FoldingDescriptor(element, elementTextRange);
 

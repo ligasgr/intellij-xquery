@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryDefaultCollationDecl extends XQueryElement {
+public interface XQueryDefaultCollationDecl extends XQueryPsiElement {
 
   @Nullable
   XQuerySeparator getSeparator();

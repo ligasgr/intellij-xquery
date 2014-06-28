@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryCatchClause extends XQueryElement {
+public interface XQueryCatchClause extends XQueryPsiElement {
 
   @Nullable
   XQueryCatchErrorList getCatchErrorList();

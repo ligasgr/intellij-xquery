@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryOrderSpecListImpl extends XQueryElementImpl implements XQueryOrderSpecList {
+public class XQueryOrderSpecListImpl extends XQueryPsiElementImpl implements XQueryOrderSpecList {
 
   public XQueryOrderSpecListImpl(ASTNode node) {
     super(node);

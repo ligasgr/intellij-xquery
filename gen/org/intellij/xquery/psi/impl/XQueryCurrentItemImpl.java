@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryCurrentItemImpl extends XQueryElementImpl implements XQueryCurrentItem {
+public class XQueryCurrentItemImpl extends XQueryPsiElementImpl implements XQueryCurrentItem {
 
   public XQueryCurrentItemImpl(ASTNode node) {
     super(node);

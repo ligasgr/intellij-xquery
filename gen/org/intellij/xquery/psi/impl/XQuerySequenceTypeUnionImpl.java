@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQuerySequenceTypeUnionImpl extends XQueryElementImpl implements XQuerySequenceTypeUnion {
+public class XQuerySequenceTypeUnionImpl extends XQueryPsiElementImpl implements XQuerySequenceTypeUnion {
 
   public XQuerySequenceTypeUnionImpl(ASTNode node) {
     super(node);

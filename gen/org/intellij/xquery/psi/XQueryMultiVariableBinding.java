@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryMultiVariableBinding extends XQueryElement {
+public interface XQueryMultiVariableBinding extends XQueryPsiElement {
 
   @NotNull
   XQueryExprSingle getExprSingle();

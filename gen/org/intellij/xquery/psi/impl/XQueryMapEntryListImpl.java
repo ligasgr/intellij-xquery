@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryMapEntryListImpl extends XQueryElementImpl implements XQueryMapEntryList {
+public class XQueryMapEntryListImpl extends XQueryPsiElementImpl implements XQueryMapEntryList {
 
   public XQueryMapEntryListImpl(ASTNode node) {
     super(node);

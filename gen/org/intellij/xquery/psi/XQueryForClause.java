@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryForClause extends XQueryElement {
+public interface XQueryForClause extends XQueryPsiElement {
 
   @NotNull
   List<XQueryForBinding> getForBindingList();

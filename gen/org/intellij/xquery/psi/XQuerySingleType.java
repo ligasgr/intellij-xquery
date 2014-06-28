@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQuerySingleType extends XQueryElement {
+public interface XQuerySingleType extends XQueryPsiElement {
 
   @NotNull
   XQuerySimpleTypeName getSimpleTypeName();

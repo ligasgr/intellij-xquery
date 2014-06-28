@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryCompAttrConstructorImpl extends XQueryElementImpl implements XQueryCompAttrConstructor {
+public class XQueryCompAttrConstructorImpl extends XQueryPsiElementImpl implements XQueryCompAttrConstructor {
 
   public XQueryCompAttrConstructorImpl(ASTNode node) {
     super(node);

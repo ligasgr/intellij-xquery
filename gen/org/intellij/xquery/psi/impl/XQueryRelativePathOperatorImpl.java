@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryRelativePathOperatorImpl extends XQueryElementImpl implements XQueryRelativePathOperator {
+public class XQueryRelativePathOperatorImpl extends XQueryPsiElementImpl implements XQueryRelativePathOperator {
 
   public XQueryRelativePathOperatorImpl(ASTNode node) {
     super(node);

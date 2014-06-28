@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryModuleImportNamespace extends XQueryElement {
+public interface XQueryModuleImportNamespace extends XQueryPsiElement {
 
   @NotNull
   XQueryModuleImportPath getModuleImportPath();

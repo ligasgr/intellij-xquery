@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryTypeDeclarationImpl extends XQueryElementImpl implements XQueryTypeDeclaration {
+public class XQueryTypeDeclarationImpl extends XQueryPsiElementImpl implements XQueryTypeDeclaration {
 
   public XQueryTypeDeclarationImpl(ASTNode node) {
     super(node);

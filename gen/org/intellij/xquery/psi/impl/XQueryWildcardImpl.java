@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryWildcardImpl extends XQueryElementImpl implements XQueryWildcard {
+public class XQueryWildcardImpl extends XQueryPsiElementImpl implements XQueryWildcard {
 
   public XQueryWildcardImpl(ASTNode node) {
     super(node);

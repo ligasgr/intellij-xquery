@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryForClauseImpl extends XQueryElementImpl implements XQueryForClause {
+public class XQueryForClauseImpl extends XQueryPsiElementImpl implements XQueryForClause {
 
   public XQueryForClauseImpl(ASTNode node) {
     super(node);

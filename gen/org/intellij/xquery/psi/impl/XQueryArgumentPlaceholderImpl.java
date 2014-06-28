@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryArgumentPlaceholderImpl extends XQueryElementImpl implements XQueryArgumentPlaceholder {
+public class XQueryArgumentPlaceholderImpl extends XQueryPsiElementImpl implements XQueryArgumentPlaceholder {
 
   public XQueryArgumentPlaceholderImpl(ASTNode node) {
     super(node);

@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryExternalVarPartImpl extends XQueryElementImpl implements XQueryExternalVarPart {
+public class XQueryExternalVarPartImpl extends XQueryPsiElementImpl implements XQueryExternalVarPart {
 
   public XQueryExternalVarPartImpl(ASTNode node) {
     super(node);

@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryOrderingModeDeclImpl extends XQueryElementImpl implements XQueryOrderingModeDecl {
+public class XQueryOrderingModeDeclImpl extends XQueryPsiElementImpl implements XQueryOrderingModeDecl {
 
   public XQueryOrderingModeDeclImpl(ASTNode node) {
     super(node);

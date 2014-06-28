@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryPredicateListImpl extends XQueryElementImpl implements XQueryPredicateList {
+public class XQueryPredicateListImpl extends XQueryPsiElementImpl implements XQueryPredicateList {
 
   public XQueryPredicateListImpl(ASTNode node) {
     super(node);

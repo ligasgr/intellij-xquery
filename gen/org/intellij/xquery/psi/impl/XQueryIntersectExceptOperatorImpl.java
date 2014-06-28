@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryIntersectExceptOperatorImpl extends XQueryElementImpl implements XQueryIntersectExceptOperator {
+public class XQueryIntersectExceptOperatorImpl extends XQueryPsiElementImpl implements XQueryIntersectExceptOperator {
 
   public XQueryIntersectExceptOperatorImpl(ASTNode node) {
     super(node);

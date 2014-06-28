@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryBoundarySpaceDecl extends XQueryElement {
+public interface XQueryBoundarySpaceDecl extends XQueryPsiElement {
 
   @Nullable
   XQuerySeparator getSeparator();

@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryComputedConstructor extends XQueryElement {
+public interface XQueryComputedConstructor extends XQueryPsiElement {
 
   @Nullable
   XQueryCompAttrConstructor getCompAttrConstructor();

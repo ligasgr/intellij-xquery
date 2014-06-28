@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryInheritModeImpl extends XQueryElementImpl implements XQueryInheritMode {
+public class XQueryInheritModeImpl extends XQueryPsiElementImpl implements XQueryInheritMode {
 
   public XQueryInheritModeImpl(ASTNode node) {
     super(node);

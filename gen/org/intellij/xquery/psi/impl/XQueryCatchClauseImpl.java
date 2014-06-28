@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryCatchClauseImpl extends XQueryElementImpl implements XQueryCatchClause {
+public class XQueryCatchClauseImpl extends XQueryPsiElementImpl implements XQueryCatchClause {
 
   public XQueryCatchClauseImpl(ASTNode node) {
     super(node);

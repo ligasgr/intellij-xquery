@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryAttributeTestImpl extends XQueryElementImpl implements XQueryAttributeTest {
+public class XQueryAttributeTestImpl extends XQueryPsiElementImpl implements XQueryAttributeTest {
 
   public XQueryAttributeTestImpl(ASTNode node) {
     super(node);

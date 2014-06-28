@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryBoundarySpaceDeclImpl extends XQueryElementImpl implements XQueryBoundarySpaceDecl {
+public class XQueryBoundarySpaceDeclImpl extends XQueryPsiElementImpl implements XQueryBoundarySpaceDecl {
 
   public XQueryBoundarySpaceDeclImpl(ASTNode node) {
     super(node);

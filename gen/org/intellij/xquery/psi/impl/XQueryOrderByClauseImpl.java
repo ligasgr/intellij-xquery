@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryOrderByClauseImpl extends XQueryElementImpl implements XQueryOrderByClause {
+public class XQueryOrderByClauseImpl extends XQueryPsiElementImpl implements XQueryOrderByClause {
 
   public XQueryOrderByClauseImpl(ASTNode node) {
     super(node);

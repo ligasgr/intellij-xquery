@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryLetBindingImpl extends XQueryElementImpl implements XQueryLetBinding {
+public class XQueryLetBindingImpl extends XQueryPsiElementImpl implements XQueryLetBinding {
 
   public XQueryLetBindingImpl(ASTNode node) {
     super(node);

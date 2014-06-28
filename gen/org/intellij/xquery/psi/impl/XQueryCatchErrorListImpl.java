@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryCatchErrorListImpl extends XQueryElementImpl implements XQueryCatchErrorList {
+public class XQueryCatchErrorListImpl extends XQueryPsiElementImpl implements XQueryCatchErrorList {
 
   public XQueryCatchErrorListImpl(ASTNode node) {
     super(node);

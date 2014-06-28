@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryCastOperatorImpl extends XQueryElementImpl implements XQueryCastOperator {
+public class XQueryCastOperatorImpl extends XQueryPsiElementImpl implements XQueryCastOperator {
 
   public XQueryCastOperatorImpl(ASTNode node) {
     super(node);

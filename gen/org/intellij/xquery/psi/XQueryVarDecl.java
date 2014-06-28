@@ -23,7 +23,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.navigation.ItemPresentation;
 
-public interface XQueryVarDecl extends XQueryElement {
+public interface XQueryVarDecl extends XQueryPsiElement {
 
   @NotNull
   List<XQueryAnnotation> getAnnotationList();

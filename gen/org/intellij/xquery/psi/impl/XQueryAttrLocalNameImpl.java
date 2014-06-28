@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryAttrLocalNameImpl extends XQueryElementImpl implements XQueryAttrLocalName {
+public class XQueryAttrLocalNameImpl extends XQueryPsiElementImpl implements XQueryAttrLocalName {
 
   public XQueryAttrLocalNameImpl(ASTNode node) {
     super(node);

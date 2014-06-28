@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryEmptyOrderDeclImpl extends XQueryElementImpl implements XQueryEmptyOrderDecl {
+public class XQueryEmptyOrderDeclImpl extends XQueryPsiElementImpl implements XQueryEmptyOrderDecl {
 
   public XQueryEmptyOrderDeclImpl(ASTNode node) {
     super(node);

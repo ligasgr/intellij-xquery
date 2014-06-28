@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryPositionalVarImpl extends XQueryElementImpl implements XQueryPositionalVar {
+public class XQueryPositionalVarImpl extends XQueryPsiElementImpl implements XQueryPositionalVar {
 
   public XQueryPositionalVarImpl(ASTNode node) {
     super(node);

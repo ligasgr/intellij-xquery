@@ -28,7 +28,7 @@ import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 import com.intellij.navigation.ItemPresentation;
 
-public class XQueryQueryBodyImpl extends XQueryElementImpl implements XQueryQueryBody {
+public class XQueryQueryBodyImpl extends XQueryPsiElementImpl implements XQueryQueryBody {
 
   public XQueryQueryBodyImpl(ASTNode node) {
     super(node);

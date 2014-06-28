@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryMultiplicativeOperatorImpl extends XQueryElementImpl implements XQueryMultiplicativeOperator {
+public class XQueryMultiplicativeOperatorImpl extends XQueryPsiElementImpl implements XQueryMultiplicativeOperator {
 
   public XQueryMultiplicativeOperatorImpl(ASTNode node) {
     super(node);

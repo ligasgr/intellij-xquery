@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryTypedFunctionTest extends XQueryElement {
+public interface XQueryTypedFunctionTest extends XQueryPsiElement {
 
   @NotNull
   List<XQuerySequenceType> getSequenceTypeList();

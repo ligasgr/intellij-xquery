@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryArgumentList extends XQueryElement {
+public interface XQueryArgumentList extends XQueryPsiElement {
 
   @NotNull
   List<XQueryArgument> getArgumentList();

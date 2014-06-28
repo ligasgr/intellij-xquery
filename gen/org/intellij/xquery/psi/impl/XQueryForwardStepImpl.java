@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryForwardStepImpl extends XQueryElementImpl implements XQueryForwardStep {
+public class XQueryForwardStepImpl extends XQueryPsiElementImpl implements XQueryForwardStep {
 
   public XQueryForwardStepImpl(ASTNode node) {
     super(node);

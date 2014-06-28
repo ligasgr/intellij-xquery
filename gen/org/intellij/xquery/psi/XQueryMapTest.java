@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryMapTest extends XQueryElement {
+public interface XQueryMapTest extends XQueryPsiElement {
 
   @Nullable
   XQueryAtomicOrUnionType getAtomicOrUnionType();

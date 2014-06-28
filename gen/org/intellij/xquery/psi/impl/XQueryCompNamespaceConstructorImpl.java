@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryCompNamespaceConstructorImpl extends XQueryElementImpl implements XQueryCompNamespaceConstructor {
+public class XQueryCompNamespaceConstructorImpl extends XQueryPsiElementImpl implements XQueryCompNamespaceConstructor {
 
   public XQueryCompNamespaceConstructorImpl(ASTNode node) {
     super(node);

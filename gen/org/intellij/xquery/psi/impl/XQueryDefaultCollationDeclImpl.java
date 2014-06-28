@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryDefaultCollationDeclImpl extends XQueryElementImpl implements XQueryDefaultCollationDecl {
+public class XQueryDefaultCollationDeclImpl extends XQueryPsiElementImpl implements XQueryDefaultCollationDecl {
 
   public XQueryDefaultCollationDeclImpl(ASTNode node) {
     super(node);

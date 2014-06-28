@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryConcatOperatorImpl extends XQueryElementImpl implements XQueryConcatOperator {
+public class XQueryConcatOperatorImpl extends XQueryPsiElementImpl implements XQueryConcatOperator {
 
   public XQueryConcatOperatorImpl(ASTNode node) {
     super(node);

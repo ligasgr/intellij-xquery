@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  * Date: 08/06/13
  * Time: 21:31
  */
-public abstract class XQueryNamedElementImpl extends XQueryElementImpl implements XQueryNamedElement {
+public abstract class XQueryNamedElementImpl extends XQueryPsiElementImpl implements XQueryNamedElement {
     public XQueryNamedElementImpl(@NotNull ASTNode node) {
         super(node);
     }

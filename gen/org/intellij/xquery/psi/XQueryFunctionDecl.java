@@ -23,7 +23,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.navigation.ItemPresentation;
 
-public interface XQueryFunctionDecl extends XQueryElement {
+public interface XQueryFunctionDecl extends XQueryPsiElement {
 
   @NotNull
   List<XQueryAnnotation> getAnnotationList();

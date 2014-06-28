@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryEqualityCompImpl extends XQueryElementImpl implements XQueryEqualityComp {
+public class XQueryEqualityCompImpl extends XQueryPsiElementImpl implements XQueryEqualityComp {
 
   public XQueryEqualityCompImpl(ASTNode node) {
     super(node);
