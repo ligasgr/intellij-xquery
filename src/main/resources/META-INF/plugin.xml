@@ -88,6 +88,9 @@
         <localInspection enabledByDefault="true" shortName="InvalidVersion" groupName="XQuery"
                          displayName="Invalid version"
                          implementationClass="org.intellij.xquery.inspection.version.InvalidVersionInspection"/>
+        <localInspection enabledByDefault="true" shortName="MarklogicExtendedSyntax" groupName="XQuery"
+                         displayName="MarkLogic extended syntax"
+                         implementationClass="org.intellij.xquery.inspection.marklogic.MarklogicExtendedSyntaxInspection"/>
 
         <codeInsight.parameterInfo language="XQuery" implementationClass="org.intellij.xquery.completion.function.parameters.XQueryParameterInfoHandler" />
         <lang.documentationProvider language="XQuery" implementationClass="org.intellij.xquery.documentation.XQueryDocumentationProvider"/>
