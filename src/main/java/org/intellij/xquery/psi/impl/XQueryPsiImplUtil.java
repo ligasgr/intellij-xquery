@@ -41,6 +41,7 @@ import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryFunctionInvocation;
 import org.intellij.xquery.psi.XQueryFunctionLocalName;
 import org.intellij.xquery.psi.XQueryFunctionName;
+import org.intellij.xquery.psi.XQueryMarklogicAnnotation;
 import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryModuleImport;
 import org.intellij.xquery.psi.XQueryModuleImportPath;
@@ -55,6 +56,7 @@ import org.intellij.xquery.psi.XQueryVarDecl;
 import org.intellij.xquery.psi.XQueryVarLocalName;
 import org.intellij.xquery.psi.XQueryVarName;
 import org.intellij.xquery.psi.XQueryVarRef;
+import org.intellij.xquery.psi.XQueryVersion;
 import org.intellij.xquery.reference.function.XQueryFunctionReference;
 import org.intellij.xquery.reference.module.XQueryModuleReference;
 import org.intellij.xquery.reference.namespace.XQueryNamespacePrefixReference;
@@ -286,7 +288,7 @@ public class XQueryPsiImplUtil {
             @Nullable
             @Override
             public Icon getIcon(boolean unused) {
-                return variableIsPublic(element) ? XQueryIcons.VARIABLE_PUBLIC_ICON : XQueryIcons.VARIABLE_PRIVATE_ICON;
+                return isPublic(element) ? XQueryIcons.VARIABLE_PUBLIC_ICON : XQueryIcons.VARIABLE_PRIVATE_ICON;
             }
         };
     }
@@ -348,21 +350,27 @@ public class XQueryPsiImplUtil {
     }
 
     public static boolean isPublic(XQueryFunctionDecl functionDecl) {
-        boolean result = true;
         for (XQueryAnnotation annotation : functionDecl.getAnnotationList()) {
             if ("private".equals(annotation.getAnnotationName().getText()))
                 return false;
         }
-        return result;
+        for (XQueryMarklogicAnnotation annotation : functionDecl.getMarklogicAnnotationList()) {
+            if ("private".equals(annotation.getText()))
+                return false;
+        }
+        return true;
     }
 
     public static boolean isPublic(XQueryVarDecl varDecl) {
-        boolean result = true;
         for (XQueryAnnotation annotation : varDecl.getAnnotationList()) {
             if ("private".equals(annotation.getAnnotationName().getText()))
                 return false;
         }
-        return result;
+        for (XQueryMarklogicAnnotation annotation : varDecl.getMarklogicAnnotationList()) {
+            if ("private".equals(annotation.getText()))
+                return false;
+        }
+        return true;
     }
 
     public static void delete(XQueryNamedElement namedElement) {
@@ -381,15 +389,6 @@ public class XQueryPsiImplUtil {
                 next = node.getTreeNext();
             }
         }
-    }
-
-    public static boolean variableIsPublic(XQueryVarDecl variableDeclaration) {
-        boolean result = true;
-        for (XQueryAnnotation annotation : variableDeclaration.getAnnotationList()) {
-            if ("private".equals(annotation.getAnnotationName().getText()))
-                return false;
-        }
-        return result;
     }
 
     public static boolean isExternal(XQueryVarDecl variableDeclaration) {
@@ -518,5 +517,9 @@ public class XQueryPsiImplUtil {
         int namePositionOffset = varDecl.getText().indexOf(keyword) + keyword.length();
         int variableOffset = varDecl.getNode().getStartOffset() + namePositionOffset;
         return indexOfDollar > -1 ? dollarOffset : variableOffset;
+    }
+
+    public static String getVersionString(XQueryVersion version) {
+        return stripApostrophes(version.getText());
     }
 }

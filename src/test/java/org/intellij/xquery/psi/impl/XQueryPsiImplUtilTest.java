@@ -107,7 +107,7 @@ public class XQueryPsiImplUtilTest {
         final List<XQueryAnnotation> annotations = annotationListWithoutPrivate();
         when(varDecl.getAnnotationList()).thenReturn(annotations);
 
-        assertThat(XQueryPsiImplUtil.variableIsPublic(varDecl), is(true));
+        assertThat(XQueryPsiImplUtil.isPublic(varDecl), is(true));
     }
 
     @Test
@@ -116,7 +116,18 @@ public class XQueryPsiImplUtilTest {
         final List<XQueryAnnotation> annotations = annotationListWithPrivate();
         when(varDecl.getAnnotationList()).thenReturn(annotations);
 
-        assertThat(XQueryPsiImplUtil.variableIsPublic(varDecl), is(false));
+        assertThat(XQueryPsiImplUtil.isPublic(varDecl), is(false));
+    }
+
+    @Test
+    public void variableWithMarklogicPrivateShouldBeRecognizedAsNonPublic() throws Exception {
+        XQueryVarDecl varDecl = mock(XQueryVarDecl.class);
+        final List<XQueryAnnotation> annotations = new ArrayList<XQueryAnnotation>();
+        when(varDecl.getAnnotationList()).thenReturn(annotations);
+        List<XQueryMarklogicAnnotation> marklogicAnnotationList = marklogicAnnotationListWithPrivate();
+        when(varDecl.getMarklogicAnnotationList()).thenReturn(marklogicAnnotationList);
+
+        assertThat(XQueryPsiImplUtil.isPublic(varDecl), is(false));
     }
 
     private List<XQueryAnnotation> annotationListWithoutPrivate() {
@@ -147,6 +158,16 @@ public class XQueryPsiImplUtilTest {
 
         when(privateName.getText()).thenReturn("private");
         when(privateAnnotation.getAnnotationName()).thenReturn(privateName);
+        annotations.add(privateAnnotation);
+
+        return annotations;
+    }
+
+    private List<XQueryMarklogicAnnotation> marklogicAnnotationListWithPrivate() {
+
+        List<XQueryMarklogicAnnotation> annotations = new ArrayList<XQueryMarklogicAnnotation>();
+        XQueryMarklogicAnnotation privateAnnotation = mock(XQueryMarklogicAnnotation.class);
+        when(privateAnnotation.getText()).thenReturn("private");
         annotations.add(privateAnnotation);
 
         return annotations;

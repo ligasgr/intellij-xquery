@@ -105,7 +105,7 @@ public class VariableCollector {
 
     private void addProposedReferencesFromImportedFile(String targetPrefix, XQueryFile file) {
         for (final XQueryVarDecl variableDeclaration : file.getVariableDeclarations()) {
-            if (variableNameExists(variableDeclaration) && XQueryPsiImplUtil.variableIsPublic(variableDeclaration)) {
+            if (variableNameExists(variableDeclaration) && XQueryPsiImplUtil.isPublic(variableDeclaration)) {
                 XQueryQName<XQueryVarName> qName = aXQueryQName(variableDeclaration.getVarName()).withPrefix
                         (targetPrefix)
                         .build();
