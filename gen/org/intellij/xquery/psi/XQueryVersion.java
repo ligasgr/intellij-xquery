@@ -22,12 +22,8 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryVersionDecl extends XQueryPsiElement {
+public interface XQueryVersion extends XQueryPsiElement {
 
-  @Nullable
-  XQuerySeparator getSeparator();
-
-  @Nullable
-  XQueryVersion getVersion();
+  String getVersionString();
 
 }

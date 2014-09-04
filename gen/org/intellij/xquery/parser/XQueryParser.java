@@ -709,6 +709,9 @@ public class XQueryParser implements PsiParser {
     else if (root_ == VAR_VALUE) {
       result_ = VarValue(builder_, 0);
     }
+    else if (root_ == VERSION) {
+      result_ = Version(builder_, 0);
+    }
     else if (root_ == VERSION_DECL) {
       result_ = VersionDecl(builder_, 0);
     }
@@ -7075,6 +7078,18 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // StringLiteral
+  public static boolean Version(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Version")) return false;
+    if (!nextTokenIs(builder_, STRINGLITERAL)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, STRINGLITERAL);
+    exit_section_(builder_, marker_, VERSION, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // "xquery" ((VersionDeclEncoding) | (VersionDeclVersion)) Separator
   public static boolean VersionDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VersionDecl")) return false;
@@ -7220,7 +7235,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "version" StringLiteral ("encoding" StringLiteral)?
+  // "version" Version ("encoding" StringLiteral)?
   static boolean VersionDeclVersion(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VersionDeclVersion")) return false;
     if (!nextTokenIs(builder_, K_VERSION)) return false;
@@ -7229,7 +7244,7 @@ public class XQueryParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, K_VERSION);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, consumeToken(builder_, STRINGLITERAL));
+    result_ = result_ && report_error_(builder_, Version(builder_, level_ + 1));
     result_ = pinned_ && VersionDeclVersion_2(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
     return result_ || pinned_;

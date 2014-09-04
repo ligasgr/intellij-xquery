@@ -1,5 +1,3 @@
-xquery version '1.0-ml';
-
 declare namespace apidoc="http://marklogic.com/xdmp/apidoc";
 
 declare variable $functions := fn:doc ("/apidocs/ml-functions.xml")/node();

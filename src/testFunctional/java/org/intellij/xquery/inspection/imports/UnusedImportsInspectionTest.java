@@ -18,9 +18,13 @@
 package org.intellij.xquery.inspection.imports;
 
 import com.intellij.codeInsight.intention.IntentionAction;
+import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.util.containers.ContainerUtil;
 import org.intellij.xquery.BaseFunctionalTestCase;
+import org.intellij.xquery.inspection.namespace.NamespacePrefixFromFileName;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
@@ -65,7 +69,9 @@ public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
     public void testRemoveUnusedImportQuickFix() {
         final String testName = getTestName(false);
 
-        myFixture.enableInspections(UnusedImportsInspection.class);
+        Collection<Class<? extends LocalInspectionTool>> inspections = new ArrayList<Class<? extends LocalInspectionTool>>();
+        inspections.add(UnusedImportsInspection.class);
+        myFixture.enableInspections(inspections);
         myFixture.configureByFile(String.format("%s.xq", testName));
 
         List<IntentionAction> availableIntentions = myFixture.filterAvailableIntentions(UnusedImportsInspection.REMOVE_UNUSED_IMPORT_QUICKFIX_NAME);
@@ -81,7 +87,9 @@ public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
     }
 
     private void executeInspectionTest(String filename) {
-        myFixture.enableInspections(UnusedImportsInspection.class);
+        Collection<Class<? extends LocalInspectionTool>> inspections = new ArrayList<Class<? extends LocalInspectionTool>>();
+        inspections.add(UnusedImportsInspection.class);
+        myFixture.enableInspections(inspections);
         myFixture.testHighlighting(true, false, false, filename);
     }
 }

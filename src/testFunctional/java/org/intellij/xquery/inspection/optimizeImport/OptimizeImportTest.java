@@ -28,10 +28,9 @@ public class OptimizeImportTest extends BaseFunctionalTestCase {
         return "src/testFunctional/testData/org/intellij/xquery/inspection/organizeImports";
     }
 
-
     public void testOptimizeRemovesUnusedImports() {
-        String tstname = getTestName(false) + ".xq";
-        myFixture.configureByFile(tstname);
+        String testName = getTestName(false) + ".xq";
+        myFixture.configureByFile(testName);
         OptimizeImportsAction.actionPerformedImpl(DataManager.getInstance().getDataContext(myFixture.getEditor().getContentComponent()));
         myFixture.checkResultByFile(getTestName(false) + "_after.xq");
     }

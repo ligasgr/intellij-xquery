@@ -15,19 +15,25 @@
  * limitations under the License.
  */
 
-// This is a generated file. Not intended for manual editing.
-package org.intellij.xquery.psi;
+package org.intellij.xquery.model;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
+public enum XQueryLanguageVersion {
+    V3_0("3.0"),
+    V1_0("1.0"),
+    V1_0_ML("1.0-ml"),
+    V0_9_ML("0.9-ml");
 
-public interface XQueryVersionDecl extends XQueryPsiElement {
+    public final String versionString;
 
-  @Nullable
-  XQuerySeparator getSeparator();
+    XQueryLanguageVersion(String versionString) {
+        this.versionString = versionString;
+    }
 
-  @Nullable
-  XQueryVersion getVersion();
-
+    public static XQueryLanguageVersion valueFor(String versionString) {
+        for (XQueryLanguageVersion XQueryLanguageVersion : values()) {
+            if (XQueryLanguageVersion.versionString.equals(versionString))
+                return XQueryLanguageVersion;
+        }
+        return null;
+    }
 }

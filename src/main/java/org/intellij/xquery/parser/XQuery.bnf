@@ -249,7 +249,8 @@ private Module ::= VersionDecl? (LibraryModule | MainModule)
 VersionDecl ::= "xquery" ((VersionDeclEncoding) | (VersionDeclVersion)) Separator {pin=1 recoverWhile=VersionDeclRecover}
 private VersionDeclRecover ::= !('$' | '%' | '(#' | '(' | '*' | '+' | '-' | '.' | '..' | '/' | '//' | '<!--' | XmlStartTagStart | '<?' | '@' | 'ancestor' | 'ancestor-or-self' | 'attribute' | 'child' | 'comment' | 'declare' | 'descendant' | 'descendant-or-self' | 'document' | 'document-node' | 'element' | 'every' | 'following' | 'following-sibling' | 'for' | 'function' | 'if' | 'import' | 'let' | 'module' | 'namespace' | 'namespace-node' | 'node' | 'ordered' | 'parent' | 'preceding' | 'preceding-sibling' | 'processing-instruction' | 'schema-attribute' | 'schema-element' | 'self' | 'some' | 'switch' | 'text' | 'try' | 'typeswitch' | 'unordered' | 'validate' | <<eof>> | BracedURILiteral | DecimalLiteral | DoubleLiteral | IntegerLiteral | NCName | StringLiteral | URIQualifiedName | '"' | "'" | Char)
 private VersionDeclEncoding ::= "encoding" StringLiteral {pin=1}
-private VersionDeclVersion ::= "version" StringLiteral ("encoding" StringLiteral)? {pin=1}
+private VersionDeclVersion ::= "version" Version ("encoding" StringLiteral)? {pin=1}
+Version ::= StringLiteral {methods=[getVersionString]}
 private MainModule ::= Prolog QueryBody {pin=1}
 private LibraryModule ::= ModuleDecl Prolog {pin=1}
 ModuleDecl ::= "module" "namespace" NamespacePrefix "=" URILiteral Separator {pin=1 recoverWhile=ModuleDeclRecover methods=[getNamespace]}

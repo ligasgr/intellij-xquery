@@ -249,6 +249,7 @@ public interface XQueryTypes {
   IElementType VAR_NAME = new XQueryElementType("VAR_NAME");
   IElementType VAR_REF = new XQueryElementType("VAR_REF");
   IElementType VAR_VALUE = new XQueryElementType("VAR_VALUE");
+  IElementType VERSION = new XQueryElementType("VERSION");
   IElementType VERSION_DECL = new XQueryElementType("VERSION_DECL");
   IElementType WHERE_CLAUSE = new XQueryElementType("WHERE_CLAUSE");
   IElementType WILDCARD = new XQueryElementType("WILDCARD");
@@ -1153,6 +1154,9 @@ public interface XQueryTypes {
       }
       else if (type == VAR_VALUE) {
         return new XQueryVarValueImpl(node);
+      }
+      else if (type == VERSION) {
+        return new XQueryVersionImpl(node);
       }
       else if (type == VERSION_DECL) {
         return new XQueryVersionDeclImpl(node);

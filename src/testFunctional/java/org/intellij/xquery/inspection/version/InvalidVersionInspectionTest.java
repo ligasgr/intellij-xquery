@@ -15,38 +15,39 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.inspection.namespace;
+package org.intellij.xquery.inspection.version;
 
 import com.intellij.codeInspection.LocalInspectionTool;
 import org.intellij.xquery.BaseFunctionalTestCase;
+import org.intellij.xquery.inspection.variable.UnusedVariableInspection;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class NamespacePrefixFromFileNameTest extends BaseFunctionalTestCase {
+public class InvalidVersionInspectionTest extends BaseFunctionalTestCase {
 
     @Override
     protected String getTestDataPath() {
-        return "src/testFunctional/testData/org/intellij/xquery/inspection/namespace/";
+        return "src/testFunctional/testData/org/intellij/xquery/inspection/version/";
     }
 
-    public void testModuleNamespaceSameAsFilename() {
+    public void testXQueryDeclarationNotPresent() {
         executeTest();
     }
 
-    public void testModuleNamespaceDifferentThanFilename() {
+    public void testVersionNotPresent() {
         executeTest();
     }
 
-    public void testModuleNamespaceSameAsFilenameCaseSensitive() {
+    public void testVersionEmpty() {
         executeTest();
     }
 
-    public void testModuleNamespaceSameAsFilenameWithoutExtension() {
+    public void testVersionInvalid() {
         executeTest();
     }
 
-    public void testMainModuleWithoutNamespaceDeclaration() {
+    public void testVersionValid() {
         executeTest();
     }
 
@@ -57,9 +58,9 @@ public class NamespacePrefixFromFileNameTest extends BaseFunctionalTestCase {
     private void executeTest(String filename) {
         Collection<Class<? extends LocalInspectionTool>> inspections = new ArrayList<Class<? extends
                 LocalInspectionTool>>();
-        inspections.add(NamespacePrefixFromFileName.class);
+        inspections.add(InvalidVersionInspection.class);
         myFixture.enableInspections(inspections);
 
-        myFixture.testHighlighting(true, false, false, filename);
+        myFixture.testHighlighting(false, false, true, filename);
     }
 }

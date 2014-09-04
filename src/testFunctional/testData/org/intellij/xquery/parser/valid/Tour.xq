@@ -1,4 +1,3 @@
-xquery version "2.0";
 declare namespace saxon="http://saxon.sf.net/";
 declare namespace tour="http://wrox.com/tour";
 

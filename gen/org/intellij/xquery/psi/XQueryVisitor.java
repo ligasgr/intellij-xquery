@@ -919,6 +919,10 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitVersion(@NotNull XQueryVersion o) {
+    visitPsiElement(o);
+  }
+
   public void visitVersionDecl(@NotNull XQueryVersionDecl o) {
     visitPsiElement(o);
   }

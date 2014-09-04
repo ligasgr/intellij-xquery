@@ -85,7 +85,10 @@
         <localInspection enabledByDefault="false" shortName="NamespacePrefixFromFileName" groupName="XQuery"
                          displayName="Namespace prefix derived from file name"
                          implementationClass="org.intellij.xquery.inspection.namespace.NamespacePrefixFromFileName"/>
-        
+        <localInspection enabledByDefault="true" shortName="InvalidVersion" groupName="XQuery"
+                         displayName="Invalid version"
+                         implementationClass="org.intellij.xquery.inspection.version.InvalidVersionInspection"/>
+
         <codeInsight.parameterInfo language="XQuery" implementationClass="org.intellij.xquery.completion.function.parameters.XQueryParameterInfoHandler" />
         <lang.documentationProvider language="XQuery" implementationClass="org.intellij.xquery.documentation.XQueryDocumentationProvider"/>
         <projectConfigurable instance="org.intellij.xquery.settings.XQueryConfigurable"/>
