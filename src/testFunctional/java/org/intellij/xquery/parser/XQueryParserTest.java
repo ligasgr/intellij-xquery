@@ -131,4 +131,16 @@ public class XQueryParserTest extends BaseParserTest {
     public void testUpdatingFacility() {
         doTest(true);
     }
+
+    public void testTryCatch() {
+        doTest(true);
+    }
+
+    public void testNamespaceAxis() {
+        doTest(true);
+    }
+
+    public void testMarklogicPrivate() {
+        doTest(true);
+    }
 }

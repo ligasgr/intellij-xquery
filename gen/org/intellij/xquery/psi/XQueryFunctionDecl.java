@@ -37,6 +37,9 @@ public interface XQueryFunctionDecl extends XQueryPsiElement {
   @Nullable
   XQueryFunctionName getFunctionName();
 
+  @NotNull
+  List<XQueryMarklogicAnnotation> getMarklogicAnnotationList();
+
   @Nullable
   XQueryParamList getParamList();
 

@@ -227,6 +227,7 @@
   K_MODIFY               =  "modify"
   K_RENAME               =  "rename"
   K_REPLACE              =  "replace"
+  K_PRIVATE              =  "private"
 //  IntegerLiteral = "regexp:[0-9]+"
 //  DecimalLiteral = "regexp:(\.[0-9]+|[0-9]+\.[0-9]*)"
 //  DoubleLiteral  = "regexp:(\.[0-9]+|[0-9]+(\.[0-9]*)?)[eE][+-]?[0-9]+"
@@ -283,14 +284,15 @@ private AnnotatedDecl ::= (VarDecl | FunctionDecl)
 CompatibilityAnnotation	   ::=   	"updating"
 Annotation ::= "%" AnnotationName ("(" Literal ("," Literal)* ")")?
 AnnotationName ::= EQName
-VarDecl ::= "declare" (CompatibilityAnnotation | Annotation)* "variable" "$" VarName TypeDeclaration? (VarDetails) Separator {pin=3 methods=[getPresentation isExternal getTextOffset isPublic]}
+MarklogicAnnotation ::= "private"
+VarDecl ::= "declare" (MarklogicAnnotation | CompatibilityAnnotation | Annotation)* "variable" "$" VarName TypeDeclaration? (VarDetails) Separator {pin=3 methods=[getPresentation isExternal getTextOffset isPublic]}
 private VarDetails ::= VarValueAssignment | ExternalVarPart
 private VarValueAssignment ::= ":=" VarValue {pin=1}
 ExternalVarPart ::= "external" (":=" VarDefaultValue)? {pin=1}
 VarValue ::= ExprSingle
 VarDefaultValue ::= ExprSingle
 ContextItemDecl ::= "declare" "context" "item" ("as" ItemType)? (VarValueAssignment | ("external" (":=" VarDefaultValue)?)) Separator {pin=2}
-FunctionDecl ::= "declare" (CompatibilityAnnotation | Annotation)* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external") Separator /* xgc: reserved-function-names */ {pin=3 methods=[getPresentation getArity hasValidFunctionName isPublic getTextOffset]}
+FunctionDecl ::= "declare" (MarklogicAnnotation | CompatibilityAnnotation | Annotation)* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external") Separator /* xgc: reserved-function-names */ {pin=3 methods=[getPresentation getArity hasValidFunctionName isPublic getTextOffset]}
 ParamList ::= "(" (Param ("," Param)*)? ")" {pin=1}
 Param ::= "$" VarName TypeDeclaration?
 FunctionBody ::= EnclosedExpr
@@ -360,8 +362,9 @@ IfExpr ::= "if" "(" Expr ")" "then" ExprSingle "else" ExprSingle {pin=1}
 TryCatchExpr ::= TryClause CatchClause+ {pin=1}
 TryClause ::= "try" "{" TryTargetExpr "}" {pin=1}
 private TryTargetExpr ::= Expr
-CatchClause ::= "catch" CatchErrorList "{" Expr "}" {pin=1}
+CatchClause ::= "catch" (CatchErrorList | MarklogicCatchErrorList) "{" Expr "}" {pin=1}
 CatchErrorList ::= NameTest ("|" NameTest)*
+MarklogicCatchErrorList ::= "(" "$" VarName ")"
 OrExpr ::= AndExpr OrMultipliedExpr*
 private OrMultipliedExpr ::= OrOperator AndExpr {pin=1}
 OrOperator ::= "or"
@@ -423,7 +426,7 @@ private RelativePathExpr ::= StepExpr RelativePathOptionalExpr*
 private RelativePathOptionalExpr ::= (RelativePathOperator) StepExpr {pin=1}
 RelativePathOperator ::= "/" | "//"
 StepExpr ::= PostfixExpr | AxisStep
-AxisStep ::= (ReverseStep | ForwardStep) PredicateList
+AxisStep ::= (ReverseStep | ForwardStep | MarklogicNamespaceAxis) PredicateList
 ForwardStep ::= FullForwardStep | AbbrevForwardStep
 private FullForwardStep ::= ForwardAxis NodeTest {pin=1}
 private ForwardAxis ::= ("child" "::")
@@ -442,6 +445,7 @@ private ReverseAxis ::= ("parent" "::")
  | ("preceding" "::")
  | ("ancestor-or-self" "::")
 AbbrevReverseStep ::= ".."
+MarklogicNamespaceAxis ::= "namespace" "::" NodeTest {pin=2}
 NodeTest ::= KindTest | NameTest
 NameTest ::= Wildcard | EQName
 Wildcard ::= (Prefix ":" "*")

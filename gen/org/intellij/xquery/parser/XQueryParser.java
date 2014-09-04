@@ -397,6 +397,15 @@ public class XQueryParser implements PsiParser {
     else if (root_ == MAP_TEST) {
       result_ = MapTest(builder_, 0);
     }
+    else if (root_ == MARKLOGIC_ANNOTATION) {
+      result_ = MarklogicAnnotation(builder_, 0);
+    }
+    else if (root_ == MARKLOGIC_CATCH_ERROR_LIST) {
+      result_ = MarklogicCatchErrorList(builder_, 0);
+    }
+    else if (root_ == MARKLOGIC_NAMESPACE_AXIS) {
+      result_ = MarklogicNamespaceAxis(builder_, 0);
+    }
     else if (root_ == MODULE_DECL) {
       result_ = ModuleDecl(builder_, 0);
     }
@@ -1236,7 +1245,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (ReverseStep | ForwardStep) PredicateList
+  // (ReverseStep | ForwardStep | MarklogicNamespaceAxis) PredicateList
   public static boolean AxisStep(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "AxisStep")) return false;
     boolean result_ = false;
@@ -1247,13 +1256,14 @@ public class XQueryParser implements PsiParser {
     return result_;
   }
 
-  // ReverseStep | ForwardStep
+  // ReverseStep | ForwardStep | MarklogicNamespaceAxis
   private static boolean AxisStep_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "AxisStep_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = ReverseStep(builder_, level_ + 1);
     if (!result_) result_ = ForwardStep(builder_, level_ + 1);
+    if (!result_) result_ = MarklogicNamespaceAxis(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -1463,7 +1473,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "catch" CatchErrorList "{" Expr "}"
+  // "catch" (CatchErrorList | MarklogicCatchErrorList) "{" Expr "}"
   public static boolean CatchClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CatchClause")) return false;
     if (!nextTokenIs(builder_, K_CATCH)) return false;
@@ -1472,12 +1482,23 @@ public class XQueryParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, K_CATCH);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, CatchErrorList(builder_, level_ + 1));
+    result_ = result_ && report_error_(builder_, CatchClause_1(builder_, level_ + 1));
     result_ = pinned_ && report_error_(builder_, consumeToken(builder_, L_C_BRACE)) && result_;
     result_ = pinned_ && report_error_(builder_, Expr(builder_, level_ + 1)) && result_;
     result_ = pinned_ && consumeToken(builder_, R_C_BRACE) && result_;
     exit_section_(builder_, level_, marker_, CATCH_CLAUSE, result_, pinned_, null);
     return result_ || pinned_;
+  }
+
+  // CatchErrorList | MarklogicCatchErrorList
+  private static boolean CatchClause_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "CatchClause_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = CatchErrorList(builder_, level_ + 1);
+    if (!result_) result_ = MarklogicCatchErrorList(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
   }
 
   /* ********************************************************** */
@@ -3243,7 +3264,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "declare" (CompatibilityAnnotation | Annotation)* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external") Separator
+  // "declare" (MarklogicAnnotation | CompatibilityAnnotation | Annotation)* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external") Separator
   public static boolean FunctionDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionDecl")) return false;
     if (!nextTokenIs(builder_, K_DECLARE)) return false;
@@ -3263,7 +3284,7 @@ public class XQueryParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // (CompatibilityAnnotation | Annotation)*
+  // (MarklogicAnnotation | CompatibilityAnnotation | Annotation)*
   private static boolean FunctionDecl_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionDecl_1")) return false;
     int pos_ = current_position_(builder_);
@@ -3275,12 +3296,13 @@ public class XQueryParser implements PsiParser {
     return true;
   }
 
-  // CompatibilityAnnotation | Annotation
+  // MarklogicAnnotation | CompatibilityAnnotation | Annotation
   private static boolean FunctionDecl_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionDecl_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = CompatibilityAnnotation(builder_, level_ + 1);
+    result_ = MarklogicAnnotation(builder_, level_ + 1);
+    if (!result_) result_ = CompatibilityAnnotation(builder_, level_ + 1);
     if (!result_) result_ = Annotation(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
@@ -4110,6 +4132,49 @@ public class XQueryParser implements PsiParser {
     result_ = result_ && SequenceType(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // "private"
+  public static boolean MarklogicAnnotation(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MarklogicAnnotation")) return false;
+    if (!nextTokenIs(builder_, K_PRIVATE)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_PRIVATE);
+    exit_section_(builder_, marker_, MARKLOGIC_ANNOTATION, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // "(" "$" VarName ")"
+  public static boolean MarklogicCatchErrorList(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MarklogicCatchErrorList")) return false;
+    if (!nextTokenIs(builder_, L_PAR)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, L_PAR);
+    result_ = result_ && consumeToken(builder_, DOLLAR_SIGN);
+    result_ = result_ && VarName(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, R_PAR);
+    exit_section_(builder_, marker_, MARKLOGIC_CATCH_ERROR_LIST, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // "namespace" "::" NodeTest
+  public static boolean MarklogicNamespaceAxis(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MarklogicNamespaceAxis")) return false;
+    if (!nextTokenIs(builder_, K_NAMESPACE)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = consumeToken(builder_, K_NAMESPACE);
+    result_ = result_ && consumeToken(builder_, COLON_COLON);
+    pinned_ = result_; // pin = 2
+    result_ = result_ && NodeTest(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, MARKLOGIC_NAMESPACE_AXIS, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -6843,7 +6908,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "declare" (CompatibilityAnnotation | Annotation)* "variable" "$" VarName TypeDeclaration? (VarDetails) Separator
+  // "declare" (MarklogicAnnotation | CompatibilityAnnotation | Annotation)* "variable" "$" VarName TypeDeclaration? (VarDetails) Separator
   public static boolean VarDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarDecl")) return false;
     if (!nextTokenIs(builder_, K_DECLARE)) return false;
@@ -6863,7 +6928,7 @@ public class XQueryParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // (CompatibilityAnnotation | Annotation)*
+  // (MarklogicAnnotation | CompatibilityAnnotation | Annotation)*
   private static boolean VarDecl_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarDecl_1")) return false;
     int pos_ = current_position_(builder_);
@@ -6875,12 +6940,13 @@ public class XQueryParser implements PsiParser {
     return true;
   }
 
-  // CompatibilityAnnotation | Annotation
+  // MarklogicAnnotation | CompatibilityAnnotation | Annotation
   private static boolean VarDecl_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarDecl_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = CompatibilityAnnotation(builder_, level_ + 1);
+    result_ = MarklogicAnnotation(builder_, level_ + 1);
+    if (!result_) result_ = CompatibilityAnnotation(builder_, level_ + 1);
     if (!result_) result_ = Annotation(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;

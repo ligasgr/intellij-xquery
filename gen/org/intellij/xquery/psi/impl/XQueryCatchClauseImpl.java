@@ -50,4 +50,10 @@ public class XQueryCatchClauseImpl extends XQueryPsiElementImpl implements XQuer
     return findChildByClass(XQueryExpr.class);
   }
 
+  @Override
+  @Nullable
+  public XQueryMarklogicCatchErrorList getMarklogicCatchErrorList() {
+    return findChildByClass(XQueryMarklogicCatchErrorList.class);
+  }
+
 }

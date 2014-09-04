@@ -145,6 +145,9 @@ public interface XQueryTypes {
   IElementType MAP_ENTRY = new XQueryElementType("MAP_ENTRY");
   IElementType MAP_ENTRY_LIST = new XQueryElementType("MAP_ENTRY_LIST");
   IElementType MAP_TEST = new XQueryElementType("MAP_TEST");
+  IElementType MARKLOGIC_ANNOTATION = new XQueryElementType("MARKLOGIC_ANNOTATION");
+  IElementType MARKLOGIC_CATCH_ERROR_LIST = new XQueryElementType("MARKLOGIC_CATCH_ERROR_LIST");
+  IElementType MARKLOGIC_NAMESPACE_AXIS = new XQueryElementType("MARKLOGIC_NAMESPACE_AXIS");
   IElementType MODULE_DECL = new XQueryElementType("MODULE_DECL");
   IElementType MODULE_IMPORT = new XQueryElementType("MODULE_IMPORT");
   IElementType MODULE_IMPORT_NAMESPACE = new XQueryElementType("MODULE_IMPORT_NAMESPACE");
@@ -392,6 +395,7 @@ public interface XQueryTypes {
   IElementType K_PRECEDING_SIBLING = new XQueryTokenType("preceding-sibling");
   IElementType K_PRESERVE = new XQueryTokenType("preserve");
   IElementType K_PREVIOUS = new XQueryTokenType("previous");
+  IElementType K_PRIVATE = new XQueryTokenType("private");
   IElementType K_RENAME = new XQueryTokenType("rename");
   IElementType K_REPLACE = new XQueryTokenType("replace");
   IElementType K_RETURN = new XQueryTokenType("return");
@@ -837,6 +841,15 @@ public interface XQueryTypes {
       }
       else if (type == MAP_TEST) {
         return new XQueryMapTestImpl(node);
+      }
+      else if (type == MARKLOGIC_ANNOTATION) {
+        return new XQueryMarklogicAnnotationImpl(node);
+      }
+      else if (type == MARKLOGIC_CATCH_ERROR_LIST) {
+        return new XQueryMarklogicCatchErrorListImpl(node);
+      }
+      else if (type == MARKLOGIC_NAMESPACE_AXIS) {
+        return new XQueryMarklogicNamespaceAxisImpl(node);
       }
       else if (type == MODULE_DECL) {
         return new XQueryModuleDeclImpl(node);

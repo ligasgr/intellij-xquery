@@ -149,10 +149,10 @@ SC=({S} | "(:" {Char}* ~":)")+
 ">"                                        {return XQueryTypes.XMLTAGEND;}
 "@"                                        {pushState(QNAME);return XQueryTypes.AT_SIGN;}
 "//" / {SC}? ("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "("  {return XQueryTypes.SLASH_SLASH;}
-"//" / {SC}? ("child"|"descendant"|"attribute"|"self"|"descendant-or-self"|"following-sibling"|"following"|"parent"|"ancestor"|"preceding-sibling"|"preceding"|"ancestor-or-self") {SC}? "::" {return XQueryTypes.SLASH_SLASH;}
+"//" / {SC}? ("child"|"descendant"|"attribute"|"self"|"descendant-or-self"|"following-sibling"|"following"|"parent"|"ancestor"|"preceding-sibling"|"preceding"|"ancestor-or-self"|"namespace") {SC}? "::" {return XQueryTypes.SLASH_SLASH;}
 "//"                                       {pushState(QNAME);return XQueryTypes.SLASH_SLASH;}
 "/" / {SC}? ("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "("  {return XQueryTypes.SLASH;}
-"/" / {SC}? ("child"|"descendant"|"attribute"|"self"|"descendant-or-self"|"following-sibling"|"following"|"parent"|"ancestor"|"preceding-sibling"|"preceding"|"ancestor-or-self") {SC}? "::" {return XQueryTypes.SLASH;}
+"/" / {SC}? ("child"|"descendant"|"attribute"|"self"|"descendant-or-self"|"following-sibling"|"following"|"parent"|"ancestor"|"preceding-sibling"|"preceding"|"ancestor-or-self"|"namespace") {SC}? "::" {return XQueryTypes.SLASH;}
 "/"                                        {pushState(QNAME);return XQueryTypes.SLASH;}
 "+"                                        {return XQueryTypes.OP_PLUS;}
 "-"                                        {return XQueryTypes.OP_MINUS;}
@@ -237,6 +237,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "preceding-sibling" / {SC}? "::"           {return XQueryTypes.K_PRECEDING_SIBLING;}
 "preceding" / {SC}? "::"                   {return XQueryTypes.K_PRECEDING;}
 "ancestor-or-self" / {SC}? "::"            {return XQueryTypes.K_ANCESTOR_OR_SELF;}
+"namespace" / {SC}? "::"                   {return XQueryTypes.K_NAMESPACE;}
 "tumbling" / {SC} "window"                 {return XQueryTypes.K_TUMBLING;}
 "sliding" / {SC} "window"                  {return XQueryTypes.K_SLIDING;}
 "window" / {SC} "$"                        {return XQueryTypes.K_WINDOW;}
@@ -249,7 +250,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "next" / {SC} "$"                          {return XQueryTypes.K_NEXT;}
 "count" / {SC} "$"                         {return XQueryTypes.K_COUNT;}
 "try" / {SC} "{"                           {return XQueryTypes.K_TRY;}
-"catch" / {SC} ("Q{"|"*"|{NCName})         {return XQueryTypes.K_CATCH;}
+"catch" / ({SC} "Q{"|{SC} "*"|{SC} {NCName}| {SC}? "(" {SC}? "$") {return XQueryTypes.K_CATCH;}
 "div"                                      {return XQueryTypes.K_DIV;}
 "idiv"                                     {return XQueryTypes.K_IDIV;}
 "mod"                                      {return XQueryTypes.K_MOD;}
@@ -433,7 +434,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "="                                        {return XQueryTypes.EQUAL;}
 "\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
 "'"                                        {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
-"declare" / {SC} ("boundary-space"|"default"|"base-uri"|"construction"|"ordering"|"copy-namespaces"|"decimal-format"|"namespace"|"context"|"option"|"function"|"variable"|"%"|"updating"|"revalidation") {return XQueryTypes.K_DECLARE;}
+"declare" / {SC} ("boundary-space"|"default"|"base-uri"|"construction"|"ordering"|"copy-namespaces"|"decimal-format"|"namespace"|"context"|"option"|"function"|"variable"|"%"|"updating"|"revalidation"|"private") {return XQueryTypes.K_DECLARE;}
 "default" / {SC} ("collation"|"order"|"decimal-format"|"element"|"function") {return XQueryTypes.K_DEFAULT;}
 "base-uri" / {SC} ("\""|"'")               {return XQueryTypes.K_BASE_URI;}
 "option" / {SC} {NCName}                   {return XQueryTypes.K_OPTION;}
@@ -496,6 +497,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "no-inherit" / {SC}? ";"                   {return XQueryTypes.K_NO_INHERIT;}
 "updating"                                 {return XQueryTypes.K_UPDATING;}
 "revalidation"                             {return XQueryTypes.K_REVALIDATION;}
+"private"                                  {return XQueryTypes.K_PRIVATE;}
 {NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }

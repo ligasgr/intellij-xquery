@@ -1607,6 +1607,25 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testVariableDeclarationWithMarklogicPrivate() throws Exception {
+        assertProducedTokens("declare private variable $x := 'value';", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "private", "private",
+                "WHITE_SPACE", " ",
+                "variable", "variable",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "x",
+                "WHITE_SPACE", " ",
+                ":=", ":=",
+                "WHITE_SPACE", " ",
+                "StringLiteral", "'value'",
+                ";", ";"
+        });
+    }
+
     public void testIncompleteVariableDeclaration() throws Exception {
         assertProducedTokens("declare variable", new String[]{
                 "WHITE_SPACE", "",
@@ -1816,6 +1835,32 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "NCName", "local",
                 ":", ":",
                 "NCName", "login",
+                "(", "(",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "test",
+                "WHITE_SPACE", "",
+                "XmlEmptyElementEnd", "/>",
+                "}", "}",
+                ";", ";"
+        });
+    }
+
+    public void testFunctionDeclarationWithMarklogicPrivate() throws Exception {
+        assertProducedTokens("declare private function local:private() {<test/>};", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "private", "private",
+                "WHITE_SPACE", " ",
+                "function", "function",
+                "WHITE_SPACE", " ",
+                "NCName", "local",
+                ":", ":",
+                "NCName", "private",
                 "(", "(",
                 ")", ")",
                 "WHITE_SPACE", " ",
@@ -2062,13 +2107,68 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "$", "$",
                 "NCName", "j",
-                "/","/",
+                "/", "/",
                 "NCName", "z",
                 "WHITE_SPACE", " ",
                 "return", "return",
                 "WHITE_SPACE", " ",
                 "$", "$",
                 "NCName", "j"
+        });
+    }
+
+    public void testXQuery30TryCatch() {
+        assertProducedTokens("try {'a'} catch * {'b'}", new String[]{
+                "try", "try",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'a'",
+                "}", "}",
+                "WHITE_SPACE", " ",
+                "catch", "catch",
+                "WHITE_SPACE", " ",
+                "*", "*",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'b'",
+                "}", "}"
+        });
+    }
+
+    public void testMarklogicTryCatch() {
+        assertProducedTokens("try {'a'} catch ($e) {'b'}", new String[]{
+                "try", "try",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'a'",
+                "}", "}",
+                "WHITE_SPACE", " ",
+                "catch", "catch",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "$", "$",
+                "NCName", "e",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'b'",
+                "}", "}"
+        });
+    }
+
+    public void testNamespaceAxis() {
+        assertProducedTokens("$a/namespace::b", new String[]{
+                "$", "$",
+                "NCName", "a",
+                "/", "/",
+                "namespace", "namespace",
+                "::", "::",
+                "WHITE_SPACE", "",
+                "NCName", "b"
         });
     }
 }

@@ -34,6 +34,9 @@ public interface XQueryVarDecl extends XQueryPsiElement {
   @Nullable
   XQueryExternalVarPart getExternalVarPart();
 
+  @NotNull
+  List<XQueryMarklogicAnnotation> getMarklogicAnnotationList();
+
   @Nullable
   XQuerySeparator getSeparator();
 

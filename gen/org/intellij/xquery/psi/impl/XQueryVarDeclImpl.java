@@ -58,6 +58,12 @@ public class XQueryVarDeclImpl extends XQueryPsiElementImpl implements XQueryVar
   }
 
   @Override
+  @NotNull
+  public List<XQueryMarklogicAnnotation> getMarklogicAnnotationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryMarklogicAnnotation.class);
+  }
+
+  @Override
   @Nullable
   public XQuerySeparator getSeparator() {
     return findChildByClass(XQuerySeparator.class);

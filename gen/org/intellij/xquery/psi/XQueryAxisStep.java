@@ -27,6 +27,9 @@ public interface XQueryAxisStep extends XQueryPsiElement {
   @Nullable
   XQueryForwardStep getForwardStep();
 
+  @Nullable
+  XQueryMarklogicNamespaceAxis getMarklogicNamespaceAxis();
+
   @NotNull
   XQueryPredicateList getPredicateList();
 

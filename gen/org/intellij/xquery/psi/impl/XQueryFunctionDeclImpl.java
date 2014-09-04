@@ -64,6 +64,12 @@ public class XQueryFunctionDeclImpl extends XQueryPsiElementImpl implements XQue
   }
 
   @Override
+  @NotNull
+  public List<XQueryMarklogicAnnotation> getMarklogicAnnotationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryMarklogicAnnotation.class);
+  }
+
+  @Override
   @Nullable
   public XQueryParamList getParamList() {
     return findChildByClass(XQueryParamList.class);

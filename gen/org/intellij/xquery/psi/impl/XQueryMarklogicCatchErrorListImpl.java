@@ -27,39 +27,21 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryAxisStepImpl extends XQueryPsiElementImpl implements XQueryAxisStep {
+public class XQueryMarklogicCatchErrorListImpl extends XQueryPsiElementImpl implements XQueryMarklogicCatchErrorList {
 
-  public XQueryAxisStepImpl(ASTNode node) {
+  public XQueryMarklogicCatchErrorListImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAxisStep(this);
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitMarklogicCatchErrorList(this);
     else super.accept(visitor);
   }
 
   @Override
-  @Nullable
-  public XQueryForwardStep getForwardStep() {
-    return findChildByClass(XQueryForwardStep.class);
-  }
-
-  @Override
-  @Nullable
-  public XQueryMarklogicNamespaceAxis getMarklogicNamespaceAxis() {
-    return findChildByClass(XQueryMarklogicNamespaceAxis.class);
-  }
-
-  @Override
   @NotNull
-  public XQueryPredicateList getPredicateList() {
-    return findNotNullChildByClass(XQueryPredicateList.class);
-  }
-
-  @Override
-  @Nullable
-  public XQueryReverseStep getReverseStep() {
-    return findChildByClass(XQueryReverseStep.class);
+  public XQueryVarName getVarName() {
+    return findNotNullChildByClass(XQueryVarName.class);
   }
 
 }

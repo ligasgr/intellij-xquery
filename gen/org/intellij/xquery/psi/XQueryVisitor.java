@@ -503,6 +503,18 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitMarklogicAnnotation(@NotNull XQueryMarklogicAnnotation o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMarklogicCatchErrorList(@NotNull XQueryMarklogicCatchErrorList o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMarklogicNamespaceAxis(@NotNull XQueryMarklogicNamespaceAxis o) {
+    visitPsiElement(o);
+  }
+
   public void visitModuleDecl(@NotNull XQueryModuleDecl o) {
     visitNamespaceSource(o);
   }
