@@ -16,48 +16,32 @@
  */
 
 // This is a generated file. Not intended for manual editing.
-package org.intellij.xquery.psi;
+package org.intellij.xquery.psi.impl;
 
 import java.util.List;
 import org.jetbrains.annotations.*;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
+import static org.intellij.xquery.psi.XQueryTypes.*;
+import org.intellij.xquery.psi.*;
 
-public interface XQueryKindTest extends XQueryPsiElement {
+public class XQueryMarklogicCompBinaryConstructorImpl extends XQueryPsiElementImpl implements XQueryMarklogicCompBinaryConstructor {
 
-  @Nullable
-  XQueryAnyKindTest getAnyKindTest();
+  public XQueryMarklogicCompBinaryConstructorImpl(ASTNode node) {
+    super(node);
+  }
 
-  @Nullable
-  XQueryAttributeTest getAttributeTest();
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitMarklogicCompBinaryConstructor(this);
+    else super.accept(visitor);
+  }
 
-  @Nullable
-  XQueryCommentTest getCommentTest();
-
-  @Nullable
-  XQueryDocumentTest getDocumentTest();
-
-  @Nullable
-  XQueryElementTest getElementTest();
-
-  @Nullable
-  XQueryMapTest getMapTest();
-
-  @Nullable
-  XQueryMarklogicBinaryTest getMarklogicBinaryTest();
-
-  @Nullable
-  XQueryNamespaceNodeTest getNamespaceNodeTest();
-
-  @Nullable
-  XQueryPITest getPITest();
-
-  @Nullable
-  XQuerySchemaAttributeTest getSchemaAttributeTest();
-
-  @Nullable
-  XQuerySchemaElementTest getSchemaElementTest();
-
-  @Nullable
-  XQueryTextTest getTextTest();
+  @Override
+  @NotNull
+  public XQueryExpr getExpr() {
+    return findNotNullChildByClass(XQueryExpr.class);
+  }
 
 }

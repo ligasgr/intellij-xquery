@@ -199,6 +199,7 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType == XQueryTypes.K_COMMENT
                 || tokenType == XQueryTypes.K_NODE
                 || tokenType == XQueryTypes.K_PI
+                || tokenType == XQueryTypes.K_BINARY
                 || tokenType == XQueryTypes.K_IF
                 || tokenType == XQueryTypes.K_THEN
                 || tokenType == XQueryTypes.K_ELSE

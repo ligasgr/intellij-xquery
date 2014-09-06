@@ -507,7 +507,15 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitMarklogicBinaryTest(@NotNull XQueryMarklogicBinaryTest o) {
+    visitPsiElement(o);
+  }
+
   public void visitMarklogicCatchErrorList(@NotNull XQueryMarklogicCatchErrorList o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMarklogicCompBinaryConstructor(@NotNull XQueryMarklogicCompBinaryConstructor o) {
     visitPsiElement(o);
   }
 

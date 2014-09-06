@@ -22,42 +22,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryKindTest extends XQueryPsiElement {
-
-  @Nullable
-  XQueryAnyKindTest getAnyKindTest();
-
-  @Nullable
-  XQueryAttributeTest getAttributeTest();
-
-  @Nullable
-  XQueryCommentTest getCommentTest();
-
-  @Nullable
-  XQueryDocumentTest getDocumentTest();
-
-  @Nullable
-  XQueryElementTest getElementTest();
-
-  @Nullable
-  XQueryMapTest getMapTest();
-
-  @Nullable
-  XQueryMarklogicBinaryTest getMarklogicBinaryTest();
-
-  @Nullable
-  XQueryNamespaceNodeTest getNamespaceNodeTest();
-
-  @Nullable
-  XQueryPITest getPITest();
-
-  @Nullable
-  XQuerySchemaAttributeTest getSchemaAttributeTest();
-
-  @Nullable
-  XQuerySchemaElementTest getSchemaElementTest();
-
-  @Nullable
-  XQueryTextTest getTextTest();
+public interface XQueryMarklogicBinaryTest extends XQueryPsiElement {
 
 }

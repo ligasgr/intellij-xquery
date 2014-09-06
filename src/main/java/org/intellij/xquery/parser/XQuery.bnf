@@ -228,6 +228,7 @@
   K_RENAME               =  "rename"
   K_REPLACE              =  "replace"
   K_PRIVATE              =  "private"
+  K_BINARY               =  "binary"
 //  IntegerLiteral = "regexp:[0-9]+"
 //  DecimalLiteral = "regexp:(\.[0-9]+|[0-9]+\.[0-9]*)"
 //  DoubleLiteral  = "regexp:(\.[0-9]+|[0-9]+(\.[0-9]*)?)[eE][+-]?[0-9]+"
@@ -520,11 +521,13 @@ ComputedConstructor ::= CompDocConstructor
  | CompTextConstructor
  | CompCommentConstructor
  | CompPIConstructor
+ | MarklogicCompBinaryConstructor
 CompDocConstructor ::= "document" "{" Expr "}"
 CompElemConstructor ::= "element" (EQName | ("{" Expr "}")) "{" ContentExpr? "}"
 CompMapConstructor ::= "map" "{" MapEntryList? "}"
 MapEntryList ::= MapEntry ("," MapEntry)* ","?
 MapEntry ::= ExprSingle ":=" ExprSingle
+MarklogicCompBinaryConstructor ::= "binary" "{" Expr "}"
 ContentExpr ::= Expr
 CompAttrConstructor ::= "attribute" (EQName | ("{" Expr "}")) "{" Expr? "}"
 CompNamespaceConstructor ::= "namespace" (Prefix | ("{" PrefixExpr "}")) "{" URIExpr "}"
@@ -556,9 +559,11 @@ KindTest ::= DocumentTest
  | TextTest
  | NamespaceNodeTest
  | AnyKindTest
+ | MarklogicBinaryTest
 AnyKindTest ::= "node" "(" ")" {pin=2}
 DocumentTest ::= "document-node" "(" (ElementTest | SchemaElementTest)? ")" {pin=2}
 TextTest ::= "text" "(" ")" {pin=2}
+MarklogicBinaryTest ::= "binary" "(" ")" {pin=2}
 CommentTest ::= "comment" "(" ")" {pin=2}
 NamespaceNodeTest ::= "namespace-node" "(" ")" {pin=2}
 PITest ::= "processing-instruction" "(" (NCName | StringLiteral)? ")" {pin=2}
@@ -595,6 +600,7 @@ VarName ::= Prefix ':' VarLocalName | VarLocalName | URIQualifiedName {pin(".*")
 VarLocalName ::= NCName
 FunctionName ::= Prefix ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {pin(".*")=2 methods=[getName setName getNameIdentifier getTextOffset getPresentation delete getPrefixText getLocalNameText]}
 FunctionLocalName ::= NCName
+
 RevalidationDecl ::= "declare" "revalidation" ("strict" | "lax" | "skip")
 InsertExprTargetChoice ::= (("as" ("first" | "last"))? "into")
  | "after"

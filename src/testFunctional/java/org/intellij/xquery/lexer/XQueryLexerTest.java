@@ -2160,7 +2160,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
-    public void testNamespaceAxis() {
+    public void testMarklogicNamespaceAxis() {
         assertProducedTokens("$a/namespace::b", new String[]{
                 "$", "$",
                 "NCName", "a",
@@ -2169,6 +2169,28 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "::", "::",
                 "WHITE_SPACE", "",
                 "NCName", "b"
+        });
+    }
+
+    public void testMarklogicBinaryTest() {
+        assertProducedTokens("$a/binary()", new String[]{
+                "$", "$",
+                "NCName", "a",
+                "/", "/",
+                "binary", "binary",
+                "(", "(",
+                ")", ")"
+        });
+    }
+
+    public void testMarklogicBinaryConstructor() {
+        assertProducedTokens("binary {$a}", new String[]{
+                "binary", "binary",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "$", "$",
+                "NCName", "a",
+                "}", "}"
         });
     }
 }

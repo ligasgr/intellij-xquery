@@ -86,4 +86,10 @@ public class XQueryComputedConstructorImpl extends XQueryPsiElementImpl implemen
     return findChildByClass(XQueryCompTextConstructor.class);
   }
 
+  @Override
+  @Nullable
+  public XQueryMarklogicCompBinaryConstructor getMarklogicCompBinaryConstructor() {
+    return findChildByClass(XQueryMarklogicCompBinaryConstructor.class);
+  }
+
 }

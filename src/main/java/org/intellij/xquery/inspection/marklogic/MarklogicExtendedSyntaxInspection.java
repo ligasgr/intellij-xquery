@@ -29,7 +29,9 @@ import org.intellij.xquery.XQueryFlavour;
 import org.intellij.xquery.model.XQueryLanguageVersion;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryMarklogicAnnotation;
+import org.intellij.xquery.psi.XQueryMarklogicBinaryTest;
 import org.intellij.xquery.psi.XQueryMarklogicCatchErrorList;
+import org.intellij.xquery.psi.XQueryMarklogicCompBinaryConstructor;
 import org.intellij.xquery.psi.XQueryMarklogicNamespaceAxis;
 import org.intellij.xquery.psi.XQueryVersion;
 import org.intellij.xquery.psi.XQueryVersionDecl;
@@ -76,6 +78,10 @@ public class MarklogicExtendedSyntaxInspection extends LocalInspectionTool {
                 PsiTreeUtil.findChildrenOfType(file, XQueryMarklogicCatchErrorList.class);
         Collection<XQueryMarklogicNamespaceAxis> marklogicNamespaceAxes =
                 PsiTreeUtil.findChildrenOfType(file, XQueryMarklogicNamespaceAxis.class);
+        Collection<XQueryMarklogicBinaryTest> marklogicBinaryTests =
+                PsiTreeUtil.findChildrenOfType(file, XQueryMarklogicBinaryTest.class);
+        Collection<XQueryMarklogicCompBinaryConstructor> marklogicBinaryConstructors =
+                PsiTreeUtil.findChildrenOfType(file, XQueryMarklogicCompBinaryConstructor.class);
         int size = marklogicAnnotations.size() + marklogicCatchErrorLists.size() + marklogicNamespaceAxes.size();
         List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>(size);
         for (XQueryMarklogicAnnotation element : marklogicAnnotations) {
@@ -85,6 +91,12 @@ public class MarklogicExtendedSyntaxInspection extends LocalInspectionTool {
             problems.add(createProblem(manager, element));
         }
         for (XQueryMarklogicNamespaceAxis element : marklogicNamespaceAxes) {
+            problems.add(createProblem(manager, element));
+        }
+        for (XQueryMarklogicBinaryTest element : marklogicBinaryTests) {
+            problems.add(createProblem(manager, element));
+        }
+        for (XQueryMarklogicCompBinaryConstructor element : marklogicBinaryConstructors) {
             problems.add(createProblem(manager, element));
         }
         return problems.toArray(new ProblemDescriptor[problems.size()]);

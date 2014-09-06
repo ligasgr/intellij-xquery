@@ -76,6 +76,12 @@ public class XQueryKindTestImpl extends XQueryPsiElementImpl implements XQueryKi
 
   @Override
   @Nullable
+  public XQueryMarklogicBinaryTest getMarklogicBinaryTest() {
+    return findChildByClass(XQueryMarklogicBinaryTest.class);
+  }
+
+  @Override
+  @Nullable
   public XQueryNamespaceNodeTest getNamespaceNodeTest() {
     return findChildByClass(XQueryNamespaceNodeTest.class);
   }

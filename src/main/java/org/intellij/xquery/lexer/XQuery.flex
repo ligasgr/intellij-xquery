@@ -148,10 +148,10 @@ SC=({S} | "(:" {Char}* ~":)")+
 ">" / {SC}? {NCName} {SC}? ":" {SC}? {NCName} {SC}? "(" {return XQueryTypes.GT_CHAR;}
 ">"                                        {return XQueryTypes.XMLTAGEND;}
 "@"                                        {pushState(QNAME);return XQueryTypes.AT_SIGN;}
-"//" / {SC}? ("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "("  {return XQueryTypes.SLASH_SLASH;}
+"//" / {SC}? ("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function"|"binary") {SC}? "("  {return XQueryTypes.SLASH_SLASH;}
 "//" / {SC}? ("child"|"descendant"|"attribute"|"self"|"descendant-or-self"|"following-sibling"|"following"|"parent"|"ancestor"|"preceding-sibling"|"preceding"|"ancestor-or-self"|"namespace") {SC}? "::" {return XQueryTypes.SLASH_SLASH;}
 "//"                                       {pushState(QNAME);return XQueryTypes.SLASH_SLASH;}
-"/" / {SC}? ("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "("  {return XQueryTypes.SLASH;}
+"/" / {SC}? ("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function"|"binary") {SC}? "("  {return XQueryTypes.SLASH;}
 "/" / {SC}? ("child"|"descendant"|"attribute"|"self"|"descendant-or-self"|"following-sibling"|"following"|"parent"|"ancestor"|"preceding-sibling"|"preceding"|"ancestor-or-self"|"namespace") {SC}? "::" {return XQueryTypes.SLASH;}
 "/"                                        {pushState(QNAME);return XQueryTypes.SLASH;}
 "+"                                        {return XQueryTypes.OP_PLUS;}
@@ -216,7 +216,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "case"                                     {return XQueryTypes.K_CASE;}
 "and"                                      {return XQueryTypes.K_AND;}
 "or"                                       {return XQueryTypes.K_OR;}
-"as"/ ({SC}? "(" {SC}?|{SC}) (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "(")                        {pushState(ITEM_TYPE); return XQueryTypes.K_AS;}
+"as"/ ({SC}? "(" {SC}?|{SC}) (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function"|"binary") {SC}? "(")                        {pushState(ITEM_TYPE); return XQueryTypes.K_AS;}
 "as"                                       {return XQueryTypes.K_AS;}
 "to"                                       {return XQueryTypes.K_TO;}
 "where"                                    {return XQueryTypes.K_WHERE;}
@@ -282,6 +282,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "element" / ({SC}?"{"| {SC}{NCName})       {return XQueryTypes.K_ELEMENT;}
 "processing-instruction" / {SC}? ("{"|{NCName}) {return XQueryTypes.K_PI;}
 "text" / {SC}? ("("|"{")                   {return XQueryTypes.K_TEXT;}
+"binary" / {SC}? ("("|"{")                 {return XQueryTypes.K_BINARY;}
 "switch" / {SC}? ("(")                     {return XQueryTypes.K_SWITCH;}
 "if" / {SC}? ("(")                         {return XQueryTypes.K_IF;}
 "typeswitch" / {SC}? ("(")                 {return XQueryTypes.K_TYPESWITCH;}
@@ -463,7 +464,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "namespace" / {SC} ({NCName}|"\""|"'"|"{") {return XQueryTypes.K_NAMESPACE;}
 "context" / {SC} "item"                    {return XQueryTypes.K_CONTEXT;}
 "item" / {SC} ("external"|":="|"as")       {return XQueryTypes.K_ITEM;}
-"as"/ ({SC}? "(" {SC}?|{SC}) (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function") {SC}? "(" | {NCName})                        {pushState(ITEM_TYPE); return XQueryTypes.K_AS;}
+"as"/ ({SC}? "(" {SC}?|{SC}) (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function"|"binary") {SC}? "(" | {NCName})                        {pushState(ITEM_TYPE); return XQueryTypes.K_AS;}
 "map" / {SC}? ("(")                        {return XQueryTypes.K_MAP;}
 "attribute" / {SC}? ("(")                  {return XQueryTypes.K_ATTRIBUTE;}
 "comment" / {SC}? ("(")                    {return XQueryTypes.K_COMMENT;}
@@ -478,6 +479,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "schema-attribute" / {SC}? ("(")           {return XQueryTypes.K_SCHEMA_ATTRIBUTE;}
 "schema-element" / {SC}? ("(")             {return XQueryTypes.K_SCHEMA_ELEMENT;}
 "text" / {SC}? ("(")                       {return XQueryTypes.K_TEXT;}
+"binary" / {SC}? ("(")                     {return XQueryTypes.K_BINARY;}
 "external" / {SC}? (":="|";")              {return XQueryTypes.K_EXTERNAL;}
 "empty" / {SC} ("greatest"|"least")        {return XQueryTypes.K_EMPTY;}
 "strict" / {SC}? ";"                       {return XQueryTypes.K_STRICT;}
@@ -626,6 +628,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "namespace-node" / {SC}? "("               {return XQueryTypes.K_NAMESPACE_NODE;}
 "comment" / {SC}? "("                      {return XQueryTypes.K_COMMENT;}
 "text" / {SC}? "("                         {return XQueryTypes.K_TEXT;}
+"binary" / {SC}? "("                       {return XQueryTypes.K_BINARY;}
 {NCName}                                   {popState(); pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }

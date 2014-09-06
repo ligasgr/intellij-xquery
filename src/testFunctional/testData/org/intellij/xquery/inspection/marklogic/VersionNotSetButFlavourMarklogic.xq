@@ -1,6 +1,6 @@
 declare private variable $var := 'var';
 try {
-    $var/namespace::*
+    $var/namespace::*, binary {$var/binary()}
 } catch ($e) {
     ''
 }

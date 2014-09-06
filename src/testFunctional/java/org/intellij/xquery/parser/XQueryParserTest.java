@@ -143,4 +143,8 @@ public class XQueryParserTest extends BaseParserTest {
     public void testMarklogicPrivate() {
         doTest(true);
     }
+
+    public void testMarklogicBinary() {
+        doTest(true);
+    }
 }

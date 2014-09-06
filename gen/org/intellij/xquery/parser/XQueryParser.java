@@ -400,8 +400,14 @@ public class XQueryParser implements PsiParser {
     else if (root_ == MARKLOGIC_ANNOTATION) {
       result_ = MarklogicAnnotation(builder_, 0);
     }
+    else if (root_ == MARKLOGIC_BINARY_TEST) {
+      result_ = MarklogicBinaryTest(builder_, 0);
+    }
     else if (root_ == MARKLOGIC_CATCH_ERROR_LIST) {
       result_ = MarklogicCatchErrorList(builder_, 0);
+    }
+    else if (root_ == MARKLOGIC_COMP_BINARY_CONSTRUCTOR) {
+      result_ = MarklogicCompBinaryConstructor(builder_, 0);
     }
     else if (root_ == MARKLOGIC_NAMESPACE_AXIS) {
       result_ = MarklogicNamespaceAxis(builder_, 0);
@@ -1881,6 +1887,7 @@ public class XQueryParser implements PsiParser {
   //  | CompTextConstructor
   //  | CompCommentConstructor
   //  | CompPIConstructor
+  //  | MarklogicCompBinaryConstructor
   public static boolean ComputedConstructor(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ComputedConstructor")) return false;
     boolean result_ = false;
@@ -1893,6 +1900,7 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = CompTextConstructor(builder_, level_ + 1);
     if (!result_) result_ = CompCommentConstructor(builder_, level_ + 1);
     if (!result_) result_ = CompPIConstructor(builder_, level_ + 1);
+    if (!result_) result_ = MarklogicCompBinaryConstructor(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, COMPUTED_CONSTRUCTOR, result_, false, null);
     return result_;
   }
@@ -3908,6 +3916,7 @@ public class XQueryParser implements PsiParser {
   //  | TextTest
   //  | NamespaceNodeTest
   //  | AnyKindTest
+  //  | MarklogicBinaryTest
   public static boolean KindTest(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "KindTest")) return false;
     boolean result_ = false;
@@ -3923,6 +3932,7 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = TextTest(builder_, level_ + 1);
     if (!result_) result_ = NamespaceNodeTest(builder_, level_ + 1);
     if (!result_) result_ = AnyKindTest(builder_, level_ + 1);
+    if (!result_) result_ = MarklogicBinaryTest(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, KIND_TEST, result_, false, null);
     return result_;
   }
@@ -4150,6 +4160,22 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // "binary" "(" ")"
+  public static boolean MarklogicBinaryTest(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MarklogicBinaryTest")) return false;
+    if (!nextTokenIs(builder_, K_BINARY)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = consumeToken(builder_, K_BINARY);
+    result_ = result_ && consumeToken(builder_, L_PAR);
+    pinned_ = result_; // pin = 2
+    result_ = result_ && consumeToken(builder_, R_PAR);
+    exit_section_(builder_, level_, marker_, MARKLOGIC_BINARY_TEST, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
   // "(" "$" VarName ")"
   public static boolean MarklogicCatchErrorList(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MarklogicCatchErrorList")) return false;
@@ -4161,6 +4187,21 @@ public class XQueryParser implements PsiParser {
     result_ = result_ && VarName(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, R_PAR);
     exit_section_(builder_, marker_, MARKLOGIC_CATCH_ERROR_LIST, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // "binary" "{" Expr "}"
+  public static boolean MarklogicCompBinaryConstructor(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MarklogicCompBinaryConstructor")) return false;
+    if (!nextTokenIs(builder_, K_BINARY)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_BINARY);
+    result_ = result_ && consumeToken(builder_, L_C_BRACE);
+    result_ = result_ && Expr(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, R_C_BRACE);
+    exit_section_(builder_, marker_, MARKLOGIC_COMP_BINARY_CONSTRUCTOR, result_);
     return result_;
   }
 

@@ -146,7 +146,9 @@ public interface XQueryTypes {
   IElementType MAP_ENTRY_LIST = new XQueryElementType("MAP_ENTRY_LIST");
   IElementType MAP_TEST = new XQueryElementType("MAP_TEST");
   IElementType MARKLOGIC_ANNOTATION = new XQueryElementType("MARKLOGIC_ANNOTATION");
+  IElementType MARKLOGIC_BINARY_TEST = new XQueryElementType("MARKLOGIC_BINARY_TEST");
   IElementType MARKLOGIC_CATCH_ERROR_LIST = new XQueryElementType("MARKLOGIC_CATCH_ERROR_LIST");
+  IElementType MARKLOGIC_COMP_BINARY_CONSTRUCTOR = new XQueryElementType("MARKLOGIC_COMP_BINARY_CONSTRUCTOR");
   IElementType MARKLOGIC_NAMESPACE_AXIS = new XQueryElementType("MARKLOGIC_NAMESPACE_AXIS");
   IElementType MODULE_DECL = new XQueryElementType("MODULE_DECL");
   IElementType MODULE_IMPORT = new XQueryElementType("MODULE_IMPORT");
@@ -308,6 +310,7 @@ public interface XQueryTypes {
   IElementType K_ATTRIBUTE = new XQueryTokenType("attribute");
   IElementType K_BASE_URI = new XQueryTokenType("base-uri");
   IElementType K_BEFORE = new XQueryTokenType("before");
+  IElementType K_BINARY = new XQueryTokenType("binary");
   IElementType K_BOUNDARY_SPACE = new XQueryTokenType("boundary-space");
   IElementType K_BY = new XQueryTokenType("by");
   IElementType K_CASE = new XQueryTokenType("case");
@@ -846,8 +849,14 @@ public interface XQueryTypes {
       else if (type == MARKLOGIC_ANNOTATION) {
         return new XQueryMarklogicAnnotationImpl(node);
       }
+      else if (type == MARKLOGIC_BINARY_TEST) {
+        return new XQueryMarklogicBinaryTestImpl(node);
+      }
       else if (type == MARKLOGIC_CATCH_ERROR_LIST) {
         return new XQueryMarklogicCatchErrorListImpl(node);
+      }
+      else if (type == MARKLOGIC_COMP_BINARY_CONSTRUCTOR) {
+        return new XQueryMarklogicCompBinaryConstructorImpl(node);
       }
       else if (type == MARKLOGIC_NAMESPACE_AXIS) {
         return new XQueryMarklogicNamespaceAxisImpl(node);
