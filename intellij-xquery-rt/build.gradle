@@ -25,6 +25,8 @@
 
 
 
+
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply from: 'idea.gradle'
@@ -73,3 +75,5 @@ task testFunctional(type: Test) {
         events "started", "passed", "skipped", "failed", "standardOut", "standardError"
     }
 }
+
+task allTests(dependsOn: [test, testFunctional])
