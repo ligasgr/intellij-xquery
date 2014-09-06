@@ -17,9 +17,8 @@
 
 package org.intellij.xquery.completion.variable;
 
-import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.Lookup;
-import org.intellij.xquery.BaseFunctionalTestCase;
+import org.intellij.xquery.completion.BaseCollectorTest;
 import org.intellij.xquery.reference.MatchingStringCondition;
 
 import java.util.List;
@@ -32,77 +31,68 @@ import static java.util.Arrays.asList;
  * Date: 02/08/13
  * Time: 13:46
  */
-public class VariableCollectorTest extends BaseFunctionalTestCase {
+public class VariableCollectorTest extends BaseCollectorTest {
     @Override
     protected String getTestDataPath() {
         return "src/testFunctional/testData/org/intellij/xquery/completion/variable";
     }
 
     public void testVariableCompletionInTheSameFile() {
-        myFixture.configureByFiles("VariableCompletionInTheSameFile.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> strings = getCompletionProposals();
         assertTrue(strings.containsAll(asList("globalScopeVar", "functionArgumentScopeVar", "flworScopeVar")));
     }
 
-    public void testVariableCompletionInTheSameFileWithScopesChecking() {
-        myFixture.configureByFiles("VariableCompletionInTheSameFileScopes.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
+    public void testVariableCompletionInTheSameFileScopes() {
+        List<String> strings = getCompletionProposals();
         assertTrue(strings.containsAll(asList("anotherOne", "globalScopeVar", "scope:globalScopeVar",
                 "functionArgumentScopeVar", "newOne", "p", "rank", "someVar")));
     }
 
     public void testVariableCompletionInTheSameFileForDuplicatedEntries() {
-        myFixture.configureByFiles("VariableCompletionInTheSameFileForDuplicatedEntries.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> strings = getCompletionProposals();
         List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
         assertEquals(1, referenceBasedEntries.size());
     }
 
     public void testVariableCompletionInTheSameFileForSameNameAndDifferentScope() {
-        myFixture.configureByFiles("VariableCompletionInTheSameFileForSameNameAndDifferentScope.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> strings = getCompletionProposals();
         List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("example"));
         assertEquals(1, referenceBasedEntries.size());
     }
 
     public void testVariableCompletionFromAnotherFile() {
-        myFixture.configureByFiles("VariableCompletionFromAnotherFile.xq", "VariableReferencedFile.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
+        List<String> strings = getCompletionProposals("VariableReferencedFile.xq");
         List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
         assertEquals(1, referenceBasedEntries.size());
     }
 
-    public void testVariableCompletionFromAnotherFileWithPrivate() {
-        myFixture.configureByFiles("VariableCompletionFromAnotherFileForPrivate.xq",
-                "VariableReferencedFileWithPrivate.xq");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
+    public void testVariableCompletionFromAnotherFileForPrivate() {
+        List<String> strings = getCompletionProposals("VariableReferencedFileWithPrivate.xq");
         List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));
         assertEquals(0, referenceBasedEntries.size());
     }
 
     public void testVariableCompletionWithoutDollarAdded() {
-        myFixture.configureByFile("VariableCompletionWithoutDollarAdded.xq");
-
-        myFixture.completeBasic();
-        myFixture.type("var");
-        myFixture.type(Lookup.NORMAL_SELECT_CHAR);
-
-        myFixture.checkResultByFile("VariableCompletionWithoutDollarAdded_after.xq");
+        testInsertHandler("var", Lookup.NORMAL_SELECT_CHAR);
     }
 
     public void testVariableCompletionWithDollarAdded() {
-        myFixture.configureByFile("VariableCompletionWithDollarAdded.xq");
+        testInsertHandler("var", Lookup.NORMAL_SELECT_CHAR);
+    }
 
-        myFixture.completeBasic();
-        myFixture.type("var");
-        myFixture.type(Lookup.NORMAL_SELECT_CHAR);
+    public void testVariableCompletionWithNamespacePrefixPresentAndWithoutDollarAdded() {
+        testInsertHandler("tmp", Lookup.NORMAL_SELECT_CHAR);
+    }
 
-        myFixture.checkResultByFile("VariableCompletionWithDollarAdded_after.xq");
+    public void testVariableCompletionWithNamespacePrefixPresentAndWithDollarAdded() {
+        testInsertHandler("tmp", Lookup.NORMAL_SELECT_CHAR);
+    }
+
+    public void testVariableCompletionWithTextAfterNotReplaced() {
+        testInsertHandler("tmp", Lookup.NORMAL_SELECT_CHAR);
+    }
+
+    public void testVariableCompletionWithTextAfterReplaced() {
+        testInsertHandler("tmp", Lookup.REPLACE_SELECT_CHAR);
     }
 }

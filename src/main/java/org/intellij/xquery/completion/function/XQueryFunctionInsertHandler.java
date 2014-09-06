@@ -21,6 +21,7 @@ import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
+import org.intellij.xquery.completion.InsertHandlerUtils;
 
 /**
  * User: ligasgr
@@ -32,6 +33,7 @@ public class XQueryFunctionInsertHandler extends ParenthesesInsertHandler<Lookup
     @Override
     public void handleInsert(InsertionContext context, LookupElement item) {
         super.handleInsert(context, item);
+        InsertHandlerUtils.removePreviousNamespaceAndColonIfPresent(context);
         AutoPopupController.getInstance(context.getProject()).autoPopupParameterInfo(context.getEditor(),
                 item.getPsiElement());
     }
