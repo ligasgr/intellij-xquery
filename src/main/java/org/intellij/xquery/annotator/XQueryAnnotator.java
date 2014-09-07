@@ -107,7 +107,8 @@ public class XQueryAnnotator implements Annotator, DumbAware {
     }
 
     private void highlightVariable(XQueryVarName element, AnnotationHolder holder, PsiElement elementParent) {
-        if (element.getPrefix() != null) {
+        TextAttributes attributes = getAttributes(XQuerySyntaxHighlighter.PREFIXED_VARIABLE);
+        if (element.getPrefix() != null && !new TextAttributes().equals(attributes)) {
             highlight(element, holder, XQuerySyntaxHighlighter.PREFIXED_VARIABLE);
         } else {
             if (elementParent instanceof XQueryParam) {
