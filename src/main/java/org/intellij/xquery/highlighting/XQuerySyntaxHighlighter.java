@@ -71,6 +71,21 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
             DefaultLanguageHighlighterColors.MARKUP_ATTRIBUTE);
     public static final TextAttributesKey XML_TAG_DATA = createTextAttributesKey("XQUERY_XML_TAG_DATA",
             HighlighterColors.TEXT);
+    public static final TextAttributesKey FUNCTION_CALL = createTextAttributesKey("XQUERY_FUNCTION_CALL",
+            DefaultLanguageHighlighterColors.FUNCTION_CALL);
+    public static final TextAttributesKey FUNCTION_DECLARATION = createTextAttributesKey("XQUERY_FUNCTION_DECLARATION",
+            DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
+    public static final TextAttributesKey PARAMETER = createTextAttributesKey("XQUERY_PARAMETER",
+            DefaultLanguageHighlighterColors.PARAMETER);
+    public static final TextAttributesKey LOCAL_VARIABLE = createTextAttributesKey("XQUERY_LOCAL_VARIABLE",
+            DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
+    public static final TextAttributesKey GLOBAL_VARIABLE = createTextAttributesKey("XQUERY_GLOBAL_VARIABLE",
+            DefaultLanguageHighlighterColors.GLOBAL_VARIABLE);
+    public static final TextAttributesKey PREFIXED_VARIABLE = createTextAttributesKey("XQUERY_PREFIXED_VARIABLE");
+    public static final TextAttributesKey ITEM_TYPE = createTextAttributesKey("XQUERY_ITEM_TYPE",
+            DefaultLanguageHighlighterColors.CLASS_NAME);
+    public static final TextAttributesKey ANNOTATION = createTextAttributesKey("XQUERY_ANNOTATION",
+            DefaultLanguageHighlighterColors.METADATA);
 
     public static final TextAttributesKey XML_ENTITY_REFERENCE = createTextAttributesKey("XQUERY_XML_ENTITY_REFERENCE",
             DefaultLanguageHighlighterColors.MARKUP_ENTITY);
@@ -311,7 +326,6 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType == XQueryTypes.K_SCHEMA_ATTRIBUTE
                 || tokenType == XQueryTypes.K_SCHEMA_ELEMENT
                 || tokenType == XQueryTypes.K_REVALIDATION
-                || tokenType == XQueryTypes.K_UPDATING
                 || tokenType == XQueryTypes.K_SKIP
                 || tokenType == XQueryTypes.K_INSERT
                 || tokenType == XQueryTypes.K_NODES

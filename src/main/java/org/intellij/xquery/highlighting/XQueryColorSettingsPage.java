@@ -22,6 +22,7 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
+import com.intellij.util.containers.ContainerUtil;
 import org.intellij.xquery.icons.XQueryIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +55,28 @@ public class XQueryColorSettingsPage implements ColorSettingsPage {
             new AttributesDescriptor("Xml Attribute name", XQuerySyntaxHighlighter.XML_ATTRIBUTE_NAME),
             new AttributesDescriptor("Xml Tag data", XQuerySyntaxHighlighter.XML_TAG_DATA),
             new AttributesDescriptor("Xml Entity reference", XQuerySyntaxHighlighter.XML_ENTITY_REFERENCE),
+            new AttributesDescriptor("Function call", XQuerySyntaxHighlighter.FUNCTION_CALL),
+            new AttributesDescriptor("Function declaration", XQuerySyntaxHighlighter.FUNCTION_DECLARATION),
+            new AttributesDescriptor("Parameter", XQuerySyntaxHighlighter.PARAMETER),
+            new AttributesDescriptor("Global variable", XQuerySyntaxHighlighter.GLOBAL_VARIABLE),
+            new AttributesDescriptor("Local variable", XQuerySyntaxHighlighter.LOCAL_VARIABLE),
+            new AttributesDescriptor("Prefixed variable", XQuerySyntaxHighlighter.PREFIXED_VARIABLE),
+            new AttributesDescriptor("Item type", XQuerySyntaxHighlighter.ITEM_TYPE),
+            new AttributesDescriptor("Annotation", XQuerySyntaxHighlighter.ANNOTATION),
     };
+
+    private static Map<String, TextAttributesKey> ATTRIBUTES_KEY_MAP = ContainerUtil.newHashMap();
+
+    static {
+        ATTRIBUTES_KEY_MAP.put("fc", XQuerySyntaxHighlighter.FUNCTION_CALL);
+        ATTRIBUTES_KEY_MAP.put("fd", XQuerySyntaxHighlighter.FUNCTION_DECLARATION);
+        ATTRIBUTES_KEY_MAP.put("p", XQuerySyntaxHighlighter.PARAMETER);
+        ATTRIBUTES_KEY_MAP.put("gv", XQuerySyntaxHighlighter.GLOBAL_VARIABLE);
+        ATTRIBUTES_KEY_MAP.put("lv", XQuerySyntaxHighlighter.LOCAL_VARIABLE);
+        ATTRIBUTES_KEY_MAP.put("it", XQuerySyntaxHighlighter.ITEM_TYPE);
+        ATTRIBUTES_KEY_MAP.put("a", XQuerySyntaxHighlighter.ANNOTATION);
+        ATTRIBUTES_KEY_MAP.put("pv", XQuerySyntaxHighlighter.PREFIXED_VARIABLE);
+    }
 
     @Nullable
     @Override
@@ -76,26 +98,29 @@ public class XQueryColorSettingsPage implements ColorSettingsPage {
                 "(:~\n" +
                 " : Function description\n" +
                 " :)\n" +
-                "declare function test($argument) {\n" +
+                "declare <a>private</a> <a>updating</a> variable $<gv>var</gv> as <it>xs:string</it> := 'var';\n" +
+                "\n" +
+                "declare <a>%private</a> <a>%another</a> function <fd>test</fd>($<p>argument</p>) {\n" +
                 "    (: comment :)\n" +
-                "    (1 + 2 - 3 mod 4 * 4, true eq false, 5 > 6)\n" +
+                "    (1 + 2 - 3 mod 4 * 4, true eq false, 5 > 6, $<gv>var</gv>, $<p>argument</p>)\n" +
                 "};\n" +
                 "\n" +
-                "let $tested := <list>\n" +
+                "let $<pv>local:tested</pv> := <list>\n" +
                 "    <item name=\"df\">content &lt;</item>\n" +
                 "    <item name=\"aa&nbsp;\"/>\n" +
                 "    <!--<item name=\"cc\"/>-->\n" +
+                "    <item name=\"{<fc>test</fc>()}\"/>\n" +
                 "</list>\n" +
-                "for $item in $tested//item\n" +
-                "let $next := ($item/following-sibling::item[1])\n" +
-                "return <x>{string($item/@name), '->', $next}</x>" +
+                "for $<lv>item</lv> in $<pv>local:tested</pv>//item\n" +
+                "let $<lv>next</lv> := ($<lv>item</lv>/following-sibling::item[1])\n" +
+                "return <x>{string($<lv>item</lv>/@name), '->', $<lv>next</lv>}</x>" +
                 "%%%~~~~";
     }
 
     @Nullable
     @Override
     public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
-        return null;
+        return ATTRIBUTES_KEY_MAP;
     }
 
     @NotNull
