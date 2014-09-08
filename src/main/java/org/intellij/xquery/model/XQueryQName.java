@@ -57,11 +57,11 @@ public class XQueryQName<T> {
         XQueryQName that = (XQueryQName) obj;
 
         boolean prefixesAndLocalNamesMatch = prefix != null && prefix.equals
-                (that.prefix) && localName.equals(that.localName);
+                (that.prefix) && localName != null && localName.equals(that.localName);
         boolean prefixesAreEmptyAndLocalNamesMatch = prefix == null && that.prefix == null && localName != null &&
                 localName.equals(that.localName);
-        boolean namespacesAndLocalNamesMatch = namespace != null && namespace.equals(that.namespace) && localName
-                .equals(that.localName);
+        boolean namespacesAndLocalNamesMatch = namespace != null && namespace.equals(that.namespace) &&
+                localName != null && localName.equals(that.localName);
 
         return prefixesAndLocalNamesMatch || prefixesAreEmptyAndLocalNamesMatch || namespacesAndLocalNamesMatch;
     }
