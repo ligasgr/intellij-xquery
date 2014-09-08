@@ -414,7 +414,8 @@ EqualityComp ::= "=" | "!="
 RelationalComp ::= "<" | "<=" | ">" | ">="
 ValueComp ::= "eq" | "ne" | "lt" | "le" | "gt" | "ge"
 NodeComp ::= "is" | "<<" | ">>"
-ValidateExpr ::= "validate" (ValidationMode | ("type" TypeName))? "{" Expr "}" {pin=1}
+ValidateExpr ::= "validate" (ValidationMode | ("type" TypeName) | MarklogicValidation)? "{" Expr "}" {pin=1}
+MarklogicValidation ::= "as" TypeName
 private ValidationMode ::= "lax" | "strict"
 ExtensionExpr ::= Pragma+ "{" Expr? "}" {pin=1}
 Pragma ::= "(#" S? EQName (S PragmaContents)? "#)" /* ws: explicit */ {pin=1}

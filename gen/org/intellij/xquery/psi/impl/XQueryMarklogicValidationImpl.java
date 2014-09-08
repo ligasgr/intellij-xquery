@@ -16,21 +16,32 @@
  */
 
 // This is a generated file. Not intended for manual editing.
-package org.intellij.xquery.psi;
+package org.intellij.xquery.psi.impl;
 
 import java.util.List;
 import org.jetbrains.annotations.*;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
+import static org.intellij.xquery.psi.XQueryTypes.*;
+import org.intellij.xquery.psi.*;
 
-public interface XQueryValidateExpr extends XQueryExprSingle {
+public class XQueryMarklogicValidationImpl extends XQueryPsiElementImpl implements XQueryMarklogicValidation {
 
-  @Nullable
-  XQueryExpr getExpr();
+  public XQueryMarklogicValidationImpl(ASTNode node) {
+    super(node);
+  }
 
-  @Nullable
-  XQueryMarklogicValidation getMarklogicValidation();
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitMarklogicValidation(this);
+    else super.accept(visitor);
+  }
 
-  @Nullable
-  XQueryTypeName getTypeName();
+  @Override
+  @NotNull
+  public XQueryTypeName getTypeName() {
+    return findNotNullChildByClass(XQueryTypeName.class);
+  }
 
 }

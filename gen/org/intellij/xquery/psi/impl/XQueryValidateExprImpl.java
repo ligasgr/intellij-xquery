@@ -46,6 +46,12 @@ public class XQueryValidateExprImpl extends XQueryExprSingleImpl implements XQue
 
   @Override
   @Nullable
+  public XQueryMarklogicValidation getMarklogicValidation() {
+    return findChildByClass(XQueryMarklogicValidation.class);
+  }
+
+  @Override
+  @Nullable
   public XQueryTypeName getTypeName() {
     return findChildByClass(XQueryTypeName.class);
   }

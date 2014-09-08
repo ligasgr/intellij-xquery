@@ -878,6 +878,24 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testMarklogicValidateAs() throws Exception {
+        assertProducedTokens("validate as xs:string {'string'}", new String[]{
+                "WHITE_SPACE", "",
+                "validate", "validate",
+                "WHITE_SPACE", " ",
+                "as", "as",
+                "WHITE_SPACE", " ",
+                "NCName", "xs",
+                ":", ":",
+                "NCName", "string",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'string'",
+                "}", "}"
+        });
+    }
+
     public void testItemType() throws Exception {
         assertProducedTokens("declare variable $item as item() external;", new String[]{
                 "WHITE_SPACE", "",

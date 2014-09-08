@@ -527,6 +527,10 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitMarklogicValidation(@NotNull XQueryMarklogicValidation o) {
+    visitPsiElement(o);
+  }
+
   public void visitModuleDecl(@NotNull XQueryModuleDecl o) {
     visitNamespaceSource(o);
   }

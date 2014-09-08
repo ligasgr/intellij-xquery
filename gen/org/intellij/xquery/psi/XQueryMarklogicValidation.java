@@ -22,15 +22,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryValidateExpr extends XQueryExprSingle {
+public interface XQueryMarklogicValidation extends XQueryPsiElement {
 
-  @Nullable
-  XQueryExpr getExpr();
-
-  @Nullable
-  XQueryMarklogicValidation getMarklogicValidation();
-
-  @Nullable
+  @NotNull
   XQueryTypeName getTypeName();
 
 }

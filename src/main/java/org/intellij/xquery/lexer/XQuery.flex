@@ -595,11 +595,12 @@ SC=({S} | "(:" {Char}* ~":)")+
 <VALIDATE_RECOGNITION> {
 {S}                                        {return TokenType.WHITE_SPACE;}
 "(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
-"validate" / {SC} ("lax"|"strict"|"type")  {return XQueryTypes.K_VALIDATE;}
+"validate" / {SC} ("lax"|"strict"|"type"|"as")  {return XQueryTypes.K_VALIDATE;}
 "validate" / {SC}? "{"                     {return XQueryTypes.K_VALIDATE;}
 "lax"                                      {return XQueryTypes.K_LAX;}
 "strict"                                   {return XQueryTypes.K_STRICT;}
 "type"                                     {return XQueryTypes.K_TYPE;}
+"as"                                       {return XQueryTypes.K_AS;}
 {NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }

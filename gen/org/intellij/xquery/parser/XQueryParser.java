@@ -415,6 +415,9 @@ public class XQueryParser implements PsiParser {
     else if (root_ == MARKLOGIC_NAMESPACE_AXIS) {
       result_ = MarklogicNamespaceAxis(builder_, 0);
     }
+    else if (root_ == MARKLOGIC_VALIDATION) {
+      result_ = MarklogicValidation(builder_, 0);
+    }
     else if (root_ == MODULE_DECL) {
       result_ = ModuleDecl(builder_, 0);
     }
@@ -4244,6 +4247,19 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // "as" TypeName
+  public static boolean MarklogicValidation(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MarklogicValidation")) return false;
+    if (!nextTokenIs(builder_, K_AS)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, K_AS);
+    result_ = result_ && TypeName(builder_, level_ + 1);
+    exit_section_(builder_, marker_, MARKLOGIC_VALIDATION, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // VersionDecl? (LibraryModule | MainModule)
   static boolean Module(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Module")) return false;
@@ -6885,7 +6901,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "validate" (ValidationMode | ("type" TypeName))? "{" Expr "}"
+  // "validate" (ValidationMode | ("type" TypeName) | MarklogicValidation)? "{" Expr "}"
   public static boolean ValidateExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ValidateExpr")) return false;
     if (!nextTokenIs(builder_, K_VALIDATE)) return false;
@@ -6902,20 +6918,21 @@ public class XQueryParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // (ValidationMode | ("type" TypeName))?
+  // (ValidationMode | ("type" TypeName) | MarklogicValidation)?
   private static boolean ValidateExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ValidateExpr_1")) return false;
     ValidateExpr_1_0(builder_, level_ + 1);
     return true;
   }
 
-  // ValidationMode | ("type" TypeName)
+  // ValidationMode | ("type" TypeName) | MarklogicValidation
   private static boolean ValidateExpr_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ValidateExpr_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = ValidationMode(builder_, level_ + 1);
     if (!result_) result_ = ValidateExpr_1_0_1(builder_, level_ + 1);
+    if (!result_) result_ = MarklogicValidation(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }

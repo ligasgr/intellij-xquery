@@ -151,6 +151,7 @@ public interface XQueryTypes {
   IElementType MARKLOGIC_CATCH_ERROR_LIST = new XQueryElementType("MARKLOGIC_CATCH_ERROR_LIST");
   IElementType MARKLOGIC_COMP_BINARY_CONSTRUCTOR = new XQueryElementType("MARKLOGIC_COMP_BINARY_CONSTRUCTOR");
   IElementType MARKLOGIC_NAMESPACE_AXIS = new XQueryElementType("MARKLOGIC_NAMESPACE_AXIS");
+  IElementType MARKLOGIC_VALIDATION = new XQueryElementType("MARKLOGIC_VALIDATION");
   IElementType MODULE_DECL = new XQueryElementType("MODULE_DECL");
   IElementType MODULE_IMPORT = new XQueryElementType("MODULE_IMPORT");
   IElementType MODULE_IMPORT_NAMESPACE = new XQueryElementType("MODULE_IMPORT_NAMESPACE");
@@ -864,6 +865,9 @@ public interface XQueryTypes {
       }
       else if (type == MARKLOGIC_NAMESPACE_AXIS) {
         return new XQueryMarklogicNamespaceAxisImpl(node);
+      }
+      else if (type == MARKLOGIC_VALIDATION) {
+        return new XQueryMarklogicValidationImpl(node);
       }
       else if (type == MODULE_DECL) {
         return new XQueryModuleDeclImpl(node);

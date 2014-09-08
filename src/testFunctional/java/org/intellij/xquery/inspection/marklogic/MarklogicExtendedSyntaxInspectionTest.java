@@ -35,6 +35,7 @@ public class MarklogicExtendedSyntaxInspectionTest extends BaseFunctionalTestCas
     public void testVersionNotSet() {
         executeTest();
     }
+
     public void testVersionNotSetButFlavourMarklogic() {
         XQuerySettings settings = XQuerySettings.getInstance(getProject());
         XQueryFlavour previous = settings.getFlavour();

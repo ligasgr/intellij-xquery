@@ -34,6 +34,7 @@ import org.intellij.xquery.psi.XQueryMarklogicBinaryTest;
 import org.intellij.xquery.psi.XQueryMarklogicCatchErrorList;
 import org.intellij.xquery.psi.XQueryMarklogicCompBinaryConstructor;
 import org.intellij.xquery.psi.XQueryMarklogicNamespaceAxis;
+import org.intellij.xquery.psi.XQueryMarklogicValidation;
 import org.intellij.xquery.psi.XQueryVersion;
 import org.intellij.xquery.psi.XQueryVersionDecl;
 import org.intellij.xquery.settings.XQuerySettings;
@@ -83,8 +84,10 @@ public class MarklogicExtendedSyntaxInspection extends LocalInspectionTool {
                 PsiTreeUtil.findChildrenOfType(file, XQueryMarklogicBinaryTest.class);
         Collection<XQueryMarklogicCompBinaryConstructor> marklogicBinaryConstructors =
                 PsiTreeUtil.findChildrenOfType(file, XQueryMarklogicCompBinaryConstructor.class);
+        Collection<XQueryMarklogicValidation> marklogicValidations =
+                PsiTreeUtil.findChildrenOfType(file, XQueryMarklogicValidation.class);
         int size = marklogicAnnotations.size() + marklogicCatchErrorLists.size() + marklogicNamespaceAxes.size()
-                + marklogicBinaryTests.size() + marklogicBinaryConstructors.size();
+                + marklogicBinaryTests.size() + marklogicBinaryConstructors.size() + marklogicValidations.size();
         List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>(size);
         for (XQueryMarklogicAnnotation element : marklogicAnnotations) {
             problems.add(createProblem(manager, element));
@@ -99,6 +102,9 @@ public class MarklogicExtendedSyntaxInspection extends LocalInspectionTool {
             problems.add(createProblem(manager, element));
         }
         for (XQueryMarklogicCompBinaryConstructor element : marklogicBinaryConstructors) {
+            problems.add(createProblem(manager, element));
+        }
+        for (XQueryMarklogicValidation element : marklogicValidations) {
             problems.add(createProblem(manager, element));
         }
         Collection<XQueryCatchClauseExpression> marklogicCatchClause =
