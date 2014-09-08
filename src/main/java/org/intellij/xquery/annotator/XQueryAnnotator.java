@@ -23,6 +23,7 @@ import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.project.DumbAware;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -103,6 +104,7 @@ public class XQueryAnnotator implements Annotator, DumbAware {
         }
         if (element instanceof XQueryAnnotation) {
             highlight(((XQueryAnnotation) element).getAnnotationName(), holder, XQuerySyntaxHighlighter.ANNOTATION);
+            highlight(new TextRange(element.getTextRange().getStartOffset(), element.getTextRange().getStartOffset() + 1), holder, XQuerySyntaxHighlighter.ANNOTATION);
         }
     }
 
@@ -142,7 +144,12 @@ public class XQueryAnnotator implements Annotator, DumbAware {
     private void highlight(PsiElement element, AnnotationHolder holder, TextAttributesKey attributesKey) {
         //TODO: start using createAnnotation in newer version to do highlighting even when there are errors
         // use HighlightInfoType.SYMBOL_TYPE_SEVERITY to satisfy UpdateHighlightersUtil.isCovered()
-        holder.createInfoAnnotation(element.getTextRange(), null)
+        highlight(element.getTextRange(), holder, attributesKey);
+    }
+
+
+    private void highlight(TextRange textRange, AnnotationHolder holder, TextAttributesKey attributesKey) {
+        holder.createInfoAnnotation(textRange, null)
                 .setEnforcedTextAttributes(getAttributes(attributesKey));
     }
 
