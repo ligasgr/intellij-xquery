@@ -76,6 +76,15 @@ public class FunctionCollectorTest extends BaseCollectorTest {
         assertEquals(1, referenceBasedEntriesWithAdditionalNamespace.size());
     }
 
+    public void testFunctionCompletionInTheSameFileWithPrefixAndPartOfNamePresent() {
+        List<String> strings = getCompletionProposals();
+        List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("Example"));
+        assertEquals(1, referenceBasedEntries.size());
+        List<String> referenceBasedEntriesWithAdditionalNamespace = findAll(strings,
+                new MatchingStringCondition("example:Example"));
+        assertEquals(1, referenceBasedEntriesWithAdditionalNamespace.size());
+    }
+
     public void testFunctionCompletionFromAnotherFile() {
         List<String> strings = getCompletionProposals("FunctionReferencedFile.xq");
         List<String> referenceBasedEntries = findAll(strings, new MatchingStringCondition("library:accessible"));

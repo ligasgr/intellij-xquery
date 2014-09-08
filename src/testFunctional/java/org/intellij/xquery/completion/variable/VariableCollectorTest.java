@@ -72,6 +72,11 @@ public class VariableCollectorTest extends BaseCollectorTest {
         assertEquals(0, referenceBasedEntries.size());
     }
 
+    public void testVariableCompletionInTheSameFileWithPrefixAndPartOfNamePresent() {
+        List<String> strings = getCompletionProposals();
+        assertTrue(strings.contains("local:Example"));
+    }
+
     public void testVariableCompletionWithoutDollarAdded() {
         testInsertHandler("var", Lookup.NORMAL_SELECT_CHAR);
     }

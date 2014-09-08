@@ -33,7 +33,9 @@ public class FunctionDeclarationToLookupElementConverter {
                 .withIcon(XQueryIcons.FUNCTION_ICON)
                 .withTailText(getTailText(functionDeclaration), true)
                 .withTypeText(getTypeText(functionDeclaration))
-                .withInsertHandler(new XQueryFunctionInsertHandler());
+                .withInsertHandler(new XQueryFunctionInsertHandler())
+                .withLookupString(functionDeclaration.getFunctionName().getLocalNameText())
+                ;
     }
 
     private static String getTypeText(XQueryFunctionDecl functionDeclaration) {

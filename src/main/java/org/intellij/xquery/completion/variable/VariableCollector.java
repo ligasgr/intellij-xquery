@@ -32,7 +32,7 @@ import org.intellij.xquery.psi.XQueryVarDecl;
 import org.intellij.xquery.psi.XQueryVarName;
 import org.intellij.xquery.psi.impl.XQueryPsiImplUtil;
 
-import javax.swing.Icon;
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -147,6 +147,8 @@ public class VariableCollector {
         return LookupElementBuilder.create(psiElement, key)
                 .withIcon(icon)
                 .withTypeText(typeText)
-                .withInsertHandler(new VariableInsertHandler());
+                .withInsertHandler(new VariableInsertHandler())
+                .withLookupString(psiElement.getVarLocalName().getText())
+                ;
     }
 }

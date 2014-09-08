@@ -32,7 +32,9 @@ public class BuiltInFunctionSignatureToLookupElementConverter {
                 .withIcon(XQueryIcons.FUNCTION_ICON)
                 .withTailText(getTailText(functionSignature), true)
                 .withTypeText(getTypeText(functionSignature))
-                .withInsertHandler(new XQueryFunctionInsertHandler());
+                .withInsertHandler(new XQueryFunctionInsertHandler())
+                .withLookupString(functionSignature.getName())
+                ;
     }
 
     private static String getTypeText(BuiltInFunctionSignature functionSignature) {
