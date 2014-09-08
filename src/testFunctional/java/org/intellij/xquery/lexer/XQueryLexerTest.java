@@ -2118,9 +2118,8 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
     }
 
     public void testXQuery30TryCatch() {
-        assertProducedTokens("try {'a'} catch * {'b'}", new String[]{
+        assertProducedTokens("try{'a'} catch * {'b'}", new String[]{
                 "try", "try",
-                "WHITE_SPACE", " ",
                 "{", "{",
                 "WHITE_SPACE", "",
                 "StringLiteral", "'a'",

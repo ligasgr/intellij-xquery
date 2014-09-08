@@ -249,7 +249,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "previous" / {SC} "$"                      {return XQueryTypes.K_PREVIOUS;}
 "next" / {SC} "$"                          {return XQueryTypes.K_NEXT;}
 "count" / {SC} "$"                         {return XQueryTypes.K_COUNT;}
-"try" / {SC} "{"                           {return XQueryTypes.K_TRY;}
+"try" / {SC}? "{"                           {return XQueryTypes.K_TRY;}
 "catch" / ({SC} "Q{"|{SC} "*"|{SC} {NCName}| {SC}? "(" {SC}? "$") {return XQueryTypes.K_CATCH;}
 "div"                                      {return XQueryTypes.K_DIV;}
 "idiv"                                     {return XQueryTypes.K_IDIV;}
