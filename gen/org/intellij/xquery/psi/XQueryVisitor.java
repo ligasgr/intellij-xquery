@@ -159,6 +159,10 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitCatchClauseExpression(@NotNull XQueryCatchClauseExpression o) {
+    visitPsiElement(o);
+  }
+
   public void visitCatchErrorList(@NotNull XQueryCatchErrorList o) {
     visitPsiElement(o);
   }

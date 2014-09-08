@@ -17,7 +17,6 @@
 
 package org.intellij.xquery.formatter;
 
-import com.intellij.psi.PsiDocumentManager;
 import org.intellij.xquery.BaseFunctionalTestCase;
 
 /**

@@ -27,33 +27,21 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryCatchClauseImpl extends XQueryPsiElementImpl implements XQueryCatchClause {
+public class XQueryCatchClauseExpressionImpl extends XQueryPsiElementImpl implements XQueryCatchClauseExpression {
 
-  public XQueryCatchClauseImpl(ASTNode node) {
+  public XQueryCatchClauseExpressionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCatchClause(this);
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitCatchClauseExpression(this);
     else super.accept(visitor);
   }
 
   @Override
   @Nullable
-  public XQueryCatchClauseExpression getCatchClauseExpression() {
-    return findChildByClass(XQueryCatchClauseExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public XQueryCatchErrorList getCatchErrorList() {
-    return findChildByClass(XQueryCatchErrorList.class);
-  }
-
-  @Override
-  @Nullable
-  public XQueryMarklogicCatchErrorList getMarklogicCatchErrorList() {
-    return findChildByClass(XQueryMarklogicCatchErrorList.class);
+  public XQueryExpr getExpr() {
+    return findChildByClass(XQueryExpr.class);
   }
 
 }

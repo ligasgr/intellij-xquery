@@ -27,6 +27,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryFlavour;
 import org.intellij.xquery.model.XQueryLanguageVersion;
+import org.intellij.xquery.psi.XQueryCatchClauseExpression;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryMarklogicAnnotation;
 import org.intellij.xquery.psi.XQueryMarklogicBinaryTest;
@@ -66,12 +67,12 @@ public class MarklogicExtendedSyntaxInspection extends LocalInspectionTool {
             versionIsNotMarklogicSpecific = false;
         }
         if (versionIsNotMarklogicSpecific) {
-            return privateUsedInInvalidPlaces(file, manager);
+            return findMarklogicExtendedSyntax(file, manager);
         }
         return null;
     }
 
-    private ProblemDescriptor[] privateUsedInInvalidPlaces(PsiFile file, InspectionManager manager) {
+    private ProblemDescriptor[] findMarklogicExtendedSyntax(PsiFile file, InspectionManager manager) {
         Collection<XQueryMarklogicAnnotation> marklogicAnnotations =
                 PsiTreeUtil.findChildrenOfType(file, XQueryMarklogicAnnotation.class);
         Collection<XQueryMarklogicCatchErrorList> marklogicCatchErrorLists =
@@ -82,7 +83,8 @@ public class MarklogicExtendedSyntaxInspection extends LocalInspectionTool {
                 PsiTreeUtil.findChildrenOfType(file, XQueryMarklogicBinaryTest.class);
         Collection<XQueryMarklogicCompBinaryConstructor> marklogicBinaryConstructors =
                 PsiTreeUtil.findChildrenOfType(file, XQueryMarklogicCompBinaryConstructor.class);
-        int size = marklogicAnnotations.size() + marklogicCatchErrorLists.size() + marklogicNamespaceAxes.size();
+        int size = marklogicAnnotations.size() + marklogicCatchErrorLists.size() + marklogicNamespaceAxes.size()
+                + marklogicBinaryTests.size() + marklogicBinaryConstructors.size();
         List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>(size);
         for (XQueryMarklogicAnnotation element : marklogicAnnotations) {
             problems.add(createProblem(manager, element));
@@ -98,6 +100,14 @@ public class MarklogicExtendedSyntaxInspection extends LocalInspectionTool {
         }
         for (XQueryMarklogicCompBinaryConstructor element : marklogicBinaryConstructors) {
             problems.add(createProblem(manager, element));
+        }
+        Collection<XQueryCatchClauseExpression> marklogicCatchClause =
+                PsiTreeUtil.findChildrenOfType(file, XQueryCatchClauseExpression.class);
+
+        for (XQueryCatchClauseExpression element : marklogicCatchClause) {
+            if (element.getExpr() == null) {
+                problems.add(createProblem(manager, element));
+            }
         }
         return problems.toArray(new ProblemDescriptor[problems.size()]);
     }

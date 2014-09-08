@@ -364,7 +364,8 @@ IfExpr ::= "if" "(" Expr ")" "then" ExprSingle "else" ExprSingle {pin=1}
 TryCatchExpr ::= TryClause CatchClause+ {pin=1}
 TryClause ::= "try" "{" TryTargetExpr "}" {pin=1}
 private TryTargetExpr ::= Expr
-CatchClause ::= "catch" (CatchErrorList | MarklogicCatchErrorList) "{" Expr "}" {pin=1}
+CatchClause ::= "catch" (CatchErrorList | MarklogicCatchErrorList) CatchClauseExpression {pin=1}
+CatchClauseExpression ::= "{" Expr? "}"
 CatchErrorList ::= NameTest ("|" NameTest)*
 MarklogicCatchErrorList ::= "(" "$" VarName ")"
 OrExpr ::= AndExpr OrMultipliedExpr*

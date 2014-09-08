@@ -173,6 +173,7 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
                 .around(CAST_OPERATOR).spaces(1)
                 .around(NODE_COMP).spaces(1)
                 .around(VALUE_COMP).spaces(1)
+                .around(CATCH_CLAUSE_EXPRESSION).spaces(1)
 
                 .after(L_BRACKET).none()
                 .before(R_BRACKET).none()

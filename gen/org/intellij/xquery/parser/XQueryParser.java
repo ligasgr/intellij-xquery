@@ -139,6 +139,9 @@ public class XQueryParser implements PsiParser {
     else if (root_ == CATCH_CLAUSE) {
       result_ = CatchClause(builder_, 0);
     }
+    else if (root_ == CATCH_CLAUSE_EXPRESSION) {
+      result_ = CatchClauseExpression(builder_, 0);
+    }
     else if (root_ == CATCH_ERROR_LIST) {
       result_ = CatchErrorList(builder_, 0);
     }
@@ -1482,7 +1485,7 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // "catch" (CatchErrorList | MarklogicCatchErrorList) "{" Expr "}"
+  // "catch" (CatchErrorList | MarklogicCatchErrorList) CatchClauseExpression
   public static boolean CatchClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CatchClause")) return false;
     if (!nextTokenIs(builder_, K_CATCH)) return false;
@@ -1492,9 +1495,7 @@ public class XQueryParser implements PsiParser {
     result_ = consumeToken(builder_, K_CATCH);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, CatchClause_1(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, L_C_BRACE)) && result_;
-    result_ = pinned_ && report_error_(builder_, Expr(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && consumeToken(builder_, R_C_BRACE) && result_;
+    result_ = pinned_ && CatchClauseExpression(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, CATCH_CLAUSE, result_, pinned_, null);
     return result_ || pinned_;
   }
@@ -1508,6 +1509,27 @@ public class XQueryParser implements PsiParser {
     if (!result_) result_ = MarklogicCatchErrorList(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // "{" Expr? "}"
+  public static boolean CatchClauseExpression(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "CatchClauseExpression")) return false;
+    if (!nextTokenIs(builder_, L_C_BRACE)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, L_C_BRACE);
+    result_ = result_ && CatchClauseExpression_1(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, R_C_BRACE);
+    exit_section_(builder_, marker_, CATCH_CLAUSE_EXPRESSION, result_);
+    return result_;
+  }
+
+  // Expr?
+  private static boolean CatchClauseExpression_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "CatchClauseExpression_1")) return false;
+    Expr(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */

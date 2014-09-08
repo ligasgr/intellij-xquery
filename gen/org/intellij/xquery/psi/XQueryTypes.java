@@ -57,6 +57,7 @@ public interface XQueryTypes {
   IElementType CAST_EXPR = new XQueryElementType("CAST_EXPR");
   IElementType CAST_OPERATOR = new XQueryElementType("CAST_OPERATOR");
   IElementType CATCH_CLAUSE = new XQueryElementType("CATCH_CLAUSE");
+  IElementType CATCH_CLAUSE_EXPRESSION = new XQueryElementType("CATCH_CLAUSE_EXPRESSION");
   IElementType CATCH_ERROR_LIST = new XQueryElementType("CATCH_ERROR_LIST");
   IElementType COMMENT_TEST = new XQueryElementType("COMMENT_TEST");
   IElementType COMMON_CONTENT = new XQueryElementType("COMMON_CONTENT");
@@ -581,6 +582,9 @@ public interface XQueryTypes {
       }
       else if (type == CATCH_CLAUSE) {
         return new XQueryCatchClauseImpl(node);
+      }
+      else if (type == CATCH_CLAUSE_EXPRESSION) {
+        return new XQueryCatchClauseExpressionImpl(node);
       }
       else if (type == CATCH_ERROR_LIST) {
         return new XQueryCatchErrorListImpl(node);
