@@ -18,18 +18,20 @@
 <idea-plugin url="http://ligasgr.github.io/intellij-xquery/" version="2">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
-    <version>2.1.0</version>
-    <vendor email="ligasgr@gmail.com">Grzegorz Ligas</vendor>
+    <version>2.2.0</version>
+    <vendor email="ligasgr@gmail.com" url="http://grzegorzligas.blogspot.com/">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0</description>
 
     <change-notes>
         <![CDATA[
-            <p>2.1.0:</p>
+            <p>2.2.0:</p>
             <ul>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/108">#108</a> - Unresolved variable highlighting.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/70">#70</a> - XQuery Update Facility 3.0</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/106">#106</a> - Inspection - check if declared default function namespace is same as module namespace (by <a href="mailto:arnost.valicek@gmail.com">Arnost Valicek</a>)</li>
+                <li>Improve insertion of completed items with namespace prefix.</li>
+                <li>Improve completion of functions and variables when prefix and part of the name are present.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/110">#110</a> - Add backwards compatibility with Marklogic language extensions.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/111">#111</a> - Color Issues.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/112">#112</a> - Faulty error reported using ml-1.0 syntax.</li>
             </ul>
         ]]>
     </change-notes>
