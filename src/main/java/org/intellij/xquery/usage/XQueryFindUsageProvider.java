@@ -17,7 +17,7 @@
 
 package org.intellij.xquery.usage;
 
-import com.intellij.find.impl.HelpID;
+import com.intellij.lang.HelpID;
 import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
