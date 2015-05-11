@@ -22,12 +22,15 @@ import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCa
 import net.java.openjdk.cacio.ctc.junit.CacioFESTRunner;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.fixture.FrameFixture;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
-import static org.intellij.xquery.XQueryFileType.DEFAULT_EXTENSION_WITH_DOT;
+import javax.swing.JComponent;
+import java.awt.Component;
+import java.awt.Container;
 
 /**
  * User: ligasgr
@@ -43,20 +46,36 @@ public abstract class BaseGuiTest extends LightPlatformCodeInsightFixtureTestCas
     }
 
     protected boolean isWriteActionRequired() {
-        return false;
+        return true;
     }
 
     @Override
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        PanelTestingFrame frame = GuiActionRunner.execute(new GuiQuery<PanelTestingFrame>() {
+        final PanelTestingFrame frame = GuiActionRunner.execute(new GuiQuery<PanelTestingFrame>() {
             protected PanelTestingFrame executeInEDT() {
                 return getPanelTestingFrame();
             }
         });
+        GuiActionRunner.execute(new GuiTask() {
+            protected void executeInEDT() {
+                disableTooltipForChildrenToSatisfyIdeasUsefulTestCase(frame);
+            }
+        });
         window = new FrameFixture(frame);
         window.show();
+    }
+
+    private void disableTooltipForChildrenToSatisfyIdeasUsefulTestCase(Container container) {
+        for (Component component : container.getComponents()) {
+            if (component instanceof JComponent) {
+                ((JComponent) component).setToolTipText(null);
+            }
+            if (component instanceof Container) {
+                disableTooltipForChildrenToSatisfyIdeasUsefulTestCase((Container) component);
+            }
+        }
     }
 
     protected abstract PanelTestingFrame getPanelTestingFrame();

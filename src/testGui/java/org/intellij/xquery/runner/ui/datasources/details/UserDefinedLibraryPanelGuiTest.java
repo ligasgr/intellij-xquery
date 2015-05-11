@@ -24,11 +24,13 @@ import com.intellij.testFramework.TestActionEvent;
 import com.intellij.ui.AnActionButton;
 import com.intellij.ui.CommonActionsPanel;
 import com.intellij.util.Consumer;
+import org.fest.swing.edt.GuiActionRunner;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
-import org.intellij.xquery.psi.XQueryElementFactory;
-import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.BaseGuiTest;
 import org.intellij.xquery.PanelTestingFrame;
+import org.intellij.xquery.psi.XQueryElementFactory;
+import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 import org.intellij.xquery.runner.ui.datasources.ConfigurationChangeListener;
 import org.junit.Before;
@@ -165,8 +167,7 @@ public class UserDefinedLibraryPanelGuiTest extends BaseGuiTest {
     @Test
     public void shouldPopulatePathListWithChosenFile() {
         setUpPanelWithUserLibrary(ENABLED);
-        XQueryFile file = XQueryElementFactory.createPhysicalFile(getProject(), "()");
-
+        XQueryFile file = createFile();
         panel.onFileChosen(file.getVirtualFile());
 
         String[] contents = window.list(PATH_LIST_NAME).contents();
@@ -180,12 +181,7 @@ public class UserDefinedLibraryPanelGuiTest extends BaseGuiTest {
         final AnActionButton action = getAnActionButton(ADD);
         final AnActionEvent event = new TestActionEvent(action);
 
-        execute(new GuiTask() {
-            @Override
-            protected void executeInEDT() throws Throwable {
-                action.actionPerformed(event);
-            }
-        });
+        simulateAction(action, event);
 
         assertThat(fileChooserUsedToChooseFiles, is(true));
     }
@@ -198,12 +194,7 @@ public class UserDefinedLibraryPanelGuiTest extends BaseGuiTest {
         final AnActionEvent event = new TestActionEvent(action);
         panel.getPathList().setSelectedIndex(0);
 
-        execute(new GuiTask() {
-            @Override
-            protected void executeInEDT() throws Throwable {
-                action.actionPerformed(event);
-            }
-        });
+        simulateAction(action, event);
 
         assertThat(window.list(PATH_LIST_NAME).contents().length, is(0));
     }
@@ -227,12 +218,7 @@ public class UserDefinedLibraryPanelGuiTest extends BaseGuiTest {
         final AnActionEvent event = new TestActionEvent(action);
         panel.getPathList().setSelectedIndex(0);
 
-        execute(new GuiTask() {
-            @Override
-            protected void executeInEDT() throws Throwable {
-                action.actionPerformed(event);
-            }
-        });
+        simulateAction(action, event);
 
         verifyChangeListenerInvokedForCurrentConfigurationState();
     }
@@ -253,4 +239,20 @@ public class UserDefinedLibraryPanelGuiTest extends BaseGuiTest {
         panel.init(cfg, aggregatingPanel, listener);
     }
 
+    private void simulateAction(final AnActionButton action, final AnActionEvent event) {
+        execute(new GuiTask() {
+            @Override
+            protected void executeInEDT() throws Throwable {
+                action.actionPerformed(event);
+            }
+        });
+    }
+
+    private XQueryFile createFile() {
+        return GuiActionRunner.execute(new GuiQuery<XQueryFile>() {
+            protected XQueryFile executeInEDT() {
+                return XQueryElementFactory.createPhysicalFile(getProject(), "()");
+            }
+        });
+    }
 }

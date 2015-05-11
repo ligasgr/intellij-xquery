@@ -17,6 +17,8 @@
 
 package org.intellij.xquery.runner.ui.datasources;
 
+import org.fest.swing.edt.GuiActionRunner;
+import org.fest.swing.edt.GuiTask;
 import org.intellij.xquery.BaseGuiTest;
 import org.intellij.xquery.PanelTestingFrame;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
@@ -62,11 +64,15 @@ public class DataSourceDetailsPanelGuiTest extends BaseGuiTest {
 
     @Test
     public void shouldAddNewPanelAfterDisplayDetailsInvoked() {
-        XQueryDataSourceConfiguration cfg = new XQueryDataSourceConfiguration("name", XQueryDataSourceType.SAXON);
-        ConfigurationChangeListener listener = mock(ConfigurationChangeListener.class);
+        final XQueryDataSourceConfiguration cfg = new XQueryDataSourceConfiguration("name", XQueryDataSourceType.SAXON);
+        final ConfigurationChangeListener listener = mock(ConfigurationChangeListener.class);
 
-        panel.displayDetails(cfg, listener);
+        GuiActionRunner.execute(new GuiTask() {
+            protected void executeInEDT() {
+                panel.displayDetails(cfg, listener);
 
+            }
+        });
         assertThat(panel.getComponents().length, is(1));
         verify(panel).add(isA(JPanel.class), eq(BorderLayout.NORTH));
     }
