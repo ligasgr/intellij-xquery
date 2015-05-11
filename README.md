@@ -11,4 +11,4 @@ Provides support for [XQuery](http://www.w3schools.com/xquery/) language in vers
 
 [GitHub Issues](https://github.com/ligasgr/intellij-xquery/issues) - request bug fixes, new features, enhancements, track current release
 
-Cloudbees Jenkins status: [![Build Status](https://buildhive.cloudbees.com/job/ligasgr/job/intellij-xquery/badge/icon?123)](https://buildhive.cloudbees.com/job/ligasgr/job/intellij-xquery/)
+[![Travis CI Build Status](https://travis-ci.org/ligasgr/intellij-xquery.svg?branch=master)](https://travis-ci.org/ligasgr/intellij-xquery)
