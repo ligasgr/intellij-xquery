@@ -18,21 +18,20 @@
 <idea-plugin url="http://ligasgr.github.io/intellij-xquery/" version="2">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
-    <version>2.2.1</version>
+    <version>3.0-SNAPSHOT</version>
     <vendor email="ligasgr@gmail.com" url="http://grzegorzligas.blogspot.com/">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0</description>
 
     <change-notes>
         <![CDATA[
-            <p>2.2.1:</p>
+            <p>3.0-SNAPSHOT:</p>
             <ul>
-                <li>Added support for IntelliJ 14.1</li>
             </ul>
         ]]>
     </change-notes>
 
-    <idea-version since-build="141.177" until-build="141.9999"/>
+    <idea-version since-build="139.1117" until-build="141.9999"/>
 
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="java-lang.xml">com.intellij.modules.java</depends>
