@@ -1,0 +1,6 @@
+language: java
+install: ./gradlew downloadSdk unzipSdk
+script: ./gradlew clean allTests
+after_success: ./gradlew dist
+jdk:
+  - openjdk7
