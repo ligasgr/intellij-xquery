@@ -21,6 +21,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.folding.FoldingBuilderEx;
 import com.intellij.lang.folding.FoldingDescriptor;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import org.intellij.xquery.psi.*;
@@ -32,7 +33,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class XQueryFoldingBuilder extends FoldingBuilderEx {
+public class XQueryFoldingBuilder extends FoldingBuilderEx implements DumbAware {
 
     @NotNull
     @Override
