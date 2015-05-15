@@ -20,6 +20,9 @@ import com.intellij.psi.tree.IElementType;
 import org.intellij.xquery.psi.XQueryBasicTypes;
 import org.intellij.xquery.psi.XQueryTypes;
 import com.intellij.psi.TokenType;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 %%
@@ -30,22 +33,85 @@ import java.util.Stack;
     this((java.io.Reader)null);
   }
 
+  private Map<Integer, String> states = new HashMap<Integer, String>() {
+    {
+      put(YYINITIAL, "YYINITIAL");
+      put(ITEM_TYPE, "ITEM_TYPE");
+      put(ATTR_QNAME, "ATTR_QNAME");
+      put(QUOT_STRING_SIMPLE, "QUOT_STRING_SIMPLE");
+      put(PRAGMA, "PRAGMA");
+      put(PI_CONTENT, "PI_CONTENT");
+      put(TAG_QNAME, "TAG_QNAME");
+      put(END_TAG, "END_TAG");
+      put(WS_BEFORE_QNAME, "WS_BEFORE_QNAME");
+      put(XQUERY_RECOGNITION, "XQUERY_RECOGNITION");
+      put(QNAME, "QNAME");
+      put(EXPRESSION_IN_QUOT_STRING, "EXPRESSION_IN_QUOT_STRING");
+      put(EXPR_COMMENT, "EXPR_COMMENT");
+      put(QUOT_STRING, "QUOT_STRING");
+      put(ELEMENT_CONTENT, "ELEMENT_CONTENT");
+      put(DECLARATION_RECOGNITION, "DECLARATION_RECOGNITION");
+      put(VALIDATE_RECOGNITION, "VALIDATE_RECOGNITION");
+      put(DOC_COMMENT, "DOC_COMMENT");
+      put(PRAGMA_CONTENT, "PRAGMA_CONTENT");
+      put(MODULE_RECOGNITION, "MODULE_RECOGNITION");
+      put(AS_RECOGNITION, "AS_RECOGNITION");
+      put(CDATA, "CDATA");
+      put(START_TAG, "START_TAG");
+      put(PI, "PI");
+      put(PRAGMA_BEFORE_CONTENT, "PRAGMA_BEFORE_CONTENT");
+      put(IMPORT_RECOGNITION, "IMPORT_RECOGNITION");
+      put(PI_BEFORE_CONTENT, "PI_BEFORE_CONTENT");
+      put(DIR_COMMENT, "DIR_COMMENT");
+      put(APOS_STRING_SIMPLE, "APOS_STRING_SIMPLE");
+      put(URIQUALIFIED, "URIQUALIFIED");
+      put(EXPRESSION_IN_APOS_STRING, "EXPRESSION_IN_APOS_STRING");
+      put(YYINITIAL, "YYINITIAL");
+      put(APOS_STRING, "APOS_STRING");
+      put(ATTR_LIST, "ATTR_LIST");
+    }
+  };
+
+  private String state(int state) {
+    return states.get(state);
+  }
+
+  private void log(String msg) {
+//    System.out.println(msg);
+  }
 
   private Stack<Integer> stack = new Stack<Integer>();
 
   private void pushState(int state) {
-    stack.push(yystate());
+    int current = yystate();
+    log("pushState is changing from " + state(current) + "(" + current + ") to " + state(state) + "(" + state +")");
+    stack.push(current);
     yybegin(state);
+    log("new state = " + state(yystate()) + "(" + yystate() + ")");
   }
 
   private void popState() {
     if (stack.empty()) {
-        yybegin(YYINITIAL);
-
+      log("popState is defaulting to YYINITIAL");
+      yybegin(YYINITIAL);
     } else {
-        int state = stack.pop();
-        yybegin(state);
+      int state = stack.pop();
+      log("popState is changing from " + state(yystate()) + "(" + yystate() + ") to " + state(state) + "(" + state + ")");
+      yybegin(state);
     }
+    log("new state = " + state(yystate()) + "(" + yystate() + ")");
+  }
+
+  private void popStateOrDefaultTo(int defaultState) {
+    if (stack.empty()) {
+      log("popStateOrDefault is defaulting to " + defaultState);
+      yybegin(defaultState);
+    } else {
+      int state = stack.pop();
+      log("popStateOrDefault is changing to " + state);
+      yybegin(state);
+    }
+    log("new state = " + state(yystate()) + "(" + yystate() + ")");
   }
 %}
 
@@ -104,6 +170,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 %state ATTR_LIST
 %state ATTR_QNAME
 %state DOC_COMMENT
+%state EXPRESSION_IN_QUOT_STRING
+%state EXPRESSION_IN_APOS_STRING
 // helper states for better support of live syntax highlighting
 %state XQUERY_RECOGNITION
 %state DECLARATION_RECOGNITION
@@ -116,7 +184,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 %%
 
 
-<YYINITIAL> {
+<YYINITIAL,EXPRESSION_IN_QUOT_STRING,EXPRESSION_IN_APOS_STRING> {
 {S}                                        {return TokenType.WHITE_SPACE;}
 {DecimalLiteral}                           {return XQueryTypes.DECIMALLITERAL;}
 {DoubleLiteral}                            {return XQueryTypes.DOUBLELITERAL;}
@@ -384,7 +452,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 {CharRef}                                  {return XQueryTypes.CHARREF;}
 "{{"                                       {return XQueryTypes.DBL_L_C_BRACE;}
 "}}"                                       {return XQueryTypes.DBL_R_C_BRACE;}
-"{"                                        {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE; }
+"{"                                        {pushState(EXPRESSION_IN_QUOT_STRING); return XQueryTypes.L_C_BRACE; }
 "\""                                       {popState(); return XQueryTypes.QUOT;}
 {Char}                                     {return XQueryTypes.CHAR;}
 }
@@ -394,9 +462,16 @@ SC=({S} | "(:" {Char}* ~":)")+
 {CharRef}                                  {return XQueryTypes.CHARREF;}
 "{{"                                       {return XQueryTypes.DBL_L_C_BRACE;}
 "}}"                                       {return XQueryTypes.DBL_R_C_BRACE;}
-"{"                                        {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE; }
+"{"                                        {pushState(EXPRESSION_IN_APOS_STRING); return XQueryTypes.L_C_BRACE; }
 "'"                                        {popState(); return XQueryTypes.APOSTROPHE;}
 {Char}                                     {return XQueryTypes.CHAR;}
+}
+
+<EXPRESSION_IN_QUOT_STRING> {
+.                                          {yypushback(yylength()); popStateOrDefaultTo(QUOT_STRING); return TokenType.WHITE_SPACE;}
+}
+<EXPRESSION_IN_APOS_STRING> {
+.                                          {yypushback(yylength()); popStateOrDefaultTo(APOS_STRING); return TokenType.WHITE_SPACE;}
 }
 
 <URIQUALIFIED> {
