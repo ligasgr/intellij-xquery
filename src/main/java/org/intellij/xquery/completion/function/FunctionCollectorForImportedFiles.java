@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static org.intellij.xquery.completion.XQueryCompletionContributor.EXTERNAL_FUNCTIONS_PRIORITY;
 import static org.intellij.xquery.completion.function.GenericFunctionCollector
         .getLookupItemForNonDefaultNamespace;
 import static org.intellij.xquery.completion.function.GenericFunctionCollector
@@ -84,9 +85,9 @@ public class FunctionCollectorForImportedFiles {
         boolean isInDefaultNamespace = targetFile.isPrefixForDefaultFunctionNamespace(targetPrefix);
 
         if (isInDefaultNamespace) {
-            lookupItems.addAll(getLookupItemsForDefaultNamespaceWhenImported(functionDecl, targetFile, localName, targetPrefix));
+            lookupItems.addAll(getLookupItemsForDefaultNamespaceWhenImported(functionDecl, targetFile, localName, targetPrefix, EXTERNAL_FUNCTIONS_PRIORITY));
         } else {
-            lookupItems.addAll(getLookupItemForNonDefaultNamespace(functionDecl, targetPrefix, localName));
+            lookupItems.addAll(getLookupItemForNonDefaultNamespace(functionDecl, targetPrefix, localName, EXTERNAL_FUNCTIONS_PRIORITY));
         }
         return lookupItems;
     }

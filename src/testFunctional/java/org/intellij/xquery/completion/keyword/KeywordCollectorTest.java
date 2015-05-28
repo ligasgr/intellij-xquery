@@ -18,14 +18,10 @@
 package org.intellij.xquery.completion.keyword;
 
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
 import org.intellij.xquery.BaseFunctionalTestCase;
 import org.intellij.xquery.XQueryFileType;
 
 import java.util.List;
-
-import static org.intellij.xquery.lexer.XQueryLexer.KEYWORDS;
 
 /**
  * User: ligasgr
@@ -34,17 +30,44 @@ import static org.intellij.xquery.lexer.XQueryLexer.KEYWORDS;
  */
 public class KeywordCollectorTest extends BaseFunctionalTestCase {
 
-    public void testKeywordsCompletion() throws Exception {
-        myFixture.configureByText(XQueryFileType.INSTANCE, "<caret>");
-        myFixture.complete(CompletionType.BASIC, 1);
-        List<String> strings = myFixture.getLookupElementStrings();
-        assertAllKeywords(KEYWORDS, strings);
+    public void testForEmptyFile() throws Exception {
+        verifyKeywords("<caret>", "xquery", "ancestor", "ancestor-or-self", "attribute", "binary", "child", "comment", "copy", "declare", "delete", "descendant", "descendant-or-self", "document", "document-node", "element", "every", "following", "following-sibling", "for", "function", "if", "import", "insert", "let", "map", "module", "namespace", "namespace-node", "node", "ordered", "parent", "preceding", "preceding-sibling", "processing-instruction", "rename", "replace", "schema-attribute", "schema-element", "self", "some", "switch", "text", "try");
     }
 
-    private void assertAllKeywords(TokenSet keywords, List<String> strings) {
-        for (IElementType keywordTokenType : keywords.getTypes()) {
-            String keywordString = keywordTokenType.toString();
-            assertTrue(String.format("Keyword %s missing", keywordString), strings.contains(keywordString));
+    public void testForXQueryBeginning() throws Exception {
+        verifyKeywords("xquery <caret>", "version", "encoding");
+    }
+
+    public void testForXQueryVersion() throws Exception {
+        verifyKeywords("xquery version '1.0' <caret>", "encoding");
+    }
+
+    public void testForDeclare() throws Exception {
+        verifyKeywords("declare <caret>", "boundary-space", "default", "base-uri", "construction", "ordering", "copy-namespaces", "decimal-format", "namespace", "updating", "private", "variable", "function", "context", "option", "revalidation");
+    }
+
+    public void testForModule() throws Exception {
+        verifyKeywords("module <caret>", "namespace");
+    }
+
+    public void testForImport() throws Exception {
+        verifyKeywords("import <caret>", "module", "schema");
+    }
+
+    public void testForDeclareDefault() throws Exception {
+        verifyKeywords("declare default <caret>", "collation", "order", "decimal-format", "element", "function");
+    }
+
+    private void verifyKeywords(String text, String... expected) {
+        myFixture.configureByText(XQueryFileType.INSTANCE, text);
+        myFixture.complete(CompletionType.BASIC, 1);
+        List<String> found = myFixture.getLookupElementStrings();
+        assertKeywordsFound(found, expected);
+    }
+
+    private void assertKeywordsFound(List<String> found, String... expected) {
+        for (String keyword : expected) {
+            assertTrue(String.format("Keyword %s missing", keyword), found.contains(keyword));
         }
     }
 }

@@ -25,7 +25,6 @@ import java.util.List;
 
 import static com.intellij.util.containers.ContainerUtil.findAll;
 import static org.intellij.xquery.completion.function.BuiltInFunctionTable.getFunctionsSignatures;
-import static org.intellij.xquery.lexer.XQueryLexer.KEYWORDS;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.MATH;
 
@@ -174,9 +173,5 @@ public class FunctionCollectorTest extends BaseCollectorTest {
         for (BuiltInFunctionSignature builtInFunctionSignature : getFunctionsSignatures(MATH.getNamespace())) {
             assertTrue(functions.contains(MATH.getPrefix() + ":" + builtInFunctionSignature.getName()));
         }
-        int builtInLookupItemsSize = getFunctionsSignatures(FN.getNamespace()).size() * timesBuiltInFunctionsAppear
-                + getFunctionsSignatures(MATH.getNamespace()).size()
-                + KEYWORDS.getTypes().length;
-        assertEquals(builtInLookupItemsSize, functions.size());
     }
 }

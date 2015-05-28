@@ -62,6 +62,7 @@ import org.intellij.xquery.reference.module.XQueryModuleReference;
 import org.intellij.xquery.reference.namespace.XQueryNamespacePrefixReference;
 import org.intellij.xquery.reference.variable.XQueryVariableReference;
 import org.intellij.xquery.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -480,8 +481,30 @@ public class XQueryPsiImplUtil {
         return null;
     }
 
+    public static PsiElement getPrevNonWhiteSpaceElement(PsiElement element) {
+        PsiElement previousLeaf = previousLeaf(element);
+        while (previousLeaf != null && (previousLeaf.getTextLength() == 0 || isWhitespace(previousLeaf))) {
+            previousLeaf = previousLeaf(previousLeaf);
+        }
+        return previousLeaf;
+    }
+
+    public static PsiElement previousLeaf(@NotNull PsiElement current) {
+        final PsiElement prevSibling = current.getPrevSibling();
+        if (prevSibling != null) return PsiTreeUtil.lastChild(prevSibling);
+        final PsiElement parent = current.getParent();
+        if (parent == null || parent instanceof PsiFile) return null;
+        PsiElement previousOfParent = previousLeaf(parent);
+        if (previousOfParent == null) return null;
+        return PsiTreeUtil.lastChild(previousOfParent);
+    }
+
     private static boolean isNotWhitespace(PsiElement element) {
-        return !(element instanceof PsiWhiteSpace);
+        return !isWhitespace(element);
+    }
+
+    private static boolean isWhitespace(PsiElement element) {
+        return element instanceof PsiWhiteSpace;
     }
 
     public static PsiElement[] findChildrenOfType(PsiElement startingElement, final IElementType elementType) {

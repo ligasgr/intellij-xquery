@@ -25,6 +25,7 @@ import org.intellij.xquery.psi.XQueryNamespaceDecl;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.intellij.xquery.completion.XQueryCompletionContributor.prioritized;
 import static org.intellij.xquery.completion.function.FunctionDeclarationToLookupElementConverter.convert;
 
 /**
@@ -35,23 +36,24 @@ import static org.intellij.xquery.completion.function.FunctionDeclarationToLooku
 public class GenericFunctionCollector {
 
     public static List<LookupElement> getLookupItemsForDefaultNamespace(XQueryFunctionDecl functionDecl,
-                                                                        XQueryFile targetFile, String localName) {
+                                                                        XQueryFile targetFile, String localName,
+                                                                        int priority) {
         List<LookupElement> lookupItems = new ArrayList<LookupElement>();
-        lookupItems.add(convert(functionDecl, localName));
+        lookupItems.add(prioritized(convert(functionDecl, localName), priority));
         for (XQueryNamespaceDecl namespaceDeclaration : targetFile.getNamespaceDeclarationsMatchingDefaultNamespace()) {
             String namespaceDeclarationPrefix = namespaceDeclaration.getNamespacePrefix().getText();
-            lookupItems.add(convert(functionDecl, namespaceDeclarationPrefix + ":" + localName));
+            lookupItems.add(prioritized(convert(functionDecl, namespaceDeclarationPrefix + ":" + localName), priority));
         }
         return lookupItems;
     }
 
     public static List<LookupElement> getLookupItemForNonDefaultNamespace(XQueryFunctionDecl functionDecl,
-                                                                          String prefix, String localName) {
+                                                                          String prefix, String localName, int priority) {
         List<LookupElement> lookupItems = new ArrayList<LookupElement>();
         if (prefix != null) {
-            lookupItems.add(convert(functionDecl, prefix + ":" + localName));
+            lookupItems.add(prioritized(convert(functionDecl, prefix + ":" + localName), priority));
         } else {
-            lookupItems.add(convert(functionDecl, localName));
+            lookupItems.add(prioritized(convert(functionDecl, localName), priority));
         }
         return lookupItems;
     }
@@ -59,9 +61,9 @@ public class GenericFunctionCollector {
     public static List<LookupElement> getLookupItemsForDefaultNamespaceWhenImported(XQueryFunctionDecl functionDecl,
                                                                                     XQueryFile targetFile,
                                                                                     String localName,
-                                                                                    String targetPrefix) {
-        List<LookupElement> lookupItems = getLookupItemsForDefaultNamespace(functionDecl, targetFile, localName);
-        lookupItems.add(convert(functionDecl, targetPrefix + ":" + localName));
+                                                                                    String targetPrefix, int priority) {
+        List<LookupElement> lookupItems = getLookupItemsForDefaultNamespace(functionDecl, targetFile, localName, priority);
+        lookupItems.add(prioritized(convert(functionDecl, targetPrefix + ":" + localName), priority));
         return lookupItems;
     }
 }

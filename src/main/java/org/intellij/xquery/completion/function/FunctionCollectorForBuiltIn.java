@@ -27,8 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.intellij.xquery.completion.XQueryCompletionContributor.BIF_PRIORITY;
 import static org.intellij.xquery.completion.function.BuiltInFunctionSignatureToLookupElementConverter.convert;
 import static org.intellij.xquery.completion.function.BuiltInFunctionTable.getFunctionsSignatures;
+import static org.intellij.xquery.completion.XQueryCompletionContributor.prioritized;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.isPredeclaredNamespace;
 
 /**
@@ -67,9 +69,9 @@ public class FunctionCollectorForBuiltIn {
         for (BuiltInFunctionSignature function : functions) {
             for (String prefix : matchingPrefixes) {
                 if (prefix != null) {
-                    lookupItems.add(convert(function, prefix + ":" + function.getName()));
+                    lookupItems.add(prioritized(convert(function, prefix + ":" + function.getName()), BIF_PRIORITY));
                 } else {
-                    lookupItems.add(convert(function, function.getName()));
+                    lookupItems.add(prioritized(convert(function, function.getName()), BIF_PRIORITY));
                 }
             }
         }

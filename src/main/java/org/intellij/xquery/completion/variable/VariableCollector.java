@@ -34,9 +34,14 @@ import org.intellij.xquery.psi.impl.XQueryPsiImplUtil;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
+import static org.intellij.xquery.completion.XQueryCompletionContributor.EXTERNAL_VARIABLES_PRIORITY;
+import static org.intellij.xquery.completion.XQueryCompletionContributor.VARIABLES_PRIORITY;
+import static org.intellij.xquery.completion.XQueryCompletionContributor.prioritized;
 import static org.intellij.xquery.model.XQueryQNameBuilder.aXQueryQName;
 import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInImport;
 
@@ -48,7 +53,8 @@ import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInI
 public class VariableCollector {
 
     private PsiElement sourceOfReference;
-    private List<XQueryQName<XQueryVarName>> proposedReferences;
+    private Set<XQueryQName<XQueryVarName>> collectedNames;
+    private LinkedList<LookupElement> proposedReferences;
 
     public VariableCollector(PsiElement sourceOfReference) {
         this.sourceOfReference = sourceOfReference;
@@ -56,24 +62,27 @@ public class VariableCollector {
 
     public List<LookupElement> getProposedLookUpItems() {
         XQueryFile file = (XQueryFile) sourceOfReference.getContainingFile();
-        proposedReferences = new LinkedList<XQueryQName<XQueryVarName>>();
+        collectedNames = new HashSet<XQueryQName<XQueryVarName>>();
+        proposedReferences = new LinkedList<LookupElement>();
         addProposedReferencesFromLocalScopes();
         addProposedReferencesFromFile(file);
         addProposedReferencesFromModuleImports(file);
-        return convertToLookupElements(proposedReferences);
+        return proposedReferences;
     }
 
     private void addProposedReferencesFromLocalScopes() {
         VariableVariantsScopeProcessor processor = new VariableVariantsScopeProcessor();
         PsiTreeUtil.treeWalkUp(processor, sourceOfReference, null, ResolveState.initial());
-        proposedReferences.addAll(processor.getProposedReferences());
+        List<XQueryQName<XQueryVarName>> references = processor.getProposedReferences();
+        proposedReferences.addAll(convertToLookupElements(references, VARIABLES_PRIORITY));
+        collectedNames.addAll(references);
     }
 
     private void addProposedReferencesFromFile(XQueryFile file) {
         for (final XQueryVarDecl varDecl : file.getVariableDeclarations()) {
             if (variableNameExists(varDecl)) {
                 XQueryQName<XQueryVarName> qName = aXQueryQName(varDecl.getVarName()).build();
-                addProposedReferenceIfNotAlreadyAdded(qName);
+                addProposedReferenceIfNotAlreadyAdded(qName, VARIABLES_PRIORITY);
             }
         }
     }
@@ -82,9 +91,10 @@ public class VariableCollector {
         return variableDeclaration.getVarName() != null && variableDeclaration.getVarName().getTextLength() > 0;
     }
 
-    private void addProposedReferenceIfNotAlreadyAdded(XQueryQName<XQueryVarName> qName) {
-        if (! proposedReferences.contains(qName)) {
-            proposedReferences.add(qName);
+    private void addProposedReferenceIfNotAlreadyAdded(XQueryQName<XQueryVarName> qName, int priority) {
+        if (! collectedNames.contains(qName)) {
+            collectedNames.add(qName);
+            proposedReferences.add(convertToLookupElement(qName, priority));
         }
     }
 
@@ -109,22 +119,22 @@ public class VariableCollector {
                 XQueryQName<XQueryVarName> qName = aXQueryQName(variableDeclaration.getVarName()).withPrefix
                         (targetPrefix)
                         .build();
-                addProposedReferenceIfNotAlreadyAdded(qName);
+                addProposedReferenceIfNotAlreadyAdded(qName, EXTERNAL_VARIABLES_PRIORITY);
             }
         }
     }
 
-    private List<LookupElement> convertToLookupElements(List<XQueryQName<XQueryVarName>> proposedReferences) {
+    private List<LookupElement> convertToLookupElements(List<XQueryQName<XQueryVarName>> proposedReferences, int priority) {
         List<LookupElement> lookupElements = new ArrayList<LookupElement>(proposedReferences.size());
         for (int i = 0; i < proposedReferences.size(); i++) {
-            lookupElements.add(convertToLookupElement(proposedReferences.get(i)));
+            lookupElements.add(convertToLookupElement(proposedReferences.get(i), priority));
         }
         return lookupElements;
     }
 
-    private LookupElement convertToLookupElement(XQueryQName<XQueryVarName> qName) {
+    private LookupElement convertToLookupElement(XQueryQName<XQueryVarName> qName, int priority) {
         XQueryVarName variableName = qName.getNamedObject();
-        return createLookupElement(variableName, qName.getTextRepresentation());
+        return prioritized(createLookupElement(variableName, qName.getTextRepresentation()), priority);
     }
 
     private LookupElement createLookupElement(XQueryVarName psiElement, String key) {

@@ -276,6 +276,15 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testIncompleteVersionDeclaration() throws Exception {
+        assertProducedTokens("xquery version", new String[]{
+                "WHITE_SPACE", "",
+                "xquery", "xquery",
+                "WHITE_SPACE", " ",
+                "version", "version"
+        });
+    }
+
     public void testEncodingAndVersionDeclaration() throws Exception {
         assertProducedTokens("xquery encoding 'UTF-8' version '3.0';", new String[]{
                 "WHITE_SPACE", "",
@@ -1031,6 +1040,15 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "StringLiteral", "'a'",
                 ";", ";"
+        });
+    }
+
+    public void testIncompleteModuleNamespace() throws Exception {
+        assertProducedTokens("module namespace", new String[]{
+                "WHITE_SPACE", "",
+                "module", "module",
+                "WHITE_SPACE", " ",
+                "namespace", "namespace"
         });
     }
 

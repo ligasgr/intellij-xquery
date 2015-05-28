@@ -17,14 +17,37 @@
 
 package org.intellij.xquery.completion.keyword;
 
+import com.intellij.codeInsight.completion.CompletionInitializationContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.intellij.psi.tree.IElementType;
+import org.intellij.grammar.parser.GeneratedParserUtilBase;
+import org.intellij.xquery.XQueryLanguage;
+import org.intellij.xquery.lexer.XQueryLexer;
+import org.intellij.xquery.psi.impl.XQueryPsiImplUtil;
+import org.intellij.xquery.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import static org.intellij.xquery.lexer.XQueryLexer.KEYWORDS;
+import static java.util.Arrays.asList;
+import static org.intellij.grammar.parser.GeneratedParserUtilBase.COMPLETION_STATE_KEY;
+import static org.intellij.xquery.completion.XQueryCompletionContributor.KEYWORD_PRIORITY;
+import static org.intellij.xquery.completion.XQueryCompletionContributor.SENSITIVE_KEYWORD_PRIORITY;
+import static org.intellij.xquery.completion.XQueryCompletionContributor.prioritized;
 
 /**
  * User: ligasgr
@@ -32,11 +55,104 @@ import static org.intellij.xquery.lexer.XQueryLexer.KEYWORDS;
  * Time: 14:26
  */
 public class KeywordCollector {
-    public List<LookupElement> getProposedLookUpItems() {
+
+    private Map<String, List<String>> keywordSuggestions = new HashMap<String, List<String>>();
+
+    {
+        keywordSuggestions.put("", asList("xquery", "ancestor", "ancestor-or-self", "attribute", "binary", "child", "comment", "copy", "declare", "delete", "descendant", "descendant-or-self", "document", "document-node", "element", "every", "following", "following-sibling", "for", "function", "if", "import", "insert", "let", "map", "module", "namespace", "namespace-node", "node", "ordered", "parent", "preceding", "preceding-sibling", "processing-instruction", "rename", "replace", "schema-attribute", "schema-element", "self", "some", "switch", "text", "try"));
+        keywordSuggestions.put("xquery", asList("version", "encoding"));
+        keywordSuggestions.put("declare", asList("boundary-space", "default", "base-uri", "construction", "ordering", "copy-namespaces", "decimal-format", "namespace", "updating", "private", "variable", "function", "context", "option", "revalidation"));
+        keywordSuggestions.put("module", asList("namespace"));
+        keywordSuggestions.put("import", asList("schema", "module"));
+    }
+
+    public List<LookupElement> getProposedLookUpItems(PsiElement position) {
+        Set<String> collected = new HashSet<String>();
+        Collection<String> keywordsForContextSensitiveKeywords = suggestKeywordsForContextSensitiveKeywords(position);
+        Collection<String> keywordsBasedOnParserExpectedKeywords = suggestKeywordsBasedOnParserExpectedKeywords(position);
+        collected.addAll(keywordsForContextSensitiveKeywords);
         List<LookupElement> result = new LinkedList<LookupElement>();
-        for (IElementType keywordTokenType : KEYWORDS.getTypes()) {
-            result.add(LookupElementBuilder.create(keywordTokenType.toString()).bold());
+        result.addAll(convertToLookupElements(keywordsForContextSensitiveKeywords, SENSITIVE_KEYWORD_PRIORITY));
+        result.addAll(convertToLookupElements(addOnlyIfNotAlreadyAdded(keywordsBasedOnParserExpectedKeywords, collected), KEYWORD_PRIORITY));
+        return result;
+    }
+
+    private Collection<String> addOnlyIfNotAlreadyAdded(Collection<String> newKeywords, Set<String> alreadyAdded) {
+        List<String> result = new LinkedList<String>();
+        for (String keyword : newKeywords) {
+            if (!alreadyAdded.contains(keyword)) {
+                result.add(keyword);
+            }
         }
         return result;
     }
+
+    private List<LookupElement> convertToLookupElements(Collection<String> keywords, int priority) {
+        List<LookupElement> result = new LinkedList<LookupElement>();
+        for (String keyword : keywords) {
+            result.add(prioritized(convert(keyword), priority));
+        }
+        return result;
+    }
+
+    private LookupElementBuilder convert(String keyword) {
+        return LookupElementBuilder.create(keyword).bold();
+    }
+
+    private Collection<String> suggestKeywordsForContextSensitiveKeywords(@NotNull PsiElement position) {
+        String text = getPrecedingTokenText(position, StringUtils.EMPTY).trim();
+        List<String> foundSuggestions = keywordSuggestions.get(text);
+        return foundSuggestions != null ? foundSuggestions : Collections.<String>emptyList();
+    }
+
+    private String getPrecedingTokenText(PsiElement position, String defaultText) {
+        PsiElement prevElement = XQueryPsiImplUtil.getPrevNonWhiteSpaceElement(position);
+        return prevElement != null ? prevElement.getText() : defaultText;
+    }
+
+    private String getPrecedingText(PsiElement position, String defaultText) {
+        TextRange range = getPrecedingTextRange(position);
+        PsiFile posFile = position.getContainingFile();
+        return range.isEmpty() ? defaultText : range.substring(posFile.getText());
+    }
+
+    private TextRange getPrecedingTextRange(PsiElement position) {
+        TextRange positionTextRange = position.getTextRange();
+        return new TextRange(0, positionTextRange.getStartOffset());
+    }
+
+    @NotNull
+    private Collection<String> suggestKeywordsBasedOnParserExpectedKeywords(@NotNull PsiElement position) {
+        String text = getPrecedingText(position, CompletionInitializationContext.DUMMY_IDENTIFIER);
+        Project project = position.getProject();
+        PsiFile temporaryFileForCompletionCheck = createFileForText(project, text + "          ");
+        int completionOffset = calculateCompletionOffset(position);
+        GeneratedParserUtilBase.CompletionState completionStateInTemporaryFile = getCompletionStateForKeywords(completionOffset);
+        temporaryFileForCompletionCheck.putUserData(COMPLETION_STATE_KEY, completionStateInTemporaryFile);
+        triggerParsingInFile(temporaryFileForCompletionCheck);
+        return completionStateInTemporaryFile.items;
+    }
+
+    private PsiFile createFileForText(Project project, String text) {
+        return PsiFileFactory.getInstance(project).createFileFromText("a.xq", XQueryLanguage.INSTANCE, text, true, false);
+    }
+
+    private void triggerParsingInFile(PsiFile file) {
+        TreeUtil.ensureParsed(file.getNode());
+    }
+
+    private GeneratedParserUtilBase.CompletionState getCompletionStateForKeywords(final int completionOffset) {
+        return new GeneratedParserUtilBase.CompletionState(completionOffset) {
+            @Override
+            public String convertItem(Object o) {
+                if (o instanceof IElementType && XQueryLexer.KEYWORDS.contains((IElementType) o)) return o.toString();
+                return o instanceof String ? (String) o : null;
+            }
+        };
+    }
+
+    private int calculateCompletionOffset(PsiElement position) {
+        return position.getTextRange().getStartOffset() - getPrecedingTextRange(position).getStartOffset();
+    }
+
 }

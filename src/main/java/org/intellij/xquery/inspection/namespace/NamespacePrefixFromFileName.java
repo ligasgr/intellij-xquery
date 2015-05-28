@@ -42,7 +42,9 @@ public class NamespacePrefixFromFileName extends LocalInspectionTool {
 
         final XQueryModuleDecl moduleDeclaration = ((XQueryFile) file).getModuleDeclaration();
 
-        if (moduleDeclaration != null && !namespacePrefixIsDerivedFromFileName(moduleDeclaration)) {
+        if (moduleDeclaration != null && moduleDeclaration.getNamespacePrefix() != null
+                && moduleDeclaration.getURILiteral() != null
+                && !namespacePrefixIsDerivedFromFileName(moduleDeclaration)) {
             ProblemDescriptor[] problemDescriptors = new ProblemDescriptor[1];
             problemDescriptors[0] = manager.createProblemDescriptor(moduleDeclaration.getNamespacePrefix(), "Namespace prefix should be derived from file name part in URI", (LocalQuickFix) null,
                     GENERIC_ERROR_OR_WARNING, true);
