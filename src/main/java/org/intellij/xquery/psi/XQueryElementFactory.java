@@ -87,4 +87,10 @@ public class XQueryElementFactory {
                 + functionName + "" + "($param) {()};");
         return PsiTreeUtil.findChildOfType(file, XQueryFunctionDecl.class);
     }
+
+    public static XQueryXmlEmptyTag createXmlTag(Project project, String namespaceName,
+                                                 String tagName) {
+        final XQueryFile file = createFile(project, "<" + namespaceName + ":" + tagName + "/>");
+        return PsiTreeUtil.findChildOfType(file, XQueryXmlEmptyTag.class);
+    }
 }

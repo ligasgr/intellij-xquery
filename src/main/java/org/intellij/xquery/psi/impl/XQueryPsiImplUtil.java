@@ -57,10 +57,12 @@ import org.intellij.xquery.psi.XQueryVarLocalName;
 import org.intellij.xquery.psi.XQueryVarName;
 import org.intellij.xquery.psi.XQueryVarRef;
 import org.intellij.xquery.psi.XQueryVersion;
+import org.intellij.xquery.psi.XQueryXmlTagNamespace;
 import org.intellij.xquery.reference.function.XQueryFunctionReference;
 import org.intellij.xquery.reference.module.XQueryModuleReference;
 import org.intellij.xquery.reference.namespace.XQueryNamespacePrefixReference;
 import org.intellij.xquery.reference.variable.XQueryVariableReference;
+import org.intellij.xquery.reference.namespace.XQueryXmlTagNamespaceReference;
 import org.intellij.xquery.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -420,6 +422,10 @@ public class XQueryPsiImplUtil {
 
     public static PsiReference getReference(XQueryPrefix prefix) {
         return new XQueryNamespacePrefixReference(prefix, new TextRange(0, prefix.getTextLength()));
+    }
+
+    public static PsiReference getReference(XQueryXmlTagNamespace prefix) {
+        return new XQueryXmlTagNamespaceReference(prefix, new TextRange(0, prefix.getTextLength()));
     }
 
     public static String getName(XQueryPrefixImpl element) {

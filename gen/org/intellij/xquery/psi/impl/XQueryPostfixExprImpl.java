@@ -46,14 +46,14 @@ public class XQueryPostfixExprImpl extends XQueryExprSingleImpl implements XQuer
 
   @Override
   @NotNull
-  public List<XQueryPredicate> getPredicateList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryPredicate.class);
+  public XQueryExprSingle getExprSingle() {
+    return findNotNullChildByClass(XQueryExprSingle.class);
   }
 
   @Override
   @NotNull
-  public XQueryPrimaryExpr getPrimaryExpr() {
-    return findNotNullChildByClass(XQueryPrimaryExpr.class);
+  public List<XQueryPredicate> getPredicateList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryPredicate.class);
   }
 
 }
