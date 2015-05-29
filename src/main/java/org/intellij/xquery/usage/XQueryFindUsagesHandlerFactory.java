@@ -22,6 +22,7 @@ import com.intellij.find.findUsages.FindUsagesHandlerFactory;
 import com.intellij.lang.findUsages.LanguageFindUsages;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileSystemItem;
+import org.intellij.xquery.XQueryLanguage;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -34,7 +35,7 @@ public class XQueryFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
     public boolean canFindUsages(@NotNull final PsiElement element) {
         if (element instanceof PsiFileSystemItem) {
             if (((PsiFileSystemItem) element).getVirtualFile() == null) return false;
-        } else if (!LanguageFindUsages.INSTANCE.forLanguage(element.getLanguage()).canFindUsagesFor(element)) {
+        } else if (!element.getLanguage().is(XQueryLanguage.INSTANCE)) {
             return false;
         }
         return element.isValid();
