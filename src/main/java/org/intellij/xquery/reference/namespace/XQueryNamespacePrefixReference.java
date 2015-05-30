@@ -34,7 +34,7 @@ public class XQueryNamespacePrefixReference extends XQueryPrefixReference<XQuery
     }
 
     @Override
-    protected Collection<? extends ResolveResult> getAdditionalReferences() {
+    protected Collection<ResolveResult> getPrimaryReferences() {
         return Collections.emptyList();
     }
 

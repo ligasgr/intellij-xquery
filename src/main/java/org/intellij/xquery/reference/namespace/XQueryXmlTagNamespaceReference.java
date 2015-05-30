@@ -52,8 +52,13 @@ public class XQueryXmlTagNamespaceReference extends XQueryPrefixReference<XQuery
     }
 
     @Override
-    protected Collection<? extends ResolveResult> getAdditionalReferences() {
+    protected Collection<ResolveResult> getPrimaryReferences() {
         return Collections.emptyList();
+    }
+
+    @Override
+    protected boolean includeOnlyPrimaryReferencesIfPresent() {
+        return true;
     }
 
     @Override

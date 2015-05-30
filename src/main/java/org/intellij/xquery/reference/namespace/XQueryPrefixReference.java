@@ -49,17 +49,28 @@ public abstract class XQueryPrefixReference<T extends XQueryPsiElement> extends 
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         XQueryFile file = (XQueryFile) myElement.getContainingFile();
         List<ResolveResult> results = new ArrayList<ResolveResult>();
-        results.addAll(getReferencesFromNamespaceDeclarations(file.getNamespaceDeclarations()));
-        results.addAll(getReferencesFromModuleImports(file.getModuleImports()));
-        results.addAll(getReferencesFromModuleName(file.getModuleNamespaceName()));
-        results.addAll(getAdditionalReferences());
-        if (results.size() == 0 && isPredeclaredNamespace(myElement.getText())) {
+        Collection<ResolveResult> primaryReferences = getPrimaryReferences();
+        results.addAll(primaryReferences);
+        if (shouldAddOtherReferences(primaryReferences)) {
+            results.addAll(getReferencesFromNamespaceDeclarations(file.getNamespaceDeclarations()));
+            results.addAll(getReferencesFromModuleImports(file.getModuleImports()));
+            results.addAll(getReferencesFromModuleName(file.getModuleNamespaceName()));
+        }
+        if (results.isEmpty() && isPredeclaredNamespace(myElement.getText())) {
             results.add(new PsiElementResolveResult(getElement()));
         }
         return results.toArray(new ResolveResult[results.size()]);
     }
 
-    protected abstract Collection<? extends ResolveResult> getAdditionalReferences();
+    protected boolean shouldAddOtherReferences(Collection<ResolveResult> primaryReferences) {
+        return !includeOnlyPrimaryReferencesIfPresent() || (includeOnlyPrimaryReferencesIfPresent() && primaryReferences.isEmpty());
+    }
+
+    protected boolean includeOnlyPrimaryReferencesIfPresent() {
+        return false;
+    }
+
+    protected abstract Collection<ResolveResult> getPrimaryReferences();
 
     private Collection<ResolveResult> getReferencesFromModuleName(XQueryNamespacePrefix moduleNamespaceName) {
         if (moduleNamespaceName != null && myElement.getText().equals(moduleNamespaceName.getText())) {
