@@ -20,31 +20,17 @@ package org.intellij.xquery.reference.namespace;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementResolveResult;
-import com.intellij.psi.PsiPolyVariantReference;
-import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveResult;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.intellij.xquery.psi.XQueryElementFactory;
-import org.intellij.xquery.psi.XQueryFile;
-import org.intellij.xquery.psi.XQueryFunctionName;
-import org.intellij.xquery.psi.XQueryModuleImport;
-import org.intellij.xquery.psi.XQueryNamespaceDecl;
-import org.intellij.xquery.psi.XQueryNamespacePrefix;
-import org.intellij.xquery.psi.XQueryPrefix;
 import org.intellij.xquery.psi.XQueryXmlEmptyTag;
 import org.intellij.xquery.psi.XQueryXmlTagNamespace;
-import org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace;
-import org.intellij.xquery.reference.namespace.XQueryPrefixReference;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-
-import static java.util.Collections.emptyList;
 
 public class XQueryXmlTagNamespaceReference extends XQueryPrefixReference<XQueryXmlTagNamespace> {
     public XQueryXmlTagNamespaceReference(XQueryXmlTagNamespace element, TextRange textRange) {
@@ -53,7 +39,16 @@ public class XQueryXmlTagNamespaceReference extends XQueryPrefixReference<XQuery
 
     @Override
     protected Collection<ResolveResult> getPrimaryReferences() {
-        return Collections.emptyList();
+        XmlTagNamespaceReferenceScopeProcessor processor = new XmlTagNamespaceReferenceScopeProcessor(myElement);
+        PsiTreeUtil.treeWalkUp(processor, myElement, null, ResolveState.initial());
+        if (processor.getResult() != null) {
+            Collection<ResolveResult> result = new ArrayList<ResolveResult>();
+            result.add(new PsiElementResolveResult(processor.getResult()));
+            return result;
+        }
+        else {
+            return Collections.emptyList();
+        }
     }
 
     @Override

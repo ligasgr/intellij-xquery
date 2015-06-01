@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
@@ -70,7 +71,9 @@ public abstract class XQueryPrefixReference<T extends XQueryPsiElement> extends 
         return false;
     }
 
-    protected abstract Collection<ResolveResult> getPrimaryReferences();
+    protected Collection<ResolveResult> getPrimaryReferences() {
+        return Collections.emptyList();
+    }
 
     private Collection<ResolveResult> getReferencesFromModuleName(XQueryNamespacePrefix moduleNamespaceName) {
         if (moduleNamespaceName != null && myElement.getText().equals(moduleNamespaceName.getText())) {

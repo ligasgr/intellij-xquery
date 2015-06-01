@@ -19,23 +19,14 @@ package org.intellij.xquery.reference.namespace;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
 import org.intellij.xquery.psi.XQueryElementFactory;
 import org.intellij.xquery.psi.XQueryFunctionName;
 import org.intellij.xquery.psi.XQueryPrefix;
 
-import java.util.Collection;
-import java.util.Collections;
-
 public class XQueryNamespacePrefixReference extends XQueryPrefixReference<XQueryPrefix> {
     public XQueryNamespacePrefixReference(XQueryPrefix element, TextRange textRange) {
         super(element, textRange);
-    }
-
-    @Override
-    protected Collection<ResolveResult> getPrimaryReferences() {
-        return Collections.emptyList();
     }
 
     @Override
