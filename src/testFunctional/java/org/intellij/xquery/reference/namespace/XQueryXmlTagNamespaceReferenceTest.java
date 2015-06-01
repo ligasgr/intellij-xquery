@@ -22,6 +22,8 @@ import org.intellij.xquery.BaseFunctionalTestCase;
 import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryModuleImport;
 import org.intellij.xquery.psi.XQueryNamespaceDecl;
+import org.intellij.xquery.psi.XQueryXmlEmptyTag;
+import org.intellij.xquery.psi.XQueryXmlFullTag;
 import org.intellij.xquery.psi.XQueryXmlTagNamespace;
 
 import static org.intellij.xquery.Assertions.assertChildOf;
@@ -55,6 +57,22 @@ public class XQueryXmlTagNamespaceReferenceTest  extends BaseFunctionalTestCase 
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryXmlTagNamespace.class);
 
         assertChildOf(resolvedReference, XQueryNamespaceDecl.class);
+    }
+
+    public void testXmlTagNamespaceReferenceForRootXmlElementXmlns() {
+        myFixture.configureByFiles("XmlTagNamespaceReference_RootXmlElementXmlns.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryXmlTagNamespace.class);
+
+        assertChildOf(resolvedReference, XQueryXmlFullTag.class);
+    }
+
+    public void testXmlTagNamespaceReferenceForSameXmlElementXmlns() {
+        myFixture.configureByFiles("XmlTagNamespaceReference_SameXmlElementXmlns.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryXmlTagNamespace.class);
+
+        assertChildOf(resolvedReference, XQueryXmlEmptyTag.class);
     }
 
     public void testXmlTagNamespaceRename() {
