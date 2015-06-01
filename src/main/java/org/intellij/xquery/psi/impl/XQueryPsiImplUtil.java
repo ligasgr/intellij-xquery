@@ -50,6 +50,7 @@ import org.intellij.xquery.psi.XQueryNamedFunctionRef;
 import org.intellij.xquery.psi.XQueryNamespaceDecl;
 import org.intellij.xquery.psi.XQueryNamespacePrefix;
 import org.intellij.xquery.psi.XQueryPrefix;
+import org.intellij.xquery.psi.XQueryPsiElement;
 import org.intellij.xquery.psi.XQueryQueryBody;
 import org.intellij.xquery.psi.XQueryTypes;
 import org.intellij.xquery.psi.XQueryVarDecl;
@@ -445,6 +446,14 @@ public class XQueryPsiImplUtil {
     }
 
     public static boolean isEquivalentTo(XQueryPrefix element, PsiElement another) {
+        return isEquivalentPrefix(element, another);
+    }
+
+    public static boolean isEquivalentTo(XQueryXmlTagNamespace element, PsiElement another) {
+        return isEquivalentPrefix(element, another);
+    }
+
+    protected static boolean isEquivalentPrefix(XQueryPsiElement element, PsiElement another) {
         if (!(another instanceof XQueryPrefix)) return false;
         if (element.getContainingFile() instanceof XQueryFile && another.getContainingFile() instanceof XQueryFile) {
             XQueryFile elementFile = (XQueryFile) element.getContainingFile();

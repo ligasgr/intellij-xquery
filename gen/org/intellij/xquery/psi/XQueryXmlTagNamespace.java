@@ -27,4 +27,6 @@ public interface XQueryXmlTagNamespace extends XQueryPsiElement {
 
   PsiReference getReference();
 
+  boolean isEquivalentTo(PsiElement another);
+
 }

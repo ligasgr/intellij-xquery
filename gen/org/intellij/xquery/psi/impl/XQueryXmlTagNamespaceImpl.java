@@ -43,4 +43,8 @@ public class XQueryXmlTagNamespaceImpl extends XQueryPsiElementImpl implements X
     return XQueryPsiImplUtil.getReference(this);
   }
 
+  public boolean isEquivalentTo(PsiElement another) {
+    return XQueryPsiImplUtil.isEquivalentTo(this, another);
+  }
+
 }
