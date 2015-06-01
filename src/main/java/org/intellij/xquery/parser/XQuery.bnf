@@ -238,10 +238,10 @@
   ]
 
   extends(".+Expr")=ExprSingle
-  implements("NamespacePrefix|VarName|FunctionName|Prefix")="org.intellij.xquery.psi.XQueryNamedElement"
+  implements("NamespacePrefix|VarName|FunctionName|Prefix|XmlTagNamespace|AttrNamespace|AttrLocalName")="org.intellij.xquery.psi.XQueryNamedElement"
   implements("NamedFunctionRef|FunctionCall")="org.intellij.xquery.psi.XQueryFunctionInvocation"
   implements("ModuleDecl|ModuleImport|NamespaceDecl")="org.intellij.xquery.psi.XQueryNamespaceSource"
-  extends("NamespacePrefix|VarName|FunctionName|Prefix")="org.intellij.xquery.psi.impl.XQueryNamedElementImpl"
+  extends("NamespacePrefix|VarName|FunctionName|Prefix|XmlTagNamespace|AttrNamespace|AttrLocalName")="org.intellij.xquery.psi.impl.XQueryNamedElementImpl"
 }
 
 xqueryFile ::= Module {pin(".*")=1}
@@ -492,12 +492,12 @@ XmlFullTag ::= XmlOpeningTagPart DirElemContent* XmlClosingTagPart {pin=1}
 private XmlOpeningTagPart ::= XmlStartTagStart XmlTagName DirAttributeList? XmlTagEnd {pin=1}
 private XmlClosingTagPart ::= XmlEndTagStart XmlTagName XmlTagEnd {pin=1}
 XmlTagName ::= XmlTagNamespace XmlColon XmlTagLocalName | XmlTagLocalName
-XmlTagNamespace ::= XmlTagNCName {methods=[getReference isEquivalentTo]}
+XmlTagNamespace ::= XmlTagNCName {methods=[getName setName getNameIdentifier getReference isEquivalentTo]}
 XmlTagLocalName ::= XmlTagNCName
 DirAttributeList ::= (DirAttributeName AttrEqual DirAttributeValue)* /* ws: explicit */
 DirAttributeName ::= AttrNamespace AttrColon AttrLocalName | AttrLocalName
-AttrNamespace ::= AttrNCName
-AttrLocalName ::= AttrNCName
+AttrNamespace ::= AttrNCName  {methods=[getName setName getNameIdentifier getReference isEquivalentTo]}
+AttrLocalName ::= AttrNCName  {methods=[getName setName getNameIdentifier]}
 DirAttributeValue ::= ("\"" (EscapeQuot | QuotAttrValueContent)* "\"")
  | ("'" (EscapeApos | AposAttrValueContent)* "'") /* ws: explicit */
 QuotAttrValueContent ::= QuotAttrContentChar

@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryAttrLocalNameImpl extends XQueryPsiElementImpl implements XQueryAttrLocalName {
+public class XQueryAttrLocalNameImpl extends XQueryNamedElementImpl implements XQueryAttrLocalName {
 
   public XQueryAttrLocalNameImpl(ASTNode node) {
     super(node);
@@ -36,6 +36,18 @@ public class XQueryAttrLocalNameImpl extends XQueryPsiElementImpl implements XQu
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitAttrLocalName(this);
     else super.accept(visitor);
+  }
+
+  public String getName() {
+    return XQueryPsiImplUtil.getName(this);
+  }
+
+  public PsiElement setName(String newName) {
+    return XQueryPsiImplUtil.setName(this, newName);
+  }
+
+  public PsiElement getNameIdentifier() {
+    return XQueryPsiImplUtil.getNameIdentifier(this);
   }
 
 }

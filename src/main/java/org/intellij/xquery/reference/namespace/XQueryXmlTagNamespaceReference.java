@@ -24,13 +24,17 @@ import com.intellij.psi.ResolveResult;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import org.intellij.xquery.psi.XQueryDirAttributeList;
+import org.intellij.xquery.psi.XQueryDirAttributeName;
 import org.intellij.xquery.psi.XQueryElementFactory;
 import org.intellij.xquery.psi.XQueryXmlEmptyTag;
+import org.intellij.xquery.psi.XQueryXmlFullTag;
 import org.intellij.xquery.psi.XQueryXmlTagNamespace;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class XQueryXmlTagNamespaceReference extends XQueryPrefixReference<XQueryXmlTagNamespace> {
     public XQueryXmlTagNamespaceReference(XQueryXmlTagNamespace element, TextRange textRange) {
@@ -39,14 +43,32 @@ public class XQueryXmlTagNamespaceReference extends XQueryPrefixReference<XQuery
 
     @Override
     protected Collection<ResolveResult> getPrimaryReferences() {
+        PsiElement grandParent = myElement.getParent().getParent();
+        XQueryDirAttributeList attributeList;
+        if (grandParent instanceof XQueryXmlFullTag) {
+            attributeList = ((XQueryXmlFullTag) grandParent).getDirAttributeList();
+        } else {
+            attributeList = ((XQueryXmlEmptyTag) grandParent).getDirAttributeList();
+        }
+
+        List<XQueryDirAttributeName> attributeNameList = attributeList.getDirAttributeNameList();
+        for (XQueryDirAttributeName attributeName : attributeNameList) {
+            if (attributeName.getAttrNamespace() != null
+                    && "xmlns".equals(attributeName.getAttrNamespace().getText())
+                    && myElement.getText().equals(attributeName.getAttrLocalName().getText())) {
+                Collection<ResolveResult> result = new ArrayList<ResolveResult>();
+                result.add(new PsiElementResolveResult(attributeName.getAttrLocalName()));
+                return result;
+            }
+        }
+
         XmlTagNamespaceReferenceScopeProcessor processor = new XmlTagNamespaceReferenceScopeProcessor(myElement);
         PsiTreeUtil.treeWalkUp(processor, myElement, null, ResolveState.initial());
         if (processor.getResult() != null) {
             Collection<ResolveResult> result = new ArrayList<ResolveResult>();
             result.add(new PsiElementResolveResult(processor.getResult()));
             return result;
-        }
-        else {
+        } else {
             return Collections.emptyList();
         }
     }

@@ -92,11 +92,11 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitAttrLocalName(@NotNull XQueryAttrLocalName o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitAttrNamespace(@NotNull XQueryAttrNamespace o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitAttribNameOrWildcard(@NotNull XQueryAttribNameOrWildcard o) {
@@ -972,7 +972,7 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitXmlTagNamespace(@NotNull XQueryXmlTagNamespace o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitFunctionInvocation(@NotNull XQueryFunctionInvocation o) {

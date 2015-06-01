@@ -28,7 +28,7 @@ import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 import com.intellij.psi.PsiReference;
 
-public class XQueryXmlTagNamespaceImpl extends XQueryPsiElementImpl implements XQueryXmlTagNamespace {
+public class XQueryXmlTagNamespaceImpl extends XQueryNamedElementImpl implements XQueryXmlTagNamespace {
 
   public XQueryXmlTagNamespaceImpl(ASTNode node) {
     super(node);
@@ -37,6 +37,18 @@ public class XQueryXmlTagNamespaceImpl extends XQueryPsiElementImpl implements X
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitXmlTagNamespace(this);
     else super.accept(visitor);
+  }
+
+  public String getName() {
+    return XQueryPsiImplUtil.getName(this);
+  }
+
+  public PsiElement setName(String newName) {
+    return XQueryPsiImplUtil.setName(this, newName);
+  }
+
+  public PsiElement getNameIdentifier() {
+    return XQueryPsiImplUtil.getNameIdentifier(this);
   }
 
   public PsiReference getReference() {

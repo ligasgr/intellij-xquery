@@ -93,4 +93,10 @@ public class XQueryElementFactory {
         final XQueryFile file = createFile(project, "<" + namespaceName + ":" + tagName + "/>");
         return PsiTreeUtil.findChildOfType(file, XQueryXmlEmptyTag.class);
     }
+
+    public static XQueryDirAttributeName createAttributeName(Project project, String namespaceName,
+                                                 String attributeName) {
+        final XQueryFile file = createFile(project, "<abc " + namespaceName + ":" + attributeName + "='def'/>");
+        return PsiTreeUtil.findChildOfType(file, XQueryDirAttributeName.class);
+    }
 }

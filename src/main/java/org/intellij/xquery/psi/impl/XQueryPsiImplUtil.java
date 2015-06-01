@@ -34,6 +34,8 @@ import com.intellij.psi.util.PsiElementFilter;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.icons.XQueryIcons;
 import org.intellij.xquery.psi.XQueryAnnotation;
+import org.intellij.xquery.psi.XQueryAttrLocalName;
+import org.intellij.xquery.psi.XQueryAttrNamespace;
 import org.intellij.xquery.psi.XQueryElementFactory;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionCall;
@@ -62,13 +64,13 @@ import org.intellij.xquery.psi.XQueryXmlTagNamespace;
 import org.intellij.xquery.reference.function.XQueryFunctionReference;
 import org.intellij.xquery.reference.module.XQueryModuleReference;
 import org.intellij.xquery.reference.namespace.XQueryNamespacePrefixReference;
-import org.intellij.xquery.reference.variable.XQueryVariableReference;
 import org.intellij.xquery.reference.namespace.XQueryXmlTagNamespaceReference;
+import org.intellij.xquery.reference.variable.XQueryVariableReference;
 import org.intellij.xquery.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 import static org.intellij.xquery.util.StringUtils.EMPTY;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
@@ -429,7 +431,7 @@ public class XQueryPsiImplUtil {
         return new XQueryXmlTagNamespaceReference(prefix, new TextRange(0, prefix.getTextLength()));
     }
 
-    public static String getName(XQueryPrefixImpl element) {
+    public static String getName(XQueryPrefix element) {
         return element.getNameIdentifier().getText();
     }
 
@@ -441,7 +443,55 @@ public class XQueryPsiImplUtil {
         return element;
     }
 
+    public static String getName(XQueryXmlTagNamespace element) {
+        return element.getNameIdentifier().getText();
+    }
+
+    public static PsiElement setName(XQueryXmlTagNamespace element, String newName) {
+        XQueryXmlTagNamespace name = element;
+        if (name != null) {
+            name.replace(XQueryElementFactory.createXmlTag(element.getProject(), newName, "any").getXmlTagName().getXmlTagNamespace());
+        }
+        return element;
+    }
+
+    public static String getName(XQueryAttrLocalName element) {
+        return element.getNameIdentifier().getText();
+    }
+
+    public static PsiElement setName(XQueryAttrLocalName element, String newName) {
+        XQueryAttrLocalName name = element;
+        if (name != null) {
+            name.replace(XQueryElementFactory.createAttributeName(element.getProject(), "any", newName).getAttrLocalName());
+        }
+        return element;
+    }
+
+    public static String getName(XQueryAttrNamespace element) {
+        return element.getNameIdentifier().getText();
+    }
+
+    public static PsiElement setName(XQueryAttrNamespace element, String newName) {
+        XQueryAttrNamespace name = element;
+        if (name != null) {
+            name.replace(XQueryElementFactory.createAttributeName(element.getProject(), newName, "any").getAttrNamespace());
+        }
+        return element;
+    }
+
     public static PsiElement getNameIdentifier(XQueryPrefix element) {
+        return element;
+    }
+
+    public static PsiElement getNameIdentifier(XQueryXmlTagNamespace element) {
+        return element;
+    }
+
+    public static PsiElement getNameIdentifier(XQueryAttrLocalName element) {
+        return element;
+    }
+
+    public static PsiElement getNameIdentifier(XQueryAttrNamespace element) {
         return element;
     }
 
@@ -453,7 +503,7 @@ public class XQueryPsiImplUtil {
         return isEquivalentPrefix(element, another);
     }
 
-    protected static boolean isEquivalentPrefix(XQueryPsiElement element, PsiElement another) {
+    private static boolean isEquivalentPrefix(XQueryPsiElement element, PsiElement another) {
         if (!(another instanceof XQueryPrefix)) return false;
         if (element.getContainingFile() instanceof XQueryFile && another.getContainingFile() instanceof XQueryFile) {
             XQueryFile elementFile = (XQueryFile) element.getContainingFile();

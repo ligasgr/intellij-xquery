@@ -23,7 +23,13 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 
-public interface XQueryXmlTagNamespace extends XQueryPsiElement {
+public interface XQueryXmlTagNamespace extends XQueryNamedElement {
+
+  String getName();
+
+  PsiElement setName(String newName);
+
+  PsiElement getNameIdentifier();
 
   PsiReference getReference();
 
