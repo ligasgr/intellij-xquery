@@ -25,6 +25,8 @@ import org.intellij.xquery.psi.XQueryDirAttributeName;
 import org.intellij.xquery.psi.XQueryXmlTagNamespace;
 import org.jetbrains.annotations.NotNull;
 
+import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.XMLNS;
+
 public class XmlTagNamespaceReferenceScopeProcessor extends BaseScopeProcessor {
     private XQueryAttrLocalName result;
     private XQueryXmlTagNamespace myElement;
@@ -41,13 +43,16 @@ public class XmlTagNamespaceReferenceScopeProcessor extends BaseScopeProcessor {
     public boolean execute(@NotNull PsiElement element, ResolveState state) {
         if (element instanceof XQueryDirAttributeName) {
             XQueryDirAttributeName attributeName = (XQueryDirAttributeName) element;
-            if (attributeName.getAttrNamespace() != null
-                    && "xmlns".equals(attributeName.getAttrNamespace().getText())
-                    && myElement.getText().equals(attributeName.getAttrLocalName().getText())) {
+            if (isInlineNamespaceDeclaration(attributeName, myElement.getText())) {
                 result = attributeName.getAttrLocalName();
                 return false;
             }
         }
         return true;
+    }
+    private boolean isInlineNamespaceDeclaration(XQueryDirAttributeName attributeName, String namespaceName) {
+        return attributeName.getAttrNamespace() != null
+                && XMLNS.getPrefix().equals(attributeName.getAttrNamespace().getText())
+                && namespaceName.equals(attributeName.getAttrLocalName().getText());
     }
 }

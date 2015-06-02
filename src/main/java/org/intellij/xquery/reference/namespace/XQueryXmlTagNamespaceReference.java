@@ -24,6 +24,7 @@ import com.intellij.psi.ResolveResult;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import org.intellij.xquery.psi.XQueryAttrLocalName;
 import org.intellij.xquery.psi.XQueryDirAttributeList;
 import org.intellij.xquery.psi.XQueryDirAttributeName;
 import org.intellij.xquery.psi.XQueryElementFactory;
@@ -36,13 +37,45 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.XMLNS;
+
 public class XQueryXmlTagNamespaceReference extends XQueryPrefixReference<XQueryXmlTagNamespace> {
+
     public XQueryXmlTagNamespaceReference(XQueryXmlTagNamespace element, TextRange textRange) {
         super(element, textRange);
     }
 
     @Override
     protected Collection<ResolveResult> getPrimaryReferences() {
+        XQueryAttrLocalName matchingNamespaceDeclaration = getMatchingInlineNamespaceDeclaration();
+        if (matchingNamespaceDeclaration == null) {
+            matchingNamespaceDeclaration = getReferenceFromXmlUpInTheHierarchy();
+        }
+        if (matchingNamespaceDeclaration != null) {
+            return convertToResolveResults(matchingNamespaceDeclaration);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    private XQueryAttrLocalName getMatchingInlineNamespaceDeclaration() {
+        List<XQueryDirAttributeName> attributeNameList = getAttributeNames();
+        XQueryAttrLocalName matchingAttribute = null;
+        for (XQueryDirAttributeName attributeName : attributeNameList) {
+            if (isInlineNamespaceDeclaration(attributeName, myElement.getText())) {
+                matchingAttribute = attributeName.getAttrLocalName();
+                break;
+            }
+        }
+        return matchingAttribute;
+    }
+
+    private List<XQueryDirAttributeName> getAttributeNames() {
+        XQueryDirAttributeList attributeList = getAttributeList();
+        return attributeList.getDirAttributeNameList();
+    }
+
+    private XQueryDirAttributeList getAttributeList() {
         PsiElement grandParent = myElement.getParent().getParent();
         XQueryDirAttributeList attributeList;
         if (grandParent instanceof XQueryXmlFullTag) {
@@ -50,26 +83,28 @@ public class XQueryXmlTagNamespaceReference extends XQueryPrefixReference<XQuery
         } else {
             attributeList = ((XQueryXmlEmptyTag) grandParent).getDirAttributeList();
         }
+        return attributeList;
+    }
 
-        List<XQueryDirAttributeName> attributeNameList = attributeList.getDirAttributeNameList();
-        for (XQueryDirAttributeName attributeName : attributeNameList) {
-            if (attributeName.getAttrNamespace() != null
-                    && "xmlns".equals(attributeName.getAttrNamespace().getText())
-                    && myElement.getText().equals(attributeName.getAttrLocalName().getText())) {
-                Collection<ResolveResult> result = new ArrayList<ResolveResult>();
-                result.add(new PsiElementResolveResult(attributeName.getAttrLocalName()));
-                return result;
-            }
-        }
+    private boolean isInlineNamespaceDeclaration(XQueryDirAttributeName attributeName, String namespaceName) {
+        return attributeName.getAttrNamespace() != null
+                && XMLNS.getPrefix().equals(attributeName.getAttrNamespace().getText())
+                && namespaceName.equals(attributeName.getAttrLocalName().getText());
+    }
 
+    private Collection<ResolveResult> convertToResolveResults(XQueryAttrLocalName localName) {
+        Collection<ResolveResult> result = new ArrayList<ResolveResult>();
+        result.add(new PsiElementResolveResult(localName));
+        return result;
+    }
+
+    private XQueryAttrLocalName getReferenceFromXmlUpInTheHierarchy() {
         XmlTagNamespaceReferenceScopeProcessor processor = new XmlTagNamespaceReferenceScopeProcessor(myElement);
         PsiTreeUtil.treeWalkUp(processor, myElement, null, ResolveState.initial());
         if (processor.getResult() != null) {
-            Collection<ResolveResult> result = new ArrayList<ResolveResult>();
-            result.add(new PsiElementResolveResult(processor.getResult()));
-            return result;
+            return processor.getResult();
         } else {
-            return Collections.emptyList();
+            return null;
         }
     }
 
