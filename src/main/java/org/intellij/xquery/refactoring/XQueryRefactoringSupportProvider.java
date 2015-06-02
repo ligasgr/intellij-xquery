@@ -19,26 +19,26 @@ package org.intellij.xquery.refactoring;
 
 import com.intellij.lang.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.PsiElement;
+import org.intellij.xquery.psi.XQueryAttrLocalName;
+import org.intellij.xquery.psi.XQueryAttrNamespace;
 import org.intellij.xquery.psi.XQueryFunctionName;
 import org.intellij.xquery.psi.XQueryNamespacePrefix;
 import org.intellij.xquery.psi.XQueryVarName;
+import org.intellij.xquery.psi.XQueryXmlTagNamespace;
 
-/**
- * User: ligasgr
- * Date: 09/07/13
- * Time: 13:54
- */
 public class XQueryRefactoringSupportProvider extends RefactoringSupportProvider {
 
     @Override
     public boolean isMemberInplaceRenameAvailable(PsiElement element, PsiElement context) {
-        return element instanceof XQueryVarName || element instanceof XQueryFunctionName || element instanceof
-                XQueryNamespacePrefix;
+        return element instanceof XQueryVarName || element instanceof XQueryFunctionName
+                || element instanceof XQueryNamespacePrefix || element instanceof XQueryAttrLocalName
+                || element instanceof XQueryAttrNamespace || element instanceof XQueryXmlTagNamespace;
     }
 
     @Override
     public boolean isSafeDeleteAvailable(PsiElement element) {
-        return element instanceof XQueryVarName || element instanceof XQueryFunctionName || element instanceof
-                XQueryNamespacePrefix;
+        return element instanceof XQueryVarName || element instanceof XQueryFunctionName
+                || element instanceof XQueryNamespacePrefix || element instanceof XQueryAttrLocalName
+                || element instanceof XQueryAttrNamespace || element instanceof XQueryXmlTagNamespace;
     }
 }
