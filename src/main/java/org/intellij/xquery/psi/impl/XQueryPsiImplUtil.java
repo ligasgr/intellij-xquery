@@ -60,12 +60,14 @@ import org.intellij.xquery.psi.XQueryVarLocalName;
 import org.intellij.xquery.psi.XQueryVarName;
 import org.intellij.xquery.psi.XQueryVarRef;
 import org.intellij.xquery.psi.XQueryVersion;
+import org.intellij.xquery.psi.XQueryXmlTagName;
 import org.intellij.xquery.psi.XQueryXmlTagNamespace;
 import org.intellij.xquery.reference.function.XQueryFunctionReference;
 import org.intellij.xquery.reference.module.XQueryModuleReference;
 import org.intellij.xquery.reference.namespace.XQueryNamespacePrefixReference;
 import org.intellij.xquery.reference.namespace.XQueryXmlTagNamespaceReference;
 import org.intellij.xquery.reference.variable.XQueryVariableReference;
+import org.intellij.xquery.reference.xml.XQueryXmlTagNameReference;
 import org.intellij.xquery.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -156,7 +158,7 @@ public class XQueryPsiImplUtil {
 
     public static PsiReference getReference(XQueryModuleImportPath element) {
         String filename = stripApostrophes(element.getURILiteral().getText());
-        if (! StringUtil.isEmptyOrSpaces(filename)) {
+        if (!StringUtil.isEmptyOrSpaces(filename)) {
             return new XQueryModuleReference(element, filename, new TextRange(1,
                     element.getURILiteral().getTextLength() - 1));
         }
@@ -431,6 +433,14 @@ public class XQueryPsiImplUtil {
         return new XQueryXmlTagNamespaceReference(prefix, new TextRange(0, prefix.getTextLength()));
     }
 
+    public static PsiReference getReference(XQueryXmlTagName element) {
+        int offset = 0;
+        if (element.getXmlTagNamespace() != null) {
+            offset += element.getXmlTagNamespace().getTextLength() + SEPARATOR_LENGTH;
+        }
+        return new XQueryXmlTagNameReference(element, new TextRange(offset, element.getTextLength()));
+    }
+
     public static String getName(XQueryPrefix element) {
         return element.getNameIdentifier().getText();
     }
@@ -479,6 +489,18 @@ public class XQueryPsiImplUtil {
         return element;
     }
 
+    public static String getName(XQueryXmlTagName element) {
+        return element.getNameIdentifier().getText();
+    }
+
+    public static PsiElement setName(XQueryXmlTagName element, String newName) {
+        XQueryXmlTagName name = element;
+        if (name != null) {
+            name.getXmlTagLocalName().replace(XQueryElementFactory.createXmlTag(element.getProject(), "any", newName).getXmlTagName().getXmlTagLocalName());
+        }
+        return element;
+    }
+
     public static PsiElement getNameIdentifier(XQueryPrefix element) {
         return element;
     }
@@ -493,6 +515,27 @@ public class XQueryPsiImplUtil {
 
     public static PsiElement getNameIdentifier(XQueryAttrNamespace element) {
         return element;
+    }
+
+    public static PsiElement getNameIdentifier(XQueryXmlTagName element) {
+        if (element == null) return null;
+        return element.getXmlTagLocalName();
+    }
+
+    public static int getTextOffset(XQueryXmlTagName element) {
+        if (element == null) return 0;
+        PsiElement nameIdentifier = getNameIdentifier(element);
+        if (nameIdentifier == null) return endOfColon(element);
+        return nameIdentifier.getTextOffset();
+    }
+
+    private static int endOfColon(XQueryXmlTagName tagName) {
+        if (tagName.getXmlTagNamespace() != null) {
+            String colon = XQueryTypes.COLON.toString();
+            int offset = tagName.getText().indexOf(colon) + colon.length();
+            return tagName.getNode().getStartOffset() + offset;
+        }
+        return 0;
     }
 
     public static boolean isEquivalentTo(XQueryPrefix element, PsiElement another) {
@@ -593,7 +636,8 @@ public class XQueryPsiImplUtil {
     }
 
     public static int getTextOffset(XQueryVarDecl varDecl) {
-        if (varDecl.getVarName() == null) return endOfDollarOrVariableKeyword(varDecl);;
+        if (varDecl.getVarName() == null) return endOfDollarOrVariableKeyword(varDecl);
+        ;
         return varDecl.getVarName().getTextOffset();
     }
 

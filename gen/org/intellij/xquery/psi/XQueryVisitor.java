@@ -968,7 +968,7 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitXmlTagName(@NotNull XQueryXmlTagName o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitXmlTagNamespace(@NotNull XQueryXmlTagNamespace o) {

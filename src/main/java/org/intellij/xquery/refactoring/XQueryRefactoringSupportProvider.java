@@ -24,6 +24,7 @@ import org.intellij.xquery.psi.XQueryAttrNamespace;
 import org.intellij.xquery.psi.XQueryFunctionName;
 import org.intellij.xquery.psi.XQueryNamespacePrefix;
 import org.intellij.xquery.psi.XQueryVarName;
+import org.intellij.xquery.psi.XQueryXmlTagName;
 import org.intellij.xquery.psi.XQueryXmlTagNamespace;
 
 public class XQueryRefactoringSupportProvider extends RefactoringSupportProvider {
@@ -32,13 +33,13 @@ public class XQueryRefactoringSupportProvider extends RefactoringSupportProvider
     public boolean isMemberInplaceRenameAvailable(PsiElement element, PsiElement context) {
         return element instanceof XQueryVarName || element instanceof XQueryFunctionName
                 || element instanceof XQueryNamespacePrefix || element instanceof XQueryAttrLocalName
-                || element instanceof XQueryAttrNamespace || element instanceof XQueryXmlTagNamespace;
+                || element instanceof XQueryAttrNamespace || element instanceof XQueryXmlTagNamespace
+                || element instanceof XQueryXmlTagName;
     }
 
     @Override
     public boolean isSafeDeleteAvailable(PsiElement element) {
         return element instanceof XQueryVarName || element instanceof XQueryFunctionName
-                || element instanceof XQueryNamespacePrefix || element instanceof XQueryAttrLocalName
-                || element instanceof XQueryAttrNamespace || element instanceof XQueryXmlTagNamespace;
+                || element instanceof XQueryNamespacePrefix;
     }
 }
