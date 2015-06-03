@@ -81,6 +81,18 @@ public class XQueryXmlTagNamespaceReferenceTest  extends BaseFunctionalTestCase 
         myFixture.checkResultByFile("XmlTagNamespaceRename.xq", "XmlTagNamespaceRenameAfter.xq", false);
     }
 
+    public void testXmlTagNamespaceRenameForRootXmlElementXmlns() {
+        myFixture.configureByFiles("XmlTagNamespaceRename_RootXmlElementXmlns.xq");
+        myFixture.renameElementAtCaret("aaa");
+        myFixture.checkResultByFile("XmlTagNamespaceRename_RootXmlElementXmlns.xq", "XmlTagNamespaceRenameAfter_RootXmlElementXmlns.xq", false);
+    }
+
+    public void testXmlTagNamespaceRenameForSameXmlElementXmlns() {
+        myFixture.configureByFiles("XmlTagNamespaceRename_SameXmlElementXmlns.xq");
+        myFixture.renameElementAtCaret("aaa");
+        myFixture.checkResultByFile("XmlTagNamespaceRename_SameXmlElementXmlns.xq", "XmlTagNamespaceRenameAfter_SameXmlElementXmlns.xq", false);
+    }
+
     public void testXmlTagNamespaceReferenceToNotExistingNamespace() {
         myFixture.configureByFiles("XmlTagNamespaceReferenceToNotExistingNamespace.xq");
 
