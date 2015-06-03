@@ -381,7 +381,19 @@ public class XQueryPsiImplUtil {
         return true;
     }
 
-    public static void delete(XQueryNamedElement namedElement) {
+    public static void delete(XQueryVarName element) {
+        deleteDeclaration(element);
+    }
+
+    public static void delete(XQueryFunctionName element) {
+        deleteDeclaration(element);
+    }
+
+    public static void delete(XQueryNamespacePrefix element) {
+        deleteDeclaration(element);
+    }
+
+    private static void deleteDeclaration(XQueryNamedElement namedElement) {
         PsiElement declarationElement = namedElement.getParent();
         final ASTNode parentNode = declarationElement.getParent().getNode();
         assert parentNode != null;
