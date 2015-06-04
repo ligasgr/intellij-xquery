@@ -18,6 +18,8 @@
 package org.intellij.xquery.reference.variable;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.refactoring.actions.SafeDeleteAction;
 import org.intellij.xquery.Assertions;
 import org.intellij.xquery.BaseFunctionalTestCase;
 import org.intellij.xquery.XQueryFlavour;
@@ -29,6 +31,7 @@ import org.intellij.xquery.psi.XQueryParam;
 import org.intellij.xquery.psi.XQueryPositionalVar;
 import org.intellij.xquery.psi.XQueryPreviousItem;
 import org.intellij.xquery.psi.XQueryVarDecl;
+import org.intellij.xquery.psi.XQueryVarName;
 import org.intellij.xquery.psi.XQueryVarRef;
 import org.intellij.xquery.psi.XQueryWindowClause;
 import org.intellij.xquery.settings.XQuerySettings;
@@ -210,5 +213,11 @@ public class XQueryVariableReferenceTest extends BaseFunctionalTestCase {
         Assertions.assertChildOf(resolvedReference, XQueryVarDecl.class);
         XQueryVarDecl varDecl = getParentOfType(resolvedReference, XQueryVarDecl.class);
         assertEquals("MarkLogicReferencedFile.xq", varDecl.getContainingFile().getName());
+    }
+
+    public void testVariableSafeDelete() {
+        myFixture.configureByFiles("VariableSafeDelete.xq");
+        myFixture.testAction(new SafeDeleteAction());
+        myFixture.checkResultByFile("VariableSafeDelete.xq", "VariableSafeDeleteAfter.xq", false);
     }
 }

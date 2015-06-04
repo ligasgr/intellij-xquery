@@ -18,6 +18,7 @@
 package org.intellij.xquery.reference.function;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.refactoring.actions.SafeDeleteAction;
 import org.intellij.xquery.Assertions;
 import org.intellij.xquery.BaseFunctionalTestCase;
 import org.intellij.xquery.XQueryFlavour;
@@ -229,5 +230,11 @@ public class XQueryFunctionReferenceTest extends BaseFunctionalTestCase {
         assertChildOf(resolvedReference, XQueryFunctionDecl.class);
         XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) resolvedReference.getParent();
         assertEquals("MarkLogicReferencedFile.xq", functionDeclaration.getContainingFile().getName());
+    }
+
+    public void testFunctionSafeDelete() {
+        myFixture.configureByFiles("FunctionSafeDelete.xq");
+        myFixture.testAction(new SafeDeleteAction());
+        myFixture.checkResultByFile("FunctionSafeDelete.xq", "FunctionSafeDeleteAfter.xq", false);
     }
 }
