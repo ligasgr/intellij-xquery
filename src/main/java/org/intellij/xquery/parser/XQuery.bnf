@@ -498,7 +498,7 @@ DirAttributeList ::= DirAttribute*
 DirAttribute ::= DirAttributeName AttrEqual DirAttributeValue /* ws: explicit */
 DirAttributeName ::= AttrNamespace AttrColon AttrLocalName | AttrLocalName
 AttrNamespace ::= AttrNCName  {methods=[getName setName getNameIdentifier getReference isEquivalentTo]}
-AttrLocalName ::= AttrNCName  {methods=[getName setName getNameIdentifier]}
+AttrLocalName ::= AttrNCName  {methods=[getName setName getNameIdentifier delete]}
 DirAttributeValue ::= ("\"" (EscapeQuot | QuotAttrValueContent)* "\"")
  | ("'" (EscapeApos | AposAttrValueContent)* "'") /* ws: explicit */
 QuotAttrValueContent ::= QuotAttrContentChar

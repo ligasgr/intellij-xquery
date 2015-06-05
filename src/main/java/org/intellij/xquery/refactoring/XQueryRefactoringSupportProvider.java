@@ -40,6 +40,6 @@ public class XQueryRefactoringSupportProvider extends RefactoringSupportProvider
     @Override
     public boolean isSafeDeleteAvailable(PsiElement element) {
         return element instanceof XQueryVarName || element instanceof XQueryFunctionName
-                || element instanceof XQueryNamespacePrefix;
+                || element instanceof XQueryNamespacePrefix || element instanceof XQueryAttrLocalName;
     }
 }

@@ -30,4 +30,6 @@ public interface XQueryAttrLocalName extends XQueryNamedElement {
 
   PsiElement getNameIdentifier();
 
+  void delete();
+
 }

@@ -39,6 +39,10 @@ public class XQueryPrefixReferenceTest extends BaseFunctionalTestCase {
         doTest();
     }
 
+    public void testInlineNamespaceSafeDelete() {
+        doTest();
+    }
+
     private void doTest() {
         String testName = getTestName(false);
         String fileBefore = testName + ".xq";

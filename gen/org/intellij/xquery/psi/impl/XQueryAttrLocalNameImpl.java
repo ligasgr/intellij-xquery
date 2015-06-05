@@ -50,4 +50,8 @@ public class XQueryAttrLocalNameImpl extends XQueryNamedElementImpl implements X
     return XQueryPsiImplUtil.getNameIdentifier(this);
   }
 
+  public void delete() {
+    XQueryPsiImplUtil.delete(this);
+  }
+
 }

@@ -381,6 +381,24 @@ public class XQueryPsiImplUtil {
         return true;
     }
 
+    public static void delete(XQueryAttrLocalName namedElement) {
+        PsiElement dirAttribute = namedElement.getParent().getParent();
+        final ASTNode parentNode = dirAttribute.getParent().getNode();
+        assert parentNode != null;
+
+        ASTNode node = dirAttribute.getNode();
+        ASTNode prev = node.getTreePrev();
+        ASTNode next = node.getTreeNext();
+        parentNode.removeChild(node);
+        if (prev == null || prev.getElementType() == TokenType.WHITE_SPACE) {
+            while (next != null && (next.getElementType() == TokenType.WHITE_SPACE || next.getElementType() ==
+                    XQueryTypes.SEPARATOR)) {
+                parentNode.removeChild(next);
+                next = node.getTreeNext();
+            }
+        }
+    }
+
     public static void delete(XQueryVarName element) {
         deleteDeclaration(element);
     }
