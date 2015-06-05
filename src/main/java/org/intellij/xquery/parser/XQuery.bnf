@@ -494,7 +494,8 @@ private XmlClosingTagPart ::= XmlEndTagStart XmlTagName XmlTagEnd {pin=1}
 XmlTagName ::= XmlTagNamespace XmlColon XmlTagLocalName | XmlTagLocalName {methods=[getName setName getNameIdentifier getReference getTextOffset]}
 XmlTagNamespace ::= XmlTagNCName {methods=[getName setName getNameIdentifier getReference isEquivalentTo]}
 XmlTagLocalName ::= XmlTagNCName
-DirAttributeList ::= (DirAttributeName AttrEqual DirAttributeValue)* /* ws: explicit */
+DirAttributeList ::= DirAttribute*
+DirAttribute ::= DirAttributeName AttrEqual DirAttributeValue /* ws: explicit */
 DirAttributeName ::= AttrNamespace AttrColon AttrLocalName | AttrLocalName
 AttrNamespace ::= AttrNCName  {methods=[getName setName getNameIdentifier getReference isEquivalentTo]}
 AttrLocalName ::= AttrNCName  {methods=[getName setName getNameIdentifier]}

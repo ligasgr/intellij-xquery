@@ -89,6 +89,7 @@ public interface XQueryTypes {
   IElementType DEFAULT_FUNCTION_NAMESPACE_DECL = new XQueryElementType("DEFAULT_FUNCTION_NAMESPACE_DECL");
   IElementType DELETE_EXPR = new XQueryElementType("DELETE_EXPR");
   IElementType DIRECT_CONSTRUCTOR = new XQueryElementType("DIRECT_CONSTRUCTOR");
+  IElementType DIR_ATTRIBUTE = new XQueryElementType("DIR_ATTRIBUTE");
   IElementType DIR_ATTRIBUTE_LIST = new XQueryElementType("DIR_ATTRIBUTE_LIST");
   IElementType DIR_ATTRIBUTE_NAME = new XQueryElementType("DIR_ATTRIBUTE_NAME");
   IElementType DIR_ATTRIBUTE_VALUE = new XQueryElementType("DIR_ATTRIBUTE_VALUE");
@@ -679,6 +680,9 @@ public interface XQueryTypes {
       }
       else if (type == DIRECT_CONSTRUCTOR) {
         return new XQueryDirectConstructorImpl(node);
+      }
+      else if (type == DIR_ATTRIBUTE) {
+        return new XQueryDirAttributeImpl(node);
       }
       else if (type == DIR_ATTRIBUTE_LIST) {
         return new XQueryDirAttributeListImpl(node);

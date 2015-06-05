@@ -27,21 +27,27 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryDirAttributeListImpl extends XQueryPsiElementImpl implements XQueryDirAttributeList {
+public class XQueryDirAttributeImpl extends XQueryPsiElementImpl implements XQueryDirAttribute {
 
-  public XQueryDirAttributeListImpl(ASTNode node) {
+  public XQueryDirAttributeImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirAttributeList(this);
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitDirAttribute(this);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public List<XQueryDirAttribute> getDirAttributeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryDirAttribute.class);
+  public XQueryDirAttributeName getDirAttributeName() {
+    return findNotNullChildByClass(XQueryDirAttributeName.class);
+  }
+
+  @Override
+  @NotNull
+  public XQueryDirAttributeValue getDirAttributeValue() {
+    return findNotNullChildByClass(XQueryDirAttributeValue.class);
   }
 
 }

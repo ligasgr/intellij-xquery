@@ -275,6 +275,10 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitExprSingle(o);
   }
 
+  public void visitDirAttribute(@NotNull XQueryDirAttribute o) {
+    visitPsiElement(o);
+  }
+
   public void visitDirAttributeList(@NotNull XQueryDirAttributeList o) {
     visitPsiElement(o);
   }

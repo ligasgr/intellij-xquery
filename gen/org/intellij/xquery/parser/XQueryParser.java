@@ -228,6 +228,9 @@ public class XQueryParser implements PsiParser {
     else if (t == DELETE_EXPR) {
       r = DeleteExpr(b, 0);
     }
+    else if (t == DIR_ATTRIBUTE) {
+      r = DirAttribute(b, 0);
+    }
     else if (t == DIR_ATTRIBUTE_LIST) {
       r = DirAttributeList(b, 0);
     }
@@ -2306,30 +2309,32 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (DirAttributeName AttrEqual DirAttributeValue)*
-  public static boolean DirAttributeList(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "DirAttributeList")) return false;
-    Marker m = enter_section_(b, l, _NONE_, "<dir attribute list>");
-    int c = current_position_(b);
-    while (true) {
-      if (!DirAttributeList_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "DirAttributeList", c)) break;
-      c = current_position_(b);
-    }
-    exit_section_(b, l, m, DIR_ATTRIBUTE_LIST, true, false, null);
-    return true;
-  }
-
   // DirAttributeName AttrEqual DirAttributeValue
-  private static boolean DirAttributeList_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "DirAttributeList_0")) return false;
+  public static boolean DirAttribute(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DirAttribute")) return false;
+    if (!nextTokenIs(b, ATTRNCNAME)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = DirAttributeName(b, l + 1);
     r = r && consumeToken(b, ATTREQUAL);
     r = r && DirAttributeValue(b, l + 1);
-    exit_section_(b, m, null, r);
+    exit_section_(b, m, DIR_ATTRIBUTE, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // DirAttribute*
+  public static boolean DirAttributeList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DirAttributeList")) return false;
+    Marker m = enter_section_(b, l, _NONE_, "<dir attribute list>");
+    int c = current_position_(b);
+    while (true) {
+      if (!DirAttribute(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "DirAttributeList", c)) break;
+      c = current_position_(b);
+    }
+    exit_section_(b, l, m, DIR_ATTRIBUTE_LIST, true, false, null);
+    return true;
   }
 
   /* ********************************************************** */

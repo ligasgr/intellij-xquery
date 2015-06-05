@@ -20,11 +20,13 @@ package org.intellij.xquery.reference.namespace;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementResolveResult;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveResult;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.intellij.xquery.psi.XQueryAttrLocalName;
+import org.intellij.xquery.psi.XQueryDirAttribute;
 import org.intellij.xquery.psi.XQueryDirAttributeList;
 import org.intellij.xquery.psi.XQueryDirAttributeName;
 import org.intellij.xquery.psi.XQueryElementFactory;
@@ -72,7 +74,11 @@ public class XQueryXmlTagNamespaceReference extends XQueryPrefixReference<XQuery
 
     private List<XQueryDirAttributeName> getAttributeNames() {
         XQueryDirAttributeList attributeList = getAttributeList();
-        return attributeList.getDirAttributeNameList();
+        List<XQueryDirAttributeName> names = new ArrayList<XQueryDirAttributeName>();
+        for (XQueryDirAttribute dirAttribute : attributeList.getDirAttributeList()) {
+            names.add(dirAttribute.getDirAttributeName());
+        }
+        return names;
     }
 
     private XQueryDirAttributeList getAttributeList() {
