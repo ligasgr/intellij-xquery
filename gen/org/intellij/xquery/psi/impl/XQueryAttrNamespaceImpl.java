@@ -26,6 +26,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
+import com.intellij.psi.PsiReference;
 
 public class XQueryAttrNamespaceImpl extends XQueryNamedElementImpl implements XQueryAttrNamespace {
 
@@ -48,6 +49,14 @@ public class XQueryAttrNamespaceImpl extends XQueryNamedElementImpl implements X
 
   public PsiElement getNameIdentifier() {
     return XQueryPsiImplUtil.getNameIdentifier(this);
+  }
+
+  public PsiReference getReference() {
+    return XQueryPsiImplUtil.getReference(this);
+  }
+
+  public boolean isEquivalentTo(PsiElement another) {
+    return XQueryPsiImplUtil.isEquivalentTo(this, another);
   }
 
 }

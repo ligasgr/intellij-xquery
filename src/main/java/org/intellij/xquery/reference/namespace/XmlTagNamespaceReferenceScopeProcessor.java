@@ -22,16 +22,17 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import org.intellij.xquery.psi.XQueryAttrLocalName;
 import org.intellij.xquery.psi.XQueryDirAttributeName;
+import org.intellij.xquery.psi.XQueryPsiElement;
 import org.intellij.xquery.psi.XQueryXmlTagNamespace;
 import org.jetbrains.annotations.NotNull;
 
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.XMLNS;
 
-public class XmlTagNamespaceReferenceScopeProcessor extends BaseScopeProcessor {
+public class XmlTagNamespaceReferenceScopeProcessor<T extends XQueryPsiElement> extends BaseScopeProcessor {
     private XQueryAttrLocalName result;
-    private XQueryXmlTagNamespace myElement;
+    private T myElement;
 
-    public XmlTagNamespaceReferenceScopeProcessor(XQueryXmlTagNamespace myElement) {
+    public XmlTagNamespaceReferenceScopeProcessor(T myElement) {
         this.myElement = myElement;
     }
 

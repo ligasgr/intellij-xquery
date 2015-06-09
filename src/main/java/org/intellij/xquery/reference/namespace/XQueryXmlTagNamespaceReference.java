@@ -30,6 +30,7 @@ import org.intellij.xquery.psi.XQueryDirAttribute;
 import org.intellij.xquery.psi.XQueryDirAttributeList;
 import org.intellij.xquery.psi.XQueryDirAttributeName;
 import org.intellij.xquery.psi.XQueryElementFactory;
+import org.intellij.xquery.psi.XQueryPsiElement;
 import org.intellij.xquery.psi.XQueryXmlEmptyTag;
 import org.intellij.xquery.psi.XQueryXmlFullTag;
 import org.intellij.xquery.psi.XQueryXmlTagNamespace;
@@ -41,82 +42,10 @@ import java.util.List;
 
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.XMLNS;
 
-public class XQueryXmlTagNamespaceReference extends XQueryPrefixReference<XQueryXmlTagNamespace> {
+public class XQueryXmlTagNamespaceReference extends XQueryXmlNamespaceReference<XQueryXmlTagNamespace> {
 
     public XQueryXmlTagNamespaceReference(XQueryXmlTagNamespace element, TextRange textRange) {
         super(element, textRange);
-    }
-
-    @Override
-    protected Collection<ResolveResult> getPrimaryReferences() {
-        XQueryAttrLocalName matchingNamespaceDeclaration = getMatchingInlineNamespaceDeclaration();
-        if (matchingNamespaceDeclaration == null) {
-            matchingNamespaceDeclaration = getReferenceFromXmlUpInTheHierarchy();
-        }
-        if (matchingNamespaceDeclaration != null) {
-            return convertToResolveResults(matchingNamespaceDeclaration);
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
-    private XQueryAttrLocalName getMatchingInlineNamespaceDeclaration() {
-        List<XQueryDirAttributeName> attributeNameList = getAttributeNames();
-        XQueryAttrLocalName matchingAttribute = null;
-        for (XQueryDirAttributeName attributeName : attributeNameList) {
-            if (isInlineNamespaceDeclaration(attributeName, myElement.getText())) {
-                matchingAttribute = attributeName.getAttrLocalName();
-                break;
-            }
-        }
-        return matchingAttribute;
-    }
-
-    private List<XQueryDirAttributeName> getAttributeNames() {
-        XQueryDirAttributeList attributeList = getAttributeList();
-        List<XQueryDirAttributeName> names = new ArrayList<XQueryDirAttributeName>();
-        for (XQueryDirAttribute dirAttribute : attributeList.getDirAttributeList()) {
-            names.add(dirAttribute.getDirAttributeName());
-        }
-        return names;
-    }
-
-    private XQueryDirAttributeList getAttributeList() {
-        PsiElement grandParent = myElement.getParent().getParent();
-        XQueryDirAttributeList attributeList;
-        if (grandParent instanceof XQueryXmlFullTag) {
-            attributeList = ((XQueryXmlFullTag) grandParent).getDirAttributeList();
-        } else {
-            attributeList = ((XQueryXmlEmptyTag) grandParent).getDirAttributeList();
-        }
-        return attributeList;
-    }
-
-    private boolean isInlineNamespaceDeclaration(XQueryDirAttributeName attributeName, String namespaceName) {
-        return attributeName.getAttrNamespace() != null
-                && XMLNS.getPrefix().equals(attributeName.getAttrNamespace().getText())
-                && namespaceName.equals(attributeName.getAttrLocalName().getText());
-    }
-
-    private Collection<ResolveResult> convertToResolveResults(XQueryAttrLocalName localName) {
-        Collection<ResolveResult> result = new ArrayList<ResolveResult>();
-        result.add(new PsiElementResolveResult(localName));
-        return result;
-    }
-
-    private XQueryAttrLocalName getReferenceFromXmlUpInTheHierarchy() {
-        XmlTagNamespaceReferenceScopeProcessor processor = new XmlTagNamespaceReferenceScopeProcessor(myElement);
-        PsiTreeUtil.treeWalkUp(processor, myElement, null, ResolveState.initial());
-        if (processor.getResult() != null) {
-            return processor.getResult();
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    protected boolean includeOnlyPrimaryReferencesIfPresent() {
-        return true;
     }
 
     @Override

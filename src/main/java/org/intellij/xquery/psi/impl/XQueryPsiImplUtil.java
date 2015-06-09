@@ -64,6 +64,7 @@ import org.intellij.xquery.psi.XQueryXmlTagName;
 import org.intellij.xquery.psi.XQueryXmlTagNamespace;
 import org.intellij.xquery.reference.function.XQueryFunctionReference;
 import org.intellij.xquery.reference.module.XQueryModuleReference;
+import org.intellij.xquery.reference.namespace.XQueryAttrNamespaceReference;
 import org.intellij.xquery.reference.namespace.XQueryNamespacePrefixReference;
 import org.intellij.xquery.reference.namespace.XQueryXmlTagNamespaceReference;
 import org.intellij.xquery.reference.variable.XQueryVariableReference;
@@ -383,20 +384,7 @@ public class XQueryPsiImplUtil {
 
     public static void delete(XQueryAttrLocalName namedElement) {
         PsiElement dirAttribute = namedElement.getParent().getParent();
-        final ASTNode parentNode = dirAttribute.getParent().getNode();
-        assert parentNode != null;
-
-        ASTNode node = dirAttribute.getNode();
-        ASTNode prev = node.getTreePrev();
-        ASTNode next = node.getTreeNext();
-        parentNode.removeChild(node);
-        if (prev == null || prev.getElementType() == TokenType.WHITE_SPACE) {
-            while (next != null && (next.getElementType() == TokenType.WHITE_SPACE || next.getElementType() ==
-                    XQueryTypes.SEPARATOR)) {
-                parentNode.removeChild(next);
-                next = node.getTreeNext();
-            }
-        }
+        deleteElement(dirAttribute);
     }
 
     public static void delete(XQueryVarName element) {
@@ -413,10 +401,14 @@ public class XQueryPsiImplUtil {
 
     private static void deleteDeclaration(XQueryNamedElement namedElement) {
         PsiElement declarationElement = namedElement.getParent();
-        final ASTNode parentNode = declarationElement.getParent().getNode();
+        deleteElement(declarationElement);
+    }
+
+    private static void deleteElement(PsiElement element) {
+        final ASTNode parentNode = element.getParent().getNode();
         assert parentNode != null;
 
-        ASTNode node = declarationElement.getNode();
+        ASTNode node = element.getNode();
         ASTNode prev = node.getTreePrev();
         ASTNode next = node.getTreeNext();
         parentNode.removeChild(node);
@@ -461,6 +453,10 @@ public class XQueryPsiImplUtil {
 
     public static PsiReference getReference(XQueryXmlTagNamespace prefix) {
         return new XQueryXmlTagNamespaceReference(prefix, new TextRange(0, prefix.getTextLength()));
+    }
+
+    public static PsiReference getReference(XQueryAttrNamespace prefix) {
+        return new XQueryAttrNamespaceReference(prefix, new TextRange(0, prefix.getTextLength()));
     }
 
     public static PsiReference getReference(XQueryXmlTagName element) {
@@ -576,8 +572,17 @@ public class XQueryPsiImplUtil {
         return isEquivalentPrefix(element, another);
     }
 
+    public static boolean isEquivalentTo(XQueryAttrNamespace element, PsiElement another) {
+        return isEquivalentPrefix(element, another);
+    }
+
     private static boolean isEquivalentPrefix(XQueryPsiElement element, PsiElement another) {
-        if (!(another instanceof XQueryPrefix)) return false;
+        boolean isElementContainingNamespace = another instanceof XQueryPrefix
+                || another instanceof XQueryXmlTagNamespace
+                || another instanceof XQueryAttrNamespace;
+        if (!isElementContainingNamespace) {
+            return false;
+        }
         if (element.getContainingFile() instanceof XQueryFile && another.getContainingFile() instanceof XQueryFile) {
             XQueryFile elementFile = (XQueryFile) element.getContainingFile();
             XQueryFile anotherFile = (XQueryFile) another.getContainingFile();
