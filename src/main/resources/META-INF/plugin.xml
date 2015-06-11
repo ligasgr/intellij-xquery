@@ -64,6 +64,8 @@
 
         <langCodeStyleSettingsProvider implementation="org.intellij.xquery.formatter.settings.XQueryLanguageCodeStyleSettingsProvider"/>
         <quoteHandler fileType="XQuery file" className="org.intellij.xquery.quotes.XQueryQuoteHandler"/>
+        <typedHandler implementation="org.intellij.xquery.completion.xml.XQueryXmlSlashTypedHandler" id="xqueryXmlSlash"/>
+        <typedHandler implementation="org.intellij.xquery.completion.xml.XQueryXmlGtTypedHandler" id="xqueryXmlGt"/>
         <declarationRangeHandler key="org.intellij.xquery.psi.XQueryFunctionDecl" implementationClass="org.intellij.xquery.structure.XQueryFunctionDeclarationRangeHandler"/>
         <annotator language="XQuery" implementationClass="org.intellij.xquery.annotator.XQueryAnnotator"/>
         <additionalTextAttributes scheme="Default" file="colorSchemes/Default.xml"/>
