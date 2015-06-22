@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,23 +30,20 @@ public class OtherOptionsPanel extends SettingsPanel {
 
     private final LabeledComponent<JComboBox> xqueryFlavour;
     private final SortedComboBoxModel<Object> xqueryFlavourModel = comboBoxModel();
-    private final XQueryFlavour defaultFlavour;
 
-    public OtherOptionsPanel(XQueryFlavour defaultFlavour) {
-        this.defaultFlavour = defaultFlavour;
+    public OtherOptionsPanel() {
         setLayout(new MigLayout("ins 0, gap 5, fill, flowy"));
         xqueryFlavour = UIUtils.comboBox("&XQuery flavour", "xqueryFlavour", xqueryFlavourModel);
         xqueryFlavour.getComponent().setRenderer(new XQueryFlavourRenderer());
         add(xqueryFlavour);
         setBorder(BorderFactory.createTitledBorder("Other options"));
-        populateFlavourList(defaultFlavour);
+        populateFlavourList();
     }
 
-    private void populateFlavourList(XQueryFlavour defaultFlavour) {
+    private void populateFlavourList() {
         for (XQueryFlavour flavour : XQueryFlavour.values()) {
             xqueryFlavourModel.add(flavour);
         }
-        xqueryFlavourModel.setSelectedItem(defaultFlavour);
     }
 
     @Override
@@ -57,18 +54,16 @@ public class OtherOptionsPanel extends SettingsPanel {
 
     @Override
     public void updatePanel(XQuerySettings settings) {
-        if (settings.getFlavour() != null) {
-            xqueryFlavour.getComponent().setSelectedItem(settings.getFlavour());
-        } else {
-            xqueryFlavour.getComponent().setSelectedItem(defaultFlavour);
-        }
+        xqueryFlavour.getComponent().setSelectedItem(settings.getFlavour());
     }
 
     private class XQueryFlavourRenderer extends ListCellRendererWrapper<XQueryFlavour> {
 
         @Override
         public void customize(JList list, XQueryFlavour value, int index, boolean selected, boolean hasFocus) {
-            setText(value.getPresentableName());
+            if (value != null) {
+                setText(value.getPresentableName());
+            }
         }
     }
 

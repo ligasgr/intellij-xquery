@@ -17,12 +17,21 @@
 
 package org.intellij.xquery.completion.function;
 
-import java.util.Collection;
+import com.intellij.openapi.project.Project;
+import org.intellij.xquery.settings.XQuerySettings;
 
-public interface BuiltInFunctionTable {
-    Collection<BuiltInFunctionSignature> getFunctionsSignatures(String namespace);
+public class BuiltInFunctionTableFactory {
 
-    Collection<BuiltInFunctionSignature> getFunctionsSignatures(String namespace, String name);
+    private static BuiltInFunctionTable bifTable = null;
 
-    boolean isBuiltInFunction(String namespace, String name);
+    public static BuiltInFunctionTable getInstance(Project project) {
+        if (bifTable == null) {
+            synchronized (BuiltInFunctionTableFactory.class) {
+                if (bifTable == null) {
+                    bifTable = XQuerySettings.getInstance(project).getFlavour().getBifTable();
+                }
+            }
+        }
+        return bifTable;
+    }
 }

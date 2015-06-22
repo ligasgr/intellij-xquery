@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,9 @@
 
 package org.intellij.xquery.documentation;
 
-import static org.intellij.xquery.completion.function.BuiltInFunctionTable.isBuiltInFunction;
+import com.intellij.openapi.project.Project;
+import org.intellij.xquery.completion.function.BuiltInFunctionTableFactory;
+
 import static org.intellij.xquery.documentation.DocumentationStylist.wrapWithHtmlAndStyle;
 
 /**
@@ -31,10 +33,14 @@ public class LookupItemBuiltInFunctionDocumentationProvider implements PsiBasedD
     public String generateDoc(XQueryDocElement element) {
         String namespace = element.getNamespace();
         String name = element.getName();
-        if (isBuiltInFunction(namespace, name)) {
+        if (isBuiltInFunction(element.getProject(), namespace, name)) {
             return getDocumentationFromExternalFile(namespace, name);
         }
         return null;
+    }
+
+    private boolean isBuiltInFunction(Project project, String namespace, String name) {
+        return BuiltInFunctionTableFactory.getInstance(project).isBuiltInFunction(namespace, name);
     }
 
     private String getDocumentationFromExternalFile(String namespace, String name) {

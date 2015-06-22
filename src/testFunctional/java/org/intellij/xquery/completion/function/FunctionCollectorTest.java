@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,6 @@ import org.intellij.xquery.reference.MatchingStringCondition;
 import java.util.List;
 
 import static com.intellij.util.containers.ContainerUtil.findAll;
-import static org.intellij.xquery.completion.function.BuiltInFunctionTable.getFunctionsSignatures;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.MATH;
 
@@ -38,6 +37,8 @@ public class FunctionCollectorTest extends BaseCollectorTest {
     protected String getTestDataPath() {
         return "src/testFunctional/testData/org/intellij/xquery/completion/function";
     }
+
+    private XQuery30BuiltInFunctionTable bifTable = new XQuery30BuiltInFunctionTable();
 
     public void testFunctionCompletionInTheSameFile() {
         List<String> strings = getCompletionProposals();
@@ -165,12 +166,12 @@ public class FunctionCollectorTest extends BaseCollectorTest {
 
     private void assertCorrectBuiltInFunctionLookupItems(List<String> functions, int timesBuiltInFunctionsAppear,
                                                          String... functionPrefixes) {
-        for (BuiltInFunctionSignature builtInFunctionSignature : getFunctionsSignatures(FN.getNamespace())) {
+        for (BuiltInFunctionSignature builtInFunctionSignature : bifTable.getFunctionsSignatures(FN.getNamespace())) {
             for (String functionPrefix : functionPrefixes) {
                 assertTrue(functions.contains(functionPrefix + builtInFunctionSignature.getName()));
             }
         }
-        for (BuiltInFunctionSignature builtInFunctionSignature : getFunctionsSignatures(MATH.getNamespace())) {
+        for (BuiltInFunctionSignature builtInFunctionSignature : bifTable.getFunctionsSignatures(MATH.getNamespace())) {
             assertTrue(functions.contains(MATH.getPrefix() + ":" + builtInFunctionSignature.getName()));
         }
     }

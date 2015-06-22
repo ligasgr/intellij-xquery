@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,22 +17,31 @@
 
 package org.intellij.xquery;
 
+import org.intellij.xquery.completion.function.BuiltInFunctionTable;
+import org.intellij.xquery.completion.function.XQuery30BuiltInFunctionTable;
+
 public enum XQueryFlavour {
-    STANDARD_30("XQuery 3.0 Standard"),
-    BASEX("BaseX"),
-    EXIST("eXist"),
-    MARKLOGIC("MarkLogic"),
-    SAXON("Saxon"),
-    SEDNA("Sedna"),
-    ZORBA("Zorba");
+    STANDARD_30("XQuery 3.0 Standard", new XQuery30BuiltInFunctionTable()),
+    BASEX("BaseX", new XQuery30BuiltInFunctionTable()),
+    EXIST("eXist", new XQuery30BuiltInFunctionTable()),
+    MARKLOGIC("MarkLogic", new XQuery30BuiltInFunctionTable()),
+    SAXON("Saxon", new XQuery30BuiltInFunctionTable()),
+    SEDNA("Sedna", new XQuery30BuiltInFunctionTable()),
+    ZORBA("Zorba", new XQuery30BuiltInFunctionTable());
 
     private final String presentableName;
+    private final BuiltInFunctionTable bifTable;
 
-    XQueryFlavour(String presentableName) {
+    XQueryFlavour(String presentableName, BuiltInFunctionTable bifTable) {
         this.presentableName = presentableName;
+        this.bifTable = bifTable;
     }
 
     public String getPresentableName() {
         return presentableName;
+    }
+
+    public BuiltInFunctionTable getBifTable() {
+        return bifTable;
     }
 }

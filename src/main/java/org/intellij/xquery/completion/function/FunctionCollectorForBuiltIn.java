@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 package org.intellij.xquery.completion.function;
 
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.openapi.project.Project;
 import org.intellij.xquery.psi.XQueryFile;
 
 import java.util.ArrayList;
@@ -28,9 +29,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.intellij.xquery.completion.XQueryCompletionContributor.BIF_PRIORITY;
-import static org.intellij.xquery.completion.function.BuiltInFunctionSignatureToLookupElementConverter.convert;
-import static org.intellij.xquery.completion.function.BuiltInFunctionTable.getFunctionsSignatures;
 import static org.intellij.xquery.completion.XQueryCompletionContributor.prioritized;
+import static org.intellij.xquery.completion.function.BuiltInFunctionSignatureToLookupElementConverter.convert;
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.isPredeclaredNamespace;
 
 /**
@@ -45,11 +45,15 @@ public class FunctionCollectorForBuiltIn {
         Set<String> availableNamespaces = new HashSet<String>(functionPrefixToNamespaceMap.values());
         for (String namespace : availableNamespaces) {
             if (isPredeclaredNamespace(namespace)) {
-                lookupItems.addAll(getLookupItemsForNamespace(getFunctionsSignatures(namespace),
+                lookupItems.addAll(getLookupItemsForNamespace(getFunctionsSignatures(file.getProject(), namespace),
                         getMatchingPrefixes(namespace, functionPrefixToNamespaceMap)));
             }
         }
         return lookupItems;
+    }
+
+    private static Collection<BuiltInFunctionSignature> getFunctionsSignatures(Project project, String namespace) {
+        return BuiltInFunctionTableFactory.getInstance(project).getFunctionsSignatures(namespace);
     }
 
     private static List<String> getMatchingPrefixes(String namespace, Map<String,

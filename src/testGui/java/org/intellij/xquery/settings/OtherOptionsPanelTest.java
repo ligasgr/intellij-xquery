@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,18 +34,12 @@ import static org.junit.Assert.assertThat;
 
 public class OtherOptionsPanelTest extends BaseGuiTest {
 
-    public static final XQueryFlavour DEFAULT = XQueryFlavour.BASEX;
     private OtherOptionsPanel panel;
 
     @Override
     protected PanelTestingFrame getPanelTestingFrame() {
-        panel = new OtherOptionsPanel(DEFAULT);
+        panel = new OtherOptionsPanel();
         return new PanelTestingFrame(panel);
-    }
-
-    @Test
-    public void shouldSetDefaultFlavourAsSelected() {
-        window.comboBox().requireSelection(DEFAULT.getPresentableName());
     }
 
     @Test
@@ -65,9 +59,10 @@ public class OtherOptionsPanelTest extends BaseGuiTest {
     public void shouldUpdateSettingsWithSelectedValue() {
         XQuerySettings settings = new XQuerySettings();
 
+        window.comboBox().selectItem(XQueryFlavour.MARKLOGIC.getPresentableName());
         panel.updateSettings(settings);
 
-        assertThat(settings.getFlavour(), is(DEFAULT));
+        assertThat(settings.getFlavour(), is(XQueryFlavour.MARKLOGIC));
     }
 
     @Test
@@ -76,7 +71,7 @@ public class OtherOptionsPanelTest extends BaseGuiTest {
 
         panel.updatePanel(settings);
 
-        window.comboBox().requireSelection(DEFAULT.getPresentableName());
+        window.comboBox().requireSelection(settings.getFlavour().getPresentableName());
     }
 
     @Test

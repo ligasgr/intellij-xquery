@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -82,7 +82,7 @@ public class XQuerySettings implements PersistentStateComponent<XQuerySettings>,
 
     @Tag("flavour")
     public XQueryFlavour getFlavour() {
-        return flavour;
+        return flavour != null ? flavour : XQueryFlavour.STANDARD_30;
     }
 
     public void setFlavour(XQueryFlavour flavour) {
@@ -116,5 +116,9 @@ public class XQuerySettings implements PersistentStateComponent<XQuerySettings>,
     @Override
     public long getModificationCount() {
         return modificationCount;
+    }
+
+    public boolean isMarklogicFlavour() {
+        return XQueryFlavour.MARKLOGIC.equals(getFlavour());
     }
 }

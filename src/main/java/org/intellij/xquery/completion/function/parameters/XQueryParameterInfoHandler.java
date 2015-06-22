@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,7 @@ import com.intellij.lang.parameterInfo.ParameterInfoHandler;
 import com.intellij.lang.parameterInfo.ParameterInfoUIContext;
 import com.intellij.lang.parameterInfo.ParameterInfoUtils;
 import com.intellij.lang.parameterInfo.UpdateParameterInfoContext;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPolyVariantReference;
 import com.intellij.psi.PsiReference;
@@ -32,7 +33,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.intellij.xquery.completion.function.BuiltInFunctionSignature;
-import org.intellij.xquery.completion.function.BuiltInFunctionTable;
+import org.intellij.xquery.completion.function.BuiltInFunctionTableFactory;
 import org.intellij.xquery.psi.XQueryArgumentList;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionCall;
@@ -44,6 +45,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -109,8 +111,12 @@ public class XQueryParameterInfoHandler implements ParameterInfoHandler<XQueryAr
             String name = functionCall.getFunctionName().getLocalNameText();
             String prefix = functionCall.getFunctionName().getPrefixText();
             String namespace = ((XQueryFile) functionCall.getContainingFile()).mapFunctionPrefixToNamespace(prefix);
-            context.setItemsToShow(ArrayUtil.toObjectArray(BuiltInFunctionTable.getFunctionsSignatures(namespace, name)));
+            context.setItemsToShow(ArrayUtil.toObjectArray(getFunctionsSignatures(functionCall.getProject(), name, namespace)));
         }
+    }
+
+    private Collection<BuiltInFunctionSignature> getFunctionsSignatures(Project project, String name, String namespace) {
+        return BuiltInFunctionTableFactory.getInstance(project).getFunctionsSignatures(namespace, name);
     }
 
     private Comparator<XQueryFunctionDecl> getParameterListSizeComparator() {

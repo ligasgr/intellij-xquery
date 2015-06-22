@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -292,7 +292,7 @@ public class XQueryFile extends PsiFileBase {
         XQueryDefaultFunctionNamespaceDecl defaultFunctionNamespaceDecl = getDefaultNamespaceFunctionDeclaration();
         if (defaultFunctionNamespaceDecl != null && defaultFunctionNamespaceDecl.getURILiteral() != null)
             return removeQuotOrApos(defaultFunctionNamespaceDecl.getURILiteral().getText());
-        else if (isLibraryModule() && XQueryFlavour.MARKLOGIC.equals(getSettings().getFlavour()) && getModuleDeclaration().getURILiteral() != null) {
+        else if (isLibraryModule() && getSettings().isMarklogicFlavour() && getModuleDeclaration().getURILiteral() != null) {
             return removeQuotOrApos(getModuleDeclaration().getURILiteral().getText());
         }
         return FN.getNamespace();

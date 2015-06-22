@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,9 @@
 
 package org.intellij.xquery.documentation;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+import org.intellij.xquery.completion.function.BuiltInFunctionTableFactory;
 import org.intellij.xquery.psi.XQueryAnnotation;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
@@ -26,7 +28,6 @@ import org.intellij.xquery.psi.XQueryFunctionName;
 
 import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static javax.xml.XMLConstants.NULL_NS_URI;
-import static org.intellij.xquery.completion.function.BuiltInFunctionTable.isBuiltInFunction;
 import static org.intellij.xquery.documentation.DocumentationStylist.FUNCTION_END;
 import static org.intellij.xquery.documentation.DocumentationStylist.FUNCTION_START;
 import static org.intellij.xquery.documentation.DocumentationStylist.wrapWithHtmlAndStyle;
@@ -49,12 +50,16 @@ public class FunctionDocumentationProvider implements PsiBasedDocumentationProvi
             String name = functionName.getLocalNameText();
             String prefix = functionName.getPrefixText();
             String namespace = ((XQueryFile) functionName.getContainingFile()).mapFunctionPrefixToNamespace(prefix);
-            if (isBuiltInFunction(namespace, name)) {
+            if (isBuiltInFunction(functionName.getProject(), namespace, name)) {
                 return getDocumentationFromExternalFile(namespace, name);
             } else {
                 return null;
             }
         }
+    }
+
+    private boolean isBuiltInFunction(Project project, String namespace, String name) {
+        return BuiltInFunctionTableFactory.getInstance(project).isBuiltInFunction(namespace,name);
     }
 
     private String getDocumentationFromExternalFile(String namespace, String name) {
