@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,6 @@ import com.intellij.psi.scope.BaseScopeProcessor;
 import org.intellij.xquery.psi.XQueryAttrLocalName;
 import org.intellij.xquery.psi.XQueryDirAttributeName;
 import org.intellij.xquery.psi.XQueryPsiElement;
-import org.intellij.xquery.psi.XQueryXmlTagNamespace;
 import org.jetbrains.annotations.NotNull;
 
 import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.XMLNS;
@@ -51,6 +50,7 @@ public class XmlTagNamespaceReferenceScopeProcessor<T extends XQueryPsiElement> 
         }
         return true;
     }
+
     private boolean isInlineNamespaceDeclaration(XQueryDirAttributeName attributeName, String namespaceName) {
         return attributeName.getAttrNamespace() != null
                 && XMLNS.getPrefix().equals(attributeName.getAttrNamespace().getText())

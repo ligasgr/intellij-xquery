@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,43 +22,23 @@ import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
 
-/**
- * User: ligasgr
- * Date: 17/08/13
- * Time: 19:09
- */
-public enum XQueryPredeclaredNamespace {
-    XML("xml", "http://www.w3.org/XML/1998/namespace"),
-    XS("xs", "http://www.w3.org/2001/XMLSchema"),
-    XSI("xsi", "http://www.w3.org/2001/XMLSchema-instance"),
-    FN("fn", "http://www.w3.org/2005/xpath-functions"),
-    MATH("math", "http://www.w3.org/2005/xpath-functions/math"),
-    MAP("map", "http://www.w3.org/2005/xpath-functions/map"),
-    ERR("err", "http://www.w3.org/2005/xqt-errors"),
-    LOCAL("local", "http://www.w3.org/2005/xquery-local-functions"),
-    XMLNS("xmlns", "");
+public class XQueryPredeclaredNamespace {
+    public static final Namespace FN = ns("fn", "http://www.w3.org/2005/xpath-functions");
+    public static final Namespace MATH = ns("math", "http://www.w3.org/2005/xpath-functions/math");
+    public static final Namespace XMLNS = ns("xmlns", "");
 
     private static final Map<String, String> prefixToNamespaceMap = new HashMap<String, String>();
-    private String prefix;
-    private String namespace;
 
     static {
-        for (XQueryPredeclaredNamespace value : values()) {
-            prefixToNamespaceMap.put(value.getPrefix(), value.getNamespace());
-        }
-    }
-
-    private XQueryPredeclaredNamespace(String prefix, String namespace) {
-        this.prefix = prefix;
-        this.namespace = namespace;
-    }
-
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public String getNamespace() {
-        return namespace;
+        prefixToNamespaceMap.put("xml", "http://www.w3.org/XML/1998/namespace");
+        prefixToNamespaceMap.put("xs", "http://www.w3.org/2001/XMLSchema");
+        prefixToNamespaceMap.put("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        prefixToNamespaceMap.put(FN.getPrefix(), FN.getNamespace());
+        prefixToNamespaceMap.put(MATH.getPrefix(), MATH.getNamespace());
+        prefixToNamespaceMap.put("map", "http://www.w3.org/2005/xpath-functions/map");
+        prefixToNamespaceMap.put("err", "http://www.w3.org/2005/xqt-errors");
+        prefixToNamespaceMap.put("local", "http://www.w3.org/2005/xquery-local-functions");
+        prefixToNamespaceMap.put(XMLNS.getPrefix(), XMLNS.getNamespace());
     }
 
     public static Map<String, String> getPrefixToNamespaceMap() {
@@ -69,7 +49,33 @@ public enum XQueryPredeclaredNamespace {
         return prefixToNamespaceMap.containsValue(namespace);
     }
 
+    public static boolean isPredeclaredNamespacePrefix(String namespacePrefix) {
+        return prefixToNamespaceMap.containsKey(namespacePrefix);
+    }
+
     public static String getNamespaceForPrefix(String prefix) {
         return prefixToNamespaceMap.get(prefix);
+    }
+
+    public static Namespace ns(String prefix, String namespace) {
+        return new Namespace(prefix, namespace);
+    }
+
+    public static class Namespace {
+        private final String prefix;
+        private final String namespace;
+
+        public Namespace(String prefix, String namespace) {
+            this.prefix = prefix;
+            this.namespace = namespace;
+        }
+
+        public String getPrefix() {
+            return prefix;
+        }
+
+        public String getNamespace() {
+            return namespace;
+        }
     }
 }

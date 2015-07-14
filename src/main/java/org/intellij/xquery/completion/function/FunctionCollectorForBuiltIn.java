@@ -31,20 +31,14 @@ import java.util.Set;
 import static org.intellij.xquery.completion.XQueryCompletionContributor.BIF_PRIORITY;
 import static org.intellij.xquery.completion.XQueryCompletionContributor.prioritized;
 import static org.intellij.xquery.completion.function.BuiltInFunctionSignatureToLookupElementConverter.convert;
-import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.isPredeclaredNamespace;
 
-/**
- * User: ligasgr
- * Date: 07/12/13
- * Time: 23:56
- */
 public class FunctionCollectorForBuiltIn {
     public static List<LookupElement> getLookupItems(XQueryFile file) {
         List<LookupElement> lookupItems = new ArrayList<LookupElement>();
         Map<String, String> functionPrefixToNamespaceMap = file.getFunctionPrefixToNamespaceMap();
         Set<String> availableNamespaces = new HashSet<String>(functionPrefixToNamespaceMap.values());
         for (String namespace : availableNamespaces) {
-            if (isPredeclaredNamespace(namespace)) {
+            if (file.isPredeclaredNamespace(namespace)) {
                 lookupItems.addAll(getLookupItemsForNamespace(getFunctionsSignatures(file.getProject(), namespace),
                         getMatchingPrefixes(namespace, functionPrefixToNamespaceMap)));
             }

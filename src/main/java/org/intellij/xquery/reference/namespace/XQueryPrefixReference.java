@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,7 +57,7 @@ public abstract class XQueryPrefixReference<T extends XQueryPsiElement> extends 
             results.addAll(getReferencesFromModuleImports(file.getModuleImports()));
             results.addAll(getReferencesFromModuleName(file.getModuleNamespaceName()));
         }
-        if (results.isEmpty() && isPredeclaredNamespace(myElement.getText())) {
+        if (results.isEmpty() && file.isPredeclaredNamespacePrefix(myElement.getText())) {
             results.add(new PsiElementResolveResult(getElement()));
         }
         return results.toArray(new ResolveResult[results.size()]);
@@ -119,10 +119,6 @@ public abstract class XQueryPrefixReference<T extends XQueryPsiElement> extends 
         ResolveResult[] resolveResults = multiResolve(false);
         PsiElement result = resolveResults.length == 1 ? resolveResults[0].getElement() : null;
         return result;
-    }
-
-    private boolean isPredeclaredNamespace(String namespacePrefix) {
-        return XQueryPredeclaredNamespace.getPrefixToNamespaceMap().keySet().contains(namespacePrefix);
     }
 
     @NotNull

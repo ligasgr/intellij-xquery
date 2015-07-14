@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,28 +19,11 @@ package org.intellij.xquery.reference.namespace;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementResolveResult;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.ResolveResult;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.intellij.xquery.psi.XQueryAttrLocalName;
-import org.intellij.xquery.psi.XQueryDirAttribute;
-import org.intellij.xquery.psi.XQueryDirAttributeList;
-import org.intellij.xquery.psi.XQueryDirAttributeName;
 import org.intellij.xquery.psi.XQueryElementFactory;
-import org.intellij.xquery.psi.XQueryPsiElement;
 import org.intellij.xquery.psi.XQueryXmlEmptyTag;
-import org.intellij.xquery.psi.XQueryXmlFullTag;
 import org.intellij.xquery.psi.XQueryXmlTagNamespace;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.XMLNS;
 
 public class XQueryXmlTagNamespaceReference extends XQueryXmlNamespaceReference<XQueryXmlTagNamespace> {
 
