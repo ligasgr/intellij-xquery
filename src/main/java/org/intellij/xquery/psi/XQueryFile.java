@@ -28,6 +28,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryFileType;
 import org.intellij.xquery.XQueryFlavour;
 import org.intellij.xquery.XQueryLanguage;
+import org.intellij.xquery.reference.namespace.PredeclaredNamespaces;
 import org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces;
 import org.intellij.xquery.settings.XQuerySettings;
 import org.jetbrains.annotations.NotNull;
@@ -43,10 +44,11 @@ import java.util.Map;
 import static com.intellij.util.containers.ContainerUtil.findAll;
 import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInImport;
 import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.FN;
-import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.getPrefixToNamespaceMap;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
 
 public class XQueryFile extends PsiFileBase {
+    private PredeclaredNamespaces predeclaredNamespaces = new XQueryStandardPredeclaredNamespaces();
+
     public XQueryFile(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, XQueryLanguage.INSTANCE);
     }
@@ -417,11 +419,19 @@ public class XQueryFile extends PsiFileBase {
         return XQuerySettings.getInstance(getProject());
     }
 
+    private PredeclaredNamespaces predeclaredNamespaces() {
+        return predeclaredNamespaces;
+    }
+
     public boolean isPredeclaredNamespacePrefix(String namespacePrefix) {
-        return XQueryStandardPredeclaredNamespaces.isPredeclaredNamespacePrefix(namespacePrefix);
+        return predeclaredNamespaces().isPredeclaredNamespacePrefix(namespacePrefix);
     }
 
     public boolean isPredeclaredNamespace(String namespace) {
-        return XQueryStandardPredeclaredNamespaces.isPredeclaredNamespace(namespace);
+        return predeclaredNamespaces().isPredeclaredNamespace(namespace);
+    }
+
+    Map<String, String> getPrefixToNamespaceMap() {
+        return predeclaredNamespaces().getPrefixToNamespaceMap();
     }
 }

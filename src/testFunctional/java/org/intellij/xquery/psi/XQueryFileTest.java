@@ -23,7 +23,6 @@ import java.util.Collection;
 
 import static org.intellij.xquery.psi.XQueryElementFactory.createFile;
 import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.FN;
-import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.getPrefixToNamespaceMap;
 
 /**
  * User: ligasgr
@@ -114,8 +113,8 @@ public class XQueryFileTest extends BaseFunctionalTestCase {
     public void testNamespaceMappingsForPredeclaredNamespaces() {
         XQueryFile file = aFile("()");
 
-        for (String key : getPrefixToNamespaceMap().keySet()) {
-            assertEquals(getPrefixToNamespaceMap().get(key), file.mapFunctionPrefixToNamespace(key));
+        for (String key : file.getPrefixToNamespaceMap().keySet()) {
+            assertEquals(file.getPrefixToNamespaceMap().get(key), file.mapFunctionPrefixToNamespace(key));
         }
     }
 

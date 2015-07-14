@@ -17,19 +17,12 @@
 
 package org.intellij.xquery.reference.namespace;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.util.Collections.unmodifiableMap;
-
-public class XQueryStandardPredeclaredNamespaces {
+public class XQueryStandardPredeclaredNamespaces extends PredeclaredNamespaces {
     public static final Namespace FN = ns("fn", "http://www.w3.org/2005/xpath-functions");
     public static final Namespace MATH = ns("math", "http://www.w3.org/2005/xpath-functions/math");
     public static final Namespace XMLNS = ns("xmlns", "");
 
-    private static final Map<String, String> prefixToNamespaceMap = new HashMap<String, String>();
-
-    static {
+    {
         prefixToNamespaceMap.put("xml", "http://www.w3.org/XML/1998/namespace");
         prefixToNamespaceMap.put("xs", "http://www.w3.org/2001/XMLSchema");
         prefixToNamespaceMap.put("xsi", "http://www.w3.org/2001/XMLSchema-instance");
@@ -39,22 +32,6 @@ public class XQueryStandardPredeclaredNamespaces {
         prefixToNamespaceMap.put("err", "http://www.w3.org/2005/xqt-errors");
         prefixToNamespaceMap.put("local", "http://www.w3.org/2005/xquery-local-functions");
         prefixToNamespaceMap.put(XMLNS.getPrefix(), XMLNS.getNamespace());
-    }
-
-    public static Map<String, String> getPrefixToNamespaceMap() {
-        return unmodifiableMap(prefixToNamespaceMap);
-    }
-
-    public static boolean isPredeclaredNamespace(String namespace) {
-        return prefixToNamespaceMap.containsValue(namespace);
-    }
-
-    public static boolean isPredeclaredNamespacePrefix(String namespacePrefix) {
-        return prefixToNamespaceMap.containsKey(namespacePrefix);
-    }
-
-    public static String getNamespaceForPrefix(String prefix) {
-        return prefixToNamespaceMap.get(prefix);
     }
 
     public static Namespace ns(String prefix, String namespace) {
