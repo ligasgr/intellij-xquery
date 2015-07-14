@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,15 +30,13 @@ import org.intellij.xquery.psi.XQueryDirAttributeName;
 import org.intellij.xquery.psi.XQueryPsiElement;
 import org.intellij.xquery.psi.XQueryXmlEmptyTag;
 import org.intellij.xquery.psi.XQueryXmlFullTag;
-import org.intellij.xquery.psi.XQueryXmlTagNamespace;
-import org.intellij.xquery.psi.impl.XQueryDirAttributeImpl;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.XMLNS;
+import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.XMLNS;
 
 public class XQueryXmlNamespaceReference<T extends XQueryPsiElement> extends XQueryPrefixReference<T> {
     public XQueryXmlNamespaceReference(T element, TextRange textRange) {

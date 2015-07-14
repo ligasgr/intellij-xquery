@@ -24,8 +24,8 @@ import org.intellij.xquery.reference.MatchingStringCondition;
 import java.util.List;
 
 import static com.intellij.util.containers.ContainerUtil.findAll;
-import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;
-import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.MATH;
+import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.FN;
+import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.MATH;
 
 /**
  * User: ligasgr

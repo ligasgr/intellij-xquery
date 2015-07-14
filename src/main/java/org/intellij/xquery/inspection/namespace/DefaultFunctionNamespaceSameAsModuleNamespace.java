@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryURILiteral;
 
 import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
-import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;
+import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.FN;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrAposIfNeeded;
 
 public class DefaultFunctionNamespaceSameAsModuleNamespace extends LocalInspectionTool {

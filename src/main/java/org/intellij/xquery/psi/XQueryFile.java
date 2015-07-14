@@ -28,7 +28,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryFileType;
 import org.intellij.xquery.XQueryFlavour;
 import org.intellij.xquery.XQueryLanguage;
-import org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace;
+import org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces;
 import org.intellij.xquery.settings.XQuerySettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,8 +42,8 @@ import java.util.Map;
 
 import static com.intellij.util.containers.ContainerUtil.findAll;
 import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInImport;
-import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;
-import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.getPrefixToNamespaceMap;
+import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.FN;
+import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.getPrefixToNamespaceMap;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
 
 public class XQueryFile extends PsiFileBase {
@@ -418,10 +418,10 @@ public class XQueryFile extends PsiFileBase {
     }
 
     public boolean isPredeclaredNamespacePrefix(String namespacePrefix) {
-        return XQueryPredeclaredNamespace.isPredeclaredNamespacePrefix(namespacePrefix);
+        return XQueryStandardPredeclaredNamespaces.isPredeclaredNamespacePrefix(namespacePrefix);
     }
 
     public boolean isPredeclaredNamespace(String namespace) {
-        return XQueryPredeclaredNamespace.isPredeclaredNamespace(namespace);
+        return XQueryStandardPredeclaredNamespaces.isPredeclaredNamespace(namespace);
     }
 }

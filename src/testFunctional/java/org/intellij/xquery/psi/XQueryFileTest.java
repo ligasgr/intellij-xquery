@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,8 +22,8 @@ import org.intellij.xquery.BaseFunctionalTestCase;
 import java.util.Collection;
 
 import static org.intellij.xquery.psi.XQueryElementFactory.createFile;
-import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.FN;
-import static org.intellij.xquery.reference.namespace.XQueryPredeclaredNamespace.getPrefixToNamespaceMap;
+import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.FN;
+import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.getPrefixToNamespaceMap;
 
 /**
  * User: ligasgr

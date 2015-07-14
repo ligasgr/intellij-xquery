@@ -22,7 +22,7 @@ import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
 
-public class XQueryPredeclaredNamespace {
+public class XQueryStandardPredeclaredNamespaces {
     public static final Namespace FN = ns("fn", "http://www.w3.org/2005/xpath-functions");
     public static final Namespace MATH = ns("math", "http://www.w3.org/2005/xpath-functions/math");
     public static final Namespace XMLNS = ns("xmlns", "");
