@@ -17,7 +17,7 @@
 
 package org.intellij.xquery.reference.namespace;
 
-public class XQueryStandardPredeclaredNamespaces extends PredeclaredNamespaces {
+public class XQuery30PredeclaredNamespaces extends PredeclaredNamespaces {
     public static final Namespace FN = ns("fn", "http://www.w3.org/2005/xpath-functions");
     public static final Namespace MATH = ns("math", "http://www.w3.org/2005/xpath-functions/math");
     public static final Namespace XMLNS = ns("xmlns", "");

@@ -29,7 +29,7 @@ import org.intellij.xquery.XQueryFileType;
 import org.intellij.xquery.XQueryFlavour;
 import org.intellij.xquery.XQueryLanguage;
 import org.intellij.xquery.reference.namespace.PredeclaredNamespaces;
-import org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces;
+import org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespaces;
 import org.intellij.xquery.settings.XQuerySettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,11 +43,11 @@ import java.util.Map;
 
 import static com.intellij.util.containers.ContainerUtil.findAll;
 import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInImport;
-import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.FN;
+import static org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespaces.FN;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
 
 public class XQueryFile extends PsiFileBase {
-    private PredeclaredNamespaces predeclaredNamespaces = new XQueryStandardPredeclaredNamespaces();
+    private PredeclaredNamespaces predeclaredNamespaces = new XQuery30PredeclaredNamespaces();
 
     public XQueryFile(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, XQueryLanguage.INSTANCE);

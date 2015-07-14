@@ -29,7 +29,7 @@ import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryURILiteral;
 
 import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
-import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.FN;
+import static org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespaces.FN;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrAposIfNeeded;
 
 public class DefaultFunctionNamespaceSameAsModuleNamespace extends LocalInspectionTool {

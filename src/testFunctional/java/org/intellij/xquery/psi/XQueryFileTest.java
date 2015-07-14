@@ -22,7 +22,7 @@ import org.intellij.xquery.BaseFunctionalTestCase;
 import java.util.Collection;
 
 import static org.intellij.xquery.psi.XQueryElementFactory.createFile;
-import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.FN;
+import static org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespaces.FN;
 
 /**
  * User: ligasgr

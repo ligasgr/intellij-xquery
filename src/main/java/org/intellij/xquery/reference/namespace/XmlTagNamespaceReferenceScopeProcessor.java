@@ -25,7 +25,7 @@ import org.intellij.xquery.psi.XQueryDirAttributeName;
 import org.intellij.xquery.psi.XQueryPsiElement;
 import org.jetbrains.annotations.NotNull;
 
-import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.XMLNS;
+import static org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespaces.XMLNS;
 
 public class XmlTagNamespaceReferenceScopeProcessor<T extends XQueryPsiElement> extends BaseScopeProcessor {
     private XQueryAttrLocalName result;

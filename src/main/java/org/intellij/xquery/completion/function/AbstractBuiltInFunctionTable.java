@@ -19,7 +19,7 @@ package org.intellij.xquery.completion.function;
 
 import com.intellij.util.containers.MultiMap;
 import org.intellij.xquery.reference.namespace.PredeclaredNamespaces;
-import org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces;
+import org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespaces;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,7 +34,7 @@ public class AbstractBuiltInFunctionTable implements BuiltInFunctionTable {
             return new TreeSet<BuiltInFunctionSignature>();
         }
     };
-    private PredeclaredNamespaces predeclaredNamespaces = new XQueryStandardPredeclaredNamespaces();
+    private PredeclaredNamespaces predeclaredNamespaces = new XQuery30PredeclaredNamespaces();
 
     protected PredeclaredNamespaces predeclaredNamespaces() {
         return predeclaredNamespaces;

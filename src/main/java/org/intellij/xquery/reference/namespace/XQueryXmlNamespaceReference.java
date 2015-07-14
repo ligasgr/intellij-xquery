@@ -36,7 +36,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static org.intellij.xquery.reference.namespace.XQueryStandardPredeclaredNamespaces.XMLNS;
+import static org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespaces.XMLNS;
 
 public class XQueryXmlNamespaceReference<T extends XQueryPsiElement> extends XQueryPrefixReference<T> {
     public XQueryXmlNamespaceReference(T element, TextRange textRange) {
