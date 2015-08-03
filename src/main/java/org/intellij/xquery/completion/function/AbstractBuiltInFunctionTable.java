@@ -36,7 +36,7 @@ public class AbstractBuiltInFunctionTable implements BuiltInFunctionTable {
     };
     private PredeclaredNamespaces predeclaredNamespaces = new XQuery30PredeclaredNamespaces();
 
-    protected PredeclaredNamespaces predeclaredNamespaces() {
+    public PredeclaredNamespaces predeclaredNamespaces() {
         return predeclaredNamespaces;
     }
 

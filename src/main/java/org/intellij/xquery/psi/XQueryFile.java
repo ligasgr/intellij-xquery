@@ -28,6 +28,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryFileType;
 import org.intellij.xquery.XQueryFlavour;
 import org.intellij.xquery.XQueryLanguage;
+import org.intellij.xquery.completion.function.BuiltInFunctionTable;
 import org.intellij.xquery.reference.namespace.PredeclaredNamespaces;
 import org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespaces;
 import org.intellij.xquery.settings.XQuerySettings;
@@ -420,7 +421,7 @@ public class XQueryFile extends PsiFileBase {
     }
 
     private PredeclaredNamespaces predeclaredNamespaces() {
-        return predeclaredNamespaces;
+        return getBuiltInFunctionTable().predeclaredNamespaces();
     }
 
     public boolean isPredeclaredNamespacePrefix(String namespacePrefix) {
@@ -433,5 +434,9 @@ public class XQueryFile extends PsiFileBase {
 
     Map<String, String> getPrefixToNamespaceMap() {
         return predeclaredNamespaces().getPrefixToNamespaceMap();
+    }
+
+    public BuiltInFunctionTable getBuiltInFunctionTable() {
+        return getSettings().getFlavour().getBifTable();
     }
 }

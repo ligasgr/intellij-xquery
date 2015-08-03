@@ -17,21 +17,23 @@
 
 package org.intellij.xquery.reference.namespace;
 
+import com.intellij.openapi.util.Pair;
+
 public class XQuery30PredeclaredNamespaces extends PredeclaredNamespaces {
     public static final Namespace FN = ns("fn", "http://www.w3.org/2005/xpath-functions");
     public static final Namespace MATH = ns("math", "http://www.w3.org/2005/xpath-functions/math");
     public static final Namespace XMLNS = ns("xmlns", "");
 
     {
-        prefixToNamespaceMap.put("xml", "http://www.w3.org/XML/1998/namespace");
-        prefixToNamespaceMap.put("xs", "http://www.w3.org/2001/XMLSchema");
-        prefixToNamespaceMap.put("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        prefixToNamespaceMap.put(FN.getPrefix(), FN.getNamespace());
-        prefixToNamespaceMap.put(MATH.getPrefix(), MATH.getNamespace());
-        prefixToNamespaceMap.put("map", "http://www.w3.org/2005/xpath-functions/map");
-        prefixToNamespaceMap.put("err", "http://www.w3.org/2005/xqt-errors");
-        prefixToNamespaceMap.put("local", "http://www.w3.org/2005/xquery-local-functions");
-        prefixToNamespaceMap.put(XMLNS.getPrefix(), XMLNS.getNamespace());
+        prefixToNamespaceMap.put("xml", Pair.create("http://www.w3.org/XML/1998/namespace", true));
+        prefixToNamespaceMap.put("xs", Pair.create("http://www.w3.org/2001/XMLSchema", true));
+        prefixToNamespaceMap.put("xsi", Pair.create("http://www.w3.org/2001/XMLSchema-instance", true));
+        prefixToNamespaceMap.put(FN.getPrefix(), Pair.create(FN.getNamespace(), true));
+        prefixToNamespaceMap.put(MATH.getPrefix(), Pair.create(MATH.getNamespace(), true));
+        prefixToNamespaceMap.put("map", Pair.create("http://www.w3.org/2005/xpath-functions/map", true));
+        prefixToNamespaceMap.put("err", Pair.create("http://www.w3.org/2005/xqt-errors", true));
+        prefixToNamespaceMap.put("local", Pair.create("http://www.w3.org/2005/xquery-local-functions", true));
+        prefixToNamespaceMap.put(XMLNS.getPrefix(), Pair.create(XMLNS.getNamespace(), true));
     }
 
     public static Namespace ns(String prefix, String namespace) {

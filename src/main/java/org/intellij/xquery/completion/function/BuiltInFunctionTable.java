@@ -17,6 +17,8 @@
 
 package org.intellij.xquery.completion.function;
 
+import org.intellij.xquery.reference.namespace.PredeclaredNamespaces;
+
 import java.util.Collection;
 
 public interface BuiltInFunctionTable {
@@ -25,4 +27,6 @@ public interface BuiltInFunctionTable {
     Collection<BuiltInFunctionSignature> getFunctionsSignatures(String namespace, String name);
 
     boolean isBuiltInFunction(String namespace, String name);
+
+    PredeclaredNamespaces predeclaredNamespaces();
 }

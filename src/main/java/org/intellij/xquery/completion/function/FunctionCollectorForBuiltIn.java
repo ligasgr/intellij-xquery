@@ -39,15 +39,15 @@ public class FunctionCollectorForBuiltIn {
         Set<String> availableNamespaces = new HashSet<String>(functionPrefixToNamespaceMap.values());
         for (String namespace : availableNamespaces) {
             if (file.isPredeclaredNamespace(namespace)) {
-                lookupItems.addAll(getLookupItemsForNamespace(getFunctionsSignatures(file.getProject(), namespace),
+                lookupItems.addAll(getLookupItemsForNamespace(getFunctionsSignatures(file, namespace),
                         getMatchingPrefixes(namespace, functionPrefixToNamespaceMap)));
             }
         }
         return lookupItems;
     }
 
-    private static Collection<BuiltInFunctionSignature> getFunctionsSignatures(Project project, String namespace) {
-        return BuiltInFunctionTableFactory.getInstance(project).getFunctionsSignatures(namespace);
+    private static Collection<BuiltInFunctionSignature> getFunctionsSignatures(XQueryFile file, String namespace) {
+        return file.getBuiltInFunctionTable().getFunctionsSignatures(namespace);
     }
 
     private static List<String> getMatchingPrefixes(String namespace, Map<String,

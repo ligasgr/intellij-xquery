@@ -17,17 +17,22 @@
 
 package org.intellij.xquery.reference.namespace;
 
+import com.intellij.openapi.util.Pair;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.util.Collections.unmodifiableMap;
-
 public abstract class PredeclaredNamespaces {
 
-    protected final Map<String, String> prefixToNamespaceMap = new HashMap<String, String>();
+    protected final Map<String, Pair<String, Boolean>> prefixToNamespaceMap = new HashMap<String, Pair<String, Boolean>>();
 
     public boolean isPredeclaredNamespace(String namespace) {
-        return prefixToNamespaceMap.containsValue(namespace);
+        for (Map.Entry<String, Pair<String, Boolean>> entry : prefixToNamespaceMap.entrySet()) {
+            if (entry.getValue().first.equals(namespace)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isPredeclaredNamespacePrefix(String namespacePrefix) {
@@ -35,10 +40,16 @@ public abstract class PredeclaredNamespaces {
     }
 
     public String getNamespaceForPrefix(String prefix) {
-        return prefixToNamespaceMap.get(prefix);
+        return prefixToNamespaceMap.get(prefix).first;
     }
 
     public Map<String, String> getPrefixToNamespaceMap() {
-        return unmodifiableMap(prefixToNamespaceMap);
+        Map<String, String> result = new HashMap<String, String>(prefixToNamespaceMap.size());
+        for (Map.Entry<String, Pair<String, Boolean>> entry : prefixToNamespaceMap.entrySet()) {
+            if (entry.getValue().second) {
+                result.put(entry.getKey(), entry.getValue().first);
+            }
+        }
+        return result;
     }
 }
