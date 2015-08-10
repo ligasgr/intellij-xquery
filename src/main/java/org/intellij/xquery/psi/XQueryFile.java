@@ -26,11 +26,10 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryFileType;
-import org.intellij.xquery.XQueryFlavour;
 import org.intellij.xquery.XQueryLanguage;
 import org.intellij.xquery.completion.function.BuiltInFunctionTable;
+import org.intellij.xquery.model.XQueryLanguageVersion;
 import org.intellij.xquery.reference.namespace.PredeclaredNamespaces;
-import org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespaces;
 import org.intellij.xquery.settings.XQuerySettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,13 +42,13 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import static com.intellij.util.containers.ContainerUtil.findAll;
+import static org.intellij.xquery.model.XQueryLanguageVersion.V0_9_ML;
+import static org.intellij.xquery.model.XQueryLanguageVersion.V1_0_ML;
 import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInImport;
 import static org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespaces.FN;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
 
 public class XQueryFile extends PsiFileBase {
-    private PredeclaredNamespaces predeclaredNamespaces = new XQuery30PredeclaredNamespaces();
-
     public XQueryFile(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, XQueryLanguage.INSTANCE);
     }
@@ -82,6 +81,7 @@ public class XQueryFile extends PsiFileBase {
     private CachedValue<Map<String, String>> functionPrefixToNamespaceMapping;
     private CachedValue<XQueryModuleDecl> moduleDeclaration;
     private CachedValue<Map<String, String>> variablePrefixToNamespaceMapping;
+    private CachedValue<XQueryVersionDecl> versionDeclaration;
 
     @NotNull
     public Collection<XQueryVarDecl> getVariableDeclarations() {
@@ -234,6 +234,22 @@ public class XQueryFile extends PsiFileBase {
         return moduleDeclaration.getValue();
     }
 
+    @Nullable
+    public XQueryVersionDecl getVersionDeclaration() {
+        if (versionDeclaration == null) {
+            versionDeclaration = CachedValuesManager
+                    .getManager(getProject())
+                    .createCachedValue(new CachedValueProvider<XQueryVersionDecl>() {
+                        @Override
+                        public Result<XQueryVersionDecl> compute() {
+                            return CachedValueProvider.Result.create
+                                    (calcVersionDeclaration(), XQueryFile.this);
+                        }
+                    }, false);
+        }
+        return versionDeclaration.getValue();
+    }
+
     private Collection<XQueryVarDecl> calcVariableDeclarations() {
         Collection<XQueryVarDecl> variableDeclarations = PsiTreeUtil.findChildrenOfType(this, XQueryVarDecl.class);
         return variableDeclarations;
@@ -291,10 +307,14 @@ public class XQueryFile extends PsiFileBase {
         XQueryDefaultFunctionNamespaceDecl defaultFunctionNamespaceDecl = getDefaultNamespaceFunctionDeclaration();
         if (defaultFunctionNamespaceDecl != null && defaultFunctionNamespaceDecl.getURILiteral() != null)
             return removeQuotOrApos(defaultFunctionNamespaceDecl.getURILiteral().getText());
-        else if (isLibraryModule() && getSettings().isMarklogicFlavour() && getModuleDeclaration().getURILiteral() != null) {
+        else if (isLibraryModule() && versionIsMarklogicSpecific() && getModuleDeclaration().getURILiteral() != null) {
             return removeQuotOrApos(getModuleDeclaration().getURILiteral().getText());
         }
         return FN.getNamespace();
+    }
+
+    private XQueryVersionDecl calcVersionDeclaration() {
+        return PsiTreeUtil.findChildOfType(this, XQueryVersionDecl.class);
     }
 
     public XQueryNamespacePrefix getModuleNamespaceName() {
@@ -387,7 +407,7 @@ public class XQueryFile extends PsiFileBase {
     }
 
     private String getVariableDefaultNamespace() {
-        if (isLibraryModule() && XQueryFlavour.MARKLOGIC.equals(getSettings().getFlavour()) && getModuleDeclaration().getURILiteral() != null) {
+        if (isLibraryModule() && versionIsMarklogicSpecific() && getModuleDeclaration().getURILiteral() != null) {
             return removeQuotOrApos(getModuleDeclaration().getURILiteral().getText());
         }
         return XMLConstants.NULL_NS_URI;
@@ -438,5 +458,25 @@ public class XQueryFile extends PsiFileBase {
 
     public BuiltInFunctionTable getBuiltInFunctionTable() {
         return getSettings().getFlavour().getBifTable();
+    }
+
+    public boolean versionIsNotMarklogicSpecific() {
+        return !versionIsMarklogicSpecific();
+    }
+
+    public boolean versionIsMarklogicSpecific() {
+        XQueryVersionDecl versionDecl = getVersionDeclaration();
+        XQueryVersion version = versionDecl != null ? versionDecl.getVersion() : null;
+        boolean versionIsMarklogicSpecific = false;
+        if (version != null) {
+            String versionString = version.getVersionString();
+            XQueryLanguageVersion languageVersion = XQueryLanguageVersion.valueFor(versionString);
+            if (V1_0_ML == languageVersion || V0_9_ML == languageVersion) {
+                versionIsMarklogicSpecific = true;
+            }
+        } else if (getSettings().isMarklogicFlavour()) {
+            versionIsMarklogicSpecific = true;
+        }
+        return versionIsMarklogicSpecific;
     }
 }

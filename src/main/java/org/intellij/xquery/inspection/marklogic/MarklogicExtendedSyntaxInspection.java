@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,8 +25,6 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.intellij.xquery.XQueryFlavour;
-import org.intellij.xquery.model.XQueryLanguageVersion;
 import org.intellij.xquery.psi.XQueryCatchClauseExpression;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryMarklogicAnnotation;
@@ -35,17 +33,11 @@ import org.intellij.xquery.psi.XQueryMarklogicCatchErrorList;
 import org.intellij.xquery.psi.XQueryMarklogicCompBinaryConstructor;
 import org.intellij.xquery.psi.XQueryMarklogicNamespaceAxis;
 import org.intellij.xquery.psi.XQueryMarklogicValidation;
-import org.intellij.xquery.psi.XQueryVersion;
-import org.intellij.xquery.psi.XQueryVersionDecl;
-import org.intellij.xquery.settings.XQuerySettings;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import static org.intellij.xquery.model.XQueryLanguageVersion.V0_9_ML;
-import static org.intellij.xquery.model.XQueryLanguageVersion.V1_0_ML;
 
 public class MarklogicExtendedSyntaxInspection extends LocalInspectionTool {
 
@@ -55,19 +47,7 @@ public class MarklogicExtendedSyntaxInspection extends LocalInspectionTool {
             return null;
         }
 
-        XQueryVersionDecl versionDecl = PsiTreeUtil.findChildOfType(file, XQueryVersionDecl.class);
-        XQueryVersion version = versionDecl != null ? versionDecl.getVersion() : null;
-        boolean versionIsNotMarklogicSpecific = true;
-        if (version != null) {
-            String versionString = version.getVersionString();
-            XQueryLanguageVersion languageVersion = XQueryLanguageVersion.valueFor(versionString);
-            if (V1_0_ML == languageVersion || V0_9_ML == languageVersion) {
-                versionIsNotMarklogicSpecific = false;
-            }
-        } else if (XQueryFlavour.MARKLOGIC == XQuerySettings.getInstance(file.getProject()).getFlavour()) {
-            versionIsNotMarklogicSpecific = false;
-        }
-        if (versionIsNotMarklogicSpecific) {
+        if (((XQueryFile) file).versionIsNotMarklogicSpecific()) {
             return findMarklogicExtendedSyntax(file, manager);
         }
         return null;
