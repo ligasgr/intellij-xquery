@@ -18,6 +18,7 @@
 package org.intellij.xquery.reference.namespace;
 
 import com.intellij.openapi.util.Pair;
+import org.intellij.xquery.psi.XQueryFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +44,7 @@ public abstract class PredeclaredNamespaces {
         return prefixToNamespaceMap.get(prefix).first;
     }
 
-    public Map<String, String> getPrefixToNamespaceMap() {
+    public Map<String, String> getPrefixToNamespaceMap(XQueryFile unused) {
         Map<String, String> result = new HashMap<String, String>(prefixToNamespaceMap.size());
         for (Map.Entry<String, Pair<String, Boolean>> entry : prefixToNamespaceMap.entrySet()) {
             if (entry.getValue().second) {

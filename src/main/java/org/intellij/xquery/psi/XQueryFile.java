@@ -453,7 +453,7 @@ public class XQueryFile extends PsiFileBase {
     }
 
     Map<String, String> getPrefixToNamespaceMap() {
-        return predeclaredNamespaces().getPrefixToNamespaceMap();
+        return predeclaredNamespaces().getPrefixToNamespaceMap(this);
     }
 
     public BuiltInFunctionTable getBuiltInFunctionTable() {

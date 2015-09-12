@@ -21,12 +21,21 @@ import com.intellij.util.containers.MultiMap;
 import org.intellij.xquery.reference.namespace.PredeclaredNamespaces;
 import org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespaces;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
 
 public class AbstractBuiltInFunctionTable implements BuiltInFunctionTable {
+    public static final String SEPARATOR = "#";
     protected final MultiMap<String, BuiltInFunctionSignature> fnMap = new MultiMap<String,
             BuiltInFunctionSignature>() {
         @Override
@@ -65,5 +74,39 @@ public class AbstractBuiltInFunctionTable implements BuiltInFunctionTable {
 
     public boolean isBuiltInFunction(String namespace, String name) {
         return getFunctionsSignatures(namespace, name).size() > 0;
+    }
+
+    protected void loadBifFile(String filePath) {
+        URL resource = AbstractBuiltInFunctionTable.class.getResource(filePath);
+        List<String> lines = getAllLines(resource);
+        for (String line : lines) {
+            String[] elements = line.split(SEPARATOR);
+            String prefix = elements[0];
+            String name = elements[1];
+            int arity = Integer.valueOf(elements[2]);
+            String arguments = elements[3];
+            String returnType = elements[4];
+            fnMap.putValue(ns(prefix), bif(prefix, name, arity, arguments, returnType));
+        }
+    }
+
+    private List<String> getAllLines(URL resource) {
+        try {
+            return Files.readAllLines(getPath(resource), Charset.defaultCharset());
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to read bif file " + resource.toString(), e);
+        }
+    }
+
+    private Path getPath(URL resource) {
+        return Paths.get(uri(resource));
+    }
+
+    private URI uri(URL resource) {
+        try {
+            return resource.toURI();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Unable to find the bif file for " + resource.toString(), e);
+        }
     }
 }

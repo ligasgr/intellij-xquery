@@ -20,13 +20,14 @@ package org.intellij.xquery;
 import org.intellij.xquery.completion.function.BuiltInFunctionTable;
 import org.intellij.xquery.completion.function.XQuery30BuiltInFunctionTable;
 import org.intellij.xquery.completion.function.bif.BaseXBuiltInFunctionTable;
+import org.intellij.xquery.completion.function.bif.MarkLogicBuiltInFunctionTable;
 import org.intellij.xquery.completion.function.bif.SaxonBuiltInFunctionTable;
 
 public enum XQueryFlavour {
     STANDARD_30("XQuery 3.0 Standard", new XQuery30BuiltInFunctionTable()),
     BASEX("BaseX", new BaseXBuiltInFunctionTable()),
     EXIST("eXist", new XQuery30BuiltInFunctionTable()),
-    MARKLOGIC("MarkLogic", new XQuery30BuiltInFunctionTable()),
+    MARKLOGIC("MarkLogic", new MarkLogicBuiltInFunctionTable()),
     SAXON("Saxon", new SaxonBuiltInFunctionTable()),
     SEDNA("Sedna", new XQuery30BuiltInFunctionTable()),
     ZORBA("Zorba", new XQuery30BuiltInFunctionTable());
