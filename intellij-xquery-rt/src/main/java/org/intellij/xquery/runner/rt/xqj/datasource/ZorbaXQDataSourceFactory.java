@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +17,8 @@
 
 package org.intellij.xquery.runner.rt.xqj.datasource;
 
+import io.zorba.api.xqj.ZorbaXQDataSource;
 import org.intellij.xquery.runner.rt.XQueryRunConfig;
-import org.zorbaxquery.api.xqj.ZorbaXQDataSource;
 
 import javax.xml.xquery.XQDataSource;
 
