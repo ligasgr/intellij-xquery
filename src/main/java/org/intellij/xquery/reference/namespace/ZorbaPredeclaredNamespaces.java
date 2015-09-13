@@ -126,6 +126,7 @@ public class ZorbaPredeclaredNamespaces extends PredeclaredNamespaces {
         prefixToNamespaceMap.put("w3c-dml", Pair.create("http://zorba.io/modules/store/dynamic/collections/w3c/dml", false));
         prefixToNamespaceMap.put("x", Pair.create("http://zorba.io/modules/xml", false));
         prefixToNamespaceMap.put("xqd", Pair.create("http://zorba.io/modules/xqdoc", false));
+        prefixToNamespaceMap.put("xs", Pair.create("http://www.w3.org/2001/XMLSchema", true));
         prefixToNamespaceMap.put("xsl-fo", Pair.create("http://zorba.io/modules/xsl-fo", false));
         prefixToNamespaceMap.put("xslt", Pair.create("http://www.zorba-xquery.com/modules/languages/xslt", false));
         prefixToNamespaceMap.put("yahoo", Pair.create("urn:yahoo:cap", false));
