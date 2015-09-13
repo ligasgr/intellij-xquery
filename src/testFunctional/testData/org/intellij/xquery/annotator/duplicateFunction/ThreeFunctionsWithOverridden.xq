@@ -10,4 +10,4 @@ declare function local:test($a, $b) {
     "anyString"
 };
 
-local:test("anyString")
+"anyString"

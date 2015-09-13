@@ -6,4 +6,4 @@
     "anyString"
 };
 
-local:test()
+()

@@ -2,6 +2,6 @@
     ""
 };
 
-<error descr="'test' is already defined in 'IncompleteFunction.xq'">declare function local:test</error><EOLError descr="'(' expected, got 'local'"/>
+<error descr="'test' is already defined in 'IncompleteFunction.xq'">declare function local:test</error><EOLError descr="'(' expected, got ''''"/>
 
-local:test()
+''
