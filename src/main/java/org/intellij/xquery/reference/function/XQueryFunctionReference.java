@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 
 package org.intellij.xquery.reference.function;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementResolveResult;
@@ -24,6 +25,9 @@ import com.intellij.psi.PsiPolyVariantReference;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.containers.ContainerUtil;
+import org.intellij.xquery.completion.function.BuiltInFunctionTableFactory;
+import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryFunctionInvocation;
 import org.intellij.xquery.psi.XQueryFunctionName;
@@ -35,11 +39,6 @@ import java.util.List;
 
 import static org.intellij.xquery.psi.XQueryElementFactory.createFunctionReference;
 
-/**
- * User: ligasgr
- * Date: 08/06/13
- * Time: 22:16
- */
 public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionInvocation> implements
         PsiPolyVariantReference {
 
@@ -64,6 +63,8 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionInvo
         List<XQueryFunctionName> filtered = filterByArity(myElement.getArity(), matchingFunctionNames);
         if (filtered.size() == 1) {
             return filtered.get(0);
+        } else if (isBuiltInFunction(myElement)) {
+            return getElement().getFunctionName();
         } else {
             return null;
         }
@@ -106,4 +107,17 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionInvo
         }
         return matchingArityFunctionNames;
     }
+
+    private boolean isBuiltInFunction(XQueryFunctionInvocation functionInvocation) {
+        XQueryFunctionName functionName = functionInvocation.getFunctionName();
+        String name = functionName.getLocalNameText();
+        String prefix = functionName.getPrefixText();
+        String namespace = ((XQueryFile) functionName.getContainingFile()).mapFunctionPrefixToNamespace(prefix);
+        return isBuiltInFunction(functionName.getProject(), namespace, name);
+    }
+
+    private boolean isBuiltInFunction(Project project, String namespace, String name) {
+        return BuiltInFunctionTableFactory.getInstance(project).isBuiltInFunction(namespace,name);
+    }
+
 }

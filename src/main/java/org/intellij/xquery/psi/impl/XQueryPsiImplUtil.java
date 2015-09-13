@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -688,5 +688,23 @@ public class XQueryPsiImplUtil {
 
     public static String getVersionString(XQueryVersion version) {
         return stripApostrophes(version.getText());
+    }
+
+    public static boolean isEquivalentTo(XQueryFunctionName functionName, PsiElement another) {
+        if (another instanceof XQueryFunctionName) {
+            if (functionName.getContainingFile() instanceof XQueryFile && another.getContainingFile() instanceof XQueryFile) {
+                XQueryFunctionName anotherFunctionName = (XQueryFunctionName) another;
+                XQueryFile elementFile = (XQueryFile) functionName.getContainingFile();
+                XQueryFile anotherFile = (XQueryFile) another.getContainingFile();
+                String elementNamespace = elementFile.mapFunctionPrefixToNamespace(functionName.getPrefixText());
+                String anotherNamespace = anotherFile.mapFunctionPrefixToNamespace(anotherFunctionName.getPrefixText());
+                String elementName = functionName.getLocalNameText();
+                String anotherName = anotherFunctionName.getLocalNameText();
+                return elementFile.equals(anotherFile)
+                        && elementNamespace.equals(anotherNamespace)
+                        && elementName != null && elementName.equals(anotherName);
+            }
+        }
+        return false;
     }
 }

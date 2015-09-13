@@ -601,7 +601,7 @@ Prefix ::= NCName {methods=[getName setName getNameIdentifier getReference isEqu
 LocalPart ::= NCName
 VarName ::= Prefix ':' VarLocalName | VarLocalName | URIQualifiedName {pin(".*")=2 methods=[getName setName getNameIdentifier getTextOffset getUseScope getPresentation delete]}
 VarLocalName ::= NCName
-FunctionName ::= Prefix ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {pin(".*")=2 methods=[getName setName getNameIdentifier getTextOffset getPresentation delete getPrefixText getLocalNameText]}
+FunctionName ::= Prefix ':' FunctionLocalName | FunctionLocalName | URIQualifiedName {pin(".*")=2 methods=[getName setName getNameIdentifier getTextOffset getPresentation delete getPrefixText getLocalNameText isEquivalentTo]}
 FunctionLocalName ::= NCName
 
 RevalidationDecl ::= "declare" "revalidation" ("strict" | "lax" | "skip")

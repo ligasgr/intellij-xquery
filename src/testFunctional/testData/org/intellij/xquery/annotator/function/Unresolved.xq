@@ -1,0 +1,1 @@
+<error descr="Cannot resolve function 'fun'">fun</error>(),fn:doc('abc.xml'), <error descr="Cannot resolve function 'local:fun'">local:fun</error>#1

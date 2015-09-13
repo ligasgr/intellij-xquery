@@ -211,7 +211,7 @@ public class XQueryFile extends PsiFileBase {
                         @Override
                         public Result<String> compute() {
                             return CachedValueProvider.Result.create
-                                    (calcDefaultFunctionNamespace(), XQueryFile.this);
+                                    (calcDefaultFunctionNamespace(), XQueryFile.this, getSettings());
                         }
                     }, false);
         }
@@ -348,7 +348,7 @@ public class XQueryFile extends PsiFileBase {
                         @Override
                         public Result<Map<String, String>> compute() {
                             return CachedValueProvider.Result.create(calcFunctionPrefixToNamespaceMap(),
-                                    XQueryFile.this);
+                                    XQueryFile.this, getSettings());
                         }
                     }, false);
         }

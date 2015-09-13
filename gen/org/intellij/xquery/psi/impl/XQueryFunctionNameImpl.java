@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,6 +81,10 @@ public class XQueryFunctionNameImpl extends XQueryNamedElementImpl implements XQ
 
   public String getLocalNameText() {
     return XQueryPsiImplUtil.getLocalNameText(this);
+  }
+
+  public boolean isEquivalentTo(PsiElement another) {
+    return XQueryPsiImplUtil.isEquivalentTo(this, another);
   }
 
 }

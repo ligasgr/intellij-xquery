@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,7 @@ import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import org.intellij.xquery.annotator.duplicateFunction.ErrorAnnotationCreator;
+import org.intellij.xquery.annotator.function.UnresolvedFunctionChecker;
 import org.intellij.xquery.annotator.variable.UnresolvedVariableChecker;
 import org.intellij.xquery.annotator.xqdoc.XQDocHighlighter;
 import org.intellij.xquery.highlighting.XQuerySyntaxHighlighter;
@@ -40,6 +41,7 @@ import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryForBinding;
 import org.intellij.xquery.psi.XQueryFunctionCall;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
+import org.intellij.xquery.psi.XQueryFunctionInvocation;
 import org.intellij.xquery.psi.XQueryFunctionName;
 import org.intellij.xquery.psi.XQueryGroupByClause;
 import org.intellij.xquery.psi.XQueryGroupingVariable;
@@ -64,6 +66,7 @@ public class XQueryAnnotator implements Annotator, DumbAware {
     private ErrorAnnotationCreator duplicateFunctionErrorCreator = new ErrorAnnotationCreator();
     private XQDocHighlighter xQDocHighlighter = new XQDocHighlighter();
     private UnresolvedVariableChecker unresolvedVariableChecker = new UnresolvedVariableChecker();
+    private UnresolvedFunctionChecker unresolvedFunctionChecker = new UnresolvedFunctionChecker();
 
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
@@ -75,6 +78,9 @@ public class XQueryAnnotator implements Annotator, DumbAware {
         }
         if (element instanceof XQueryVarRef) {
             unresolvedVariableChecker.check((XQueryVarRef) element, holder);
+        }
+        if (element instanceof XQueryFunctionInvocation) {
+            unresolvedFunctionChecker.check((XQueryFunctionInvocation) element, holder);
         }
         if (element instanceof XQueryItemType) {
             highlight(element, holder, XQuerySyntaxHighlighter.ITEM_TYPE);
