@@ -23,6 +23,7 @@ import org.intellij.xquery.completion.function.bif.BaseXBuiltInFunctionTable;
 import org.intellij.xquery.completion.function.bif.ExistBuiltInFunctionTable;
 import org.intellij.xquery.completion.function.bif.MarkLogicBuiltInFunctionTable;
 import org.intellij.xquery.completion.function.bif.SaxonBuiltInFunctionTable;
+import org.intellij.xquery.completion.function.bif.SednaBuiltInFunctionTable;
 import org.intellij.xquery.completion.function.bif.ZorbaBuiltInFunctionTable;
 
 public enum XQueryFlavour {
@@ -31,7 +32,7 @@ public enum XQueryFlavour {
     EXIST("eXist", new ExistBuiltInFunctionTable()),
     MARKLOGIC("MarkLogic", new MarkLogicBuiltInFunctionTable()),
     SAXON("Saxon", new SaxonBuiltInFunctionTable()),
-    SEDNA("Sedna", new XQuery30BuiltInFunctionTable()),
+    SEDNA("Sedna", new SednaBuiltInFunctionTable()),
     ZORBA("Zorba", new ZorbaBuiltInFunctionTable());
 
     private final String presentableName;
