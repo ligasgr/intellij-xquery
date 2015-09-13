@@ -307,7 +307,9 @@ public class XQueryFile extends PsiFileBase {
         XQueryDefaultFunctionNamespaceDecl defaultFunctionNamespaceDecl = getDefaultNamespaceFunctionDeclaration();
         if (defaultFunctionNamespaceDecl != null && defaultFunctionNamespaceDecl.getURILiteral() != null)
             return removeQuotOrApos(defaultFunctionNamespaceDecl.getURILiteral().getText());
-        else if (isLibraryModule() && versionIsMarklogicSpecific() && getModuleDeclaration().getURILiteral() != null) {
+        else if (isLibraryModule()
+                && (versionIsMarklogicSpecific() || getSettings().isMarklogicFlavour())
+                && getModuleDeclaration().getURILiteral() != null) {
             return removeQuotOrApos(getModuleDeclaration().getURILiteral().getText());
         }
         return FN.getNamespace();
@@ -407,7 +409,9 @@ public class XQueryFile extends PsiFileBase {
     }
 
     private String getVariableDefaultNamespace() {
-        if (isLibraryModule() && versionIsMarklogicSpecific() && getModuleDeclaration().getURILiteral() != null) {
+        if (isLibraryModule()
+                && (versionIsMarklogicSpecific() || getSettings().isMarklogicFlavour())
+                && getModuleDeclaration().getURILiteral() != null) {
             return removeQuotOrApos(getModuleDeclaration().getURILiteral().getText());
         }
         return XMLConstants.NULL_NS_URI;
