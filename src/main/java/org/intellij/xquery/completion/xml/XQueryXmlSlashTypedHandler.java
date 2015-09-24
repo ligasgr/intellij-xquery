@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,6 +34,7 @@ import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryLanguage;
 import org.intellij.xquery.psi.XQueryDirAttributeValue;
+import org.intellij.xquery.psi.XQueryEnclosedExpr;
 import org.intellij.xquery.psi.XQueryTypes;
 import org.intellij.xquery.psi.XQueryXmlFullTag;
 import org.jetbrains.annotations.NotNull;
@@ -86,12 +87,18 @@ public class XQueryXmlSlashTypedHandler extends TypedHandlerDelegate {
             prevLeaf = getPreviousNonWhiteSpaceLeaf(prevLeaf);
             if (prevLeaf == null) return Result.CONTINUE;
             if (PsiTreeUtil.getParentOfType(element, XQueryDirAttributeValue.class) != null) return Result.CONTINUE;
-            if (PsiTreeUtil.getParentOfType(prevLeaf.getPsi(), XQueryXmlFullTag.class) != null) {
+            if (prevLeaf.getElementType() == XQueryTypes.ELEMENTCONTENTCHAR) return Result.CONTINUE;
+            if (PsiTreeUtil.getParentOfType(element, XQueryEnclosedExpr.class, true, XQueryXmlFullTag.class) != null) return Result.CONTINUE;
+            if (getParentFullTag(prevLeaf) != null) {
                 EditorModificationUtil.insertStringAtCaret(editor, ">", false);
                 return Result.STOP;
             }
         }
         return Result.CONTINUE;
+    }
+
+    protected XQueryXmlFullTag getParentFullTag(ASTNode prevLeaf) {
+        return PsiTreeUtil.getParentOfType(prevLeaf.getPsi(), XQueryXmlFullTag.class);
     }
 
     protected ASTNode getPreviousNonWhiteSpaceLeaf(ASTNode originalPrevLeaf) {
