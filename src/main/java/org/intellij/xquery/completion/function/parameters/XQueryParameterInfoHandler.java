@@ -24,7 +24,6 @@ import com.intellij.lang.parameterInfo.ParameterInfoHandler;
 import com.intellij.lang.parameterInfo.ParameterInfoUIContext;
 import com.intellij.lang.parameterInfo.ParameterInfoUtils;
 import com.intellij.lang.parameterInfo.UpdateParameterInfoContext;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPolyVariantReference;
 import com.intellij.psi.PsiReference;
@@ -33,7 +32,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.intellij.xquery.completion.function.BuiltInFunctionSignature;
-import org.intellij.xquery.completion.function.BuiltInFunctionTableFactory;
 import org.intellij.xquery.psi.XQueryArgumentList;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionCall;
@@ -52,11 +50,6 @@ import java.util.List;
 
 import static org.intellij.xquery.util.StringUtils.compressWhitespaces;
 
-/**
- * User: ligasgr
- * Date: 23/10/13
- * Time: 20:37
- */
 public class XQueryParameterInfoHandler implements ParameterInfoHandler<XQueryArgumentList, Object> {
     @Override
     public boolean couldShowInLookup() {
@@ -108,15 +101,16 @@ public class XQueryParameterInfoHandler implements ParameterInfoHandler<XQueryAr
             Collections.sort(functionDeclarations, getParameterListSizeComparator());
             context.setItemsToShow(ArrayUtil.toObjectArray(functionDeclarations));
         } else {
+            XQueryFile file = (XQueryFile) functionCall.getContainingFile();
             String name = functionCall.getFunctionName().getLocalNameText();
             String prefix = functionCall.getFunctionName().getPrefixText();
-            String namespace = ((XQueryFile) functionCall.getContainingFile()).mapFunctionPrefixToNamespace(prefix);
-            context.setItemsToShow(ArrayUtil.toObjectArray(getFunctionsSignatures(functionCall.getProject(), name, namespace)));
+            String namespace = file.mapFunctionPrefixToNamespace(prefix);
+            context.setItemsToShow(ArrayUtil.toObjectArray(getFunctionsSignatures(file, name, namespace)));
         }
     }
 
-    private Collection<BuiltInFunctionSignature> getFunctionsSignatures(Project project, String name, String namespace) {
-        return BuiltInFunctionTableFactory.getInstance(project).getFunctionsSignatures(namespace, name);
+    private Collection<BuiltInFunctionSignature> getFunctionsSignatures(XQueryFile file, String name, String namespace) {
+        return file.getFunctionsSignatures(namespace, name);
     }
 
     private Comparator<XQueryFunctionDecl> getParameterListSizeComparator() {

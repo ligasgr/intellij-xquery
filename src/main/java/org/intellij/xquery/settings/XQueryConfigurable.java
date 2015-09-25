@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -70,7 +70,14 @@ public class XQueryConfigurable implements Configurable {
     @Override
     public void apply() throws ConfigurationException {
         if (settingsForm != null) {
+            boolean restartAnnotations = false;
+            if (isModified()) {
+                restartAnnotations = true;
+            }
             getSettings().loadState(settingsForm.getSettings());
+            if (restartAnnotations) {
+                UIUtils.restartDaemons();
+            }
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,9 @@
 
 package org.intellij.xquery.settings;
 
+import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.ui.SortedComboBoxModel;
 
@@ -41,5 +44,12 @@ public class UIUtils {
         comboBox.getComponent().setName(name);
         comboBox.getComponent().setModel(model);
         return comboBox;
+    }
+
+    static void restartDaemons() {
+        Project[] projects = ProjectManager.getInstance().getOpenProjects();
+        for (Project project : projects) {
+            DaemonCodeAnalyzer.getInstance(project).restart();
+        }
     }
 }

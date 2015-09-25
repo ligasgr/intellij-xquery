@@ -17,9 +17,7 @@
 
 package org.intellij.xquery.documentation;
 
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import org.intellij.xquery.completion.function.BuiltInFunctionTableFactory;
 import org.intellij.xquery.psi.XQueryAnnotation;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
@@ -34,11 +32,6 @@ import static org.intellij.xquery.documentation.DocumentationStylist.wrapWithHtm
 import static org.intellij.xquery.util.StringUtils.compressWhitespaces;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrAposIfNeeded;
 
-/**
- * User: ligasgr
- * Date: 29/12/13
- * Time: 09:24
- */
 public class FunctionDocumentationProvider implements PsiBasedDocumentationProvider<XQueryFunctionName> {
 
     @Override
@@ -47,22 +40,17 @@ public class FunctionDocumentationProvider implements PsiBasedDocumentationProvi
         if (elementToProduceDescription != null) {
             return wrapWithHtmlAndStyle(getDocFromFunctionDeclaration(functionName, elementToProduceDescription).getText());
         } else {
-            String name = functionName.getLocalNameText();
-            String prefix = functionName.getPrefixText();
-            String namespace = ((XQueryFile) functionName.getContainingFile()).mapFunctionPrefixToNamespace(prefix);
-            if (isBuiltInFunction(functionName.getProject(), namespace, name)) {
-                return getDocumentationFromExternalFile(namespace, name);
+            XQueryFile file = (XQueryFile) functionName.getContainingFile();
+            if (file.isBuiltInFunction(functionName)) {
+                return getDocumentationFromExternalFile(functionName);
             } else {
                 return null;
             }
         }
     }
 
-    private boolean isBuiltInFunction(Project project, String namespace, String name) {
-        return BuiltInFunctionTableFactory.getInstance(project).isBuiltInFunction(namespace,name);
-    }
-
-    private String getDocumentationFromExternalFile(String namespace, String name) {
+    private String getDocumentationFromExternalFile(XQueryFunctionName functionName) {
+        String name = functionName.getLocalNameText();
         String doc = ExternalDocumentationFetcher.fetch(name);
         if (doc != null)
             return wrapWithHtmlAndStyle(doc);

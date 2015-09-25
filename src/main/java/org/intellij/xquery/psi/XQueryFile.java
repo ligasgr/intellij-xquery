@@ -26,7 +26,9 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryFileType;
+import org.intellij.xquery.XQueryFlavour;
 import org.intellij.xquery.XQueryLanguage;
+import org.intellij.xquery.completion.function.BuiltInFunctionSignature;
 import org.intellij.xquery.completion.function.BuiltInFunctionTable;
 import org.intellij.xquery.model.XQueryLanguageVersion;
 import org.intellij.xquery.reference.namespace.PredeclaredNamespaces;
@@ -49,6 +51,7 @@ import static org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespa
 import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
 
 public class XQueryFile extends PsiFileBase {
+
     public XQueryFile(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, XQueryLanguage.INSTANCE);
     }
@@ -82,6 +85,7 @@ public class XQueryFile extends PsiFileBase {
     private CachedValue<XQueryModuleDecl> moduleDeclaration;
     private CachedValue<Map<String, String>> variablePrefixToNamespaceMapping;
     private CachedValue<XQueryVersionDecl> versionDeclaration;
+    private CachedValue<BuiltInFunctionTable> builtInFunctionTable;
 
     @NotNull
     public Collection<XQueryVarDecl> getVariableDeclarations() {
@@ -460,8 +464,26 @@ public class XQueryFile extends PsiFileBase {
         return predeclaredNamespaces().getPrefixToNamespaceMap(this);
     }
 
-    public BuiltInFunctionTable getBuiltInFunctionTable() {
+    public BuiltInFunctionTable calcBuiltInFunctionTable() {
+        if (versionIsMarklogicSpecific()) {
+            return XQueryFlavour.MARKLOGIC.getBifTable();
+        }
         return getSettings().getFlavour().getBifTable();
+    }
+
+    public BuiltInFunctionTable getBuiltInFunctionTable() {
+        if (builtInFunctionTable == null) {
+            builtInFunctionTable = CachedValuesManager
+                    .getManager(getProject())
+                    .createCachedValue(new CachedValueProvider<BuiltInFunctionTable>() {
+                        @Override
+                        public Result<BuiltInFunctionTable> compute() {
+                            return CachedValueProvider.Result.create(calcBuiltInFunctionTable(),
+                                    XQueryFile.this, getSettings());
+                        }
+                    }, false);
+        }
+        return builtInFunctionTable.getValue();
     }
 
     public boolean versionIsNotMarklogicSpecific() {
@@ -482,5 +504,20 @@ public class XQueryFile extends PsiFileBase {
             versionIsMarklogicSpecific = true;
         }
         return versionIsMarklogicSpecific;
+    }
+
+    public boolean isBuiltInFunction(String namespace, String name) {
+        return getBuiltInFunctionTable().isBuiltInFunction(namespace, name);
+    }
+
+    public boolean isBuiltInFunction(XQueryFunctionName functionName) {
+        String name = functionName.getLocalNameText();
+        String prefix = functionName.getPrefixText();
+        String namespace = mapFunctionPrefixToNamespace(prefix);
+        return isBuiltInFunction(namespace, name);
+    }
+
+    public Collection<BuiltInFunctionSignature> getFunctionsSignatures(String namespace, String name) {
+        return getBuiltInFunctionTable().getFunctionsSignatures(namespace, name);
     }
 }

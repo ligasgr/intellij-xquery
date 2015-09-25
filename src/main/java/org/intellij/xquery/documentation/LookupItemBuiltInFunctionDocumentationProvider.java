@@ -17,30 +17,21 @@
 
 package org.intellij.xquery.documentation;
 
-import com.intellij.openapi.project.Project;
-import org.intellij.xquery.completion.function.BuiltInFunctionTableFactory;
+import org.intellij.xquery.psi.XQueryFile;
 
 import static org.intellij.xquery.documentation.DocumentationStylist.wrapWithHtmlAndStyle;
 
-/**
- * User: ligasgr
- * Date: 30/12/13
- * Time: 23:07
- */
 public class LookupItemBuiltInFunctionDocumentationProvider implements PsiBasedDocumentationProvider<XQueryDocElement> {
 
     @Override
     public String generateDoc(XQueryDocElement element) {
+        XQueryFile file = (XQueryFile) element.getContainingFile();
         String namespace = element.getNamespace();
         String name = element.getName();
-        if (isBuiltInFunction(element.getProject(), namespace, name)) {
+        if (file.isBuiltInFunction(namespace, name)) {
             return getDocumentationFromExternalFile(namespace, name);
         }
         return null;
-    }
-
-    private boolean isBuiltInFunction(Project project, String namespace, String name) {
-        return BuiltInFunctionTableFactory.getInstance(project).isBuiltInFunction(namespace, name);
     }
 
     private String getDocumentationFromExternalFile(String namespace, String name) {

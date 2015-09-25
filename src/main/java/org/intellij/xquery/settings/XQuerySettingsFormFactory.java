@@ -17,8 +17,6 @@
 
 package org.intellij.xquery.settings;
 
-import org.intellij.xquery.XQueryFlavour;
-
 import java.util.List;
 
 import static org.intellij.xquery.XQueryFileType.ALL_EXTENSIONS_LIST;

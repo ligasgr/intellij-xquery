@@ -17,7 +17,6 @@
 
 package org.intellij.xquery.reference.function;
 
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementResolveResult;
@@ -25,8 +24,6 @@ import com.intellij.psi.PsiPolyVariantReference;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
-import org.intellij.xquery.completion.function.BuiltInFunctionTableFactory;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryFunctionInvocation;
@@ -110,14 +107,7 @@ public class XQueryFunctionReference extends PsiReferenceBase<XQueryFunctionInvo
 
     private boolean isBuiltInFunction(XQueryFunctionInvocation functionInvocation) {
         XQueryFunctionName functionName = functionInvocation.getFunctionName();
-        String name = functionName.getLocalNameText();
-        String prefix = functionName.getPrefixText();
-        String namespace = ((XQueryFile) functionName.getContainingFile()).mapFunctionPrefixToNamespace(prefix);
-        return isBuiltInFunction(functionName.getProject(), namespace, name);
+        XQueryFile file = (XQueryFile) functionName.getContainingFile();
+        return file.isBuiltInFunction(functionName);
     }
-
-    private boolean isBuiltInFunction(Project project, String namespace, String name) {
-        return BuiltInFunctionTableFactory.getInstance(project).isBuiltInFunction(namespace,name);
-    }
-
 }
