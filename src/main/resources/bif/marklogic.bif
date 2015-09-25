@@ -158,7 +158,7 @@ admin#appserver-set-ssl-require-client-certificate#3#$config as element(configur
 admin#appserver-set-static-expires#3#$config as element(configuration), $appserver-id as xs:unsignedLong, $value as xs:unsignedInt#element(configuration)
 admin#appserver-set-threads#3#$config as element(configuration), $appserver-id as xs:unsignedLong, $value as xs:unsignedInt#element(configuration)
 admin#appserver-set-url-rewriter#3#$config as element(configuration), $appserver-id as xs:unsignedLong, $value as xs:string#element(configuration)
-admin#check-range-policy-config#2#$database as node(), $assignments as node()*#empty-sequence()
+admin#bucket-assignment-policy#0##element(db:assignment-policy)
 admin#cluster-get-foreign-cluster-id#2#$config as element(configuration), $name as xs:string#xs:unsignedLong
 admin#cluster-get-foreign-cluster-ids#1#$config as element(configuration)#xs:unsignedLong*
 admin#cluster-get-foreign-master-database#3#$config as element(configuration), $foreign-cluster-id as xs:unsignedLong, $database-ids as xs:unsignedLong*#element(db:foreign-master)*
@@ -184,7 +184,6 @@ admin#database-add-field-included-element#4#$config as element(configuration), $
 admin#database-add-field-paths#4#$config as element(configuration), $database-id as xs:unsignedLong, $field-name as xs:string, $field-paths as element(db:field-path)*#element(configuration)
 admin#database-add-field-tokenizer-override#4#$config as element(configuration), $database-id as xs:unsignedLong, $field-name as xs:string, $tokenizer-overrides as element(db:tokenizer-override)*#element(configuration)
 admin#database-add-field-word-lexicon#4#$config as element(configuration), $database-id as xs:unsignedLong, $field-name as xs:string, $word-lexicons as element(db:word-lexicon)*#element(configuration)
-admin#database-add-foreign-database#4#$config as element(configuration), $database-id as xs:unsignedLong, $foreign-cluster-id as xs:unsignedLong, $foreign-database-id as xs:unsignedLong#element(configuration)
 admin#database-add-foreign-replicas#3#$config as element(configuration), $database-id as xs:unsignedLong, $replicas as element(db:foreign-replica)*#element(configuration)
 admin#database-add-fragment-parent#3#$config as element(configuration), $database-id as xs:unsignedLong, $fragment-parents as element(db:fragment-parent)*#element(configuration)
 admin#database-add-fragment-root#3#$config as element(configuration), $database-id as xs:unsignedLong, $fragment-roots as element(db:fragment-root)*#element(configuration)
@@ -226,7 +225,6 @@ admin#database-delete-field-included-element#4#$config as element(configuration)
 admin#database-delete-field-paths#4#$config as element(configuration), $database-id as xs:unsignedLong, $field-name as xs:string, $field-paths as element(db:field-path)*#element(configuration)
 admin#database-delete-field-tokenizer-override#4#$config as element(configuration), $database-id as xs:unsignedLong, $field-name as xs:string, $tokenizer-overrides as element(db:tokenizer-override)*#element(configuration)
 admin#database-delete-field-word-lexicon#4#$config as element(configuration), $database-id as xs:unsignedLong, $field-name as xs:string, $word-lexicons as element(db:word-lexicon)*#element(configuration)
-admin#database-delete-foreign-database#4#$config as element(configuration), $database-id as xs:unsignedLong, $foreign-cluster-id as xs:unsignedLong, $foreign-database-id as xs:unsignedLong#element(configuration)
 admin#database-delete-foreign-master#2#$config as element(configuration), $database-id as xs:unsignedLong#element(configuration)
 admin#database-delete-foreign-replicas#3#$config as element(configuration), $database-id as xs:unsignedLong, $foreign-replicas as element(db:foreign-replica)*#element(configuration)
 admin#database-delete-fragment-parent#3#$config as element(configuration), $database-id as xs:unsignedLong, $fragment-parents as element(db:fragment-parent)*#element(configuration)
@@ -539,9 +537,7 @@ admin#database-super-databases#2#$config as element(configuration), $database-id
 admin#database-tokenizer-override#2#$character as xs:string, $class as xs:string#element(db:tokenizer-override)
 admin#database-validate-field-path#3#$config as element(configuration), $database-id as xs:unsignedLong, $field-path as element(db:field-path)#empty-sequence()
 admin#database-validate-field-paths#3#$config as element(configuration), $database-id as xs:unsignedLong, $field-paths as element(db:field-path)*#empty-sequence()
-admin#database-validate-path-expression#4#$config as element(configuration), $database-id as xs:unsignedLong, $pathexpr as xs:string, $ignore-ns as xs:boolean#xs:boolean
 admin#database-validate-path-fields#3#$config as element(configuration), $database-id as xs:unsignedLong, $fields as element(db:field)*#empty-sequence()
-admin#database-validate-path-namespaces#3#$config as element(configuration), $database-id as xs:unsignedLong, $pathexpr as xs:string#xs:string*
 admin#database-weekly-backup#12#$backup-dir as xs:string, $backup-period as xs:positiveInteger, $days as xs:string+, $start-time as xs:time, $max-backups as xs:unsignedLong, $backup-security-db as xs:boolean, $backup-schemas-db as xs:boolean, $backup-triggers-db as xs:boolean, $include-replicas as xs:boolean, $journal-archiving as xs:boolean, $journal-archive-path as xs:string, $lag-limit as xs:unsignedLong#element(db:database-backup)
 admin#database-weekly-incremental-backup#13#$backup-dir as xs:string, $backup-period as xs:positiveInteger, $days as xs:string+, $start-time as xs:time, $backup-security-db as xs:boolean, $backup-schemas-db as xs:boolean, $backup-triggers-db as xs:boolean, $include-replicas as xs:boolean, $incremental-dir as xs:string?, $purge-journal-archive as xs:boolean?, $journal-archiving as xs:boolean, $journal-archive-path as xs:string, $lag-limit as xs:unsignedLong#element(db:database-backup)
 admin#database-word-lexicon#1#$collation as xs:string#element(db:word-lexicon)
@@ -631,6 +627,7 @@ admin#forest-set-rebalancer-enable#3#$config as element(configuration), $forest-
 admin#forest-set-updates-allowed#3#$config as element(configuration), $forest-id as xs:unsignedLong, $value as xs:string#element(configuration)
 admin#forest-weekly-backup#4#$backup-dir as xs:string, $backup-period as xs:positiveInteger, $days as xs:string+, $start-time as xs:time#element(as:forest-backup)
 admin#get-appserver-ids#1#$config as element(configuration)#xs:unsignedLong*
+admin#get-configuration#0##element(configuration)
 admin#get-database-ids#1#$config as element(configuration)#xs:unsignedLong*
 admin#get-forest-ids#1#$config as element(configuration)#xs:unsignedLong*
 admin#get-group-ids#1#$config as element(configuration)#xs:unsignedLong*
@@ -803,6 +800,7 @@ admin#host-set-name#3#$config as element(configuration), $host-id as xs:unsigned
 admin#host-set-port#3#$config as element(configuration), $host-id as xs:unsignedLong, $value as xs:unsignedInt#element(configuration)
 admin#host-set-zone#3#$config as element(configuration), $host-id as xs:unsignedLong, $value as xs:string#element(configuration)
 admin#http-server-create#7#$config as element(configuration), $group-id as xs:unsignedLong, $appserver-name as xs:string, $root as xs:string, $port as xs:unsignedLong, $modules-id as item(), $database-id as xs:unsignedLong#element(configuration)
+admin#legacy-assignment-policy#0##element(db:assignment-policy)
 admin#mimetype#3#$name as xs:string, $extensions as xs:string, $format as xs:string#element(mt:mimetype)
 admin#mimetypes-add#2#$config as element(configuration), $mimetypes as element(mt:mimetype)*#element(configuration)
 admin#mimetypes-delete#2#$config as element(configuration), $mimetypes as element(mt:mimetype)*#element(configuration)
@@ -812,6 +810,7 @@ admin#range-assignment-policy#2#$partition-key as cts:reference, $lower-bound-in
 admin#restart-hosts#1#$hosts as xs:unsignedLong*#empty-sequence()
 admin#save-configuration#1#$config as element(configuration)#empty-sequence()
 admin#save-configuration-without-restart#1#$config as element(configuration)#xs:unsignedLong*
+admin#statistical-assignment-policy#0##element(db:assignment-policy)
 admin#taskserver-get-debug-allow#2#$config as element(configuration), $group-id as xs:unsignedLong#xs:boolean
 admin#taskserver-get-debug-threads#2#$config as element(configuration), $group-id as xs:unsignedLong#xs:unsignedInt
 admin#taskserver-get-default-inference-size#2#$config as element(configuration), $group-id as xs:unsignedLong#xs:unsignedInt
@@ -857,7 +856,6 @@ alert#action-set-name#2#$action as element(alert:action), $name as xs:string#ele
 alert#action-set-options#2#$action as element(alert:action), $options as element(alert:options)#element(alert:action)
 alert#config-delete#1#$uri as xs:string#empty-sequence()
 alert#config-get#1#$uri as xs:string#element(alert:config)?
-alert#config-get-cpf-domain-ids#1#$config as element(alert:config)#xs:unsignedLong*
 alert#config-get-cpf-domain-names#1#$config as element(alert:config)#xs:string*
 alert#config-get-description#1#$config as element(alert:config)#xs:string
 alert#config-get-id#1#$config as element(alert:config)#xs:unsignedLong
@@ -866,13 +864,11 @@ alert#config-get-options#1#$config as element(alert:config)#element(alert:option
 alert#config-get-trigger-ids#1#$config as element(alert:config)#xs:unsignedLong*
 alert#config-get-uri#1#$config as element(alert:config)#xs:string
 alert#config-insert#1#$config as element(alert:config)#empty-sequence()
-alert#config-set-cpf-domain-ids#2#$config as element(alert:config), $ids as xs:unsignedLong*#element(alert:config)
 alert#config-set-cpf-domain-names#2#$config as element(alert:config), $names as xs:string*#element(alert:config)
 alert#config-set-description#2#$config as element(alert:config), $description as xs:string#element(alert:config)
 alert#config-set-name#2#$config as element(alert:config), $name as xs:string#element(alert:config)
 alert#config-set-options#2#$config as element(alert:config), $options as element(alert:options)#element(alert:config)
 alert#config-set-trigger-ids#2#$config as element(alert:config), $ids as xs:unsignedLong*#element(alert:config)
-alert#config-set-uri#2#$config as element(alert:config), $uri as xs:string#element (alert:config)
 alert#create-triggers#2#$uri as xs:string, $events as element(trgr:data-event)*#xs:unsignedLong*
 alert#find-matching-rules#2#$config-uri as xs:string, $doc as node()#element(alert:rule)*
 alert#get-actions#2#$collection-uri as xs:string, $names as xs:string*#element(alert:action)*
@@ -907,6 +903,7 @@ alert#spawn-matching-actions#3#$config-uri as xs:string, $doc as node(), $option
 cdict#dictionary-delete#1#$lang as xs:string#empty-sequence()
 cdict#dictionary-read#1#$lang as xs:string#element(cdict:dictionary)?
 cdict#dictionary-write#2#$lang as xs:string, $dict as element(cdict:dictionary)#empty-sequence()
+cdict#get-languages#0##xs:string*
 cpf#check-transition#2#$docid as xs:string, $transition as element(*, p:transition)?# xs:boolean 
 cpf#document-get-error#1#$doc as xs:string# node()? 
 cpf#document-get-last-updated#1#$doc as xs:string# xs:dateTime?
@@ -1289,6 +1286,7 @@ dbg#break#2#$request as xs:unsignedLong, $expression as xs:unsignedLong#empty-se
 dbg#breakpoints#1#$request as xs:unsignedLong#xs:unsignedLong*
 dbg#clear#2#$request as xs:unsignedLong, $expression as xs:unsignedLong#empty-sequence()
 dbg#connect#1#$server as xs:unsignedLong#empty-sequence()
+dbg#connected#0##xs:unsignedLong*
 dbg#continue#1#$request as xs:unsignedLong#empty-sequence()
 dbg#detach#1#$request-id as xs:unsignedLong#empty-sequence()
 dbg#disconnect#1#$server as xs:unsignedLong#empty-sequence()
@@ -1346,6 +1344,7 @@ dls#document-version-uri#2#$document-uri as xs:string, $version as xs:integer#xs
 dls#document-version-uris#1#$uri as xs:string#xs:string*
 dls#document-versions-query#1#$uri as xs:string#cts:properties-fragment-query
 dls#documents-query#0##cts:query
+dls#latest-validation-results#0##element(dls:validation-results)?
 dls#link-expand#3#$context as node(), $ref as element(xi:include), $restriction as cts:query?#node()*
 dls#link-references#2#$node as node(), $restriction as cts:query?#xs:string*
 dls#node-expand#2#$node as node(), $restriction as cts:query?#node()
@@ -1355,12 +1354,13 @@ dls#retention-rule-insert#1#$rules as element(dls:retention-rule)*#empty-sequenc
 dls#retention-rule-remove#1#$names as xs:string*#empty-sequence()
 dls#retention-rules#1#$names as xs:string*#element(dls:retention-rule)*
 dls#set-upgrade-status#1#$promote as xs:boolean#element(dls:upgrade-status)
-dls#update-validation-results#1#$results as element(dls:validation-results)#empty-sequence()
+dls#start-upgrade#0##empty-sequence()
 dls#validate-all-documents#1#$verbose as xs:boolean#element(dls:validation-results) 
 dom#add-permissions#2#$domain-name as xs:string, $permissions as item()*# empty-sequence() 
 dom#add-pipeline#2#$domain-name as xs:string, $pipeline-id as xs:unsignedLong# empty-sequence() 
 dom#collection#0## xs:string 
 dom#configuration-create#4#$restart-user as xs:string, $evaluation-context as element(dom:evaluation-context), $default-domain as xs:unsignedLong, $permissions as element(sec:permission)*#xs:unsignedLong
+dom#configuration-get#0##element(dom:configuration)
 dom#configuration-set-default-domain#1#$domain-id as xs:unsignedLong#empty-sequence()
 dom#configuration-set-evaluation-context#1#$context as element(dom:evaluation-context)#empty-sequence()
 dom#configuration-set-permissions#1#$permissions as item()*#empty-sequence()
@@ -1446,16 +1446,8 @@ ec2#unmonitor-instances#4#$access-key as xs:string, $secret-key as xs:string, $e
 excel#clean#2#$uri as xs:string, $doc as node()?# node()? 
 exsl#node-set#1#$value as item()*#node()*
 exsl#object-type#1#$value as item()*#xs:string
-flexrep#_binary-push-status-uri#3#$domain-id as xs:unsignedLong, $target-id as xs:unsignedLong, $key as xs:unsignedLong#xs:string
-flexrep#ack-apply#3#$domain-id as xs:unsignedLong, $target-id as xs:unsignedLong, $acks as element(flexrep:ack)*#element(error:error)?
-flexrep#ack-binary-chunk-apply#5#$domain-id as xs:unsignedLong, $target-id as xs:unsignedLong, $key as xs:unsignedLong, $offset as xs:unsignedLong, $subsize as xs:unsignedLong#element(error:error)?
 flexrep#apply#2#$update as element(flexrep:update), $content as document-node()?#empty-sequence()
-flexrep#apply-binary-chunk#4#$key as xs:string, $offset as xs:string, $bn as node(), $forests as xs:string*#empty-sequence()
-flexrep#apply-binary-gc#1#$key as xs:string#empty-sequence()
-flexrep#apply-binary-join#2#$key as xs:string, $forests as xs:string*#empty-sequence()
-flexrep#apply-encoded-updates#3#$dts as element(flexrep:domain-target-status), $boundary as xs:string, $data as binary()#element()*
 flexrep#binary-chunk-uris#1#$ts as xs:dateTime#xs:string*
-flexrep#coalesce-domain-statuses#1#$domain-id as xs:unsignedLong#empty-sequence()
 flexrep#configuration-create#2#$domain-id as xs:unsignedLong, $alerting-uri as xs:string?#element(flexrep:configuration)
 flexrep#configuration-delete#1#$domain-id as xs:unsignedLong#empty-sequence()
 flexrep#configuration-domain-ids#0##xs:unsignedLong*
@@ -1506,15 +1498,11 @@ flexrep#domain-target-reset#3#$domain-id as xs:unsignedLong, $target-ids as xs:u
 flexrep#domain-target-statuses#0##element(flexrep:domain-target-status)*
 flexrep#get-domain-name#1#$domain-id as xs:unsignedLong#xs:string
 flexrep#get-target-name#2#$domain-id as xs:unsignedLong, $target-id as xs:unsignedLong#xs:string?
-flexrep#get-update-binarydoc-uri#3#$domain-id as xs:unsignedLong, $target-id as xs:unsignedLong, $key as xs:unsignedLong#xs:string?
 flexrep#inbound-filter-create#2#$filter-module as xs:string, $filter-options as element(flexrep:filter-options)?#element(flexrep:inbound-filter)
+flexrep#inbound-filter-delete#0##empty-sequence()
+flexrep#inbound-filter-get#0##element(flexrep:inbound-filter)?
 flexrep#inbound-filter-insert#1#$filter as element(flexrep:inbound-filter)#empty-sequence()
-flexrep#multipart-encode#2#$boundary as xs:string, $parts as node()*#binary()
-flexrep#poll#5#$domain-id as xs:unsignedLong, $target-id as xs:unsignedLong, $start as xs:integer?, $size as xs:integer?, $forest-ids as xs:unsignedLong*#node()*
 flexrep#process#5#$domain-id as xs:unsignedLong, $size as xs:unsignedInt?, $targets as xs:unsignedLong*, $forest-ids as xs:unsignedLong*, $uris as xs:string*#element(flexrep:results)
-flexrep#pull-binaries#2#$pull as element(flexrep:pull), $max-spawn as xs:unsignedLong#element()*
-flexrep#pull-binary-chunk#1#$pull as element(flexrep:pull)#xs:integer
-flexrep#pull-check-duplicate#1#$pull as element(flexrep:pull)#element(flexrep:pull)?
 flexrep#pull-create#5#$name as xs:string, $domain-id as xs:unsignedLong, $target-id as xs:unsignedLong, $urls as xs:string+, $http-options as element(flexrep:http-options)?#element(flexrep:pull)
 flexrep#pull-delete#2#$domain-id as xs:unsignedLong, $target-id as xs:unsignedLong#empty-sequence()
 flexrep#pull-get#2#$domain-id as xs:unsignedLong, $assert as xs:boolean#element(flexrep:pull)*
@@ -1534,24 +1522,15 @@ flexrep#pull-set-http-options#2#$pull as element(flexrep:pull), $http-options as
 flexrep#pull-set-name#2#$pull as element(flexrep:pull), $name as xs:string#element(flexrep:pull)
 flexrep#pull-set-target-id#2#$pull as element(flexrep:pull), $target-id as xs:unsignedLong#element(flexrep:pull)
 flexrep#pull-set-urls#2#$pull as element(flexrep:pull), $urls as xs:string+#element(flexrep:pull)
-flexrep#push-binaries#1#$domain-id as xs:unsignedLong#empty-sequence()
-flexrep#push-binary#4#$domain-id as xs:unsignedLong, $target-id as xs:unsignedLong, $forest-id as xs:unsignedLong, $key as xs:unsignedLong#empty-sequence()
-flexrep#push-binary-chunk#2#$status-doc as document-node(), $use-server-field as xs:boolean#xs:integer
-flexrep#push-binary-docs#4#$domain-id as xs:unsignedLong, $target-id as xs:unsignedLong, $forest-id as xs:unsignedLong, $map as map:map#element(flexrep:results)
-flexrep#push-forest-binaries#4#$domain-id as xs:unsignedLong, $target-id as xs:unsignedLong, $forest-id as xs:unsignedLong, $max-spawn as xs:unsignedLong#empty-sequence()
 flexrep#push-local-forest#3#$domain-id as xs:unsignedLong, $forest-id as xs:unsignedLong, $max-spawn as xs:unsignedLong#empty-sequence()
 flexrep#push-local-forest-target#4#$domain-id as xs:unsignedLong, $target-id as xs:unsignedLong, $forest-id as xs:unsignedLong, $max-spawn as xs:unsignedLong#empty-sequence()
+flexrep#push-local-forests#0##empty-sequence()
 flexrep#remote-target-status#1#$pull as element(flexrep:pull)#element(flexrep:target-status)?
-flexrep#replicate#7#$uri as xs:string, $label as xs:string, $cfg as element(flexrep:configuration), $domain as element(dom:domain), $doc-status as element(flexrep:document-status), $is-delete as xs:boolean, $is-retry as xs:boolean#element(error:error)?
-flexrep#target-binary-push-status-document#3#$domain-id as xs:unsignedLong, $target-id as xs:unsignedLong, $uri as xs:string#element(flexrep:binary-push-status)*
-flexrep#target-binary-push-status-documents#2#$domain-id as xs:unsignedLong, $target-ids as xs:unsignedLong*#element(flexrep:binary-push-status)*
 flexrep#target-create#13#$cfg as element(flexrep:configuration), $name as xs:string, $urls as xs:string*, $retry-seconds-min as xs:unsignedInt?, $retry-seconds-max as xs:unsignedInt?, $documents-per-batch as xs:unsignedInt?, $enabled as xs:boolean?, $http-options as element(flexrep:http-options)?, $replicate-cpf as xs:boolean?, $filter-module as xs:string?, $filter-options as element(flexrep:filter-options)?, $user-id as xs:unsignedLong?, $immediate-push as xs:boolean#element(flexrep:configuration)
 flexrep#target-delete#2#$cfg as element(flexrep:configuration), $target-id as xs:unsignedLong#element(flexrep:configuration)
 flexrep#target-error-documents#2#$domain-id as xs:unsignedLong, $target-ids as xs:unsignedLong*#element(flexrep:document-target-status)*
 flexrep#target-status#2#$domain-id as xs:unsignedLong, $target-ids as xs:unsignedLong*#element(flexrep:target-status)*
 flexrep#upgrade-appserver#2#$cfg as element(configuration), $ids as xs:unsignedLong*#element(configuration)
-flexrep#validate-name#1#$name as xs:string#xs:string
-flexrep#validate-url#1#$url as xs:string#xs:string
 fn#QName#2#$paramURI as xs:string?, $paramQName as xs:string#xs:QName
 fn#abs#1#$arg as numeric?#numeric?
 fn#adjust-date-to-timezone#2#$arg as xs:date?, $timezone as xs:dayTimeDuration?#xs:date?
@@ -1569,8 +1548,11 @@ fn#compare#3#$comparand1 as xs:string?, $comparand2 as xs:string?, $collation as
 fn#concat#2#$parameter1 as xs:anyAtomicType?, $parameterN as xs:anyAtomicType?,...#xs:string
 fn#contains#3#$parameter1 as xs:string?, $parameter2 as xs:string?, $collation as xs:string#xs:boolean
 fn#count#2#$arg as item()*, $maximum as xs:double?#xs:integer
+fn#current#0##item()
 fn#current-date#0##xs:date
 fn#current-dateTime#0##xs:dateTime
+fn#current-group#0##item()*
+fn#current-grouping-key#0##xs:anyAtomicType?
 fn#current-time#0##xs:time
 fn#data#1#$arg as item()*#xs:anyAtomicType*
 fn#day-from-date#1#$arg as xs:date?#xs:integer?
@@ -1701,7 +1683,8 @@ geo#circle#2#$radius as xs:double, $center as node()# cts:circle
 geo#complex-polygon#1#$complex-polygon as node()# cts:complex-polygon 
 geo#geospatial-query#3#$regions as cts:region*, $options as xs:string*, $weight as xs:double?# cts:query 
 geo#geospatial-query-from-elements#3#$regions as element()*, $options as xs:string*, $weight as xs:double?# cts:query 
-geo#interior-polygon#1#$polygon as node()# cts:polygon* 
+geo#geospatial-query-from-nodes#0## cts:query
+geo#interior-polygon#1#$polygon as node()# cts:polygon*
 geo#linestring#1#$linestring as node()# cts:linestring 
 geo#point#1#$point as node()# cts:point 
 geo#polygon#1#$polygon-or-points as node()+# cts:polygon 
@@ -1745,6 +1728,7 @@ info#flow-tickets#2#$flow-id as xs:string, $include-inactive as xs:boolean?#xs:s
 info#load#4#$dir-path as xs:string, $policy-name as xs:string?, $policy-deltas as element(info:options)?, $database as xs:string#xs:string
 info#policy#1#$policy-name as xs:string#element(info:options)?
 info#policy-delete#1#$policy-name as xs:string#empty-sequence()
+info#policy-names#0##xs:string*
 info#policy-set#2#$policy-name as xs:string?, $policy as element(info:options)?#empty-sequence()
 info#ticket#1#$ticket-id as xs:string+#element(info:ticket)+
 info#ticket-delete#1#$ticket-id as xs:string#empty-sequence()
@@ -1973,6 +1957,7 @@ rdf#langString#2#$string as xs:string, $lang as xs:string#rdf:langString
 rdf#langString-language#1#$val as rdf:langString#xs:string
 rest#check-options#1#$options as element(rest:options)#element(rest:report)?
 rest#check-request#1#$options as element(rest:request)#element(rest:report)?
+rest#get-raw-query-params#0##map:map
 rest#matching-request#2#$options as element(rest:options), $match-criteria as xs:string+#element(rest:request)?
 rest#process-request#1#$request as element(rest:request)#map:map
 rest#report-error#1#$error as element()#element()
@@ -1997,6 +1982,7 @@ sc#type-apply#2#$type as schema-type(), $arg as item()#item()*
 sc#type-named#1#$arg as xs:QName#schema-type()
 search#check-options#2#$options as element(search:options), $strict as xs:boolean?#element(search:report)*
 search#estimate#2#$cts-query as element(), $options as element(search:options)?#xs:unsignedLong
+search#get-default-options#0##element(search:options)
 search#parse#3#$qtext as xs:string+, $options as element(search:options)?, $output as xs:string?#element()?
 search#remove-constraint#3#$qtext as xs:string, $ptext as xs:string, $options as element(search:options)?#xs:string?
 search#resolve#4#$query as element(), $options as element(search:options)?, $start as xs:unsignedLong?, $page-length as xs:unsignedLong?#element(search:response)
@@ -2007,16 +1993,20 @@ search#suggest#6#$qtext as xs:string+, $options as element(search:options)?, $li
 search#unparse#1#$qtree as element()#xs:string+
 search#values#7#$spec-name as xs:string, $options as element(search:options), $query as element(search:query)?, $limit as xs:unsignedLong?, $start as xs:anyAtomicType?, $page-start as xs:unsignedLong?, $page-length as xs:unsignedLong?#element(search:values-response)
 sec#amp-add-roles#5#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong, $role-names as xs:string*#empty-sequence()
+sec#amp-doc-collections#0## xs:string* 
+sec#amp-doc-permissions#0##element(sec:permission)* 
 sec#amp-exists#4#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong#xs:boolean
 sec#amp-get-roles#4#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong#xs:string* 
 sec#amp-remove-roles#5#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong, $role-names as xs:string*#empty-sequence()
 sec#amp-set-roles#5#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong, $role-names as xs:string*#empty-sequence()
 sec#amps-change-modules-database#2#$old-db as xs:unsignedLong, $new-db as xs:unsignedLong#xs:unsignedLong*
+sec#amps-collection#0##xs:string 
 sec#check-admin#0##empty-sequence()
 sec#collection-add-permissions#2#$uri as xs:string, $permissions as element(sec:permission)*#empty-sequence()
 sec#collection-get-permissions#1#$uri as xs:string#element(sec:permission)* 
 sec#collection-remove-permissions#2#$uri as xs:string, $permissions as element(sec:permission)*#empty-sequence()
 sec#collection-set-permissions#2#$uri as xs:string, $permissions as element(sec:permission)*#empty-sequence()
+sec#collections-collection#0##xs:string 
 sec#compartment-get-roles#1#$compartment-name as xs:string#element(sec:role)*
 sec#create-amp#5#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong, $role-names as xs:string*#xs:unsignedLong 
 sec#create-external-security#11#$external-security-name as xs:string, $description as xs:string, $authentication as xs:string, $cache-timeout as xs:unsignedInt, $authorization as xs:string, $ldap-server-uri as xs:string, $ldap-base as xs:string, $ldap-attribute as xs:string, $ldap-default-user as xs:string, $ldap-password as xs:string, $ldap-bind-method as xs:string#xs:unsignedLong
@@ -2026,7 +2016,10 @@ sec#create-user#7#$user-name as xs:string, $description as xs:string?, $password
 sec#create-user-with-role#7#$user-name as xs:string, $description as xs:string?, $password as xs:string, $role-names as xs:string*, $permissions as element(sec:permission)*, $collections as xs:string*, $external-names as xs:string*#xs:unsignedLong
 sec#credentials-get-aws#0##xs:string*
 sec#credentials-set-aws#2#$access-key as xs:string, $secret-key as xs:string#empty-sequence()
+sec#external-securities-collection#0##xs:string
 sec#external-security-clear-cache#1#$external-security-name as xs:string#empty-sequence()
+sec#external-security-doc-collections#0##xs:string*
+sec#external-security-doc-permissions#0##element(sec:permission)*
 sec#external-security-get-authentication#1#$external-security-name as xs:string#xs:string
 sec#external-security-get-authorization#1#$external-security-name as xs:string#xs:string
 sec#external-security-get-cache-timeout#1#$external-security-name as xs:string#xs:unsignedInt
@@ -2049,17 +2042,21 @@ sec#external-security-set-ldap-server-uri#2#$external-security-name as xs:string
 sec#external-security-set-name#2#$external-security-name as xs:string, $new-external-security-name as xs:string#empty-sequence()
 sec#get-amp#4#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong#element(sec:amp)? 
 sec#get-collection#1#$uri as xs:string#element(sec:collection) 
+sec#get-compartments#0##xs:string*
 sec#get-distinct-permissions#2#$input-perms as element(sec:permission)*, $output-perms as element(sec:permission)*#element(sec:permission)* 
 sec#get-privilege#2#$action as xs:string, $kind as xs:string#element(sec:privilege)? 
 sec#get-role-ids#1#$role-names as xs:string*# element(sec:role-id)*
 sec#get-role-names#1#$role-ids as xs:unsignedLong*# element(sec:role-name)* 
 sec#get-user-names#1#$user-ids as xs:unsignedLong*# element(sec:user-name)* 
+sec#priv-doc-collections#0## xs:string* 
+sec#priv-doc-permissions#0##element(sec:permission)* 
 sec#privilege-add-roles#3#$action as xs:string, $kind as xs:string, $role-names as xs:string*#empty-sequence()
 sec#privilege-exists#2#$action as xs:string, $kind as xs:string#xs:boolean
 sec#privilege-get-roles#2#$action as xs:string, $kind as xs:string#xs:string* 
 sec#privilege-remove-roles#3#$action as xs:string, $kind as xs:string, $role-names as xs:string*#empty-sequence()
 sec#privilege-set-name#3#$action as xs:string, $kind as xs:string, $new-privilege-name as xs:string#empty-sequence()
 sec#privilege-set-roles#3#$action as xs:string, $kind as xs:string, $role-names as xs:string*#empty-sequence()
+sec#privileges-collection#0## xs:string 
 sec#protect-collection#2#$uri as xs:string, $permissions as element(sec:permission)*#xs:unsignedLong 
 sec#remove-amp#4#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong#empty-sequence()
 sec#remove-external-security#1#$external-security-name as xs:string#empty-sequence()
@@ -2071,6 +2068,8 @@ sec#remove-role-from-roles#1#$role-name as xs:string#empty-sequence()
 sec#remove-role-from-users#1#$role-name as xs:string#empty-sequence()
 sec#remove-user#1#$user-name as xs:string#empty-sequence()
 sec#role-add-roles#2#$role-name as xs:string, $new-roles as xs:string*#empty-sequence()
+sec#role-doc-collections#0## xs:string* 
+sec#role-doc-permissions#0##element(sec:permission)* 
 sec#role-exists#1#$role-name as xs:string#xs:boolean
 sec#role-get-compartment#1#$role-name as xs:string#xs:string?
 sec#role-get-default-collections#1#$role-name as xs:string#xs:string* 
@@ -2086,18 +2085,22 @@ sec#role-set-description#2#$role-name as xs:string, $description as xs:string#em
 sec#role-set-external-names#2#$role-name as xs:string, $external-name as xs:string*#empty-sequence()
 sec#role-set-name#2#$role-name as xs:string, $new-role-name as xs:string#empty-sequence()
 sec#role-set-roles#2#$role-name as xs:string, $role-names as xs:string*#empty-sequence()
+sec#roles-collection#0##xs:string 
+sec#security-collection#0##xs:string 
 sec#security-installed#0##xs:boolean 
+sec#security-namespace#0##xs:string 
 sec#security-version#0##xs:double
 sec#set-realm#1#$realm as xs:string#empty-sequence()
 sec#uid-for-name#1#$name as xs:string#xs:unsignedLong*
 sec#unprotect-collection#1#$uri as xs:string#empty-sequence()
 sec#user-add-roles#2#$user-name as xs:string, $role-names as xs:string*#empty-sequence()
+sec#user-doc-collections#0##xs:string* 
+sec#user-doc-permissions#0##element(sec:permission)* 
 sec#user-exists#1#$user-name as xs:string#xs:boolean
 sec#user-get-default-collections#1#$user-name as xs:string#xs:string* 
 sec#user-get-default-permissions#1#$user-name as xs:string#element(sec:permission)* 
 sec#user-get-description#1#$user-name as xs:string#xs:string 
 sec#user-get-external-names#1#$user-name as xs:string#xs:string*
-sec#user-get-last-password-date#1#$user-name as xs:string#xs:dateTime?
 sec#user-get-password-extra#1#$user-name as xs:string#element(sec:password-extra)?
 sec#user-get-roles#1#$user-name as xs:string# xs:string*
 sec#user-privileges#1#$user-name as xs:string#element(sec:privilege)* 
@@ -2110,6 +2113,7 @@ sec#user-set-name#3#$user-name as xs:string, $new-user-name as xs:string, $passw
 sec#user-set-password#2#$user-name as xs:string, $password as xs:string#empty-sequence()
 sec#user-set-password-extra#2#$user-name as xs:string, $extra as element(sec:password-extra)#empty-sequence()
 sec#user-set-roles#2#$user-name as xs:string, $role-names as xs:string*#empty-sequence()
+sec#users-collection#0##xs:string 
 sec#validate-permissions#1#$permissions as element(sec:permission)*#node()*
 sem#binding#1#$map as element(json:object)#sem:binding
 sem#bnode#1#$value as xs:anyAtomicType#sem:blank
@@ -2178,6 +2182,7 @@ spell#romanize#1#$string as xs:string#xs:string
 spell#suggest#3#$uri as xs:string*, $word as xs:string, $options as (element()|map:map)?#xs:string*
 spell#suggest-detailed#3#$dictionary_uris as xs:string*, $word as xs:string, $options as (element()|map:map)?#element(spell:suggestion)*
 temporal#advance-lsqt#1#$temporal-collection as xs:string#xs:dateTime
+temporal#axes#0##xs:string*
 temporal#axis-create#3#$axis-name as xs:string, $start-range-index as cts:reference, $end-range-index as cts:reference#xs:unsignedLong
 temporal#axis-get-end#1#$axis-name as xs:string#cts:reference
 temporal#axis-get-start#1#$axis-name as xs:string#cts:reference
@@ -2187,6 +2192,7 @@ temporal#collection-get-axis#2#$temporal-collection as xs:string, $axis as xs:st
 temporal#collection-get-options#1#$temporal-collection as xs:string#xs:string*
 temporal#collection-remove#1#$collection-name as xs:string#empty-sequence()
 temporal#collection-set-options#2#$temporal-collection as xs:string, $options as xs:string*#empty-sequence()
+temporal#collections#0##xs:string*
 temporal#document-delete#2#$temporal-collection as xs:string, $uri as xs:string#empty-sequence()
 temporal#document-insert#8#$temporal-collection as xs:string, $uri as xs:string, $root as node(), $permissions as element(sec:permission)*, $permissions as Object[], $collections as xs:string*, $quality as xs:int?, $forest-ids as xs:unsignedLong*#empty-sequence()
 temporal#document-load#4#$temporal-collection as xs:string, $location as xs:string, $options as (element()|map:map)?, $options as Object?#empty-sequence()
@@ -2233,6 +2239,8 @@ trgr#document-content#1#$update-kind as xs:string#element(trgr:document-content)
 trgr#document-scope#1#$uri as xs:string#element(trgr:document-scope)
 trgr#get-trigger#1#$trigger-name as xs:string#element(trgr:trigger)
 trgr#get-trigger-by-id#1#$trigger-id as xs:unsignedLong#element(trgr:trigger)
+trgr#post-commit#0##element(trgr:when)
+trgr#pre-commit#0##element(trgr:when)
 trgr#property-content#1#$property-name as xs:QName#element(trgr:property-content)
 trgr#remove-trigger#1#$trigger-name as xs:string#empty-sequence()
 trgr#trigger-add-permissions#2#$trigger-name as xs:string, $permissions as item()*#empty-sequence()
@@ -2251,13 +2259,10 @@ trgr#trigger-set-permissions#2#$trigger-name as xs:string, $permissions as item(
 trgr#trigger-set-recursive#2#$trigger-name as xs:string, $recursive as xs:boolean#empty-sequence()
 trgr#trigger-set-task-priority#2#$trigger-name as xs:string, $task-priority as xs:string#empty-sequence()
 trgr#triggers-change-modules-database#2#$old-db as xs:unsignedLong, $new-db as xs:unsignedLong#empty-sequence()
-trgr#validate-data-event#1#$event as element(trgr:data-event)#empty()
-trgr#validate-database-online-event#1#$database-online-event as element(trgr:database-online-event)#empty()
-trgr#validate-module#1#$module as element(trgr:module)#empty()
-trgr#validate-trigger-name#1#$trigger-name as xs:string#empty()
 view#add-column#3#$schema-name as xs:string, $view-name as xs:string, $column as element(view:column)#empty-sequence()
 view#add-field#3#$schema-name as xs:string, $view-name as xs:string, $field as element(view:field)#empty-sequence()
 view#add-permissions#3#$schema-name as xs:string, $view-name as xs:string, $permissions as item()*#empty-sequence()
+view#collection#0##xs:string
 view#collection-view-scope#1#$collection as xs:string#element(*, view:view-scope)
 view#column#2#$name as xs:string, $range-index as cts:reference#element(view:column)
 view#columns#2#$schema-name as xs:string, $view-name as xs:string#element(view:column)*
@@ -2270,7 +2275,6 @@ view#get-bindings#2#$schema-name as xs:string, $view-name as xs:string#map:map
 view#get-by-id#1#$view-id as xs:unsignedLong#element(view:view)
 view#get-column#3#$schema-name as xs:string, $view-name as xs:string, $column-name as xs:string#element(view:column)
 view#get-field#3#$schema-name as xs:string, $view-name as xs:string, $field-name as xs:string#element(view:field)
-view#get-ordered#2#$schema-name as xs:string, $view-name as xs:string#xs:boolean
 view#get-permissions#2#$schema-name as xs:string, $view-name as xs:string#element(sec:permission)*
 view#get-view-scope#2#$schema-name as xs:string, $view-name as xs:string#element(*, view:view-scope)
 view#remove#2#$schema-name as xs:string, $view-name as xs:string#empty-sequence()
@@ -2285,10 +2289,10 @@ view#schema-get-permissions#1#$schema-name as xs:string#element(sec:permission)*
 view#schema-remove#1#$schema-name as xs:string#empty-sequence()
 view#schema-remove-permissions#2#$schema-name as xs:string, $permissions as item()*#empty-sequence()
 view#schema-set-permissions#2#$schema-name as xs:string, $permissions as item()*#empty-sequence()
+view#schemas#0##element(view:schema)*
 view#set-columns#3#$schema-name as xs:string, $view-name as xs:string, $columns as element(view:column)*#empty-sequence()
 view#set-fields#3#$schema-name as xs:string, $view-name as xs:string, $fields as element(view:field)*#empty-sequence()
 view#set-name#3#$schema-name as xs:string, $view-name as xs:string, $new-name as xs:string#empty-sequence()
-view#set-ordered#3#$schema-name as xs:string, $view-name as xs:string, $ordered as xs:boolean#empty-sequence()
 view#set-permissions#3#$schema-name as xs:string, $view-name as xs:string, $permissions as item()*#empty-sequence()
 view#set-view-scope#3#$schema-name as xs:string, $view-name as xs:string, $scope as element(*,view:view-scope)#empty-sequence()
 view#views#1#$schema-name as xs:string#element(view:view)*
@@ -2324,6 +2328,8 @@ xdmp#commit#0##empty-sequence()
 xdmp#configuration-timestamp#1#$name as xs:string#xs:unsignedLong?
 xdmp#crypt#2#$password as xs:string, $salt as xs:string#xs:string
 xdmp#crypt2#1#$password as xs:string#xs:string
+xdmp#current-last#0##xs:integer
+xdmp#current-position#0##xs:integer
 xdmp#database#1#$name as xs:string#xs:unsignedLong
 xdmp#database-backup#5#$forestIDs as xs:unsignedLong*, $pathname as xs:string, $journal-archiving as xs:boolean?, $journal-archive-path as xs:string?, $lag-limit as xs:unsignedLong?#xs:unsignedLong
 xdmp#database-backup-cancel#1#$jobid as xs:unsignedLong#xs:boolean
@@ -2382,6 +2388,7 @@ xdmp#document-set-property#2#$uri as xs:string, $prop as element()#empty-sequenc
 xdmp#document-set-quality#2#$uri as xs:string, $quality as xs:integer#empty-sequence()
 xdmp#document-timestamp#1#$uri as xs:string#xs:integer?
 xdmp#eager#1#$arg as item()*#item()*
+xdmp#elapsed-time#0##xs:dayTimeDuration
 xdmp#element-content-type#1#$element as element()#xs:string
 xdmp#email#1#$message as element()#empty-sequence()
 xdmp#encode-for-NCName#1#$name as xs:string#xs:string
@@ -2434,18 +2441,26 @@ xdmp#get#3#$path as xs:string, $default-namespace as xs:string?, $options as xs:
 xdmp#get-current-roles#0##xs:unsignedLong*
 xdmp#get-current-user#0##xs:string?
 xdmp#get-current-userid#0##xs:unsignedLong
+xdmp#get-invoked-path#0##xs:string
+xdmp#get-original-url#0##xs:string
 xdmp#get-orphaned-binaries#1#$id as xs:unsignedLong#xs:unsignedLong*
 xdmp#get-request-body#1#$format as xs:string?#item()*
 xdmp#get-request-client-address#0##xs:string?
 xdmp#get-request-client-certificate#0##xs:string?
+xdmp#get-request-error-format#0##xs:string
 xdmp#get-request-field#2#$name as xs:string, $default as xs:string?#item()*
 xdmp#get-request-field-content-type#1#$field-name as xs:string#xs:string*
 xdmp#get-request-field-filename#1#$field-name as xs:string#xs:string*
 xdmp#get-request-field-names#0##xs:string*
 xdmp#get-request-header#2#$name as xs:string, $default as xs:string?#xs:string*
 xdmp#get-request-header-names#0##xs:string*
+xdmp#get-request-method#0##xs:string
+xdmp#get-request-path#0##xs:string
+xdmp#get-request-port#0##xs:integer?
 xdmp#get-request-protocol#0##xs:string?
+xdmp#get-request-url#0##xs:string
 xdmp#get-request-user#0##xs:unsignedLong
+xdmp#get-request-username#0##xs:string
 xdmp#get-response-code#0##item()*
 xdmp#get-response-encoding#0##xs:string
 xdmp#get-server-field#2#$name as xs:string, $default as item()*#item()*
@@ -2542,6 +2557,7 @@ xdmp#privilege-roles#2#$action as xs:string, $kind as xs:string#xs:unsignedLong*
 xdmp#product-edition#0##xs:string
 xdmp#product-environment#0##xs:string
 xdmp#quarter-from-date#1#$arg as xs:date?#xs:integer?
+xdmp#query-meters#0##element()
 xdmp#query-trace#1#$enabled as xs:boolean#empty-sequence()
 xdmp#quote#2#$arg as item()*, $options as (element()|map:map)?#xs:string
 xdmp#random#1#$max as xs:unsignedLong#xs:unsignedLong
@@ -2640,11 +2656,7 @@ xhtml#restructure#1#$doc as node()?# node()?
 xinc#link-expand#2#$context as node(), $ref as element(xi:include)#node()*
 xinc#link-references#1#$node as node()#xs:string*
 xinc#node-expand#1#$node as node()#node()
-xp#alt-path-from-element-scheme#1#$part as xs:string#xs:string?
 xp#dereference#2#$context as node(), $xpointer as xs:string#node()*
-xp#do-dereference#3#$context as node(), $path as xs:string, $ns-bindings as xs:string*#node()*
-xp#parse-xpointer#1#$xpointer as xs:string#element(xp:part)*
-xp#path-from-element-scheme#1#$part as xs:string#xs:string
 xs#untyped#1#$arg#xs:untyped
 xs#untypedAtomic#1#$arg#xs:untypedAtomic
 xs#dayTimeDuration#1#$arg#xs:dayTimeDuration

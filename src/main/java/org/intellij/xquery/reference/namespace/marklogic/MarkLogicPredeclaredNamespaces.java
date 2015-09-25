@@ -34,7 +34,8 @@ public class MarkLogicPredeclaredNamespaces extends XQuery30PredeclaredNamespace
             "xdmp",
             "prof",
             "dbg",
-            "rdf"
+            "rdf",
+            "sc"
     );
 
     {
@@ -65,6 +66,7 @@ public class MarkLogicPredeclaredNamespaces extends XQuery30PredeclaredNamespace
         prefixToNamespaceMap.put("json", Pair.create("http://marklogic.com/xdmp/json", false));
         prefixToNamespaceMap.put("kml", Pair.create("http://earth.google.com/kml/2.0", false));
         prefixToNamespaceMap.put("lnk", Pair.create("http://marklogic.com/cpf/links", false));
+        prefixToNamespaceMap.put("map", Pair.create("http://marklogic.com/xdmp/map", false));
         prefixToNamespaceMap.put("mcgm", Pair.create("http://marklogic.com/geospatial/mcgm", false));
         prefixToNamespaceMap.put("msword", Pair.create("http://marklogic.com/cpf/msword", false));
         prefixToNamespaceMap.put("ooxml", Pair.create("http://marklogic.com/openxml", false));
