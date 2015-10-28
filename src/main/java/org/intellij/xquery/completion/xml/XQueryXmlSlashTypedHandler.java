@@ -88,8 +88,10 @@ public class XQueryXmlSlashTypedHandler extends TypedHandlerDelegate {
             if (prevLeaf == null) return Result.CONTINUE;
             if (PsiTreeUtil.getParentOfType(element, XQueryDirAttributeValue.class) != null) return Result.CONTINUE;
             if (prevLeaf.getElementType() == XQueryTypes.ELEMENTCONTENTCHAR) return Result.CONTINUE;
-            if (PsiTreeUtil.getParentOfType(element, XQueryEnclosedExpr.class, true, XQueryXmlFullTag.class) != null) return Result.CONTINUE;
-            if (getParentFullTag(prevLeaf) != null) {
+            XQueryEnclosedExpr parentEnclosedExpression = PsiTreeUtil.getParentOfType(element, XQueryEnclosedExpr.class, true, XQueryXmlFullTag.class);
+            XQueryXmlFullTag fullTag = getParentFullTag(prevLeaf);
+            if (isChildOfEcnlosedExpressionMoreThanChildOfXmlTag(parentEnclosedExpression, fullTag)) return Result.CONTINUE;
+            if (fullTag != null) {
                 EditorModificationUtil.insertStringAtCaret(editor, ">", false);
                 return Result.STOP;
             }
@@ -97,8 +99,13 @@ public class XQueryXmlSlashTypedHandler extends TypedHandlerDelegate {
         return Result.CONTINUE;
     }
 
+    private boolean isChildOfEcnlosedExpressionMoreThanChildOfXmlTag(XQueryEnclosedExpr parentEnclosedExpression,
+                                                                     XQueryXmlFullTag fullTag) {
+        return parentEnclosedExpression != null && fullTag == null;
+    }
+
     protected XQueryXmlFullTag getParentFullTag(ASTNode prevLeaf) {
-        return PsiTreeUtil.getParentOfType(prevLeaf.getPsi(), XQueryXmlFullTag.class);
+        return PsiTreeUtil.getParentOfType(prevLeaf.getPsi(), XQueryXmlFullTag.class, true, XQueryEnclosedExpr.class);
     }
 
     protected ASTNode getPreviousNonWhiteSpaceLeaf(ASTNode originalPrevLeaf) {

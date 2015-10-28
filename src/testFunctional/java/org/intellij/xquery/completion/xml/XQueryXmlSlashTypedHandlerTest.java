@@ -87,4 +87,22 @@ public class XQueryXmlSlashTypedHandlerTest extends BaseFunctionalTestCase {
         myFixture.type("/");
         myFixture.checkResult("<a><a/><caret></a>");
     }
+
+    public void testClosingEmptyTagInsideOfEnclosedExpressionInsideOfAnotherTag() {
+        myFixture.configureByText(XQueryFileType.INSTANCE, "<a>{<a<caret>}</a>");
+        myFixture.type("/");
+        myFixture.checkResult("<a>{<a/><caret>}</a>");
+    }
+
+    public void testClosingFullTagInsideOfEnclosedExpressionInsideOfAnotherTag() {
+        myFixture.configureByText(XQueryFileType.INSTANCE, "<a>{<a><<caret>}</a>");
+        myFixture.type("/");
+        myFixture.checkResult("<a>{<a></a><caret>}</a>");
+    }
+
+    public void testOnlyInsertsSlashInXpathInsideOfEnclosedExpressionWhichIsInsideOfATagInExpression() {
+        myFixture.configureByText(XQueryFileType.INSTANCE, "<abc>{<def>{/abc<caret>}</def>}</abc>");
+        myFixture.type("/");
+        myFixture.checkResult("<abc>{<def>{/abc/}</def>}</abc>");
+    }
 }
