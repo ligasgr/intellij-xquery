@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -618,8 +618,9 @@ public class XQueryDocumentationProviderTest extends BaseFunctionalTestCase {
             }
         });
         assertNotNull(interestingElement);
+        PsiElement elementAtCaret = myFixture.getFile().findElementAt(myFixture.getCaretOffset());
         PsiElement sourceOfDocumentation = documentationProvider.getDocumentationElementForLookupItem(getPsiManager()
-                , interestingElement.getObject(), null);
+                , interestingElement.getObject(), elementAtCaret);
         assertEquals(expected, documentationProvider.generateDoc(sourceOfDocumentation, null));
     }
 
