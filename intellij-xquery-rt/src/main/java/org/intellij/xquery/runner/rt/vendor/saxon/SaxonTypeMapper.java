@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -86,12 +86,12 @@ public class SaxonTypeMapper implements TypeMapper<ItemType> {
         typeMap.put(XS_BOOLEAN, ItemType.BOOLEAN);
         typeMap.put(XS_DATE, ItemType.DATE);
         typeMap.put(XS_INT, ItemType.INT);
-        typeMap.put(XS_INTEGER, ItemType.INTEGER);
+        typeMap.put(XS_INTEGER, ItemType.INT);
         typeMap.put(XS_SHORT, ItemType.SHORT);
         typeMap.put(XS_LONG, ItemType.LONG);
         typeMap.put(XS_DATE_TIME, ItemType.DATE_TIME);
         typeMap.put(XS_DATE_TIME_STAMP, ItemType.DATE_TIME_STAMP);
-        typeMap.put(XS_DECIMAL, ItemType.DECIMAL);
+        typeMap.put(XS_DECIMAL, ItemType.DOUBLE);
         typeMap.put(XS_DOUBLE, ItemType.DOUBLE);
         typeMap.put(XS_DURATION, ItemType.DURATION);
         typeMap.put(XS_FLOAT, ItemType.FLOAT);

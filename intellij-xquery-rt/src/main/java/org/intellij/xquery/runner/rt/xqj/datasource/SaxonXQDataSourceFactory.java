@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 package org.intellij.xquery.runner.rt.xqj.datasource;
 
 import net.sf.saxon.Configuration;
-import net.sf.saxon.xqj.SaxonXQDataSource;
+import com.saxonica.xqj.SaxonXQDataSource;
 import org.intellij.xquery.runner.rt.XQueryRunConfig;
 
 import javax.xml.transform.stream.StreamSource;
