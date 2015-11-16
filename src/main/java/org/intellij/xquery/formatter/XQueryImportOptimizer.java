@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@ package org.intellij.xquery.formatter;
 
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.psi.PsiFile;
+import org.intellij.xquery.inspection.imports.AnnotationNamespacesExtractor;
 import org.intellij.xquery.inspection.imports.FunctionNamespacesExtractor;
 import org.intellij.xquery.inspection.imports.UnusedImportsFinder;
 import org.intellij.xquery.inspection.imports.VariableNamespacesExtractor;
@@ -39,7 +40,9 @@ public class XQueryImportOptimizer implements ImportOptimizer {
     public Runnable processFile(final PsiFile psiFile) {
         FunctionNamespacesExtractor functionNamespacesExtractor = new FunctionNamespacesExtractor();
         VariableNamespacesExtractor variableNamespacesExtractor = new VariableNamespacesExtractor();
-        UnusedImportsFinder unusedImportsFinder = new UnusedImportsFinder(functionNamespacesExtractor, variableNamespacesExtractor);
+        AnnotationNamespacesExtractor annotationNamespacesExtractor = new AnnotationNamespacesExtractor();
+        UnusedImportsFinder unusedImportsFinder =
+                new UnusedImportsFinder(functionNamespacesExtractor, variableNamespacesExtractor, annotationNamespacesExtractor);
 
         Collection<XQueryModuleImport> unusedImports = unusedImportsFinder.getUnusedImports((XQueryFile) psiFile);
 

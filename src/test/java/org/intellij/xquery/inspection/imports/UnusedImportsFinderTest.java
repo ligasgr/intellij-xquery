@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,28 +32,27 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-/**
- * User: ligasgr
- * Date: 31/10/13
- * Time: 21:13
- */
 public class UnusedImportsFinderTest {
 
     private static final String FUNCTION_USED_NAMESPACE = "function_used_namespace";
     private static final String VARIABLE_USED_NAMESPACE = "variable_used_namespace";
+    private static final String ANNOTATION_USED_NAMESPACE = "annotation_used_namespace";
     private UnusedImportsFinder unusedImportsFinder;
     private XQueryFile file;
     private Collection<XQueryModuleImport> moduleImports;
     private FunctionNamespacesExtractor functionNamespacesExtractor;
     private VariableNamespacesExtractor variableNamespacesExtractor;
+    private AnnotationNamespacesExtractor annotationNamespacesExtractor;
     private Set<String> functionInvocationNamespaces;
     private Set<String> variableReferenceNamespaces;
+    private Set<String> annotationReferenceNamespaces;
 
     @Before
     public void setUp() {
         functionNamespacesExtractor = mock(FunctionNamespacesExtractor.class);
         variableNamespacesExtractor = mock(VariableNamespacesExtractor.class);
-        unusedImportsFinder = new UnusedImportsFinder(functionNamespacesExtractor, variableNamespacesExtractor);
+        annotationNamespacesExtractor = mock(AnnotationNamespacesExtractor.class);
+        unusedImportsFinder = new UnusedImportsFinder(functionNamespacesExtractor, variableNamespacesExtractor, annotationNamespacesExtractor);
         file = mock(XQueryFile.class);
         moduleImports = new ArrayList<XQueryModuleImport>();
         given(file.getModuleImports()).willReturn(moduleImports);
@@ -61,6 +60,8 @@ public class UnusedImportsFinderTest {
         given(functionNamespacesExtractor.getNamespacesUsedByFunctions(file)).willReturn(functionInvocationNamespaces);
         variableReferenceNamespaces = new HashSet<String>();
         given(variableNamespacesExtractor.getNamespacesUsedByVariables(file)).willReturn(variableReferenceNamespaces);
+        annotationReferenceNamespaces = new HashSet<String>();
+        given(annotationNamespacesExtractor.getNamespacesUsedByAnnotations(file)).willReturn(annotationReferenceNamespaces);
     }
 
     @Test
@@ -123,6 +124,18 @@ public class UnusedImportsFinderTest {
     }
 
     @Test
+    public void shouldReturnUnusedImportWhenNotUsedByAnnotation() {
+        annotationReferenceNamespaces.add(ANNOTATION_USED_NAMESPACE);
+        XQueryModuleImport unused = moduleImportWithNamespace("unused");
+        moduleImports.add(unused);
+
+        Collection<XQueryModuleImport> result = unusedImportsFinder.getUnusedImports(file);
+
+        assertThat(result.size(), is(1));
+        assertThat(result.iterator().next(), is(unused));
+    }
+
+    @Test
     public void shouldReturnUnusedImportWhenNotUsedInAnyOfFoundUsages() {
         functionInvocationNamespaces.add(FUNCTION_USED_NAMESPACE);
         variableReferenceNamespaces.add(VARIABLE_USED_NAMESPACE);
@@ -150,6 +163,17 @@ public class UnusedImportsFinderTest {
     public void shouldReturnEmptyResultsWhenUsedByVariable() {
         variableReferenceNamespaces.add(VARIABLE_USED_NAMESPACE);
         XQueryModuleImport used = moduleImportWithNamespace(VARIABLE_USED_NAMESPACE);
+        moduleImports.add(used);
+
+        Collection<XQueryModuleImport> result = unusedImportsFinder.getUnusedImports(file);
+
+        assertThat(result.size(), is(0));
+    }
+
+    @Test
+    public void shouldReturnEmptyResultsWhenUsedByAnnotation() {
+        annotationReferenceNamespaces.add(ANNOTATION_USED_NAMESPACE);
+        XQueryModuleImport used = moduleImportWithNamespace(ANNOTATION_USED_NAMESPACE);
         moduleImports.add(used);
 
         Collection<XQueryModuleImport> result = unusedImportsFinder.getUnusedImports(file);

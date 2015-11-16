@@ -85,6 +85,7 @@ public class XQueryFile extends PsiFileBase {
     private CachedValue<XQueryModuleDecl> moduleDeclaration;
     private CachedValue<Map<String, String>> variablePrefixToNamespaceMapping;
     private CachedValue<XQueryVersionDecl> versionDeclaration;
+    private CachedValue<Collection<XQueryAnnotation>> annotations;
     private CachedValue<BuiltInFunctionTable> builtInFunctionTable;
 
     @NotNull
@@ -254,6 +255,20 @@ public class XQueryFile extends PsiFileBase {
         return versionDeclaration.getValue();
     }
 
+    public Collection<XQueryAnnotation> getAnnotations() {
+        if (annotations == null) {
+            annotations = CachedValuesManager
+                    .getManager(getProject())
+                    .createCachedValue(new CachedValueProvider<Collection<XQueryAnnotation>>() {
+                        @Override
+                        public Result<Collection<XQueryAnnotation>> compute() {
+                            return CachedValueProvider.Result.create(calcAnnotations(), XQueryFile.this);
+                        }
+                    }, false);
+        }
+        return annotations.getValue();
+    }
+
     private Collection<XQueryVarDecl> calcVariableDeclarations() {
         Collection<XQueryVarDecl> variableDeclarations = PsiTreeUtil.findChildrenOfType(this, XQueryVarDecl.class);
         return variableDeclarations;
@@ -290,6 +305,10 @@ public class XQueryFile extends PsiFileBase {
         Collection<XQueryFunctionInvocation> functionsInvocations = PsiTreeUtil.findChildrenOfType(this,
                 XQueryFunctionInvocation.class);
         return functionsInvocations;
+    }
+
+    private Collection<XQueryAnnotation> calcAnnotations() {
+        return PsiTreeUtil.findChildrenOfType(this, XQueryAnnotation.class);
     }
 
     private Collection<XQueryNamespaceDecl> calcNamespaceDeclarationsMatchingDefaultNamespace() {

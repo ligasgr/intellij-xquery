@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,8 +38,9 @@ public class UnusedImportsInspection extends LocalInspectionTool {
 
     private FunctionNamespacesExtractor functionNamespacesExtractor = new FunctionNamespacesExtractor();
     private VariableNamespacesExtractor variableNamespacesExtractor = new VariableNamespacesExtractor();
+    AnnotationNamespacesExtractor annotationNamespacesExtractor = new AnnotationNamespacesExtractor();
     private final UnusedImportsFinder unusedImportsFinder = new UnusedImportsFinder(functionNamespacesExtractor,
-            variableNamespacesExtractor);
+            variableNamespacesExtractor, annotationNamespacesExtractor);
 
     @Override
     public ProblemDescriptor[] checkFile(PsiFile file, InspectionManager manager, boolean isOnTheFly) {

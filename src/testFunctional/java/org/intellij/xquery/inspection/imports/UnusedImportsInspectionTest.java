@@ -66,6 +66,10 @@ public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
         executeInspectionTest();
     }
 
+    public void testImportUsedByAnnotation() {
+        executeInspectionTest();
+    }
+
     public void testRemoveUnusedImportQuickFix() {
         final String testName = getTestName(false);
 

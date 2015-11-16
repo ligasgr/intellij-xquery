@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,11 +29,13 @@ import java.util.Set;
 public class UnusedImportsFinder {
     private final VariableNamespacesExtractor variableNamespacesExtractor;
     private final FunctionNamespacesExtractor functionNamespacesExtractor;
+    private final AnnotationNamespacesExtractor annotationNamespacesExtractor;
 
     public UnusedImportsFinder(FunctionNamespacesExtractor functionNamespacesExtractor, VariableNamespacesExtractor
-            variableNamespacesExtractor) {
+            variableNamespacesExtractor, AnnotationNamespacesExtractor annotationNamespacesExtractor) {
         this.functionNamespacesExtractor = functionNamespacesExtractor;
         this.variableNamespacesExtractor = variableNamespacesExtractor;
+        this.annotationNamespacesExtractor = annotationNamespacesExtractor;
     }
 
     public Collection<XQueryModuleImport> getUnusedImports(XQueryFile xQueryFile) {
@@ -61,6 +63,7 @@ public class UnusedImportsFinder {
         Set<String> namespaces = new HashSet<String>();
         namespaces.addAll(functionNamespacesExtractor.getNamespacesUsedByFunctions(xQueryFile));
         namespaces.addAll(variableNamespacesExtractor.getNamespacesUsedByVariables(xQueryFile));
+        namespaces.addAll(annotationNamespacesExtractor.getNamespacesUsedByAnnotations(xQueryFile));
         return namespaces;
     }
 }
