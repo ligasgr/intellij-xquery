@@ -136,8 +136,6 @@ PredefinedEntityRef="&" ("lt" | "gt" | "amp" | "quot" | "apos" | "bdquo" | "brvb
 EscapeQuot="\"\""
 EscapeApos="''"
 Digits=[0-9]+
-DirCommentContents=(({Char} - '-') | ('-' ({Char} - '-')))*                                 /* ws: explicit */
-PITarget={Name} - (("X" | "x") ("M" | "m") ("L" | "l"))                                     /* xgc: xml-version */
 CharRef="&#" [0-9]+ ";" | "&#x" [0-9a-fA-F]+ ";"                                            /* xgc: xml-version */
 NCName={NameStartCharWithoutFirst} ({NameCharWithoutFirst})*                                                     /* xgc: xml-version */
 NameStartChar=":" | {NameStartCharWithoutFirst}
@@ -183,6 +181,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 %state VALIDATE_RECOGNITION
 %state WS_BEFORE_QNAME
 %state ITEM_TYPE
+%state KIND_TEST
+%state UPDATE_FACILITY
 %%
 
 
@@ -227,7 +227,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "+"                                        {return XQueryTypes.OP_PLUS;}
 "-"                                        {return XQueryTypes.OP_MINUS;}
 ":="                                       {return XQueryTypes.OP_ASSIGN;}
-"::"                                       {return XQueryTypes.COLON_COLON;}
+"::"                                       {pushState(KIND_TEST);return XQueryTypes.COLON_COLON;}
 ":"                                        {return XQueryTypes.COLON;}
 "?"                                        {return XQueryTypes.QUESTIONMARK;}
 "$"                                        {pushState(QNAME);return XQueryTypes.DOLLAR_SIGN;}
@@ -361,19 +361,16 @@ SC=({S} | "(:" {Char}* ~":)")+
 "stable" / {SC} "order"                    {return XQueryTypes.K_STABLE;}
 "ordered" / {SC}? "{"                      {return XQueryTypes.K_ORDERED;}
 "unordered" / {SC}? "{"                    {return XQueryTypes.K_UNORDERED;}
-"insert" / {SC} ("node"|"nodes")           {return XQueryTypes.K_INSERT;}
-"delete" / {SC} ("node"|"nodes")           {return XQueryTypes.K_DELETE;}
-"node"                                     {return XQueryTypes.K_NODE;}
-"nodes"                                    {return XQueryTypes.K_NODES;}
+"insert" / {SC} ("node"|"nodes")           {pushState(UPDATE_FACILITY);return XQueryTypes.K_INSERT;}
+"delete" / {SC} ("node"|"nodes")           {pushState(UPDATE_FACILITY);return XQueryTypes.K_DELETE;}
 "after"                                    {return XQueryTypes.K_AFTER;}
 "before"                                   {return XQueryTypes.K_BEFORE;}
 "first" / {SC} "into"                      {return XQueryTypes.K_FIRST;}
 "last" / {SC} "into"                       {return XQueryTypes.K_LAST;}
 "into"                                     {return XQueryTypes.K_INTO;}
-"replace" / {SC} ("value"|"node")          {return XQueryTypes.K_REPLACE;}
-"value" / {SC} "of"                        {return XQueryTypes.K_VALUE;}
+"replace" / {SC} ("value"|"node")          {pushState(UPDATE_FACILITY);return XQueryTypes.K_REPLACE;}
 "with"                                     {return XQueryTypes.K_WITH;}
-"rename" / {SC} "node"                     {return XQueryTypes.K_RENAME;}
+"rename" / {SC} "node"                     {pushState(UPDATE_FACILITY);return XQueryTypes.K_RENAME;}
 "copy" / {SC} "$"                          {return XQueryTypes.K_COPY;}
 "modify"                                   {return XQueryTypes.K_MODIFY;}
 {NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
@@ -541,20 +538,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 "context"                                  {return XQueryTypes.K_CONTEXT;}
 "item"                                     {return XQueryTypes.K_ITEM;}
 "as"/ ({SC}? "(" {SC}?|{SC}) (("item"|"node"|"document-node"|"text"|"element"|"map"|"attribute"|"schema-element"|"schema-attribute"|"processing-instruction"|"comment"|"namespace-node"|"%"|"function"|"binary") {SC}? "(" | {NCName})                        {pushState(ITEM_TYPE); return XQueryTypes.K_AS;}
-"map"                                      {return XQueryTypes.K_MAP;}
-"attribute"                                {return XQueryTypes.K_ATTRIBUTE;}
-"comment"                                  {return XQueryTypes.K_COMMENT;}
-"document-node"                            {return XQueryTypes.K_DOCUMENT_NODE;}
-"element"                                  {return XQueryTypes.K_ELEMENT;}
 "empty-sequence"                           {return XQueryTypes.K_EMPTY_SEQUENCE;}
 "item"                                     {return XQueryTypes.K_ITEM;}
-"namespace-node"                           {return XQueryTypes.K_NAMESPACE_NODE;}
-"node"                                     {return XQueryTypes.K_NODE;}
-"processing-instruction"                   {return XQueryTypes.K_PI;}
-"schema-attribute"                         {return XQueryTypes.K_SCHEMA_ATTRIBUTE;}
-"schema-element"                           {return XQueryTypes.K_SCHEMA_ELEMENT;}
-"text"                                     {return XQueryTypes.K_TEXT;}
-"binary"                                   {return XQueryTypes.K_BINARY;}
 "external"                                 {return XQueryTypes.K_EXTERNAL;}
 "empty"                                    {return XQueryTypes.K_EMPTY;}
 "strict"                                   {return XQueryTypes.K_STRICT;}
@@ -563,7 +548,6 @@ SC=({S} | "(:" {Char}* ~":)")+
 "skip"                                     {return XQueryTypes.K_SKIP;}
 "collation"                                {return XQueryTypes.K_COLLATION;}
 "%"                                        {pushState(QNAME); return XQueryTypes.PERCENT;}
-"element"                                  {return XQueryTypes.K_ELEMENT;}
 "("                                        {return XQueryTypes.L_PAR;}
 ")"                                        {return XQueryTypes.R_PAR;}
 ","                                        {return XQueryTypes.COMMA;}
@@ -693,8 +677,6 @@ SC=({S} | "(:" {Char}* ~":)")+
 }
 
 <ITEM_TYPE> {
-{S}                                        {return TokenType.WHITE_SPACE;}
-"(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
 "("                                        {return XQueryTypes.L_PAR;}
 ")"                                        {popState(); return XQueryTypes.R_PAR;}
 ","                                        {return XQueryTypes.COMMA;}
@@ -702,22 +684,36 @@ SC=({S} | "(:" {Char}* ~":)")+
 "+"                                        {return XQueryTypes.OP_PLUS;}
 "?"                                        {return XQueryTypes.QUESTIONMARK;}
 "%"                                        {return XQueryTypes.PERCENT;}
-"map" / {SC}? "("                          {return XQueryTypes.K_MAP;}
-"attribute" / {SC}?"("                     {return XQueryTypes.K_ATTRIBUTE;}
-"document-node" / {SC}? "("                {return XQueryTypes.K_DOCUMENT_NODE;}
-"element" / {SC}?"("                       {return XQueryTypes.K_ELEMENT;}
 "function" / {SC}? "("                     {return XQueryTypes.K_FUNCTION;}
+"empty-sequence" / {SC}? "("               {return XQueryTypes.K_EMPTY_SEQUENCE;}
+"item" / {SC}? "("                         {return XQueryTypes.K_ITEM;}
+}
+
+<KIND_TEST,ITEM_TYPE> {
+{S}                                        {return TokenType.WHITE_SPACE;}
+"(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
+"attribute" / {SC}? "("                    {return XQueryTypes.K_ATTRIBUTE;}
+"binary" / {SC}? "("                       {return XQueryTypes.K_BINARY;}
+"comment" / {SC}? "("                      {return XQueryTypes.K_COMMENT;}
+"document-node" / {SC}? "("                {return XQueryTypes.K_DOCUMENT_NODE;}
+"element" / {SC}? "("                      {return XQueryTypes.K_ELEMENT;}
+"map" / {SC}? "("                          {return XQueryTypes.K_MAP;}
+"namespace-node" / {SC}? "("               {return XQueryTypes.K_NAMESPACE_NODE;}
+"node" / {SC}? "("                         {return XQueryTypes.K_NODE;}
 "processing-instruction" / {SC}? "("       {return XQueryTypes.K_PI;}
 "schema-attribute" / {SC}? "("             {return XQueryTypes.K_SCHEMA_ATTRIBUTE;}
 "schema-element" / {SC}? "("               {return XQueryTypes.K_SCHEMA_ELEMENT;}
-"empty-sequence" / {SC}? "("               {return XQueryTypes.K_EMPTY_SEQUENCE;}
-"item" / {SC}? "("                         {return XQueryTypes.K_ITEM;}
-"node" / {SC}? "("                         {return XQueryTypes.K_NODE;}
-"namespace-node" / {SC}? "("               {return XQueryTypes.K_NAMESPACE_NODE;}
-"comment" / {SC}? "("                      {return XQueryTypes.K_COMMENT;}
 "text" / {SC}? "("                         {return XQueryTypes.K_TEXT;}
-"binary" / {SC}? "("                       {return XQueryTypes.K_BINARY;}
 {NCName}                                   {popState(); pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+}
+
+<UPDATE_FACILITY> {
+{S}                                        {return TokenType.WHITE_SPACE;}
+"node"                                     {return XQueryTypes.K_NODE;}
+"nodes"                                    {return XQueryTypes.K_NODES;}
+"value" / {SC} "of"                        {return XQueryTypes.K_VALUE;}
+"of"                                       {return XQueryTypes.K_OF;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 

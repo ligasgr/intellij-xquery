@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -355,6 +355,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "/", "/",
                 "parent", "parent",
                 "::", "::",
+                "WHITE_SPACE", "",
                 "*", "*"
         });
     }
@@ -1016,6 +1017,28 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "::", "::",
                 "WHITE_SPACE", "",
                 "NCName", "foo"
+        });
+    }
+
+    public void testQueryWithAxisWithKindTest() throws Exception {
+        assertProducedTokens("/ancestor::node()", new String[]{
+                "/", "/",
+                "ancestor", "ancestor",
+                "::", "::",
+                "node", "node",
+                "WHITE_SPACE", "",
+                "(", "(",
+                ")", ")"
+        });
+    }
+
+    public void testQueryWithAxisWithNameTest() throws Exception {
+        assertProducedTokens("/ancestor::node", new String[]{
+                "/", "/",
+                "ancestor", "ancestor",
+                "::", "::",
+                "WHITE_SPACE", "",
+                "NCName", "node"
         });
     }
 

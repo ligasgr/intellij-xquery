@@ -1,0 +1,1 @@
+($foo//bar/ancestor::node)[1]
