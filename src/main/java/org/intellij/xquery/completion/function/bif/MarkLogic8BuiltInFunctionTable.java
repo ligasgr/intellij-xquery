@@ -21,7 +21,7 @@ import org.intellij.xquery.completion.function.AbstractBuiltInFunctionTable;
 import org.intellij.xquery.reference.namespace.PredeclaredNamespaces;
 import org.intellij.xquery.reference.namespace.marklogic.MarkLogicPredeclaredNamespaces;
 
-public class MarkLogicBuiltInFunctionTable  extends AbstractBuiltInFunctionTable {
+public class MarkLogic8BuiltInFunctionTable extends AbstractBuiltInFunctionTable {
     private PredeclaredNamespaces predeclaredNamespaces = new MarkLogicPredeclaredNamespaces();
 
     {
