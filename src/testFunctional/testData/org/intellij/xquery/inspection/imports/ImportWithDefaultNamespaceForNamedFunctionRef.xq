@@ -5,5 +5,5 @@ import module "used" at "file1.xq";
 declare default function namespace "used";
 
 declare function local:testDefaultNamespace() {
-    test#1
+    test#0
 };

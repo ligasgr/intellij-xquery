@@ -13,5 +13,5 @@ declare namespace used_for_var = "used_for_var";
 declare variable $used_for_var:test := ();
 
 declare function local:testImportWithoutPrefix() {
-    used:test(),used_for_named_function_ref:test#1,$used_for_var:test
+    used:test(),used_for_named_function_ref:test#0,$used_for_var:test
 };

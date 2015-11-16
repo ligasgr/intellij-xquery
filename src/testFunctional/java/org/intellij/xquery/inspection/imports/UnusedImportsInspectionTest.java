@@ -90,6 +90,6 @@ public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
         Collection<Class<? extends LocalInspectionTool>> inspections = new ArrayList<Class<? extends LocalInspectionTool>>();
         inspections.add(UnusedImportsInspection.class);
         myFixture.enableInspections(inspections);
-        myFixture.testHighlighting(true, false, false, "file1.xq", "file3.xq", filename);
+        myFixture.testHighlighting(true, false, false, filename, "file1.xq", "file3.xq");
     }
 }
