@@ -49,6 +49,21 @@ public interface XQueryComputedConstructor extends XQueryPsiElement {
   XQueryCompTextConstructor getCompTextConstructor();
 
   @Nullable
+  XQueryMarklogicCompArrayNodeConstructor getMarklogicCompArrayNodeConstructor();
+
+  @Nullable
   XQueryMarklogicCompBinaryConstructor getMarklogicCompBinaryConstructor();
+
+  @Nullable
+  XQueryMarklogicCompBooleanNodeConstructor getMarklogicCompBooleanNodeConstructor();
+
+  @Nullable
+  XQueryMarklogicCompNullNodeConstructor getMarklogicCompNullNodeConstructor();
+
+  @Nullable
+  XQueryMarklogicCompNumberNodeConstructor getMarklogicCompNumberNodeConstructor();
+
+  @Nullable
+  XQueryMarklogicCompObjectNodeConstructor getMarklogicCompObjectNodeConstructor();
 
 }

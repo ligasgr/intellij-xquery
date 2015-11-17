@@ -76,8 +76,50 @@ public class XQueryKindTestImpl extends XQueryPsiElementImpl implements XQueryKi
 
   @Override
   @Nullable
+  public XQueryMarklogicAnyKindTest getMarklogicAnyKindTest() {
+    return findChildByClass(XQueryMarklogicAnyKindTest.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryMarklogicArrayNodeTest getMarklogicArrayNodeTest() {
+    return findChildByClass(XQueryMarklogicArrayNodeTest.class);
+  }
+
+  @Override
+  @Nullable
   public XQueryMarklogicBinaryTest getMarklogicBinaryTest() {
     return findChildByClass(XQueryMarklogicBinaryTest.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryMarklogicBooleanNodeTest getMarklogicBooleanNodeTest() {
+    return findChildByClass(XQueryMarklogicBooleanNodeTest.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryMarklogicNullNodeTest getMarklogicNullNodeTest() {
+    return findChildByClass(XQueryMarklogicNullNodeTest.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryMarklogicNumberNodeTest getMarklogicNumberNodeTest() {
+    return findChildByClass(XQueryMarklogicNumberNodeTest.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryMarklogicObjectNodeTest getMarklogicObjectNodeTest() {
+    return findChildByClass(XQueryMarklogicObjectNodeTest.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryMarklogicTextTest getMarklogicTextTest() {
+    return findChildByClass(XQueryMarklogicTextTest.class);
   }
 
   @Override

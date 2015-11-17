@@ -17,11 +17,6 @@
 
 package org.intellij.xquery.parser;
 
-/**
- * User: ligasgr
- * Date: 14/06/13
- * Time: 21:01
- */
 public class XQueryParserTest extends BaseParserTest {
 
     public XQueryParserTest() {
@@ -153,6 +148,38 @@ public class XQueryParserTest extends BaseParserTest {
     }
 
     public void testAxisWithKindTest() {
+        doTest(true);
+    }
+
+    public void testMarklogicObjectNode() {
+        doTest(true);
+    }
+
+    public void testMarklogicNumberNode() {
+        doTest(true);
+    }
+
+    public void testMarklogicBooleanNode() {
+        doTest(true);
+    }
+
+    public void testMarklogicNullNode() {
+        doTest(true);
+    }
+
+    public void testMarklogicArrayNode() {
+        doTest(true);
+    }
+
+    public void testMarklogicNodeSelector() {
+        doTest(true);
+    }
+
+    public void testMarklogicTextSelector() {
+        doTest(true);
+    }
+
+    public void testMarklogicJSONNodes() {
         doTest(true);
     }
 }
