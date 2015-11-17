@@ -30,6 +30,7 @@ import com.intellij.psi.PsiReference;
 import org.intellij.xquery.annotator.duplicateFunction.ErrorAnnotationCreator;
 import org.intellij.xquery.annotator.function.UnresolvedFunctionChecker;
 import org.intellij.xquery.annotator.variable.UnresolvedVariableChecker;
+import org.intellij.xquery.annotator.xml.UnresolvedXmlNamespaceChecker;
 import org.intellij.xquery.annotator.xqdoc.XQDocHighlighter;
 import org.intellij.xquery.highlighting.XQuerySyntaxHighlighter;
 import org.intellij.xquery.psi.XQueryAnnotation;
@@ -59,6 +60,7 @@ import org.intellij.xquery.psi.XQueryVarDecl;
 import org.intellij.xquery.psi.XQueryVarName;
 import org.intellij.xquery.psi.XQueryVarRef;
 import org.intellij.xquery.psi.XQueryWindowClause;
+import org.intellij.xquery.psi.XQueryXmlTagNamespace;
 import org.jetbrains.annotations.NotNull;
 
 public class XQueryAnnotator implements Annotator, DumbAware {
@@ -67,6 +69,7 @@ public class XQueryAnnotator implements Annotator, DumbAware {
     private XQDocHighlighter xQDocHighlighter = new XQDocHighlighter();
     private UnresolvedVariableChecker unresolvedVariableChecker = new UnresolvedVariableChecker();
     private UnresolvedFunctionChecker unresolvedFunctionChecker = new UnresolvedFunctionChecker();
+    private UnresolvedXmlNamespaceChecker unresolvedXmlNamespaceChecker = new UnresolvedXmlNamespaceChecker();
 
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
@@ -81,6 +84,9 @@ public class XQueryAnnotator implements Annotator, DumbAware {
         }
         if (element instanceof XQueryFunctionInvocation) {
             unresolvedFunctionChecker.check((XQueryFunctionInvocation) element, holder);
+        }
+        if (element instanceof XQueryXmlTagNamespace) {
+            unresolvedXmlNamespaceChecker.check((XQueryXmlTagNamespace) element, holder);
         }
         if (element instanceof XQueryItemType) {
             highlight(element, holder, XQuerySyntaxHighlighter.ITEM_TYPE);

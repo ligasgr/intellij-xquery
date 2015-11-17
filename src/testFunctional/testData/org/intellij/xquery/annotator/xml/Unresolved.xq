@@ -1,0 +1,1 @@
+<<error descr="Cannot resolve namespace 'html'">html</error>:p>text</<error descr="Cannot resolve namespace 'html'">html</error>:p>
