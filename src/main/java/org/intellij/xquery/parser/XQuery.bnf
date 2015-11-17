@@ -229,6 +229,11 @@
   K_REPLACE              =  "replace"
   K_PRIVATE              =  "private"
   K_BINARY               =  "binary"
+  K_OBJECT_NODE          =  "object-node"
+  K_NUMBER_NODE          =  "number-node"
+  K_BOOLEAN_NODE         =  "boolean-node"
+  K_NULL_NODE            =  "null-node"
+  K_ARRAY_NODE           =  "array-node"
 //  IntegerLiteral = "regexp:[0-9]+"
 //  DecimalLiteral = "regexp:(\.[0-9]+|[0-9]+\.[0-9]*)"
 //  DoubleLiteral  = "regexp:(\.[0-9]+|[0-9]+(\.[0-9]*)?)[eE][+-]?[0-9]+"
@@ -525,12 +530,24 @@ ComputedConstructor ::= CompDocConstructor
  | CompCommentConstructor
  | CompPIConstructor
  | MarklogicCompBinaryConstructor
+ | MarklogicCompObjectNodeConstructor
+ | MarklogicCompNumberNodeConstructor
+ | MarklogicCompBooleanNodeConstructor
+ | MarklogicCompNullNodeConstructor
+ | MarklogicCompArrayNodeConstructor
 CompDocConstructor ::= "document" "{" Expr "}"
 CompElemConstructor ::= "element" (EQName | ("{" Expr "}")) "{" ContentExpr? "}"
 CompMapConstructor ::= "map" "{" MapEntryList? "}"
 MapEntryList ::= MapEntry ("," MapEntry)* ","?
 MapEntry ::= ExprSingle ":=" ExprSingle
 MarklogicCompBinaryConstructor ::= "binary" "{" Expr "}"
+MarklogicCompObjectNodeConstructor ::= "object-node" "{" ObjectPropertyList "}"
+MarklogicCompNumberNodeConstructor ::= "number-node" "{" Expr "}"
+MarklogicCompBooleanNodeConstructor ::= "boolean-node" "{" Expr "}"
+MarklogicCompNullNodeConstructor ::= "null-node" "{" "}"
+MarklogicCompArrayNodeConstructor ::= "array-node" "{" Expr "}"
+ObjectPropertyList ::= ObjectProperty ("," ObjectProperty)* ","?
+ObjectProperty ::= ExprSingle ":" ExprSingle
 ContentExpr ::= Expr
 CompAttrConstructor ::= "attribute" (EQName | ("{" Expr "}")) "{" Expr? "}"
 CompNamespaceConstructor ::= "namespace" (Prefix | ("{" PrefixExpr "}")) "{" URIExpr "}"
@@ -559,14 +576,28 @@ KindTest ::= DocumentTest
  | SchemaAttributeTest
  | PITest
  | CommentTest
+ | MarklogicTextTest
  | TextTest
  | NamespaceNodeTest
+ | MarklogicAnyKindTest
  | AnyKindTest
  | MarklogicBinaryTest
+ | MarklogicObjectNodeTest
+ | MarklogicNumberNodeTest
+ | MarklogicBooleanNodeTest
+ | MarklogicNullNodeTest
+ | MarklogicArrayNodeTest
 AnyKindTest ::= "node" "(" ")" {pin=2}
 DocumentTest ::= "document-node" "(" (ElementTest | SchemaElementTest)? ")" {pin=2}
 TextTest ::= "text" "(" ")" {pin=2}
 MarklogicBinaryTest ::= "binary" "(" ")" {pin=2}
+MarklogicObjectNodeTest ::= "object-node" "(" (StringLiteralOrWildcard)? ")" {pin=2}
+MarklogicNumberNodeTest ::= "number-node" "(" (StringLiteralOrWildcard)? ")" {pin=2}
+MarklogicBooleanNodeTest ::= "boolean-node" "(" (StringLiteralOrWildcard)? ")" {pin=2}
+MarklogicNullNodeTest ::= "null-node" "(" (StringLiteralOrWildcard)? ")" {pin=2}
+MarklogicArrayNodeTest ::= "array-node" "(" (StringLiteralOrWildcard)? ")" {pin=2}
+MarklogicTextTest ::= "text" "(" (StringLiteralOrWildcard) ")"
+MarklogicAnyKindTest ::= "node" "(" (StringLiteralOrWildcard) ")"
 CommentTest ::= "comment" "(" ")" {pin=2}
 NamespaceNodeTest ::= "namespace-node" "(" ")" {pin=2}
 PITest ::= "processing-instruction" "(" (NCName | StringLiteral)? ")" {pin=2}
@@ -576,6 +607,7 @@ SchemaAttributeTest ::= "schema-attribute" "(" AttributeDeclaration ")" {pin=2}
 AttributeDeclaration ::= AttributeName
 ElementTest ::= "element" "(" (ElementNameOrWildcard ("," TypeName "?"?)?)? ")" {pin=2}
 ElementNameOrWildcard ::= ElementName | "*"
+StringLiteralOrWildcard ::= StringLiteral | "*"
 MapTest ::= "map" "(" ("*"| (AtomicOrUnionType "," SequenceType)) ")" {pin=2}
 SchemaElementTest ::= "schema-element" "(" ElementDeclaration ")" {pin=2}
 ElementDeclaration ::= ElementName

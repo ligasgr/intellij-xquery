@@ -2199,4 +2199,201 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "}", "}"
         });
     }
+
+    public void testMarklogicObjectNodeTest() {
+        assertProducedTokens("$a/object-node()", new String[]{
+                "$", "$",
+                "NCName", "a",
+                "/", "/",
+                "object-node", "object-node",
+                "(", "(",
+                ")", ")"
+        });
+    }
+
+    public void testMarklogicObjectNodeConstructor() {
+        assertProducedTokens("object-node {$a}", new String[]{
+                "object-node", "object-node",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "$", "$",
+                "NCName", "a",
+                "}", "}"
+        });
+    }
+
+    public void testMarklogicObjectNodeConstructorWithProperty() {
+        assertProducedTokens("object-node {'a':$a}", new String[]{
+                "object-node", "object-node",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'a'",
+                ":", ":",
+                "$", "$",
+                "NCName", "a",
+                "}", "}"
+        });
+    }
+
+    public void testMarklogicNumberNodeTest() {
+        assertProducedTokens("$a/number-node()", new String[]{
+                "$", "$",
+                "NCName", "a",
+                "/", "/",
+                "number-node", "number-node",
+                "(", "(",
+                ")", ")"
+        });
+    }
+
+    public void testMarklogicNumberNodeTestWithLiteral() {
+        assertProducedTokens("$a/number-node('count')", new String[]{
+                "$", "$",
+                "NCName", "a",
+                "/", "/",
+                "number-node", "number-node",
+                "(", "(",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'count'",
+                ")", ")"
+        });
+    }
+
+    public void testMarklogicNumberNodeConstructor() {
+        assertProducedTokens("number-node {$a}", new String[]{
+                "number-node", "number-node",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "$", "$",
+                "NCName", "a",
+                "}", "}"
+        });
+    }
+
+    public void testMarklogicBooleanNodeTest() {
+        assertProducedTokens("$a/boolean-node()", new String[]{
+                "$", "$",
+                "NCName", "a",
+                "/", "/",
+                "boolean-node", "boolean-node",
+                "(", "(",
+                ")", ")"
+        });
+    }
+
+    public void testMarklogicBooleanNodeTestWithLiteral() {
+        assertProducedTokens("$a/boolean-node('completed')", new String[]{
+                "$", "$",
+                "NCName", "a",
+                "/", "/",
+                "boolean-node", "boolean-node",
+                "(", "(",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'completed'",
+                ")", ")"
+        });
+    }
+
+    public void testMarklogicObjectBooleanConstructor() {
+        assertProducedTokens("boolean-node {$a}", new String[]{
+                "boolean-node", "boolean-node",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "$", "$",
+                "NCName", "a",
+                "}", "}"
+        });
+    }
+    public void testMarklogicNullNodeTest() {
+        assertProducedTokens("$a/null-node()", new String[]{
+                "$", "$",
+                "NCName", "a",
+                "/", "/",
+                "null-node", "null-node",
+                "(", "(",
+                ")", ")"
+        });
+    }
+
+    public void testMarklogicNullNodeTestWithLiteral() {
+        assertProducedTokens("$a/null-node('account')", new String[]{
+                "$", "$",
+                "NCName", "a",
+                "/", "/",
+                "null-node", "null-node",
+                "(", "(",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'account'",
+                ")", ")"
+        });
+    }
+
+    public void testMarklogicNullNodeConstructor() {
+        assertProducedTokens("null-node {}", new String[]{
+                "null-node", "null-node",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "}", "}"
+        });
+    }
+
+    public void testMarklogicArrayNodeTest() {
+        assertProducedTokens("$a/array-node()", new String[]{
+                "$", "$",
+                "NCName", "a",
+                "/", "/",
+                "array-node", "array-node",
+                "(", "(",
+                ")", ")"
+        });
+    }
+
+    public void testMarklogicArrayNodeTestWithLiteral() {
+        assertProducedTokens("$a/array-node('names')", new String[]{
+                "$", "$",
+                "NCName", "a",
+                "/", "/",
+                "array-node", "array-node",
+                "(", "(",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'names'",
+                ")", ")"
+        });
+    }
+
+    public void testMarklogicArrayNodeConstructor() {
+        assertProducedTokens("array-node {$a}", new String[]{
+                "array-node", "array-node",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "$", "$",
+                "NCName", "a",
+                "}", "}"
+        });
+    }    public void testMarklogicTextTest() {
+        assertProducedTokens("$a/text('title')", new String[]{
+                "$", "$",
+                "NCName", "a",
+                "/", "/",
+                "text", "text",
+                "(", "(",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'title'",
+                ")", ")"
+        });
+    }
+
+    public void testMarklogicAnyKindTest() {
+        assertProducedTokens("$a/node('title')", new String[]{
+                "$", "$",
+                "NCName", "a",
+                "/", "/",
+                "node", "node",
+                "(", "(",
+                "WHITE_SPACE", "",
+                "StringLiteral", "'title'",
+                ")", ")"
+        });
+    }
 }
