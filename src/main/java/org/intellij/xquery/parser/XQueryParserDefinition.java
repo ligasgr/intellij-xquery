@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,11 +36,6 @@ import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryTypes;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * User: ligasgr
- * Date: 10/02/13
- * Time: 19:01
- */
 public class XQueryParserDefinition implements ParserDefinition {
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
     public static final TokenSet COMMENTS = TokenSet.create(
@@ -50,6 +45,14 @@ public class XQueryParserDefinition implements ParserDefinition {
             XQueryBasicTypes.DOC_COMMENT_CONTENT,
             XQueryBasicTypes.DOC_COMMENT_END,
             XQueryBasicTypes.DOC_COMMENT_START
+    );
+    public static final TokenSet CHARACTER_CONTENTS = TokenSet.create(
+            XQueryTypes.ELEMENTCONTENTCHAR,
+            XQueryTypes.PRAGMACONTENTCHAR,
+            XQueryTypes.CDATASECTIONCONTENTCHAR,
+            XQueryTypes.DIRPICONTENTCHAR,
+            XQueryTypes.DIRCOMMENTCHAR,
+            XQueryTypes.CHAR
     );
     public static final TokenSet STRINGS = TokenSet.create(XQueryTypes.STRINGLITERAL);
     public static final IFileElementType FILE = new IFileElementType(Language.<XQueryLanguage>findInstance
