@@ -21,11 +21,6 @@ import com.intellij.lexer.Lexer;
 import org.intellij.xquery.BaseFunctionalTestCase;
 import org.jetbrains.annotations.NonNls;
 
-/**
- * User: ligasgr
- * Date: 29/07/13
- * Time: 23:28
- */
 public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     private static void assertProducedTokens(@NonNls String text, @NonNls String[] expectedTokens) {
