@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+  ~ Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
   ~ (see the CONTRIBUTORS file).
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,6 +75,9 @@
         <localInspection enabledByDefault="true" shortName="UnusedImports" groupName="XQuery"
                          displayName="Unused import"
                          implementationClass="org.intellij.xquery.inspection.imports.UnusedImportsInspection"/>
+        <localInspection enabledByDefault="true" shortName="UnusedNamespaceDeclaration" groupName="XQuery"
+                         displayName="Unused namespace declaration"
+                         implementationClass="org.intellij.xquery.inspection.namespace.UnusedNamespaceDeclarationInspection"/>
         <localInspection enabledByDefault="true" shortName="UnusedVariable" groupName="XQuery"
                          displayName="Unused variable"
                          implementationClass="org.intellij.xquery.inspection.variable.UnusedVariableInspection"/>

@@ -19,17 +19,33 @@ package org.intellij.xquery.formatter;
 
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.psi.PsiFile;
-import org.intellij.xquery.inspection.imports.AnnotationNamespacesExtractor;
-import org.intellij.xquery.inspection.imports.FunctionNamespacesExtractor;
-import org.intellij.xquery.inspection.imports.UnusedImportsFinder;
-import org.intellij.xquery.inspection.imports.VariableNamespacesExtractor;
+import org.intellij.xquery.inspection.imports.UnusedNamespaceSourceFinder;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryModuleImport;
+import org.intellij.xquery.psi.XQueryNamespaceDecl;
+import org.intellij.xquery.psi.XQueryNamespaceSource;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class XQueryImportOptimizer implements ImportOptimizer {
+
+    private final UnusedNamespaceSourceFinder<XQueryModuleImport> unusedImportsFinder = new UnusedNamespaceSourceFinder<XQueryModuleImport>() {
+        @NotNull
+        @Override
+        protected Collection<XQueryModuleImport> getAllNamespaceSources(XQueryFile xQueryFile) {
+            return xQueryFile.getModuleImports();
+        }
+    };
+    private final UnusedNamespaceSourceFinder<XQueryNamespaceDecl> unusedNamespaceDeclarationsFinder = new UnusedNamespaceSourceFinder<XQueryNamespaceDecl>() {
+        @NotNull
+        @Override
+        protected Collection<XQueryNamespaceDecl> getAllNamespaceSources(XQueryFile xQueryFile) {
+            return xQueryFile.getNamespaceDeclarations();
+        }
+    };
+
     @Override
     public boolean supports(PsiFile psiFile) {
         return psiFile instanceof XQueryFile;
@@ -38,28 +54,25 @@ public class XQueryImportOptimizer implements ImportOptimizer {
     @NotNull
     @Override
     public Runnable processFile(final PsiFile psiFile) {
-        FunctionNamespacesExtractor functionNamespacesExtractor = new FunctionNamespacesExtractor();
-        VariableNamespacesExtractor variableNamespacesExtractor = new VariableNamespacesExtractor();
-        AnnotationNamespacesExtractor annotationNamespacesExtractor = new AnnotationNamespacesExtractor();
-        UnusedImportsFinder unusedImportsFinder =
-                new UnusedImportsFinder(functionNamespacesExtractor, variableNamespacesExtractor, annotationNamespacesExtractor);
-
-        Collection<XQueryModuleImport> unusedImports = unusedImportsFinder.getUnusedImports((XQueryFile) psiFile);
-
-        return new RemoveUnusedImport(unusedImports);
+        Collection<XQueryModuleImport> unusedImports = unusedImportsFinder.getUnusedNamespaceSources((XQueryFile) psiFile);
+        Collection<XQueryNamespaceDecl> unusedNamespaceDeclarations = unusedNamespaceDeclarationsFinder.getUnusedNamespaceSources((XQueryFile) psiFile);
+        Collection<XQueryNamespaceSource> unusedNamespaceSources = new ArrayList<XQueryNamespaceSource>(unusedImports.size() + unusedNamespaceDeclarations.size());
+        unusedNamespaceSources.addAll(unusedImports);
+        unusedNamespaceSources.addAll(unusedNamespaceDeclarations);
+        return new RemoveUnusedImport(unusedNamespaceSources);
     }
 
     private static class RemoveUnusedImport implements Runnable {
 
-        private final Collection<XQueryModuleImport> unusedImports;
+        private final Collection<XQueryNamespaceSource> unusedNamespaceSources;
 
-        private RemoveUnusedImport(Collection<XQueryModuleImport> unusedImports) {
-            this.unusedImports = unusedImports;
+        private RemoveUnusedImport(Collection<XQueryNamespaceSource> unusedNamespaceSources) {
+            this.unusedNamespaceSources = unusedNamespaceSources;
         }
 
         @Override
         public void run() {
-            for (XQueryModuleImport unusedImport : unusedImports) {
+            for (XQueryNamespaceSource unusedImport : unusedNamespaceSources) {
                 unusedImport.delete();
             }
         }

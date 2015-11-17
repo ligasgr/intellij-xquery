@@ -24,6 +24,7 @@ import com.intellij.codeInspection.compiler.RemoveElementQuickFix;
 import com.intellij.psi.PsiFile;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryModuleImport;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,12 +36,13 @@ public class UnusedImportsInspection extends LocalInspectionTool {
 
     public static final String UNUSED_IMPORT = "Unused import";
     public static final String REMOVE_UNUSED_IMPORT_QUICKFIX_NAME = "Remove unused import";
-
-    private FunctionNamespacesExtractor functionNamespacesExtractor = new FunctionNamespacesExtractor();
-    private VariableNamespacesExtractor variableNamespacesExtractor = new VariableNamespacesExtractor();
-    AnnotationNamespacesExtractor annotationNamespacesExtractor = new AnnotationNamespacesExtractor();
-    private final UnusedImportsFinder unusedImportsFinder = new UnusedImportsFinder(functionNamespacesExtractor,
-            variableNamespacesExtractor, annotationNamespacesExtractor);
+    private final UnusedNamespaceSourceFinder<XQueryModuleImport> unusedImportsFinder = new UnusedNamespaceSourceFinder<XQueryModuleImport>() {
+        @NotNull
+        @Override
+        protected Collection<XQueryModuleImport> getAllNamespaceSources(XQueryFile xQueryFile) {
+            return xQueryFile.getModuleImports();
+        }
+    };
 
     @Override
     public ProblemDescriptor[] checkFile(PsiFile file, InspectionManager manager, boolean isOnTheFly) {
@@ -52,7 +54,7 @@ public class UnusedImportsInspection extends LocalInspectionTool {
     }
 
     private List<ProblemDescriptor> getUnusedImportProblems(XQueryFile xQueryFile, InspectionManager manager) {
-        Collection<XQueryModuleImport> unusedImports = unusedImportsFinder.getUnusedImports(xQueryFile);
+        Collection<XQueryModuleImport> unusedImports = unusedImportsFinder.getUnusedNamespaceSources(xQueryFile);
         List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
         for (XQueryModuleImport unused : unusedImports) {
             problems.add(manager.createProblemDescriptor(unused, UNUSED_IMPORT,

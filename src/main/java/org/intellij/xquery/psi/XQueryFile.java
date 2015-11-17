@@ -269,6 +269,10 @@ public class XQueryFile extends PsiFileBase {
         return annotations.getValue();
     }
 
+    public Collection<XQueryXmlTagName> getXmlTagNames() {
+        return PsiTreeUtil.findChildrenOfType(this, XQueryXmlTagName.class);
+    }
+
     private Collection<XQueryVarDecl> calcVariableDeclarations() {
         Collection<XQueryVarDecl> variableDeclarations = PsiTreeUtil.findChildrenOfType(this, XQueryVarDecl.class);
         return variableDeclarations;

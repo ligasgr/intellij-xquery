@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,28 +15,25 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.inspection.imports;
+package org.intellij.xquery.inspection;
 
 import org.intellij.xquery.psi.XQueryFile;
+import org.intellij.xquery.psi.XQueryFunctionInvocation;
 import org.intellij.xquery.psi.XQueryPrefix;
-import org.intellij.xquery.psi.XQueryVarRef;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class VariableNamespacesExtractor {
+public class FunctionNamespacesExtractor {
 
-    public Set<String> getNamespacesUsedByVariables(XQueryFile xQueryFile) {
+    public Set<String> getNamespacesUsedByFunctions(XQueryFile xQueryFile) {
         Set<String> usedNamespaces = new HashSet<String>();
-        for (XQueryVarRef variableReference : xQueryFile.getVariableReferences()) {
-            if (variableReference.getVarName() != null) {
-                XQueryPrefix namespacePrefix = variableReference.getVarName().getPrefix();
-                if (namespacePrefix != null) {
-                    usedNamespaces.add(xQueryFile.mapFunctionPrefixToNamespace(namespacePrefix.getText()));
-                }
-            }
+        for (XQueryFunctionInvocation functionInvocation : xQueryFile.getFunctionInvocations()) {
+            XQueryPrefix namespacePrefix = functionInvocation.getFunctionName().getPrefix();
+            String namespacePrefixText = namespacePrefix != null ? namespacePrefix.getText() : null;
+            String functionNamespace = xQueryFile.mapFunctionPrefixToNamespace(namespacePrefixText);
+            usedNamespaces.add(functionNamespace);
         }
-
         return usedNamespaces;
     }
 }

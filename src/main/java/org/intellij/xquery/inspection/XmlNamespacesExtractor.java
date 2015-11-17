@@ -15,23 +15,21 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.inspection.imports;
+package org.intellij.xquery.inspection;
 
-import org.intellij.xquery.psi.XQueryAnnotation;
 import org.intellij.xquery.psi.XQueryFile;
-import org.intellij.xquery.psi.XQueryPrefix;
+import org.intellij.xquery.psi.XQueryXmlTagName;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class AnnotationNamespacesExtractor {
+public class XmlNamespacesExtractor {
 
-    public Set<String> getNamespacesUsedByAnnotations(XQueryFile xQueryFile) {
+    public Set<String> getNamespacesUsedByXml(XQueryFile xQueryFile) {
         Set<String> usedNamespaces = new HashSet<String>();
-        for (XQueryAnnotation annotation : xQueryFile.getAnnotations()) {
-            XQueryPrefix namespacePrefix = annotation.getAnnotationName().getPrefix();
-            if (namespacePrefix != null) {
-                usedNamespaces.add(xQueryFile.mapFunctionPrefixToNamespace(namespacePrefix.getText()));
+        for (XQueryXmlTagName tagName : xQueryFile.getXmlTagNames()) {
+            if (tagName.getXmlTagNamespace() != null) {
+                usedNamespaces.add(xQueryFile.mapFunctionPrefixToNamespace(tagName.getXmlTagNamespace().getText()));
             }
         }
 
