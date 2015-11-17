@@ -515,7 +515,19 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitMarklogicAnyKindTest(@NotNull XQueryMarklogicAnyKindTest o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMarklogicArrayNodeTest(@NotNull XQueryMarklogicArrayNodeTest o) {
+    visitPsiElement(o);
+  }
+
   public void visitMarklogicBinaryTest(@NotNull XQueryMarklogicBinaryTest o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMarklogicBooleanNodeTest(@NotNull XQueryMarklogicBooleanNodeTest o) {
     visitPsiElement(o);
   }
 
@@ -523,11 +535,47 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitMarklogicCompArrayNodeConstructor(@NotNull XQueryMarklogicCompArrayNodeConstructor o) {
+    visitPsiElement(o);
+  }
+
   public void visitMarklogicCompBinaryConstructor(@NotNull XQueryMarklogicCompBinaryConstructor o) {
     visitPsiElement(o);
   }
 
+  public void visitMarklogicCompBooleanNodeConstructor(@NotNull XQueryMarklogicCompBooleanNodeConstructor o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMarklogicCompNullNodeConstructor(@NotNull XQueryMarklogicCompNullNodeConstructor o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMarklogicCompNumberNodeConstructor(@NotNull XQueryMarklogicCompNumberNodeConstructor o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMarklogicCompObjectNodeConstructor(@NotNull XQueryMarklogicCompObjectNodeConstructor o) {
+    visitPsiElement(o);
+  }
+
   public void visitMarklogicNamespaceAxis(@NotNull XQueryMarklogicNamespaceAxis o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMarklogicNullNodeTest(@NotNull XQueryMarklogicNullNodeTest o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMarklogicNumberNodeTest(@NotNull XQueryMarklogicNumberNodeTest o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMarklogicObjectNodeTest(@NotNull XQueryMarklogicObjectNodeTest o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMarklogicTextTest(@NotNull XQueryMarklogicTextTest o) {
     visitPsiElement(o);
   }
 
@@ -600,6 +648,14 @@ public class XQueryVisitor extends PsiElementVisitor {
   }
 
   public void visitNumericLiteral(@NotNull XQueryNumericLiteral o) {
+    visitPsiElement(o);
+  }
+
+  public void visitObjectProperty(@NotNull XQueryObjectProperty o) {
+    visitPsiElement(o);
+  }
+
+  public void visitObjectPropertyList(@NotNull XQueryObjectPropertyList o) {
     visitPsiElement(o);
   }
 
@@ -805,6 +861,10 @@ public class XQueryVisitor extends PsiElementVisitor {
 
   public void visitStringConcatExpr(@NotNull XQueryStringConcatExpr o) {
     visitExprSingle(o);
+  }
+
+  public void visitStringLiteralOrWildcard(@NotNull XQueryStringLiteralOrWildcard o) {
+    visitPsiElement(o);
   }
 
   public void visitSwitchCaseClause(@NotNull XQuerySwitchCaseClause o) {

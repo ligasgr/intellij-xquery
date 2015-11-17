@@ -17,11 +17,6 @@
 
 package org.intellij.xquery.parser;
 
-/**
- * User: ligasgr
- * Date: 14/06/13
- * Time: 21:01
- */
 public class XQueryParserTest extends BaseParserTest {
 
     public XQueryParserTest() {

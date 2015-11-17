@@ -26,9 +26,10 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.lang.PsiParser;
+import com.intellij.lang.LightPsiParser;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
-public class XQueryParser implements PsiParser {
+public class XQueryParser implements PsiParser, LightPsiParser {
 
   public ASTNode parse(IElementType t, PsiBuilder b) {
     parseLight(t, b);
@@ -408,17 +409,53 @@ public class XQueryParser implements PsiParser {
     else if (t == MARKLOGIC_ANNOTATION) {
       r = MarklogicAnnotation(b, 0);
     }
+    else if (t == MARKLOGIC_ANY_KIND_TEST) {
+      r = MarklogicAnyKindTest(b, 0);
+    }
+    else if (t == MARKLOGIC_ARRAY_NODE_TEST) {
+      r = MarklogicArrayNodeTest(b, 0);
+    }
     else if (t == MARKLOGIC_BINARY_TEST) {
       r = MarklogicBinaryTest(b, 0);
+    }
+    else if (t == MARKLOGIC_BOOLEAN_NODE_TEST) {
+      r = MarklogicBooleanNodeTest(b, 0);
     }
     else if (t == MARKLOGIC_CATCH_ERROR_LIST) {
       r = MarklogicCatchErrorList(b, 0);
     }
+    else if (t == MARKLOGIC_COMP_ARRAY_NODE_CONSTRUCTOR) {
+      r = MarklogicCompArrayNodeConstructor(b, 0);
+    }
     else if (t == MARKLOGIC_COMP_BINARY_CONSTRUCTOR) {
       r = MarklogicCompBinaryConstructor(b, 0);
     }
+    else if (t == MARKLOGIC_COMP_BOOLEAN_NODE_CONSTRUCTOR) {
+      r = MarklogicCompBooleanNodeConstructor(b, 0);
+    }
+    else if (t == MARKLOGIC_COMP_NULL_NODE_CONSTRUCTOR) {
+      r = MarklogicCompNullNodeConstructor(b, 0);
+    }
+    else if (t == MARKLOGIC_COMP_NUMBER_NODE_CONSTRUCTOR) {
+      r = MarklogicCompNumberNodeConstructor(b, 0);
+    }
+    else if (t == MARKLOGIC_COMP_OBJECT_NODE_CONSTRUCTOR) {
+      r = MarklogicCompObjectNodeConstructor(b, 0);
+    }
     else if (t == MARKLOGIC_NAMESPACE_AXIS) {
       r = MarklogicNamespaceAxis(b, 0);
+    }
+    else if (t == MARKLOGIC_NULL_NODE_TEST) {
+      r = MarklogicNullNodeTest(b, 0);
+    }
+    else if (t == MARKLOGIC_NUMBER_NODE_TEST) {
+      r = MarklogicNumberNodeTest(b, 0);
+    }
+    else if (t == MARKLOGIC_OBJECT_NODE_TEST) {
+      r = MarklogicObjectNodeTest(b, 0);
+    }
+    else if (t == MARKLOGIC_TEXT_TEST) {
+      r = MarklogicTextTest(b, 0);
     }
     else if (t == MARKLOGIC_VALIDATION) {
       r = MarklogicValidation(b, 0);
@@ -473,6 +510,12 @@ public class XQueryParser implements PsiParser {
     }
     else if (t == NUMERIC_LITERAL) {
       r = NumericLiteral(b, 0);
+    }
+    else if (t == OBJECT_PROPERTY) {
+      r = ObjectProperty(b, 0);
+    }
+    else if (t == OBJECT_PROPERTY_LIST) {
+      r = ObjectPropertyList(b, 0);
     }
     else if (t == OCCURRENCE_INDICATOR) {
       r = OccurrenceIndicator(b, 0);
@@ -626,6 +669,9 @@ public class XQueryParser implements PsiParser {
     }
     else if (t == STRING_CONCAT_EXPR) {
       r = StringConcatExpr(b, 0);
+    }
+    else if (t == STRING_LITERAL_OR_WILDCARD) {
+      r = StringLiteralOrWildcard(b, 0);
     }
     else if (t == SWITCH_CASE_CLAUSE) {
       r = SwitchCaseClause(b, 0);
@@ -1903,6 +1949,11 @@ public class XQueryParser implements PsiParser {
   //  | CompCommentConstructor
   //  | CompPIConstructor
   //  | MarklogicCompBinaryConstructor
+  //  | MarklogicCompObjectNodeConstructor
+  //  | MarklogicCompNumberNodeConstructor
+  //  | MarklogicCompBooleanNodeConstructor
+  //  | MarklogicCompNullNodeConstructor
+  //  | MarklogicCompArrayNodeConstructor
   public static boolean ComputedConstructor(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ComputedConstructor")) return false;
     boolean r;
@@ -1916,6 +1967,11 @@ public class XQueryParser implements PsiParser {
     if (!r) r = CompCommentConstructor(b, l + 1);
     if (!r) r = CompPIConstructor(b, l + 1);
     if (!r) r = MarklogicCompBinaryConstructor(b, l + 1);
+    if (!r) r = MarklogicCompObjectNodeConstructor(b, l + 1);
+    if (!r) r = MarklogicCompNumberNodeConstructor(b, l + 1);
+    if (!r) r = MarklogicCompBooleanNodeConstructor(b, l + 1);
+    if (!r) r = MarklogicCompNullNodeConstructor(b, l + 1);
+    if (!r) r = MarklogicCompArrayNodeConstructor(b, l + 1);
     exit_section_(b, l, m, COMPUTED_CONSTRUCTOR, r, false, null);
     return r;
   }
@@ -3902,10 +3958,17 @@ public class XQueryParser implements PsiParser {
   //  | SchemaAttributeTest
   //  | PITest
   //  | CommentTest
+  //  | MarklogicTextTest
   //  | TextTest
   //  | NamespaceNodeTest
+  //  | MarklogicAnyKindTest
   //  | AnyKindTest
   //  | MarklogicBinaryTest
+  //  | MarklogicObjectNodeTest
+  //  | MarklogicNumberNodeTest
+  //  | MarklogicBooleanNodeTest
+  //  | MarklogicNullNodeTest
+  //  | MarklogicArrayNodeTest
   public static boolean KindTest(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "KindTest")) return false;
     boolean r;
@@ -3918,10 +3981,17 @@ public class XQueryParser implements PsiParser {
     if (!r) r = SchemaAttributeTest(b, l + 1);
     if (!r) r = PITest(b, l + 1);
     if (!r) r = CommentTest(b, l + 1);
+    if (!r) r = MarklogicTextTest(b, l + 1);
     if (!r) r = TextTest(b, l + 1);
     if (!r) r = NamespaceNodeTest(b, l + 1);
+    if (!r) r = MarklogicAnyKindTest(b, l + 1);
     if (!r) r = AnyKindTest(b, l + 1);
     if (!r) r = MarklogicBinaryTest(b, l + 1);
+    if (!r) r = MarklogicObjectNodeTest(b, l + 1);
+    if (!r) r = MarklogicNumberNodeTest(b, l + 1);
+    if (!r) r = MarklogicBooleanNodeTest(b, l + 1);
+    if (!r) r = MarklogicNullNodeTest(b, l + 1);
+    if (!r) r = MarklogicArrayNodeTest(b, l + 1);
     exit_section_(b, l, m, KIND_TEST, r, false, null);
     return r;
   }
@@ -4145,6 +4215,64 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // "node" "(" (StringLiteralOrWildcard) ")"
+  public static boolean MarklogicAnyKindTest(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicAnyKindTest")) return false;
+    if (!nextTokenIs(b, K_NODE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_NODE);
+    r = r && consumeToken(b, L_PAR);
+    r = r && MarklogicAnyKindTest_2(b, l + 1);
+    r = r && consumeToken(b, R_PAR);
+    exit_section_(b, m, MARKLOGIC_ANY_KIND_TEST, r);
+    return r;
+  }
+
+  // (StringLiteralOrWildcard)
+  private static boolean MarklogicAnyKindTest_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicAnyKindTest_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = StringLiteralOrWildcard(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // "array-node" "(" (StringLiteralOrWildcard)? ")"
+  public static boolean MarklogicArrayNodeTest(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicArrayNodeTest")) return false;
+    if (!nextTokenIs(b, K_ARRAY_NODE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeToken(b, K_ARRAY_NODE);
+    r = r && consumeToken(b, L_PAR);
+    p = r; // pin = 2
+    r = r && report_error_(b, MarklogicArrayNodeTest_2(b, l + 1));
+    r = p && consumeToken(b, R_PAR) && r;
+    exit_section_(b, l, m, MARKLOGIC_ARRAY_NODE_TEST, r, p, null);
+    return r || p;
+  }
+
+  // (StringLiteralOrWildcard)?
+  private static boolean MarklogicArrayNodeTest_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicArrayNodeTest_2")) return false;
+    MarklogicArrayNodeTest_2_0(b, l + 1);
+    return true;
+  }
+
+  // (StringLiteralOrWildcard)
+  private static boolean MarklogicArrayNodeTest_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicArrayNodeTest_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = StringLiteralOrWildcard(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // "binary" "(" ")"
   public static boolean MarklogicBinaryTest(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MarklogicBinaryTest")) return false;
@@ -4160,6 +4288,39 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // "boolean-node" "(" (StringLiteralOrWildcard)? ")"
+  public static boolean MarklogicBooleanNodeTest(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicBooleanNodeTest")) return false;
+    if (!nextTokenIs(b, K_BOOLEAN_NODE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeToken(b, K_BOOLEAN_NODE);
+    r = r && consumeToken(b, L_PAR);
+    p = r; // pin = 2
+    r = r && report_error_(b, MarklogicBooleanNodeTest_2(b, l + 1));
+    r = p && consumeToken(b, R_PAR) && r;
+    exit_section_(b, l, m, MARKLOGIC_BOOLEAN_NODE_TEST, r, p, null);
+    return r || p;
+  }
+
+  // (StringLiteralOrWildcard)?
+  private static boolean MarklogicBooleanNodeTest_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicBooleanNodeTest_2")) return false;
+    MarklogicBooleanNodeTest_2_0(b, l + 1);
+    return true;
+  }
+
+  // (StringLiteralOrWildcard)
+  private static boolean MarklogicBooleanNodeTest_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicBooleanNodeTest_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = StringLiteralOrWildcard(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // "(" "$" VarName ")"
   public static boolean MarklogicCatchErrorList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MarklogicCatchErrorList")) return false;
@@ -4171,6 +4332,21 @@ public class XQueryParser implements PsiParser {
     r = r && VarName(b, l + 1);
     r = r && consumeToken(b, R_PAR);
     exit_section_(b, m, MARKLOGIC_CATCH_ERROR_LIST, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // "array-node" "{" Expr "}"
+  public static boolean MarklogicCompArrayNodeConstructor(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicCompArrayNodeConstructor")) return false;
+    if (!nextTokenIs(b, K_ARRAY_NODE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_ARRAY_NODE);
+    r = r && consumeToken(b, L_C_BRACE);
+    r = r && Expr(b, l + 1);
+    r = r && consumeToken(b, R_C_BRACE);
+    exit_section_(b, m, MARKLOGIC_COMP_ARRAY_NODE_CONSTRUCTOR, r);
     return r;
   }
 
@@ -4190,6 +4366,65 @@ public class XQueryParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // "boolean-node" "{" Expr "}"
+  public static boolean MarklogicCompBooleanNodeConstructor(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicCompBooleanNodeConstructor")) return false;
+    if (!nextTokenIs(b, K_BOOLEAN_NODE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_BOOLEAN_NODE);
+    r = r && consumeToken(b, L_C_BRACE);
+    r = r && Expr(b, l + 1);
+    r = r && consumeToken(b, R_C_BRACE);
+    exit_section_(b, m, MARKLOGIC_COMP_BOOLEAN_NODE_CONSTRUCTOR, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // "null-node" "{" "}"
+  public static boolean MarklogicCompNullNodeConstructor(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicCompNullNodeConstructor")) return false;
+    if (!nextTokenIs(b, K_NULL_NODE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_NULL_NODE);
+    r = r && consumeToken(b, L_C_BRACE);
+    r = r && consumeToken(b, R_C_BRACE);
+    exit_section_(b, m, MARKLOGIC_COMP_NULL_NODE_CONSTRUCTOR, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // "number-node" "{" Expr "}"
+  public static boolean MarklogicCompNumberNodeConstructor(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicCompNumberNodeConstructor")) return false;
+    if (!nextTokenIs(b, K_NUMBER_NODE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_NUMBER_NODE);
+    r = r && consumeToken(b, L_C_BRACE);
+    r = r && Expr(b, l + 1);
+    r = r && consumeToken(b, R_C_BRACE);
+    exit_section_(b, m, MARKLOGIC_COMP_NUMBER_NODE_CONSTRUCTOR, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // "object-node" "{" ObjectPropertyList "}"
+  public static boolean MarklogicCompObjectNodeConstructor(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicCompObjectNodeConstructor")) return false;
+    if (!nextTokenIs(b, K_OBJECT_NODE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_OBJECT_NODE);
+    r = r && consumeToken(b, L_C_BRACE);
+    r = r && ObjectPropertyList(b, l + 1);
+    r = r && consumeToken(b, R_C_BRACE);
+    exit_section_(b, m, MARKLOGIC_COMP_OBJECT_NODE_CONSTRUCTOR, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // "namespace" "::" NodeTest
   public static boolean MarklogicNamespaceAxis(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MarklogicNamespaceAxis")) return false;
@@ -4202,6 +4437,130 @@ public class XQueryParser implements PsiParser {
     r = r && NodeTest(b, l + 1);
     exit_section_(b, l, m, MARKLOGIC_NAMESPACE_AXIS, r, p, null);
     return r || p;
+  }
+
+  /* ********************************************************** */
+  // "null-node" "(" (StringLiteralOrWildcard)? ")"
+  public static boolean MarklogicNullNodeTest(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicNullNodeTest")) return false;
+    if (!nextTokenIs(b, K_NULL_NODE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeToken(b, K_NULL_NODE);
+    r = r && consumeToken(b, L_PAR);
+    p = r; // pin = 2
+    r = r && report_error_(b, MarklogicNullNodeTest_2(b, l + 1));
+    r = p && consumeToken(b, R_PAR) && r;
+    exit_section_(b, l, m, MARKLOGIC_NULL_NODE_TEST, r, p, null);
+    return r || p;
+  }
+
+  // (StringLiteralOrWildcard)?
+  private static boolean MarklogicNullNodeTest_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicNullNodeTest_2")) return false;
+    MarklogicNullNodeTest_2_0(b, l + 1);
+    return true;
+  }
+
+  // (StringLiteralOrWildcard)
+  private static boolean MarklogicNullNodeTest_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicNullNodeTest_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = StringLiteralOrWildcard(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // "number-node" "(" (StringLiteralOrWildcard)? ")"
+  public static boolean MarklogicNumberNodeTest(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicNumberNodeTest")) return false;
+    if (!nextTokenIs(b, K_NUMBER_NODE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeToken(b, K_NUMBER_NODE);
+    r = r && consumeToken(b, L_PAR);
+    p = r; // pin = 2
+    r = r && report_error_(b, MarklogicNumberNodeTest_2(b, l + 1));
+    r = p && consumeToken(b, R_PAR) && r;
+    exit_section_(b, l, m, MARKLOGIC_NUMBER_NODE_TEST, r, p, null);
+    return r || p;
+  }
+
+  // (StringLiteralOrWildcard)?
+  private static boolean MarklogicNumberNodeTest_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicNumberNodeTest_2")) return false;
+    MarklogicNumberNodeTest_2_0(b, l + 1);
+    return true;
+  }
+
+  // (StringLiteralOrWildcard)
+  private static boolean MarklogicNumberNodeTest_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicNumberNodeTest_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = StringLiteralOrWildcard(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // "object-node" "(" (StringLiteralOrWildcard)? ")"
+  public static boolean MarklogicObjectNodeTest(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicObjectNodeTest")) return false;
+    if (!nextTokenIs(b, K_OBJECT_NODE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeToken(b, K_OBJECT_NODE);
+    r = r && consumeToken(b, L_PAR);
+    p = r; // pin = 2
+    r = r && report_error_(b, MarklogicObjectNodeTest_2(b, l + 1));
+    r = p && consumeToken(b, R_PAR) && r;
+    exit_section_(b, l, m, MARKLOGIC_OBJECT_NODE_TEST, r, p, null);
+    return r || p;
+  }
+
+  // (StringLiteralOrWildcard)?
+  private static boolean MarklogicObjectNodeTest_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicObjectNodeTest_2")) return false;
+    MarklogicObjectNodeTest_2_0(b, l + 1);
+    return true;
+  }
+
+  // (StringLiteralOrWildcard)
+  private static boolean MarklogicObjectNodeTest_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicObjectNodeTest_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = StringLiteralOrWildcard(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // "text" "(" (StringLiteralOrWildcard) ")"
+  public static boolean MarklogicTextTest(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicTextTest")) return false;
+    if (!nextTokenIs(b, K_TEXT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_TEXT);
+    r = r && consumeToken(b, L_PAR);
+    r = r && MarklogicTextTest_2(b, l + 1);
+    r = r && consumeToken(b, R_PAR);
+    exit_section_(b, m, MARKLOGIC_TEXT_TEST, r);
+    return r;
+  }
+
+  // (StringLiteralOrWildcard)
+  private static boolean MarklogicTextTest_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicTextTest_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = StringLiteralOrWildcard(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -4593,6 +4952,62 @@ public class XQueryParser implements PsiParser {
     if (!r) r = consumeToken(b, DOUBLELITERAL);
     exit_section_(b, l, m, NUMERIC_LITERAL, r, false, null);
     return r;
+  }
+
+  /* ********************************************************** */
+  // ExprSingle ":" ExprSingle
+  public static boolean ObjectProperty(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ObjectProperty")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, "<object property>");
+    r = ExprSingle(b, l + 1);
+    r = r && consumeToken(b, COLON);
+    r = r && ExprSingle(b, l + 1);
+    exit_section_(b, l, m, OBJECT_PROPERTY, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ObjectProperty ("," ObjectProperty)* ","?
+  public static boolean ObjectPropertyList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ObjectPropertyList")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, "<object property list>");
+    r = ObjectProperty(b, l + 1);
+    r = r && ObjectPropertyList_1(b, l + 1);
+    r = r && ObjectPropertyList_2(b, l + 1);
+    exit_section_(b, l, m, OBJECT_PROPERTY_LIST, r, false, null);
+    return r;
+  }
+
+  // ("," ObjectProperty)*
+  private static boolean ObjectPropertyList_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ObjectPropertyList_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!ObjectPropertyList_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ObjectPropertyList_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // "," ObjectProperty
+  private static boolean ObjectPropertyList_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ObjectPropertyList_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && ObjectProperty(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ","?
+  private static boolean ObjectPropertyList_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ObjectPropertyList_2")) return false;
+    consumeToken(b, COMMA);
+    return true;
   }
 
   /* ********************************************************** */
@@ -6194,6 +6609,19 @@ public class XQueryParser implements PsiParser {
     r = r && RangeExpr(b, l + 1);
     exit_section_(b, l, m, null, r, p, null);
     return r || p;
+  }
+
+  /* ********************************************************** */
+  // StringLiteral | "*"
+  public static boolean StringLiteralOrWildcard(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StringLiteralOrWildcard")) return false;
+    if (!nextTokenIs(b, "<string literal or wildcard>", STAR_SIGN, STRINGLITERAL)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, "<string literal or wildcard>");
+    r = consumeToken(b, STRINGLITERAL);
+    if (!r) r = consumeToken(b, STAR_SIGN);
+    exit_section_(b, l, m, STRING_LITERAL_OR_WILDCARD, r, false, null);
+    return r;
   }
 
   /* ********************************************************** */

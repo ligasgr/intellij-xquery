@@ -88,8 +88,38 @@ public class XQueryComputedConstructorImpl extends XQueryPsiElementImpl implemen
 
   @Override
   @Nullable
+  public XQueryMarklogicCompArrayNodeConstructor getMarklogicCompArrayNodeConstructor() {
+    return findChildByClass(XQueryMarklogicCompArrayNodeConstructor.class);
+  }
+
+  @Override
+  @Nullable
   public XQueryMarklogicCompBinaryConstructor getMarklogicCompBinaryConstructor() {
     return findChildByClass(XQueryMarklogicCompBinaryConstructor.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryMarklogicCompBooleanNodeConstructor getMarklogicCompBooleanNodeConstructor() {
+    return findChildByClass(XQueryMarklogicCompBooleanNodeConstructor.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryMarklogicCompNullNodeConstructor getMarklogicCompNullNodeConstructor() {
+    return findChildByClass(XQueryMarklogicCompNullNodeConstructor.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryMarklogicCompNumberNodeConstructor getMarklogicCompNumberNodeConstructor() {
+    return findChildByClass(XQueryMarklogicCompNumberNodeConstructor.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryMarklogicCompObjectNodeConstructor getMarklogicCompObjectNodeConstructor() {
+    return findChildByClass(XQueryMarklogicCompObjectNodeConstructor.class);
   }
 
 }

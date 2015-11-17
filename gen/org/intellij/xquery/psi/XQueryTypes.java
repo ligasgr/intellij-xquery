@@ -148,10 +148,22 @@ public interface XQueryTypes {
   IElementType MAP_ENTRY_LIST = new XQueryElementType("MAP_ENTRY_LIST");
   IElementType MAP_TEST = new XQueryElementType("MAP_TEST");
   IElementType MARKLOGIC_ANNOTATION = new XQueryElementType("MARKLOGIC_ANNOTATION");
+  IElementType MARKLOGIC_ANY_KIND_TEST = new XQueryElementType("MARKLOGIC_ANY_KIND_TEST");
+  IElementType MARKLOGIC_ARRAY_NODE_TEST = new XQueryElementType("MARKLOGIC_ARRAY_NODE_TEST");
   IElementType MARKLOGIC_BINARY_TEST = new XQueryElementType("MARKLOGIC_BINARY_TEST");
+  IElementType MARKLOGIC_BOOLEAN_NODE_TEST = new XQueryElementType("MARKLOGIC_BOOLEAN_NODE_TEST");
   IElementType MARKLOGIC_CATCH_ERROR_LIST = new XQueryElementType("MARKLOGIC_CATCH_ERROR_LIST");
+  IElementType MARKLOGIC_COMP_ARRAY_NODE_CONSTRUCTOR = new XQueryElementType("MARKLOGIC_COMP_ARRAY_NODE_CONSTRUCTOR");
   IElementType MARKLOGIC_COMP_BINARY_CONSTRUCTOR = new XQueryElementType("MARKLOGIC_COMP_BINARY_CONSTRUCTOR");
+  IElementType MARKLOGIC_COMP_BOOLEAN_NODE_CONSTRUCTOR = new XQueryElementType("MARKLOGIC_COMP_BOOLEAN_NODE_CONSTRUCTOR");
+  IElementType MARKLOGIC_COMP_NULL_NODE_CONSTRUCTOR = new XQueryElementType("MARKLOGIC_COMP_NULL_NODE_CONSTRUCTOR");
+  IElementType MARKLOGIC_COMP_NUMBER_NODE_CONSTRUCTOR = new XQueryElementType("MARKLOGIC_COMP_NUMBER_NODE_CONSTRUCTOR");
+  IElementType MARKLOGIC_COMP_OBJECT_NODE_CONSTRUCTOR = new XQueryElementType("MARKLOGIC_COMP_OBJECT_NODE_CONSTRUCTOR");
   IElementType MARKLOGIC_NAMESPACE_AXIS = new XQueryElementType("MARKLOGIC_NAMESPACE_AXIS");
+  IElementType MARKLOGIC_NULL_NODE_TEST = new XQueryElementType("MARKLOGIC_NULL_NODE_TEST");
+  IElementType MARKLOGIC_NUMBER_NODE_TEST = new XQueryElementType("MARKLOGIC_NUMBER_NODE_TEST");
+  IElementType MARKLOGIC_OBJECT_NODE_TEST = new XQueryElementType("MARKLOGIC_OBJECT_NODE_TEST");
+  IElementType MARKLOGIC_TEXT_TEST = new XQueryElementType("MARKLOGIC_TEXT_TEST");
   IElementType MARKLOGIC_VALIDATION = new XQueryElementType("MARKLOGIC_VALIDATION");
   IElementType MODULE_DECL = new XQueryElementType("MODULE_DECL");
   IElementType MODULE_IMPORT = new XQueryElementType("MODULE_IMPORT");
@@ -170,6 +182,8 @@ public interface XQueryTypes {
   IElementType NODE_COMP = new XQueryElementType("NODE_COMP");
   IElementType NODE_TEST = new XQueryElementType("NODE_TEST");
   IElementType NUMERIC_LITERAL = new XQueryElementType("NUMERIC_LITERAL");
+  IElementType OBJECT_PROPERTY = new XQueryElementType("OBJECT_PROPERTY");
+  IElementType OBJECT_PROPERTY_LIST = new XQueryElementType("OBJECT_PROPERTY_LIST");
   IElementType OCCURRENCE_INDICATOR = new XQueryElementType("OCCURRENCE_INDICATOR");
   IElementType OPTION_DECL = new XQueryElementType("OPTION_DECL");
   IElementType ORDERED_EXPR = new XQueryElementType("ORDERED_EXPR");
@@ -221,6 +235,7 @@ public interface XQueryTypes {
   IElementType SOURCE_EXPR = new XQueryElementType("SOURCE_EXPR");
   IElementType STEP_EXPR = new XQueryElementType("STEP_EXPR");
   IElementType STRING_CONCAT_EXPR = new XQueryElementType("STRING_CONCAT_EXPR");
+  IElementType STRING_LITERAL_OR_WILDCARD = new XQueryElementType("STRING_LITERAL_OR_WILDCARD");
   IElementType SWITCH_CASE_CLAUSE = new XQueryElementType("SWITCH_CASE_CLAUSE");
   IElementType SWITCH_CASE_OPERAND = new XQueryElementType("SWITCH_CASE_OPERAND");
   IElementType SWITCH_DEFAULT_RETURN_CLAUSE = new XQueryElementType("SWITCH_DEFAULT_RETURN_CLAUSE");
@@ -307,6 +322,7 @@ public interface XQueryTypes {
   IElementType K_ANCESTOR = new XQueryTokenType("ancestor");
   IElementType K_ANCESTOR_OR_SELF = new XQueryTokenType("ancestor-or-self");
   IElementType K_AND = new XQueryTokenType("and");
+  IElementType K_ARRAY_NODE = new XQueryTokenType("array-node");
   IElementType K_AS = new XQueryTokenType("as");
   IElementType K_ASCENDING = new XQueryTokenType("ascending");
   IElementType K_AT = new XQueryTokenType("at");
@@ -314,6 +330,7 @@ public interface XQueryTypes {
   IElementType K_BASE_URI = new XQueryTokenType("base-uri");
   IElementType K_BEFORE = new XQueryTokenType("before");
   IElementType K_BINARY = new XQueryTokenType("binary");
+  IElementType K_BOOLEAN_NODE = new XQueryTokenType("boolean-node");
   IElementType K_BOUNDARY_SPACE = new XQueryTokenType("boundary-space");
   IElementType K_BY = new XQueryTokenType("by");
   IElementType K_CASE = new XQueryTokenType("case");
@@ -386,6 +403,9 @@ public interface XQueryTypes {
   IElementType K_NODES = new XQueryTokenType("nodes");
   IElementType K_NO_INHERIT = new XQueryTokenType("no-inherit");
   IElementType K_NO_PRESERVE = new XQueryTokenType("no-preserve");
+  IElementType K_NULL_NODE = new XQueryTokenType("null-node");
+  IElementType K_NUMBER_NODE = new XQueryTokenType("number-node");
+  IElementType K_OBJECT_NODE = new XQueryTokenType("object-node");
   IElementType K_OF = new XQueryTokenType("of");
   IElementType K_ONLY = new XQueryTokenType("only");
   IElementType K_OPTION = new XQueryTokenType("option");
@@ -858,17 +878,53 @@ public interface XQueryTypes {
       else if (type == MARKLOGIC_ANNOTATION) {
         return new XQueryMarklogicAnnotationImpl(node);
       }
+      else if (type == MARKLOGIC_ANY_KIND_TEST) {
+        return new XQueryMarklogicAnyKindTestImpl(node);
+      }
+      else if (type == MARKLOGIC_ARRAY_NODE_TEST) {
+        return new XQueryMarklogicArrayNodeTestImpl(node);
+      }
       else if (type == MARKLOGIC_BINARY_TEST) {
         return new XQueryMarklogicBinaryTestImpl(node);
+      }
+      else if (type == MARKLOGIC_BOOLEAN_NODE_TEST) {
+        return new XQueryMarklogicBooleanNodeTestImpl(node);
       }
       else if (type == MARKLOGIC_CATCH_ERROR_LIST) {
         return new XQueryMarklogicCatchErrorListImpl(node);
       }
+      else if (type == MARKLOGIC_COMP_ARRAY_NODE_CONSTRUCTOR) {
+        return new XQueryMarklogicCompArrayNodeConstructorImpl(node);
+      }
       else if (type == MARKLOGIC_COMP_BINARY_CONSTRUCTOR) {
         return new XQueryMarklogicCompBinaryConstructorImpl(node);
       }
+      else if (type == MARKLOGIC_COMP_BOOLEAN_NODE_CONSTRUCTOR) {
+        return new XQueryMarklogicCompBooleanNodeConstructorImpl(node);
+      }
+      else if (type == MARKLOGIC_COMP_NULL_NODE_CONSTRUCTOR) {
+        return new XQueryMarklogicCompNullNodeConstructorImpl(node);
+      }
+      else if (type == MARKLOGIC_COMP_NUMBER_NODE_CONSTRUCTOR) {
+        return new XQueryMarklogicCompNumberNodeConstructorImpl(node);
+      }
+      else if (type == MARKLOGIC_COMP_OBJECT_NODE_CONSTRUCTOR) {
+        return new XQueryMarklogicCompObjectNodeConstructorImpl(node);
+      }
       else if (type == MARKLOGIC_NAMESPACE_AXIS) {
         return new XQueryMarklogicNamespaceAxisImpl(node);
+      }
+      else if (type == MARKLOGIC_NULL_NODE_TEST) {
+        return new XQueryMarklogicNullNodeTestImpl(node);
+      }
+      else if (type == MARKLOGIC_NUMBER_NODE_TEST) {
+        return new XQueryMarklogicNumberNodeTestImpl(node);
+      }
+      else if (type == MARKLOGIC_OBJECT_NODE_TEST) {
+        return new XQueryMarklogicObjectNodeTestImpl(node);
+      }
+      else if (type == MARKLOGIC_TEXT_TEST) {
+        return new XQueryMarklogicTextTestImpl(node);
       }
       else if (type == MARKLOGIC_VALIDATION) {
         return new XQueryMarklogicValidationImpl(node);
@@ -923,6 +979,12 @@ public interface XQueryTypes {
       }
       else if (type == NUMERIC_LITERAL) {
         return new XQueryNumericLiteralImpl(node);
+      }
+      else if (type == OBJECT_PROPERTY) {
+        return new XQueryObjectPropertyImpl(node);
+      }
+      else if (type == OBJECT_PROPERTY_LIST) {
+        return new XQueryObjectPropertyListImpl(node);
       }
       else if (type == OCCURRENCE_INDICATOR) {
         return new XQueryOccurrenceIndicatorImpl(node);
@@ -1076,6 +1138,9 @@ public interface XQueryTypes {
       }
       else if (type == STRING_CONCAT_EXPR) {
         return new XQueryStringConcatExprImpl(node);
+      }
+      else if (type == STRING_LITERAL_OR_WILDCARD) {
+        return new XQueryStringLiteralOrWildcardImpl(node);
       }
       else if (type == SWITCH_CASE_CLAUSE) {
         return new XQuerySwitchCaseClauseImpl(node);
