@@ -2391,4 +2391,13 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ")", ")"
         });
     }
+
+    public void testNCNameWithHyphen() {
+        assertProducedTokens("abc-def:def-ghi", new String[]{
+                "WHITE_SPACE", "",
+                "NCName", "abc-def",
+                ":", ":",
+                "NCName", "def-ghi",
+        });
+    }
 }
