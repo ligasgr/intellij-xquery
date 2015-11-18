@@ -21,14 +21,10 @@ import com.intellij.util.containers.MultiMap;
 import org.intellij.xquery.reference.namespace.PredeclaredNamespaces;
 import org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespaces;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -77,7 +73,7 @@ public class AbstractBuiltInFunctionTable implements BuiltInFunctionTable {
     }
 
     protected void loadBifFile(String filePath) {
-        URL resource = AbstractBuiltInFunctionTable.class.getResource(filePath);
+        InputStream resource = AbstractBuiltInFunctionTable.class.getResourceAsStream(filePath);
         List<String> lines = getAllLines(resource);
         for (String line : lines) {
             String[] elements = line.split(SEPARATOR);
@@ -90,23 +86,22 @@ public class AbstractBuiltInFunctionTable implements BuiltInFunctionTable {
         }
     }
 
-    private List<String> getAllLines(URL resource) {
+    private List<String> getAllLines(InputStream resource) {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resource));
         try {
-            return Files.readAllLines(getPath(resource), Charset.defaultCharset());
+            List<String> lines = new ArrayList<String>();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                lines.add(line);
+            }
+            return lines;
         } catch (IOException e) {
             throw new RuntimeException("Unable to read bif file " + resource.toString(), e);
-        }
-    }
-
-    private Path getPath(URL resource) {
-        return Paths.get(uri(resource));
-    }
-
-    private URI uri(URL resource) {
-        try {
-            return resource.toURI();
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("Unable to find the bif file for " + resource.toString(), e);
+        } finally {
+            try {
+                bufferedReader.close();
+            } catch (IOException ignored) {
+            }
         }
     }
 }

@@ -119,6 +119,6 @@ public class XQuerySettings implements PersistentStateComponent<XQuerySettings>,
     }
 
     public boolean isMarklogicFlavour() {
-        return XQueryFlavour.MARKLOGIC.equals(getFlavour());
+        return XQueryFlavour.MARKLOGIC == getFlavour();
     }
 }
