@@ -29,6 +29,14 @@ public class UnresolvedFunctionCheckerTest extends BaseFunctionalTestCase {
     }
 
     public void testUnresolved() {
+        doTest();
+    }
+
+    public void testMarklogicExtendedShouldBeResolved() {
+        doTest();
+    }
+
+    private void doTest() {
         myFixture.configureByFiles(getDefaultFileName());
         myFixture.checkHighlighting(false, false, true);
     }

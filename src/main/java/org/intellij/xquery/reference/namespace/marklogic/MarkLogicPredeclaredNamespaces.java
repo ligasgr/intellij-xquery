@@ -29,11 +29,14 @@ import java.util.Set;
 public class MarkLogicPredeclaredNamespaces extends XQuery30PredeclaredNamespaces {
     private static final Set<String> AVAILABLE_BY_DEFAULT_IN_MARK_LOGIC_EXTENDED_SYNTAX = ContainerUtil.set(
             "cts",
+            "dbg",
             "exsl",
+            "map",
+            "sec",
+            "sem",
             "spell",
             "xdmp",
             "prof",
-            "dbg",
             "rdf",
             "sc"
     );
