@@ -25,8 +25,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.ResolveScopeManager;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.tree.IElementType;
@@ -37,12 +39,15 @@ import org.intellij.xquery.psi.XQueryAnnotation;
 import org.intellij.xquery.psi.XQueryAttrLocalName;
 import org.intellij.xquery.psi.XQueryAttrNamespace;
 import org.intellij.xquery.psi.XQueryElementFactory;
+import org.intellij.xquery.psi.XQueryExprSingle;
 import org.intellij.xquery.psi.XQueryFile;
+import org.intellij.xquery.psi.XQueryForBinding;
 import org.intellij.xquery.psi.XQueryFunctionCall;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryFunctionInvocation;
 import org.intellij.xquery.psi.XQueryFunctionLocalName;
 import org.intellij.xquery.psi.XQueryFunctionName;
+import org.intellij.xquery.psi.XQueryLetBinding;
 import org.intellij.xquery.psi.XQueryMarklogicAnnotation;
 import org.intellij.xquery.psi.XQueryModuleDecl;
 import org.intellij.xquery.psi.XQueryModuleImport;
@@ -706,5 +711,30 @@ public class XQueryPsiImplUtil {
             }
         }
         return false;
+    }
+
+    public static boolean processDeclarations(XQueryForBinding module, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+        return processChildrenIfPlaceIsNotPartOfSameBinding(module, processor, state, lastParent, place, XQueryForBinding.class, XQueryExprSingle.class);
+    }
+
+    public static boolean processDeclarations(XQueryLetBinding module, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+        return processChildrenIfPlaceIsNotPartOfSameBinding(module, processor, state, lastParent, place, XQueryLetBinding.class, XQueryExprSingle.class);
+    }
+
+    private static <T extends XQueryPsiElement, U extends XQueryPsiElement>boolean processChildrenIfPlaceIsNotPartOfSameBinding(T module,
+            @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent,
+            @NotNull PsiElement place, Class<T> bindingClass, Class<U>... childClassesToSkip) {
+        PsiElement commonParent = PsiTreeUtil.findCommonParent(place, module);
+        T expressionInBinding = PsiTreeUtil.getParentOfType(place, bindingClass, true);
+        boolean inSameBinding = commonParent != null && commonParent.equals(module) && expressionInBinding != null && expressionInBinding.equals(module);
+        if (inSameBinding) {
+            return processor.execute(module, state);
+        } else {
+            if (!processor.execute(module, state)) {
+                return false;
+            } else {
+                return ResolveUtil.processChildren(module, processor, state, lastParent, place, childClassesToSkip);
+            }
+        }
     }
 }

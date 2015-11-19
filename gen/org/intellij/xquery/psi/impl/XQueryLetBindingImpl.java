@@ -26,6 +26,8 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 
 public class XQueryLetBindingImpl extends XQueryPsiElementImpl implements XQueryLetBinding {
 
@@ -54,6 +56,10 @@ public class XQueryLetBindingImpl extends XQueryPsiElementImpl implements XQuery
   @NotNull
   public XQueryVarName getVarName() {
     return findNotNullChildByClass(XQueryVarName.class);
+  }
+
+  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
+    return XQueryPsiImplUtil.processDeclarations(this, processor, state, lastParent, place);
   }
 
 }

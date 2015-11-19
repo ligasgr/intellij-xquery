@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,18 +21,14 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.intellij.xquery.psi.XQueryPsiElement;
 
-/**
- * User: ligasgr
- * Date: 30/06/13
- * Time: 22:09
- */
 public class ResolveUtil {
-    public static boolean processChildren(PsiElement element, PsiScopeProcessor processor,
-                                          ResolveState substitutor, PsiElement lastParent, PsiElement place) {
+    public static <T extends XQueryPsiElement> boolean processChildren(PsiElement element, PsiScopeProcessor processor,
+            ResolveState substitutor, PsiElement lastParent, PsiElement place, Class<T>... childClassesToSkip) {
         PsiElement run = lastParent == null ? element.getLastChild() : lastParent.getPrevSibling();
         while (run != null) {
-            if (PsiTreeUtil.findCommonParent(place, run) != run && !run.processDeclarations(processor, substitutor,
+            if (!isAnyOf(run, childClassesToSkip) &&PsiTreeUtil.findCommonParent(place, run) != run && !run.processDeclarations(processor, substitutor,
                     null, place)) {
                 return false;
             }
@@ -40,5 +36,14 @@ public class ResolveUtil {
         }
 
         return true;
+    }
+
+    private static <T extends XQueryPsiElement>  boolean isAnyOf(PsiElement run, Class<T>... classes) {
+        for (Class<T> aClass : classes) {
+            if (aClass.isAssignableFrom(run.getClass())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

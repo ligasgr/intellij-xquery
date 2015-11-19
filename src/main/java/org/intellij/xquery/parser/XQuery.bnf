@@ -326,12 +326,12 @@ private FLWORExprRecover ::= !('count' | 'for' | 'group' | 'let' | 'order' | 're
 private InitialClause ::= ForClause | WindowClause | LetClause {pin=1}
 private IntermediateClause ::= InitialClause | WhereClause | GroupByClause | OrderByClause | CountClause
 ForClause ::= "for" ForBinding ("," ForBinding)* {pin=2}
-ForBinding ::= "$" ForBindingDetails {pin=1}
+ForBinding ::= "$" ForBindingDetails {pin=1 methods=[processDeclarations]}
 private ForBindingDetails ::= VarName TypeDeclaration? AllowingEmpty? PositionalVar? "in" ExprSingle {recoverWhile=FLWORExprRecover}
 AllowingEmpty ::= "allowing" "empty"
 PositionalVar ::= "at" "$" VarName
 LetClause ::= "let" LetBinding ("," LetBinding)* {pin=1}
-LetBinding ::= "$" VarName TypeDeclaration? ":=" ExprSingle {recoverWhile=FLWORExprRecover}
+LetBinding ::= "$" VarName TypeDeclaration? ":=" ExprSingle {recoverWhile=FLWORExprRecover methods=[processDeclarations]}
 WindowClause ::= "for" (TumblingWindowClause | SlidingWindowClause) {pin=2}
 private TumblingWindowClause ::= "tumbling" TumblingWindowDetails {pin=1}
 private TumblingWindowDetails ::= "window" "$" VarName TypeDeclaration? "in" ExprSingle WindowStartCondition WindowEndCondition? {recoverWhile=FLWORExprRecover}
