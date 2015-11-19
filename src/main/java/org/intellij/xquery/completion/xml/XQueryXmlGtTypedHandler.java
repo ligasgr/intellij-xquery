@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,6 +34,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryLanguage;
 import org.intellij.xquery.psi.XQueryTypes;
 import org.intellij.xquery.psi.XQueryXmlFullTag;
+import org.intellij.xquery.psi.XQueryXmlTagName;
 import org.jetbrains.annotations.NotNull;
 
 public class XQueryXmlGtTypedHandler extends TypedHandlerDelegate {
@@ -78,8 +79,10 @@ public class XQueryXmlGtTypedHandler extends TypedHandlerDelegate {
             if (">".equals(prevLeafText) && prevLeaf.getElementType() == XQueryTypes.XMLTAGEND) {
                 XQueryXmlFullTag tag = PsiTreeUtil.getParentOfType(element, XQueryXmlFullTag.class);
                 if (tag != null && (tag.getXmlTagNameList().size() == 1 || tag.getXmlTagNameList().size() == 2 && !tag.getXmlTagNameList().get(0).getText().equals(tag.getXmlTagNameList().get(1).getText()))) {
-                    if (StringUtil.isNotEmpty(tag.getXmlTagNameList().get(0).getName()) && TreeUtil.findSibling(prevLeaf, XQueryTypes.XMLTAGNCNAME) == null) {
-                        String name = tag.getXmlTagNameList().get(0).getName();
+                    XQueryXmlTagName tagName = tag.getXmlTagNameList().get(0);
+                    if (StringUtil.isNotEmpty(tagName.getName()) && TreeUtil.findSibling(prevLeaf, XQueryTypes.XMLTAGNCNAME) == null) {
+                        String prefix = tagName.getXmlTagNamespace() != null ? tagName.getXmlTagNamespace().getName() + ":" : "";
+                        String name = prefix + tagName.getXmlTagLocalName().getText();
                         EditorModificationUtil.insertStringAtCaret(editor, "</" + name + ">", false, 0);
                         return Result.STOP;
                     }

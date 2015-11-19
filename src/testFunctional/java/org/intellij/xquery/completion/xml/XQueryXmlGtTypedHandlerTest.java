@@ -63,4 +63,10 @@ public class XQueryXmlGtTypedHandlerTest extends BaseFunctionalTestCase {
         myFixture.type(">");
         myFixture.checkResult("1 ><caret>");
     }
+
+    public void testClosingFullTagWithNamespaceName() {
+        myFixture.configureByText(XQueryFileType.INSTANCE, "<html:a<caret>");
+        myFixture.type(">");
+        myFixture.checkResult("<html:a><caret></html:a>");
+    }
 }
