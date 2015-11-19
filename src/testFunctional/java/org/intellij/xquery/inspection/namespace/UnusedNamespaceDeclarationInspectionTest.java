@@ -43,6 +43,14 @@ public class UnusedNamespaceDeclarationInspectionTest extends BaseFunctionalTest
         executeInspectionTest();
     }
 
+    public void testNamespaceDeclarationUsedByQNameInConstructor() {
+        executeInspectionTest();
+    }
+
+    public void testNamespaceDeclarationUsedByQNameInPathExpression() {
+        executeInspectionTest();
+    }
+
     public void testRemoveUnusedNamespaceDeclarationQuickFix() {
         final String testName = getTestName(false);
 

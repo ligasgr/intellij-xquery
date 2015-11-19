@@ -17,22 +17,20 @@
 
 package org.intellij.xquery.inspection;
 
-import org.intellij.xquery.psi.XQueryAnnotation;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryPrefix;
+import org.intellij.xquery.psi.XQueryVarRef;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class AnnotationNamespacesExtractor {
+public class PrefixExtractor {
 
-    public Set<String> getNamespacesUsedByAnnotations(XQueryFile xQueryFile) {
+    public Set<String> getNamespacesUsedByPrefixes(XQueryFile xQueryFile) {
         Set<String> usedNamespaces = new HashSet<String>();
-        for (XQueryAnnotation annotation : xQueryFile.getAnnotations()) {
-            XQueryPrefix namespacePrefix = annotation.getAnnotationName().getPrefix();
-            if (namespacePrefix != null) {
-                usedNamespaces.add(xQueryFile.mapFunctionPrefixToNamespace(namespacePrefix.getText()));
-            }
+        for (XQueryPrefix prefix : PsiTreeUtil.findChildrenOfType(xQueryFile, XQueryPrefix.class)) {
+            usedNamespaces.add(xQueryFile.mapFunctionPrefixToNamespace(prefix.getText()));
         }
 
         return usedNamespaces;

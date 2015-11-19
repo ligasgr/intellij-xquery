@@ -19,17 +19,11 @@ package org.intellij.xquery.inspection.namespace;
 
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.compiler.RemoveElementQuickFix;
 import com.intellij.psi.PsiFile;
-import org.intellij.xquery.inspection.AnnotationNamespacesExtractor;
-import org.intellij.xquery.inspection.FunctionNamespacesExtractor;
-import org.intellij.xquery.inspection.VariableNamespacesExtractor;
-import org.intellij.xquery.inspection.XmlNamespacesExtractor;
 import org.intellij.xquery.inspection.imports.UnusedNamespaceSourceFinder;
 import org.intellij.xquery.psi.XQueryFile;
-import org.intellij.xquery.psi.XQueryModuleImport;
 import org.intellij.xquery.psi.XQueryNamespaceDecl;
 import org.jetbrains.annotations.NotNull;
 
