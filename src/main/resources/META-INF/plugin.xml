@@ -18,15 +18,42 @@
 <idea-plugin url="http://ligasgr.github.io/intellij-xquery/" version="2">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
-    <version>3.0-SNAPSHOT</version>
+    <version>3.0</version>
     <vendor email="ligasgr@gmail.com" url="http://grzegorzligas.blogspot.com/">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0</description>
 
     <change-notes>
         <![CDATA[
-            <p>3.0-SNAPSHOT:</p>
+            <p>3.0.0:</p>
             <ul>
+                <li>Upgrade to Saxon 9.6.0.7.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/123">#123</a> - Add support for MarkLogic JSON node constructors/tests (by <a href="https://github.com/malteseduck">Chris Cieslinski</a>).</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/19">#19</a> - Improved XML support.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/141">#141</a> - IDEA 15 support.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/129">#129</a> - Highlight unresolved function.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/120">#120</a> - BaseX 8.0: New XQJ Driver.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/127">#127</a> - Upgrade Zorba api to 3.0.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/89">#89</a> - Sedna built-in function completion.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/87">#87</a> - eXist built-in function completion.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/88">#88</a> - Zorba built-in function completion.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/85">#85</a> - MarkLogic built-in function completion.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/86">#86</a> - BaseX built-in function completion.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/84">#84</a> - Saxon built-in function completion.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/126">#126</a> - Highlight unresolved namespace name in direct xml element constructors.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/33">#33</a> - Smart keyword completion (at least smarter than now).</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/130">#130</a> - Allow for hyphens in names.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/125">#125</a> - FindUsages does not show proper options dialog for other languages after installing XQuery Support plugin</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/143">#143</a> - Find prefixes everywhere.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/145">#145</a> - Refreshed list of available namespaces based on MarkLogic official list.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/144">#144</a> - Use namespaces when completing the full tag.</li>
+                <li>Issues <a href="https://github.com/ligasgr/intellij-xquery/issues/136">#136</a> and <a href="https://github.com/ligasgr/intellij-xquery/issues/140">#140</a> - Fixed scope traversing for bindings.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/142">#142</a> - Bif file loading has to use resource as stream as Java is not able to make a path from given URL.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/135">#135</a> - Support flagging declare namespace statements as not being used when there are no references to them. Also added xml reference checking for imports and a quick-fix. Unified finding.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/132">#132</a> - Double click in an XML attribute only selects one character.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/131">#131</a> - Don't treat import used by annotation as unused.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/133">#133</a> - Incorrect error using ancestor::node in XPath.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/117">#117</a> - Add additional states to stop highlighter from re-lexing in the middle of the string. Highlighter runs tokenization from the last segment that started in YYINITIAL state.</li>
             </ul>
         ]]>
     </change-notes>
