@@ -12,3 +12,4 @@ Arnost Valicek <arnost.valicek@gmail.com> - Issue #100 - Optimize imports in xqu
 Arnost Valicek <arnost.valicek@gmail.com> - Issue #104 - Inspection - check if module namespace prefix is same as module file name
 Arnost Valicek <arnost.valicek@gmail.com> - Issue #106 - Inspection - check if declared default function namespace is same as module namespace
 Bartosz Jamroz <bartosz.jamroz@ubs.com> - Issue #121 - Not compatible with the latest IntelliJ release, 14.1
+Chris Cieslinski <CieslinskiCE@ldschurch.org> - Issue #123 - Add support for MarkLogic JSON node constructors/tests
