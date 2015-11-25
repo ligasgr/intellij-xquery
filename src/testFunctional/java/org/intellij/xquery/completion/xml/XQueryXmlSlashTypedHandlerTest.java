@@ -105,4 +105,10 @@ public class XQueryXmlSlashTypedHandlerTest extends BaseFunctionalTestCase {
         myFixture.type("/");
         myFixture.checkResult("<abc>{<def>{/abc/}</def>}</abc>");
     }
+
+    public void testClosingFullTagWithNamespacePrefix() {
+        myFixture.configureByText(XQueryFileType.INSTANCE, "<html:p><<caret>");
+        myFixture.type("/");
+        myFixture.checkResult("<html:p></html:p><caret>");
+    }
 }

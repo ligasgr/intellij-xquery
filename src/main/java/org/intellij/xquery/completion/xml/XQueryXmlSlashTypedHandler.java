@@ -37,6 +37,7 @@ import org.intellij.xquery.psi.XQueryDirAttributeValue;
 import org.intellij.xquery.psi.XQueryEnclosedExpr;
 import org.intellij.xquery.psi.XQueryTypes;
 import org.intellij.xquery.psi.XQueryXmlFullTag;
+import org.intellij.xquery.psi.XQueryXmlTagName;
 import org.jetbrains.annotations.NotNull;
 
 public class XQueryXmlSlashTypedHandler extends TypedHandlerDelegate {
@@ -50,11 +51,8 @@ public class XQueryXmlSlashTypedHandler extends TypedHandlerDelegate {
             final int offset = editor.getCaretModel().getOffset();
             FileViewProvider provider = file.getViewProvider();
             PsiElement element = provider.findElementAt(offset, XQueryLanguage.class);
-            if (element != null && element.getNode() != null
-                    && element.getNode().getElementType() == XQueryTypes.XMLEMPTYELEMENTEND
-                    && offset == element.getTextOffset()) {
-                editor.getCaretModel().moveToOffset(offset + 1);
-                editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+            if (isAtTheSlashOfClosingOfEmptyTag(offset, element)) {
+                moveCaretByOne(editor, offset);
                 return Result.STOP;
             }
         }
@@ -75,11 +73,11 @@ public class XQueryXmlSlashTypedHandler extends TypedHandlerDelegate {
             ASTNode prevLeaf = element.getNode();
             if (prevLeaf == null) return Result.CONTINUE;
             final String prevLeafText = prevLeaf.getText();
-            if ("</".equals(prevLeafText) && prevLeaf.getElementType() == XQueryTypes.XMLENDTAGSTART) {
+            if (isStartOfEndOfTag(prevLeaf, prevLeafText)) {
                 XQueryXmlFullTag tag = PsiTreeUtil.getParentOfType(element, XQueryXmlFullTag.class);
-                if (tag != null && StringUtil.isNotEmpty(tag.getXmlTagNameList().get(0).getName()) && TreeUtil.findSibling(prevLeaf, XQueryTypes.XMLTAGNCNAME) == null) {
-                    String name = tag.getXmlTagNameList().get(0).getName();
-                    EditorModificationUtil.insertStringAtCaret(editor, name + ">", false);
+                XQueryXmlTagName tagName = tag.getXmlTagNameList().get(0);
+                if (hasNoClosingTagName(prevLeaf, tag, tagName)) {
+                    finishClosingTag(editor, tagName);
                     return Result.STOP;
                 }
             }
@@ -90,16 +88,49 @@ public class XQueryXmlSlashTypedHandler extends TypedHandlerDelegate {
             if (prevLeaf.getElementType() == XQueryTypes.ELEMENTCONTENTCHAR) return Result.CONTINUE;
             XQueryEnclosedExpr parentEnclosedExpression = PsiTreeUtil.getParentOfType(element, XQueryEnclosedExpr.class, true, XQueryXmlFullTag.class);
             XQueryXmlFullTag fullTag = getParentFullTag(prevLeaf);
-            if (isChildOfEcnlosedExpressionMoreThanChildOfXmlTag(parentEnclosedExpression, fullTag)) return Result.CONTINUE;
-            if (fullTag != null) {
-                EditorModificationUtil.insertStringAtCaret(editor, ">", false);
+            if (isInEnclosedExpressionNestedInXmlTag(parentEnclosedExpression, fullTag)) return Result.CONTINUE;
+            if (isInUnclosedXmlTag(fullTag)) {
+                closeEmptyTag(editor);
                 return Result.STOP;
             }
         }
         return Result.CONTINUE;
     }
 
-    private boolean isChildOfEcnlosedExpressionMoreThanChildOfXmlTag(XQueryEnclosedExpr parentEnclosedExpression,
+    private void moveCaretByOne(Editor editor, int offset) {
+        editor.getCaretModel().moveToOffset(offset + 1);
+        editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+    }
+
+    private boolean isAtTheSlashOfClosingOfEmptyTag(int offset, PsiElement element) {
+        return element != null && element.getNode() != null
+                && element.getNode().getElementType() == XQueryTypes.XMLEMPTYELEMENTEND
+                && offset == element.getTextOffset();
+    }
+
+    private boolean isInUnclosedXmlTag(XQueryXmlFullTag fullTag) {
+        return fullTag != null;
+    }
+
+    private void closeEmptyTag(@NotNull Editor editor) {
+        EditorModificationUtil.insertStringAtCaret(editor, ">", false);
+    }
+
+    private void finishClosingTag(@NotNull Editor editor, XQueryXmlTagName tagName) {
+        String prefix = tagName.getXmlTagNamespace() != null ? tagName.getXmlTagNamespace().getName() + ":" : "";
+        String name = prefix + tagName.getXmlTagLocalName().getText();
+        EditorModificationUtil.insertStringAtCaret(editor, name + ">", false);
+    }
+
+    private boolean hasNoClosingTagName(ASTNode prevLeaf, XQueryXmlFullTag tag, XQueryXmlTagName tagName) {
+        return tag != null && StringUtil.isNotEmpty(tagName.getName()) && TreeUtil.findSibling(prevLeaf, XQueryTypes.XMLTAGNCNAME) == null;
+    }
+
+    private boolean isStartOfEndOfTag(ASTNode prevLeaf, String prevLeafText) {
+        return "</".equals(prevLeafText) && prevLeaf.getElementType() == XQueryTypes.XMLENDTAGSTART;
+    }
+
+    private boolean isInEnclosedExpressionNestedInXmlTag(XQueryEnclosedExpr parentEnclosedExpression,
                                                                      XQueryXmlFullTag fullTag) {
         return parentEnclosedExpression != null && fullTag == null;
     }
