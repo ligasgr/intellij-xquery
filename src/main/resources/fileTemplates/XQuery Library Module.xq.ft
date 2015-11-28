@@ -1,0 +1,2 @@
+#parse("XQuery File Header.xq")
+module namespace ${NAME_WITHOUT_EXTENSION} = "${NAME}";

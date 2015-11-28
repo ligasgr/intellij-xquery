@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,6 +34,7 @@ import static org.intellij.xquery.actions.XQueryFileTemplates.LIBRARY_MODULE;
 import static org.intellij.xquery.actions.XQueryFileTemplates.MAIN_MODULE;
 
 public class XQueryCreateFromTemplateHandler extends DefaultCreateFromTemplateHandler {
+    public static final String NAME_WITHOUT_EXTENSION = "NAME_WITHOUT_EXTENSION";
     private Project project;
 
     @Override
@@ -49,15 +50,26 @@ public class XQueryCreateFromTemplateHandler extends DefaultCreateFromTemplateHa
     }
 
     @Override
+    public void prepareProperties(Map<String, Object> props) {
+        String name = (String) props.get(FileTemplate.ATTRIBUTE_NAME);
+        if (name != null) {
+            String nameWithoutExtension = name.indexOf(".") > 0 ? name.substring(0, name.lastIndexOf(".")) : name;
+            props.put(NAME_WITHOUT_EXTENSION, nameWithoutExtension);
+        }
+    }
+
+    @Override
     protected String checkAppendExtension(String fileName, FileTemplate template) {
+        if (hasExtension(fileName)) {
+            return fileName;
+        }
         XQuerySettings settings = XQuerySettings.getInstance(project);
         String extension = getExtension(template, settings);
-        final String suggestedFileNameEnd = "." + extension;
+        return fileName + "." + extension;
+    }
 
-        if (!fileName.endsWith(suggestedFileNameEnd)) {
-            fileName += suggestedFileNameEnd;
-        }
-        return fileName;
+    private boolean hasExtension(String fileName) {
+        return fileName.indexOf('.') > 0;
     }
 
     private String getExtension(FileTemplate template, XQuerySettings settings) {

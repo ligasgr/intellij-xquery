@@ -1,2 +1,0 @@
-#parse("XQuery File Header.xq")
-module namespace ${NAME} = "${NAME}";

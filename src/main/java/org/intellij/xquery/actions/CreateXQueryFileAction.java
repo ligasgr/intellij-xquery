@@ -33,8 +33,9 @@ import static org.intellij.xquery.actions.XQueryFileTemplates.MAIN_MODULE;
 public class CreateXQueryFileAction extends CreateFileFromTemplateAction implements DumbAware {
 
     public static final String NEW_XQUERY_FILE = "New XQuery File";
-    public static final int HYPHEN = 45;
-    public static final int UNDERSCORE = 95;
+    public static final int HYPHEN = '-';
+    public static final int UNDERSCORE = '_';
+    public static final int DOT = '.';
 
     public CreateXQueryFileAction() {
         super(NEW_XQUERY_FILE, "", XQueryIcons.FILE);
@@ -99,7 +100,7 @@ public class CreateXQueryFileAction extends CreateFileFromTemplateAction impleme
         }
         for(int i = 0; i < length; ++i) {
             char c = name.charAt(i);
-            if (!Character.isLetterOrDigit(c) && c != UNDERSCORE && c != HYPHEN) {
+            if (!Character.isLetterOrDigit(c) && c != UNDERSCORE && c != HYPHEN && c != DOT) {
                 return false;
             }
         }
