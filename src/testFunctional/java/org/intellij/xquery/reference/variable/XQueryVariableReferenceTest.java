@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,6 @@
 package org.intellij.xquery.reference.variable;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.actions.SafeDeleteAction;
 import org.intellij.xquery.Assertions;
 import org.intellij.xquery.BaseFunctionalTestCase;
@@ -31,7 +30,6 @@ import org.intellij.xquery.psi.XQueryParam;
 import org.intellij.xquery.psi.XQueryPositionalVar;
 import org.intellij.xquery.psi.XQueryPreviousItem;
 import org.intellij.xquery.psi.XQueryVarDecl;
-import org.intellij.xquery.psi.XQueryVarName;
 import org.intellij.xquery.psi.XQueryVarRef;
 import org.intellij.xquery.psi.XQueryWindowClause;
 import org.intellij.xquery.settings.XQuerySettings;
@@ -213,6 +211,54 @@ public class XQueryVariableReferenceTest extends BaseFunctionalTestCase {
         Assertions.assertChildOf(resolvedReference, XQueryVarDecl.class);
         XQueryVarDecl varDecl = getParentOfType(resolvedReference, XQueryVarDecl.class);
         assertEquals("MarkLogicReferencedFile.xq", varDecl.getContainingFile().getName());
+    }
+
+    public void testVariableReferenceInLetBindingIsNotPointingToItsOwnDeclaredVariable() {
+        myFixture.configureByFiles("VariableReferenceInLetBindingIsNotPointingToItsOwnDeclaredVariable.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertNull(resolvedReference);
+    }
+
+    public void testVariableReferenceInForBindingIsNotPointingToItsOwnDeclaredVariable() {
+        myFixture.configureByFiles("VariableReferenceInForBindingIsNotPointingToItsOwnDeclaredVariable.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertNull(resolvedReference);
+    }
+
+    public void testVariableReferenceInLetBindingWillNotReferenceInternalVariablesOfSubExpressions() {
+        myFixture.configureByFiles("VariableReferenceInLetBindingWillNotReferenceInternalVariablesOfSubExpressions.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertNull(resolvedReference);
+    }
+
+    public void testVariableReferenceInLetBindingWillNotReferenceInternalVariablesOfSubExpressionsOfDifferentType() {
+        myFixture.configureByFiles("VariableReferenceInLetBindingWillNotReferenceInternalVariablesOfSubExpressionsOfDifferentType.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertNull(resolvedReference);
+    }
+
+    public void testVariableReferenceInForBindingWillNotReferenceInternalVariablesOfSubExpressions() {
+        myFixture.configureByFiles("VariableReferenceInForBindingWillNotReferenceInternalVariablesOfSubExpressions.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertNull(resolvedReference);
+    }
+
+    public void testVariableReferenceInForBindingWillNotReferenceInternalVariablesOfSubExpressionsOfDifferentType() {
+        myFixture.configureByFiles("VariableReferenceInForBindingWillNotReferenceInternalVariablesOfSubExpressionsOfDifferentType.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertNull(resolvedReference);
     }
 
     public void testVariableSafeDelete() {
