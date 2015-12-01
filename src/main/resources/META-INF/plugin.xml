@@ -66,6 +66,7 @@
         <quoteHandler fileType="XQuery file" className="org.intellij.xquery.quotes.XQueryQuoteHandler"/>
         <typedHandler implementation="org.intellij.xquery.completion.xml.XQueryXmlSlashTypedHandler" id="xqueryXmlSlash"/>
         <typedHandler implementation="org.intellij.xquery.completion.xml.XQueryXmlGtTypedHandler" id="xqueryXmlGt"/>
+        <typedHandler implementation="org.intellij.xquery.braces.FunctionDeclarationBracesBodyHandler" id="xqueryFunDeclBraces"/>
         <declarationRangeHandler key="org.intellij.xquery.psi.XQueryFunctionDecl" implementationClass="org.intellij.xquery.structure.XQueryFunctionDeclarationRangeHandler"/>
         <annotator language="XQuery" implementationClass="org.intellij.xquery.annotator.XQueryAnnotator"/>
         <additionalTextAttributes scheme="Default" file="colorSchemes/Default.xml"/>
