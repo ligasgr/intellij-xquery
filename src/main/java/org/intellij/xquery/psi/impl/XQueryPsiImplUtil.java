@@ -80,6 +80,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Icon;
 
+import java.util.Collection;
+
 import static org.intellij.xquery.util.StringUtils.EMPTY;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
 
@@ -725,9 +727,12 @@ public class XQueryPsiImplUtil {
             @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent,
             @NotNull PsiElement place, Class<T> bindingClass, Class<U>... childClassesToSkip) {
         PsiElement commonParent = PsiTreeUtil.findCommonParent(place, module);
-        T expressionInBinding = PsiTreeUtil.getParentOfType(place, bindingClass, true);
-        boolean inSameBinding = commonParent != null && commonParent.equals(module) && expressionInBinding != null && expressionInBinding.equals(module);
-        if (inSameBinding) {
+        T parentBinding = PsiTreeUtil.getParentOfType(place, bindingClass, true);
+        XQueryExprSingle expressionInModule = PsiTreeUtil.getChildOfType(module, XQueryExprSingle.class);
+        boolean inSameBinding = commonParent != null && commonParent.equals(module) && parentBinding != null && parentBinding.equals(module);
+        Collection<T> childBindings = PsiTreeUtil.findChildrenOfType(expressionInModule, bindingClass);
+        boolean partOfExpressionInBinding = childBindings.contains(parentBinding);
+        if (inSameBinding || partOfExpressionInBinding) {
             return processor.execute(module, state);
         } else {
             if (!processor.execute(module, state)) {

@@ -261,6 +261,14 @@ public class XQueryVariableReferenceTest extends BaseFunctionalTestCase {
         assertNull(resolvedReference);
     }
 
+    public void testVariableReferenceOfForBindingNestedInInExpressionWillNotReferenceVariableFromParentFor() {
+        myFixture.configureByFiles("VariableReferenceOfForBindingNestedInInExpressionWillNotReferenceVariableFromParentFor.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryVarRef.class);
+
+        assertNull(resolvedReference);
+    }
+
     public void testVariableSafeDelete() {
         myFixture.configureByFiles("VariableSafeDelete.xq");
         myFixture.testAction(new SafeDeleteAction());
