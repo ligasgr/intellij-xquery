@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@ package org.intellij.xquery.annotator.duplicateFunction;
 
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
+import org.intellij.xquery.model.XQueryQName;
 import org.intellij.xquery.psi.XQueryFile;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryFunctionName;
@@ -30,6 +31,7 @@ import org.intellij.xquery.psi.XQueryURILiteral;
 import java.util.Collection;
 
 import static com.intellij.util.containers.ContainerUtil.filter;
+import static org.intellij.xquery.model.XQueryQNameBuilder.aXQueryQName;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrAposIfNeeded;
 
 public class Determiner {
@@ -110,7 +112,9 @@ public class Determiner {
 
     private boolean nameIsTheSame(XQueryFunctionName functionName, XQueryFunctionDecl otherFunctionDeclaration) {
         XQueryFunctionName otherFunctionName = otherFunctionDeclaration.getFunctionName();
-        return functionName.getName().equals(otherFunctionName != null ? otherFunctionName.getName() : null);
+        XQueryQName<XQueryFunctionName> source = aXQueryQName(functionName).build();
+        XQueryQName<XQueryFunctionName> checkedQName = aXQueryQName(otherFunctionName).build();
+        return source.equals(checkedQName);
     }
 
     private boolean arityIsTheSame(XQueryFunctionName functionName, XQueryFunctionDecl otherFunctionDeclaration) {
