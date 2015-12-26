@@ -46,6 +46,12 @@ public class XQueryXmlEmptyTagImpl extends XQueryPsiElementImpl implements XQuer
 
   @Override
   @NotNull
+  public List<XQueryMisplacedComment> getMisplacedCommentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryMisplacedComment.class);
+  }
+
+  @Override
+  @NotNull
   public XQueryXmlTagName getXmlTagName() {
     return findNotNullChildByClass(XQueryXmlTagName.class);
   }

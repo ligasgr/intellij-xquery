@@ -22,15 +22,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryXmlEmptyTag extends XQueryPsiElement {
-
-  @Nullable
-  XQueryDirAttributeList getDirAttributeList();
+public interface XQueryMisplacedComment extends XQueryPsiElement {
 
   @NotNull
   List<XQueryMisplacedComment> getMisplacedCommentList();
-
-  @NotNull
-  XQueryXmlTagName getXmlTagName();
 
 }

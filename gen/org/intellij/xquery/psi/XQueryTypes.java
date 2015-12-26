@@ -165,6 +165,7 @@ public interface XQueryTypes {
   IElementType MARKLOGIC_OBJECT_NODE_TEST = new XQueryElementType("MARKLOGIC_OBJECT_NODE_TEST");
   IElementType MARKLOGIC_TEXT_TEST = new XQueryElementType("MARKLOGIC_TEXT_TEST");
   IElementType MARKLOGIC_VALIDATION = new XQueryElementType("MARKLOGIC_VALIDATION");
+  IElementType MISPLACED_COMMENT = new XQueryElementType("MISPLACED_COMMENT");
   IElementType MODULE_DECL = new XQueryElementType("MODULE_DECL");
   IElementType MODULE_IMPORT = new XQueryElementType("MODULE_IMPORT");
   IElementType MODULE_IMPORT_NAMESPACE = new XQueryElementType("MODULE_IMPORT_NAMESPACE");
@@ -311,6 +312,9 @@ public interface XQueryTypes {
   IElementType EQ = new XQueryTokenType("eq");
   IElementType EQUAL = new XQueryTokenType("=");
   IElementType EXCLAMATION_MARK = new XQueryTokenType("!");
+  IElementType EXPRCOMMENTCONTENT = new XQueryTokenType("ExprCommentContent");
+  IElementType EXPR_COMMENT_END = new XQueryTokenType(":)");
+  IElementType EXPR_COMMENT_START = new XQueryTokenType("(:");
   IElementType GE = new XQueryTokenType("ge");
   IElementType GE_CHARS = new XQueryTokenType(">=");
   IElementType GT = new XQueryTokenType("gt");
@@ -928,6 +932,9 @@ public interface XQueryTypes {
       }
       else if (type == MARKLOGIC_VALIDATION) {
         return new XQueryMarklogicValidationImpl(node);
+      }
+      else if (type == MISPLACED_COMMENT) {
+        return new XQueryMisplacedCommentImpl(node);
       }
       else if (type == MODULE_DECL) {
         return new XQueryModuleDeclImpl(node);

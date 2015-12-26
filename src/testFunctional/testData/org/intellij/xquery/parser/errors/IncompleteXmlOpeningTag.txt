@@ -22,7 +22,7 @@ XQuery File(0,22)
                     PsiWhiteSpace(' ')(9,10)
                     XQueryDirAttributeListImpl(DIR_ATTRIBUTE_LIST)(10,10)
                       <empty list>
-                    PsiErrorElement:AttrNCName, XmlColon, XmlEmptyElementEnd or XmlTagEnd expected, got '</'(10,10)
+                    PsiErrorElement:'(:', AttrNCName, XmlColon, XmlEmptyElementEnd or XmlTagEnd expected, got '</'(10,10)
                       <empty list>
                     PsiElement(XmlEndTagStart)('</')(10,12)
                     XQueryXmlTagNameImpl(XML_TAG_NAME)(12,15)

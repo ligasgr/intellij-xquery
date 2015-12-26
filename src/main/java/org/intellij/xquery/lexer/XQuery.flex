@@ -48,6 +48,7 @@ import java.util.Stack;
       put(QNAME, "QNAME");
       put(EXPRESSION_IN_QUOT_STRING, "EXPRESSION_IN_QUOT_STRING");
       put(EXPR_COMMENT, "EXPR_COMMENT");
+      put(MISPLACED_EXPR_COMMENT, "MISPLACED_EXPR_COMMENT");
       put(QUOT_STRING, "QUOT_STRING");
       put(ELEMENT_CONTENT, "ELEMENT_CONTENT");
       put(DECLARATION_RECOGNITION, "DECLARATION_RECOGNITION");
@@ -157,6 +158,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 %state URIQUALIFIED
 %state QNAME
 %state EXPR_COMMENT
+%state MISPLACED_EXPR_COMMENT
 %state DIR_COMMENT
 %state PRAGMA
 %state PRAGMA_BEFORE_CONTENT
@@ -204,8 +206,10 @@ SC=({S} | "(:" {Char}* ~":)")+
 "<" / {SC}? {IntegerLiteral}               {return XQueryTypes.LT_CHAR;}
 "<" / {SC}? {DecimalLiteral}               {return XQueryTypes.LT_CHAR;}
 "<" / {SC}? {DoubleLiteral}                {return XQueryTypes.LT_CHAR;}
-"<" / {SC}? {NCName} {SC}? "("             {return XQueryTypes.LT_CHAR;}
-"<" / {SC}? {NCName} {SC}? ":" {SC}? {NCName} {SC}? "(" {return XQueryTypes.LT_CHAR;}
+"<" / {SC}? {NCName} {S}? "(:"            {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART;}
+"<" / {SC}? {NCName} {S}? "("             {return XQueryTypes.LT_CHAR;}
+"<" / {SC}? {NCName} {SC}? ":" {SC}? {NCName} {S}? "(:" {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART;}
+"<" / {SC}? {NCName} {SC}? ":" {SC}? {NCName} {S}? "(" {return XQueryTypes.LT_CHAR;}
 "<"                                        {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART;}
 "<="                                       {return XQueryTypes.LE_CHARS;}
 ">="                                       {return XQueryTypes.GE_CHARS;}
@@ -214,7 +218,9 @@ SC=({S} | "(:" {Char}* ~":)")+
 ">" / {SC}? {IntegerLiteral}               {return XQueryTypes.GT_CHAR;}
 ">" / {SC}? {DecimalLiteral}               {return XQueryTypes.GT_CHAR;}
 ">" / {SC}? {DoubleLiteral}                {return XQueryTypes.GT_CHAR;}
-">" / {SC}? {NCName} {SC}? "("             {return XQueryTypes.GT_CHAR;}
+">" / {SC}? {NCName} {S}? "(:"             {return XQueryTypes.XMLTAGEND;}
+">" / {SC}? {NCName} {S}? "("             {return XQueryTypes.GT_CHAR;}
+">" / {SC}? {NCName} {SC}? ":" {SC}? {NCName} {S}? "(:" {return XQueryTypes.XMLTAGEND;}
 ">" / {SC}? {NCName} {SC}? ":" {SC}? {NCName} {SC}? "(" {return XQueryTypes.GT_CHAR;}
 ">"                                        {return XQueryTypes.XMLTAGEND;}
 "@"                                        {pushState(QNAME);return XQueryTypes.AT_SIGN;}
@@ -387,12 +393,19 @@ SC=({S} | "(:" {Char}* ~":)")+
 {Char}                                     {return XQueryBasicTypes.EXPR_COMMENT_CONTENT;}
 }
 
+<MISPLACED_EXPR_COMMENT> {
+":)"                                       {popState(); return XQueryTypes.EXPR_COMMENT_END;}
+"(:"                                       {pushState(MISPLACED_EXPR_COMMENT); return XQueryTypes.EXPR_COMMENT_START;}
+{Char}                                     {return XQueryTypes.EXPRCOMMENTCONTENT;}
+}
+
 <DOC_COMMENT> {
 ":)"                                       {popState(); return XQueryBasicTypes.DOC_COMMENT_END;}
 {Char}                                     {return XQueryBasicTypes.DOC_COMMENT_CONTENT;}
 }
 
 <START_TAG> {
+"(:"                                       {pushState(MISPLACED_EXPR_COMMENT); return XQueryTypes.EXPR_COMMENT_START;}
 {S}                                        {return TokenType.WHITE_SPACE;}
 {NCName}                                   {pushState(TAG_QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 ">"                                        {popState();pushState(ELEMENT_CONTENT); return XQueryTypes.XMLTAGEND;}
@@ -409,6 +422,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 }
 
 <ATTR_LIST> {
+"(:"                                       {pushState(MISPLACED_EXPR_COMMENT); return XQueryTypes.EXPR_COMMENT_START;}
 {S}                                        {return TokenType.WHITE_SPACE;}
 {NCName}                                   {pushState(ATTR_QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 "="                                        {return XQueryTypes.ATTREQUAL;}
@@ -444,6 +458,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 }
 
 <END_TAG> {
+"(:"                                       {pushState(MISPLACED_EXPR_COMMENT); return XQueryTypes.EXPR_COMMENT_START;}
 {S}                                        {return TokenType.WHITE_SPACE;}
 {NCName}                                   {return XQueryTypes.XMLTAGNCNAME;}
 ":"                                        {return XQueryTypes.XMLCOLON;}

@@ -27,6 +27,8 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.tree.IElementType;
+import org.intellij.xquery.annotator.comment.MisplacedCommentHighlighter;
 import org.intellij.xquery.annotator.duplicateFunction.ErrorAnnotationCreator;
 import org.intellij.xquery.annotator.function.UnresolvedFunctionChecker;
 import org.intellij.xquery.annotator.variable.UnresolvedVariableChecker;
@@ -63,21 +65,30 @@ import org.intellij.xquery.psi.XQueryWindowClause;
 import org.intellij.xquery.psi.XQueryXmlTagNamespace;
 import org.jetbrains.annotations.NotNull;
 
+import static org.intellij.xquery.psi.XQueryTypes.EXPRCOMMENTCONTENT;
+import static org.intellij.xquery.psi.XQueryTypes.EXPR_COMMENT_END;
+import static org.intellij.xquery.psi.XQueryTypes.EXPR_COMMENT_START;
+
 public class XQueryAnnotator implements Annotator, DumbAware {
 
     private ErrorAnnotationCreator duplicateFunctionErrorCreator = new ErrorAnnotationCreator();
     private XQDocHighlighter xQDocHighlighter = new XQDocHighlighter();
+    private MisplacedCommentHighlighter misplacedCommentHighlighter = new MisplacedCommentHighlighter();
     private UnresolvedVariableChecker unresolvedVariableChecker = new UnresolvedVariableChecker();
     private UnresolvedFunctionChecker unresolvedFunctionChecker = new UnresolvedFunctionChecker();
     private UnresolvedXmlNamespaceChecker unresolvedXmlNamespaceChecker = new UnresolvedXmlNamespaceChecker();
 
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
+        IElementType elementType = element.getNode().getElementType();
         if (element instanceof XQueryFunctionName) {
             duplicateFunctionErrorCreator.createDuplicateFunctionDeclarationError(holder, (XQueryFunctionName) element, (XQueryFile) element.getContainingFile());
         }
         if (element instanceof PsiComment) {
             xQDocHighlighter.highlightXQDocTags((PsiComment) element, holder);
+        }
+        if (isPartOfMisplacedComment(elementType)) {
+            misplacedCommentHighlighter.highlight(element, holder);
         }
         if (element instanceof XQueryVarRef) {
             unresolvedVariableChecker.check((XQueryVarRef) element, holder);
@@ -118,6 +129,10 @@ public class XQueryAnnotator implements Annotator, DumbAware {
             highlight(((XQueryAnnotation) element).getAnnotationName(), holder, XQuerySyntaxHighlighter.ANNOTATION);
             highlight(new TextRange(element.getTextRange().getStartOffset(), element.getTextRange().getStartOffset() + 1), holder, XQuerySyntaxHighlighter.ANNOTATION);
         }
+    }
+
+    private boolean isPartOfMisplacedComment(IElementType type) {
+        return type == EXPRCOMMENTCONTENT || type == EXPR_COMMENT_START || type == EXPR_COMMENT_END;
     }
 
     private void highlightVariable(XQueryVarName element, AnnotationHolder holder, PsiElement elementParent) {

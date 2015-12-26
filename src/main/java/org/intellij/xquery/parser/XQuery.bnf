@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Grzegorz Ligas <ligasgr@gmail.com>
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,6 +61,8 @@
   APOSTROPHE   = "'"
   PRAGMA_BEGIN = "(#"
   PRAGMA_END   = "#)"
+  EXPR_COMMENT_START = "(:"
+  EXPR_COMMENT_END = ":)"
   DIR_COMMENT_BEGIN = "<!--"
   DIR_COMMENT_END = "-->"
   CDATA_BEGIN  = "<![CDATA["
@@ -492,10 +494,10 @@ DirectConstructor ::= DirElemConstructor
  | DirCommentConstructor
  | DirPIConstructor
 private DirElemConstructor ::= XmlEmptyTag | XmlFullTag /* ws: explicit */
-XmlEmptyTag ::= XmlStartTagStart XmlTagName DirAttributeList? XmlEmptyElementEnd
+XmlEmptyTag ::= XmlStartTagStart XmlTagName MisplacedComment* DirAttributeList? MisplacedComment* XmlEmptyElementEnd
 XmlFullTag ::= XmlOpeningTagPart DirElemContent* XmlClosingTagPart {pin=1}
-private XmlOpeningTagPart ::= XmlStartTagStart XmlTagName DirAttributeList? XmlTagEnd {pin=1}
-private XmlClosingTagPart ::= XmlEndTagStart XmlTagName XmlTagEnd {pin=1}
+private XmlOpeningTagPart ::= XmlStartTagStart XmlTagName MisplacedComment* DirAttributeList? MisplacedComment* XmlTagEnd {pin=1}
+private XmlClosingTagPart ::= XmlEndTagStart XmlTagName MisplacedComment* XmlTagEnd {pin=1}
 XmlTagName ::= XmlTagNamespace XmlColon XmlTagLocalName | XmlTagLocalName {methods=[getName setName getNameIdentifier getReference getTextOffset]}
 XmlTagNamespace ::= XmlTagNCName {methods=[getName setName getNameIdentifier getReference isEquivalentTo]}
 XmlTagLocalName ::= XmlTagNCName
@@ -648,3 +650,6 @@ SourceExpr ::= ExprSingle
 TargetExpr ::= ExprSingle
 NewNameExpr ::= ExprSingle
 TransformExpr ::= "copy" "$" VarName ":=" ExprSingle ("," "$" VarName ":=" ExprSingle)* "modify" ExprSingle "return" ExprSingle
+
+MisplacedComment ::= "(:" MisplacedCommentContent ":)"
+private MisplacedCommentContent ::= (ExprCommentContent|MisplacedComment)*

@@ -26,7 +26,7 @@ XQuery File(0,21)
                     XQueryXmlTagNameImpl(XML_TAG_NAME)(12,15)
                       XQueryXmlTagLocalNameImpl(XML_TAG_LOCAL_NAME)(12,15)
                         PsiElement(XmlTagNCName)('tag')(12,15)
-                    PsiErrorElement:XmlColon or XmlTagEnd expected, got '</'(15,15)
+                    PsiErrorElement:'(:', XmlColon or XmlTagEnd expected, got '</'(15,15)
                       <empty list>
               PsiElement(XmlEndTagStart)('</')(15,17)
               XQueryXmlTagNameImpl(XML_TAG_NAME)(17,20)

@@ -31,6 +31,9 @@ public interface XQueryXmlFullTag extends XQueryPsiElement {
   List<XQueryDirElemContent> getDirElemContentList();
 
   @NotNull
+  List<XQueryMisplacedComment> getMisplacedCommentList();
+
+  @NotNull
   List<XQueryXmlTagName> getXmlTagNameList();
 
 }

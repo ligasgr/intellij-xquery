@@ -15,22 +15,22 @@
  * limitations under the License.
  */
 
-// This is a generated file. Not intended for manual editing.
-package org.intellij.xquery.psi;
+package org.intellij.xquery.annotator.comment;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
+import org.intellij.xquery.BaseFunctionalTestCase;
+import org.jetbrains.annotations.NotNull;
 
-public interface XQueryXmlEmptyTag extends XQueryPsiElement {
+public class XQueryMisplacedCommentTest extends BaseFunctionalTestCase {
 
-  @Nullable
-  XQueryDirAttributeList getDirAttributeList();
+    @NotNull
+    @Override
+    protected String getTestDataPath() {
+        return "src/testFunctional/testData/org/intellij/xquery/annotator/comment/";
+    }
 
-  @NotNull
-  List<XQueryMisplacedComment> getMisplacedCommentList();
-
-  @NotNull
-  XQueryXmlTagName getXmlTagName();
+    public void testMisplacedComment() {
+        myFixture.configureByFiles(getDefaultFileName());
+        myFixture.checkHighlighting(false, false, true);
+    }
 
 }

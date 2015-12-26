@@ -16,21 +16,32 @@
  */
 
 // This is a generated file. Not intended for manual editing.
-package org.intellij.xquery.psi;
+package org.intellij.xquery.psi.impl;
 
 import java.util.List;
 import org.jetbrains.annotations.*;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
+import static org.intellij.xquery.psi.XQueryTypes.*;
+import org.intellij.xquery.psi.*;
 
-public interface XQueryXmlEmptyTag extends XQueryPsiElement {
+public class XQueryMisplacedCommentImpl extends XQueryPsiElementImpl implements XQueryMisplacedComment {
 
-  @Nullable
-  XQueryDirAttributeList getDirAttributeList();
+  public XQueryMisplacedCommentImpl(ASTNode node) {
+    super(node);
+  }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) ((XQueryVisitor)visitor).visitMisplacedComment(this);
+    else super.accept(visitor);
+  }
+
+  @Override
   @NotNull
-  List<XQueryMisplacedComment> getMisplacedCommentList();
-
-  @NotNull
-  XQueryXmlTagName getXmlTagName();
+  public List<XQueryMisplacedComment> getMisplacedCommentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryMisplacedComment.class);
+  }
 
 }

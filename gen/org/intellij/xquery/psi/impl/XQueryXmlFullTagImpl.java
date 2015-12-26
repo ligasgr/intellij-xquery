@@ -52,6 +52,12 @@ public class XQueryXmlFullTagImpl extends XQueryPsiElementImpl implements XQuery
 
   @Override
   @NotNull
+  public List<XQueryMisplacedComment> getMisplacedCommentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryMisplacedComment.class);
+  }
+
+  @Override
+  @NotNull
   public List<XQueryXmlTagName> getXmlTagNameList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryXmlTagName.class);
   }

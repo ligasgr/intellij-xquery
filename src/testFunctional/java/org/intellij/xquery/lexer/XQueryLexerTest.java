@@ -82,6 +82,18 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testNestedExpressionComment() throws Exception {
+        assertProducedTokens("(: con(:t:)ent :)", new String[]{
+                "ExprCommentStart", "(:",
+                "ExprCommentContent", " con",
+                "ExprCommentStart", "(:",
+                "ExprCommentContent", "t",
+                "ExprCommentEnd", ":)",
+                "ExprCommentContent", "ent ",
+                "ExprCommentEnd", ":)"
+        });
+    }
+
     public void testXmlContent() throws Exception {
         assertProducedTokens("<tag attr='val'>content</tag>", new String[]{
                 "XmlStartTagStart", "<",
@@ -2300,6 +2312,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "}", "}"
         });
     }
+
     public void testMarklogicNullNodeTest() {
         assertProducedTokens("$a/null-node()", new String[]{
                 "$", "$",
@@ -2366,7 +2379,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "NCName", "a",
                 "}", "}"
         });
-    }    public void testMarklogicTextTest() {
+    }
+
+    public void testMarklogicTextTest() {
         assertProducedTokens("$a/text('title')", new String[]{
                 "$", "$",
                 "NCName", "a",
@@ -2398,6 +2413,63 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "NCName", "abc-def",
                 ":", ":",
                 "NCName", "def-ghi",
+        });
+    }
+
+    public void testIncompleteTagStartBeforeComment() {
+        assertProducedTokens("<foo (: a :)", new String[]{
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "foo",
+                "WHITE_SPACE", " ",
+                "(:", "(:",
+                "ExprCommentContent", " a ",
+                ":)", ":)",
+        });
+    }
+
+    public void testTagWithMisplacedComments() {
+        assertProducedTokens("<foo (: foo :) attr='attr' (: bar :)></foo>", new String[]{
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "foo",
+                "WHITE_SPACE", " ",
+                "(:", "(:",
+                "ExprCommentContent", " foo ",
+                ":)", ":)",
+                "WHITE_SPACE", " ",
+                "AttrNCName", "attr",
+                "AttrEqual", "=",
+                "'", "'",
+                "Char", "attr",
+                "'", "'",
+                "WHITE_SPACE", " ",
+                "(:", "(:",
+                "ExprCommentContent", " bar ",
+                ":)", ":)",
+                "WHITE_SPACE", "",
+                "XmlTagEnd", ">",
+                "XmlEndTagStart", "</",
+                "XmlTagNCName", "foo",
+                "XmlTagEnd", ">"
+        });
+    }
+
+    public void testNestedMisplacedComment() {
+        assertProducedTokens("<a (: a(:b:)c :)/>", new String[]{
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "a",
+                "WHITE_SPACE", " ",
+                "(:", "(:",
+                "ExprCommentContent", " a",
+                "(:", "(:",
+                "ExprCommentContent", "b",
+                ":)", ":)",
+                "ExprCommentContent", "c ",
+                ":)", ":)",
+                "WHITE_SPACE", "",
+                "XmlEmptyElementEnd", "/>"
         });
     }
 }

@@ -460,6 +460,9 @@ public class XQueryParser implements PsiParser, LightPsiParser {
     else if (t == MARKLOGIC_VALIDATION) {
       r = MarklogicValidation(b, 0);
     }
+    else if (t == MISPLACED_COMMENT) {
+      r = MisplacedComment(b, 0);
+    }
     else if (t == MODULE_DECL) {
       r = ModuleDecl(b, 0);
     }
@@ -4577,6 +4580,44 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // "(:" MisplacedCommentContent ":)"
+  public static boolean MisplacedComment(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MisplacedComment")) return false;
+    if (!nextTokenIs(b, EXPR_COMMENT_START)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, EXPR_COMMENT_START);
+    r = r && MisplacedCommentContent(b, l + 1);
+    r = r && consumeToken(b, EXPR_COMMENT_END);
+    exit_section_(b, m, MISPLACED_COMMENT, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (ExprCommentContent|MisplacedComment)*
+  static boolean MisplacedCommentContent(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MisplacedCommentContent")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!MisplacedCommentContent_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MisplacedCommentContent", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // ExprCommentContent|MisplacedComment
+  private static boolean MisplacedCommentContent_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MisplacedCommentContent_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, EXPRCOMMENTCONTENT);
+    if (!r) r = MisplacedComment(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // VersionDecl? (LibraryModule | MainModule)
   static boolean Module(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Module")) return false;
@@ -7892,7 +7933,7 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // XmlEndTagStart XmlTagName XmlTagEnd
+  // XmlEndTagStart XmlTagName MisplacedComment* XmlTagEnd
   static boolean XmlClosingTagPart(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "XmlClosingTagPart")) return false;
     if (!nextTokenIs(b, XMLENDTAGSTART)) return false;
@@ -7901,13 +7942,26 @@ public class XQueryParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, XMLENDTAGSTART);
     p = r; // pin = 1
     r = r && report_error_(b, XmlTagName(b, l + 1));
+    r = p && report_error_(b, XmlClosingTagPart_2(b, l + 1)) && r;
     r = p && consumeToken(b, XMLTAGEND) && r;
     exit_section_(b, l, m, null, r, p, null);
     return r || p;
   }
 
+  // MisplacedComment*
+  private static boolean XmlClosingTagPart_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "XmlClosingTagPart_2")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!MisplacedComment(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "XmlClosingTagPart_2", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
   /* ********************************************************** */
-  // XmlStartTagStart XmlTagName DirAttributeList? XmlEmptyElementEnd
+  // XmlStartTagStart XmlTagName MisplacedComment* DirAttributeList? MisplacedComment* XmlEmptyElementEnd
   public static boolean XmlEmptyTag(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "XmlEmptyTag")) return false;
     if (!nextTokenIs(b, XMLSTARTTAGSTART)) return false;
@@ -7916,15 +7970,41 @@ public class XQueryParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, XMLSTARTTAGSTART);
     r = r && XmlTagName(b, l + 1);
     r = r && XmlEmptyTag_2(b, l + 1);
+    r = r && XmlEmptyTag_3(b, l + 1);
+    r = r && XmlEmptyTag_4(b, l + 1);
     r = r && consumeToken(b, XMLEMPTYELEMENTEND);
     exit_section_(b, m, XML_EMPTY_TAG, r);
     return r;
   }
 
-  // DirAttributeList?
+  // MisplacedComment*
   private static boolean XmlEmptyTag_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "XmlEmptyTag_2")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!MisplacedComment(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "XmlEmptyTag_2", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // DirAttributeList?
+  private static boolean XmlEmptyTag_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "XmlEmptyTag_3")) return false;
     DirAttributeList(b, l + 1);
+    return true;
+  }
+
+  // MisplacedComment*
+  private static boolean XmlEmptyTag_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "XmlEmptyTag_4")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!MisplacedComment(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "XmlEmptyTag_4", c)) break;
+      c = current_position_(b);
+    }
     return true;
   }
 
@@ -7956,7 +8036,7 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // XmlStartTagStart XmlTagName DirAttributeList? XmlTagEnd
+  // XmlStartTagStart XmlTagName MisplacedComment* DirAttributeList? MisplacedComment* XmlTagEnd
   static boolean XmlOpeningTagPart(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "XmlOpeningTagPart")) return false;
     if (!nextTokenIs(b, XMLSTARTTAGSTART)) return false;
@@ -7966,15 +8046,41 @@ public class XQueryParser implements PsiParser, LightPsiParser {
     p = r; // pin = 1
     r = r && report_error_(b, XmlTagName(b, l + 1));
     r = p && report_error_(b, XmlOpeningTagPart_2(b, l + 1)) && r;
+    r = p && report_error_(b, XmlOpeningTagPart_3(b, l + 1)) && r;
+    r = p && report_error_(b, XmlOpeningTagPart_4(b, l + 1)) && r;
     r = p && consumeToken(b, XMLTAGEND) && r;
     exit_section_(b, l, m, null, r, p, null);
     return r || p;
   }
 
-  // DirAttributeList?
+  // MisplacedComment*
   private static boolean XmlOpeningTagPart_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "XmlOpeningTagPart_2")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!MisplacedComment(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "XmlOpeningTagPart_2", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // DirAttributeList?
+  private static boolean XmlOpeningTagPart_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "XmlOpeningTagPart_3")) return false;
     DirAttributeList(b, l + 1);
+    return true;
+  }
+
+  // MisplacedComment*
+  private static boolean XmlOpeningTagPart_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "XmlOpeningTagPart_4")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!MisplacedComment(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "XmlOpeningTagPart_4", c)) break;
+      c = current_position_(b);
+    }
     return true;
   }
 

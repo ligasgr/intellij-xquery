@@ -75,10 +75,12 @@ public class XQueryXmlSlashTypedHandler extends TypedHandlerDelegate {
             final String prevLeafText = prevLeaf.getText();
             if (isStartOfEndOfTag(prevLeaf, prevLeafText)) {
                 XQueryXmlFullTag tag = PsiTreeUtil.getParentOfType(element, XQueryXmlFullTag.class);
-                XQueryXmlTagName tagName = tag.getXmlTagNameList().get(0);
-                if (hasNoClosingTagName(prevLeaf, tag, tagName)) {
-                    finishClosingTag(editor, tagName);
-                    return Result.STOP;
+                if (tag != null) {
+                    XQueryXmlTagName tagName = tag.getXmlTagNameList().get(0);
+                    if (hasNoClosingTagName(prevLeaf, tag, tagName)) {
+                        finishClosingTag(editor, tagName);
+                        return Result.STOP;
+                    }
                 }
             }
             if (!"/".equals(prevLeafText.trim())) return Result.CONTINUE;

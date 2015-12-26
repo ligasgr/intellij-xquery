@@ -52,7 +52,8 @@ public class XQueryParserDefinition implements ParserDefinition {
             XQueryTypes.CDATASECTIONCONTENTCHAR,
             XQueryTypes.DIRPICONTENTCHAR,
             XQueryTypes.DIRCOMMENTCHAR,
-            XQueryTypes.CHAR
+            XQueryTypes.CHAR,
+            XQueryTypes.EXPRCOMMENTCONTENT
     );
     public static final TokenSet STRINGS = TokenSet.create(XQueryTypes.STRINGLITERAL);
     public static final IFileElementType FILE = new IFileElementType(Language.<XQueryLanguage>findInstance

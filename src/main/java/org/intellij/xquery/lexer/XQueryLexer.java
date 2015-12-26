@@ -28,11 +28,6 @@ import static org.intellij.xquery.parser.XQueryParserDefinition.CHARACTER_CONTEN
 import static org.intellij.xquery.parser.XQueryParserDefinition.COMMENTS;
 import static org.intellij.xquery.parser.XQueryParserDefinition.WHITE_SPACES;
 
-/**
- * User: ligasgr
- * Date: 25/03/13
- * Time: 21:16
- */
 public class XQueryLexer extends LookAheadLexer {
     public static final TokenSet KEYWORDS = TokenSet.create(
             XQueryTypes.K_ALLOWING,
@@ -158,10 +153,6 @@ public class XQueryLexer extends LookAheadLexer {
             XQueryTypes.K_WINDOW,
             XQueryTypes.K_XQUERY,
             XQueryTypes.K_ZERO_DIGIT
-    );
-
-    public static final TokenSet OPERATORS = TokenSet.create(
-
     );
 
     public XQueryLexer() {

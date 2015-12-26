@@ -583,6 +583,10 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitMisplacedComment(@NotNull XQueryMisplacedComment o) {
+    visitPsiElement(o);
+  }
+
   public void visitModuleDecl(@NotNull XQueryModuleDecl o) {
     visitNamespaceSource(o);
   }

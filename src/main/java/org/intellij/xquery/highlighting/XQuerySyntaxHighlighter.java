@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,11 +31,6 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
-/**
- * User: ligasgr
- * Date: 10/02/13
- * Time: 19:01
- */
 public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
 
     public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("XQUERY_BAD_CHARACTER",
@@ -118,7 +113,10 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
         if (tokenType == XQueryBasicTypes.EXPR_COMMENT_CONTENT
                 || tokenType == XQueryBasicTypes.EXPR_COMMENT_END
-                || tokenType == XQueryBasicTypes.EXPR_COMMENT_START) {
+                || tokenType == XQueryBasicTypes.EXPR_COMMENT_START
+                || tokenType == XQueryTypes.EXPRCOMMENTCONTENT
+                || tokenType == XQueryTypes.EXPR_COMMENT_END
+                || tokenType == XQueryTypes.EXPR_COMMENT_START) {
             return COMMENTS;
         }
         if (tokenType == XQueryBasicTypes.DOC_COMMENT_CONTENT
