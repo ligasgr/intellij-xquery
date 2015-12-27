@@ -54,6 +54,7 @@ import java.util.Stack;
       put(DECLARATION_RECOGNITION, "DECLARATION_RECOGNITION");
       put(DEFAULT_RECOGNITION, "DEFAULT_RECOGNITION");
       put(VALIDATE_RECOGNITION, "VALIDATE_RECOGNITION");
+      put(BY_RECOGNITION, "BY_RECOGNITION");
       put(DOC_COMMENT, "DOC_COMMENT");
       put(PRAGMA_CONTENT, "PRAGMA_CONTENT");
       put(MODULE_RECOGNITION, "MODULE_RECOGNITION");
@@ -181,6 +182,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 %state MODULE_RECOGNITION
 %state AS_RECOGNITION
 %state VALIDATE_RECOGNITION
+%state BY_RECOGNITION
 %state WS_BEFORE_QNAME
 %state ITEM_TYPE
 %state KIND_TEST
@@ -296,8 +298,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "as"                                       {return XQueryTypes.K_AS;}
 "to"                                       {return XQueryTypes.K_TO;}
 "where"                                    {return XQueryTypes.K_WHERE;}
-"group" / {SC} "by"                        {return XQueryTypes.K_GROUP;}
-"by"                                       {return XQueryTypes.K_BY;}
+"group"                                    {{yypushback(yylength()); pushState(BY_RECOGNITION); return TokenType.WHITE_SPACE;}}
 "instance" / {SC} "of"                     {return XQueryTypes.K_INSTANCE;}
 "of"                                       {return XQueryTypes.K_OF;}
 "satisfies"                                {return XQueryTypes.K_SATISFIES;}
@@ -339,7 +340,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "is"                                       {return XQueryTypes.K_IS;}
 "external" / {SC}? (":="|";")              {return XQueryTypes.K_EXTERNAL;}
 "validate"                                 {yypushback(yylength()); pushState(VALIDATE_RECOGNITION); return TokenType.WHITE_SPACE;}
-"order" / {SC} "by"                        {return XQueryTypes.K_ORDER;}
+"order"                                    {yypushback(yylength()); pushState(BY_RECOGNITION); return TokenType.WHITE_SPACE;}
 "map" / {SC}? "("                          {pushState(ITEM_TYPE); return XQueryTypes.K_MAP;}
 "attribute" / {SC}?"("                     {pushState(ITEM_TYPE); return XQueryTypes.K_ATTRIBUTE;}
 "document-node" / {SC}? "("                {pushState(ITEM_TYPE); return XQueryTypes.K_DOCUMENT_NODE;}
@@ -369,7 +370,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "typeswitch" / {SC}? ("(")                 {return XQueryTypes.K_TYPESWITCH;}
 "default" / {SC} ("$"|"return")            {return XQueryTypes.K_DEFAULT;}
 "document" / {SC}? ("{")                   {return XQueryTypes.K_DOCUMENT;}
-"stable" / {SC} "order"                    {return XQueryTypes.K_STABLE;}
+"stable"                                   {yypushback(yylength()); pushState(BY_RECOGNITION); return TokenType.WHITE_SPACE;}
 "ordered" / {SC}? "{"                      {return XQueryTypes.K_ORDERED;}
 "unordered" / {SC}? "{"                    {return XQueryTypes.K_UNORDERED;}
 "insert" / {SC} ("node"|"nodes")           {pushState(UPDATE_FACILITY);return XQueryTypes.K_INSERT;}
@@ -692,6 +693,17 @@ SC=({S} | "(:" {Char}* ~":)")+
 "strict"                                   {return XQueryTypes.K_STRICT;}
 "type"                                     {return XQueryTypes.K_TYPE;}
 "as"                                       {return XQueryTypes.K_AS;}
+{NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+}
+
+<BY_RECOGNITION> {
+{S}                                        {return TokenType.WHITE_SPACE;}
+"(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
+"stable" / {SC} "order"                    {return XQueryTypes.K_STABLE;}
+"order" / {SC} "by"                        {return XQueryTypes.K_ORDER;}
+"group" / {SC} "by"                        {return XQueryTypes.K_GROUP;}
+"by"                                       {return XQueryTypes.K_BY;}
 {NCName}                                   {pushState(QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
