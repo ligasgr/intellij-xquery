@@ -449,7 +449,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 {PredefinedEntityRef}                      {return XQueryTypes.PREDEFINEDENTITYREF;}
 {CharRef}                                  {return XQueryTypes.CHARREF;}
 "{{" | "}}" | [^{}<]                       {return XQueryTypes.ELEMENTCONTENTCHAR;}
-"{"                                        {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE; }
+"{"                                        {pushState(EXPRESSION); return XQueryTypes.L_C_BRACE; }
 "</"                                       {popState(); pushState(END_TAG); return XQueryTypes.XMLENDTAGSTART;}
 "<"                                        {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART; }
 }

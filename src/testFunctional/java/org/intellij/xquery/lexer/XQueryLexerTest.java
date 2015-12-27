@@ -2480,4 +2480,41 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "XmlEmptyElementEnd", "/>"
         });
     }
+
+    public void testInternalExpressionsInElementContent() {
+        assertProducedTokens("declare function foo($a, $b) {<foo>a is '{$a}", new String[]{
+                "WHITE_SPACE", "",
+                "declare", "declare",
+                "WHITE_SPACE", " ",
+                "function", "function",
+                "WHITE_SPACE", " ",
+                "NCName", "foo",
+                "(", "(",
+                "WHITE_SPACE", "",
+                "$", "$",
+                "NCName", "a",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "b",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "foo",
+                "WHITE_SPACE", "",
+                "XmlTagEnd", ">",
+                "ElementContentChar", "a",
+                "WHITE_SPACE", " ",
+                "ElementContentChar", "is",
+                "WHITE_SPACE", " ",
+                "ElementContentChar", "'",
+                "{", "{",
+                "$", "$",
+                "NCName", "a",
+                "}", "}"
+
+        });
+    }
 }
