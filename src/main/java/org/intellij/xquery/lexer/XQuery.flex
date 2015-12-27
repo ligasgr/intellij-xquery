@@ -69,6 +69,7 @@ import java.util.Stack;
       put(APOS_STRING_SIMPLE, "APOS_STRING_SIMPLE");
       put(URIQUALIFIED, "URIQUALIFIED");
       put(EXPRESSION_IN_APOS_STRING, "EXPRESSION_IN_APOS_STRING");
+      put(EXPRESSION, "EXPRESSION");
       put(YYINITIAL, "YYINITIAL");
       put(APOS_STRING, "APOS_STRING");
       put(ATTR_LIST, "ATTR_LIST");
@@ -174,6 +175,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 %state DOC_COMMENT
 %state EXPRESSION_IN_QUOT_STRING
 %state EXPRESSION_IN_APOS_STRING
+%state EXPRESSION
 // helper states for better support of live syntax highlighting
 %state XQUERY_RECOGNITION
 %state DECLARATION_RECOGNITION
@@ -190,7 +192,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 %%
 
 
-<YYINITIAL,EXPRESSION_IN_QUOT_STRING,EXPRESSION_IN_APOS_STRING> {
+<YYINITIAL,EXPRESSION_IN_QUOT_STRING,EXPRESSION_IN_APOS_STRING,EXPRESSION> {
 {S}                                        {return TokenType.WHITE_SPACE;}
 {DecimalLiteral}                           {return XQueryTypes.DECIMALLITERAL;}
 {DoubleLiteral}                            {return XQueryTypes.DOUBLELITERAL;}
@@ -493,6 +495,9 @@ SC=({S} | "(:" {Char}* ~":)")+
 <EXPRESSION_IN_APOS_STRING> {
 .                                          {yypushback(yylength()); popStateOrDefaultTo(APOS_STRING); return TokenType.WHITE_SPACE;}
 }
+<EXPRESSION> {
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+}
 
 <URIQUALIFIED> {
 {S}                                        {return TokenType.WHITE_SPACE;}
@@ -503,6 +508,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 {S}                                        {popState(); pushState(QNAME); return TokenType.WHITE_SPACE;}
 .                                          {yypushback(yylength()); popState(); pushState(QNAME); return TokenType.WHITE_SPACE;}
 }
+
 <QNAME> {
 "*"                                        {return XQueryTypes.STAR_SIGN;}
 {NCName} ":" {NameStartCharWithoutFirst}   {yypushback(2); return XQueryTypes.NCNAME;}
@@ -527,6 +533,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 {S}                                        {return TokenType.WHITE_SPACE;}
 "(:~"                                      {pushState(DOC_COMMENT);return XQueryBasicTypes.DOC_COMMENT_START;}
 "(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
+"{"                                        {pushState(EXPRESSION);return XQueryTypes.L_C_BRACE;}
 "="                                        {return XQueryTypes.EQUAL;}
 "\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
 "'"                                        {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}

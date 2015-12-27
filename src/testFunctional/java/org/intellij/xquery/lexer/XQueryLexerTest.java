@@ -1671,6 +1671,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "(", "(",
                 ")", ")",
                 "}", "}",
+                "WHITE_SPACE", "",
                 ";", ";"
         });
     }
@@ -1692,6 +1693,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "(", "(",
                 ")", ")",
                 "}", "}",
+                "WHITE_SPACE", "",
                 ";", ";"
         });
     }
@@ -1714,6 +1716,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "(", "(",
                 ")", ")",
                 "}", "}",
+                "WHITE_SPACE", "",
                 ";", ";"
         });
     }
@@ -1766,6 +1769,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "(", "(",
                 ")", ")",
                 "}", "}",
+                "WHITE_SPACE", "",
                 ";", ";"
         });
     }
@@ -1790,6 +1794,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "(", "(",
                 ")", ")",
                 "}", "}",
+                "WHITE_SPACE", "",
                 ";", ";"
         });
     }
@@ -1823,6 +1828,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", "",
                 "XmlEmptyElementEnd", "/>",
                 "}", "}",
+                "WHITE_SPACE", "",
                 ";", ";"
         });
     }
@@ -1859,6 +1865,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", "",
                 "XmlEmptyElementEnd", "/>",
                 "}", "}",
+                "WHITE_SPACE", "",
                 ";", ";"
         });
     }
@@ -1885,6 +1892,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", "",
                 "XmlEmptyElementEnd", "/>",
                 "}", "}",
+                "WHITE_SPACE", "",
                 ";", ";"
         });
     }
