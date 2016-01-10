@@ -112,9 +112,13 @@ public class Determiner {
 
     private boolean nameIsTheSame(XQueryFunctionName functionName, XQueryFunctionDecl otherFunctionDeclaration) {
         XQueryFunctionName otherFunctionName = otherFunctionDeclaration.getFunctionName();
-        XQueryQName<XQueryFunctionName> source = aXQueryQName(functionName).build();
-        XQueryQName<XQueryFunctionName> checkedQName = aXQueryQName(otherFunctionName).build();
-        return source.equals(checkedQName);
+        if (otherFunctionName != null) {
+            XQueryQName<XQueryFunctionName> source = aXQueryQName(functionName).build();
+            XQueryQName<XQueryFunctionName> checkedQName = aXQueryQName(otherFunctionName).build();
+            return source.equals(checkedQName);
+        } else {
+            return false;
+        }
     }
 
     private boolean arityIsTheSame(XQueryFunctionName functionName, XQueryFunctionDecl otherFunctionDeclaration) {
