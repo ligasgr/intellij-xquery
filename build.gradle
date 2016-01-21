@@ -26,7 +26,7 @@ sourceCompatibility = 1.6
 // Update this path to point to your IDEA installation
 project.ext.userDefinedInstallationPath = ''
 project.ext.sdkDir = 'sdk'
-project.ext.sdkVersion = '141.2735'
+project.ext.sdkVersion = '141.2735.5'
 project.ext.ideaSdk = 'idea-IC-' + project.ext.sdkVersion
 project.ext.ideaSdkName = 'IDEA IC-' + project.ext.sdkVersion
 if (project.ext.userDefinedInstallationPath)
