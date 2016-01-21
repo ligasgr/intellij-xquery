@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -252,7 +252,7 @@ public class XQueryFormattingBlock extends AbstractBlock {
 
     private Indent calculateChildIndent(IElementType type, boolean fromCalculatedType) {
         if (type == ENCLOSED_EXPR || type == FUNCTION_DECL || (! fromCalculatedType && type == PARENTHESIZED_EXPR)
-                || type == LET_BINDING || type == OP_ASSIGN || (fromCalculatedType && type == RETURN_CLAUSE)
+                || type == LET_BINDING || type == OP_ASSIGN || type == RETURN_CLAUSE
                 || (! fromCalculatedType && type == TRY_CLAUSE) || (! fromCalculatedType && type == CATCH_CLAUSE)
                 || type == CATCH_CLAUSE_EXPRESSION)
             return Indent.getNormalIndent();

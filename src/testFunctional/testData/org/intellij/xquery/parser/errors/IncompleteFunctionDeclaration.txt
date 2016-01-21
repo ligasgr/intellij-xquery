@@ -96,8 +96,8 @@ XQuery File(0,185)
         PsiElement(NCName)('y')(136,137)
     XQueryParamListImpl(PARAM_LIST)(137,138)
       PsiElement(()('(')(137,138)
-    PsiErrorElement:$ or ')' expected, got 'declare'(138,138)
-      <empty list>
+      PsiErrorElement:$ or ')' expected, got 'declare'(138,138)
+        <empty list>
   PsiWhiteSpace('\n')(138,139)
   XQueryFunctionDeclImpl(FUNCTION_DECL)(139,157)
     PsiElement(declare)('declare')(139,146)

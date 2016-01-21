@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +18,10 @@
 package org.intellij.xquery.livetemplate;
 
 import com.intellij.codeInsight.lookup.Lookup;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.template.impl.TemplateImpl;
 import com.intellij.codeInsight.template.impl.TemplateSettings;
 import com.intellij.codeInsight.template.impl.actions.ListTemplatesAction;
-import com.intellij.openapi.editor.Editor;
 import org.intellij.xquery.BaseFunctionalTestCase;
 import org.junit.Test;
 
@@ -60,42 +60,42 @@ public class LiveTemplateTest extends BaseFunctionalTestCase {
 
     @Test
     public void testDeclareVariableTemplate() throws Exception {
-        doTestTemplateExpansion("name", "'value'");
+        doTestTemplateExpansion("var", "name", "'value'");
     }
 
     @Test
     public void testExtendedDeclareVariableTemplate() throws Exception {
-        doTestTemplateExpansion("%private", "name", "xs:string", "'value'");
+        doTestTemplateExpansion("vvar", "%private", "name", "xs:string", "'value'");
     }
 
     @Test
     public void testDeclareFunctionTemplate() throws Exception {
-        doTestTemplateExpansion("name", "'value'");
+        doTestTemplateExpansion("fun", "name", "'value'");
     }
 
     @Test
     public void testExtendedDeclareFunctionTemplate() throws Exception {
-        doTestTemplateExpansion("%private", "name", "$param", "xs:string", "'value'");
+        doTestTemplateExpansion("ffun", "%private", "name", "$param", "xs:string", "'value'");
     }
 
     @Test
     public void testDeclareNamespaceTemplate() throws Exception {
-        doTestTemplateExpansion("name", "value", "");
+        doTestTemplateExpansion("ns", "name", "value", "");
     }
 
     @Test
     public void testImportTemplate() throws Exception {
-        doTestTemplateExpansion("name", "value", "");
+        doTestTemplateExpansion("imp", "name", "value", "");
     }
 
     @Test
     public void testModuleTemplate() throws Exception {
-        doTestTemplateExpansion("name", "value", "");
+        doTestTemplateExpansion("mod", "name", "value", "");
     }
 
     @Test
     public void testDeclareOptionTemplate() throws Exception {
-        doTestTemplateExpansion("name", "value", "");
+        doTestTemplateExpansion("opt", "name", "value", "");
     }
 
     @Test
@@ -106,17 +106,17 @@ public class LiveTemplateTest extends BaseFunctionalTestCase {
 
     @Test
     public void testCarriageReturnTemplate() throws Exception {
-        doTestTemplateExpansion();
+        doTestTemplateExpansion("cr");
     }
 
     @Test
     public void testNewLineTemplate() throws Exception {
-        doTestTemplateExpansion();
+        doTestTemplateExpansion("nl");
     }
 
     @Test
     public void testTabulationTemplate() throws Exception {
-        doTestTemplateExpansion();
+        doTestTemplateExpansion("tab");
     }
 
     @Test
@@ -144,65 +144,74 @@ public class LiveTemplateTest extends BaseFunctionalTestCase {
 
     @Test
     public void testLetTemplate() throws Exception {
-        doTestTemplateExpansion("name", "'value'", "");
+        doTestTemplateExpansion("let", "name", "'value'", "");
     }
 
     @Test
     public void testForTemplate() throws Exception {
-        doTestTemplateExpansion("name", "(1 to 10)", "");
+        doTestTemplateExpansion("for", "name", "(1 to 10)", "");
     }
 
     @Test
     public void testOrderByTemplate() throws Exception {
-        doTestTemplateExpansion("$x");
+        doTestTemplateExpansion("order", "$x");
     }
 
     @Test
     public void testGroupByTemplate() throws Exception {
-        doTestTemplateExpansion("$x");
+        doTestTemplateExpansion("group", "$x");
     }
 
     @Test
     public void testSomeTemplate() throws Exception {
-        doTestTemplateExpansion("name", "(1 to 10)", "");
+        doTestTemplateExpansion("some", "name", "(1 to 10)", "");
     }
 
     @Test
     public void testAllTemplate() throws Exception {
-        doTestTemplateExpansion("name", "(1 to 10)", "");
+        doTestTemplateExpansion("all", "name", "(1 to 10)", "");
     }
 
     @Test
     public void testSwitchTemplate() throws Exception {
-        doTestTemplateExpansion("'value'", "'value'", "'matched'", "'unknown'");
+        doTestTemplateExpansion("switch", "'value'", "'value'", "'matched'", "'unknown'");
     }
 
     @Test
     public void testTypeswitchTemplate() throws Exception {
-        doTestTemplateExpansion("'value'", "xs:string", "'xs:string'", "'unknown'");
+        doTestTemplateExpansion("typeswitch", "'value'", "xs:string", "'xs:string'", "'unknown'");
     }
 
     @Test
     public void testTryCatchTemplate() throws Exception {
-        doTestTemplateExpansion("'value'", "");
+        doTestTemplateExpansion("try", "'value'", "");
     }
 
     @Test
     public void testTraceTemplate() throws Exception {
-        doTestTemplateExpansion("$x");
+        doTestTemplateExpansion("trace", "$x");
     }
 
-    private void doTestTemplateExpansion(String... values) throws Exception {
+    private void doTestTemplateExpansion(String lookupText, String... values) throws Exception {
         final String testName = getTestName(false);
         myFixture.configureByFile(testName + ".xq");
-        expandTemplate(myFixture.getEditor(), values);
-        myFixture.checkResultByFile(String.format("%s_after.xq", testName));
+        expandTemplate(lookupText, values);
     }
 
-    public void expandTemplate(final Editor editor, String... values) {
-        new ListTemplatesAction().actionPerformedImpl(editor.getProject(), editor);
-        myFixture.finishLookup(Lookup.NORMAL_SELECT_CHAR);
-        substituteValues(values);
+    public void expandTemplate(String lookupText, String... values) {
+        new ListTemplatesAction().actionPerformedImpl(myFixture.getProject(), myFixture.getEditor());
+
+        LookupElement[] elements = myFixture.getLookupElements();
+        assertNotNull(elements);
+        for (LookupElement element : elements) {
+            if (lookupText.equals(element.getLookupString())) {
+                myFixture.getLookup().setCurrentItem(element);
+                myFixture.finishLookup(Lookup.NORMAL_SELECT_CHAR);
+                substituteValues(values);
+                myFixture.checkResultByFile(getTestName(false) + "_after.xq");
+                return;
+            }
+        }
     }
 
     private void substituteValues(String[] values) {

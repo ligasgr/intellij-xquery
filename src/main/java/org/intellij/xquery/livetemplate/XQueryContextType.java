@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ package org.intellij.xquery.livetemplate;
 import com.intellij.codeInsight.template.EverywhereContextType;
 import com.intellij.codeInsight.template.TemplateContextType;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilBase;
@@ -52,7 +53,7 @@ public abstract class XQueryContextType extends TemplateContextType {
     protected abstract boolean isInContext(PsiElement element);
 
     protected boolean isNotBeforeModuleDeclaration(PsiElement topmostElement) {
-        PsiElement[] moduleKeywords = XQueryPsiImplUtil.findChildrenOfType(topmostElement.getNextSibling(), XQueryTypes.K_MODULE);
+        PsiElement[] moduleKeywords = XQueryPsiImplUtil.findChildrenOfType(topmostElement, XQueryTypes.K_MODULE);
         PsiElement nextModuleDeclaration = PsiTreeUtil.getNextSiblingOfType(topmostElement, XQueryModuleDecl.class);
         return moduleKeywords.length == 0&& nextModuleDeclaration == null;
     }
@@ -77,13 +78,21 @@ public abstract class XQueryContextType extends TemplateContextType {
         @Override
         protected boolean isInContext(PsiElement element) {
             PsiElement topmostElement = XQueryPsiImplUtil.getTopmostElementWithTheSameOffset(element);
-            boolean isOnTheTopLevelOfTheStructure = topmostElement.getParent() instanceof XQueryFile;
+            PsiElement topmostNonErrorElement = topmostElement instanceof PsiErrorElement
+                    ? topmostElement.getParent()
+                    : topmostElement;
+            boolean isOnTheTopLevelOfTheStructure = topmostNonErrorElement.getParent() instanceof XQueryFile;
             return isOnTheTopLevelOfTheStructure && isBeforeQueryBody(topmostElement) && isNotBeforeModuleDeclaration(topmostElement);
         }
 
         private boolean isBeforeQueryBody(PsiElement topmostElement) {
             PsiElement previousQueryBody = PsiTreeUtil.getPrevSiblingOfType(topmostElement, XQueryQueryBody.class);
-            return previousQueryBody == null;
+            return previousQueryBody == null && (!(topmostElement instanceof PsiErrorElement) || !topmostElement.equals(getLastChild(topmostElement)));
+        }
+
+        private PsiElement getLastChild(PsiElement topmostElement) {
+            XQueryQueryBody queryBody = PsiTreeUtil.getParentOfType(topmostElement, XQueryQueryBody.class);
+            return queryBody != null ? queryBody.getLastChild() : null;
         }
     }
 

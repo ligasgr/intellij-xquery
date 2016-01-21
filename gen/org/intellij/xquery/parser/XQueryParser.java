@@ -4665,7 +4665,7 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !('declare' | 'import')
+  // !('declare' | 'import' | ';')
   static boolean ModuleDeclRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ModuleDeclRecover")) return false;
     boolean r;
@@ -4675,13 +4675,14 @@ public class XQueryParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // 'declare' | 'import'
+  // 'declare' | 'import' | ';'
   private static boolean ModuleDeclRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ModuleDeclRecover_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, K_DECLARE);
     if (!r) r = consumeToken(b, K_IMPORT);
+    if (!r) r = consumeToken(b, SEMICOLON);
     exit_section_(b, m, null, r);
     return r;
   }

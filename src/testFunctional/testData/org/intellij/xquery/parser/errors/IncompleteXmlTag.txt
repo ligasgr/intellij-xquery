@@ -24,5 +24,5 @@ XQuery File(0,18)
                     PsiElement(XmlTagEnd)('>')(9,10)
                     XQueryDirElemContentImpl(DIR_ELEM_CONTENT)(10,18)
                       PsiElement(ElementContentChar)('contents')(10,18)
-                  PsiErrorElement:<dir elem content> or XmlEndTagStart expected, unexpected end of file(18,18)
-                    <empty list>
+                    PsiErrorElement:<dir elem content> or XmlEndTagStart expected, unexpected end of file(18,18)
+                      <empty list>
