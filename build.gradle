@@ -26,14 +26,14 @@ sourceCompatibility = 1.6
 // Update this path to point to your IDEA installation
 project.ext.userDefinedInstallationPath = ''
 project.ext.sdkDir = 'sdk'
-project.ext.sdkVersion = '141.1532.4'
+project.ext.sdkVersion = '141.2735'
 project.ext.ideaSdk = 'idea-IC-' + project.ext.sdkVersion
 project.ext.ideaSdkName = 'IDEA IC-' + project.ext.sdkVersion
 if (project.ext.userDefinedInstallationPath)
     project.ext.ideaInstallationPath = project.ext.userDefinedInstallationPath
 else
     project.ext.ideaInstallationPath = project.ext.sdkDir + "/" + project.ext.ideaSdk
-project.ext.ideaInstallationSource = 'http://download.jetbrains.com/idea/ideaIC-14.1.4.tar.gz'
+project.ext.ideaInstallationSource = 'http://download.jetbrains.com/idea/ideaIC-14.1.5.tar.gz'
 project.ext.ideaArchiveFileName = project.ext.ideaInstallationSource.substring(project.ext.ideaInstallationSource.lastIndexOf('/'))
 
 configurations {
