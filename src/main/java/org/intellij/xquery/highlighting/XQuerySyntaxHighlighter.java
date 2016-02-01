@@ -339,6 +339,11 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType == XQueryTypes.K_MODIFY
                 || tokenType == XQueryTypes.K_RENAME
                 || tokenType == XQueryTypes.K_REPLACE
+                || tokenType == XQueryTypes.K_OBJECT_NODE
+                || tokenType == XQueryTypes.K_NUMBER_NODE
+                || tokenType == XQueryTypes.K_BOOLEAN_NODE
+                || tokenType == XQueryTypes.K_NULL_NODE
+                || tokenType == XQueryTypes.K_ARRAY_NODE
                 ) {
             return KEYWORDS;
         }
