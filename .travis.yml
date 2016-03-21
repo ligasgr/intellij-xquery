@@ -2,7 +2,7 @@ language: java
 install: ./gradlew downloadSdk unzipSdk
 script: ./gradlew clean allTests
 jdk:
-  - openjdk8
+  - oraclejdk8
 branches:
   only:
     - master
