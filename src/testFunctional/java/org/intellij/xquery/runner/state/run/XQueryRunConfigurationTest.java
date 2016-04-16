@@ -25,6 +25,7 @@ import org.intellij.xquery.runner.XQueryRunConfigurationFactory;
 import org.intellij.xquery.runner.XQueryRunConfigurationType;
 import org.mockito.InOrder;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -96,7 +97,7 @@ public class XQueryRunConfigurationTest extends BaseFunctionalTestCase {
     }
 
     public void testShouldSetWorkingDirectoryToProjectBasePath() {
-        assertThat(configuration.getWorkingDirectory(), is(getProject().getBasePath()));
+        assertThat(configuration.getWorkingDirectory(), is(getProject().getBasePath().replace('/', File.separatorChar)));
         assertThat(configuration.getWorkingDirectory(), not(containsString(LocalFileSystem.PROTOCOL)));
         assertThat(configuration.getRawWorkingDirectory(), containsString(LocalFileSystem.PROTOCOL));
         assertThat(configuration.getRawWorkingDirectory(), not(containsString("\\")));
