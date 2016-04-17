@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -76,6 +76,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testExpressionComment() throws Exception {
         assertProducedTokens("(: content :)", new String[]{
+                "WHITE_SPACE", "",
                 "ExprCommentStart", "(:",
                 "ExprCommentContent", " content ",
                 "ExprCommentEnd", ":)"
@@ -84,6 +85,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testNestedExpressionComment() throws Exception {
         assertProducedTokens("(: con(:t:)ent :)", new String[]{
+                "WHITE_SPACE", "",
                 "ExprCommentStart", "(:",
                 "ExprCommentContent", " con",
                 "ExprCommentStart", "(:",
@@ -96,6 +98,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testXmlContent() throws Exception {
         assertProducedTokens("<tag attr='val'>content</tag>", new String[]{
+                "WHITE_SPACE", "",
                 "XmlStartTagStart", "<",
                 "WHITE_SPACE", "",
                 "XmlTagNCName", "tag",
@@ -116,6 +119,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testDirectComment() throws Exception {
         assertProducedTokens("<tag attr='val'><!--content--></tag>", new String[]{
+                "WHITE_SPACE", "",
                 "XmlStartTagStart", "<",
                 "WHITE_SPACE", "",
                 "XmlTagNCName", "tag",
@@ -138,6 +142,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testDirectCommentWithoutSurroundingTag() throws Exception {
         assertProducedTokens("<!--content-->", new String[]{
+                "WHITE_SPACE", "",
                 "<!--", "<!--",
                 "DirCommentChar", "content",
                 "-->", "-->",
@@ -146,6 +151,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testXmlContentWithCharacterRefs() throws Exception {
         assertProducedTokens("<tag attr='x&#xa0;&#123;y'>x&#xa0;&#123;y</tag>", new String[]{
+                "WHITE_SPACE", "",
                 "XmlStartTagStart", "<",
                 "WHITE_SPACE", "",
                 "XmlTagNCName", "tag",
@@ -172,6 +178,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testXmlContentWithPredefinedRefs() throws Exception {
         assertProducedTokens("<tag attr='x&amp;&nbsp;y'>x&amp;&nbsp;y</tag>", new String[]{
+                "WHITE_SPACE", "",
                 "XmlStartTagStart", "<",
                 "WHITE_SPACE", "",
                 "XmlTagNCName", "tag",
@@ -199,6 +206,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
     public void testFlworExpression() throws Exception {
         assertProducedTokens("for $i in 1 to 10 let $j := 'no. ' || $i order by $i ascending, " +
                 "$j descending return $j", new String[]{
+                "WHITE_SPACE", "",
                 "for", "for",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -289,6 +297,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testVariableReference() throws Exception {
         assertProducedTokens("$y", new String[]{
+                "WHITE_SPACE", "",
                 "$", "$",
                 "NCName", "y"
         });
@@ -309,6 +318,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testQueryByElement() throws Exception {
         assertProducedTokens("//tag", new String[]{
+                "WHITE_SPACE", "",
                 "//", "//",
                 "NCName", "tag"
         });
@@ -316,6 +326,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testQueryByAttribute() throws Exception {
         assertProducedTokens("//@attr", new String[]{
+                "WHITE_SPACE", "",
                 "//", "//",
                 "WHITE_SPACE", "",
                 "@", "@",
@@ -325,6 +336,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testQueryWithSelector() throws Exception {
         assertProducedTokens("/tag[2]", new String[]{
+                "WHITE_SPACE", "",
                 "/", "/",
                 "NCName", "tag",
                 "[", "[",
@@ -335,6 +347,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testQueryWithAxis() throws Exception {
         assertProducedTokens("//tag/parent::*", new String[]{
+                "WHITE_SPACE", "",
                 "//", "//",
                 "NCName", "tag",
                 "/", "/",
@@ -347,6 +360,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testQueryWithWildcard() throws Exception {
         assertProducedTokens("/*:div", new String[]{
+                "WHITE_SPACE", "",
                 "/", "/",
                 "*", "*",
                 ":", ":",
@@ -356,6 +370,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testGroupBy() throws Exception {
         assertProducedTokens("for $x in 1 to 20 group by $key := $x mod 2 return $x", new String[]{
+                "WHITE_SPACE", "",
                 "for", "for",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -394,6 +409,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testGroupByWithCollation() throws Exception {
         assertProducedTokens("for $x in 1 to 20 group by $key collation 'x' return $x", new String[]{
+                "WHITE_SPACE", "",
                 "for", "for",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -427,6 +443,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testWhere() throws Exception {
         assertProducedTokens("for $i in //item where $i/id = '0' return $i/name", new String[]{
+                "WHITE_SPACE", "",
                 "for", "for",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -459,6 +476,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testOrderBy() throws Exception {
         assertProducedTokens("for $i in //item order by $i/id return $i/name", new String[]{
+                "WHITE_SPACE", "",
                 "for", "for",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -489,6 +507,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testOrderByWithCollation() throws Exception {
         assertProducedTokens("for $i in //item order by 'x' collation 'x' return $i", new String[]{
+                "WHITE_SPACE", "",
                 "for", "for",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -518,6 +537,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testOrderByEmptyGreatestWithCollation() throws Exception {
         assertProducedTokens("for $i in //item order by 'x' empty greatest collation 'x' return $i", new String[]{
+                "WHITE_SPACE", "",
                 "for", "for",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -552,6 +572,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
     public void testTypeswitch() throws Exception {
         assertProducedTokens("typeswitch (//element) case $type1 as element(*, x:type1) return true() default return " +
                 "false()", new String[]{
+                "WHITE_SPACE", "",
                 "typeswitch", "typeswitch",
                 "WHITE_SPACE", " ",
                 "(", "(",
@@ -594,6 +615,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testEvery() throws Exception {
         assertProducedTokens("every $i in //item satisfies (exists($i/subitem))", new String[]{
+                "WHITE_SPACE", "",
                 "every", "every",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -622,6 +644,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
     public void testPragma() throws Exception {
         assertProducedTokens("(# use-magic #) " +
                 "{ //query/with[some-magic] }", new String[]{
+                "WHITE_SPACE", "",
                 "(#", "(#",
                 "S", " ",
                 "NCName", "use-magic",
@@ -646,6 +669,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
     public void testMoreComplicatedPragma() throws Exception {
         assertProducedTokens("(# use-magic for query #) " +
                 "{ //query/with[some-magic] }", new String[]{
+                "WHITE_SPACE", "",
                 "(#", "(#",
                 "S", " ",
                 "NCName", "use-magic",
@@ -670,6 +694,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testCData() throws Exception {
         assertProducedTokens("<tag><![CDATA[ data ]]></tag>", new String[]{
+                "WHITE_SPACE", "",
                 "XmlStartTagStart", "<",
                 "WHITE_SPACE", "",
                 "XmlTagNCName", "tag",
@@ -686,6 +711,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testCDataWithoutSurroundingTag() throws Exception {
         assertProducedTokens("<![CDATA[data]]>", new String[]{
+                "WHITE_SPACE", "",
                 "<![CDATA[", "<![CDATA[",
                 "CDataSectionContentChar", "data",
                 "]]>", "]]>",
@@ -694,6 +720,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testProcessingInstruction() throws Exception {
         assertProducedTokens("<?name content chars ?>", new String[]{
+                "WHITE_SPACE", "",
                 "<?", "<?",
                 "PITarget", "name",
                 "S", " ",
@@ -704,6 +731,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testComparisonWithFunctionResult() throws Exception {
         assertProducedTokens("if (0 < string-length('')) then 0 else 1", new String[]{
+                "WHITE_SPACE", "",
                 "if", "if",
                 "WHITE_SPACE", " ",
                 "(", "(",
@@ -730,6 +758,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testComparisonWithFunctionResultWithNamespacePrefix() throws Exception {
         assertProducedTokens("if (0 < functx:string-length('')) then 0 else 1", new String[]{
+                "WHITE_SPACE", "",
                 "if", "if",
                 "WHITE_SPACE", " ",
                 "(", "(",
@@ -956,6 +985,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testKindTestInStepExpression() throws Exception {
         assertProducedTokens("/xxx/text()", new String[]{
+                "WHITE_SPACE", "",
                 "/", "/",
                 "NCName", "xxx",
                 "/", "/",
@@ -967,6 +997,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testAttributeAxis() throws Exception {
         assertProducedTokens("/attribute::foo", new String[]{
+                "WHITE_SPACE", "",
                 "/", "/",
                 "attribute", "attribute",
                 "::", "::",
@@ -977,6 +1008,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testQueryWithAxisWithKindTest() throws Exception {
         assertProducedTokens("/ancestor::node()", new String[]{
+                "WHITE_SPACE", "",
                 "/", "/",
                 "ancestor", "ancestor",
                 "::", "::",
@@ -989,6 +1021,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testQueryWithAxisWithNameTest() throws Exception {
         assertProducedTokens("/ancestor::node", new String[]{
+                "WHITE_SPACE", "",
                 "/", "/",
                 "ancestor", "ancestor",
                 "::", "::",
@@ -999,6 +1032,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testIncompleteXmlContent() throws Exception {
         assertProducedTokens("</books>", new String[]{
+                "WHITE_SPACE", "",
                 "XmlEndTagStart", "</",
                 "XmlTagNCName", "books",
                 "XmlTagEnd", ">"
@@ -1899,6 +1933,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testFlworAllowingEmptyWithTypeAndPositionalVar() throws Exception {
         assertProducedTokens("for $i as empty-sequence() allowing empty at $j in 1 to 10", new String[]{
+                "WHITE_SPACE", "",
                 "for", "for",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -1931,6 +1966,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testOrderedExpression() {
         assertProducedTokens("ordered {''}", new String[]{
+                "WHITE_SPACE", "",
                 "ordered", "ordered",
                 "WHITE_SPACE", " ",
                 "{", "{",
@@ -1942,6 +1978,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testUnorderedExpression() {
         assertProducedTokens("unordered {''}", new String[]{
+                "WHITE_SPACE", "",
                 "unordered", "unordered",
                 "WHITE_SPACE", " ",
                 "{", "{",
@@ -1953,6 +1990,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testTreatExpression() {
         assertProducedTokens("1 treat as xs:integer", new String[]{
+                "WHITE_SPACE", "",
                 "IntegerLiteral", "1",
                 "WHITE_SPACE", " ",
                 "treat", "treat",
@@ -1967,6 +2005,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testIncompleteTreatExpression() {
         assertProducedTokens("1 treat as", new String[]{
+                "WHITE_SPACE", "",
                 "IntegerLiteral", "1",
                 "WHITE_SPACE", " ",
                 "treat", "treat",
@@ -1977,6 +2016,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testKeywordInElementSequenceType() {
         assertProducedTokens("/div treat as element(div)", new String[]{
+                "WHITE_SPACE", "",
                 "/", "/",
                 "NCName", "div",
                 "WHITE_SPACE", " ",
@@ -1994,6 +2034,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testKeywordInSequenceTypeWhenAlmostLikeElementTest() {
         assertProducedTokens("/div treat as element", new String[]{
+                "WHITE_SPACE", "",
                 "/", "/",
                 "NCName", "div",
                 "WHITE_SPACE", " ",
@@ -2007,6 +2048,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testKeywordInSequenceType() {
         assertProducedTokens("/div treat as div", new String[]{
+                "WHITE_SPACE", "",
                 "/", "/",
                 "NCName", "div",
                 "WHITE_SPACE", " ",
@@ -2033,6 +2075,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testInsert() {
         assertProducedTokens("insert node <a>a</a> as last into /a/z", new String[]{
+                "WHITE_SPACE", "",
                 "insert", "insert",
                 "WHITE_SPACE", " ",
                 "node", "node",
@@ -2062,6 +2105,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testDelete() {
         assertProducedTokens("delete nodes /email/message", new String[]{
+                "WHITE_SPACE", "",
                 "delete", "delete",
                 "WHITE_SPACE", " ",
                 "nodes", "nodes",
@@ -2075,6 +2119,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testReplace() {
         assertProducedTokens("replace node /a/z with element w", new String[]{
+                "WHITE_SPACE", "",
                 "replace", "replace",
                 "WHITE_SPACE", " ",
                 "node", "node",
@@ -2094,6 +2139,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testRename() {
         assertProducedTokens("rename node /a/z as 'a'", new String[]{
+                "WHITE_SPACE", "",
                 "rename", "rename",
                 "WHITE_SPACE", " ",
                 "node", "node",
@@ -2111,6 +2157,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testTransform() {
         assertProducedTokens("copy $j := /e modify delete node $j/z return $j", new String[]{
+                "WHITE_SPACE", "",
                 "copy", "copy",
                 "WHITE_SPACE", " ",
                 "$", "$",
@@ -2141,6 +2188,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testXQuery30TryCatch() {
         assertProducedTokens("try{'a'} catch * {'b'}", new String[]{
+                "WHITE_SPACE", "",
                 "try", "try",
                 "{", "{",
                 "WHITE_SPACE", "",
@@ -2160,6 +2208,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicTryCatch() {
         assertProducedTokens("try {'a'} catch ($e) {'b'}", new String[]{
+                "WHITE_SPACE", "",
                 "try", "try",
                 "WHITE_SPACE", " ",
                 "{", "{",
@@ -2183,6 +2232,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicNamespaceAxis() {
         assertProducedTokens("$a/namespace::b", new String[]{
+                "WHITE_SPACE", "",
                 "$", "$",
                 "NCName", "a",
                 "/", "/",
@@ -2195,6 +2245,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicBinaryTest() {
         assertProducedTokens("$a/binary()", new String[]{
+                "WHITE_SPACE", "",
                 "$", "$",
                 "NCName", "a",
                 "/", "/",
@@ -2206,6 +2257,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicBinaryConstructor() {
         assertProducedTokens("binary {$a}", new String[]{
+                "WHITE_SPACE", "",
                 "binary", "binary",
                 "WHITE_SPACE", " ",
                 "{", "{",
@@ -2217,6 +2269,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicObjectNodeTest() {
         assertProducedTokens("$a/object-node()", new String[]{
+                "WHITE_SPACE", "",
                 "$", "$",
                 "NCName", "a",
                 "/", "/",
@@ -2228,6 +2281,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicObjectNodeConstructor() {
         assertProducedTokens("object-node {$a}", new String[]{
+                "WHITE_SPACE", "",
                 "object-node", "object-node",
                 "WHITE_SPACE", " ",
                 "{", "{",
@@ -2239,6 +2293,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicObjectNodeConstructorWithProperty() {
         assertProducedTokens("object-node {'a':$a}", new String[]{
+                "WHITE_SPACE", "",
                 "object-node", "object-node",
                 "WHITE_SPACE", " ",
                 "{", "{",
@@ -2253,6 +2308,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicNumberNodeTest() {
         assertProducedTokens("$a/number-node()", new String[]{
+                "WHITE_SPACE", "",
                 "$", "$",
                 "NCName", "a",
                 "/", "/",
@@ -2264,6 +2320,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicNumberNodeTestWithLiteral() {
         assertProducedTokens("$a/number-node('count')", new String[]{
+                "WHITE_SPACE", "",
                 "$", "$",
                 "NCName", "a",
                 "/", "/",
@@ -2277,6 +2334,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicNumberNodeConstructor() {
         assertProducedTokens("number-node {$a}", new String[]{
+                "WHITE_SPACE", "",
                 "number-node", "number-node",
                 "WHITE_SPACE", " ",
                 "{", "{",
@@ -2288,6 +2346,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicBooleanNodeTest() {
         assertProducedTokens("$a/boolean-node()", new String[]{
+                "WHITE_SPACE", "",
                 "$", "$",
                 "NCName", "a",
                 "/", "/",
@@ -2299,6 +2358,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicBooleanNodeTestWithLiteral() {
         assertProducedTokens("$a/boolean-node('completed')", new String[]{
+                "WHITE_SPACE", "",
                 "$", "$",
                 "NCName", "a",
                 "/", "/",
@@ -2312,6 +2372,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicObjectBooleanConstructor() {
         assertProducedTokens("boolean-node {$a}", new String[]{
+                "WHITE_SPACE", "",
                 "boolean-node", "boolean-node",
                 "WHITE_SPACE", " ",
                 "{", "{",
@@ -2323,6 +2384,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicNullNodeTest() {
         assertProducedTokens("$a/null-node()", new String[]{
+                "WHITE_SPACE", "",
                 "$", "$",
                 "NCName", "a",
                 "/", "/",
@@ -2334,6 +2396,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicNullNodeTestWithLiteral() {
         assertProducedTokens("$a/null-node('account')", new String[]{
+                "WHITE_SPACE", "",
                 "$", "$",
                 "NCName", "a",
                 "/", "/",
@@ -2347,6 +2410,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicNullNodeConstructor() {
         assertProducedTokens("null-node {}", new String[]{
+                "WHITE_SPACE", "",
                 "null-node", "null-node",
                 "WHITE_SPACE", " ",
                 "{", "{",
@@ -2356,6 +2420,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicArrayNodeTest() {
         assertProducedTokens("$a/array-node()", new String[]{
+                "WHITE_SPACE", "",
                 "$", "$",
                 "NCName", "a",
                 "/", "/",
@@ -2367,6 +2432,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicArrayNodeTestWithLiteral() {
         assertProducedTokens("$a/array-node('names')", new String[]{
+                "WHITE_SPACE", "",
                 "$", "$",
                 "NCName", "a",
                 "/", "/",
@@ -2380,6 +2446,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicArrayNodeConstructor() {
         assertProducedTokens("array-node {$a}", new String[]{
+                "WHITE_SPACE", "",
                 "array-node", "array-node",
                 "WHITE_SPACE", " ",
                 "{", "{",
@@ -2391,6 +2458,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicTextTest() {
         assertProducedTokens("$a/text('title')", new String[]{
+                "WHITE_SPACE", "",
                 "$", "$",
                 "NCName", "a",
                 "/", "/",
@@ -2404,6 +2472,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testMarklogicAnyKindTest() {
         assertProducedTokens("$a/node('title')", new String[]{
+                "WHITE_SPACE", "",
                 "$", "$",
                 "NCName", "a",
                 "/", "/",
@@ -2426,6 +2495,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testIncompleteTagStartBeforeComment() {
         assertProducedTokens("<foo (: a :)", new String[]{
+                "WHITE_SPACE", "",
                 "XmlStartTagStart", "<",
                 "WHITE_SPACE", "",
                 "XmlTagNCName", "foo",
@@ -2438,6 +2508,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testTagWithMisplacedComments() {
         assertProducedTokens("<foo (: foo :) attr='attr' (: bar :)></foo>", new String[]{
+                "WHITE_SPACE", "",
                 "XmlStartTagStart", "<",
                 "WHITE_SPACE", "",
                 "XmlTagNCName", "foo",
@@ -2465,6 +2536,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
     public void testNestedMisplacedComment() {
         assertProducedTokens("<a (: a(:b:)c :)/>", new String[]{
+                "WHITE_SPACE", "",
                 "XmlStartTagStart", "<",
                 "WHITE_SPACE", "",
                 "XmlTagNCName", "a",

@@ -70,7 +70,6 @@ import java.util.Stack;
       put(URIQUALIFIED, "URIQUALIFIED");
       put(EXPRESSION_IN_APOS_STRING, "EXPRESSION_IN_APOS_STRING");
       put(EXPRESSION, "EXPRESSION");
-      put(YYINITIAL, "YYINITIAL");
       put(APOS_STRING, "APOS_STRING");
       put(ATTR_LIST, "ATTR_LIST");
     }
@@ -96,8 +95,8 @@ import java.util.Stack;
 
   private void popState() {
     if (stack.empty()) {
-      log("popState is defaulting to YYINITIAL");
-      yybegin(YYINITIAL);
+      log("popState is defaulting to EXPRESSION");
+      yybegin(EXPRESSION);
     } else {
       int state = stack.pop();
       log("popState is changing from " + state(yystate()) + "(" + yystate() + ") to " + state(state) + "(" + state + ")");
@@ -191,8 +190,12 @@ SC=({S} | "(:" {Char}* ~":)")+
 %state UPDATE_FACILITY
 %%
 
+<YYINITIAL> {
+{S}                                        {return TokenType.WHITE_SPACE;}
+. {{yypushback(yylength()); pushState(EXPRESSION); return TokenType.WHITE_SPACE;}}
+}
 
-<YYINITIAL,EXPRESSION_IN_QUOT_STRING,EXPRESSION_IN_APOS_STRING,EXPRESSION> {
+<EXPRESSION_IN_QUOT_STRING,EXPRESSION_IN_APOS_STRING,EXPRESSION> {
 {S}                                        {return TokenType.WHITE_SPACE;}
 {DecimalLiteral}                           {return XQueryTypes.DECIMALLITERAL;}
 {DoubleLiteral}                            {return XQueryTypes.DOUBLELITERAL;}
@@ -252,7 +255,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 ")"                                        {return XQueryTypes.R_PAR;}
 "["                                        {return XQueryTypes.L_BRACKET;}
 "]"                                        {return XQueryTypes.R_BRACKET;}
-"{"                                        {pushState(YYINITIAL); return XQueryTypes.L_C_BRACE;}
+"{"                                        {pushState(EXPRESSION); return XQueryTypes.L_C_BRACE;}
 "}"                                        {popState(); return XQueryTypes.R_C_BRACE;}
 ","                                        {return XQueryTypes.COMMA;}
 "!="                                       {return XQueryTypes.NOT_EQUAL;}
@@ -496,7 +499,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 .                                          {yypushback(yylength()); popStateOrDefaultTo(APOS_STRING); return TokenType.WHITE_SPACE;}
 }
 <EXPRESSION> {
-.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
+.                                          {return TokenType.BAD_CHARACTER;}
 }
 
 <URIQUALIFIED> {
