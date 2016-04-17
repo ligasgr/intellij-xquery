@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryMarklogicCompObjectNodeConstructor extends XQueryPsiElement {
 
-  @NotNull
+  @Nullable
   XQueryObjectPropertyList getObjectPropertyList();
 
 }

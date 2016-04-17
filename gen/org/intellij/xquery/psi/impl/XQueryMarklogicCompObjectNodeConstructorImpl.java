@@ -43,9 +43,9 @@ public class XQueryMarklogicCompObjectNodeConstructorImpl extends XQueryPsiEleme
   }
 
   @Override
-  @NotNull
+  @Nullable
   public XQueryObjectPropertyList getObjectPropertyList() {
-    return findNotNullChildByClass(XQueryObjectPropertyList.class);
+    return findChildByClass(XQueryObjectPropertyList.class);
   }
 
 }

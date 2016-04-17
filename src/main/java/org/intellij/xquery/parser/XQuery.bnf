@@ -543,7 +543,7 @@ CompMapConstructor ::= "map" "{" MapEntryList? "}"
 MapEntryList ::= MapEntry ("," MapEntry)* ","?
 MapEntry ::= ExprSingle ":=" ExprSingle
 MarklogicCompBinaryConstructor ::= "binary" "{" Expr "}"
-MarklogicCompObjectNodeConstructor ::= "object-node" "{" ObjectPropertyList "}"
+MarklogicCompObjectNodeConstructor ::= "object-node" "{" ObjectPropertyList? "}"
 MarklogicCompNumberNodeConstructor ::= "number-node" "{" Expr "}"
 MarklogicCompBooleanNodeConstructor ::= "boolean-node" "{" Expr "}"
 MarklogicCompNullNodeConstructor ::= "null-node" "{" "}"

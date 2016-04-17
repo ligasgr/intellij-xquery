@@ -4413,7 +4413,7 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "object-node" "{" ObjectPropertyList "}"
+  // "object-node" "{" ObjectPropertyList? "}"
   public static boolean MarklogicCompObjectNodeConstructor(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MarklogicCompObjectNodeConstructor")) return false;
     if (!nextTokenIs(b, K_OBJECT_NODE)) return false;
@@ -4421,10 +4421,17 @@ public class XQueryParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, K_OBJECT_NODE);
     r = r && consumeToken(b, L_C_BRACE);
-    r = r && ObjectPropertyList(b, l + 1);
+    r = r && MarklogicCompObjectNodeConstructor_2(b, l + 1);
     r = r && consumeToken(b, R_C_BRACE);
     exit_section_(b, m, MARKLOGIC_COMP_OBJECT_NODE_CONSTRUCTOR, r);
     return r;
+  }
+
+  // ObjectPropertyList?
+  private static boolean MarklogicCompObjectNodeConstructor_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MarklogicCompObjectNodeConstructor_2")) return false;
+    ObjectPropertyList(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
