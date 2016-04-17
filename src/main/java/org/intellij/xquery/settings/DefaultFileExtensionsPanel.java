@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,10 +28,10 @@ public class DefaultFileExtensionsPanel extends SettingsPanel {
 
     public static final String MAIN_MODULE_FILE_EXTENSION = "mainModuleFileExtension";
     public static final String LIBRARY_MODULE_FILE_EXTENSION = "libraryModuleFileExtension";
-    private final LabeledComponent<JComboBox> mainModuleFileExtension;
-    private final LabeledComponent<JComboBox> libraryModuleFileExtension;
-    private final SortedComboBoxModel<Object> mainModuleFileExtensionModel = UIUtils.comboBoxModel();
-    private final SortedComboBoxModel<Object> libraryModuleFileExtensionModel = UIUtils.comboBoxModel();
+    private final LabeledComponent<JComboBox<String>> mainModuleFileExtension;
+    private final LabeledComponent<JComboBox<String>> libraryModuleFileExtension;
+    private final SortedComboBoxModel<String> mainModuleFileExtensionModel = UIUtils.<String>comboBoxModel();
+    private final SortedComboBoxModel<String> libraryModuleFileExtensionModel = UIUtils.<String>comboBoxModel();
     private final String defaultMainModuleExtension;
     private final String defaultLibraryModuleExtension;
 
@@ -39,8 +39,8 @@ public class DefaultFileExtensionsPanel extends SettingsPanel {
         this.defaultMainModuleExtension = defaultMainModuleExtension;
         this.defaultLibraryModuleExtension = defaultLibraryModuleExtension;
         setLayout(new MigLayout("ins 0, gap 5, fill, flowy"));
-        mainModuleFileExtension = UIUtils.comboBox("&Main module", MAIN_MODULE_FILE_EXTENSION, mainModuleFileExtensionModel);
-        libraryModuleFileExtension = UIUtils.comboBox("&Library module", LIBRARY_MODULE_FILE_EXTENSION, libraryModuleFileExtensionModel);
+        mainModuleFileExtension = UIUtils.<String>comboBox("&Main module", MAIN_MODULE_FILE_EXTENSION, mainModuleFileExtensionModel);
+        libraryModuleFileExtension = UIUtils.<String>comboBox("&Library module", LIBRARY_MODULE_FILE_EXTENSION, libraryModuleFileExtensionModel);
         add(mainModuleFileExtension);
         add(libraryModuleFileExtension);
 
@@ -64,7 +64,7 @@ public class DefaultFileExtensionsPanel extends SettingsPanel {
         libraryModuleFileExtension.getComponent().setSelectedItem(libraryFileExtension);
     }
 
-    private void populateExtensionsList(SortedComboBoxModel<Object> model, Object defaultItem, List<String> allItems) {
+    private void populateExtensionsList(SortedComboBoxModel<String> model, Object defaultItem, List<String> allItems) {
         for (String type : allItems) {
             model.add(type);
         }

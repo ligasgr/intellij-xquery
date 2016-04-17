@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,20 +27,20 @@ import javax.swing.*;
 import java.util.Comparator;
 
 public class UIUtils {
-    static SortedComboBoxModel<Object> comboBoxModel() {
-        return new SortedComboBoxModel<Object>(new Comparator<Object>() {
+    static SortedComboBoxModel<String> comboBoxModel() {
+        return new SortedComboBoxModel<String>(new Comparator<String>() {
             @Override
-            public int compare(Object o1, Object o2) {
-                return ((String) o1).compareToIgnoreCase((String) o2);
+            public int compare(String o1, String o2) {
+                return o1.compareToIgnoreCase(o2);
             }
         });
     }
 
-    static LabeledComponent<JComboBox> comboBox(String text, String name, SortedComboBoxModel<Object> model) {
-        LabeledComponent<JComboBox> comboBox = new LabeledComponent<JComboBox>();
+    static <T> LabeledComponent<JComboBox<T>> comboBox(String text, String name, ComboBoxModel<T> model) {
+        LabeledComponent<JComboBox<T>> comboBox = new LabeledComponent<>();
         comboBox.setText(text);
         comboBox.setLabelLocation("West");
-        comboBox.setComponent(new JComboBox());
+        comboBox.setComponent(new JComboBox<>());
         comboBox.getComponent().setName(name);
         comboBox.getComponent().setModel(model);
         return comboBox;

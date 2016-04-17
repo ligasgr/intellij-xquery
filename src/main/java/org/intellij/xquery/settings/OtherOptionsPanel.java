@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,12 +28,12 @@ import java.util.Comparator;
 
 public class OtherOptionsPanel extends SettingsPanel {
 
-    private final LabeledComponent<JComboBox> xqueryFlavour;
-    private final SortedComboBoxModel<Object> xqueryFlavourModel = comboBoxModel();
+    private final LabeledComponent<JComboBox<XQueryFlavour>> xqueryFlavour;
+    private final SortedComboBoxModel<XQueryFlavour> xqueryFlavourModel = comboBoxModel();
 
     public OtherOptionsPanel() {
         setLayout(new MigLayout("ins 0, gap 5, fill, flowy"));
-        xqueryFlavour = UIUtils.comboBox("&XQuery flavour", "xqueryFlavour", xqueryFlavourModel);
+        xqueryFlavour = UIUtils.<XQueryFlavour>comboBox("&XQuery flavour", "xqueryFlavour", xqueryFlavourModel);
         xqueryFlavour.getComponent().setRenderer(new XQueryFlavourRenderer());
         add(xqueryFlavour);
         setBorder(BorderFactory.createTitledBorder("Other options"));
@@ -67,11 +67,11 @@ public class OtherOptionsPanel extends SettingsPanel {
         }
     }
 
-    private SortedComboBoxModel<Object> comboBoxModel() {
-        return new SortedComboBoxModel<Object>(new Comparator<Object>() {
+    private SortedComboBoxModel<XQueryFlavour> comboBoxModel() {
+        return new SortedComboBoxModel<>(new Comparator<XQueryFlavour>() {
             @Override
-            public int compare(Object o1, Object o2) {
-                return ((XQueryFlavour) o1).getPresentableName().compareToIgnoreCase(((XQueryFlavour) o2).getPresentableName());
+            public int compare(XQueryFlavour o1, XQueryFlavour o2) {
+                return o1.getPresentableName().compareToIgnoreCase(o2.getPresentableName());
             }
         });
     }
