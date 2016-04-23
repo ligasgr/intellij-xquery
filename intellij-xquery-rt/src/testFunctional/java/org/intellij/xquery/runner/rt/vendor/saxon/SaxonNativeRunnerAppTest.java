@@ -19,6 +19,7 @@ package org.intellij.xquery.runner.rt.vendor.saxon;
 
 import org.intellij.xquery.runner.rt.RunnerAppTest;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
+import org.junit.Ignore;
 import org.junit.experimental.theories.DataPoints;
 
 import static org.intellij.xquery.runner.rt.XQueryItemType.TEXT;
@@ -44,6 +45,7 @@ import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED_ATOMIC;
  * Date: 12/01/14
  * Time: 19:14
  */
+@Ignore
 public class SaxonNativeRunnerAppTest extends RunnerAppTest {
 
     @DataPoints
