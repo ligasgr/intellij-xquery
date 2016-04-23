@@ -467,7 +467,7 @@ PostfixExpr ::= PrimaryExpr (Predicate | ArgumentList)*
 ArgumentList ::= "(" (Argument OptionalArgumentAfterComma*)? ")" {pin=1}
 private OptionalArgumentAfterComma ::= "," Argument {pin=1}
 PredicateList ::= Predicate*
-Predicate ::= "[" Expr "]" {pin=1}
+Predicate ::= "[" Expr "]"
 PrimaryExpr ::= Literal
  | VarRef
  | ParenthesizedExpr

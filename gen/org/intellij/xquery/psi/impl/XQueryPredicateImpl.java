@@ -43,9 +43,9 @@ public class XQueryPredicateImpl extends XQueryPsiElementImpl implements XQueryP
   }
 
   @Override
-  @Nullable
+  @NotNull
   public XQueryExpr getExpr() {
-    return findChildByClass(XQueryExpr.class);
+    return findNotNullChildByClass(XQueryExpr.class);
   }
 
 }

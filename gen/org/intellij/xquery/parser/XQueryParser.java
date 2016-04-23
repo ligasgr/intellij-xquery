@@ -5638,14 +5638,13 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   public static boolean Predicate(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Predicate")) return false;
     if (!nextTokenIs(b, L_BRACKET)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, PREDICATE, null);
+    boolean r;
+    Marker m = enter_section_(b);
     r = consumeToken(b, L_BRACKET);
-    p = r; // pin = 1
-    r = r && report_error_(b, Expr(b, l + 1));
-    r = p && consumeToken(b, R_BRACKET) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    r = r && Expr(b, l + 1);
+    r = r && consumeToken(b, R_BRACKET);
+    exit_section_(b, m, PREDICATE, r);
+    return r;
   }
 
   /* ********************************************************** */

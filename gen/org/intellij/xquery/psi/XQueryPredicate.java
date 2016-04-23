@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryPredicate extends XQueryPsiElement {
 
-  @Nullable
+  @NotNull
   XQueryExpr getExpr();
 
 }
