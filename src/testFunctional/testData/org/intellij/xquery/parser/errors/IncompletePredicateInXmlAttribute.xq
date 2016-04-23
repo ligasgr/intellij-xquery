@@ -1,0 +1,1 @@
+<p class="{$items[@id=$id}]">Test</p>
