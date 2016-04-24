@@ -1,5 +1,6 @@
 /*
- * Copyright 2013 Grzegorz Ligas
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -455,6 +456,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "{"                                        {pushState(EXPRESSION); return XQueryTypes.L_C_BRACE; }
 "</"                                       {popState(); pushState(END_TAG); return XQueryTypes.XMLENDTAGSTART;}
 "<"                                        {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART; }
+.                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 <DIR_COMMENT> {
