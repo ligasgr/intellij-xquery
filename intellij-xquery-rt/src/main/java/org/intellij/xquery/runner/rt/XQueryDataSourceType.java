@@ -42,11 +42,11 @@ public enum XQueryDataSourceType {
     SAXON("Saxon", true, false, asList("saxon9he.jar", "saxon9-xqj.jar"), true, SaxonXQDataSourceFactory.class),
     MARKLOGIC("MarkLogic", false, true, asList("marklogic-xqj-1.0.0.jar"), false, MarklogicXQDataSourceFactory.class),
     EXIST("eXist", false, true, asList("exist-xqj-1.0.1.jar"), false, ExistXQDataSourceFactory.class),
-    BASEX("BaseX", false, true, asList("basex-xqj-1.4.0.jar"), false, BaseXXQDataSourceFactory.class),
+    BASEX("BaseX", false, true, asList("basex-xqj-1.6.0.jar"), false, BaseXXQDataSourceFactory.class),
     SEDNA("Sedna", false, true, asList("sedna-xqj-1.0.0.jar"), false, SednaXQDataSourceFactory.class),
     ZORBA("Zorba", false, false, asList("zorba_xqj.jar", "zorba_api.jar"), false, ZorbaXQDataSourceFactory.class),
     SAXON_NATIVE("Saxon (native)", true, false, asList("saxon9he.jar"), SaxonRunnerAppFactory.class),
-    BASEX_LOCAL("BaseX (embedded)", false, false, asList("basex-xqj-1.4.0.jar", "basex-8.1.1.jar"), false,
+    BASEX_LOCAL("BaseX (embedded)", false, false, asList("basex-xqj-1.6.0.jar", "basex-8.4.3.jar"), false,
             BaseXLocalXQDataSourceFactory.class);
     private final List<String> classpathEntries;
     private final boolean jarContainsXqjApi;
