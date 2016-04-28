@@ -80,6 +80,11 @@ public class XQueryXmlGtTypedHandlerTest extends BaseFunctionalTestCase {
                         "local:test(<a></a>)");
     }
 
+    public void testNotClosingTagsWithTypos() {
+        assertResultAfterCompletion("<test><<caret></test>", "<test><><caret></test>");
+        assertResultAfterCompletion("<test><inner<<caret></test>", "<test><inner<><caret></test>");
+    }
+
     private void assertResultAfterCompletion(String input, String output) {
         myFixture.configureByText(XQueryFileType.INSTANCE, input);
         myFixture.type(">");

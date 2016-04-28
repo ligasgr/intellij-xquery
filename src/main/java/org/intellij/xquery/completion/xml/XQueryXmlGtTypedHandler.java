@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,7 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.tree.TreeUtil;
+import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryLanguage;
 import org.intellij.xquery.psi.XQueryTypes;
@@ -78,8 +79,11 @@ public class XQueryXmlGtTypedHandler extends TypedHandlerDelegate {
             final String prevLeafText = prevLeaf.getText();
             if (">".equals(prevLeafText) && prevLeaf.getElementType() == XQueryTypes.XMLTAGEND) {
                 XQueryXmlFullTag tag = PsiTreeUtil.getParentOfType(element, XQueryXmlFullTag.class);
-                if (tag != null && (tag.getXmlTagNameList().size() == 1 || tag.getXmlTagNameList().size() == 2 && !tag.getXmlTagNameList().get(0).getText().equals(tag.getXmlTagNameList().get(1).getText()))) {
-                    XQueryXmlTagName tagName = tag.getXmlTagNameList().get(0);
+                if (tag != null  && (
+                        (tag.getXmlTagNameList().size() == 1 && xmlTagStartsAndStops(tag).length == 2)
+                        || (tag.getXmlTagNameList().size() == 2 && !tagName(tag, 0).getText().equals(tagName(tag, 1).getText()))
+                )) {
+                    XQueryXmlTagName tagName = tagName(tag, 0);
                     if (StringUtil.isNotEmpty(tagName.getName()) && TreeUtil.findSibling(prevLeaf, XQueryTypes.XMLTAGNCNAME) == null) {
                         String prefix = tagName.getXmlTagNamespace() != null ? tagName.getXmlTagNamespace().getName() + ":" : "";
                         String name = prefix + tagName.getXmlTagLocalName().getText();
@@ -90,5 +94,14 @@ public class XQueryXmlGtTypedHandler extends TypedHandlerDelegate {
             }
         }
         return Result.CONTINUE;
+    }
+
+    private XQueryXmlTagName tagName(XQueryXmlFullTag tag, int index) {
+        return tag.getXmlTagNameList().get(index);
+    }
+
+    @NotNull
+    private ASTNode[] xmlTagStartsAndStops(XQueryXmlFullTag tag) {
+        return tag.getNode().getChildren(TokenSet.create(XQueryTypes.XMLSTARTTAGSTART, XQueryTypes.XMLTAGEND, XQueryTypes.XMLENDTAGSTART));
     }
 }
