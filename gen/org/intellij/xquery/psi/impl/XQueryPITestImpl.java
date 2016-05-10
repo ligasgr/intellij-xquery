@@ -42,4 +42,10 @@ public class XQueryPITestImpl extends XQueryPsiElementImpl implements XQueryPITe
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public XQueryStringLiteral getStringLiteral() {
+    return findChildByClass(XQueryStringLiteral.class);
+  }
+
 }

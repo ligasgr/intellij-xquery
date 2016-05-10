@@ -89,6 +89,7 @@
   NODECOMP_GT  = ">>"
   HASH         = "#"
   PERCENT      = "%"
+  AMPERSAND    = "&"
   PIPE_PIPE    = "||"
   PIPE    = "|"
   EXCLAMATION_MARK = "!"
@@ -653,3 +654,6 @@ TransformExpr ::= "copy" "$" VarName ":=" ExprSingle ("," "$" VarName ":=" ExprS
 
 MisplacedComment ::= "(:" MisplacedCommentContent ":)"
 private MisplacedCommentContent ::= (ExprCommentContent|MisplacedComment)*
+StringLiteral ::= QuotStringLiteral | AposStringLiteral
+private QuotStringLiteral ::= "\"" (PredefinedEntityRef | CharRef | EscapeQuot | StringChar)* "\""
+private AposStringLiteral ::= "'" (PredefinedEntityRef | CharRef | EscapeApos | StringChar)* "'"

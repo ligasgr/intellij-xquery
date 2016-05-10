@@ -132,7 +132,6 @@ import java.util.Stack;
 IntegerLiteral={Digits}
 DecimalLiteral=("." {Digits}) | ({Digits} "." [0-9]*)               	                    /* ws: explicit */
 DoubleLiteral=(("." {Digits}) | ({Digits} ("." [0-9]*)?)) [eE] [+-]? {Digits}             	/* ws: explicit */
-StringLiteral=("\"" ({PredefinedEntityRef} | {CharRef} | {EscapeQuot} | [^\"&])* "\"") | ("'" ({PredefinedEntityRef} | {CharRef} | {EscapeApos} | [^'&])* "'") 	/* ws: explicit */
 URIQualifiedName={BracedURILiteral} {NCName}                                                /* ws: explicit */
 BracedURILiteral="Q" "{" ({PredefinedEntityRef} | {CharRef} | [^&{}]    )* "}"                  /* ws: explicit */
 PredefinedEntityRef="&" ("lt" | "gt" | "amp" | "quot" | "apos" | "bdquo" | "brvbar" | "bull" | "circ" | "copy" | "emsp" | "ensp" | "hellip" | "iexcl" | "iquest" | "laquo" | "ldquo" | "lsaquo" | "lsquo" | "mdash" | "nbsp" |  "dash" | "oline" | "prime" | "Prime" | "raquo" | "rdquo" | "rsaquo" | "rsquo" | "sbquo" | "thinsp" | "tilde" | "uml" | "acute" | "cedil" | "cent" | "curren" | "deg" | "divide" | "macr" | "micro" | "middot" | "not" | "ordf" | "ordm" | "para" | "plusmn" | "pound" | "sect" | "times" | "yen") ";"                         /* ws: explicit */
@@ -201,8 +200,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 {DecimalLiteral}                           {return XQueryTypes.DECIMALLITERAL;}
 {DoubleLiteral}                            {return XQueryTypes.DOUBLELITERAL;}
 {IntegerLiteral}                           {return XQueryTypes.INTEGERLITERAL;}
-"\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
-"'"                                        {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"\""                                       {pushState(QUOT_STRING_SIMPLE);return XQueryTypes.QUOT;}
+"'"                                        {pushState(APOS_STRING_SIMPLE);return XQueryTypes.APOSTROPHE;}
 "Q{"                                       {pushState(URIQUALIFIED); yypushback(2);}
 "(:~"                                      {pushState(DOC_COMMENT);return XQueryBasicTypes.DOC_COMMENT_START;}
 "(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
@@ -525,8 +524,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 
 <XQUERY_RECOGNITION> {
 {S}                                        {return TokenType.WHITE_SPACE;}
-"\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
-"'"                                        {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"\""                                       {pushState(QUOT_STRING_SIMPLE);return XQueryTypes.QUOT;}
+"'"                                        {pushState(APOS_STRING_SIMPLE);return XQueryTypes.APOSTROPHE;}
 "xquery" / {S} ("encoding"|"version")      {return XQueryTypes.K_XQUERY;}
 "version"                                  {return XQueryTypes.K_VERSION;}
 "encoding"                                 {return XQueryTypes.K_ENCODING;}
@@ -540,8 +539,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 "(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
 "{"                                        {pushState(EXPRESSION);return XQueryTypes.L_C_BRACE;}
 "="                                        {return XQueryTypes.EQUAL;}
-"\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
-"'"                                        {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"\""                                       {pushState(QUOT_STRING_SIMPLE);return XQueryTypes.QUOT;}
+"'"                                        {pushState(APOS_STRING_SIMPLE);return XQueryTypes.APOSTROPHE;}
 "declare" / {SC} ("boundary-space"|"default"|"base-uri"|"construction"|"ordering"|"copy-namespaces"|"decimal-format"|"namespace"|"context"|"option"|"function"|"variable"|"%"|"updating"|"revalidation"|"private") {return XQueryTypes.K_DECLARE;}
 "default"                                  {pushState(DEFAULT_RECOGNITION);return XQueryTypes.K_DEFAULT;}
 "base-uri"                                 {return XQueryTypes.K_BASE_URI;}
@@ -598,8 +597,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 
 <IMPORT_RECOGNITION> {
 {S}                                        {return TokenType.WHITE_SPACE;}
-"\""                                       {pushState(QUOT_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
-"'"                                        {pushState(APOS_STRING_SIMPLE);yypushback(yylength());return TokenType.WHITE_SPACE;}
+"\""                                       {pushState(QUOT_STRING_SIMPLE);return XQueryTypes.QUOT;}
+"'"                                        {pushState(APOS_STRING_SIMPLE);return XQueryTypes.APOSTROPHE;}
 "(:~"                                      {pushState(DOC_COMMENT);return XQueryBasicTypes.DOC_COMMENT_START;}
 "(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
 "import" / {SC} ("schema"|"module")        {return XQueryTypes.K_IMPORT;}
@@ -639,16 +638,22 @@ SC=({S} | "(:" {Char}* ~":)")+
 
 
 <QUOT_STRING_SIMPLE> {
-"\""                                       {return XQueryTypes.QUOT;}
-{StringLiteral}                            {popState(); return XQueryTypes.STRINGLITERAL;}
-{Char}                                     {return XQueryTypes.CHAR;}
+{PredefinedEntityRef}                      {return XQueryTypes.PREDEFINEDENTITYREF;}
+{CharRef}                                  {return XQueryTypes.CHARREF;}
+{EscapeQuot}                               {return XQueryTypes.STRINGCHAR;}
+[^\"&]                                     {return XQueryTypes.STRINGCHAR;}
+"&"                                        {return XQueryTypes.AMPERSAND;}
+"\""                                       {popState(); return XQueryTypes.QUOT;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
 <APOS_STRING_SIMPLE> {
-"'"                                        {return XQueryTypes.APOSTROPHE;}
-{StringLiteral}                            {popState(); return XQueryTypes.STRINGLITERAL;}
-{Char}                                     {return XQueryTypes.CHAR;}
+{PredefinedEntityRef}                      {return XQueryTypes.PREDEFINEDENTITYREF;}
+{CharRef}                                  {return XQueryTypes.CHARREF;}
+{EscapeApos}                               {return XQueryTypes.STRINGCHAR;}
+[^\'&]                                     {return XQueryTypes.STRINGCHAR;}
+"&"                                        {return XQueryTypes.AMPERSAND;}
+"'"                                        {popState(); return XQueryTypes.APOSTROPHE;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 

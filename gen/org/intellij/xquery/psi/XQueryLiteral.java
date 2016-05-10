@@ -27,4 +27,7 @@ public interface XQueryLiteral extends XQueryPsiElement {
   @Nullable
   XQueryNumericLiteral getNumericLiteral();
 
+  @Nullable
+  XQueryStringLiteral getStringLiteral();
+
 }

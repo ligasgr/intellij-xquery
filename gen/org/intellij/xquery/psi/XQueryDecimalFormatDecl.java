@@ -33,4 +33,7 @@ public interface XQueryDecimalFormatDecl extends XQueryPsiElement {
   @Nullable
   XQuerySeparator getSeparator();
 
+  @NotNull
+  List<XQueryStringLiteral> getStringLiteralList();
+
 }

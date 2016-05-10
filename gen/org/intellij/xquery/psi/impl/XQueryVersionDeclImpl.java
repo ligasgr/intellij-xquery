@@ -50,6 +50,12 @@ public class XQueryVersionDeclImpl extends XQueryPsiElementImpl implements XQuer
 
   @Override
   @Nullable
+  public XQueryStringLiteral getStringLiteral() {
+    return findChildByClass(XQueryStringLiteral.class);
+  }
+
+  @Override
+  @Nullable
   public XQueryVersion getVersion() {
     return findChildByClass(XQueryVersion.class);
   }

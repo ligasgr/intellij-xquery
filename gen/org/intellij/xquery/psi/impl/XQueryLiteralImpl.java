@@ -48,4 +48,10 @@ public class XQueryLiteralImpl extends XQueryPsiElementImpl implements XQueryLit
     return findChildByClass(XQueryNumericLiteral.class);
   }
 
+  @Override
+  @Nullable
+  public XQueryStringLiteral getStringLiteral() {
+    return findChildByClass(XQueryStringLiteral.class);
+  }
+
 }

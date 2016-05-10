@@ -27,14 +27,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryVersionImpl extends XQueryPsiElementImpl implements XQueryVersion {
+public class XQueryStringLiteralImpl extends XQueryPsiElementImpl implements XQueryStringLiteral {
 
-  public XQueryVersionImpl(ASTNode node) {
+  public XQueryStringLiteralImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull XQueryVisitor visitor) {
-    visitor.visitVersion(this);
+    visitor.visitStringLiteral(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -44,12 +44,14 @@ public class XQueryVersionImpl extends XQueryPsiElementImpl implements XQueryVer
 
   @Override
   @NotNull
-  public XQueryStringLiteral getStringLiteral() {
-    return findNotNullChildByClass(XQueryStringLiteral.class);
+  public List<XQueryEscapeApos> getEscapeAposList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryEscapeApos.class);
   }
 
-  public String getVersionString() {
-    return XQueryPsiImplUtil.getVersionString(this);
+  @Override
+  @NotNull
+  public List<XQueryEscapeQuot> getEscapeQuotList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryEscapeQuot.class);
   }
 
 }

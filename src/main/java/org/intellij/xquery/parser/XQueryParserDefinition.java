@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,9 +53,10 @@ public class XQueryParserDefinition implements ParserDefinition {
             XQueryTypes.DIRPICONTENTCHAR,
             XQueryTypes.DIRCOMMENTCHAR,
             XQueryTypes.CHAR,
-            XQueryTypes.EXPRCOMMENTCONTENT
+            XQueryTypes.EXPRCOMMENTCONTENT,
+            XQueryTypes.STRINGCHAR
     );
-    public static final TokenSet STRINGS = TokenSet.create(XQueryTypes.STRINGLITERAL);
+    public static final TokenSet STRINGS = TokenSet.create(XQueryTypes.STRINGCHAR, XQueryTypes.CHARREF, XQueryTypes.PREDEFINEDENTITYREF);
     public static final IFileElementType FILE = new IFileElementType(Language.<XQueryLanguage>findInstance
             (XQueryLanguage.class));
 

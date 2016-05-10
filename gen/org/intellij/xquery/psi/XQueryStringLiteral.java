@@ -15,19 +15,19 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.quotes;
+// This is a generated file. Not intended for manual editing.
+package org.intellij.xquery.psi;
 
-import com.intellij.codeInsight.editorActions.SimpleTokenSetQuoteHandler;
+import java.util.List;
+import org.jetbrains.annotations.*;
+import com.intellij.psi.PsiElement;
 
-import static org.intellij.xquery.psi.XQueryTypes.*;
+public interface XQueryStringLiteral extends XQueryPsiElement {
 
-/**
- * User: ligasgr
- * Date: 03/09/13
- * Time: 13:57
- */
-public class XQueryQuoteHandler extends SimpleTokenSetQuoteHandler {
-    public XQueryQuoteHandler() {
-        super(QUOT, APOSTROPHE, CHAR, STRINGCHAR, PREDEFINEDENTITYREF, CHARREF);
-    }
+  @NotNull
+  List<XQueryEscapeApos> getEscapeAposList();
+
+  @NotNull
+  List<XQueryEscapeQuot> getEscapeQuotList();
+
 }

@@ -151,4 +151,8 @@ public class XQueryParserSyntaxErrorsHandlingTest extends BaseParserTest {
     public void testIncompletePredicateInXmlAttribute() {
         doTest(true);
     }
+
+    public void testStringWithIncompleteEntityRef() {
+        doTest(true);
+    }
 }

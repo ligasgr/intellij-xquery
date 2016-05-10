@@ -236,6 +236,7 @@ public interface XQueryTypes {
   IElementType SOURCE_EXPR = new XQueryElementType("SOURCE_EXPR");
   IElementType STEP_EXPR = new XQueryElementType("STEP_EXPR");
   IElementType STRING_CONCAT_EXPR = new XQueryElementType("STRING_CONCAT_EXPR");
+  IElementType STRING_LITERAL = new XQueryElementType("STRING_LITERAL");
   IElementType STRING_LITERAL_OR_WILDCARD = new XQueryElementType("STRING_LITERAL_OR_WILDCARD");
   IElementType SWITCH_CASE_CLAUSE = new XQueryElementType("SWITCH_CASE_CLAUSE");
   IElementType SWITCH_CASE_OPERAND = new XQueryElementType("SWITCH_CASE_OPERAND");
@@ -281,6 +282,7 @@ public interface XQueryTypes {
   IElementType XML_TAG_NAME = new XQueryElementType("XML_TAG_NAME");
   IElementType XML_TAG_NAMESPACE = new XQueryElementType("XML_TAG_NAMESPACE");
 
+  IElementType AMPERSAND = new XQueryTokenType("&");
   IElementType APOSTROPHE = new XQueryTokenType("'");
   IElementType ATTRCOLON = new XQueryTokenType("AttrColon");
   IElementType ATTREQUAL = new XQueryTokenType("AttrEqual");
@@ -500,7 +502,7 @@ public interface XQueryTypes {
   IElementType SLASH = new XQueryTokenType("/");
   IElementType SLASH_SLASH = new XQueryTokenType("//");
   IElementType STAR_SIGN = new XQueryTokenType("*");
-  IElementType STRINGLITERAL = new XQueryTokenType("StringLiteral");
+  IElementType STRINGCHAR = new XQueryTokenType("StringChar");
   IElementType TAGNAME = new XQueryTokenType("TagName");
   IElementType URIQUALIFIEDNAME = new XQueryTokenType("URIQualifiedName");
   IElementType XMLCOLON = new XQueryTokenType("XmlColon");
@@ -1145,6 +1147,9 @@ public interface XQueryTypes {
       }
       else if (type == STRING_CONCAT_EXPR) {
         return new XQueryStringConcatExprImpl(node);
+      }
+      else if (type == STRING_LITERAL) {
+        return new XQueryStringLiteralImpl(node);
       }
       else if (type == STRING_LITERAL_OR_WILDCARD) {
         return new XQueryStringLiteralOrWildcardImpl(node);

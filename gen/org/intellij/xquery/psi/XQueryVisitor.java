@@ -867,6 +867,10 @@ public class XQueryVisitor extends PsiElementVisitor {
     visitExprSingle(o);
   }
 
+  public void visitStringLiteral(@NotNull XQueryStringLiteral o) {
+    visitPsiElement(o);
+  }
+
   public void visitStringLiteralOrWildcard(@NotNull XQueryStringLiteralOrWildcard o) {
     visitPsiElement(o);
   }

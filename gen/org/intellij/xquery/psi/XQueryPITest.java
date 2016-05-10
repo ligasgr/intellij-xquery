@@ -24,4 +24,7 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryPITest extends XQueryPsiElement {
 
+  @Nullable
+  XQueryStringLiteral getStringLiteral();
+
 }

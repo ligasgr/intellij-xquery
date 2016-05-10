@@ -60,4 +60,10 @@ public class XQueryDecimalFormatDeclImpl extends XQueryPsiElementImpl implements
     return findChildByClass(XQuerySeparator.class);
   }
 
+  @Override
+  @NotNull
+  public List<XQueryStringLiteral> getStringLiteralList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryStringLiteral.class);
+  }
+
 }

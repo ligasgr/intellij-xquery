@@ -24,4 +24,7 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryURILiteral extends XQueryPsiElement {
 
+  @NotNull
+  XQueryStringLiteral getStringLiteral();
+
 }

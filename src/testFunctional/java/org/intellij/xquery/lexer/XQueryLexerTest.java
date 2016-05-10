@@ -61,16 +61,71 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
     }
 
     public void testLiterals() throws Exception {
-        assertProducedTokens("\"abc\",'bcd',123,456.78", new String[]{
+        assertProducedTokens("123,456.78", new String[]{
                 "WHITE_SPACE", "",
-                "StringLiteral", "\"abc\"",
-                ",", ",",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'bcd'",
-                ",", ",",
                 "IntegerLiteral", "123",
                 ",", ",",
                 "DecimalLiteral", "456.78"
+        });
+    }
+
+    public void testAposStringLiteral() throws Exception {
+        assertProducedTokens("'abc'", new String[] {
+                "WHITE_SPACE", "",
+                "'", "'",
+                "StringChar", "abc",
+                "'", "'"
+        });
+    }
+
+    public void testQuotStringLiteral() throws Exception {
+        assertProducedTokens("\"abc\"", new String[] {
+                "WHITE_SPACE", "",
+                "\"", "\"",
+                "StringChar", "abc",
+                "\"", "\""
+        });
+    }
+
+    public void testAposStringLiteralWithAdditionalStuff() throws Exception {
+        assertProducedTokens("'abc&#xa0;&#123;&amp;def'", new String[] {
+                "WHITE_SPACE", "",
+                "'", "'",
+                "StringChar", "abc",
+                "CharRef", "&#xa0;",
+                "CharRef", "&#123;",
+                "PredefinedEntityRef", "&amp;",
+                "StringChar", "def",
+                "'", "'"
+        });
+    }
+
+    public void testQuotStringLiteralWithAdditionalStuff() throws Exception {
+        assertProducedTokens("\"abc&#xa0;&#123;&amp;def\"", new String[] {
+                "WHITE_SPACE", "",
+                "\"", "\"",
+                "StringChar", "abc",
+                "CharRef", "&#xa0;",
+                "CharRef", "&#123;",
+                "PredefinedEntityRef", "&amp;",
+                "StringChar", "def",
+                "\"", "\""
+        });
+    }
+
+    public void testIncompleteQuotStringLiteral() throws Exception {
+        assertProducedTokens("'abc", new String[] {
+                "WHITE_SPACE", "",
+                "'", "'",
+                "StringChar", "abc",
+        });
+    }
+
+    public void testIncompleteAposStringLiteral() throws Exception {
+        assertProducedTokens("'abc", new String[] {
+                "WHITE_SPACE", "",
+                "'", "'",
+                "StringChar", "abc",
         });
     }
 
@@ -227,7 +282,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 ":=", ":=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'no. '",
+                "'", "'",
+                "StringChar", "no. ",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "||", "||",
                 "WHITE_SPACE", " ",
@@ -263,7 +320,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "version", "version",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'3.0'",
+                "'", "'",
+                "StringChar", "3.0",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -285,11 +344,15 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "encoding", "encoding",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'UTF-8'",
+                "'", "'",
+                "StringChar", "UTF-8",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "version", "version",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'3.0'",
+                "'", "'",
+                "StringChar", "3.0",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -310,8 +373,8 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ":", ":",
                 "NCName", "empty",
                 "(", "(",
-                "WHITE_SPACE", "",
-                "StringLiteral", "''",
+                "'", "'",
+                "'", "'",
                 ")", ")"
         });
     }
@@ -432,7 +495,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "collation", "collation",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'x'",
+                "'", "'",
+                "StringChar", "x",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "return", "return",
                 "WHITE_SPACE", " ",
@@ -463,7 +528,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'0'",
+                "'", "'",
+                "StringChar", "0",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "return", "return",
                 "WHITE_SPACE", " ",
@@ -522,11 +589,15 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "by", "by",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'x'",
+                "'", "'",
+                "StringChar", "x",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "collation", "collation",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'x'",
+                "'", "'",
+                "StringChar", "x",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "return", "return",
                 "WHITE_SPACE", " ",
@@ -552,7 +623,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "by", "by",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'x'",
+                "'", "'",
+                "StringChar", "x",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "empty", "empty",
                 "WHITE_SPACE", " ",
@@ -560,7 +633,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "collation", "collation",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'x'",
+                "'", "'",
+                "StringChar", "x",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "return", "return",
                 "WHITE_SPACE", " ",
@@ -741,8 +816,8 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "NCName", "string-length",
                 "(", "(",
-                "WHITE_SPACE", "",
-                "StringLiteral", "''",
+                "'", "'",
+                "'", "'",
                 ")", ")",
                 ")", ")",
                 "WHITE_SPACE", " ",
@@ -770,8 +845,8 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ":", ":",
                 "NCName", "string-length",
                 "(", "(",
-                "WHITE_SPACE", "",
-                "StringLiteral", "''",
+                "'", "'",
+                "'", "'",
                 ")", ")",
                 ")", ")",
                 "WHITE_SPACE", " ",
@@ -805,10 +880,12 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ".", ".",
                 ",", ",",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'$'",
+                "'", "'",
+                "StringChar", "$",
+                "'", "'",
                 ",", ",",
-                "WHITE_SPACE", "",
-                "StringLiteral", "''",
+                "'", "'",
+                "'", "'",
                 ")", ")",
                 "WHITE_SPACE", " ",
                 "!", "!",
@@ -834,13 +911,17 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'ds'",
+                "'", "'",
+                "StringChar", "ds",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "NaN", "NaN",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'nan'",
+                "'", "'",
+                "StringChar", "nan",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -852,8 +933,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "validate", "validate",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'string'",
+                "'", "'",
+                "StringChar", "string",
+                "'", "'",
                 "}", "}"
         });
     }
@@ -866,8 +948,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "lax", "lax",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'string'",
+                "'", "'",
+                "StringChar", "string",
+                "'", "'",
                 "}", "}"
         });
     }
@@ -884,8 +967,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "NCName", "string",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'string'",
+                "'", "'",
+                "StringChar", "string",
+                "'", "'",
                 "}", "}"
         });
     }
@@ -1050,7 +1134,10 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 ";", ";"
         });
     }
@@ -1075,7 +1162,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "namespace", "namespace",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1092,7 +1181,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "namespace", "namespace",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1133,7 +1224,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "collation", "collation",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1146,7 +1239,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "base-uri", "base-uri",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1288,61 +1383,81 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "grouping-separator", "grouping-separator",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "infinity", "infinity",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "minus-sign", "minus-sign",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "NaN", "NaN",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "percent", "percent",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "per-mille", "per-mille",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "zero-digit", "zero-digit",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "digit", "digit",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "pattern-separator", "pattern-separator",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1372,7 +1487,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1385,7 +1502,10 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "schema", "schema",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1398,11 +1518,15 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "schema", "schema",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "at", "at",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1415,14 +1539,20 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "schema", "schema",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "at", "at",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 ",", ",",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1441,14 +1571,20 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "at", "at",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 ",", ",",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1467,14 +1603,20 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "namespace", "namespace",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "at", "at",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 ",", ",",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1493,7 +1635,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'example'",
+                "'", "'",
+                "StringChar", "example",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1506,7 +1650,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "module", "module",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'example'",
+                "'", "'",
+                "StringChar", "example",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1519,11 +1665,15 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "module", "module",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'example'",
+                "'", "'",
+                "StringChar", "example",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "at", "at",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1536,14 +1686,21 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "module", "module",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'example'",
+                
+                "'", "'",
+                "StringChar", "example",
+                "'", "'",
                 "WHITE_SPACE", " ",
                 "at", "at",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 ",", ",",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1632,7 +1789,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ":", ":",
                 "NCName", "a",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1650,7 +1809,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 ":=", ":=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'value'",
+                "'", "'",
+                "StringChar", "value",
+                "'", "'",
                 ";", ";"
         });
     }
@@ -1669,7 +1830,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 ":=", ":=",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'value'",
+                "'", "'",
+                "StringChar", "value",
+                "'", "'",
                 ";", ";"
         });
     }
@@ -1843,8 +2006,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ":", ":",
                 "NCName", "path",
                 "(", "(",
-                "WHITE_SPACE", "",
-                "StringLiteral", "\"/test\"",
+                "\"", "\"",
+                "StringChar", "/test",
+                "\"", "\"",
                 ")", ")",
                 "WHITE_SPACE", " ",
                 "function", "function",
@@ -1877,11 +2041,13 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ":", ":",
                 "NCName", "path",
                 "(", "(",
-                "WHITE_SPACE", "",
-                "StringLiteral", "\"/test\"",
+                "\"","\"",
+                "StringChar", "/test",
+                "\"","\"",
                 ",", ",",
-                "WHITE_SPACE", "",
-                "StringLiteral", "\"test2\"",
+                "\"","\"",
+                "StringChar", "test2",
+                "\"","\"",
                 ")", ")",
                 "WHITE_SPACE", " ",
                 "function", "function",
@@ -1970,8 +2136,8 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "ordered", "ordered",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "WHITE_SPACE", "",
-                "StringLiteral", "''",
+                "'", "'",
+                "'", "'",
                 "}", "}"
         });
     }
@@ -1982,8 +2148,8 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "unordered", "unordered",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "WHITE_SPACE", "",
-                "StringLiteral", "''",
+                "'", "'",
+                "'", "'",
                 "}", "}"
         });
     }
@@ -2151,7 +2317,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "as", "as",
                 "WHITE_SPACE", " ",
-                "StringLiteral", "'a'"
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
         });
     }
 
@@ -2191,8 +2359,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", "",
                 "try", "try",
                 "{", "{",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "}", "}",
                 "WHITE_SPACE", " ",
                 "catch", "catch",
@@ -2200,8 +2369,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "*", "*",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'b'",
+                "'", "'",
+                "StringChar", "b",
+                "'", "'",
                 "}", "}"
         });
     }
@@ -2212,8 +2382,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "try", "try",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 "}", "}",
                 "WHITE_SPACE", " ",
                 "catch", "catch",
@@ -2224,8 +2395,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ")", ")",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'b'",
+                "'", "'",
+                "StringChar", "b",
+                "'", "'",
                 "}", "}"
         });
     }
@@ -2297,8 +2469,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "object-node", "object-node",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'a'",
+                "'", "'",
+                "StringChar", "a",
+                "'", "'",
                 ":", ":",
                 "$", "$",
                 "NCName", "a",
@@ -2326,8 +2499,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "/", "/",
                 "number-node", "number-node",
                 "(", "(",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'count'",
+                "'", "'",
+                "StringChar", "count",
+                "'", "'",
                 ")", ")"
         });
     }
@@ -2364,8 +2538,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "/", "/",
                 "boolean-node", "boolean-node",
                 "(", "(",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'completed'",
+                "'", "'",
+                "StringChar", "completed",
+                "'", "'",
                 ")", ")"
         });
     }
@@ -2402,8 +2577,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "/", "/",
                 "null-node", "null-node",
                 "(", "(",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'account'",
+                "'", "'",
+                "StringChar", "account",
+                "'", "'",
                 ")", ")"
         });
     }
@@ -2438,8 +2614,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "/", "/",
                 "array-node", "array-node",
                 "(", "(",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'names'",
+                "'", "'",
+                "StringChar", "names",
+                "'", "'",
                 ")", ")"
         });
     }
@@ -2464,8 +2641,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "/", "/",
                 "text", "text",
                 "(", "(",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'title'",
+                "'", "'",
+                "StringChar", "title",
+                "'", "'",
                 ")", ")"
         });
     }
@@ -2478,8 +2656,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "/", "/",
                 "node", "node",
                 "(", "(",
-                "WHITE_SPACE", "",
-                "StringLiteral", "'title'",
+                "'", "'",
+                "StringChar", "title",
+                "'", "'",
                 ")", ")"
         });
     }

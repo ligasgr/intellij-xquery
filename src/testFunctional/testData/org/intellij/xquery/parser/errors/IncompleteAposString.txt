@@ -1,4 +1,5 @@
 XQuery File(0,11)
-  PsiErrorElement:<expr single>, declare, import, module or xquery expected, got '''(0,1)
-    PsiElement(')(''')(0,1)
-  PsiElement(Char)('incomplete')(1,11)
+  PsiElement(')(''')(0,1)
+  PsiElement(StringChar)('incomplete')(1,11)
+  PsiErrorElement:''', '''', CharRef, PredefinedEntityRef or StringChar expected, unexpected end of file(11,11)
+    <empty list>

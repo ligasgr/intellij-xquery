@@ -42,4 +42,10 @@ public class XQueryURILiteralImpl extends XQueryPsiElementImpl implements XQuery
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public XQueryStringLiteral getStringLiteral() {
+    return findNotNullChildByClass(XQueryStringLiteral.class);
+  }
+
 }

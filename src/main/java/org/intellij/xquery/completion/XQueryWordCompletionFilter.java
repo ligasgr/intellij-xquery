@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,6 @@ import org.intellij.xquery.psi.XQueryTypes;
  */
 public class XQueryWordCompletionFilter extends DefaultWordCompletionFilter {
     public boolean isWordCompletionEnabledIn(final IElementType element) {
-        return super.isWordCompletionEnabledIn(element) || element == XQueryTypes.NCNAME;
+        return super.isWordCompletionEnabledIn(element);
     }
 }

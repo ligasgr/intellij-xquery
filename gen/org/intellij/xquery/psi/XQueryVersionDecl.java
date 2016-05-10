@@ -28,6 +28,9 @@ public interface XQueryVersionDecl extends XQueryPsiElement {
   XQuerySeparator getSeparator();
 
   @Nullable
+  XQueryStringLiteral getStringLiteral();
+
+  @Nullable
   XQueryVersion getVersion();
 
 }

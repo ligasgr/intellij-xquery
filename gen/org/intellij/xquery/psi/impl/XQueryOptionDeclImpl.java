@@ -60,4 +60,10 @@ public class XQueryOptionDeclImpl extends XQueryPsiElementImpl implements XQuery
     return findChildByClass(XQuerySeparator.class);
   }
 
+  @Override
+  @Nullable
+  public XQueryStringLiteral getStringLiteral() {
+    return findChildByClass(XQueryStringLiteral.class);
+  }
+
 }

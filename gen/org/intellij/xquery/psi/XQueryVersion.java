@@ -24,6 +24,9 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryVersion extends XQueryPsiElement {
 
+  @NotNull
+  XQueryStringLiteral getStringLiteral();
+
   String getVersionString();
 
 }

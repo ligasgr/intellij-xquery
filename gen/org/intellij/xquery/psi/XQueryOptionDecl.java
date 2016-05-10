@@ -33,4 +33,7 @@ public interface XQueryOptionDecl extends XQueryPsiElement {
   @Nullable
   XQuerySeparator getSeparator();
 
+  @Nullable
+  XQueryStringLiteral getStringLiteral();
+
 }

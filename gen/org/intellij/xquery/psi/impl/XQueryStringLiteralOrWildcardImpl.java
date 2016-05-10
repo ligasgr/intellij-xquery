@@ -42,4 +42,10 @@ public class XQueryStringLiteralOrWildcardImpl extends XQueryPsiElementImpl impl
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public XQueryStringLiteral getStringLiteral() {
+    return findChildByClass(XQueryStringLiteral.class);
+  }
+
 }
