@@ -1117,15 +1117,15 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "'" (PredefinedEntityRef | CharRef | EscapeApos | StringChar)* "'"
+  // OpeningApos (PredefinedEntityRef | CharRef | EscapeApos | StringChar)* ClosingApos
   static boolean AposStringLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AposStringLiteral")) return false;
-    if (!nextTokenIs(b, APOSTROPHE)) return false;
+    if (!nextTokenIs(b, OPENINGAPOS)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, APOSTROPHE);
+    r = consumeToken(b, OPENINGAPOS);
     r = r && AposStringLiteral_1(b, l + 1);
-    r = r && consumeToken(b, APOSTROPHE);
+    r = r && consumeToken(b, CLOSINGAPOS);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -2464,10 +2464,11 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ("\"" (EscapeQuot | QuotAttrValueContent)* "\"")
-  //  | ("'" (EscapeApos | AposAttrValueContent)* "'")
+  // (OpeningQuot (EscapeQuot | QuotAttrValueContent)* ClosingQuot)
+  //  | (OpeningApos (EscapeApos | AposAttrValueContent)* ClosingApos)
   public static boolean DirAttributeValue(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DirAttributeValue")) return false;
+    if (!nextTokenIs(b, "<dir attribute value>", OPENINGAPOS, OPENINGQUOT)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, DIR_ATTRIBUTE_VALUE, "<dir attribute value>");
     r = DirAttributeValue_0(b, l + 1);
@@ -2476,14 +2477,14 @@ public class XQueryParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // "\"" (EscapeQuot | QuotAttrValueContent)* "\""
+  // OpeningQuot (EscapeQuot | QuotAttrValueContent)* ClosingQuot
   private static boolean DirAttributeValue_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DirAttributeValue_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, "\"");
+    r = consumeToken(b, OPENINGQUOT);
     r = r && DirAttributeValue_0_1(b, l + 1);
-    r = r && consumeToken(b, "\"");
+    r = r && consumeToken(b, CLOSINGQUOT);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -2511,14 +2512,14 @@ public class XQueryParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // "'" (EscapeApos | AposAttrValueContent)* "'"
+  // OpeningApos (EscapeApos | AposAttrValueContent)* ClosingApos
   private static boolean DirAttributeValue_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DirAttributeValue_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, APOSTROPHE);
+    r = consumeToken(b, OPENINGAPOS);
     r = r && DirAttributeValue_1_1(b, l + 1);
-    r = r && consumeToken(b, APOSTROPHE);
+    r = r && consumeToken(b, CLOSINGAPOS);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -4818,6 +4819,7 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   // ModuleImportPath
   public static boolean ModuleImportNamespace(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ModuleImportNamespace")) return false;
+    if (!nextTokenIs(b, "<module import namespace>", OPENINGAPOS, OPENINGQUOT)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, MODULE_IMPORT_NAMESPACE, "<module import namespace>");
     r = ModuleImportPath(b, l + 1);
@@ -4829,6 +4831,7 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   // URILiteral
   public static boolean ModuleImportPath(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ModuleImportPath")) return false;
+    if (!nextTokenIs(b, "<module import path>", OPENINGAPOS, OPENINGQUOT)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, MODULE_IMPORT_PATH, "<module import path>");
     r = URILiteral(b, l + 1);
@@ -5940,14 +5943,15 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "\"" (PredefinedEntityRef | CharRef | EscapeQuot | StringChar)* "\""
+  // OpeningQuot (PredefinedEntityRef | CharRef | EscapeQuot | StringChar)* ClosingQuot
   static boolean QuotStringLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "QuotStringLiteral")) return false;
+    if (!nextTokenIs(b, OPENINGQUOT)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, "\"");
+    r = consumeToken(b, OPENINGQUOT);
     r = r && QuotStringLiteral_1(b, l + 1);
-    r = r && consumeToken(b, "\"");
+    r = r && consumeToken(b, CLOSINGQUOT);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -6740,6 +6744,7 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   // QuotStringLiteral | AposStringLiteral
   public static boolean StringLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StringLiteral")) return false;
+    if (!nextTokenIs(b, "<string literal>", OPENINGAPOS, OPENINGQUOT)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, STRING_LITERAL, "<string literal>");
     r = QuotStringLiteral(b, l + 1);
@@ -7267,6 +7272,7 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   // StringLiteral
   public static boolean URILiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "URILiteral")) return false;
+    if (!nextTokenIs(b, "<uri literal>", OPENINGAPOS, OPENINGQUOT)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, URI_LITERAL, "<uri literal>");
     r = StringLiteral(b, l + 1);
@@ -7638,6 +7644,7 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   // StringLiteral
   public static boolean Version(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Version")) return false;
+    if (!nextTokenIs(b, "<version>", OPENINGAPOS, OPENINGQUOT)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, VERSION, "<version>");
     r = StringLiteral(b, l + 1);
@@ -7781,8 +7788,8 @@ public class XQueryParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, NCNAME);
     if (!r) r = StringLiteral(b, l + 1);
     if (!r) r = consumeToken(b, URIQUALIFIEDNAME);
-    if (!r) r = consumeToken(b, QUOT);
-    if (!r) r = consumeToken(b, APOSTROPHE);
+    if (!r) r = consumeToken(b, "\"");
+    if (!r) r = consumeToken(b, "'");
     if (!r) r = consumeToken(b, CHAR);
     exit_section_(b, m, null, r);
     return r;

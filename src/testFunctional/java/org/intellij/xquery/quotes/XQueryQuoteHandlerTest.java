@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,6 +39,18 @@ public class XQueryQuoteHandlerTest extends BaseFunctionalTestCase {
         myFixture.checkResult("''<caret>");
     }
 
+    public void testClosingApostropheWhenTextIsPartOfTheString() {
+        myFixture.configureByText(XQueryFileType.INSTANCE, "'abc<caret>");
+        myFixture.type("'");
+        myFixture.checkResult("'abc'");
+    }
+
+    public void testClosingApostropheWhenTextIsPartOfAttributeString() {
+        myFixture.configureByText(XQueryFileType.INSTANCE, "<test attr='hello<caret>>");
+        myFixture.type("'");
+        myFixture.checkResult("<test attr='hello'>");
+    }
+
     public void testClosingQuote() {
         myFixture.configureByText(XQueryFileType.INSTANCE, "");
         myFixture.type("\"");
@@ -50,4 +62,18 @@ public class XQueryQuoteHandlerTest extends BaseFunctionalTestCase {
         myFixture.type("\"");
         myFixture.checkResult("\"\"<caret>");
     }
+
+    public void testClosingQuoteWhenTextIsPartOfTheString() {
+        myFixture.configureByText(XQueryFileType.INSTANCE, "\"abc<caret>");
+        myFixture.type("\"");
+        myFixture.checkResult("\"abc\"");
+    }
+
+    public void testClosingQuoteWhenTextIsPartOfAttributeString() {
+        myFixture.configureByText(XQueryFileType.INSTANCE, "<test attr=\"hello<caret>>");
+        myFixture.type("\"");
+        myFixture.checkResult("<test attr=\"hello\">");
+    }
+
+
 }

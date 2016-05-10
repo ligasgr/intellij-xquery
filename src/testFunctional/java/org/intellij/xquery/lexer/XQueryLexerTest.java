@@ -72,51 +72,51 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
     public void testAposStringLiteral() throws Exception {
         assertProducedTokens("'abc'", new String[] {
                 "WHITE_SPACE", "",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "abc",
-                "'", "'"
+                "ClosingApos", "'"
         });
     }
 
     public void testQuotStringLiteral() throws Exception {
         assertProducedTokens("\"abc\"", new String[] {
                 "WHITE_SPACE", "",
-                "\"", "\"",
+                "OpeningQuot", "\"",
                 "StringChar", "abc",
-                "\"", "\""
+                "ClosingQuot", "\""
         });
     }
 
     public void testAposStringLiteralWithAdditionalStuff() throws Exception {
         assertProducedTokens("'abc&#xa0;&#123;&amp;def'", new String[] {
                 "WHITE_SPACE", "",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "abc",
                 "CharRef", "&#xa0;",
                 "CharRef", "&#123;",
                 "PredefinedEntityRef", "&amp;",
                 "StringChar", "def",
-                "'", "'"
+                "ClosingApos", "'"
         });
     }
 
     public void testQuotStringLiteralWithAdditionalStuff() throws Exception {
         assertProducedTokens("\"abc&#xa0;&#123;&amp;def\"", new String[] {
                 "WHITE_SPACE", "",
-                "\"", "\"",
+                "OpeningQuot", "\"",
                 "StringChar", "abc",
                 "CharRef", "&#xa0;",
                 "CharRef", "&#123;",
                 "PredefinedEntityRef", "&amp;",
                 "StringChar", "def",
-                "\"", "\""
+                "ClosingQuot", "\""
         });
     }
 
     public void testIncompleteQuotStringLiteral() throws Exception {
         assertProducedTokens("'abc", new String[] {
                 "WHITE_SPACE", "",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "abc",
         });
     }
@@ -124,7 +124,7 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
     public void testIncompleteAposStringLiteral() throws Exception {
         assertProducedTokens("'abc", new String[] {
                 "WHITE_SPACE", "",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "abc",
         });
     }
@@ -160,9 +160,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "AttrNCName", "attr",
                 "AttrEqual", "=",
-                "'", "'",
+                "OpeningApos", "'",
                 "Char", "val",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 "XmlTagEnd", ">",
                 "ElementContentChar", "content",
@@ -181,9 +181,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "AttrNCName", "attr",
                 "AttrEqual", "=",
-                "'", "'",
+                "OpeningApos", "'",
                 "Char", "val",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 "XmlTagEnd", ">",
                 "<!--", "<!--",
@@ -213,12 +213,12 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "AttrNCName", "attr",
                 "AttrEqual", "=",
-                "'", "'",
+                "OpeningApos", "'",
                 "Char", "x",
                 "CharRef", "&#xa0;",
                 "CharRef", "&#123;",
                 "Char", "y",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 "XmlTagEnd", ">",
                 "ElementContentChar", "x",
@@ -240,12 +240,12 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "AttrNCName", "attr",
                 "AttrEqual", "=",
-                "'", "'",
+                "OpeningApos", "'",
                 "Char", "x",
                 "PredefinedEntityRef", "&amp;",
                 "PredefinedEntityRef", "&nbsp;",
                 "Char", "y",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 "XmlTagEnd", ">",
                 "ElementContentChar", "x",
@@ -282,9 +282,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 ":=", ":=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "no. ",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "||", "||",
                 "WHITE_SPACE", " ",
@@ -320,9 +320,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "version", "version",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "3.0",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -344,15 +344,15 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "encoding", "encoding",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "UTF-8",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "version", "version",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "3.0",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -373,8 +373,8 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ":", ":",
                 "NCName", "empty",
                 "(", "(",
-                "'", "'",
-                "'", "'",
+                "OpeningApos", "'",
+                "ClosingApos", "'",
                 ")", ")"
         });
     }
@@ -495,9 +495,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "collation", "collation",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "x",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "return", "return",
                 "WHITE_SPACE", " ",
@@ -528,9 +528,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "0",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "return", "return",
                 "WHITE_SPACE", " ",
@@ -589,15 +589,15 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "by", "by",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "x",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "collation", "collation",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "x",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "return", "return",
                 "WHITE_SPACE", " ",
@@ -623,9 +623,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "by", "by",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "x",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "empty", "empty",
                 "WHITE_SPACE", " ",
@@ -633,9 +633,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "collation", "collation",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "x",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "return", "return",
                 "WHITE_SPACE", " ",
@@ -816,8 +816,8 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "NCName", "string-length",
                 "(", "(",
-                "'", "'",
-                "'", "'",
+                "OpeningApos", "'",
+                "ClosingApos", "'",
                 ")", ")",
                 ")", ")",
                 "WHITE_SPACE", " ",
@@ -845,8 +845,8 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ":", ":",
                 "NCName", "string-length",
                 "(", "(",
-                "'", "'",
-                "'", "'",
+                "OpeningApos", "'",
+                "ClosingApos", "'",
                 ")", ")",
                 ")", ")",
                 "WHITE_SPACE", " ",
@@ -880,12 +880,12 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ".", ".",
                 ",", ",",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "$",
-                "'", "'",
+                "ClosingApos", "'",
                 ",", ",",
-                "'", "'",
-                "'", "'",
+                "OpeningApos", "'",
+                "ClosingApos", "'",
                 ")", ")",
                 "WHITE_SPACE", " ",
                 "!", "!",
@@ -911,17 +911,17 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "ds",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "NaN", "NaN",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "nan",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -933,9 +933,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "validate", "validate",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "string",
-                "'", "'",
+                "ClosingApos", "'",
                 "}", "}"
         });
     }
@@ -948,9 +948,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "lax", "lax",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "string",
-                "'", "'",
+                "ClosingApos", "'",
                 "}", "}"
         });
     }
@@ -967,9 +967,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "NCName", "string",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "string",
-                "'", "'",
+                "ClosingApos", "'",
                 "}", "}"
         });
     }
@@ -1135,9 +1135,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "=", "=",
                 "WHITE_SPACE", " ",
                 
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 ";", ";"
         });
     }
@@ -1162,9 +1162,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "namespace", "namespace",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1181,9 +1181,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "namespace", "namespace",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1224,9 +1224,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "collation", "collation",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1239,9 +1239,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "base-uri", "base-uri",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1383,81 +1383,81 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "grouping-separator", "grouping-separator",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "infinity", "infinity",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "minus-sign", "minus-sign",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "NaN", "NaN",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "percent", "percent",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "per-mille", "per-mille",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "zero-digit", "zero-digit",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "digit", "digit",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "pattern-separator", "pattern-separator",
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1487,9 +1487,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1503,9 +1503,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "schema", "schema",
                 "WHITE_SPACE", " ",
                 
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1518,15 +1518,15 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "schema", "schema",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "at", "at",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1539,20 +1539,20 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "schema", "schema",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "at", "at",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 ",", ",",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1571,20 +1571,20 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "at", "at",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 ",", ",",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1603,20 +1603,20 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "namespace", "namespace",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "at", "at",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 ",", ",",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1635,9 +1635,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "=", "=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "example",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1650,9 +1650,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "module", "module",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "example",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1665,15 +1665,15 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "module", "module",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "example",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "at", "at",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1687,20 +1687,20 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "module", "module",
                 "WHITE_SPACE", " ",
                 
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "example",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "at", "at",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 ",", ",",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1789,9 +1789,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ":", ":",
                 "NCName", "a",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", "",
                 ";", ";"
         });
@@ -1809,9 +1809,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 ":=", ":=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "value",
-                "'", "'",
+                "ClosingApos", "'",
                 ";", ";"
         });
     }
@@ -1830,9 +1830,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 ":=", ":=",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "value",
-                "'", "'",
+                "ClosingApos", "'",
                 ";", ";"
         });
     }
@@ -2006,9 +2006,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ":", ":",
                 "NCName", "path",
                 "(", "(",
-                "\"", "\"",
+                "OpeningQuot", "\"",
                 "StringChar", "/test",
-                "\"", "\"",
+                "ClosingQuot", "\"",
                 ")", ")",
                 "WHITE_SPACE", " ",
                 "function", "function",
@@ -2041,13 +2041,13 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ":", ":",
                 "NCName", "path",
                 "(", "(",
-                "\"","\"",
+                "OpeningQuot","\"",
                 "StringChar", "/test",
-                "\"","\"",
+                "ClosingQuot","\"",
                 ",", ",",
-                "\"","\"",
+                "OpeningQuot","\"",
                 "StringChar", "test2",
-                "\"","\"",
+                "ClosingQuot","\"",
                 ")", ")",
                 "WHITE_SPACE", " ",
                 "function", "function",
@@ -2136,8 +2136,8 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "ordered", "ordered",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "'", "'",
-                "'", "'",
+                "OpeningApos", "'",
+                "ClosingApos", "'",
                 "}", "}"
         });
     }
@@ -2148,8 +2148,8 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "unordered", "unordered",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "'", "'",
-                "'", "'",
+                "OpeningApos", "'",
+                "ClosingApos", "'",
                 "}", "}"
         });
     }
@@ -2317,9 +2317,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "as", "as",
                 "WHITE_SPACE", " ",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
         });
     }
 
@@ -2359,9 +2359,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", "",
                 "try", "try",
                 "{", "{",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "}", "}",
                 "WHITE_SPACE", " ",
                 "catch", "catch",
@@ -2369,9 +2369,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "*", "*",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "b",
-                "'", "'",
+                "ClosingApos", "'",
                 "}", "}"
         });
     }
@@ -2382,9 +2382,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "try", "try",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 "}", "}",
                 "WHITE_SPACE", " ",
                 "catch", "catch",
@@ -2395,9 +2395,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 ")", ")",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "b",
-                "'", "'",
+                "ClosingApos", "'",
                 "}", "}"
         });
     }
@@ -2469,9 +2469,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "object-node", "object-node",
                 "WHITE_SPACE", " ",
                 "{", "{",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "a",
-                "'", "'",
+                "ClosingApos", "'",
                 ":", ":",
                 "$", "$",
                 "NCName", "a",
@@ -2499,9 +2499,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "/", "/",
                 "number-node", "number-node",
                 "(", "(",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "count",
-                "'", "'",
+                "ClosingApos", "'",
                 ")", ")"
         });
     }
@@ -2538,9 +2538,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "/", "/",
                 "boolean-node", "boolean-node",
                 "(", "(",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "completed",
-                "'", "'",
+                "ClosingApos", "'",
                 ")", ")"
         });
     }
@@ -2577,9 +2577,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "/", "/",
                 "null-node", "null-node",
                 "(", "(",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "account",
-                "'", "'",
+                "ClosingApos", "'",
                 ")", ")"
         });
     }
@@ -2614,9 +2614,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "/", "/",
                 "array-node", "array-node",
                 "(", "(",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "names",
-                "'", "'",
+                "ClosingApos", "'",
                 ")", ")"
         });
     }
@@ -2641,9 +2641,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "/", "/",
                 "text", "text",
                 "(", "(",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "title",
-                "'", "'",
+                "ClosingApos", "'",
                 ")", ")"
         });
     }
@@ -2656,9 +2656,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "/", "/",
                 "node", "node",
                 "(", "(",
-                "'", "'",
+                "OpeningApos", "'",
                 "StringChar", "title",
-                "'", "'",
+                "ClosingApos", "'",
                 ")", ")"
         });
     }
@@ -2698,9 +2698,9 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "AttrNCName", "attr",
                 "AttrEqual", "=",
-                "'", "'",
+                "OpeningApos", "'",
                 "Char", "attr",
-                "'", "'",
+                "ClosingApos", "'",
                 "WHITE_SPACE", " ",
                 "(:", "(:",
                 "ExprCommentContent", " bar ",

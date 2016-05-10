@@ -57,8 +57,6 @@
   COMMA         = ","
   DOLLAR_SIGN  = "$"
   STAR_SIGN    = "*"
-  QUOT         = "\""
-  APOSTROPHE   = "'"
   PRAGMA_BEGIN = "(#"
   PRAGMA_END   = "#)"
   EXPR_COMMENT_START = "(:"
@@ -507,8 +505,8 @@ DirAttribute ::= DirAttributeName AttrEqual DirAttributeValue /* ws: explicit */
 DirAttributeName ::= AttrNamespace AttrColon AttrLocalName | AttrLocalName
 AttrNamespace ::= AttrNCName  {methods=[getName setName getNameIdentifier getReference isEquivalentTo]}
 AttrLocalName ::= AttrNCName  {methods=[getName setName getNameIdentifier delete]}
-DirAttributeValue ::= ("\"" (EscapeQuot | QuotAttrValueContent)* "\"")
- | ("'" (EscapeApos | AposAttrValueContent)* "'") /* ws: explicit */
+DirAttributeValue ::= (OpeningQuot (EscapeQuot | QuotAttrValueContent)* ClosingQuot)
+ | (OpeningApos (EscapeApos | AposAttrValueContent)* ClosingApos) /* ws: explicit */
 QuotAttrValueContent ::= QuotAttrContentChar
  | CommonContent
 AposAttrValueContent ::= AposAttrContentChar
@@ -655,5 +653,5 @@ TransformExpr ::= "copy" "$" VarName ":=" ExprSingle ("," "$" VarName ":=" ExprS
 MisplacedComment ::= "(:" MisplacedCommentContent ":)"
 private MisplacedCommentContent ::= (ExprCommentContent|MisplacedComment)*
 StringLiteral ::= QuotStringLiteral | AposStringLiteral
-private QuotStringLiteral ::= "\"" (PredefinedEntityRef | CharRef | EscapeQuot | StringChar)* "\""
-private AposStringLiteral ::= "'" (PredefinedEntityRef | CharRef | EscapeApos | StringChar)* "'"
+private QuotStringLiteral ::= OpeningQuot (PredefinedEntityRef | CharRef | EscapeQuot | StringChar)* ClosingQuot
+private AposStringLiteral ::= OpeningApos (PredefinedEntityRef | CharRef | EscapeApos | StringChar)* ClosingApos

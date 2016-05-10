@@ -17,17 +17,78 @@
 
 package org.intellij.xquery.quotes;
 
-import com.intellij.codeInsight.editorActions.SimpleTokenSetQuoteHandler;
+import com.intellij.codeInsight.editorActions.QuoteHandler;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.highlighter.HighlighterIterator;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 
 import static org.intellij.xquery.psi.XQueryTypes.*;
 
-/**
- * User: ligasgr
- * Date: 03/09/13
- * Time: 13:57
- */
-public class XQueryQuoteHandler extends SimpleTokenSetQuoteHandler {
+public class XQueryQuoteHandler implements QuoteHandler {
+    private final TokenSet myLiteralTokenSet;
+
     public XQueryQuoteHandler() {
-        super(QUOT, APOSTROPHE, CHAR, STRINGCHAR, PREDEFINEDENTITYREF, CHARREF);
+        myLiteralTokenSet = TokenSet.create(OPENINGQUOT, OPENINGAPOS, CLOSINGQUOT, CLOSINGAPOS, CHAR, STRINGCHAR, PREDEFINEDENTITYREF, CHARREF);
+    }
+
+    @Override
+    public boolean isClosingQuote(HighlighterIterator iterator, int offset) {
+        IElementType tokenType = iterator.getTokenType();
+        if (tokenType == CLOSINGQUOT || tokenType == CLOSINGAPOS){
+            int start = iterator.getStart();
+            int end = iterator.getEnd();
+            return end - start >= 1 && offset == end - 1;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isOpeningQuote(HighlighterIterator iterator, int offset) {
+        if (OPENINGQUOT == iterator.getTokenType() || OPENINGAPOS == iterator.getTokenType()){
+            int start = iterator.getStart();
+            return offset == start;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean hasNonClosedLiteral(Editor editor, HighlighterIterator iterator, int offset) {
+        int start = iterator.getStart();
+        try {
+            Document doc = editor.getDocument();
+            CharSequence chars = doc.getCharsSequence();
+            int lineEnd = doc.getLineEndOffset(doc.getLineNumber(offset));
+
+            while (!iterator.atEnd() && iterator.getStart() < lineEnd) {
+                IElementType tokenType = iterator.getTokenType();
+
+                if (myLiteralTokenSet.contains(tokenType)) {
+                    if (isNonClosedLiteral(iterator, chars)) return true;
+                }
+                iterator.advance();
+            }
+        }
+        finally {
+            while(iterator.atEnd() || iterator.getStart() != start) iterator.retreat();
+        }
+
+        return false;
+    }
+
+    protected boolean isNonClosedLiteral(HighlighterIterator iterator, CharSequence chars) {
+        if (iterator.getStart() >= iterator.getEnd() - 1 ||
+                chars.charAt(iterator.getEnd() - 1) != '\"' && chars.charAt(iterator.getEnd() - 1) != '\'') {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isInsideLiteral(HighlighterIterator iterator) {
+        return myLiteralTokenSet.contains(iterator.getTokenType());
     }
 }

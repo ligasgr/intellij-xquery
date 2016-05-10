@@ -158,9 +158,11 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
         }
         if (tokenType == XQueryTypes.STRINGCHAR
                 || tokenType == XQueryTypes.CHAR
-                || tokenType == XQueryTypes.APOSTROPHE
+                || tokenType == XQueryTypes.OPENINGAPOS
+                || tokenType == XQueryTypes.CLOSINGAPOS
                 || tokenType == XQueryTypes.AMPERSAND
-                || tokenType == XQueryTypes.QUOT) {
+                || tokenType == XQueryTypes.OPENINGQUOT
+                || tokenType == XQueryTypes.CLOSINGQUOT) {
             return STRINGS;
         }
         if (tokenType == XQueryTypes.SEMICOLON) {

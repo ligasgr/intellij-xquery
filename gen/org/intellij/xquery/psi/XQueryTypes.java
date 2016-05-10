@@ -283,7 +283,6 @@ public interface XQueryTypes {
   IElementType XML_TAG_NAMESPACE = new XQueryElementType("XML_TAG_NAMESPACE");
 
   IElementType AMPERSAND = new XQueryTokenType("&");
-  IElementType APOSTROPHE = new XQueryTokenType("'");
   IElementType ATTRCOLON = new XQueryTokenType("AttrColon");
   IElementType ATTREQUAL = new XQueryTokenType("AttrEqual");
   IElementType ATTRNCNAME = new XQueryTokenType("AttrNCName");
@@ -295,6 +294,8 @@ public interface XQueryTypes {
   IElementType CHAR = new XQueryTokenType("Char");
   IElementType CHARREF = new XQueryTokenType("CharRef");
   IElementType CLOSE_TAG = new XQueryTokenType("/>");
+  IElementType CLOSINGAPOS = new XQueryTokenType("ClosingApos");
+  IElementType CLOSINGQUOT = new XQueryTokenType("ClosingQuot");
   IElementType COLON = new XQueryTokenType(":");
   IElementType COLON_COLON = new XQueryTokenType("::");
   IElementType COMMA = new XQueryTokenType(",");
@@ -479,6 +480,8 @@ public interface XQueryTypes {
   IElementType NODECOMP_GT = new XQueryTokenType(">>");
   IElementType NODECOMP_LT = new XQueryTokenType("<<");
   IElementType NOT_EQUAL = new XQueryTokenType("!=");
+  IElementType OPENINGAPOS = new XQueryTokenType("OpeningApos");
+  IElementType OPENINGQUOT = new XQueryTokenType("OpeningQuot");
   IElementType OP_ASSIGN = new XQueryTokenType(":=");
   IElementType OP_MINUS = new XQueryTokenType("-");
   IElementType OP_PLUS = new XQueryTokenType("+");
@@ -493,7 +496,6 @@ public interface XQueryTypes {
   IElementType PRAGMA_END = new XQueryTokenType("#)");
   IElementType PREDEFINEDENTITYREF = new XQueryTokenType("PredefinedEntityRef");
   IElementType QUESTIONMARK = new XQueryTokenType("?");
-  IElementType QUOT = new XQueryTokenType("\"");
   IElementType R_BRACKET = new XQueryTokenType("]");
   IElementType R_C_BRACE = new XQueryTokenType("}");
   IElementType R_PAR = new XQueryTokenType(")");

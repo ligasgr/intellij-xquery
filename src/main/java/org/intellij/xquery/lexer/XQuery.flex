@@ -200,8 +200,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 {DecimalLiteral}                           {return XQueryTypes.DECIMALLITERAL;}
 {DoubleLiteral}                            {return XQueryTypes.DOUBLELITERAL;}
 {IntegerLiteral}                           {return XQueryTypes.INTEGERLITERAL;}
-"\""                                       {pushState(QUOT_STRING_SIMPLE);return XQueryTypes.QUOT;}
-"'"                                        {pushState(APOS_STRING_SIMPLE);return XQueryTypes.APOSTROPHE;}
+"\""                                       {pushState(QUOT_STRING_SIMPLE);return XQueryTypes.OPENINGQUOT;}
+"'"                                        {pushState(APOS_STRING_SIMPLE);return XQueryTypes.OPENINGAPOS;}
 "Q{"                                       {pushState(URIQUALIFIED); yypushback(2);}
 "(:~"                                      {pushState(DOC_COMMENT);return XQueryBasicTypes.DOC_COMMENT_START;}
 "(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
@@ -432,8 +432,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 {S}                                        {return TokenType.WHITE_SPACE;}
 {NCName}                                   {pushState(ATTR_QNAME);yypushback(yylength());return TokenType.WHITE_SPACE;}
 "="                                        {return XQueryTypes.ATTREQUAL;}
-"\""                                       {pushState(QUOT_STRING); return XQueryTypes.QUOT;}
-"'"                                        {pushState(APOS_STRING); return XQueryTypes.APOSTROPHE;}
+"\""                                       {pushState(QUOT_STRING); return XQueryTypes.OPENINGQUOT;}
+"'"                                        {pushState(APOS_STRING); return XQueryTypes.OPENINGAPOS;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
@@ -479,7 +479,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "{{"                                       {return XQueryTypes.DBL_L_C_BRACE;}
 "}}"                                       {return XQueryTypes.DBL_R_C_BRACE;}
 "{"                                        {pushState(EXPRESSION_IN_QUOT_STRING); return XQueryTypes.L_C_BRACE; }
-"\""                                       {popState(); return XQueryTypes.QUOT;}
+"\""                                       {popState(); return XQueryTypes.CLOSINGQUOT;}
 {Char}                                     {return XQueryTypes.CHAR;}
 }
 
@@ -489,7 +489,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "{{"                                       {return XQueryTypes.DBL_L_C_BRACE;}
 "}}"                                       {return XQueryTypes.DBL_R_C_BRACE;}
 "{"                                        {pushState(EXPRESSION_IN_APOS_STRING); return XQueryTypes.L_C_BRACE; }
-"'"                                        {popState(); return XQueryTypes.APOSTROPHE;}
+"'"                                        {popState(); return XQueryTypes.CLOSINGAPOS;}
 {Char}                                     {return XQueryTypes.CHAR;}
 }
 
@@ -524,8 +524,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 
 <XQUERY_RECOGNITION> {
 {S}                                        {return TokenType.WHITE_SPACE;}
-"\""                                       {pushState(QUOT_STRING_SIMPLE);return XQueryTypes.QUOT;}
-"'"                                        {pushState(APOS_STRING_SIMPLE);return XQueryTypes.APOSTROPHE;}
+"\""                                       {pushState(QUOT_STRING_SIMPLE);return XQueryTypes.OPENINGQUOT;}
+"'"                                        {pushState(APOS_STRING_SIMPLE);return XQueryTypes.OPENINGAPOS;}
 "xquery" / {S} ("encoding"|"version")      {return XQueryTypes.K_XQUERY;}
 "version"                                  {return XQueryTypes.K_VERSION;}
 "encoding"                                 {return XQueryTypes.K_ENCODING;}
@@ -539,8 +539,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 "(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
 "{"                                        {pushState(EXPRESSION);return XQueryTypes.L_C_BRACE;}
 "="                                        {return XQueryTypes.EQUAL;}
-"\""                                       {pushState(QUOT_STRING_SIMPLE);return XQueryTypes.QUOT;}
-"'"                                        {pushState(APOS_STRING_SIMPLE);return XQueryTypes.APOSTROPHE;}
+"\""                                       {pushState(QUOT_STRING_SIMPLE);return XQueryTypes.OPENINGQUOT;}
+"'"                                        {pushState(APOS_STRING_SIMPLE);return XQueryTypes.OPENINGAPOS;}
 "declare" / {SC} ("boundary-space"|"default"|"base-uri"|"construction"|"ordering"|"copy-namespaces"|"decimal-format"|"namespace"|"context"|"option"|"function"|"variable"|"%"|"updating"|"revalidation"|"private") {return XQueryTypes.K_DECLARE;}
 "default"                                  {pushState(DEFAULT_RECOGNITION);return XQueryTypes.K_DEFAULT;}
 "base-uri"                                 {return XQueryTypes.K_BASE_URI;}
@@ -597,8 +597,8 @@ SC=({S} | "(:" {Char}* ~":)")+
 
 <IMPORT_RECOGNITION> {
 {S}                                        {return TokenType.WHITE_SPACE;}
-"\""                                       {pushState(QUOT_STRING_SIMPLE);return XQueryTypes.QUOT;}
-"'"                                        {pushState(APOS_STRING_SIMPLE);return XQueryTypes.APOSTROPHE;}
+"\""                                       {pushState(QUOT_STRING_SIMPLE);return XQueryTypes.OPENINGQUOT;}
+"'"                                        {pushState(APOS_STRING_SIMPLE);return XQueryTypes.OPENINGAPOS;}
 "(:~"                                      {pushState(DOC_COMMENT);return XQueryBasicTypes.DOC_COMMENT_START;}
 "(:"                                       {pushState(EXPR_COMMENT);return XQueryBasicTypes.EXPR_COMMENT_START;}
 "import" / {SC} ("schema"|"module")        {return XQueryTypes.K_IMPORT;}
@@ -643,7 +643,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 {EscapeQuot}                               {return XQueryTypes.STRINGCHAR;}
 [^\"&]                                     {return XQueryTypes.STRINGCHAR;}
 "&"                                        {return XQueryTypes.AMPERSAND;}
-"\""                                       {popState(); return XQueryTypes.QUOT;}
+"\""                                       {popState(); return XQueryTypes.CLOSINGQUOT;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
@@ -653,7 +653,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 {EscapeApos}                               {return XQueryTypes.STRINGCHAR;}
 [^\'&]                                     {return XQueryTypes.STRINGCHAR;}
 "&"                                        {return XQueryTypes.AMPERSAND;}
-"'"                                        {popState(); return XQueryTypes.APOSTROPHE;}
+"'"                                        {popState(); return XQueryTypes.CLOSINGAPOS;}
 .                                          {yypushback(yylength()); popState(); return TokenType.WHITE_SPACE;}
 }
 
