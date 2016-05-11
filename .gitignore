@@ -16,3 +16,4 @@ sdk/
 *.iml
 *.ipr
 *.iws
+.shelf/
