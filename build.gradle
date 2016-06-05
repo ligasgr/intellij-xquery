@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -131,6 +129,49 @@ task unzipSdk << {
         into file('sdk/')
     }
 }
+
+task changelog << {
+    def calculatedFrom = project.hasProperty("versionFrom") ? versionFrom + '..' : ''
+    def calculatedTo = project.hasProperty("versionTo") ? versionTo: 'HEAD'
+    new ByteArrayOutputStream().withStream { os ->
+        def result = exec {
+            executable 'git'
+            args = ['--no-pager', 'log', '--pretty="%s"', "$calculatedFrom$calculatedTo"]
+            standardOutput = os
+        }
+        def gitLog = os.toString().split('\n').collect {it.replaceAll('^\"|\"$', "");}
+        def twoParts = gitLog.split { logEntry -> logEntry.startsWith("Issue #") || logEntry.startsWith("Closes #")}
+        def issueRelatedEntries = twoParts.get(0)
+        def pattern = java.util.regex.Pattern.compile('(Issue|Closes) #([0-9]+)(.*)')
+        println 'Issue related:'
+        println '<ul>'
+        issueRelatedEntries.each {
+            def matcher = pattern.matcher(it)
+            if (matcher.matches()) {
+                def issueNumber = matcher.group(2)
+                def rest = matcher.group(3)
+                println(
+                        '\t' +
+                        '<li>' +
+                                'Issue ' +
+                                '<a href="https://github.com/ligasgr/intellij-xquery/issues/' + issueNumber + '" rel="nofollow">' +
+                                '#' + issueNumber +
+                                '</a>' +
+                                rest +
+                        '</li>'
+                )
+            } else {
+                println it
+            }
+        }
+        println '</ul>'
+        println()
+        def unrelatedEntries = twoParts.get(1)
+        println 'Unrelated:'
+        unrelatedEntries.each {println(it)}
+    }
+}
+
 
 class DownloadTask extends DefaultTask {
     @Input
