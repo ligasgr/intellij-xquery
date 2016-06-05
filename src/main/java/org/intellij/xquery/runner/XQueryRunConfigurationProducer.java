@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,23 +21,17 @@ import com.intellij.execution.Location;
 import com.intellij.execution.RunManagerEx;
 import com.intellij.execution.RunnerAndConfigurationSettings;
 import com.intellij.execution.actions.ConfigurationContext;
+import com.intellij.execution.actions.RunConfigurationProducer;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
-import com.intellij.execution.impl.RunManagerImpl;
-import com.intellij.execution.junit.RuntimeConfigurationProducer;
+import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import org.intellij.xquery.psi.XQueryContextItemDecl;
-import org.intellij.xquery.psi.XQueryFile;
-import org.intellij.xquery.psi.XQueryLiteral;
-import org.intellij.xquery.psi.XQueryNamespaceSource;
-import org.intellij.xquery.psi.XQueryPrefix;
-import org.intellij.xquery.psi.XQueryVarDecl;
-import org.intellij.xquery.psi.XQueryVarDefaultValue;
+import org.intellij.xquery.psi.*;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.intellij.xquery.runner.state.run.XQueryRunVariable;
 import org.intellij.xquery.runner.state.run.XQueryRunVariables;
@@ -50,58 +44,57 @@ import java.util.List;
 import static org.intellij.xquery.util.StringUtils.EMPTY;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrAposIfNeeded;
 
-/**
- * User: ligasgr
- * Date: 04/08/13
- * Time: 18:57
- */
-public class XQueryRunConfigurationProducer extends RuntimeConfigurationProducer implements Cloneable {
-    private XQueryFile containingFile;
+public class XQueryRunConfigurationProducer extends RunConfigurationProducer implements Cloneable {
 
     public XQueryRunConfigurationProducer() {
         super(XQueryRunConfigurationType.getInstance());
     }
 
     @Override
-    public PsiElement getSourceElement() {
-        return containingFile;
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        return PREFERED;
-    }
-
-    @Nullable
-    @Override
-    protected RunnerAndConfigurationSettings createConfigurationByElement(Location location, ConfigurationContext
-            context) {
+    protected boolean setupConfigurationFromContext(RunConfiguration configuration, ConfigurationContext context, Ref sourceElement) {
+        if (!(configuration instanceof XQueryRunConfiguration)) return false;
+        XQueryRunConfiguration appConfiguration = (XQueryRunConfiguration) configuration;
+        Location location = context.getLocation();
         PsiElement psiElement = location.getPsiElement();
         PsiFile psiFile = psiElement.getContainingFile();
-        if (isUnsupportedFile(psiFile)) return null;
-        containingFile = (XQueryFile) psiFile;
-        if (containingFile.isLibraryModule()) return null;
-        final VirtualFile vFile = containingFile.getVirtualFile();
-        if (vFile == null) return null;
-        RunnerAndConfigurationSettings settings = prepareSettings(context, psiElement.getProject(), vFile);
-        return settings;
+        if (isUnsupportedFile(psiFile)) return false;
+        XQueryFile containingFile = (XQueryFile) psiFile;
+        if (containingFile.isLibraryModule()) return false;
+        final VirtualFile vFile = location.getVirtualFile();
+        if (vFile == null) return false;
+        prepareSettings(appConfiguration, context, vFile, containingFile);
+        return true;
+    }
+
+    @Override
+    public boolean isConfigurationFromContext(RunConfiguration configuration, ConfigurationContext context) {
+        if (!(configuration instanceof XQueryRunConfiguration)) return false;
+        XQueryRunConfiguration appConfiguration = (XQueryRunConfiguration) configuration;
+        Location location = context.getLocation();
+        PsiFile psiFile = location.getPsiElement().getContainingFile();
+        if (isUnsupportedFile(psiFile) || ((XQueryFile) psiFile).isLibraryModule()) return false;
+        return isForTheSameFile(psiFile, appConfiguration) && isForTheSameModule(location, appConfiguration)
+                && appConfiguration.getDataSourceName() != null;
+    }
+
+    @Override
+    protected RunnerAndConfigurationSettings cloneTemplateConfiguration(@NotNull ConfigurationContext context) {
+        RunnerAndConfigurationSettings cloned = super.cloneTemplateConfiguration(context);
+        cloned.setEditBeforeRun(true);
+        return cloned;
     }
 
     private boolean isUnsupportedFile(PsiFile psiFile) {
         return !(psiFile instanceof XQueryFile);
     }
 
-    private RunnerAndConfigurationSettings prepareSettings(ConfigurationContext context, Project project,
-                                                           VirtualFile vFile) {
-        RunnerAndConfigurationSettings settings = cloneTemplateConfiguration(project, context);
-        XQueryRunConfiguration configuration = (XQueryRunConfiguration) settings.getConfiguration();
-        setFileSpecificSettings(vFile, configuration);
+    private void prepareSettings(XQueryRunConfiguration configuration, ConfigurationContext context,
+                                                           VirtualFile vFile, XQueryFile containingFile) {
+        setFileSpecificSettings(vFile, configuration, containingFile);
         setupConfigurationModule(context, configuration);
-        settings.setEditBeforeRun(true);
-        return settings;
     }
 
-    private void setFileSpecificSettings(VirtualFile vFile, XQueryRunConfiguration configuration) {
+    private void setFileSpecificSettings(VirtualFile vFile, XQueryRunConfiguration configuration, XQueryFile containingFile) {
         configuration.setMainFileName(FileUtil.toSystemIndependentName(vFile.getCanonicalPath()));
         configuration.setName(vFile.getPresentableName());
         configuration.setVariables(getExternalVariables(containingFile));
@@ -155,7 +148,6 @@ public class XQueryRunConfigurationProducer extends RuntimeConfigurationProducer
                 configuration.setModule(module);
             }
         }
-        return;
     }
 
     private Module getModule(ConfigurationContext context, ModuleBasedConfiguration configuration) {
@@ -176,36 +168,12 @@ public class XQueryRunConfigurationProducer extends RuntimeConfigurationProducer
     }
 
     private RunnerAndConfigurationSettings getConfigurationTemplate(ConfigurationContext context) {
-        return ((RunManagerImpl) context.getRunManager()).getConfigurationTemplate(getConfigurationFactory());
+        return context.getRunManager().getConfigurationTemplate(getConfigurationFactory());
     }
 
     private Module findModule(ModuleBasedConfiguration configuration, Module contextModule) {
         if (configuration.getConfigurationModule().getModule() == null && contextModule != null) {
             return contextModule;
-        }
-        return null;
-    }
-
-    @Override
-    protected RunnerAndConfigurationSettings findExistingByElement(Location location,
-                                                                   @NotNull List<RunnerAndConfigurationSettings>
-                                                                           existingConfigurations,
-                                                                   ConfigurationContext context) {
-        PsiFile psiFile = location.getPsiElement().getContainingFile();
-        if (isUnsupportedFile(psiFile) || ((XQueryFile) psiFile).isLibraryModule()) return null;
-        return getExistingConfigurationForLocation(location, psiFile, existingConfigurations);
-    }
-
-    private RunnerAndConfigurationSettings getExistingConfigurationForLocation(Location location, PsiFile psiFile,
-                                                                               List<RunnerAndConfigurationSettings>
-                                                                                       existingConfigurations) {
-        for (RunnerAndConfigurationSettings existingConfiguration : existingConfigurations) {
-            final XQueryRunConfiguration appConfiguration = (XQueryRunConfiguration) existingConfiguration
-                    .getConfiguration();
-            if (isForTheSameFile(psiFile, appConfiguration) && isForTheSameModule(location, appConfiguration)
-                    && appConfiguration.getDataSourceName() != null) {
-                return existingConfiguration;
-            }
         }
         return null;
     }

@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+  ~ Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
   ~ (see the CONTRIBUTORS file).
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <programRunner implementation="org.intellij.xquery.runner.XQueryRunner"/>
         <configurationType implementation="org.intellij.xquery.runner.XQueryRunConfigurationType"/>
-        <configurationProducer implementation="org.intellij.xquery.runner.XQueryRunConfigurationProducer"/>
+        <runConfigurationProducer implementation="org.intellij.xquery.runner.XQueryRunConfigurationProducer"/>
         <applicationConfigurable instance="org.intellij.xquery.runner.state.datasources.XQueryDataSourcesConfigurable"/>
     </extensions>
 

@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+  ~ Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
   ~ (see the CONTRIBUTORS file).
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,7 +41,7 @@
         <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
         <fileTypeFactory implementation="org.intellij.xquery.XQueryFileTypeFactory"/>
         <lang.parserDefinition language="XQuery" implementationClass="org.intellij.xquery.parser.XQueryParserDefinition"/>
-        <lang.syntaxHighlighterFactory key="XQuery" language="XQuery" implementationClass="org.intellij.xquery.highlighting.XQuerySyntaxHighlighterFactory"/>
+        <lang.syntaxHighlighterFactory language="XQuery" implementationClass="org.intellij.xquery.highlighting.XQuerySyntaxHighlighterFactory"/>
         <lang.findUsagesProvider language="XQuery" implementationClass="org.intellij.xquery.usage.XQueryFindUsageProvider"/>
         <lang.commenter language="XQuery" implementationClass="org.intellij.xquery.comment.XQueryCommenter"/>
         <lang.braceMatcher language="XQuery" implementationClass="org.intellij.xquery.braces.XQueryBraceMatcher"/>
