@@ -18,16 +18,22 @@
 <idea-plugin url="http://ligasgr.github.io/intellij-xquery/" version="2">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
-    <version>3.0.1</version>
+    <version>3.0.2</version>
     <vendor email="ligasgr@gmail.com" url="http://grzegorzligas.blogspot.com/">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0</description>
 
     <change-notes>
         <![CDATA[
-            <p>3.0.1:</p>
+            <p>3.0.2:</p>
             <ul>
-                <li>Upgrade to Idea 2016.1</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/190" rel="nofollow">#190</a> - Improved handling of quotes closing for regular and attribute strings.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/172" rel="nofollow">#172</a> - Make String a proper parsed type instead of a token.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/184" rel="nofollow">#184</a> - Tags with typos inside should not get auto-closing.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/180" rel="nofollow">#180</a> - Element content lexical analysis should have fallback to expression.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/170" rel="nofollow">#170</a> - Pinning predicate makes it not show parsed expression errors.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/178" rel="nofollow">#178</a> - Change to start every lexing to start file with expression.</li>
+                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/175" rel="nofollow">#175</a> - Empty object-node is a valid construct.</li>
             </ul>
         ]]>
     </change-notes>
