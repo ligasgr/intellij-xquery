@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,14 +20,11 @@ package org.intellij.xquery.runner.ui.run.main.module;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-/**
- * User: ligasgr
- * Date: 12/11/13
- * Time: 15:05
- */
 public class MainModuleTypeValidator implements ModuleTypeValidator {
-    private static final String MODULE_NAMESPACE_DETECTION_STRING = "module namespace ";
+    public static final Pattern MODULE_NAMESPACE_PATTERN = Pattern.compile(".*^(?!import)\\s*module\\s+namespace.*", Pattern.DOTALL|Pattern.MULTILINE);
 
     @Override
     public boolean isValidModuleType(VirtualFile file) {
@@ -40,6 +37,7 @@ public class MainModuleTypeValidator implements ModuleTypeValidator {
 
     private boolean isMainModuleBasedOnContent(VirtualFile file) throws IOException {
         String contents = new String(file.contentsToByteArray());
-        return contents.indexOf(MODULE_NAMESPACE_DETECTION_STRING) < 0;
+        Matcher matcher = MODULE_NAMESPACE_PATTERN.matcher(contents);
+        return !matcher.matches();
     }
 }

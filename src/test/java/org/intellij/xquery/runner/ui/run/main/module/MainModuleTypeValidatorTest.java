@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,11 +28,6 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-/**
- * User: ligasgr
- * Date: 12/11/13
- * Time: 15:05
- */
 public class MainModuleTypeValidatorTest {
 
     private VirtualFile file;
@@ -46,7 +41,17 @@ public class MainModuleTypeValidatorTest {
 
     @Test
     public void shouldReturnFalseWhenContentContainsModuleDeclaration() throws IOException {
-        String content = "module namespace xxx";
+        String content = "module namespace xxx = 'xxx';\n x";
+        given(file.contentsToByteArray()).willReturn(content.getBytes());
+
+        boolean result = validator.isValidModuleType(file);
+
+        assertThat(result, is(false));
+    }
+
+    @Test
+    public void shouldReturnFalseWhenContentContainsModuleDeclarationInMultilineFile() throws IOException {
+        String content = "xquery version '1.0';\nmodule namespace x = 'a';\nx";
         given(file.contentsToByteArray()).willReturn(content.getBytes());
 
         boolean result = validator.isValidModuleType(file);
@@ -66,6 +71,16 @@ public class MainModuleTypeValidatorTest {
     @Test
     public void shouldReturnTrueWhenContentDoesNotContainModuleDeclaration() throws IOException {
         String content = "xxx";
+        given(file.contentsToByteArray()).willReturn(content.getBytes());
+
+        boolean result = validator.isValidModuleType(file);
+
+        assertThat(result, is(true));
+    }
+
+    @Test
+    public void shouldReturnTrueWhenFileContainsModuleImport() throws IOException {
+        String content = "xquery version '1.0';\nimport module namespace x = 'a';\nx";
         given(file.contentsToByteArray()).willReturn(content.getBytes());
 
         boolean result = validator.isValidModuleType(file);
