@@ -24,7 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MainModuleTypeValidator implements ModuleTypeValidator {
-    public static final Pattern MODULE_NAMESPACE_PATTERN = Pattern.compile(".*^(?!import)\\s*module\\s+namespace.*", Pattern.DOTALL|Pattern.MULTILINE);
+    public static final Pattern LIBRARY_MODULE_NAMESPACE_PATTERN = Pattern.compile(".*^(?!import)\\s*module\\s+namespace.*", Pattern.DOTALL|Pattern.MULTILINE);
 
     @Override
     public boolean isValidModuleType(VirtualFile file) {
@@ -37,7 +37,7 @@ public class MainModuleTypeValidator implements ModuleTypeValidator {
 
     private boolean isMainModuleBasedOnContent(VirtualFile file) throws IOException {
         String contents = new String(file.contentsToByteArray());
-        Matcher matcher = MODULE_NAMESPACE_PATTERN.matcher(contents);
+        Matcher matcher = LIBRARY_MODULE_NAMESPACE_PATTERN.matcher(contents);
         return !matcher.matches();
     }
 }
