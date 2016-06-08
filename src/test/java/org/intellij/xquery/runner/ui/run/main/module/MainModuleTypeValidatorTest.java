@@ -60,6 +60,16 @@ public class MainModuleTypeValidatorTest {
     }
 
     @Test
+    public void shouldReturnFalseWhenContentContainsModuleDeclarationAndImportOfModule() throws IOException {
+        String content = "xquery version '1.0';\nmodule namespace x = 'a';\nimport module namespace z = 'z';";
+        given(file.contentsToByteArray()).willReturn(content.getBytes());
+
+        boolean result = validator.isValidModuleType(file);
+
+        assertThat(result, is(false));
+    }
+
+    @Test
     public void shouldReturnFalseWhenExceptionThrownFromFile() throws IOException {
         given(file.contentsToByteArray()).willThrow(new IOException());
 
