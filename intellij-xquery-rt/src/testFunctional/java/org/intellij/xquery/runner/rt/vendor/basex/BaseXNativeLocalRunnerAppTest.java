@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.rt.xqj;
+package org.intellij.xquery.runner.rt.vendor.basex;
 
 import org.intellij.xquery.runner.rt.RunnerAppTest;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
@@ -29,7 +29,7 @@ import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NORMALIZED_STRING;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_TOKEN;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED_ATOMIC;
 
-public class BaseXLocalRunnerAppTest extends RunnerAppTest {
+public class BaseXNativeLocalRunnerAppTest extends RunnerAppTest {
 
     @DataPoints
     public static DataPair[] getBaseXCompatibleData() {
@@ -46,6 +46,6 @@ public class BaseXLocalRunnerAppTest extends RunnerAppTest {
 
     @Override
     protected String getDataSourceType() {
-        return XQueryDataSourceType.BASEX_LOCAL.toString();
+        return XQueryDataSourceType.BASEX_NATIVE_LOCAL.toString();
     }
 }

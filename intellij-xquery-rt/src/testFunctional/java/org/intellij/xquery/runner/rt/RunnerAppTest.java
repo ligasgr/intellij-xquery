@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -143,7 +143,7 @@ public abstract class RunnerAppTest {
 
         runAppFor(config);
 
-        assertThat(outputStream.getString(), is(expectedValue));
+        assertThat(normalize(outputStream.getString()), is(expectedValue));
     }
 
     protected void assertBindsVariable(String type, String value,
@@ -152,7 +152,19 @@ public abstract class RunnerAppTest {
 
         runAppFor(config);
 
-        assertThat(outputStream.getString(), is(expectedValue));
+        assertThat(normalize(outputStream.getString()), is(expectedValue));
+    }
+
+    private String normalize(String initialValue) {
+        if (initialValue == null) return null;
+        if (initialValue.length() < 2) return initialValue;
+        String value = initialValue.replaceAll("<\\?xml version=\"1.0\" encoding=\"UTF-8\"\\?>","");
+        String unescaped = value.startsWith("\"") && value.endsWith("\"") ? value.substring(1, value.length() - 1) : value;
+        if ("true()".equals(unescaped)) {
+            return "true";
+        } else {
+            return unescaped;
+        }
     }
 
     private XQueryRunConfig prepareConfigForVariable(String type, String value) throws Exception {
@@ -181,7 +193,7 @@ public abstract class RunnerAppTest {
     }
 
     protected String prepareConfigurationWithVariableForMainFile(File xqueryMainFile, String value, String type) {
-        return  runConfig()
+        return runConfig()
                 .withTypeName(getDataSourceType())
                 .withMainFileName(xqueryMainFile.getAbsolutePath())
                 .withVariable("v", value, type)
