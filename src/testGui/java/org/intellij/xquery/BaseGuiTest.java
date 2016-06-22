@@ -26,6 +26,7 @@ import org.fest.swing.edt.GuiTask;
 import org.fest.swing.fixture.FrameFixture;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
 import javax.swing.JComponent;
@@ -48,6 +49,16 @@ public abstract class BaseGuiTest extends LightPlatformCodeInsightFixtureTestCas
 
     protected boolean isWriteActionRequired() {
         return true;
+    }
+
+    @BeforeClass
+    public static void beforeAll() {
+        System.out.println("java.awt.graphicsenv=" + System.getProperty("java.awt.graphicsenv"));
+        System.out.println("awt.toolkit=" + System.getProperty("awt.toolkit"));
+        System.out.println("swing.defaultlaf=" + System.getProperty("swing.defaultlaf"));
+        System.out.println("java.awt.headless=" + System.getProperty("java.awt.headless"));
+        System.out.println("os.name=" + System.getProperty("os.name"));
+        System.out.println("os.version=" + System.getProperty("os.version"));
     }
 
     @Override
