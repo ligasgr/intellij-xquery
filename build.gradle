@@ -109,6 +109,10 @@ task testGui(type: Test, dependsOn: ':compileForms') {
     testLogging {
         events "started", "passed", "skipped", "failed", "standardOut", "standardError"
         exceptionFormat = 'full'
+        showStackTraces = 'true'
+        showCauses = 'true'
+        showStandardStreams = 'true'
+        showExceptions = 'true'
     }
 }
 
