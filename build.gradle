@@ -81,7 +81,7 @@ dependencies {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
     }
     testCompile 'org.easytesting:fest-swing:1.2.1'
-    testCompile 'net.java.openjdk.cacio:cacio-tta:1.3'
+    testCompile 'net.java.openjdk.cacio:cacio-tta:1.9'
 }
 
 test {
@@ -112,7 +112,7 @@ task testPerformance(type: Test) {
     classpath = sourceSets.testPerformance.runtimeClasspath
 }
 
-task allTests(dependsOn: [test, testFunctional])
+task allTests(dependsOn: [test, testFunctional, testGui])
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
