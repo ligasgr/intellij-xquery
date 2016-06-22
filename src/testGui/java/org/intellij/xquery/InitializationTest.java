@@ -22,7 +22,7 @@ import org.junit.Test;
 
 public class InitializationTest {
     @Test
-    public void shouldInitializeFontPreferences() throws Exception {
+    public void shouldInitializeFontPreferencesBeforeAllOtherTestsSoThatItDoesNotThrowExceptionsInTravis() {
         new FontPreferences();
     }
 }
