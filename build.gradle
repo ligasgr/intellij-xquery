@@ -85,7 +85,15 @@ dependencies {
 }
 
 test {
-    jvmArgs = ['-Didea.home.path=' + project.ext.ideaInstallationPath, '-Didea.test.group=ALL_EXCLUDE_DEFINED', '-Didea.config.path=sdk/config', '-Didea.system.path=sdk/system', '-ea']
+    jvmArgs = ['-Didea.home.path=' + project.ext.ideaInstallationPath,
+               '-Didea.test.group=ALL_EXCLUDE_DEFINED',
+               '-Didea.config.path=sdk/config',
+               '-Didea.system.path=sdk/system',
+               '-ea',
+               '-Dawt.toolkit=net.java.openjdk.cacio.ctc.CTCToolkit',
+               '-Djava.awt.graphicsenv=net.java.openjdk.cacio.ctc.CTCGraphicsEnvironment',
+               '-Djava.awt.headless=false',
+               '-Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel']
     testLogging {
         events "started", "passed", "skipped", "failed", "standardOut", "standardError"
     }
