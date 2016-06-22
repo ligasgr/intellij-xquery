@@ -15,18 +15,19 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.rt.xqj;
+package org.intellij.xquery.runner.rt.vendor.basex;
 
 import org.basex.BaseXServer;
 import org.intellij.xquery.runner.rt.RunnerAppTest;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
+import org.intellij.xquery.runner.rt.XQueryRunConfig;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.experimental.theories.DataPoints;
 
 import java.io.File;
 
+import static org.intellij.xquery.runner.rt.FileTestUtil.createFileWithContents;
 import static org.intellij.xquery.runner.rt.XQueryItemType.TEXT;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_BYTE;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_DURATION;
@@ -36,7 +37,10 @@ import static org.intellij.xquery.runner.rt.XQueryItemType.XS_TOKEN;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED_ATOMIC;
 import static org.intellij.xquery.runner.rt.XQueryRunConfigBuilder.runConfig;
 
-public class BaseXRunnerAppTest extends RunnerAppTest {
+public class BaseXNativeRunnerAppTest extends RunnerAppTest {
+
+    private static final String SERIALIZATION_OPTION = "declare option output:method 'xml';\n";
+
     private static BaseXServer server;
 
     @BeforeClass
@@ -64,7 +68,7 @@ public class BaseXRunnerAppTest extends RunnerAppTest {
 
     @Override
     protected String getDataSourceType() {
-        return XQueryDataSourceType.BASEX.toString();
+        return XQueryDataSourceType.BASEX_NATIVE.toString();
     }
 
     protected String prepareConfigurationWithContextItemForMainFile(File xqueryMainFile, String contextItemValue,
@@ -85,5 +89,16 @@ public class BaseXRunnerAppTest extends RunnerAppTest {
                 .withVariable("v", value, type)
                 .withConnectionData("localhost", "1984", "admin", "admin")
                 .build();
+    }
+
+
+    protected XQueryRunConfig prepareConfigForVariable(String type, String value) throws Exception {
+        File xqueryMainFile = createFileWithContents(SERIALIZATION_OPTION + RETURN_VARIABLE_XQUERY);
+        return new XQueryRunConfig(prepareConfigurationWithVariableForMainFile(xqueryMainFile, value, type));
+    }
+
+    protected XQueryRunConfig prepareConfigForContextItem(String type, String value) throws Exception {
+        File xqueryMainFile = createFileWithContents(SERIALIZATION_OPTION + RETURN_CONTEXT_ITEM_XQUERY);
+        return new XQueryRunConfig(prepareConfigurationWithContextItemForMainFile(xqueryMainFile, value, type));
     }
 }

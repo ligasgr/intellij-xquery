@@ -17,6 +17,7 @@
 
 package org.intellij.xquery.runner.rt;
 
+import org.intellij.xquery.runner.rt.vendor.basex.BaseXLocalRunnerAppFactory;
 import org.intellij.xquery.runner.rt.vendor.basex.BaseXRunnerAppFactory;
 import org.intellij.xquery.runner.rt.vendor.saxon.SaxonRunnerAppFactory;
 import org.intellij.xquery.runner.rt.xqj.XQJRunnerAppFactory;
@@ -44,7 +45,8 @@ public enum XQueryDataSourceType {
     SAXON_NATIVE("Saxon (native)", true, false, asList("saxon9he.jar"), SaxonRunnerAppFactory.class),
     BASEX_LOCAL("BaseX (embedded)", false, false, asList("basex-xqj-1.6.0.jar", "basex-8.4.3.jar"), false,
             BaseXLocalXQDataSourceFactory.class),
-    BASEX_NATIVE_LOCAL("BaseX (native embedded)", false, false, asList("basex-8.4.3.jar"), BaseXRunnerAppFactory.class)
+    BASEX_NATIVE_LOCAL("BaseX (native embedded)", false, false, asList("basex-8.4.3.jar"), BaseXLocalRunnerAppFactory.class),
+    BASEX_NATIVE("BaseX (native)", false, true, asList("basex-8.4.3.jar"), BaseXRunnerAppFactory.class)
     ;
     private final List<String> classpathEntries;
     private final boolean jarContainsXqjApi;

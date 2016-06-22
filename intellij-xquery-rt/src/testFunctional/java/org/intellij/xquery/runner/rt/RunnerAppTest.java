@@ -61,7 +61,7 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(Theories.class)
 public abstract class RunnerAppTest {
-    private static final String RETURN_CONTEXT_ITEM_XQUERY = ".";
+    protected static final String RETURN_CONTEXT_ITEM_XQUERY = ".";
     protected static final String VALUE = "val";
     protected static final String NUMERIC_VALUE = "123";
     protected static final String NEGATIVE_NUMERIC_VALUE = "-123";
@@ -167,12 +167,12 @@ public abstract class RunnerAppTest {
         }
     }
 
-    private XQueryRunConfig prepareConfigForVariable(String type, String value) throws Exception {
+    protected XQueryRunConfig prepareConfigForVariable(String type, String value) throws Exception {
         File xqueryMainFile = createFileWithContents(RETURN_VARIABLE_XQUERY);
         return new XQueryRunConfig(prepareConfigurationWithVariableForMainFile(xqueryMainFile, value, type));
     }
 
-    private XQueryRunConfig prepareConfigForContextItem(String type, String value) throws Exception {
+    protected XQueryRunConfig prepareConfigForContextItem(String type, String value) throws Exception {
         File xqueryMainFile = createFileWithContents(RETURN_CONTEXT_ITEM_XQUERY);
         return new XQueryRunConfig(prepareConfigurationWithContextItemForMainFile(xqueryMainFile, value, type));
     }

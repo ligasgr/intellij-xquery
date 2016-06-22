@@ -23,9 +23,9 @@ import org.intellij.xquery.runner.rt.XQueryRunConfig;
 
 import java.io.PrintStream;
 
-public class BaseXRunnerAppFactory implements RunnerAppFactory {
+public class BaseXLocalRunnerAppFactory implements RunnerAppFactory {
     @Override
     public RunnerApp getInstance(XQueryRunConfig config, PrintStream output) throws Exception {
-        return new BaseXRunnerApp(config, output);
+        return new BaseXLocalRunnerApp(config, output);
     }
 }
