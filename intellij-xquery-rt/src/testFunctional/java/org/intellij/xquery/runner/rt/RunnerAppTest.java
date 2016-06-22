@@ -54,11 +54,6 @@ import static org.intellij.xquery.runner.rt.XQueryItemType.XS_YEAR_MONTH_DURATIO
 import static org.intellij.xquery.runner.rt.XQueryRunConfigBuilder.runConfig;
 import static org.junit.Assert.assertThat;
 
-/**
- * User: ligasgr
- * Date: 09/01/14
- * Time: 17:31
- */
 @RunWith(Theories.class)
 public abstract class RunnerAppTest {
     protected static final String RETURN_CONTEXT_ITEM_XQUERY = ".";
@@ -115,7 +110,7 @@ public abstract class RunnerAppTest {
 
     @Test
     public void shouldBindContextItemForDocumentNode() throws Exception {
-        String contextItemValue = "<tag>val</tag>";
+        String contextItemValue = "<outer><tag>val</tag></outer>";
         String contextItemValueInCData = "<![CDATA[" + contextItemValue + "]]>";
         String contextItemType = DOCUMENT.getTextRepresentation();
         assertBindsContextItem(contextItemType, contextItemValueInCData, contextItemValue);
@@ -123,7 +118,7 @@ public abstract class RunnerAppTest {
 
     @Test
     public void shouldBindVariableForDocumentNode() throws Exception {
-        String contextItemValue = "<tag>val</tag>";
+        String contextItemValue = "<outer><tag>val</tag></outer>";
         String contextItemValueInCData = "<![CDATA[" + contextItemValue + "]]>";
         String contextItemType = DOCUMENT.getTextRepresentation();
         assertBindsVariable(contextItemType, contextItemValueInCData, contextItemValue);

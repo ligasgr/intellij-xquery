@@ -26,6 +26,8 @@ import org.intellij.xquery.runner.rt.RunnerApp;
 import org.intellij.xquery.runner.rt.XQueryRunConfig;
 import org.intellij.xquery.runner.rt.XQueryRunnerVariable;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
 import javax.xml.transform.Transformer;
@@ -62,8 +64,8 @@ public class BaseXLocalRunnerApp implements RunnerApp {
             Iter iter = proc.iter();
             for(Item item; (item = iter.next()) != null;) {
                 Object value = item.toJava();
-                if (value instanceof Document) {
-                    DOMSource domSource = new DOMSource((Document) value);
+                if (value instanceof Document || value instanceof Element) {
+                    DOMSource domSource = new DOMSource((Node) value);
                     StringWriter writer = new StringWriter();
                     StreamResult result = new StreamResult(writer);
                     TransformerFactory tf = TransformerFactory.newInstance();
