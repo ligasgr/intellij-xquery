@@ -118,10 +118,22 @@ public abstract class RunnerAppTest {
 
     @Test
     public void shouldBindVariableForDocumentNode() throws Exception {
-        String contextItemValue = "<outer><tag>val</tag></outer>";
-        String contextItemValueInCData = "<![CDATA[" + contextItemValue + "]]>";
-        String contextItemType = DOCUMENT.getTextRepresentation();
-        assertBindsVariable(contextItemType, contextItemValueInCData, contextItemValue);
+        String variableItemValue = "<outer><tag>val</tag></outer>";
+        String variableItemValueInCData = "<![CDATA[" + variableItemValue + "]]>";
+        String variableItemType = DOCUMENT.getTextRepresentation();
+        assertBindsVariable(variableItemType, variableItemValueInCData, variableItemValue);
+    }
+
+    @Test
+    public void shouldProperlyReturnXmlFromContents() throws Exception {
+        String contents = "<outer><tag>val</tag></outer>";
+        File xqueryMainFile = createFileWithContents(contents);
+        String config = prepareConfigurationForMainFile(xqueryMainFile);
+        XQueryRunConfig runConfig = new XQueryRunConfig(config);
+
+        runAppFor(runConfig);
+
+        assertThat(normalize(outputStream.getString()), is(contents));
     }
 
     protected void assertBindsContextItem(String type, String value) throws Exception {
@@ -153,7 +165,7 @@ public abstract class RunnerAppTest {
     private String normalize(String initialValue) {
         if (initialValue == null) return null;
         if (initialValue.length() < 2) return initialValue;
-        String value = initialValue.replaceAll("<\\?xml version=\"1.0\" encoding=\"UTF-8\"\\?>","");
+        String value = initialValue.replaceAll("<\\?xml version=\"1.0\" encoding=\"UTF-8\"\\?>","").replaceAll("\\s+", "");
         String unescaped = value.startsWith("\"") && value.endsWith("\"") ? value.substring(1, value.length() - 1) : value;
         if ("true()".equals(unescaped)) {
             return "true";
@@ -175,6 +187,13 @@ public abstract class RunnerAppTest {
     private void runAppFor(XQueryRunConfig config) throws Exception {
         RunnerApp app = XQueryRunnerAppFactory.getInstance(config, printStream);
         app.run();
+    }
+
+    protected String prepareConfigurationForMainFile(File xqueryMainFile) {
+        return runConfig()
+                .withTypeName(getDataSourceType())
+                .withMainFileName(xqueryMainFile.getAbsolutePath())
+                .build();
     }
 
     protected String prepareConfigurationWithContextItemForMainFile(File xqueryMainFile, String contextItemValue,

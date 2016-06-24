@@ -22,7 +22,6 @@ import org.intellij.xquery.runner.rt.RunnerAppTest;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.experimental.theories.DataPoints;
 
 import java.io.File;
@@ -65,6 +64,15 @@ public class BaseXRunnerAppTest extends RunnerAppTest {
     @Override
     protected String getDataSourceType() {
         return XQueryDataSourceType.BASEX.toString();
+    }
+
+
+    protected String prepareConfigurationForMainFile(File xqueryMainFile) {
+        return runConfig()
+                .withTypeName(getDataSourceType())
+                .withMainFileName(xqueryMainFile.getAbsolutePath())
+                .withConnectionData("localhost", "1984", "admin", "admin")
+                .build();
     }
 
     protected String prepareConfigurationWithContextItemForMainFile(File xqueryMainFile, String contextItemValue,

@@ -65,12 +65,9 @@ public class BaseXLocalRunnerApp implements RunnerApp {
             for(Item item; (item = iter.next()) != null;) {
                 Object value = item.toJava();
                 if (value instanceof Document || value instanceof Element) {
-                    DOMSource domSource = new DOMSource((Node) value);
                     StringWriter writer = new StringWriter();
-                    StreamResult result = new StreamResult(writer);
-                    TransformerFactory tf = TransformerFactory.newInstance();
-                    Transformer transformer = tf.newTransformer();
-                    transformer.transform(domSource, result);
+                    Transformer transformer = TransformerFactory.newInstance().newTransformer();
+                    transformer.transform(new DOMSource((Node) value), new StreamResult(writer));
                     output.println(writer.toString());
                 } else if (value instanceof Text) {
                     output.println(((Text) value).getWholeText());
