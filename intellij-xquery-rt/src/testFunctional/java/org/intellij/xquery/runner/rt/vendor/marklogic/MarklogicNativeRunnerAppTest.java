@@ -15,12 +15,14 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.rt.xqj;
+package org.intellij.xquery.runner.rt.vendor.marklogic;
 
 import org.intellij.xquery.runner.rt.RunnerAppTest;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
+import org.junit.experimental.theories.Theory;
 
 import java.io.File;
 
@@ -33,7 +35,7 @@ import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED_ATOMIC;
 import static org.intellij.xquery.runner.rt.XQueryRunConfigBuilder.runConfig;
 
 @Ignore("works only when Marklogic instance is up")
-public class MarklogicRunnerAppTest extends RunnerAppTest {
+public class MarklogicNativeRunnerAppTest extends RunnerAppTest {
     @DataPoints
     public static DataPair[] getMarklogicCompatibleData() {
         return new DataPair[]{
@@ -46,26 +48,27 @@ public class MarklogicRunnerAppTest extends RunnerAppTest {
         };
     }
 
+    @Theory
+    @Ignore("Native MarkLogic client doesn't support context item binding")
+    public void shouldBindContextItem(DataPair dataPair) throws Exception {
+        super.shouldBindContextItem(dataPair);
+    }
+
+    @Test
+    @Ignore("Native MarkLogic client doesn't support context item binding")
+    public void shouldBindContextItemForDocumentNode() throws Exception {
+        super.shouldBindContextItemForDocumentNode();
+    }
+
     @Override
     protected String getDataSourceType() {
-        return XQueryDataSourceType.MARKLOGIC.toString();
+        return XQueryDataSourceType.MARKLOGIC_NATIVE.toString();
     }
 
     protected String prepareConfigurationForMainFile(File xqueryMainFile) {
         return runConfig()
                 .withTypeName(getDataSourceType())
                 .withMainFileName(xqueryMainFile.getAbsolutePath())
-                .withConnectionData("localhost", "8003", "admin", "admin")
-                .build();
-    }
-
-    protected String prepareConfigurationWithContextItemForMainFile(File xqueryMainFile, String contextItemValue,
-                                                                    String contextItemType) {
-        return runConfig()
-                .withTypeName(getDataSourceType())
-                .withMainFileName(xqueryMainFile.getAbsolutePath())
-                .withContextItemType(contextItemType)
-                .withContextItemValue(contextItemValue)
                 .withConnectionData("localhost", "8003", "admin", "admin")
                 .build();
     }

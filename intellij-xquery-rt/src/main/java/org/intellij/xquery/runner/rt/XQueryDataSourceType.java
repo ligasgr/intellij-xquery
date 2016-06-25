@@ -20,6 +20,7 @@ package org.intellij.xquery.runner.rt;
 import org.intellij.xquery.runner.rt.vendor.basex.BaseXLocalRunnerAppFactory;
 import org.intellij.xquery.runner.rt.vendor.basex.BaseXRunnerAppFactory;
 import org.intellij.xquery.runner.rt.vendor.exist.ExistRunnerAppFactory;
+import org.intellij.xquery.runner.rt.vendor.marklogic.MarklogicRunnerAppFactory;
 import org.intellij.xquery.runner.rt.vendor.saxon.SaxonRunnerAppFactory;
 import org.intellij.xquery.runner.rt.xqj.XQJRunnerAppFactory;
 import org.intellij.xquery.runner.rt.xqj.datasource.BaseXLocalXQDataSourceFactory;
@@ -48,7 +49,8 @@ public enum XQueryDataSourceType {
             BaseXLocalXQDataSourceFactory.class),
     BASEX_NATIVE_LOCAL("BaseX (native embedded)", false, false, asList("basex-8.4.3.jar"), BaseXLocalRunnerAppFactory.class),
     BASEX_NATIVE("BaseX (native)", false, true, asList("basex-8.4.3.jar"), BaseXRunnerAppFactory.class),
-    EXIST_NATIVE("eXist (native)", false, true, asList("commons-codec-1.10.jar"), ExistRunnerAppFactory.class)
+    EXIST_NATIVE("eXist (native)", false, true, asList("commons-codec-1.10.jar"), ExistRunnerAppFactory.class),
+    MARKLOGIC_NATIVE("MarkLogic (native)", false, true, asList("marklogic-xcc-8.0.5.jar"), MarklogicRunnerAppFactory.class)
     ;
     private final List<String> classpathEntries;
     private final boolean jarContainsXqjApi;

@@ -68,6 +68,9 @@ repositories {
     maven {
         url "http://xqj.net/maven/"
     }
+    maven {
+        url "http://developer.marklogic.com/maven2"
+    }
 }
 
 dependencies {
