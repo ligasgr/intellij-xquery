@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,7 @@ import static org.intellij.xquery.XQueryFileType.DEFAULT_EXTENSION_WITH_DOT;
  * Date: 24/11/13
  * Time: 13:33
  */
-public abstract class BasePerformanceTestCase extends LightPlatformCodeInsightFixtureTestCase {
+public abstract class BasePerformanceTestCase extends BaseFunctionalTestCase {
     private static final String MODULE_DECLARATION = "module namespace prefix_%s_%s='module_%s_%s';\n";
     private static final String IMPORT_DECLARATION = "import module namespace module_%s_%s = 'module_%s_%s.xq';\n";
     private static final String VARIABLE_DECLARATION = "declare variable $prefix_%s_%s:var_%s:= ();\n";
@@ -37,21 +37,13 @@ public abstract class BasePerformanceTestCase extends LightPlatformCodeInsightFi
 
     protected String testName;
 
-    public BasePerformanceTestCase() {
-        PlatformTestCase.initPlatformPrefix("not_existing_class", "PlatformLangXml");
-    }
-
-    protected boolean isWriteActionRequired() {
-        return false;
-    }
-
     protected String getDefaultFileName() {
-        return getTestName(false) + DEFAULT_EXTENSION_WITH_DOT;
+        return getTestName() + DEFAULT_EXTENSION_WITH_DOT;
     }
 
     public void setUp() throws Exception {
         super.setUp();
-        testName = getTestName(false);
+        testName = getTestName();
     }
 
 

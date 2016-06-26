@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,14 +38,14 @@ public abstract class XQueryFormattingModelBuilderTest extends BaseFunctionalTes
     private CodeStyleSettings myTemporarySettings;
 
     void executeTest() {
-        myFixture.configureByFiles(getTestName(false) + ".xq");
+        myFixture.configureByFiles(getTestName() + ".xq");
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
             public void run() {
                 CodeStyleManager.getInstance(getProject()).reformat(myFixture.getFile());
             }
         });
-        myFixture.checkResultByFile(getTestName(false) + "_after.xq");
+        myFixture.checkResultByFile(getTestName() + "_after.xq");
     }
 
 

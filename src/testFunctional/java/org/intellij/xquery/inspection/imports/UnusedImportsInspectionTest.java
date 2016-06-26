@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,6 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.util.containers.ContainerUtil;
 import org.intellij.xquery.BaseFunctionalTestCase;
-import org.intellij.xquery.inspection.namespace.NamespacePrefixFromFileName;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -71,7 +70,7 @@ public class UnusedImportsInspectionTest extends BaseFunctionalTestCase {
     }
 
     public void testRemoveUnusedImportQuickFix() {
-        final String testName = getTestName(false);
+        final String testName = getTestName();
 
         Collection<Class<? extends LocalInspectionTool>> inspections = new ArrayList<Class<? extends LocalInspectionTool>>();
         inspections.add(UnusedImportsInspection.class);

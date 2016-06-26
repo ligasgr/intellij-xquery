@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,7 +44,7 @@ public class XQueryPrefixReferenceTest extends BaseFunctionalTestCase {
     }
 
     private void doTest() {
-        String testName = getTestName(false);
+        String testName = getTestName();
         String fileBefore = testName + ".xq";
         String fileAfter = testName + "After" + ".xq";
         assertAsExpectedAfterSafeDelete(fileBefore, fileAfter);

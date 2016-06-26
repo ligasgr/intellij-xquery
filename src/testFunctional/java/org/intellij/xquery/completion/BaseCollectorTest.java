@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,11 +25,11 @@ import java.util.List;
 public abstract class BaseCollectorTest extends BaseFunctionalTestCase {
 
     protected List<String> getCompletionProposals() {
-        return getCompletionProposals(getTestName(false) + ".xq");
+        return getCompletionProposals(getTestName() + ".xq");
     }
 
     protected List<String> getCompletionProposals(String additionalPath) {
-        return getCompletionProposals(getTestName(false) + ".xq", additionalPath);
+        return getCompletionProposals(getTestName() + ".xq", additionalPath);
     }
 
     private List<String> getCompletionProposals(String... additionalPaths) {
@@ -43,7 +43,7 @@ public abstract class BaseCollectorTest extends BaseFunctionalTestCase {
     }
 
     protected void testInsertHandler(String typedText, char completionChar) {
-        myFixture.configureByFile(getTestName(false) + ".xq");
+        myFixture.configureByFile(getTestName() + ".xq");
 
         myFixture.completeBasic();
         if (typedText != null) {
@@ -51,6 +51,6 @@ public abstract class BaseCollectorTest extends BaseFunctionalTestCase {
         }
         myFixture.type(completionChar);
 
-        myFixture.checkResultByFile(getTestName(false) + "_after.xq");
+        myFixture.checkResultByFile(getTestName() + "_after.xq");
     }
 }

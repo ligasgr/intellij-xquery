@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,26 +17,96 @@
 
 package org.intellij.xquery;
 
+import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiManager;
+import com.intellij.testFramework.EdtTestUtil;
 import com.intellij.testFramework.PlatformTestCase;
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
+import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
+import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
+import com.intellij.testFramework.fixtures.TestFixtureBuilder;
+import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;
+import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
 
 import static org.intellij.xquery.XQueryFileType.DEFAULT_EXTENSION_WITH_DOT;
 
-/**
- * User: ligasgr
- * Date: 30/08/13
- * Time: 21:50
- */
-public abstract class BaseFunctionalTestCase extends LightPlatformCodeInsightFixtureTestCase {
+public abstract class BaseFunctionalTestCase extends TestCase {
+
     public BaseFunctionalTestCase() {
         PlatformTestCase.initPlatformPrefix("not_existing_class", "PlatformLangXml");
     }
+
+    protected CodeInsightTestFixture myFixture;
 
     protected boolean isWriteActionRequired() {
         return false;
     }
 
     protected String getDefaultFileName() {
-        return getTestName(false) + DEFAULT_EXTENSION_WITH_DOT;
+        return getTestName() + DEFAULT_EXTENSION_WITH_DOT;
+    }
+
+    protected String getTestName() {
+        String fullTestName = getName();
+        if (fullTestName.startsWith("test")) {
+            return fullTestName.substring("test".length());
+        }
+        return fullTestName;
+    }
+
+    protected Project getProject() {
+        return myFixture.getProject();
+    }
+
+    protected PsiManager getPsiManager() {
+        return PsiManager.getInstance(getProject());
+    }
+
+    @Override
+    protected void runTest() throws Throwable {
+        if (isWriteActionRequired()) {
+            new WriteCommandAction(myFixture.getProject()) {
+                @Override
+                protected void run(@NotNull Result result) throws Throwable {
+                    doRunTest();
+                }
+            }.execute();
+        } else {
+            doRunTest();
+        }
+    }
+
+    private void doRunTest() throws Throwable {
+        EdtTestUtil.runInEdtAndWait((Runnable) () -> {
+            try {
+                BaseFunctionalTestCase.super.runTest();
+            } catch (Throwable throwable) {
+                throw new RuntimeException(throwable);
+            }
+        });
+    }
+
+    @Override
+    protected void setUp() throws Exception {
+        IdeaTestFixtureFactory factory = IdeaTestFixtureFactory.getFixtureFactory();
+        TestFixtureBuilder<IdeaProjectTestFixture> fixtureBuilder = factory.createLightFixtureBuilder(null);
+        final IdeaProjectTestFixture fixture = fixtureBuilder.getFixture();
+        myFixture = IdeaTestFixtureFactory.getFixtureFactory().createCodeInsightFixture(fixture, new LightTempDirTestFixtureImpl(true));
+
+        myFixture.setUp();
+        myFixture.setTestDataPath(getTestDataPath());
+    }
+
+    protected String getTestDataPath() {
+        return PathManager.getHomePath();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        myFixture.tearDown();
     }
 }
