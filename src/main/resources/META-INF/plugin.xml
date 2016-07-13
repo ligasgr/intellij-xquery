@@ -18,27 +18,28 @@
 <idea-plugin url="http://ligasgr.github.io/intellij-xquery/" version="2">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
-    <version>3.0.2</version>
+    <version>3.1.0</version>
     <vendor email="ligasgr@gmail.com" url="http://grzegorzligas.blogspot.com/">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0</description>
 
     <change-notes>
         <![CDATA[
-            <p>3.0.2:</p>
+            <p>3.1.0:</p>
             <ul>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/190" rel="nofollow">#190</a> - Improved handling of quotes closing for regular and attribute strings.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/172" rel="nofollow">#172</a> - Make String a proper parsed type instead of a token.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/184" rel="nofollow">#184</a> - Tags with typos inside should not get auto-closing.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/180" rel="nofollow">#180</a> - Element content lexical analysis should have fallback to expression.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/170" rel="nofollow">#170</a> - Pinning predicate makes it not show parsed expression errors.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/178" rel="nofollow">#178</a> - Change to start every lexing to start file with expression.</li>
-                <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/175" rel="nofollow">#175</a> - Empty object-node is a valid construct.</li>
+                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/202" rel="nofollow">#202</a> - Update to Idea 2016.2.</li>
+                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/200" rel="nofollow">#200</a> - Native runner for MarkLogic.</li>
+                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/98" rel="nofollow">#98</a> - Native runner for eXist DB.</li>
+                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/192" rel="nofollow">#192</a> - Added BaseX native runner for remote and embedded server.</li>
+                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/195" rel="nofollow">#195</a> - Fix oversimplified condition for main module type verification in 'Create configuration' dialog.</li>
+                    <li>Upgrade to Saxon 9.7.0-6.</li>
+                    <li>Upgrade to BaseX 8.4.3 and BaseX XQJ driver 1.6.0.</li>
             </ul>
+
         ]]>
     </change-notes>
 
-    <idea-version since-build="162.1121" until-build="162.9999"/>
+    <idea-version since-build="162.1121" until-build="162.*"/>
 
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="java-lang.xml">com.intellij.modules.java</depends>
