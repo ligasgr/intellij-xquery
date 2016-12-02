@@ -18,7 +18,7 @@
 <idea-plugin url="http://ligasgr.github.io/intellij-xquery/" version="2">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
     <vendor email="ligasgr@gmail.com" url="http://grzegorzligas.blogspot.com/">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0</description>
@@ -27,6 +27,7 @@
         <![CDATA[
             <p>3.1.0:</p>
             <ul>
+                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/206" rel="nofollow">#206</a> - Update to Idea 2016.3.</li>
                     <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/202" rel="nofollow">#202</a> - Update to Idea 2016.2.</li>
                     <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/200" rel="nofollow">#200</a> - Native runner for MarkLogic.</li>
                     <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/98" rel="nofollow">#98</a> - Native runner for eXist DB.</li>
@@ -39,7 +40,7 @@
         ]]>
     </change-notes>
 
-    <idea-version since-build="162.1121" until-build="162.*"/>
+    <idea-version since-build="162.1121" until-build="163.*"/>
 
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="java-lang.xml">com.intellij.modules.java</depends>

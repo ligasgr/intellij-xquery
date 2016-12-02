@@ -29,6 +29,7 @@ import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
 import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;
+import com.intellij.util.ThrowableRunnable;
 import junit.framework.TestCase;
 import org.jetbrains.annotations.NotNull;
 
@@ -81,7 +82,7 @@ public abstract class BaseFunctionalTestCase extends TestCase {
     }
 
     private void doRunTest() throws Throwable {
-        EdtTestUtil.runInEdtAndWait((Runnable) () -> {
+        EdtTestUtil.runInEdtAndWait(() -> {
             try {
                 BaseFunctionalTestCase.super.runTest();
             } catch (Throwable throwable) {
