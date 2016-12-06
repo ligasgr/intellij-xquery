@@ -25,22 +25,15 @@
 
     <change-notes>
         <![CDATA[
-            <p>3.1.0:</p>
+            <p>3.1.1:</p>
             <ul>
-                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/206" rel="nofollow">#206</a> - Update to Idea 2016.3.</li>
-                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/202" rel="nofollow">#202</a> - Update to Idea 2016.2.</li>
-                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/200" rel="nofollow">#200</a> - Native runner for MarkLogic.</li>
-                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/98" rel="nofollow">#98</a> - Native runner for eXist DB.</li>
-                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/192" rel="nofollow">#192</a> - Added BaseX native runner for remote and embedded server.</li>
-                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/195" rel="nofollow">#195</a> - Fix oversimplified condition for main module type verification in 'Create configuration' dialog.</li>
-                    <li>Upgrade to Saxon 9.7.0-6.</li>
-                    <li>Upgrade to BaseX 8.4.3 and BaseX XQJ driver 1.6.0.</li>
+                    <li>Update to Idea 2016.3.</li>
             </ul>
 
         ]]>
     </change-notes>
 
-    <idea-version since-build="162.1121" until-build="163.*"/>
+    <idea-version since-build="163.7743" until-build="163.*"/>
 
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="java-lang.xml">com.intellij.modules.java</depends>
