@@ -124,7 +124,7 @@ task testPerformance(type: Test) {
     classpath = sourceSets.testPerformance.runtimeClasspath
 }
 
-task allTests(dependsOn: [test, testFunctional, testGui])
+task allTests(dependsOn: [test, testFunctional])
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
