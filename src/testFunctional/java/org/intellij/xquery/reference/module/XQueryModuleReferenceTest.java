@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,6 +84,26 @@ public class XQueryModuleReferenceTest extends BaseFunctionalTestCase {
         assertChildOf(resolvedReference, XQueryFile.class);
         assertEquals("ModuleReference_ReferencedModule.xq", ((XQueryFile) resolvedReference).getName());
         assertFalse("sub".equals(((XQueryFile) resolvedReference).getContainingDirectory().getName()));
+    }
+
+    public void testModuleReferenceToFileInDirectoryWithHyphen() {
+        myFixture.configureByFiles("ModuleReferenceWithHyphen.xq", "sub-dir/ModuleReferenceWithHyphen_ReferencedModule.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryModuleImportPath.class);
+
+        assertChildOf(resolvedReference, XQueryFile.class);
+        assertEquals("ModuleReferenceWithHyphen_ReferencedModule.xq", ((XQueryFile) resolvedReference).getName());
+        assertTrue("sub-dir".equals(((XQueryFile) resolvedReference).getContainingDirectory().getName()));
+    }
+
+    public void testModuleReferenceToFileInDirectoryWithHyphenInSameDirectory() {
+        myFixture.configureByFiles("sub-dir/ModuleReferenceWithHyphenInSameDirectory.xq", "sub-dir/ModuleReferenceWithHyphen_ReferencedModule.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryModuleImportPath.class);
+
+        assertChildOf(resolvedReference, XQueryFile.class);
+        assertEquals("ModuleReferenceWithHyphen_ReferencedModule.xq", ((XQueryFile) resolvedReference).getName());
+        assertTrue("sub-dir".equals(((XQueryFile) resolvedReference).getContainingDirectory().getName()));
     }
 
     public void testModuleReferenceWithRelativePath() {
