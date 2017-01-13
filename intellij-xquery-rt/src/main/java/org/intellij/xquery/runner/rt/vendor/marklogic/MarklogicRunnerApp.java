@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,7 +48,7 @@ public class MarklogicRunnerApp implements RunnerApp {
     }
 
     @Override
-    public void run() throws Exception {
+    public void runApp() throws Exception {
         URI uri = new URI(String.format(XCC_CONNECTION_URI_TEMPLATE, config.getUsername(), config.getPassword(), config.getHost(), config.getPort(), config.getDatabaseName()));
         ContentSource contentSource = ContentSourceFactory.newContentSource(uri);
         try (Session session = contentSource.newSession()) {

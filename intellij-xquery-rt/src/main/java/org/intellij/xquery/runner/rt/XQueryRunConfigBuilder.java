@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,11 +20,6 @@ package org.intellij.xquery.runner.rt;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * User: ligasgr
- * Date: 17/03/14
- * Time: 16:40
- */
 public class XQueryRunConfigBuilder {
     private String typeName;
     private String mainFileName;
@@ -37,6 +32,8 @@ public class XQueryRunConfigBuilder {
     private String password;
     private boolean connectionDataIsAvailable;
     private String databaseName;
+    private boolean debug;
+    private String debugPort;
 
     private XQueryRunConfigBuilder() {
     }
@@ -89,8 +86,18 @@ public class XQueryRunConfigBuilder {
         return this;
     }
 
+    public XQueryRunConfigBuilder withDebug(boolean debug) {
+        this.debug = debug;
+        return this;
+    }
+
+    public XQueryRunConfigBuilder withDebugPort(String debugPort) {
+        this.debugPort = debugPort;
+        return this;
+    }
+
     public String build() {
-        return "<run>\n" +
+        return "<run debug=\"" + debug + "\" debugPort=\"" + debugPort + "\" >\n" +
                 "<xQueryConfiguration " +
                 "mainFileName=\"" + mainFileName + "\" " +
                 contextItemType() +

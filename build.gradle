@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -77,8 +77,12 @@ dependencies {
     compile project(':intellij-xquery-rt') {
         ext.transitive = false
     }
+    
     provided fileTree(dir: project.ext.ideaInstallationPath + '/lib', include: '*.jar')
     provided files("${System.properties['java.home']}/../lib/tools.jar")
+    compile('com.codnos:dbgp-interfaces:1.0.0') {
+        ext.transitive = false
+    }
     testCompile 'org.mockito:mockito-all:1.9.5'
     testCompile('org.hamcrest:hamcrest-library:1.1') {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'

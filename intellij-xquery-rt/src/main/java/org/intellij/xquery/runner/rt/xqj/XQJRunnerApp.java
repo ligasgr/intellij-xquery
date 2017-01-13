@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,11 +26,6 @@ import javax.xml.xquery.XQPreparedExpression;
 import javax.xml.xquery.XQResultSequence;
 import java.io.PrintStream;
 
-/**
- * User: ligasgr
- * Date: 06/01/14
- * Time: 22:39
- */
 public class XQJRunnerApp implements RunnerApp {
 
     private final ConnectionFactory connectionFactory;
@@ -40,8 +35,8 @@ public class XQJRunnerApp implements RunnerApp {
     private final PrintStream output;
 
     public XQJRunnerApp(ConnectionFactory connectionFactory,
-                 DataSourceFactory dataSourceFactory, ExpressionFactory expressionFactory,
-                 OutputMethodFactory outputMethodFactory, PrintStream output) {
+                        DataSourceFactory dataSourceFactory, ExpressionFactory expressionFactory,
+                        OutputMethodFactory outputMethodFactory, PrintStream output) {
         this.connectionFactory = connectionFactory;
         this.dataSourceFactory = dataSourceFactory;
         this.expressionFactory = expressionFactory;
@@ -50,7 +45,7 @@ public class XQJRunnerApp implements RunnerApp {
     }
 
 
-    public void run() throws Exception {
+    public void runApp() throws Exception {
         XQDataSource xqs = dataSourceFactory.getDataSource();
         XQConnection connection = null;
         try {

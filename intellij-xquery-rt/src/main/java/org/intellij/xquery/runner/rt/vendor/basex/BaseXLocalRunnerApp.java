@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,7 +49,7 @@ public class BaseXLocalRunnerApp implements RunnerApp {
     }
 
     @Override
-    public void run() throws Exception {
+    public void runApp() throws Exception {
         Context context = new Context();
         try (QueryProcessor proc = new QueryProcessor(FileUtil.readFile(config.getMainFile()), context)) {
             for (XQueryRunnerVariable variable : config.getVariables()) {

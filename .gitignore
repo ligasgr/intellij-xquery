@@ -17,3 +17,5 @@ sdk/
 *.ipr
 *.iws
 .shelf/
+
+.DS_Store

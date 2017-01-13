@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.JavaCommandLineState;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RunConfigurationModule;
+import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.util.JavaParametersUtil;
 import org.intellij.xquery.runner.state.run.DataSourceAccessor;
@@ -33,14 +34,10 @@ import org.intellij.xquery.runner.state.run.XmlConfigurationAccessor;
 import java.io.File;
 import java.io.FileWriter;
 
-/**
- * User: ligasgr
- * Date: 04/08/13
- * Time: 22:40
- */
 public class XQueryRunProfileState extends JavaCommandLineState {
 
     private XQueryRunConfiguration configuration;
+    private int port;
 
     public XQueryRunProfileState(ExecutionEnvironment environment, XQueryRunConfiguration runConfiguration) {
         super(environment);
@@ -65,9 +62,12 @@ public class XQueryRunProfileState extends JavaCommandLineState {
     private JavaParameters prepareRunnerParameters() throws CantRunException {
         final JavaParameters parameters = new JavaParameters();
         parameters.setMainClass(configuration.getRunClass());
-        parameters.getClassPath().addFirst(new XQueryRunnerClasspathEntryGenerator()
-                .generateRunnerClasspathEntries(configuration));
         parameters.getProgramParametersList().prepend(getSerializedConfig(configuration).getAbsolutePath());
+        parameters.getClassPath().addFirst(new XQueryRunnerClasspathEntryGenerator().generateRunnerClasspathEntries(configuration));
+        if (getEnvironment().getExecutor().getId().equals(DefaultDebugExecutor.EXECUTOR_ID)) {
+            parameters.getVMParametersList().defineProperty("xquery.debugger.port", String.valueOf(port));
+            parameters.getVMParametersList().defineProperty("xquery.debug", "true");
+        }
         return parameters;
     }
 
@@ -83,5 +83,9 @@ public class XQueryRunProfileState extends JavaCommandLineState {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }

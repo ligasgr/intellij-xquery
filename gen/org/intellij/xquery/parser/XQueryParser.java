@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -277,7 +277,7 @@ public class XQueryParser implements PsiParser, LightPsiParser {
     else if (t == EMPTY_ORDER_DECL) {
       r = EmptyOrderDecl(b, 0);
     }
-    else if (t == ENCLOSED_EXPR) {
+    else if (t == ENCLOSED_EXPRESSION) {
       r = EnclosedExpr(b, 0);
     }
     else if (t == EQUALITY_COMP) {
@@ -821,7 +821,7 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(ADDITIVE_EXPR, AND_EXPR, CASTABLE_EXPR, CAST_EXPR,
       COMPARISON_EXPR, CONTENT_EXPR, CONTEXT_ITEM_EXPR, DELETE_EXPR,
-      ENCLOSED_EXPR, EXPR_SINGLE, EXTENSION_EXPR, FLWOR_EXPR,
+      ENCLOSED_EXPRESSION, EXPR_SINGLE, EXTENSION_EXPR, FLWOR_EXPR,
       FUNCTION_ITEM_EXPR, IF_EXPR, INLINE_FUNCTION_EXPR, INSERT_EXPR,
       INSTANCEOF_EXPR, INTERSECT_EXCEPT_EXPR, MULTIPLICATIVE_EXPR, NEW_NAME_EXPR,
       ORDERED_EXPR, OR_EXPR, PARENTHESIZED_EXPR, PATH_EXPR,
@@ -1669,7 +1669,7 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PredefinedEntityRef | CharRef | "{{" | "}}" | EnclosedExpr
+  // PredefinedEntityRef | CharRef | "{{" | "}}" | EnclosedExpression
   public static boolean CommonContent(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CommonContent")) return false;
     boolean r;
@@ -2844,10 +2844,10 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // "{" Expr "}"
   public static boolean EnclosedExpr(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "EnclosedExpr")) return false;
+    if (!recursion_guard_(b, l, "EnclosedExpression")) return false;
     if (!nextTokenIs(b, L_C_BRACE)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ENCLOSED_EXPR, null);
+    Marker m = enter_section_(b, l, _NONE_, ENCLOSED_EXPRESSION, null);
     r = consumeToken(b, L_C_BRACE);
     p = r; // pin = 1
     r = r && report_error_(b, Expr(b, l + 1));
@@ -3348,7 +3348,7 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EnclosedExpr
+  // EnclosedExpression
   public static boolean FunctionBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionBody")) return false;
     if (!nextTokenIs(b, L_C_BRACE)) return false;

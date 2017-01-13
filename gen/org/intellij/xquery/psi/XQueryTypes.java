@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -104,7 +104,7 @@ public interface XQueryTypes {
   IElementType ELEMENT_NAME_OR_WILDCARD = new XQueryElementType("ELEMENT_NAME_OR_WILDCARD");
   IElementType ELEMENT_TEST = new XQueryElementType("ELEMENT_TEST");
   IElementType EMPTY_ORDER_DECL = new XQueryElementType("EMPTY_ORDER_DECL");
-  IElementType ENCLOSED_EXPR = new XQueryElementType("ENCLOSED_EXPR");
+  IElementType ENCLOSED_EXPRESSION = new XQueryElementType("ENCLOSED_EXPRESSION");
   IElementType EQUALITY_COMP = new XQueryElementType("EQUALITY_COMP");
   IElementType ESCAPE_APOS = new XQueryElementType("ESCAPE_APOS");
   IElementType ESCAPE_QUOT = new XQueryElementType("ESCAPE_QUOT");
@@ -754,8 +754,8 @@ public interface XQueryTypes {
       else if (type == EMPTY_ORDER_DECL) {
         return new XQueryEmptyOrderDeclImpl(node);
       }
-      else if (type == ENCLOSED_EXPR) {
-        return new XQueryEnclosedExprImpl(node);
+      else if (type == ENCLOSED_EXPRESSION) {
+        return new XQueryEnclosedExpressionImpl(node);
       }
       else if (type == EQUALITY_COMP) {
         return new XQueryEqualityCompImpl(node);

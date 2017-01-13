@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,23 +23,22 @@ import org.jdom.Element;
 import java.io.IOException;
 import java.io.Writer;
 
-/**
- * User: ligasgr
- * Date: 08/10/13
- * Time: 22:41
- */
 public class XQueryRunConfigurationSerializer {
     private final XQueryRunConfiguration configuration;
     private XmlConfigurationAccessor xmlConfigurationAccessor;
     private VariablesAccessor variablesAccessor;
     private DataSourceAccessor dataSourceAccessor;
+    private final boolean isDebugging;
+    private final int port;
 
     public XQueryRunConfigurationSerializer(XQueryRunConfiguration configuration, XmlConfigurationAccessor
-            xmlConfigurationAccessor, VariablesAccessor variablesAccessor, DataSourceAccessor dataSourceAccessor) {
+            xmlConfigurationAccessor, VariablesAccessor variablesAccessor, DataSourceAccessor dataSourceAccessor, boolean isDebugging, int port) {
         this.configuration = configuration;
         this.xmlConfigurationAccessor = xmlConfigurationAccessor;
         this.variablesAccessor = variablesAccessor;
         this.dataSourceAccessor = dataSourceAccessor;
+        this.isDebugging = isDebugging;
+        this.port = port;
     }
 
     public void serialize(Writer writer) throws Exception {
@@ -47,6 +46,10 @@ public class XQueryRunConfigurationSerializer {
         variablesAccessor.writeVariables(configuration, xmlRootElement);
         xmlConfigurationAccessor.writeConfiguration(configuration, xmlRootElement);
         dataSourceAccessor.writeDataSourceConfiguration(configuration, xmlRootElement);
+        xmlRootElement.setAttribute("debug", Boolean.toString(isDebugging));
+        if (isDebugging) {
+            xmlRootElement.setAttribute("debugPort", Integer.toString(port));
+        }
         getElementWriter().writeElement(xmlRootElement, writer, System.getProperty("line.separator"));
     }
 

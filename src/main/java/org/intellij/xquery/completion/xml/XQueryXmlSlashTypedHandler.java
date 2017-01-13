@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@ import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.XQueryLanguage;
 import org.intellij.xquery.psi.XQueryDirAttributeValue;
-import org.intellij.xquery.psi.XQueryEnclosedExpr;
+import org.intellij.xquery.psi.XQueryEnclosedExpression;
 import org.intellij.xquery.psi.XQueryTypes;
 import org.intellij.xquery.psi.XQueryXmlFullTag;
 import org.intellij.xquery.psi.XQueryXmlTagName;
@@ -88,7 +88,7 @@ public class XQueryXmlSlashTypedHandler extends TypedHandlerDelegate {
             if (prevLeaf == null) return Result.CONTINUE;
             if (PsiTreeUtil.getParentOfType(element, XQueryDirAttributeValue.class) != null) return Result.CONTINUE;
             if (prevLeaf.getElementType() == XQueryTypes.ELEMENTCONTENTCHAR) return Result.CONTINUE;
-            XQueryEnclosedExpr parentEnclosedExpression = PsiTreeUtil.getParentOfType(element, XQueryEnclosedExpr.class, true, XQueryXmlFullTag.class);
+            XQueryEnclosedExpression parentEnclosedExpression = PsiTreeUtil.getParentOfType(element, XQueryEnclosedExpression.class, true, XQueryXmlFullTag.class);
             XQueryXmlFullTag fullTag = getParentFullTag(prevLeaf);
             if (isInEnclosedExpressionNestedInXmlTag(parentEnclosedExpression, fullTag)) return Result.CONTINUE;
             if (isInUnclosedXmlTag(fullTag)) {
@@ -132,13 +132,13 @@ public class XQueryXmlSlashTypedHandler extends TypedHandlerDelegate {
         return "</".equals(prevLeafText) && prevLeaf.getElementType() == XQueryTypes.XMLENDTAGSTART;
     }
 
-    private boolean isInEnclosedExpressionNestedInXmlTag(XQueryEnclosedExpr parentEnclosedExpression,
+    private boolean isInEnclosedExpressionNestedInXmlTag(XQueryEnclosedExpression parentEnclosedExpression,
                                                                      XQueryXmlFullTag fullTag) {
         return parentEnclosedExpression != null && fullTag == null;
     }
 
     protected XQueryXmlFullTag getParentFullTag(ASTNode prevLeaf) {
-        return PsiTreeUtil.getParentOfType(prevLeaf.getPsi(), XQueryXmlFullTag.class, true, XQueryEnclosedExpr.class);
+        return PsiTreeUtil.getParentOfType(prevLeaf.getPsi(), XQueryXmlFullTag.class, true, XQueryEnclosedExpression.class);
     }
 
     protected ASTNode getPreviousNonWhiteSpaceLeaf(ASTNode originalPrevLeaf) {

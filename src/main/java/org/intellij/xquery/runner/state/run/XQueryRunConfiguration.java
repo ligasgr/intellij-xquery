@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,11 +54,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * User: ligasgr
- * Date: 04/08/13
- * Time: 14:56
- */
 public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunConfigurationModule> implements
         CommonJavaRunConfigurationParameters, RunConfigurationWithSuppressedDefaultDebugAction {
     public static final String RUNNER_CLASS = "org.intellij.xquery.runner.rt.XQueryRunnerApp";
@@ -326,9 +321,13 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
     }
 
     public XQueryDataSourceType getDataSourceType() {
-        XQueryDataSourceConfiguration dataSourceConfiguration = getDataSourcesSettings()
-                .getDataSourceConfigurationForName(dataSourceName);
-        return dataSourceConfiguration.TYPE;
+        if (dataSourceName != null) {
+            XQueryDataSourceConfiguration dataSourceConfiguration = getDataSourcesSettings()
+                    .getDataSourceConfigurationForName(dataSourceName);
+            return dataSourceConfiguration.TYPE;
+        } else {
+            return null;
+        }
     }
 
     protected XQueryDataSourcesSettings getDataSourcesSettings() {

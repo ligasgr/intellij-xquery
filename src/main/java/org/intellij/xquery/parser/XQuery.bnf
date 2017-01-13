@@ -1,5 +1,6 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com>
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -303,8 +304,8 @@ ContextItemDecl ::= "declare" "context" "item" ("as" ItemType)? (VarValueAssignm
 FunctionDecl ::= "declare" (MarklogicAnnotation | CompatibilityAnnotation | Annotation)* "function" FunctionName ParamList ("as" SequenceType)? (FunctionBody | "external") Separator /* xgc: reserved-function-names */ {pin=3 methods=[getPresentation getArity hasValidFunctionName isPublic getTextOffset]}
 ParamList ::= "(" (Param ("," Param)*)? ")" {pin=1}
 Param ::= "$" VarName TypeDeclaration?
-FunctionBody ::= EnclosedExpr
-EnclosedExpr ::= "{" Expr "}" {pin=1}
+FunctionBody ::= EnclosedExpression
+EnclosedExpression ::= "{" Expr "}" {pin=1}
 OptionDecl ::= "declare" "option" EQName StringLiteral Separator {pin=2}
 QueryBody ::= Expr {pin=1 methods=[getPresentation] recoverWhile=QueryBodyRecover}
 private QueryBodyRecover ::= !<<eof>>
@@ -515,7 +516,7 @@ DirElemContent ::= DirectConstructor
  | CDataSection
  | CommonContent
  | ElementContentChar
-CommonContent ::= PredefinedEntityRef | CharRef | "{{" | "}}" | EnclosedExpr
+CommonContent ::= PredefinedEntityRef | CharRef | "{{" | "}}" | EnclosedExpression
 DirCommentContents ::= DirCommentChar*
 DirCommentConstructor ::= "<!--" DirCommentContents "-->" /* ws: explicit */
 DirPIConstructor ::= "<?" PITarget (S DirPIContents)? "?>" /* ws: explicit */

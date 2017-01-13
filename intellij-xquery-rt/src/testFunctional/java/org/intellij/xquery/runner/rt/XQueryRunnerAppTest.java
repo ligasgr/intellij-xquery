@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,11 +29,6 @@ import static org.intellij.xquery.runner.rt.XQueryDataSourceType.SAXON;
 import static org.intellij.xquery.runner.rt.XQueryRunConfigBuilder.runConfig;
 import static org.junit.Assert.assertThat;
 
-/**
- * User: ligasgr
- * Date: 04/11/13
- * Time: 23:24
- */
 public class XQueryRunnerAppTest {
     private static final String HELLO_WORLD = "Hello world!";
     private static final String XQUERY_LITERAL = "'" + HELLO_WORLD + "'";

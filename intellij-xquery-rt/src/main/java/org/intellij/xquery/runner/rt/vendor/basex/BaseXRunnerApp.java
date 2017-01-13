@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +38,7 @@ public class BaseXRunnerApp implements RunnerApp {
     }
 
     @Override
-    public void run() throws Exception {
+    public void runApp() throws Exception {
         try (ClientSession session = new ClientSession(config.getHost(), Integer.valueOf(config.getPort()), config.getUsername(), config.getPassword())) {
             try (ClientQuery query = session.query(FileUtil.readFile(config.getMainFile()))) {
 

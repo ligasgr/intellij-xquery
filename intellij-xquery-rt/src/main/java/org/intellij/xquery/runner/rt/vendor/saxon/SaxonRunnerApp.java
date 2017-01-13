@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 package org.intellij.xquery.runner.rt.vendor.saxon;
 
 import net.sf.saxon.Configuration;
+import net.sf.saxon.query.QueryModule;
 import net.sf.saxon.s9api.ItemType;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
@@ -43,14 +44,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
-/**
- * User: ligasgr
- * Date: 06/01/14
- * Time: 22:45
- */
 public class SaxonRunnerApp implements RunnerApp {
 
-    private final XQueryRunConfig config;
+    protected final XQueryRunConfig config;
     private final PrintStream output;
     private Processor processor;
     private SaxonTypeMapper typeMapper = new SaxonTypeMapper();
@@ -76,10 +72,12 @@ public class SaxonRunnerApp implements RunnerApp {
     }
 
     @Override
-    public void run() throws Exception {
+    public void runApp() throws Exception {
+        doAdditionalConfiguration(processor);
         Serializer out = prepareSerializer();
         XQueryCompiler compiler = processor.newXQueryCompiler();
         XQueryExecutable executable = compiler.compile(new File(config.getMainFile()));
+        setMainModule(executable.getUnderlyingCompiledQuery().getMainModule());
         XQueryEvaluator evaluator = executable.load();
         bindContextItem(evaluator);
         bindVariables(evaluator);
@@ -137,4 +135,9 @@ public class SaxonRunnerApp implements RunnerApp {
     protected String readFile(String fileName) throws IOException {
         return FileUtil.readFile(fileName);
     }
+
+    protected void doAdditionalConfiguration(Processor debugger) { }
+
+    protected void setMainModule(QueryModule mainModule) { }
+
 }

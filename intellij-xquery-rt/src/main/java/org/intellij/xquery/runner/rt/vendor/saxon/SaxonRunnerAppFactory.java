@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,18 +21,17 @@ import net.sf.saxon.trans.XPathException;
 import org.intellij.xquery.runner.rt.RunnerApp;
 import org.intellij.xquery.runner.rt.RunnerAppFactory;
 import org.intellij.xquery.runner.rt.XQueryRunConfig;
+import org.intellij.xquery.runner.rt.debugger.saxon.SaxonDebuggerApp;
 
 import java.io.PrintStream;
 
-/**
- * User: ligasgr
- * Date: 06/01/14
- * Time: 22:56
- */
 public class SaxonRunnerAppFactory implements RunnerAppFactory {
 
     @Override
     public RunnerApp getInstance(XQueryRunConfig config, PrintStream output) throws XPathException {
+        if (config.isDebugEnabled()) {
+            return new SaxonDebuggerApp(config, output);
+        }
         return new SaxonRunnerApp(config, output);
     }
 }

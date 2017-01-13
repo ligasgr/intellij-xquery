@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -186,7 +186,7 @@ public abstract class RunnerAppTest {
 
     private void runAppFor(XQueryRunConfig config) throws Exception {
         RunnerApp app = XQueryRunnerAppFactory.getInstance(config, printStream);
-        app.run();
+        app.runApp();
     }
 
     protected String prepareConfigurationForMainFile(File xqueryMainFile) {

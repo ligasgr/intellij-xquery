@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,11 +25,6 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-/**
- * User: ligasgr
- * Date: 09/10/13
- * Time: 00:06
- */
 public class XQueryRunConfigTest {
     private static final String MAIN_FILE_NAME = "/path/to/main/file.xq";
     private static final Boolean CONTEXT_ITEM_ENABLED = true;
@@ -52,7 +47,7 @@ public class XQueryRunConfigTest {
     private static final String DATABASE_NAME = "dbName";
     private static final String CONTEXT_ITEM_TYPE = "xs:string";
 
-    private final String xml = "<run>\n" +
+    private final String xml = "<run debug=\"true\" debugPort=\"9000\">\n" +
             "<variables>\n" +
             "<list>\n" +
             "<variable active=\"" + VARIABLE_ACTIVE +
@@ -97,6 +92,20 @@ public class XQueryRunConfigTest {
         String result = config.getMainFile();
 
         assertThat(result, is(MAIN_FILE_NAME));
+    }
+
+    @Test
+    public void shouldReturnDebugEnabledValue() {
+        boolean result = config.isDebugEnabled();
+
+        assertThat(result, is(true));
+    }
+
+    @Test
+    public void shouldReturnDebugPortValue() {
+        String result = config.getDebugPort();
+
+        assertThat(result, is("9000"));
     }
 
     @Test

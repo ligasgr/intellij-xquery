@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,6 +44,7 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'lib', include: '*.jar')
+    compile('com.codnos:dbgp-interfaces:1.0.0')
     compile 'commons-codec:commons-codec:1.10'
     compile 'com.marklogic:marklogic-xcc:8.0.5'
     testCompile 'junit:junit-dep:4.10'
@@ -51,6 +52,7 @@ dependencies {
     testCompile('org.hamcrest:hamcrest-library:1.1') {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
     }
+    testCompile  'com.jayway.awaitility:awaitility:1.7.0'
 }
 
 tasks.withType(JavaCompile) {

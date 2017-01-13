@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +17,6 @@
 
 package org.intellij.xquery.runner.rt;
 
-/**
- * User: ligasgr
- * Date: 06/01/14
- * Time: 22:41
- */
 public interface RunnerApp {
-    void run() throws Exception;
+    void runApp() throws Exception;
 }

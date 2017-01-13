@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,11 +19,6 @@ package org.intellij.xquery.runner.rt;
 
 import java.io.PrintStream;
 
-/**
- * User: ligasgr
- * Date: 15/08/13
- * Time: 13:56
- */
 public class XQueryRunnerApp {
 
     public static void main(String[] args) throws Exception {
@@ -31,7 +26,6 @@ public class XQueryRunnerApp {
     }
 
     public static void runConfigForOutputStream(XQueryRunConfig config, PrintStream output) throws Exception {
-        RunnerApp app = XQueryRunnerAppFactory.getInstance(config, output);
-        app.run();
+        XQueryRunnerAppFactory.getInstance(config, output).runApp();
     }
 }

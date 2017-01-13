@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,11 +28,6 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * User: ligasgr
- * Date: 09/10/13
- * Time: 00:07
- */
 public class XQueryRunConfig {
     private final Document document;
     private final XPathExpression mainFileExpression;
@@ -50,6 +45,8 @@ public class XQueryRunConfig {
     private final XPathExpression configFileExpression;
     private final XPathExpression databaseNameExpression;
     private final XPathExpression contextItemTypeExpression;
+    private final XPathExpression debugExpression;
+    private final XPathExpression debugPortExpression;
 
     public XQueryRunConfig(String xml) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -70,6 +67,8 @@ public class XQueryRunConfig {
         configFileExpression = xPath.compile(xqRunnerAttrXPath("configFile"));
         databaseNameExpression = xPath.compile(xqRunnerAttrXPath("databaseName"));
         contextItemTypeExpression = xPath.compile(xqCfgAttrXPath("contextItemType"));
+        debugExpression = xPath.compile("/run/@debug");
+        debugPortExpression = xPath.compile("/run/@debugPort");
     }
 
     public String getMainFile() {
@@ -151,6 +150,15 @@ public class XQueryRunConfig {
 
     public String getContextItemType() {
         return getExpressionValue(contextItemTypeExpression);
+    }
+
+
+    public boolean isDebugEnabled() {
+        return Boolean.parseBoolean(getExpressionValue(debugExpression));
+    }
+
+    public String getDebugPort() {
+        return getExpressionValue(debugPortExpression);
     }
 
     private XPathExpression getExpression(String xpath) {

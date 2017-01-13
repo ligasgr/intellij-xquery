@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,14 +27,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryEnclosedExprImpl extends XQueryExprSingleImpl implements XQueryEnclosedExpr {
+public class XQueryEnclosedExpressionImpl extends XQueryPsiElementImpl implements XQueryEnclosedExpression {
 
-  public XQueryEnclosedExprImpl(ASTNode node) {
+  public XQueryEnclosedExpressionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull XQueryVisitor visitor) {
-    visitor.visitEnclosedExpr(this);
+    visitor.visitEnclosedExpression(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,11 +33,6 @@ import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-/**
- * User: ligasgr
- * Date: 08/10/13
- * Time: 22:35
- */
 public class XQueryRunConfigurationSerializerTest {
 
     private XQueryRunConfiguration configuration;
@@ -57,7 +52,7 @@ public class XQueryRunConfigurationSerializerTest {
         writer = mock(Writer.class);
         elementWriter = mock(ElementWriter.class);
         serializer = new XQueryRunConfigurationSerializer(configuration, xmlConfigurationAccessor, variablesAccessor,
-                dataSourceAccessor) {
+                dataSourceAccessor, false, 9000) {
             @Override
             protected ElementWriter getElementWriter() {
                 return elementWriter;
