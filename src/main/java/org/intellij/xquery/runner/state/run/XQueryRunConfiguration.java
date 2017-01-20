@@ -18,7 +18,7 @@
 package org.intellij.xquery.runner.state.run;
 
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
-import com.intellij.execution.CommonJavaRunConfigurationParameters;
+import com.intellij.execution.CommonProgramRunConfigurationParameters;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.ExternalizablePath;
@@ -55,7 +55,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunConfigurationModule> implements
-        CommonJavaRunConfigurationParameters, RunConfigurationWithSuppressedDefaultDebugAction {
+        CommonProgramRunConfigurationParameters, RunConfigurationWithSuppressedDefaultDebugAction {
     public static final String RUNNER_CLASS = "org.intellij.xquery.runner.rt.XQueryRunnerApp";
     private final VariablesValidator variablesValidator;
     private final DataSourceValidator dataSourceValidator;
@@ -238,44 +238,36 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
         this.workingDirectory = workingDirectory;
     }
 
-    @Override
     public String getVMParameters() {
         return vmParameters;
     }
 
-    @Override
     public void setVMParameters(String vmParameters) {
         this.vmParameters = vmParameters;
     }
 
-    @Override
     public boolean isAlternativeJrePathEnabled() {
         return alternativeJrePathEnabled;
     }
 
-    @Override
     public void setAlternativeJrePathEnabled(boolean enabled) {
         alternativeJrePathEnabled = enabled;
     }
 
-    @Override
     public String getAlternativeJrePath() {
         return alternativeJrePath;
     }
 
-    @Override
     public void setAlternativeJrePath(String path) {
         alternativeJrePath = path;
     }
 
     @Nullable
-    @Override
     public String getRunClass() {
         return RUNNER_CLASS;
     }
 
     @Nullable
-    @Override
     public String getPackage() {
         return null;
     }

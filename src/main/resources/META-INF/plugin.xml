@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+  ~ Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
   ~ (see the CONTRIBUTORS file).
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +36,6 @@
     <idea-version since-build="163.7743" until-build="163.*"/>
 
     <depends>com.intellij.modules.lang</depends>
-    <depends optional="true" config-file="java-lang.xml">com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
@@ -102,6 +101,13 @@
         <projectConfigurable instance="org.intellij.xquery.settings.XQueryConfigurable"/>
         <projectService serviceImplementation="org.intellij.xquery.settings.XQuerySettings"/>
         <createFromTemplateHandler order="first" implementation="org.intellij.xquery.actions.XQueryCreateFromTemplateHandler"/>
+
+        <programRunner implementation="org.intellij.xquery.runner.XQueryRunner"/>
+        <programRunner implementation="org.intellij.xquery.debugger.XQueryDebuggerRunner"/>
+        <configurationType implementation="org.intellij.xquery.runner.XQueryRunConfigurationType"/>
+        <runConfigurationProducer implementation="org.intellij.xquery.runner.XQueryRunConfigurationProducer"/>
+        <applicationConfigurable instance="org.intellij.xquery.runner.state.datasources.XQueryDataSourcesConfigurable"/>
+        <xdebugger.breakpointType implementation="org.intellij.xquery.debugger.XQueryBreakpointType"/>
     </extensions>
 
     <actions>
@@ -110,4 +116,10 @@
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </action>
     </actions>
+
+    <application-components>
+        <component>
+            <implementation-class>org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings</implementation-class>
+        </component>
+    </application-components>
 </idea-plugin>

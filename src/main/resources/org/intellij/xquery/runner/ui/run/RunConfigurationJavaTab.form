@@ -11,7 +11,7 @@
     </properties>
     <border type="none"/>
     <children>
-      <component id="82572" class="com.intellij.execution.ui.CommonJavaParametersPanel" binding="commonJavaParametersPanel">
+      <component id="82572" class="org.intellij.xquery.runner.ui.run.CommonJavaParametersPanel" binding="commonJavaParametersPanel">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -27,7 +27,7 @@
           <text value="Use classpath of m&amp;odule"/>
         </properties>
       </component>
-      <component id="e1865" class="com.intellij.execution.ui.AlternativeJREPanel" binding="alternativeJrePanel">
+      <component id="e1865" class="org.intellij.xquery.runner.ui.run.AlternativeJREPanel" binding="alternativeJrePanel">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>

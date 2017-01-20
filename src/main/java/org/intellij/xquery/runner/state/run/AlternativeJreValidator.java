@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,18 +17,30 @@
 
 package org.intellij.xquery.runner.state.run;
 
-import com.intellij.execution.CommonJavaRunConfigurationParameters;
+import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configurations.RuntimeConfigurationWarning;
-import com.intellij.execution.util.JavaParametersUtil;
+import com.intellij.openapi.projectRoots.JdkUtil;
+import com.intellij.openapi.projectRoots.ProjectJdkTable;
+import com.intellij.openapi.util.text.StringUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * User: ligasgr
- * Date: 18/11/13
- * Time: 13:43
- */
 public class AlternativeJreValidator {
 
-    public void validate(CommonJavaRunConfigurationParameters runConfiguration) throws RuntimeConfigurationWarning {
-        JavaParametersUtil.checkAlternativeJRE(runConfiguration);
+    public void validate(XQueryRunConfiguration runConfiguration) throws RuntimeConfigurationWarning {
+        checkAlternativeJRE(runConfiguration);
+    }
+
+    public static void checkAlternativeJRE(@NotNull XQueryRunConfiguration configuration) throws RuntimeConfigurationWarning {
+        if (configuration.isAlternativeJrePathEnabled()) {
+            checkAlternativeJRE(configuration.getAlternativeJrePath());
+        }
+    }
+
+    public static void checkAlternativeJRE(@Nullable String jrePath) throws RuntimeConfigurationWarning {
+        if (StringUtil.isEmpty(jrePath) ||
+                ProjectJdkTable.getInstance().findJdk(jrePath) == null && !JdkUtil.checkForJre(jrePath)) {
+            throw new RuntimeConfigurationWarning(ExecutionBundle.message("jre.path.is.not.valid.jre.home.error.message", jrePath));
+        }
     }
 }

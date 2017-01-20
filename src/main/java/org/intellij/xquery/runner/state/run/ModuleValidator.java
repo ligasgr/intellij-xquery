@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,16 +21,10 @@ import com.intellij.execution.configurations.RunConfigurationModule;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.util.ProgramParametersUtil;
 
-/**
- * User: ligasgr
- * Date: 18/11/13
- * Time: 13:47
- */
 public class ModuleValidator {
 
     public void validate(XQueryRunConfiguration xQueryRunConfiguration) throws RuntimeConfigurationException {
         final RunConfigurationModule configurationModule = xQueryRunConfiguration.getConfigurationModule();
-        configurationModule.checkForWarning();
         ProgramParametersUtil.checkWorkingDirectoryExist(xQueryRunConfiguration, xQueryRunConfiguration.getProject(), configurationModule.getModule());
     }
 }
