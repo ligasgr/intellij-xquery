@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -280,9 +280,9 @@ SC=({S} | "(:" {Char}* ~":)")+
 "least" / {SC}? (";"|",")                  {return XQueryTypes.K_LEAST;}
 "least" / {SC} ("for"|"let"|"order"|"stable"|"group"|"count"|"return"|"collation") {return XQueryTypes.K_LEAST;}
 "ascending" / {SC}? ","                    {return XQueryTypes.K_ASCENDING;}
-"ascending" / {SC} ("empty"|"collation"|"for"|"let"|"order"|"stable"|"group"|"count"|"return"|",")   {return XQueryTypes.K_ASCENDING;}
+"ascending" / {SC} ("empty"|"collation"|"for"|"let"|"order"|"stable"|"group"|"count"|"return"|"where"|",")   {return XQueryTypes.K_ASCENDING;}
 "descending" / {SC}? ","                   {return XQueryTypes.K_DESCENDING;}
-"descending" / {SC} ("empty"|"collation"|"for"|"let"|"order"|"stable"|"group"|"count"|"return"|",")  {return XQueryTypes.K_DESCENDING;}
+"descending" / {SC} ("empty"|"collation"|"for"|"let"|"order"|"stable"|"group"|"count"|"return"|"where"|",")  {return XQueryTypes.K_DESCENDING;}
 "collation" / {SC} ("\""|"'")              {return XQueryTypes.K_COLLATION;}
 "import"                                   {yypushback(yylength()); pushState(IMPORT_RECOGNITION); return TokenType.WHITE_SPACE;}
 "module"                                   {yypushback(yylength()); pushState(MODULE_RECOGNITION); return TokenType.WHITE_SPACE;}

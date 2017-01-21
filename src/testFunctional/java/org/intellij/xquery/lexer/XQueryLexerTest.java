@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -310,6 +310,65 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "$", "$",
                 "NCName", "j"
+        });
+    }
+
+    public void testFlworExpressionWithOrderFollowedByWhere() throws Exception {
+        assertProducedTokens("for $i in 1 to 10 order by $i ascending where $i = 5 order by $i descending where $i = 5 return $i", new String[]{
+                "WHITE_SPACE", "",
+                "for", "for",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "in", "in",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "1",
+                "WHITE_SPACE", " ",
+                "to", "to",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "10",
+                "WHITE_SPACE", " ",
+                "order", "order",
+                "WHITE_SPACE", " ",
+                "by", "by",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "ascending", "ascending",
+                "WHITE_SPACE", " ",
+                "where", "where",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "5",
+                "WHITE_SPACE", " ",
+                "order", "order",
+                "WHITE_SPACE", " ",
+                "by", "by",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "descending", "descending",
+                "WHITE_SPACE", " ",
+                "where", "where",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "5",
+                "WHITE_SPACE", " ",
+                "return", "return",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i"
         });
     }
 
