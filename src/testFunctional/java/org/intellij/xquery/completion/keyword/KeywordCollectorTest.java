@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,11 +23,6 @@ import org.intellij.xquery.XQueryFileType;
 
 import java.util.List;
 
-/**
- * User: ligasgr
- * Date: 02/08/13
- * Time: 13:46
- */
 public class KeywordCollectorTest extends BaseFunctionalTestCase {
 
     public void testForEmptyFile() throws Exception {
@@ -55,7 +50,11 @@ public class KeywordCollectorTest extends BaseFunctionalTestCase {
     }
 
     public void testForDeclareDefault() throws Exception {
-        verifyKeywords("declare default <caret>", "collation", "order", "decimal-format", "element", "function");
+        verifyKeywords("declare default <caret>", "collation", "order", "order empty", "decimal-format", "element", "element namespace", "function", "function namespace");
+    }
+
+    public void testForSimpleExpression() throws Exception {
+        verifyKeywords("1 <caret>", "mod", "or", "intersect", "is", "union", "cast", "cast as", "treat", "treat as", "div", "and", "instance", "instance of", "idiv", "except", "to", "castable", "castable as");
     }
 
     private void verifyKeywords(String text, String... expected) {

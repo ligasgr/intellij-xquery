@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
@@ -34,6 +35,7 @@ import org.intellij.xquery.psi.impl.XQueryPsiImplUtil;
 import org.intellij.xquery.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,7 +44,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
+import static com.intellij.openapi.util.text.StringUtil.join;
 import static java.util.Arrays.asList;
 import static org.intellij.grammar.parser.GeneratedParserUtilBase.COMPLETION_STATE_KEY;
 import static org.intellij.xquery.completion.XQueryCompletionContributor.KEYWORD_PRIORITY;
@@ -130,7 +134,57 @@ public class KeywordCollector {
         GeneratedParserUtilBase.CompletionState completionStateInTemporaryFile = getCompletionStateForKeywords(completionOffset);
         temporaryFileForCompletionCheck.putUserData(COMPLETION_STATE_KEY, completionStateInTemporaryFile);
         triggerParsingInFile(temporaryFileForCompletionCheck);
-        return completionStateInTemporaryFile.items;
+        List<String> stripped = stringPrecedingText(StringUtils.normalizeWhitespaces(text), completionStateInTemporaryFile.items);
+        return expandMultiWordOptions(stripped);
+    }
+
+    @NotNull
+    private List<String> stringPrecedingText(String text, Collection<String> items) {
+        Set<String> stripped = new HashSet<>(items.size());
+        List<String> variantsToReplace = variantsToReplace(text);
+        for (String item : items) {
+            stripped.add(strippedItem(variantsToReplace, item));
+        }
+        return new ArrayList<>(stripped);
+    }
+
+    private String strippedItem(List<String> variantsToReplace, String item) {
+        for (String textToReplace: variantsToReplace) {
+            if (item.startsWith(textToReplace)) {
+                return item.replaceFirst(textToReplace, "").trim();
+            }
+        }
+        return item.trim();
+    }
+
+    private List<String> variantsToReplace(String text) {
+        Set<String> possibleEndings = new HashSet<>();
+        List<String> possibleBeginnings = expandMultiWordOptions(Collections.singletonList(Pattern.quote(text)));
+        for (String possibleBeginning : possibleBeginnings) {
+            String possibleEnding = text.replaceFirst(possibleBeginning, "");
+            if (!StringUtil.isEmptyOrSpaces(possibleEnding)) {
+                possibleEndings.add(possibleEnding.trim());
+            }
+        }
+        possibleEndings.add(text);
+        return new ArrayList<>(possibleEndings);
+    }
+
+    private List<String> expandMultiWordOptions(List<String> items) {
+        List<String> expanded = new ArrayList<>();
+        for (String item : items) {
+            String[] allWords = item.split(" ");
+            String currentBuildUp = null;
+            for (String word : allWords) {
+                if (currentBuildUp == null) {
+                    currentBuildUp = word;
+                } else {
+                    currentBuildUp = currentBuildUp + " " + word;
+                }
+                expanded.add(currentBuildUp);
+            }
+        }
+        return expanded;
     }
 
     private PsiFile createFileForText(Project project, String text) {
@@ -145,8 +199,15 @@ public class KeywordCollector {
         return new GeneratedParserUtilBase.CompletionState(completionOffset) {
             @Override
             public String convertItem(Object o) {
-                if (o instanceof IElementType && XQueryLexer.KEYWORDS.contains((IElementType) o)) return o.toString();
-                return o instanceof String ? (String) o : null;
+                if (o instanceof IElementType && XQueryLexer.KEYWORDS.contains((IElementType) o)) {
+                    return o.toString();
+                } else if (o instanceof String) {
+                    return (String) o;
+                }
+                else if (o instanceof Object[]) {
+                    return join((Object[]) o, this, " ");
+                }
+                return null;
             }
         };
     }

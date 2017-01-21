@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryExprSingleImpl extends XQueryPsiElementImpl implements XQueryExprSingle {
+public abstract class XQueryExprSingleImpl extends XQueryPsiElementImpl implements XQueryExprSingle {
 
   public XQueryExprSingleImpl(ASTNode node) {
     super(node);

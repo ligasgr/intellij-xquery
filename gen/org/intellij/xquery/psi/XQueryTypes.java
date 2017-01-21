@@ -769,9 +769,6 @@ public interface XQueryTypes {
       else if (type == EXPR) {
         return new XQueryExprImpl(node);
       }
-      else if (type == EXPR_SINGLE) {
-        return new XQueryExprSingleImpl(node);
-      }
       else if (type == EXTENSION_EXPR) {
         return new XQueryExtensionExprImpl(node);
       }
@@ -976,9 +973,6 @@ public interface XQueryTypes {
       else if (type == NAME_TEST) {
         return new XQueryNameTestImpl(node);
       }
-      else if (type == NEW_NAME_EXPR) {
-        return new XQueryNewNameExprImpl(node);
-      }
       else if (type == NEXT_ITEM) {
         return new XQueryNextItemImpl(node);
       }
@@ -1141,9 +1135,6 @@ public interface XQueryTypes {
       else if (type == SINGLE_TYPE) {
         return new XQuerySingleTypeImpl(node);
       }
-      else if (type == SOURCE_EXPR) {
-        return new XQuerySourceExprImpl(node);
-      }
       else if (type == STEP_EXPR) {
         return new XQueryStepExprImpl(node);
       }
@@ -1170,9 +1161,6 @@ public interface XQueryTypes {
       }
       else if (type == SWITCH_RETURN_CLAUSE) {
         return new XQuerySwitchReturnClauseImpl(node);
-      }
-      else if (type == TARGET_EXPR) {
-        return new XQueryTargetExprImpl(node);
       }
       else if (type == TEXT_TEST) {
         return new XQueryTextTestImpl(node);
@@ -1233,9 +1221,6 @@ public interface XQueryTypes {
       }
       else if (type == VALUE_COMP) {
         return new XQueryValueCompImpl(node);
-      }
-      else if (type == VALUE_EXPR) {
-        return new XQueryValueExprImpl(node);
       }
       else if (type == VAR_DECL) {
         return new XQueryVarDeclImpl(node);
