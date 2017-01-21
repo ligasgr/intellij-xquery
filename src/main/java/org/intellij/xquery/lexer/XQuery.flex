@@ -213,9 +213,11 @@ SC=({S} | "(:" {Char}* ~":)")+
 "<" / {SC}? {IntegerLiteral}               {return XQueryTypes.LT_CHAR;}
 "<" / {SC}? {DecimalLiteral}               {return XQueryTypes.LT_CHAR;}
 "<" / {SC}? {DoubleLiteral}                {return XQueryTypes.LT_CHAR;}
-"<" / {SC}? {NCName} {S}? "(:"            {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART;}
-"<" / {SC}? {NCName} {S}? "("             {return XQueryTypes.LT_CHAR;}
+"<" / {SC}? {NCName} {S}? "(:"             {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART;}
+"<" / {NCName} {S} "("                     {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART;}
+"<" / {SC}? {NCName} {S}? "("              {return XQueryTypes.LT_CHAR;}
 "<" / {SC}? {NCName} {SC}? ":" {SC}? {NCName} {S}? "(:" {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART;}
+"<" / {NCName} ":" {NCName} {S} "("        {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART;}
 "<" / {SC}? {NCName} {SC}? ":" {SC}? {NCName} {S}? "(" {return XQueryTypes.LT_CHAR;}
 "<" / {SC}? "("                            {return XQueryTypes.LT_CHAR;}
 "<"                                        {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART;}

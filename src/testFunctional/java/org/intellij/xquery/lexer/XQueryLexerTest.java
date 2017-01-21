@@ -2806,6 +2806,32 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testIncompleteTagStartBeforeEmptySequence() {
+        assertProducedTokens("<foo ()", new String[]{
+                "WHITE_SPACE", "",
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "foo",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                ")", ")",
+        });
+    }
+
+    public void testIncompletePrefixedTagStartBeforeEmptySequence() {
+        assertProducedTokens("<foo:foo ()", new String[]{
+                "WHITE_SPACE", "",
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "foo",
+                "XmlColon", ":",
+                "XmlTagNCName", "foo",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                ")", ")",
+        });
+    }
+
     public void testTagWithMisplacedComments() {
         assertProducedTokens("<foo (: foo :) attr='attr' (: bar :)></foo>", new String[]{
                 "WHITE_SPACE", "",
