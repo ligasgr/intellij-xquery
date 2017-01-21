@@ -1,7 +1,7 @@
 <!doctype html>
 
 <!--
-  ~ Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+  ~ Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
   ~ (see the CONTRIBUTORS file).
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,8 +50,27 @@
         <div id="title">
             <h1>Changelog</h1>
         </div>
-        <h3>
-            <a name="version-3.0.2" class="anchor" href="#version-3.0.2"><span class="octicon octicon-link"></span></a>Version 3.0.2</h3>
+        <h3><a name="version-3.2.0" class="anchor" href="#version-3.2.0"><span class="octicon octicon-link"></span></a>Version 3.2.0</h3>
+        <ul>
+            <li><a href="https://github.com/ligasgr/intellij-xquery/wiki/Debugger" rel="nofollow">Debugger for Saxon</a> with known <a href="https://github.com/ligasgr/intellij-xquery/issues/208" rel="nofollow">future changes</a>.</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/59" rel="nofollow">#59</a> - Add runner for module types which are not java.</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/171" rel="nofollow">#171</a> - Fix additional case when the module directory contains hyphen.</li>
+        </ul>
+        <h3><a name="version-3.1.1" class="anchor" href="#version-3.1.1"><span class="octicon octicon-link"></span></a>Version 3.1.1</h3>
+        <ul>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/206" rel="nofollow">#206</a> - Update to Idea 2016.3.</li>
+        </ul>
+        <h3><a name="version-3.1.0" class="anchor" href="#version-3.1.0"><span class="octicon octicon-link"></span></a>Version 3.1.0</h3>
+        <ul>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/202" rel="nofollow">#202</a> - Update to Idea 2016.2.</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/200" rel="nofollow">#200</a> - Native runner for MarkLogic.</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/98" rel="nofollow">#98</a> - Native runner for eXist DB.</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/192" rel="nofollow">#192</a> - Added BaseX native runner for remote and embedded server.</li>
+            <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/195" rel="nofollow">#195</a> - Fix oversimplified condition for main module type verification in 'Create configuration' dialog.</li>
+            <li>Upgrade to Saxon 9.7.0-6.</li>
+            <li>Upgrade to BaseX 8.4.3 and BaseX XQJ driver 1.6.0.</li>
+        </ul>
+        <h3><a name="version-3.0.2" class="anchor" href="#version-3.0.2"><span class="octicon octicon-link"></span></a>Version 3.0.2</h3>
         <ul>
             <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/190" rel="nofollow">#190</a> - Improved handling of quotes closing for regular and attribute strings.</li>
             <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/172" rel="nofollow">#172</a> - Make String a proper parsed type instead of a token.</li>
@@ -61,13 +80,11 @@
             <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/178" rel="nofollow">#178</a> - Change to start every lexing to start file with expression.</li>
             <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/175" rel="nofollow">#175</a> - Empty object-node is a valid construct.</li>
         </ul>
-        <h3>
-            <a name="version-3.0.1" class="anchor" href="#version-3.0.1"><span class="octicon octicon-link"></span></a>Version 3.0.1</h3>
+        <h3><a name="version-3.0.1" class="anchor" href="#version-3.0.1"><span class="octicon octicon-link"></span></a>Version 3.0.1</h3>
         <ul>
             <li>Upgrade to Idea 2016.1</li>
         </ul>
-        <h3>
-            <a name="version-3.0.0" class="anchor" href="#version-3.0.0"><span class="octicon octicon-link"></span></a>Version 3.0.0</h3>
+        <h3><a name="version-3.0.0" class="anchor" href="#version-3.0.0"><span class="octicon octicon-link"></span></a>Version 3.0.0</h3>
         <ul>
             <li>Upgrade to Saxon 9.6.0.7.</li>
             <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/123">#123</a> - Add support for MarkLogic JSON node constructors/tests (by <a href="https://github.com/malteseduck">Chris Cieslinski</a>).</li>
@@ -97,13 +114,11 @@
             <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/133">#133</a> - Incorrect error using ancestor::node in XPath.</li>
             <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/117">#117</a> - Add additional states to stop highlighter from re-lexing in the middle of the string. Highlighter runs tokenization from the last segment that started in YYINITIAL state.</li>
         </ul>
-        <h3>
-            <a name="version-2.2.1" class="anchor" href="#version-2.2.1"><span class="octicon octicon-link"></span></a>Version 2.2.1</h3>
+        <h3><a name="version-2.2.1" class="anchor" href="#version-2.2.1"><span class="octicon octicon-link"></span></a>Version 2.2.1</h3>
         <ul>
             <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/121">#121</a> - Not compatible with the latest IntelliJ release, 14.1 (by <a href="https://github.com/w17chm4n">Bartosz Jamroz</a>).</li>
         </ul>
-        <h3>
-            <a name="version-2.2.0" class="anchor" href="#version-2.2.0"><span class="octicon octicon-link"></span></a>Version 2.2.0</h3>
+        <h3><a name="version-2.2.0" class="anchor" href="#version-2.2.0"><span class="octicon octicon-link"></span></a>Version 2.2.0</h3>
         <ul>
             <li>Improve insertion of completed items with namespace prefix.</li>
             <li>Improve completion of functions and variables when prefix and part of the name are present.</li>
