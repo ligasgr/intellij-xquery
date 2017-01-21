@@ -217,6 +217,7 @@ SC=({S} | "(:" {Char}* ~":)")+
 "<" / {SC}? {NCName} {S}? "("             {return XQueryTypes.LT_CHAR;}
 "<" / {SC}? {NCName} {SC}? ":" {SC}? {NCName} {S}? "(:" {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART;}
 "<" / {SC}? {NCName} {SC}? ":" {SC}? {NCName} {S}? "(" {return XQueryTypes.LT_CHAR;}
+"<" / {SC}? "("                            {return XQueryTypes.LT_CHAR;}
 "<"                                        {pushState(START_TAG); return XQueryTypes.XMLSTARTTAGSTART;}
 "<="                                       {return XQueryTypes.LE_CHARS;}
 ">="                                       {return XQueryTypes.GE_CHARS;}

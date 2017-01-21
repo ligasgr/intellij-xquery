@@ -919,6 +919,68 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testComparisonWithParenthesizedExpression() throws Exception {
+        assertProducedTokens("if (1 < (2 * 3)) then 0 else 1", new String[]{
+                "WHITE_SPACE", "",
+                "if", "if",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "IntegerLiteral", "1",
+                "WHITE_SPACE", " ",
+                "<", "<",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "IntegerLiteral", "2",
+                "WHITE_SPACE", " ",
+                "*", "*",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "3",
+                ")", ")",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "then", "then",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "0",
+                "WHITE_SPACE", " ",
+                "else", "else",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "1"
+        });
+    }
+
+    public void testComparisonWithCommentFollowedByParenthesizedExpression() throws Exception {
+        assertProducedTokens("if (1 < (: 2 * 3 :) (2 * 3)) then 0 else 1", new String[]{
+                "WHITE_SPACE", "",
+                "if", "if",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "IntegerLiteral", "1",
+                "WHITE_SPACE", " ",
+                "<", "<",
+                "WHITE_SPACE", " ",
+                "ExprCommentStart", "(:",
+                "ExprCommentContent", " 2 * 3 ",
+                "ExprCommentEnd", ":)",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "IntegerLiteral", "2",
+                "WHITE_SPACE", " ",
+                "*", "*",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "3",
+                ")", ")",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "then", "then",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "0",
+                "WHITE_SPACE", " ",
+                "else", "else",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "1"
+        });
+    }
+
     public void testSimpleMapOperator() throws Exception {
         assertProducedTokens("avg( //employee / salary ! translate(., '$','') ! number(.))", new String[]{
                 "WHITE_SPACE", "",
