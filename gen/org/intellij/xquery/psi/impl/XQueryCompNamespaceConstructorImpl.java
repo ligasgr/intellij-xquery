@@ -43,9 +43,15 @@ public class XQueryCompNamespaceConstructorImpl extends XQueryPsiElementImpl imp
   }
 
   @Override
+  @Nullable
+  public XQueryEnclosedPrefixExpression getEnclosedPrefixExpression() {
+    return findChildByClass(XQueryEnclosedPrefixExpression.class);
+  }
+
+  @Override
   @NotNull
-  public List<XQueryExprSingle> getExprSingleList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExprSingle.class);
+  public XQueryEnclosedURIExpression getEnclosedURIExpression() {
+    return findNotNullChildByClass(XQueryEnclosedURIExpression.class);
   }
 
   @Override

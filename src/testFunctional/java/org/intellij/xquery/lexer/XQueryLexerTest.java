@@ -2915,4 +2915,79 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
 
         });
     }
+
+    public void testArray() {
+        assertProducedTokens("array {}", new String[] {
+                "WHITE_SPACE", "",
+                "array", "array",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "}", "}"
+        });
+    }
+
+    public void testStringConstructor() {
+        assertProducedTokens("``[`{$s}` fish]``", new String[] {
+                "WHITE_SPACE", "",
+                "``[", "``[",
+                "`{", "`{",
+                "$", "$",
+                "NCName", "s",
+                "}`", "}`",
+                "Char", " fish",
+                "]``", "]``"
+        });
+    }
+
+    public void testNestedStringConstructor() {
+        assertProducedTokens("``[`{ $i, ``[literal text]``, $j, ``[more literal text]`` }`]``", new String[] {
+                "WHITE_SPACE", "",
+                "``[", "``[",
+                "`{", "`{",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "``[", "``[",
+                "Char", "literal text",
+                "]``", "]``",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "j",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "``[", "``[",
+                "Char", "more literal text",
+                "]``", "]``",
+                "WHITE_SPACE", " ",
+                "}`", "}`",
+                "]``", "]``"
+        });
+    }
+
+    public void testIncompleteStringConstructorExpression() {
+        assertProducedTokens("``[`{$s]``", new String[] {
+                "WHITE_SPACE", "",
+                "``[", "``[",
+                "`{", "`{",
+                "$", "$",
+                "NCName", "s",
+                "]``", "]``"
+        });
+    }
+
+    public void testMultiLineStringConstructor() {
+        assertProducedTokens("``[`{$s}`\nfish]``", new String[] {
+                "WHITE_SPACE", "",
+                "``[", "``[",
+                "`{", "`{",
+                "$", "$",
+                "NCName", "s",
+                "}`", "}`",
+                "Char", "\nfish",
+                "]``", "]``"
+        });
+    }
 }

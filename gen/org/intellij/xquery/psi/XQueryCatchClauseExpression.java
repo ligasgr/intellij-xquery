@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryCatchClauseExpression extends XQueryPsiElement {
 
-  @Nullable
-  XQueryExpr getExpr();
+  @NotNull
+  XQueryEnclosedExpression getEnclosedExpression();
 
 }

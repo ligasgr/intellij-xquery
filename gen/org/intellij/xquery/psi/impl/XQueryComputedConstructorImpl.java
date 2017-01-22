@@ -68,12 +68,6 @@ public class XQueryComputedConstructorImpl extends XQueryPsiElementImpl implemen
 
   @Override
   @Nullable
-  public XQueryCompMapConstructor getCompMapConstructor() {
-    return findChildByClass(XQueryCompMapConstructor.class);
-  }
-
-  @Override
-  @Nullable
   public XQueryCompNamespaceConstructor getCompNamespaceConstructor() {
     return findChildByClass(XQueryCompNamespaceConstructor.class);
   }

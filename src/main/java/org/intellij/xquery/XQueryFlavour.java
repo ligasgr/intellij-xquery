@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@ package org.intellij.xquery;
 
 import org.intellij.xquery.completion.function.BuiltInFunctionTable;
 import org.intellij.xquery.completion.function.XQuery30BuiltInFunctionTable;
+import org.intellij.xquery.completion.function.XQuery31BuiltInFunctionTable;
 import org.intellij.xquery.completion.function.bif.BaseXBuiltInFunctionTable;
 import org.intellij.xquery.completion.function.bif.ExistBuiltInFunctionTable;
 import org.intellij.xquery.completion.function.bif.MarkLogic8BuiltInFunctionTable;
@@ -27,6 +28,7 @@ import org.intellij.xquery.completion.function.bif.SednaBuiltInFunctionTable;
 import org.intellij.xquery.completion.function.bif.ZorbaBuiltInFunctionTable;
 
 public enum XQueryFlavour {
+    STANDARD_31("XQuery 3.1 Standard", new XQuery31BuiltInFunctionTable()),
     STANDARD_30("XQuery 3.0 Standard", new XQuery30BuiltInFunctionTable()),
     BASEX("BaseX", new BaseXBuiltInFunctionTable()),
     EXIST("eXist", new ExistBuiltInFunctionTable()),

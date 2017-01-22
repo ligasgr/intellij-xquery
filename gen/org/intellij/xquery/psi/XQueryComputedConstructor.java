@@ -37,9 +37,6 @@ public interface XQueryComputedConstructor extends XQueryPsiElement {
   XQueryCompElemConstructor getCompElemConstructor();
 
   @Nullable
-  XQueryCompMapConstructor getCompMapConstructor();
-
-  @Nullable
   XQueryCompNamespaceConstructor getCompNamespaceConstructor();
 
   @Nullable

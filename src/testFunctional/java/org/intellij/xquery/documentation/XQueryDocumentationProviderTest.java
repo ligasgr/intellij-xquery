@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,11 +23,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.intellij.xquery.BaseFunctionalTestCase;
+import org.intellij.xquery.XQueryFlavour;
 import org.intellij.xquery.completion.function.BuiltInFunctionSignature;
+import org.intellij.xquery.psi.XQueryFunctionCall;
+import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryFunctionName;
 import org.intellij.xquery.psi.XQueryVarName;
+import org.intellij.xquery.settings.XQuerySettings;
 import org.jetbrains.annotations.NotNull;
 
+import static org.intellij.xquery.Assertions.assertChildOf;
 import static org.intellij.xquery.documentation.CommentAndSignatureBasedDocumentation.FILE_LINK_TEMPLATE;
 import static org.intellij.xquery.documentation.CommentAndSignatureBasedDocumentation.NAMESPACE_LABEL;
 import static org.intellij.xquery.documentation.DocumentationStylist.DD_END;
@@ -41,6 +46,7 @@ import static org.intellij.xquery.documentation.DocumentationStylist.LABEL_END;
 import static org.intellij.xquery.documentation.DocumentationStylist.LABEL_START;
 import static org.intellij.xquery.documentation.DocumentationStylist.WRAPPER_END;
 import static org.intellij.xquery.documentation.DocumentationStylist.WRAPPER_START;
+import static org.intellij.xquery.reference.ReferenceUtil.getTargetOfReferenceAtCaret;
 
 /**
  * User: ligasgr
@@ -594,6 +600,64 @@ public class XQueryDocumentationProviderTest extends BaseFunctionalTestCase {
                 "module namespace ns = '" + NAMESPACE + "';\n" +
                         "declare variable $v := fn:tru<caret>;",
                 BuiltInFunctionSignature.class);
+    }
+
+    public void testBuiltInFunctionReferenceForXQuery31() throws Exception {
+        XQuerySettings settings = XQuerySettings.getInstance(myFixture.getProject());
+        XQueryFlavour previous = settings.getFlavour();
+        settings.setFlavour(XQueryFlavour.STANDARD_31);
+        try {
+            doTestGenerateFunctionDoc(WRAPPER_START +
+                            "<dl> <dt class=\"label\">Summary</dt> <dd> <p>Returns the <code>xs:boolean</code> value " +
+                            "<code>true</code>. </p> </dd> <dt class=\"label\">Signature</dt> <dd> <div class=\"proto\">" +
+                            "<code class=\"function\">fn:true</code>()<code class=\"as\">&nbsp;as&nbsp;</code>" +
+                            "<code class=\"return-type\">xs:boolean</code></div> </dd> <dt class=\"label\">Properties</dt>" +
+                            " <dd> <p>This function is <a title=\"deterministic\" class=\"termref\" " +
+                            "href=\"https://www.w3.org/TR/xpath-functions-31/#dt-deterministic\"><span class=\"arrow\">·" +
+                            "</span>deterministic<span class=\"arrow\">·</span></a>, <a title=\"context-independent\"" +
+                            " class=\"termref\" href=\"https://www.w3.org/TR/xpath-functions-31/#dt-context-independent\">" +
+                            "<span class=\"arrow\">·</span>context-independent<span class=\"arrow\">·</span></a>, and " +
+                            "<a title=\"focus-dependent\" class=\"termref\" " +
+                            "href=\"https://www.w3.org/TR/xpath-functions-31/#dt-focus-independent\"><span class=\"arrow\">·" +
+                            "</span>focus-independent<span class=\"arrow\">·</span></a>. </p> </dd> " +
+                            "<dt class=\"label\">Rules</dt> <dd> <p>The result is equivalent to <code>xs:boolean(\"1\")</code>. " +
+                            "</p> </dd> <dt class=\"label\">Examples</dt> <dd> <div class=\"example\"> " +
+                            "<p>The expression <code>fn:true()</code> returns <code>xs:boolean(1)</code>. </p> </div> </dd> </dl>" +
+                            WRAPPER_END,
+                    "fn:<caret>true()");
+        } finally {
+            settings.setFlavour(previous);
+        }
+    }
+
+    public void testLookupItemForBuiltInFunctionForXQuery31() throws Exception {
+        XQuerySettings settings = XQuerySettings.getInstance(myFixture.getProject());
+        XQueryFlavour previous = settings.getFlavour();
+        settings.setFlavour(XQueryFlavour.STANDARD_31);
+        try {
+            doTestGenerateLookupItemDoc(WRAPPER_START +
+                            "<dl> <dt class=\"label\">Summary</dt> <dd> <p>Returns the <code>xs:boolean</code> value " +
+                            "<code>true</code>. </p> </dd> <dt class=\"label\">Signature</dt> <dd> <div class=\"proto\">" +
+                            "<code class=\"function\">fn:true</code>()<code class=\"as\">&nbsp;as&nbsp;</code>" +
+                            "<code class=\"return-type\">xs:boolean</code></div> </dd> <dt class=\"label\">Properties</dt>" +
+                            " <dd> <p>This function is <a title=\"deterministic\" class=\"termref\" " +
+                            "href=\"https://www.w3.org/TR/xpath-functions-31/#dt-deterministic\"><span class=\"arrow\">·" +
+                            "</span>deterministic<span class=\"arrow\">·</span></a>, <a title=\"context-independent\"" +
+                            " class=\"termref\" href=\"https://www.w3.org/TR/xpath-functions-31/#dt-context-independent\">" +
+                            "<span class=\"arrow\">·</span>context-independent<span class=\"arrow\">·</span></a>, and " +
+                            "<a title=\"focus-dependent\" class=\"termref\" " +
+                            "href=\"https://www.w3.org/TR/xpath-functions-31/#dt-focus-independent\"><span class=\"arrow\">·" +
+                            "</span>focus-independent<span class=\"arrow\">·</span></a>. </p> </dd> " +
+                            "<dt class=\"label\">Rules</dt> <dd> <p>The result is equivalent to <code>xs:boolean(\"1\")</code>. " +
+                            "</p> </dd> <dt class=\"label\">Examples</dt> <dd> <div class=\"example\"> " +
+                            "<p>The expression <code>fn:true()</code> returns <code>xs:boolean(1)</code>. </p> </div> </dd> </dl>" +
+                            WRAPPER_END,
+                    "module namespace ns = '" + NAMESPACE + "';\n" +
+                            "declare variable $v := fn:tru<caret>;",
+                    BuiltInFunctionSignature.class);
+        } finally {
+            settings.setFlavour(previous);
+        }
     }
 
     private void doTestGenerateVariableDoc(@NotNull String expected, @NotNull String text,

@@ -74,12 +74,6 @@ public class XQueryKindTestImpl extends XQueryPsiElementImpl implements XQueryKi
 
   @Override
   @Nullable
-  public XQueryMapTest getMapTest() {
-    return findChildByClass(XQueryMapTest.class);
-  }
-
-  @Override
-  @Nullable
   public XQueryMarklogicAnyKindTest getMarklogicAnyKindTest() {
     return findChildByClass(XQueryMarklogicAnyKindTest.class);
   }

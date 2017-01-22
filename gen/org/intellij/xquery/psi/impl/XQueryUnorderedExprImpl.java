@@ -43,9 +43,9 @@ public class XQueryUnorderedExprImpl extends XQueryExprSingleImpl implements XQu
   }
 
   @Override
-  @Nullable
-  public XQueryExpr getExpr() {
-    return findChildByClass(XQueryExpr.class);
+  @NotNull
+  public XQueryEnclosedExpression getEnclosedExpression() {
+    return findNotNullChildByClass(XQueryEnclosedExpression.class);
   }
 
 }

@@ -44,8 +44,8 @@ public class XQueryPrimaryExprImpl extends XQueryExprSingleImpl implements XQuer
 
   @Override
   @Nullable
-  public XQueryConstructor getConstructor() {
-    return findChildByClass(XQueryConstructor.class);
+  public XQueryArrayConstructor getArrayConstructor() {
+    return findChildByClass(XQueryArrayConstructor.class);
   }
 
   @Override
@@ -58,6 +58,30 @@ public class XQueryPrimaryExprImpl extends XQueryExprSingleImpl implements XQuer
   @Nullable
   public XQueryLiteral getLiteral() {
     return findChildByClass(XQueryLiteral.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryMapConstructor getMapConstructor() {
+    return findChildByClass(XQueryMapConstructor.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryNodeConstructor getNodeConstructor() {
+    return findChildByClass(XQueryNodeConstructor.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryStringConstructor getStringConstructor() {
+    return findChildByClass(XQueryStringConstructor.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryUnaryLookup getUnaryLookup() {
+    return findChildByClass(XQueryUnaryLookup.class);
   }
 
   @Override

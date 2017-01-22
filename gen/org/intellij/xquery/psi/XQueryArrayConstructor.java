@@ -22,9 +22,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryPrefixExpr extends XQueryExprSingle {
+public interface XQueryArrayConstructor extends XQueryPsiElement {
 
-  @NotNull
-  XQueryExpr getExpr();
+  @Nullable
+  XQueryCurlyArrayConstructor getCurlyArrayConstructor();
+
+  @Nullable
+  XQuerySquareArrayConstructor getSquareArrayConstructor();
 
 }

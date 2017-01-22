@@ -24,8 +24,8 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryCompElemConstructor extends XQueryPsiElement {
 
-  @Nullable
-  XQueryContentExpr getContentExpr();
+  @NotNull
+  XQueryEnclosedContentExpression getEnclosedContentExpression();
 
   @Nullable
   XQueryExpr getExpr();

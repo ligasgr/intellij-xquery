@@ -25,6 +25,6 @@ import com.intellij.psi.PsiElement;
 public interface XQueryTryClause extends XQueryPsiElement {
 
   @Nullable
-  XQueryExpr getExpr();
+  XQueryEnclosedExpression getEnclosedExpression();
 
 }

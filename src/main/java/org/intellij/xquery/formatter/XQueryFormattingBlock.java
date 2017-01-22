@@ -55,7 +55,7 @@ import static org.intellij.xquery.psi.XQueryTypes.CASTABLE_OPERATOR;
 import static org.intellij.xquery.psi.XQueryTypes.CAST_OPERATOR;
 import static org.intellij.xquery.psi.XQueryTypes.CATCH_CLAUSE;
 import static org.intellij.xquery.psi.XQueryTypes.CATCH_CLAUSE_EXPRESSION;
-import static org.intellij.xquery.psi.XQueryTypes.CONTENT_EXPR;
+import static org.intellij.xquery.psi.XQueryTypes.ENCLOSED_CONTENT_EXPRESSION;
 import static org.intellij.xquery.psi.XQueryTypes.DIR_ELEM_CONTENT;
 import static org.intellij.xquery.psi.XQueryTypes.ENCLOSED_EXPRESSION;
 import static org.intellij.xquery.psi.XQueryTypes.EQ;
@@ -226,7 +226,7 @@ public class XQueryFormattingBlock extends AbstractBlock {
     }
 
     private boolean isExpressionAfterBrace(IElementType type, IElementType typeOfPreviousElement) {
-        return (type == EXPR || type == CONTENT_EXPR) && typeOfPreviousElement == L_C_BRACE;
+        return (type == EXPR || type == ENCLOSED_CONTENT_EXPRESSION) && typeOfPreviousElement == L_C_BRACE;
     }
 
     private boolean isExpressionAfterParenthesis(IElementType type, IElementType typeOfPreviousElement) {

@@ -27,14 +27,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryContentExprImpl extends XQueryExprSingleImpl implements XQueryContentExpr {
+public class XQueryArrowExprImpl extends XQueryExprSingleImpl implements XQueryArrowExpr {
 
-  public XQueryContentExprImpl(ASTNode node) {
+  public XQueryArrowExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull XQueryVisitor visitor) {
-    visitor.visitContentExpr(this);
+    visitor.visitArrowExpr(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -44,8 +44,14 @@ public class XQueryContentExprImpl extends XQueryExprSingleImpl implements XQuer
 
   @Override
   @NotNull
-  public XQueryExpr getExpr() {
-    return findNotNullChildByClass(XQueryExpr.class);
+  public List<XQueryArrowFunctionReference> getArrowFunctionReferenceList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryArrowFunctionReference.class);
+  }
+
+  @Override
+  @NotNull
+  public XQueryExprSingle getExprSingle() {
+    return findNotNullChildByClass(XQueryExprSingle.class);
   }
 
 }

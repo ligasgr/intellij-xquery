@@ -22,9 +22,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryURIExpr extends XQueryExprSingle {
+public interface XQueryEnclosedContentExpression extends XQueryPsiElement {
 
   @NotNull
-  XQueryExpr getExpr();
+  XQueryEnclosedExpression getEnclosedExpression();
 
 }

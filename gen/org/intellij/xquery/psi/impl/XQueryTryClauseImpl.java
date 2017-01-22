@@ -44,8 +44,8 @@ public class XQueryTryClauseImpl extends XQueryPsiElementImpl implements XQueryT
 
   @Override
   @Nullable
-  public XQueryExpr getExpr() {
-    return findChildByClass(XQueryExpr.class);
+  public XQueryEnclosedExpression getEnclosedExpression() {
+    return findChildByClass(XQueryEnclosedExpression.class);
   }
 
 }

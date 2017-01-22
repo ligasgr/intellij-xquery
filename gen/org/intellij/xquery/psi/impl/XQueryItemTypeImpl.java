@@ -44,6 +44,12 @@ public class XQueryItemTypeImpl extends XQueryPsiElementImpl implements XQueryIt
 
   @Override
   @Nullable
+  public XQueryArrayTest getArrayTest() {
+    return findChildByClass(XQueryArrayTest.class);
+  }
+
+  @Override
+  @Nullable
   public XQueryAtomicOrUnionType getAtomicOrUnionType() {
     return findChildByClass(XQueryAtomicOrUnionType.class);
   }
@@ -64,6 +70,12 @@ public class XQueryItemTypeImpl extends XQueryPsiElementImpl implements XQueryIt
   @Nullable
   public XQueryKindTest getKindTest() {
     return findChildByClass(XQueryKindTest.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryMapTest getMapTest() {
+    return findChildByClass(XQueryMapTest.class);
   }
 
   @Override

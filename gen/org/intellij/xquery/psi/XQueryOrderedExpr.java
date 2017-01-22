@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryOrderedExpr extends XQueryExprSingle {
 
-  @Nullable
-  XQueryExpr getExpr();
+  @NotNull
+  XQueryEnclosedExpression getEnclosedExpression();
 
 }

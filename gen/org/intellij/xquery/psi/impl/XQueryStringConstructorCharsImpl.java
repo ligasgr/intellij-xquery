@@ -16,18 +16,30 @@
  */
 
 // This is a generated file. Not intended for manual editing.
-package org.intellij.xquery.psi;
+package org.intellij.xquery.psi.impl;
 
 import java.util.List;
 import org.jetbrains.annotations.*;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
+import static org.intellij.xquery.psi.XQueryTypes.*;
+import org.intellij.xquery.psi.*;
 
-public interface XQueryConstructor extends XQueryPsiElement {
+public class XQueryStringConstructorCharsImpl extends XQueryPsiElementImpl implements XQueryStringConstructorChars {
 
-  @Nullable
-  XQueryComputedConstructor getComputedConstructor();
+  public XQueryStringConstructorCharsImpl(ASTNode node) {
+    super(node);
+  }
 
-  @Nullable
-  XQueryDirectConstructor getDirectConstructor();
+  public void accept(@NotNull XQueryVisitor visitor) {
+    visitor.visitStringConstructorChars(this);
+  }
+
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof XQueryVisitor) accept((XQueryVisitor)visitor);
+    else super.accept(visitor);
+  }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +51,7 @@ public class FunctionDocumentationProvider implements PsiBasedDocumentationProvi
 
     private String getDocumentationFromExternalFile(XQueryFunctionName functionName) {
         String name = functionName.getLocalNameText();
-        String doc = ExternalDocumentationFetcher.fetch(name);
+        String doc = ExternalDocumentationFetcher.fetch(functionName.getProject(), name);
         if (doc != null)
             return wrapWithHtmlAndStyle(doc);
         else

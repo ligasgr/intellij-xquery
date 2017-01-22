@@ -27,14 +27,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryConstructorImpl extends XQueryPsiElementImpl implements XQueryConstructor {
+public class XQueryArrowFunctionSpecifierImpl extends XQueryPsiElementImpl implements XQueryArrowFunctionSpecifier {
 
-  public XQueryConstructorImpl(ASTNode node) {
+  public XQueryArrowFunctionSpecifierImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull XQueryVisitor visitor) {
-    visitor.visitConstructor(this);
+    visitor.visitArrowFunctionSpecifier(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -44,14 +44,20 @@ public class XQueryConstructorImpl extends XQueryPsiElementImpl implements XQuer
 
   @Override
   @Nullable
-  public XQueryComputedConstructor getComputedConstructor() {
-    return findChildByClass(XQueryComputedConstructor.class);
+  public XQueryFunctionName getFunctionName() {
+    return findChildByClass(XQueryFunctionName.class);
   }
 
   @Override
   @Nullable
-  public XQueryDirectConstructor getDirectConstructor() {
-    return findChildByClass(XQueryDirectConstructor.class);
+  public XQueryParenthesizedExpr getParenthesizedExpr() {
+    return findChildByClass(XQueryParenthesizedExpr.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryVarRef getVarRef() {
+    return findChildByClass(XQueryVarRef.class);
   }
 
 }

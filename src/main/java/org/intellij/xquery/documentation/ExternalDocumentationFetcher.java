@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,10 @@
 
 package org.intellij.xquery.documentation;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.util.ResourceUtil;
+import org.intellij.xquery.XQueryFlavour;
+import org.intellij.xquery.settings.XQuerySettings;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,19 +29,19 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * User: ligasgr
- * Date: 29/12/13
- * Time: 21:21
- */
 public class ExternalDocumentationFetcher {
 
-    private static final Pattern BEGINNING_OF_FUNCTION = Pattern.compile("<(h[0-9])><a name=\"(.*?)\" id=");
-    private static final URL EXTERNAL_DOC = ResourceUtil.getResource(
+    private static final Pattern BEGINNING_OF_FUNCTION = Pattern.compile("<(?:h[0-9])><a (?:name=\"(?:.*?)\" )?id=\"(.*?)\"");
+    private static final URL EXTERNAL_DOC_30 = ResourceUtil.getResource(
             ExternalDocumentationFetcher.class, "/documentation", "w3c-xpath-functions-30.html");
+    private static final URL EXTERNAL_DOC_31 = ResourceUtil.getResource(
+            ExternalDocumentationFetcher.class, "/documentation", "w3c-xpath-functions-31.html");
 
-    public static String fetch(String name) {
-        BufferedReader reader = getReader(EXTERNAL_DOC);
+    public static String fetch(Project project, String name) {
+        XQuerySettings settings = XQuerySettings.getInstance(project);
+        XQueryFlavour flavour = settings.getFlavour();
+        URL externalDoc = flavour == XQueryFlavour.STANDARD_31 ? EXTERNAL_DOC_31 : EXTERNAL_DOC_30;
+        BufferedReader reader = getReader(externalDoc);
         if (reader != null) {
             return retrieveDoc(reader, name);
         } else {
@@ -93,37 +96,20 @@ public class ExternalDocumentationFetcher {
     }
 
     private static boolean isDefinitionEnd(String line) {
-        return line.startsWith("</dl>");
+        return line.trim().startsWith("</dl>");
     }
 
     private static boolean isDefinitionStart(String line) {
-        return line.startsWith("<dl>");
-    }
-
-    private static String findAllAfterTagEnd(String line, String tagName) {
-        String closingTag = "</" + tagName + ">";
-        return line.substring(line.indexOf(closingTag) + closingTag.length());
-    }
-
-    private static boolean isDocEnd(String line) {
-        return BEGINNING_OF_FUNCTION.matcher(line).find() || line.startsWith("</html>");
+        return line.trim().startsWith("<dl>");
     }
 
     private static boolean isDocBegin(String line, String name) {
         Matcher matcher = BEGINNING_OF_FUNCTION.matcher(line);
         while (matcher.find()) {
-            if (matcher.group(2).equals("func-" + name)) {
+            if (matcher.group(1).equals("func-" + name)) {
                 return true;
             }
         }
         return false;
-    }
-
-    private static String getTagName(String line) {
-        Matcher matcher = BEGINNING_OF_FUNCTION.matcher(line);
-        while (matcher.find()) {
-            return matcher.group(1);
-        }
-        return null;
     }
 }

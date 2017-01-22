@@ -43,9 +43,9 @@ public class XQueryCatchClauseExpressionImpl extends XQueryPsiElementImpl implem
   }
 
   @Override
-  @Nullable
-  public XQueryExpr getExpr() {
-    return findChildByClass(XQueryExpr.class);
+  @NotNull
+  public XQueryEnclosedExpression getEnclosedExpression() {
+    return findNotNullChildByClass(XQueryEnclosedExpression.class);
   }
 
 }

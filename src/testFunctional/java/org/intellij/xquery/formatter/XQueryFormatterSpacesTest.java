@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -80,6 +80,22 @@ public class XQueryFormatterSpacesTest extends XQueryFormattingModelBuilderTest 
         String withSpaces = "let $var as map(*) := map {\n" +
                 "a := 1 * 2,\n" +
                 "b := /something/something:*/something}\n" +
+                "return $var";
+
+        getSettings().SPACE_AROUND_MULTIPLICATIVE_OPERATORS = true;
+        executeTest(withoutSpaces, withSpaces);
+        getSettings().SPACE_AROUND_MULTIPLICATIVE_OPERATORS = false;
+        executeTest(withSpaces, withoutSpaces);
+    }
+
+    public void testSpaceAroundMultiplicativeOperatorsInNewMapEntryFormat() {
+        String withoutSpaces = "let $var as map(*) := map {\n" +
+                "a : 1*2,\n" +
+                "b : /something/something:*/something}\n" +
+                "return $var";
+        String withSpaces = "let $var as map(*) := map {\n" +
+                "a : 1 * 2,\n" +
+                "b : /something/something:*/something}\n" +
                 "return $var";
 
         getSettings().SPACE_AROUND_MULTIPLICATIVE_OPERATORS = true;

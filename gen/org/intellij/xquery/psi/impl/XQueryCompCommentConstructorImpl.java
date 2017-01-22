@@ -44,8 +44,8 @@ public class XQueryCompCommentConstructorImpl extends XQueryPsiElementImpl imple
 
   @Override
   @NotNull
-  public XQueryExpr getExpr() {
-    return findNotNullChildByClass(XQueryExpr.class);
+  public XQueryEnclosedExpression getEnclosedExpression() {
+    return findNotNullChildByClass(XQueryEnclosedExpression.class);
   }
 
 }

@@ -27,25 +27,19 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryMapEntryListImpl extends XQueryPsiElementImpl implements XQueryMapEntryList {
+public abstract class XQueryMapKeyExprImpl extends XQueryExprSingleImpl implements XQueryMapKeyExpr {
 
-  public XQueryMapEntryListImpl(ASTNode node) {
+  public XQueryMapKeyExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull XQueryVisitor visitor) {
-    visitor.visitMapEntryList(this);
+    visitor.visitMapKeyExpr(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof XQueryVisitor) accept((XQueryVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public List<XQueryMapEntry> getMapEntryList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryMapEntry.class);
   }
 
 }

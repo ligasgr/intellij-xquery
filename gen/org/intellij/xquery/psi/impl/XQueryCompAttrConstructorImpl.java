@@ -44,8 +44,14 @@ public class XQueryCompAttrConstructorImpl extends XQueryPsiElementImpl implemen
 
   @Override
   @NotNull
-  public List<XQueryExpr> getExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExpr.class);
+  public XQueryEnclosedExpression getEnclosedExpression() {
+    return findNotNullChildByClass(XQueryEnclosedExpression.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryExpr getExpr() {
+    return findChildByClass(XQueryExpr.class);
   }
 
   @Override

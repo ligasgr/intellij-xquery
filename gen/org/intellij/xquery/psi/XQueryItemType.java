@@ -25,6 +25,9 @@ import com.intellij.psi.PsiElement;
 public interface XQueryItemType extends XQueryPsiElement {
 
   @Nullable
+  XQueryArrayTest getArrayTest();
+
+  @Nullable
   XQueryAtomicOrUnionType getAtomicOrUnionType();
 
   @Nullable
@@ -35,6 +38,9 @@ public interface XQueryItemType extends XQueryPsiElement {
 
   @Nullable
   XQueryKindTest getKindTest();
+
+  @Nullable
+  XQueryMapTest getMapTest();
 
   @Nullable
   XQueryParenthesizedItemType getParenthesizedItemType();

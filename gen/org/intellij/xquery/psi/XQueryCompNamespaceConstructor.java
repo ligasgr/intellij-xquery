@@ -24,8 +24,11 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryCompNamespaceConstructor extends XQueryPsiElement {
 
+  @Nullable
+  XQueryEnclosedPrefixExpression getEnclosedPrefixExpression();
+
   @NotNull
-  List<XQueryExprSingle> getExprSingleList();
+  XQueryEnclosedURIExpression getEnclosedURIExpression();
 
   @Nullable
   XQueryPrefix getPrefix();

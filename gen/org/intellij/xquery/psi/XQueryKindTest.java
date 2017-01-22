@@ -40,9 +40,6 @@ public interface XQueryKindTest extends XQueryPsiElement {
   XQueryElementTest getElementTest();
 
   @Nullable
-  XQueryMapTest getMapTest();
-
-  @Nullable
   XQueryMarklogicAnyKindTest getMarklogicAnyKindTest();
 
   @Nullable

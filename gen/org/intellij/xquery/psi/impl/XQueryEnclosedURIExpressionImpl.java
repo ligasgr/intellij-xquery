@@ -27,14 +27,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryPrefixExprImpl extends XQueryExprSingleImpl implements XQueryPrefixExpr {
+public class XQueryEnclosedURIExpressionImpl extends XQueryPsiElementImpl implements XQueryEnclosedURIExpression {
 
-  public XQueryPrefixExprImpl(ASTNode node) {
+  public XQueryEnclosedURIExpressionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull XQueryVisitor visitor) {
-    visitor.visitPrefixExpr(this);
+    visitor.visitEnclosedURIExpression(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -44,8 +44,8 @@ public class XQueryPrefixExprImpl extends XQueryExprSingleImpl implements XQuery
 
   @Override
   @NotNull
-  public XQueryExpr getExpr() {
-    return findNotNullChildByClass(XQueryExpr.class);
+  public XQueryEnclosedExpression getEnclosedExpression() {
+    return findNotNullChildByClass(XQueryEnclosedExpression.class);
   }
 
 }

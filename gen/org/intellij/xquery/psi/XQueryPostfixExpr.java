@@ -31,6 +31,9 @@ public interface XQueryPostfixExpr extends XQueryExprSingle {
   XQueryExprSingle getExprSingle();
 
   @NotNull
+  List<XQueryLookup> getLookupList();
+
+  @NotNull
   List<XQueryPredicate> getPredicateList();
 
 }

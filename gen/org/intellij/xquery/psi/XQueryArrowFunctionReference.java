@@ -21,10 +21,20 @@ package org.intellij.xquery.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 
-public interface XQueryCompMapConstructor extends XQueryPsiElement {
+public interface XQueryArrowFunctionReference extends XQueryFunctionInvocation {
 
-  @Nullable
-  XQueryMapEntryList getMapEntryList();
+  @NotNull
+  XQueryArgumentList getArgumentList();
+
+  @NotNull
+  XQueryArrowFunctionSpecifier getArrowFunctionSpecifier();
+
+  int getArity();
+
+  PsiReference getReference();
+
+  XQueryFunctionName getFunctionName();
 
 }

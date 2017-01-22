@@ -25,6 +25,6 @@ import com.intellij.psi.PsiElement;
 public interface XQueryCompCommentConstructor extends XQueryPsiElement {
 
   @NotNull
-  XQueryExpr getExpr();
+  XQueryEnclosedExpression getEnclosedExpression();
 
 }

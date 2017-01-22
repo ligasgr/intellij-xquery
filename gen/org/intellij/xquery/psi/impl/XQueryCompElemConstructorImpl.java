@@ -43,9 +43,9 @@ public class XQueryCompElemConstructorImpl extends XQueryPsiElementImpl implemen
   }
 
   @Override
-  @Nullable
-  public XQueryContentExpr getContentExpr() {
-    return findChildByClass(XQueryContentExpr.class);
+  @NotNull
+  public XQueryEnclosedContentExpression getEnclosedContentExpression() {
+    return findNotNullChildByClass(XQueryEnclosedContentExpression.class);
   }
 
   @Override
