@@ -577,7 +577,7 @@ NamedFunctionRef ::= FunctionName "#" FunctionArity {methods=[getArity getRefere
 FunctionArity ::= IntegerLiteral
 InlineFunctionExpr ::= Annotation* "function" ParamList ("as" SequenceType)? FunctionBody
 MapConstructor   ::=   "map" "{" (MapConstructorEntry ("," MapConstructorEntry)*)? SaxonMapEntriesSeparator? "}" {pin=2}
-MapConstructorEntry   ::=   MapKeyExpr (":"|SaxonMapEntrySeparator) MapValueExpr
+MapConstructorEntry   ::=   MapKeyExpr (":"|SaxonMapEntrySeparator) MapValueExpr {pin=2}
 SaxonMapEntriesSeparator ::= ","
 SaxonMapEntrySeparator ::= ":="
 MapKeyExpr   ::=   ExprSingle

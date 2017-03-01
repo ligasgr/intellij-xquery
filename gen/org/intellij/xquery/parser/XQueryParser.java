@@ -4338,13 +4338,14 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   // MapKeyExpr (":"|SaxonMapEntrySeparator) MapValueExpr
   public static boolean MapConstructorEntry(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MapConstructorEntry")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, MAP_CONSTRUCTOR_ENTRY, "<map constructor entry>");
     r = MapKeyExpr(b, l + 1);
     r = r && MapConstructorEntry_1(b, l + 1);
+    p = r; // pin = 2
     r = r && MapValueExpr(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // ":"|SaxonMapEntrySeparator
