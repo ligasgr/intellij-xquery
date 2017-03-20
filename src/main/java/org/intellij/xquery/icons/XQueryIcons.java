@@ -30,7 +30,7 @@ import javax.swing.Icon;
  * Time: 18:14
  */
 public class XQueryIcons {
-    public static final Icon FILE = IconLoader.getIcon("/icons/xq.png");
+    public static final Icon FILE = IconLoader.getIcon("/icons/filexq.png");
     public static final Icon FUNCTION_ICON = AllIcons.Nodes.Method;
     public static final Icon VARIABLE_ICON = AllIcons.Nodes.Variable;
 

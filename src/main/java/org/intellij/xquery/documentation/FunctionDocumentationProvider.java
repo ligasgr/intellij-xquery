@@ -34,8 +34,14 @@ import static org.intellij.xquery.util.StringUtils.removeQuotOrAposIfNeeded;
 
 public class FunctionDocumentationProvider implements PsiBasedDocumentationProvider<XQueryFunctionName> {
 
+    private MarkLogicFunctionDefs functionDefs = MarkLogicFunctionDefs.instance();
+
     @Override
     public String generateDoc(XQueryFunctionName functionName) {
+        MarkLogicFunctionDefs.Function func = functionDefs.getFunction (functionName.getPrefixText() + ":" + functionName.getLocalNameText());
+
+        if (func != null) return func.docAsHtml();
+
         XQueryFunctionDecl elementToProduceDescription = getElementToProduceDescription(functionName);
         if (elementToProduceDescription != null) {
             return wrapWithHtmlAndStyle(getDocFromFunctionDeclaration(functionName, elementToProduceDescription).getText());
