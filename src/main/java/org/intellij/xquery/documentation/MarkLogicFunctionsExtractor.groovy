@@ -29,6 +29,14 @@ import java.util.zip.ZipFile
  * User: ron
  * Date: 3/20/17
  * Time: 11:03 PM
+ *
+ * This class reads a Docs zip file downloaded from the MarkLogic developer site (http://docs.marklogic.com/) and extracts
+ * out the XML describing API functions.  These are combined into one large XML file which is then committed as a resource
+ * for use at runtime by the plugin, to generate pop-up documentation for functions (View > Quick Documentation).
+ *
+ *  This class is not used by the plugin at runtime.  Use a Run Configuration to run this class as a Java application
+ *  with the path to the zip file as the first argument and the path to write the XML file to as the second argument.
+ *  The XML should be placed at src/main/resources/documentation/marklogic-functions.xml to be packaged into the plugin jar.
  */
 class MarkLogicFunctionsExtractor
 {
