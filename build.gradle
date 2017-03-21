@@ -156,7 +156,6 @@ task unzipSdk << {
 task downloadMlDocs (type: DownloadTask) {
     sourceUrl = project.ext.mlDocumentationSource
     target = file(project.ext.mlDocsDir + '/' + project.ext.mlDocsArchiveFileName)
-    println ">>> Downloading MarkLogic docs bundle from ${sourceUrl} to ${target} ..."
 }
 
 
