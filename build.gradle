@@ -34,6 +34,11 @@ else
 project.ext.ideaInstallationSource = 'https://download.jetbrains.com/idea/ideaIC-2016.3.tar.gz'
 project.ext.ideaArchiveFileName = project.ext.ideaInstallationSource.substring(project.ext.ideaInstallationSource.lastIndexOf('/'))
 
+project.ext.mlDocumentationSource = 'https://docs.marklogic.com/MarkLogic_8_pubs.zip'
+project.ext.mlDocsDir = 'build/mldocs'
+project.ext.mlDocsArchiveFileName = project.ext.mlDocumentationSource.substring (project.ext.mlDocumentationSource.lastIndexOf('/'))
+
+
 configurations {
     provided
 }
@@ -77,7 +82,7 @@ dependencies {
     compile project(':intellij-xquery-rt') {
         ext.transitive = false
     }
-    
+
     provided fileTree(dir: project.ext.ideaInstallationPath + '/lib', include: '*.jar')
     provided files("${System.properties['java.home']}/../lib/tools.jar")
     compile('com.codnos:dbgp-interfaces:1.0.0') {
@@ -145,6 +150,15 @@ task unzipSdk << {
         into file('sdk/')
     }
 }
+
+// Drops the MarkLogic documentation bundle into build/mldocs.  Run the class org.intellij.xquery.documentation.MarkLogicFunctionsExtractor
+// with the path of this .zip file as the first argument, and src/main/resources/documentation/marklogic-functions.xml as the second argument.
+task downloadMlDocs (type: DownloadTask) {
+    sourceUrl = project.ext.mlDocumentationSource
+    target = file(project.ext.mlDocsDir + '/' + project.ext.mlDocsArchiveFileName)
+    println ">>> Downloading MarkLogic docs bundle from ${sourceUrl} to ${target} ..."
+}
+
 
 task changelog << {
     def calculatedFrom = project.hasProperty("versionFrom") ? versionFrom + '..' : ''

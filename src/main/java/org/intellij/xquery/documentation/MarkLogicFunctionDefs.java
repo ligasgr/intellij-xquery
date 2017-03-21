@@ -22,7 +22,7 @@ import static org.intellij.xquery.runner.rt.debugger.LogUtil.log;
  */
 public class MarkLogicFunctionDefs
 {
-	private static final MarkLogicFunctionDefs INSTANCE = new MarkLogicFunctionDefs ();
+	private static final MarkLogicFunctionDefs INSTANCE = new MarkLogicFunctionDefs();
 
 	public static MarkLogicFunctionDefs instance()
 	{
@@ -35,16 +35,15 @@ public class MarkLogicFunctionDefs
 	private static final String ML_FUNCTIONS_PATH = "documentation/marklogic-functions.xml";
 
 	private final SAXParserFactory spf = SAXParserFactory.newInstance();
-	private final List<Category> categories = new ArrayList<>();
 	private final Map<String,Category> categoryMap = new HashMap<>();
 	private final List<Function> functions = new ArrayList<>();
 	private final Map<String, Function> functionMap = new HashMap<>();
 
 	// ------------------------------------------------------------
 
-	public List<Category> getCategories()
+	public Map<String,Category> getCategoryMap()
 	{
-		return Collections.unmodifiableList (categories);
+		return Collections.unmodifiableMap (categoryMap);
 	}
 
 	public List<Function> getFunctions()
@@ -71,9 +70,8 @@ public class MarkLogicFunctionDefs
 	// ------------------------------------------------------------
 	// Private constructor
 
-	private MarkLogicFunctionDefs ()
+	private MarkLogicFunctionDefs()
 	{
-		loadCategories (ML_CATEGORIES_PATH);
 		loadFunctions (ML_FUNCTIONS_PATH);
 	}
 
@@ -99,39 +97,18 @@ public class MarkLogicFunctionDefs
 		}
 	}
 
-	private void loadCategories (String path)
-	{
-		try {
-			InputStream is = getClass().getClassLoader ().getResourceAsStream (path);
-
-			if (is == null) {
-				log ("FunctionDefs.loadCategories: could not load: " + path);
-				return;
-			}
-
-			FunctionDefCategoryParser parser = new FunctionDefCategoryParser (categories, categoryMap);
-			SAXParser saxParser = spf.newSAXParser();
-			XMLReader xmlReader = saxParser.getXMLReader();
-			xmlReader.setContentHandler (parser);
-			xmlReader.parse (new InputSource (is));
-			is.close();
-		} catch (Exception e) {
-			log ("Problem loading categories XML from '" + path + "': " + e);
-			e.printStackTrace();
-		}
-	}
-
 	// ------------------------------------------------------------
 	// ------------------------------------------------------------
 
 	public static class Function
 	{
 		private final List<Parameter> parameters = new ArrayList<>();
-		private final List<String> examples = new ArrayList<>();
-		private final String localName;
+		private final List<Example> examples = new ArrayList<>();
+		private final List<String> seeAlsos = new ArrayList<>();
+		private String localName;
 		private final String fullName;
 		private final String prefix;
-		private Category category;
+		private final Category category;
 		private final boolean priv;
 		private final boolean hidden;
 		private String returnType = null;
@@ -163,9 +140,14 @@ public class MarkLogicFunctionDefs
 			if (param.isVararg()) varargs = true;
 		}
 
-		void addExample (String example)
+		void addExample (Example example)
 		{
 			examples.add (example);
+		}
+
+		void addSeeAlso (String text)
+		{
+			seeAlsos.add (text);
 		}
 
 		public String getLocalName()
@@ -230,7 +212,6 @@ public class MarkLogicFunctionDefs
 			sb.append ("<div>");
 			sb.append ("<h1>").append (category.getDesc()).append (" (").append (category.getFunctionCount()).append (" functions)</h1>\n");
 
-			sb.append ("<h1>Syntax</h1>\n");
 			sb.append ("<blockquote><b>").append (fullName).append ("</b> (");
 
 			if (parameters.size() == 0) {
@@ -289,15 +270,30 @@ public class MarkLogicFunctionDefs
 				sb.append ("<br/><h1>Privileges</h1><blockquote>").append (privilege).append ("</blockquote>");
 			}
 
+			if (seeAlsos.size() > 0) {
+				sb.append ("<br/><h1>See Also</h1><blockquote>");
+
+				boolean first = true;
+
+				for (String seeAlso : seeAlsos) {
+					if (first) first = false; else sb.append ("<br/>\n");
+					sb.append (seeAlso);
+				}
+
+				sb.append ("</blockquote>\n");
+			}
+
 			if (examples.size() > 0) {
 				boolean first = true;
 
 				sb.append ("<br/><h1>Examples</h1>");
 
-				for (String example : examples) {
-					if (first) first = false; else sb.append ("<hr/>\n");
+				for (Example example : examples) {
+					if (example.klass.equals ("xquery")) {
+						if (first) first = false; else sb.append ("<hr/>\n");
 
-					sb.append ("<blockquote><code><pre>").append (example).append ("</pre></code></blockquote>\n");
+						sb.append ("<blockquote><code><pre>").append (example.text).append ("</pre></code></blockquote>\n");
+					}
 				}
 			}
 
@@ -350,124 +346,22 @@ public class MarkLogicFunctionDefs
 		}
 	}
 
-	private static class FunctionDefFunctionParser extends DefaultHandler
+	public static class Example
 	{
-		private final StringBuilder text = new StringBuilder();
-		private final List<Function> functions;
-		private final Map<String,Function> functionMap;
-		private final Map<String,Category> categoryMap;
+		public final String klass;
+		public String text = "";
 
-		private Function func = null;
-		private Parameter param = null;
-
-		private FunctionDefFunctionParser (List<Function> functions, Map<String, Function> functionMap, Map<String, Category> categoryMap)
+		public Example (String klass)
 		{
-			this.functions = functions;
-			this.functionMap = functionMap;
-			this.categoryMap = categoryMap;
+			this.klass = klass;
 		}
 
-		@Override
-		public void startElement (String namespaceName, String name, String qname, Attributes attributes) throws SAXException
+		public Example text (String text)
 		{
-			if (qname.equals ("function")) {
-				text.setLength (0);
-				func = new Function (attributes.getValue ("lib"),
-					attributes.getValue ("name"),
-					attributes.getValue ("fullname"),
-					false,
-					Boolean.valueOf (attributes.getValue ("hidden")),
-					"item()*",
-					categoryMap.get (attributes.getValue ("lib")));
-				return;
-			}
-
-			if (qname.equals ("param")) {
-				text.setLength (0);
-				param = new Parameter (attributes.getValue ("name"),
-					attributes.getValue ("type"),
-					Boolean.valueOf (attributes.getValue ("optional")));
-				return;
-			}
-
-			switch (qname) {
-			case "functions":
-			case "params":
-				break;
-			case "return":
-			case "summary":
-			case "example":
-			case "usage":
-			case "algorithm":
-			case "privilege":
-				text.setLength (0);
-				break;
-			default:
-				text.append ("<").append (qname);
-
-				for (int i = 0; i < attributes.getLength(); i++) {
-					text.append (" ").append (attributes.getQName (i)).append ("=\"").append (attributes.getValue (i)).append ("\"");
-				}
-
-				text.append (">");
-			}
-		}
-
-		@Override
-		public void endElement (String namespaceName, String name, String qname) throws SAXException
-		{
-			switch (qname) {
-			case "functions":
-			case "params":
-				break;
-			case "function":
-				functions.add (func);
-
-				if ( ! func.isHidden()) {
-					functionMap.put (func.fullName, func);
-
-					Category cat = categoryMap.get (func.prefix);
-
-					if (cat != null) cat.incrementCount();
-				}
-				break;
-			case "param":
-				param.description = text.toString();
-				func.addParam (param);
-				break;
-			case "return":
-				func.returnType = text.toString();
-				break;
-			case "summary":
-				func.summary = text.toString();
-				break;
-			case "example":
-				func.addExample (text.toString());
-				break;
-			case "usage":
-				func.usage = text.toString();
-				break;
-			case "algorithm":
-				func.algorithm = text.toString();
-				break;
-			case "privilege":
-				func.privilege = text.toString();
-				break;
-			default:
-				// The trailing space here is not exactly what was parsed, but greatly improves readability for MarkLogic docs because of the way inline tags are formatted.
-				text.append ("</").append (qname).append ("> ");
-			}
-		}
-
-		@Override
-		public void characters (char[] chars, int start, int length) throws SAXException
-		{
-			text.append (chars, start, length);
+			this.text = text;
+			return this;
 		}
 	}
-
-	// ------------------------------------------------------------
-	// ------------------------------------------------------------
 
 	public static class Category
 	{
@@ -504,37 +398,149 @@ public class MarkLogicFunctionDefs
 
 	// ------------------------------------------------------------
 
-	private static class FunctionDefCategoryParser extends DefaultHandler
+	private static class FunctionDefFunctionParser extends DefaultHandler
 	{
-		private final List<Category> categories;
+		private final StringBuilder text = new StringBuilder();
+		private final List<Function> functions;
+		private final Map<String,Function> functionMap;
 		private final Map<String,Category> categoryMap;
-		private String prefix = null;
-		private String desc = null;
 
-		private FunctionDefCategoryParser (List<Category> categories, Map<String, Category> categoryMap)
+		private Function func;
+		private Parameter param;
+		private Example example;
+
+		private FunctionDefFunctionParser (List<Function> functions, Map<String, Function> functionMap, Map<String, Category> categoryMap)
 		{
-			this.categories = categories;
+			this.functions = functions;
+			this.functionMap = functionMap;
 			this.categoryMap = categoryMap;
 		}
 
 		@Override
 		public void startElement (String namespaceName, String localName, String qname, Attributes attributes) throws SAXException
 		{
-			if (qname.equals ("category")) {
-				prefix = attributes.getValue ("prefix");
-				desc = attributes.getValue ("desc");
+			switch (qname) {
+			case "apidoc:function":
+				text.setLength (0);
+				func = new Function (attributes.getValue ("lib"),
+					attributes.getValue ("name"),
+					(attributes.getValue ("fullname") == null) ? (attributes.getValue ("lib") + ":" + attributes.getValue ("name")) : attributes.getValue ("fullname"),
+					false,
+					Boolean.valueOf (attributes.getValue ("hidden")),
+					"item()*",
+					categoryMap.get (attributes.getValue ("lib")));
+				break;
+			case "apidoc:name":
+				text.setLength (0);
+				break;
+			case "apidoc:param":
+				text.setLength (0);
+				param = new Parameter (attributes.getValue ("name"),
+					attributes.getValue ("type"),
+					Boolean.valueOf (attributes.getValue ("optional")));
+				break;
+			case "apidoc:example":
+				text.setLength (0);
+				example = new Example (attributes.getValue ("class"));
+				break;
+			case "apidoc:category":
+				categoryMap.put (attributes.getValue ("prefix"), new Category (attributes.getValue ("prefix"), attributes.getValue ("desc")));
+				break;
+			case "apidoc:apidocs":
+			case "apidoc:categories":
+			case "apidoc:functions":
+			case "apidoc:params":
+			case "apidoc:see-also-list":
+			case "apidoc:headers":
+			case "apidoc:header":
+			case "apidoc:response":
+				break;
+			case "apidoc:return":
+			case "apidoc:summary":
+			case "apidoc:usage":
+			case "apidoc:algorithm":
+			case "apidoc:privilege":
+			case "apidoc:see-also":
+				text.setLength (0);
+				break;
+			default:
+				String lName = qname.substring (qname.indexOf (':') + 1);
+				text.append ("<").append (lName);
+
+				for (int i = 0; i < attributes.getLength(); i++) {
+					String attrName = attributes.getQName (i);
+
+					if ( ! attrName.startsWith ("xmlns")) {
+						text.append (" ").append (attributes.getQName (i)).append ("=\"").append (attributes.getValue (i)).append ("\"");
+					}
+				}
+
+				text.append (">");
 			}
 		}
 
 		@Override
-		public void endElement (String namespaceName, String localName, String qname) throws SAXException
+		public void endElement (String namespaceName, String name, String qname) throws SAXException
 		{
-			if (qname.equals ("category")) {
-				Category category = new Category (prefix, desc);
+			switch (qname) {
+			case "apidoc:functions":
+			case "apidoc:params":
+			case "apidoc:see-also-list":
+			case "apidoc:headers":
+			case "apidoc:header":
+			case "apidoc:response":
+				break;
+			case "apidoc:function":
+				functions.add (func);
 
-				categories.add (category);
-				categoryMap.put (prefix, category);
+				if ( ! func.isHidden()) {
+					functionMap.put (func.fullName, func);
+
+					Category cat = categoryMap.get (func.prefix);
+
+					if (cat != null) cat.incrementCount();
+				}
+				break;
+			case "apidoc:name":
+				if (text.length() > 0) {
+					func.localName = text.toString();
+				}
+				break;
+			case "apidoc:param":
+				param.description = text.toString();
+				func.addParam (param);
+				break;
+			case "apidoc:return":
+				func.returnType = text.toString();
+				break;
+			case "apidoc:summary":
+				func.summary = text.toString();
+				break;
+			case "apidoc:example":
+				func.addExample (example.text (text.toString()));
+				break;
+			case "apidoc:usage":
+				func.usage = text.toString();
+				break;
+			case "apidoc:algorithm":
+				func.algorithm = text.toString();
+				break;
+			case "apidoc:privilege":
+				func.privilege = text.toString();
+				break;
+			case "apidoc:see-also":
+				func.addSeeAlso (text.toString());
+				break;
+			default:
+				// The trailing space here is not exactly what was parsed, but greatly improves readability for MarkLogic docs because of the way inline tags are formatted.
+				text.append ("</").append (qname.substring (qname.indexOf (':') + 1)).append ("> ");
 			}
+		}
+
+		@Override
+		public void characters (char[] chars, int start, int length) throws SAXException
+		{
+			text.append (chars, start, length);
 		}
 	}
 }
