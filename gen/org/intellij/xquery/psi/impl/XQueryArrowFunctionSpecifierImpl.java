@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,14 +27,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryContentExprImpl extends XQueryExprSingleImpl implements XQueryContentExpr {
+public class XQueryArrowFunctionSpecifierImpl extends XQueryPsiElementImpl implements XQueryArrowFunctionSpecifier {
 
-  public XQueryContentExprImpl(ASTNode node) {
+  public XQueryArrowFunctionSpecifierImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull XQueryVisitor visitor) {
-    visitor.visitContentExpr(this);
+    visitor.visitArrowFunctionSpecifier(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -43,9 +43,21 @@ public class XQueryContentExprImpl extends XQueryExprSingleImpl implements XQuer
   }
 
   @Override
-  @NotNull
-  public XQueryExpr getExpr() {
-    return findNotNullChildByClass(XQueryExpr.class);
+  @Nullable
+  public XQueryFunctionName getFunctionName() {
+    return findChildByClass(XQueryFunctionName.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryParenthesizedExpr getParenthesizedExpr() {
+    return findChildByClass(XQueryParenthesizedExpr.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryVarRef getVarRef() {
+    return findChildByClass(XQueryVarRef.class);
   }
 
 }

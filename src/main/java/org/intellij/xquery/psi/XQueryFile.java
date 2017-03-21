@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,6 +46,7 @@ import java.util.Map;
 import static com.intellij.util.containers.ContainerUtil.findAll;
 import static org.intellij.xquery.model.XQueryLanguageVersion.V0_9_ML;
 import static org.intellij.xquery.model.XQueryLanguageVersion.V1_0_ML;
+import static org.intellij.xquery.model.XQueryLanguageVersion.V3_1;
 import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInImport;
 import static org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespaces.FN;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
@@ -511,6 +512,22 @@ public class XQueryFile extends PsiFileBase {
 
     public boolean versionIsNotMarklogicSpecific() {
         return !versionIsMarklogicSpecific();
+    }
+
+    public boolean versionIs31() {
+        XQueryVersionDecl versionDecl = getVersionDeclaration();
+        XQueryVersion version = versionDecl != null ? versionDecl.getVersion() : null;
+        boolean versionIs31 = false;
+        if (version != null) {
+            String versionString = version.getVersionString();
+            XQueryLanguageVersion languageVersion = XQueryLanguageVersion.valueFor(versionString);
+            if (V3_1 == languageVersion) {
+                versionIs31 = true;
+            }
+        } else if (getSettings().isFlavourWithVersion31()) {
+            versionIs31 = true;
+        }
+        return versionIs31;
     }
 
     public boolean versionIsMarklogicSpecific() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,9 +43,9 @@ public class XQueryCompElemConstructorImpl extends XQueryPsiElementImpl implemen
   }
 
   @Override
-  @Nullable
-  public XQueryContentExpr getContentExpr() {
-    return findChildByClass(XQueryContentExpr.class);
+  @NotNull
+  public XQueryEnclosedContentExpression getEnclosedContentExpression() {
+    return findNotNullChildByClass(XQueryEnclosedContentExpression.class);
   }
 
   @Override

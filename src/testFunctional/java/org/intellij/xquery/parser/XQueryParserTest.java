@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +36,10 @@ public class XQueryParserTest extends BaseParserTest {
     }
 
     public void testSaxonMapSyntax() {
+        doTest(true);
+    }
+
+    public void testMapSyntax() {
         doTest(true);
     }
 
@@ -184,6 +188,18 @@ public class XQueryParserTest extends BaseParserTest {
     }
 
     public void testMarklogicObjectNodes() {
+        doTest(true);
+    }
+
+    public void testArray() {
+        doTest(true);
+    }
+
+    public void testArrow() {
+        doTest(true);
+    }
+
+    public void testStringConstructor() {
         doTest(true);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,13 +25,25 @@ import com.intellij.psi.PsiElement;
 public interface XQueryPrimaryExpr extends XQueryExprSingle {
 
   @Nullable
-  XQueryConstructor getConstructor();
+  XQueryArrayConstructor getArrayConstructor();
 
   @Nullable
   XQueryFunctionCall getFunctionCall();
 
   @Nullable
   XQueryLiteral getLiteral();
+
+  @Nullable
+  XQueryMapConstructor getMapConstructor();
+
+  @Nullable
+  XQueryNodeConstructor getNodeConstructor();
+
+  @Nullable
+  XQueryStringConstructor getStringConstructor();
+
+  @Nullable
+  XQueryUnaryLookup getUnaryLookup();
 
   @Nullable
   XQueryVarRef getVarRef();

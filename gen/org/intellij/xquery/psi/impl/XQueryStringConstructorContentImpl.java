@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,14 +27,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryCompMapConstructorImpl extends XQueryPsiElementImpl implements XQueryCompMapConstructor {
+public class XQueryStringConstructorContentImpl extends XQueryPsiElementImpl implements XQueryStringConstructorContent {
 
-  public XQueryCompMapConstructorImpl(ASTNode node) {
+  public XQueryStringConstructorContentImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull XQueryVisitor visitor) {
-    visitor.visitCompMapConstructor(this);
+    visitor.visitStringConstructorContent(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -43,9 +43,15 @@ public class XQueryCompMapConstructorImpl extends XQueryPsiElementImpl implement
   }
 
   @Override
-  @Nullable
-  public XQueryMapEntryList getMapEntryList() {
-    return findChildByClass(XQueryMapEntryList.class);
+  @NotNull
+  public List<XQueryStringConstructorChars> getStringConstructorCharsList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryStringConstructorChars.class);
+  }
+
+  @Override
+  @NotNull
+  public List<XQueryStringConstructorInterpolation> getStringConstructorInterpolationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryStringConstructorInterpolation.class);
   }
 
 }

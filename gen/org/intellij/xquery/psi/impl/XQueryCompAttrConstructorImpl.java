@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,8 +44,14 @@ public class XQueryCompAttrConstructorImpl extends XQueryPsiElementImpl implemen
 
   @Override
   @NotNull
-  public List<XQueryExpr> getExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryExpr.class);
+  public XQueryEnclosedExpression getEnclosedExpression() {
+    return findNotNullChildByClass(XQueryEnclosedExpression.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryExpr getExpr() {
+    return findChildByClass(XQueryExpr.class);
   }
 
   @Override

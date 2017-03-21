@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,7 +56,8 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
             K_DESCENDANT, K_SELF, K_DESCENDANT_OR_SELF, K_FOLLOWING_SIBLING, K_FOLLOWING, K_PARENT, K_ANCESTOR,
             K_PRECEDING_SIBLING, K_PRECEDING, K_ANCESTOR_OR_SELF, K_TUMBLING, K_SLIDING, K_WINDOW, K_START, K_WHEN,
             K_ONLY, K_END, K_PREVIOUS, K_NEXT, K_COUNT, K_TRY, K_CATCH, K_DIV, K_IDIV, K_MOD, K_UNION, K_INTERSECT,
-            K_EXCEPT, K_TREAT, K_CASTABLE, K_CAST, K_IS, K_TYPE, K_LAX, K_STRICT, K_EXTERNAL);
+            K_EXCEPT, K_TREAT, K_CASTABLE, K_CAST, K_IS, K_TYPE, K_LAX, K_STRICT, K_EXTERNAL, K_EXPONENT_SEPARATOR,
+            K_ARRAY);
 
     @NotNull
     @Override
@@ -98,6 +99,7 @@ public class XQueryFormattingModelBuilder implements FormattingModelBuilder {
 
                 .around(OP_ASSIGN).spaceIf(settings.SPACE_AROUND_ASSIGNMENT_OPERATORS)
                 .around(EQUAL).spaceIf(settings.SPACE_AROUND_ASSIGNMENT_OPERATORS)
+                .aroundInside(COLON, MAP_CONSTRUCTOR_ENTRY).spaceIf(settings.SPACE_AROUND_ASSIGNMENT_OPERATORS)
 
                 .beforeInside(L_PAR, IF_EXPR).spaceIf(settings.SPACE_BEFORE_IF_PARENTHESES)
                 .beforeInside(L_PAR, SWITCH_EXPR).spaceIf(settings.SPACE_BEFORE_SWITCH_PARENTHESES)

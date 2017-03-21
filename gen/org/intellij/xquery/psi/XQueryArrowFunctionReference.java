@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,10 +21,20 @@ package org.intellij.xquery.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 
-public interface XQueryMapEntryList extends XQueryPsiElement {
+public interface XQueryArrowFunctionReference extends XQueryFunctionInvocation {
 
   @NotNull
-  List<XQueryMapEntry> getMapEntryList();
+  XQueryArgumentList getArgumentList();
+
+  @NotNull
+  XQueryArrowFunctionSpecifier getArrowFunctionSpecifier();
+
+  int getArity();
+
+  PsiReference getReference();
+
+  XQueryFunctionName getFunctionName();
 
 }

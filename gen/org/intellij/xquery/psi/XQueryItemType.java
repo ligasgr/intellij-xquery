@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,9 @@ import com.intellij.psi.PsiElement;
 public interface XQueryItemType extends XQueryPsiElement {
 
   @Nullable
+  XQueryArrayTest getArrayTest();
+
+  @Nullable
   XQueryAtomicOrUnionType getAtomicOrUnionType();
 
   @Nullable
@@ -35,6 +38,9 @@ public interface XQueryItemType extends XQueryPsiElement {
 
   @Nullable
   XQueryKindTest getKindTest();
+
+  @Nullable
+  XQueryMapTest getMapTest();
 
   @Nullable
   XQueryParenthesizedItemType getParenthesizedItemType();

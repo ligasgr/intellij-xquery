@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 
 package org.intellij.xquery.documentation;
 
+import com.intellij.openapi.project.Project;
 import org.intellij.xquery.psi.XQueryFile;
 
 import static org.intellij.xquery.documentation.DocumentationStylist.wrapWithHtmlAndStyle;
@@ -29,13 +30,13 @@ public class LookupItemBuiltInFunctionDocumentationProvider implements PsiBasedD
         String namespace = element.getNamespace();
         String name = element.getName();
         if (file.isBuiltInFunction(namespace, name)) {
-            return getDocumentationFromExternalFile(namespace, name);
+            return getDocumentationFromExternalFile(file.getProject(), name);
         }
         return null;
     }
 
-    private String getDocumentationFromExternalFile(String namespace, String name) {
-        String doc = ExternalDocumentationFetcher.fetch(name);
+    private String getDocumentationFromExternalFile(Project project, String name) {
+        String doc = ExternalDocumentationFetcher.fetch(project, name);
         if (doc != null)
             return wrapWithHtmlAndStyle(doc);
         else

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ import com.intellij.refactoring.actions.SafeDeleteAction;
 import org.intellij.xquery.Assertions;
 import org.intellij.xquery.BaseFunctionalTestCase;
 import org.intellij.xquery.XQueryFlavour;
+import org.intellij.xquery.psi.XQueryArrowFunctionReference;
 import org.intellij.xquery.psi.XQueryFunctionCall;
 import org.intellij.xquery.psi.XQueryFunctionDecl;
 import org.intellij.xquery.psi.XQueryNamedFunctionRef;
@@ -212,6 +213,26 @@ public class XQueryFunctionReferenceTest extends BaseFunctionalTestCase {
         myFixture.configureByFiles("FunctionReferenceWithDifferentArity.xq");
 
         PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryFunctionCall.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+        XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) resolvedReference.getParent();
+        assertEquals(2, functionDeclaration.getArity());
+    }
+
+    public void testFunctionReferenceInArrowWithOneArgument() {
+        myFixture.configureByFiles("FunctionReferenceInArrowWithOneArgument.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryArrowFunctionReference.class);
+
+        assertChildOf(resolvedReference, XQueryFunctionDecl.class);
+        XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) resolvedReference.getParent();
+        assertEquals(1, functionDeclaration.getArity());
+    }
+
+    public void testFunctionReferenceInArrowWithTwoArguments() {
+        myFixture.configureByFiles("FunctionReferenceInArrowWithTwoArguments.xq");
+
+        PsiElement resolvedReference = getTargetOfReferenceAtCaret(myFixture, XQueryArrowFunctionReference.class);
 
         assertChildOf(resolvedReference, XQueryFunctionDecl.class);
         XQueryFunctionDecl functionDeclaration = (XQueryFunctionDecl) resolvedReference.getParent();

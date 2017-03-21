@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,9 +22,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface XQueryContentExpr extends XQueryExprSingle {
+public interface XQueryMapConstructorEntry extends XQueryPsiElement {
 
   @NotNull
-  XQueryExpr getExpr();
+  List<XQueryExprSingle> getExprSingleList();
+
+  @Nullable
+  XQuerySaxonMapEntrySeparator getSaxonMapEntrySeparator();
 
 }

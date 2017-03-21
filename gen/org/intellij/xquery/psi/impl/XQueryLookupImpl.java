@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,14 +27,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryURIExprImpl extends XQueryExprSingleImpl implements XQueryURIExpr {
+public class XQueryLookupImpl extends XQueryPsiElementImpl implements XQueryLookup {
 
-  public XQueryURIExprImpl(ASTNode node) {
+  public XQueryLookupImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull XQueryVisitor visitor) {
-    visitor.visitURIExpr(this);
+    visitor.visitLookup(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -44,8 +44,8 @@ public class XQueryURIExprImpl extends XQueryExprSingleImpl implements XQueryURI
 
   @Override
   @NotNull
-  public XQueryExpr getExpr() {
-    return findNotNullChildByClass(XQueryExpr.class);
+  public XQueryKeySpecifier getKeySpecifier() {
+    return findNotNullChildByClass(XQueryKeySpecifier.class);
   }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -62,12 +62,12 @@ public class MarklogicExtendedSyntaxInspection extends LocalInspectionTool {
         }
 
         if (((XQueryFile) file).versionIsNotMarklogicSpecific()) {
-            return findMarklogicExtendedSyntax(file, manager);
+            return findMarklogicExtendedSyntax(((XQueryFile) file), manager);
         }
         return null;
     }
 
-    private ProblemDescriptor[] findMarklogicExtendedSyntax(PsiFile file, InspectionManager manager) {
+    private ProblemDescriptor[] findMarklogicExtendedSyntax(XQueryFile file, InspectionManager manager) {
         Collection<PsiElement> marklogicExtendedSyntaxElements = new ArrayList<PsiElement>();
         addAllMarkLogicSpecifics(file, marklogicExtendedSyntaxElements, XQueryMarklogicAnnotation.class);
         addAllMarkLogicSpecifics(file, marklogicExtendedSyntaxElements, XQueryMarklogicCatchErrorList.class);
@@ -92,12 +92,14 @@ public class MarklogicExtendedSyntaxInspection extends LocalInspectionTool {
             problems.add(createProblem(manager, element));
         }
 
-        Collection<XQueryCatchClauseExpression> marklogicCatchClause =
-                findChildrenOfType(file, XQueryCatchClauseExpression.class);
+        if (!file.versionIs31()) {
+            Collection<XQueryCatchClauseExpression> marklogicCatchClause =
+                    findChildrenOfType(file, XQueryCatchClauseExpression.class);
 
-        for (XQueryCatchClauseExpression element : marklogicCatchClause) {
-            if (element.getExpr() == null) {
-                problems.add(createProblem(manager, element));
+            for (XQueryCatchClauseExpression element : marklogicCatchClause) {
+                if (element.getEnclosedExpression().getExpr() == null) {
+                    problems.add(createProblem(manager, element));
+                }
             }
         }
         return problems.toArray(new ProblemDescriptor[problems.size()]);

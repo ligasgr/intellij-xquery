@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,14 +27,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
-public class XQueryMapEntryListImpl extends XQueryPsiElementImpl implements XQueryMapEntryList {
+public class XQueryArrowExprImpl extends XQueryExprSingleImpl implements XQueryArrowExpr {
 
-  public XQueryMapEntryListImpl(ASTNode node) {
+  public XQueryArrowExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull XQueryVisitor visitor) {
-    visitor.visitMapEntryList(this);
+    visitor.visitArrowExpr(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -44,8 +44,14 @@ public class XQueryMapEntryListImpl extends XQueryPsiElementImpl implements XQue
 
   @Override
   @NotNull
-  public List<XQueryMapEntry> getMapEntryList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryMapEntry.class);
+  public List<XQueryArrowFunctionReference> getArrowFunctionReferenceList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryArrowFunctionReference.class);
+  }
+
+  @Override
+  @NotNull
+  public XQueryExprSingle getExprSingle() {
+    return findNotNullChildByClass(XQueryExprSingle.class);
   }
 
 }

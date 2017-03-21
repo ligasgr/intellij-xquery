@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -310,6 +310,65 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "WHITE_SPACE", " ",
                 "$", "$",
                 "NCName", "j"
+        });
+    }
+
+    public void testFlworExpressionWithOrderFollowedByWhere() throws Exception {
+        assertProducedTokens("for $i in 1 to 10 order by $i ascending where $i = 5 order by $i descending where $i = 5 return $i", new String[]{
+                "WHITE_SPACE", "",
+                "for", "for",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "in", "in",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "1",
+                "WHITE_SPACE", " ",
+                "to", "to",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "10",
+                "WHITE_SPACE", " ",
+                "order", "order",
+                "WHITE_SPACE", " ",
+                "by", "by",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "ascending", "ascending",
+                "WHITE_SPACE", " ",
+                "where", "where",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "5",
+                "WHITE_SPACE", " ",
+                "order", "order",
+                "WHITE_SPACE", " ",
+                "by", "by",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "descending", "descending",
+                "WHITE_SPACE", " ",
+                "where", "where",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                "WHITE_SPACE", " ",
+                "=", "=",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "5",
+                "WHITE_SPACE", " ",
+                "return", "return",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i"
         });
     }
 
@@ -847,6 +906,68 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "(", "(",
                 "OpeningApos", "'",
                 "ClosingApos", "'",
+                ")", ")",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "then", "then",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "0",
+                "WHITE_SPACE", " ",
+                "else", "else",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "1"
+        });
+    }
+
+    public void testComparisonWithParenthesizedExpression() throws Exception {
+        assertProducedTokens("if (1 < (2 * 3)) then 0 else 1", new String[]{
+                "WHITE_SPACE", "",
+                "if", "if",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "IntegerLiteral", "1",
+                "WHITE_SPACE", " ",
+                "<", "<",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "IntegerLiteral", "2",
+                "WHITE_SPACE", " ",
+                "*", "*",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "3",
+                ")", ")",
+                ")", ")",
+                "WHITE_SPACE", " ",
+                "then", "then",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "0",
+                "WHITE_SPACE", " ",
+                "else", "else",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "1"
+        });
+    }
+
+    public void testComparisonWithCommentFollowedByParenthesizedExpression() throws Exception {
+        assertProducedTokens("if (1 < (: 2 * 3 :) (2 * 3)) then 0 else 1", new String[]{
+                "WHITE_SPACE", "",
+                "if", "if",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "IntegerLiteral", "1",
+                "WHITE_SPACE", " ",
+                "<", "<",
+                "WHITE_SPACE", " ",
+                "ExprCommentStart", "(:",
+                "ExprCommentContent", " 2 * 3 ",
+                "ExprCommentEnd", ":)",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                "IntegerLiteral", "2",
+                "WHITE_SPACE", " ",
+                "*", "*",
+                "WHITE_SPACE", " ",
+                "IntegerLiteral", "3",
                 ")", ")",
                 ")", ")",
                 "WHITE_SPACE", " ",
@@ -2685,6 +2806,32 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
         });
     }
 
+    public void testIncompleteTagStartBeforeEmptySequence() {
+        assertProducedTokens("<foo ()", new String[]{
+                "WHITE_SPACE", "",
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "foo",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                ")", ")",
+        });
+    }
+
+    public void testIncompletePrefixedTagStartBeforeEmptySequence() {
+        assertProducedTokens("<foo:foo ()", new String[]{
+                "WHITE_SPACE", "",
+                "XmlStartTagStart", "<",
+                "WHITE_SPACE", "",
+                "XmlTagNCName", "foo",
+                "XmlColon", ":",
+                "XmlTagNCName", "foo",
+                "WHITE_SPACE", " ",
+                "(", "(",
+                ")", ")",
+        });
+    }
+
     public void testTagWithMisplacedComments() {
         assertProducedTokens("<foo (: foo :) attr='attr' (: bar :)></foo>", new String[]{
                 "WHITE_SPACE", "",
@@ -2766,6 +2913,81 @@ public class XQueryLexerTest extends BaseFunctionalTestCase {
                 "NCName", "a",
                 "}", "}"
 
+        });
+    }
+
+    public void testArray() {
+        assertProducedTokens("array {}", new String[] {
+                "WHITE_SPACE", "",
+                "array", "array",
+                "WHITE_SPACE", " ",
+                "{", "{",
+                "}", "}"
+        });
+    }
+
+    public void testStringConstructor() {
+        assertProducedTokens("``[`{$s}` fish]``", new String[] {
+                "WHITE_SPACE", "",
+                "``[", "``[",
+                "`{", "`{",
+                "$", "$",
+                "NCName", "s",
+                "}`", "}`",
+                "Char", " fish",
+                "]``", "]``"
+        });
+    }
+
+    public void testNestedStringConstructor() {
+        assertProducedTokens("``[`{ $i, ``[literal text]``, $j, ``[more literal text]`` }`]``", new String[] {
+                "WHITE_SPACE", "",
+                "``[", "``[",
+                "`{", "`{",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "i",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "``[", "``[",
+                "Char", "literal text",
+                "]``", "]``",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "$", "$",
+                "NCName", "j",
+                ",", ",",
+                "WHITE_SPACE", " ",
+                "``[", "``[",
+                "Char", "more literal text",
+                "]``", "]``",
+                "WHITE_SPACE", " ",
+                "}`", "}`",
+                "]``", "]``"
+        });
+    }
+
+    public void testIncompleteStringConstructorExpression() {
+        assertProducedTokens("``[`{$s]``", new String[] {
+                "WHITE_SPACE", "",
+                "``[", "``[",
+                "`{", "`{",
+                "$", "$",
+                "NCName", "s",
+                "]``", "]``"
+        });
+    }
+
+    public void testMultiLineStringConstructor() {
+        assertProducedTokens("``[`{$s}`\nfish]``", new String[] {
+                "WHITE_SPACE", "",
+                "``[", "``[",
+                "`{", "`{",
+                "$", "$",
+                "NCName", "s",
+                "}`", "}`",
+                "Char", "\nfish",
+                "]``", "]``"
         });
     }
 }

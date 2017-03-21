@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,8 +44,8 @@ public class XQueryPrimaryExprImpl extends XQueryExprSingleImpl implements XQuer
 
   @Override
   @Nullable
-  public XQueryConstructor getConstructor() {
-    return findChildByClass(XQueryConstructor.class);
+  public XQueryArrayConstructor getArrayConstructor() {
+    return findChildByClass(XQueryArrayConstructor.class);
   }
 
   @Override
@@ -58,6 +58,30 @@ public class XQueryPrimaryExprImpl extends XQueryExprSingleImpl implements XQuer
   @Nullable
   public XQueryLiteral getLiteral() {
     return findChildByClass(XQueryLiteral.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryMapConstructor getMapConstructor() {
+    return findChildByClass(XQueryMapConstructor.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryNodeConstructor getNodeConstructor() {
+    return findChildByClass(XQueryNodeConstructor.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryStringConstructor getStringConstructor() {
+    return findChildByClass(XQueryStringConstructor.class);
+  }
+
+  @Override
+  @Nullable
+  public XQueryUnaryLookup getUnaryLookup() {
+    return findChildByClass(XQueryUnaryLookup.class);
   }
 
   @Override
