@@ -228,7 +228,13 @@ public class MarkLogicFunctionDefs
 			StringBuilder sb = new StringBuilder();
 
 			sb.append ("<div>");
-			sb.append ("<h1>").append (category.getDesc()).append (" (").append (category.getFunctionCount()).append (" functions)</h1>\n");
+			sb.append ("<h1>");
+
+			if (category.getBucket() != null) {
+				sb.append (category.getBucket()).append (" / ");
+			}
+
+			sb.append (category.getName()).append (" (").append (category.getFunctionCount()).append (" functions)</h1>\n");
 
 			sb.append ("<blockquote><b>").append (fullName).append ("</b> (");
 
@@ -307,7 +313,9 @@ public class MarkLogicFunctionDefs
 				sb.append ("<br/><h1>Examples</h1>");
 
 				for (Example example : examples) {
-					if (example.klass.equals ("xquery")) {
+					String klass = example.klass;
+
+					if ((klass == null) || (klass.length() == 0) || klass.equals ("xquery")) {
 						if (first) first = false; else sb.append ("<hr/>\n");
 
 						sb.append ("<blockquote><code><pre>").append (example.text).append ("</pre></code></blockquote>\n");
@@ -383,34 +391,30 @@ public class MarkLogicFunctionDefs
 
 	public static class Category
 	{
-		private final String prefix;
-		private final String desc;
-		private int functionCount = 0;
+		private final String name;
+		private final String bucket;
+		private final int count;
 
-		public Category (String prefix, String desc)
+		public Category (String name, String bucket, String count)
 		{
-			this.prefix = prefix;
-			this.desc = desc;
+			this.name = name;
+			this.bucket = ((bucket != null) && (bucket.length() == 0)) ? null : bucket;
+			this.count = Integer.parseInt (count);
 		}
 
-		public String getPrefix()
+		public String getName()
 		{
-			return prefix;
+			return name;
 		}
 
-		public String getDesc()
+		public String getBucket()
 		{
-			return desc;
+			return bucket;
 		}
 
 		public int getFunctionCount()
 		{
-			return functionCount;
-		}
-
-		private void incrementCount()
-		{
-			functionCount++;
+			return count;
 		}
 	}
 
@@ -434,6 +438,7 @@ public class MarkLogicFunctionDefs
 			this.categoryMap = categoryMap;
 		}
 
+		// ToDo [Rh]: Need to properly parse this XML into a DOM rather than faffing about with brain-damaged SAX parsing.  Does not currently filter out class="javascript" markup.  I should re-write this in Groovy.
 		@Override
 		public void startElement (String namespaceName, String localName, String qname, Attributes attributes) throws SAXException
 		{
@@ -446,7 +451,7 @@ public class MarkLogicFunctionDefs
 					false,
 					Boolean.valueOf (attributes.getValue ("hidden")),
 					"item()*",
-					categoryMap.get (attributes.getValue ("lib")));
+					categoryMap.get (attributes.getValue ("category")));
 				break;
 			case "apidoc:name":
 				text.setLength (0);
@@ -462,7 +467,7 @@ public class MarkLogicFunctionDefs
 				example = new Example (attributes.getValue ("class"));
 				break;
 			case "apidoc:category":
-				categoryMap.put (attributes.getValue ("prefix"), new Category (attributes.getValue ("prefix"), attributes.getValue ("desc")));
+				categoryMap.put (attributes.getValue ("name"), new Category (attributes.getValue ("name"), attributes.getValue ("bucket"), attributes.getValue ("count")));
 				break;
 			case "apidoc:apidocs":
 			case "apidoc:categories":
@@ -513,10 +518,6 @@ public class MarkLogicFunctionDefs
 
 				if ( ! func.isHidden()) {
 					functionMap.put (func.fullName, func);
-
-					Category cat = categoryMap.get (func.prefix);
-
-					if (cat != null) cat.incrementCount();
 				}
 				break;
 			case "apidoc:name":

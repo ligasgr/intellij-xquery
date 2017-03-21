@@ -68,7 +68,19 @@ class MarkLogicFunctionsExtractor
 					xml.'apidoc:function'.each {
 						functions << it
 
-						categoryMap [it.'@lib'.toString()] = it.'@category'.toString()
+						String category = it.'@category'.toString()
+						Map<String,String> props = categoryMap.get (category)
+
+						if (props == null) {
+							String desc =
+							categoryMap.put (category, [desc: it.'@category'.toString(), bucket: it.'@bucket'.toString(), count: 0])
+						} else {
+							props ['count'] += 1
+
+							if ((props ['bucket'] == null) && (it.'@bucket'.toString())) {
+								props ['bucket'] = it.'@bucket'.toString()
+							}
+						}
 					}
 				}
 			}
@@ -79,17 +91,29 @@ class MarkLogicFunctionsExtractor
 		def xml = builder.bind {
 			mkp.declareNamespace ([apidoc: 'http://marklogic.com/xdmp/apidoc', xhtml: 'http://www.w3.org/1999/xhtml'])
 			delegate.'apidoc:apidocs' {
+				mkp.yield ('\n')
+
 				delegate.'apidoc:categories' {
-					categoryMap.each { String key, String value ->
-						'apidoc:category' (prefix: key, desc: value)
+					categoryMap.each { String key, Map<String,Object> props ->
+						mkp.yield ('\n\t')
+						'apidoc:category' (name: key, bucket: props ['bucket'], count: props ['count'])
 					}
+
+					mkp.yield ('\n')
 				}
+
+				mkp.yield ('\n')
 
 				delegate.'apidoc:functions' {
 					functions.each {
+						mkp.yield ('\n\n')
 						mkp.yield (it)
 					}
+
+					mkp.yield ('\n\n')
 				}
+
+				mkp.yield ('\n')
 			}
 		}
 
