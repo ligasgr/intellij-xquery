@@ -105,7 +105,7 @@
 
         <codeInsight.parameterInfo language="XQuery" implementationClass="org.intellij.xquery.completion.function.parameters.XQueryParameterInfoHandler" />
         <lang.documentationProvider language="XQuery" implementationClass="org.intellij.xquery.documentation.XQueryDocumentationProvider"/>
-        <projectConfigurable instance="org.intellij.xquery.settings.XQueryConfigurable"/>
+        <projectConfigurable instance="org.intellij.xquery.settings.XQueryConfigurable" groupId="language"/>
         <projectService serviceImplementation="org.intellij.xquery.settings.XQuerySettings"/>
         <createFromTemplateHandler order="first" implementation="org.intellij.xquery.actions.XQueryCreateFromTemplateHandler"/>
 
@@ -113,7 +113,7 @@
         <programRunner implementation="org.intellij.xquery.debugger.XQueryDebuggerRunner"/>
         <configurationType implementation="org.intellij.xquery.runner.XQueryRunConfigurationType"/>
         <runConfigurationProducer implementation="org.intellij.xquery.runner.XQueryRunConfigurationProducer"/>
-        <applicationConfigurable instance="org.intellij.xquery.runner.state.datasources.XQueryDataSourcesConfigurable"/>
+        <applicationConfigurable instance="org.intellij.xquery.runner.state.datasources.XQueryDataSourcesConfigurable" groupId="language"/>
         <xdebugger.breakpointType implementation="org.intellij.xquery.debugger.XQueryBreakpointType"/>
     </extensions>
 
