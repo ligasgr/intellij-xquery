@@ -18,8 +18,10 @@
 package org.intellij.xquery.runner.rt.vendor.basex;
 
 import org.basex.core.Context;
+import org.basex.io.serial.Serializer;
 import org.basex.query.QueryProcessor;
 import org.basex.query.iter.Iter;
+import org.basex.query.value.item.Hex;
 import org.basex.query.value.item.Item;
 import org.intellij.xquery.runner.rt.FileUtil;
 import org.intellij.xquery.runner.rt.RunnerApp;
@@ -29,6 +31,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
+import org.w3c.dom.bootstrap.DOMImplementationRegistry;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSOutput;
+import org.w3c.dom.ls.LSSerializer;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -36,6 +42,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.PrintStream;
 import java.io.StringWriter;
+import java.io.Writer;
 
 import static org.intellij.xquery.runner.rt.FileUtil.readFile;
 
@@ -62,17 +69,13 @@ public class BaseXLocalRunnerApp implements RunnerApp {
                 proc.context(contextItemValue, config.getContextItemType());
             }
             Iter iter = proc.iter();
-            for(Item item; (item = iter.next()) != null;) {
-                Object value = item.toJava();
-                if (value instanceof Document || value instanceof Element) {
-                    StringWriter writer = new StringWriter();
-                    Transformer transformer = TransformerFactory.newInstance().newTransformer();
-                    transformer.transform(new DOMSource((Node) value), new StreamResult(writer));
-                    output.println(writer.toString());
-                } else if (value instanceof Text) {
-                    output.println(((Text) value).getWholeText());
-                } else {
-                    output.println(item);
+            try(Serializer ser = proc.getSerializer(output)) {
+                for(Item item; (item = iter.next()) != null;) {
+                    if (item instanceof Hex) {
+                        output.println(item.toString());
+                    } else {
+                        ser.serialize(item);
+                    }
                 }
             }
         }

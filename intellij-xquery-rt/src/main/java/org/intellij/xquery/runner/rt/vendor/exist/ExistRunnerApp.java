@@ -181,13 +181,13 @@ public class ExistRunnerApp implements RunnerApp {
                     node.removeAttribute(XMLNS);
                 }
             }
-            return prettyPrint(node, builder.getDOMImplementation());
+            return prettyPrint(node);
         } else {
             return response;
         }
     }
 
-    private String prettyPrint(Element node, DOMImplementation domImplementation) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+    private String prettyPrint(Element node) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         DOMImplementationRegistry domImplementationRegistry = DOMImplementationRegistry.newInstance();
         DOMImplementationLS domImplementationLS = (DOMImplementationLS) domImplementationRegistry.getDOMImplementation("LS");
         LSOutput lsOutput = domImplementationLS.createLSOutput();
