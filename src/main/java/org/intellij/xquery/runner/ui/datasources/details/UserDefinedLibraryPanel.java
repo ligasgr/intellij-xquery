@@ -126,6 +126,7 @@ public class UserDefinedLibraryPanel {
     }
 
     public void onFileChosen(VirtualFile chosenFile) {
+        //noinspection unchecked
         pathListModel.addElement(chosenFile.getPresentableUrl());
     }
 
@@ -136,6 +137,7 @@ public class UserDefinedLibraryPanel {
     private void populatePathList(List<String> userDefinedLibraryPaths) {
         pathListModel.removeAllElements();
         for (String userDefinedLibraryPath : userDefinedLibraryPaths) {
+            //noinspection unchecked
             pathListModel.addElement(userDefinedLibraryPath);
         }
     }

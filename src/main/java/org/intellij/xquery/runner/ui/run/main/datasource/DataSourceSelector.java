@@ -51,7 +51,9 @@ public class DataSourceSelector {
                 return super.getElementText(element);
             }
         };
+        //noinspection unchecked
         this.dataSourceList.setModel(dataSourcesModel);
+        //noinspection unchecked
         this.dataSourceList.setRenderer(new ListCellRendererWrapper() {
             @Override
             public void customize(final JList list, final Object value, final int index, final boolean selected,

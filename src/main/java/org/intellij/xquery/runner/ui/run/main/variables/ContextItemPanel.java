@@ -127,6 +127,7 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         add(contextItemEnabled, "shrinkx, top");
         add(contextItemOptionsPanel, "growx, pushx");
         contextItemTypeField.getComponent().setName(CONTEXT_ITEM_TYPE);
+        //noinspection unchecked
         contextItemTypeField.getComponent().setModel(typesModel);
         contextItemOptionsPanel.add(contextItemTypeField, "growx, pushx, wrap, span 2");
         contextItemOptionsPanel.add(editorRadioButton);

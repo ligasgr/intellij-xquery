@@ -64,6 +64,7 @@ public class VariableDialog {
         value.getComponent().setRows(7);
         value.getComponent().setColumns(50);
         value.getComponent().setName(VALUE);
+        //noinspection unchecked
         type.getComponent().setModel(typesModel);
         populateTypesList();
         new ComboboxSpeedSearch(type.getComponent());
