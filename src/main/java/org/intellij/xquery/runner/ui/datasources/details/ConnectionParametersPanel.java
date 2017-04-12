@@ -23,8 +23,7 @@ import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 import org.intellij.xquery.runner.ui.datasources.ConfigurationChangeListener;
 
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -43,7 +42,7 @@ public class ConnectionParametersPanel {
     private LabeledComponent<JTextField> host;
     private LabeledComponent<JTextField> port;
     private LabeledComponent<JTextField> username;
-    private LabeledComponent<JTextField> password;
+    private LabeledComponent<JPasswordField> password;
     private LabeledComponent<JTextField> databaseName;
 
     public ConnectionParametersPanel() {

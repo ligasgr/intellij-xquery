@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,10 +28,8 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.isNull;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -39,7 +37,8 @@ import static org.mockito.Mockito.mock;
  * Date: 21/11/13
  * Time: 21:59
  */
-public class DataSourceAccessorTest {
+public class DataSourceAccessorMLTest
+{
 
     private XQueryRunConfiguration configuration;
     private Element element;
@@ -62,6 +61,10 @@ public class DataSourceAccessorTest {
         ds.PORT = "port";
         ds.USERNAME = "user";
         ds.PASSWORD = "pass";
+        ds.MLDEBUGGER_CONFIG_ENABLED = true;
+        ds.MLDEBUGGER_CONFIG_PORT = "8424";
+        ds.MLDEBUGGER_CONFIG_USER = "porkypig";
+        ds.MLDEBUGGER_CONFIG_PASSWORD = "habidahabida";
         ds.USER_DEFINED_LIBRARY_ENABLED = true;
         ds.DATABASE_NAME = "dbName";
         ds.DEFAULT = true;
@@ -85,10 +88,10 @@ public class DataSourceAccessorTest {
         assertThat(dataSourceElement.getAttributeValue("port"), is(ds.PORT));
         assertThat(dataSourceElement.getAttributeValue("username"), is(ds.USERNAME));
         assertThat(dataSourceElement.getAttributeValue("password"), is(ds.PASSWORD));
-        assertThat(dataSourceElement.getAttributeValue("mlDebuggerEnabled"), is("false"));
-        assertThat(dataSourceElement.getAttributeValue("mlDebuggerPort"), nullValue());
-        assertThat(dataSourceElement.getAttributeValue("mlDebuggerUser"), nullValue());
-        assertThat(dataSourceElement.getAttributeValue("mlDebuggerPassword"), nullValue());
+        assertThat(dataSourceElement.getAttributeValue("mlDebuggerEnabled"), is(Boolean.toString(ds.MLDEBUGGER_CONFIG_ENABLED)));
+        assertThat(dataSourceElement.getAttributeValue("mlDebuggerPort"), is(ds.MLDEBUGGER_CONFIG_PORT));
+        assertThat(dataSourceElement.getAttributeValue("mlDebuggerUser"), is(ds.MLDEBUGGER_CONFIG_USER));
+        assertThat(dataSourceElement.getAttributeValue("mlDebuggerPassword"), is(ds.MLDEBUGGER_CONFIG_PASSWORD));
         assertThat(dataSourceElement.getAttributeValue("userDefinedLibraryEnabled"), is(Boolean.toString(ds.USER_DEFINED_LIBRARY_ENABLED)));
         assertThat(dataSourceElement.getAttributeValue("databaseName"), is(ds.DATABASE_NAME));
         assertThat(dataSourceElement.getAttributeValue("default"), is(Boolean.toString(ds.DEFAULT)));

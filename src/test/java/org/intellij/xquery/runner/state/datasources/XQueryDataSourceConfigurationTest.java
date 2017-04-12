@@ -42,6 +42,9 @@ public class XQueryDataSourceConfigurationTest {
     private static final String NAME_FIELD = "name";
     private static final String PASSWORD = "password";
     private static final String USER = "user";
+    private static final String MLDB_USER = "mlfoobar";
+    private static final String MLDB_PASSWORD = "Shhhh!";
+    private static final String MLDB_PORT = "7654";
     private static final String PORT = "1234";
     private static final String NAME = "name";
     private static final String HOST = "localhost";
@@ -53,6 +56,10 @@ public class XQueryDataSourceConfigurationTest {
     private static final String PORT_FIELD = "port";
     private static final String USERNAME_FIELD = "username";
     private static final String PASSWORD_FIELD = "password";
+    private static final String ML_DEBUGGER_ENABLED_FIELD = "mlDebuggerEnabled";
+    private static final String ML_DEBUGGER_PORT_FIELD = "mlDebuggerPort";
+    private static final String ML_DEBUGGER_USER_FIELD = "mlDebuggerUser";
+    private static final String ML_DEBUGGER_PASSWORD_FIELD = "mlDebuggerPassword";
     private static final String USER_DEFINED_LIBRARY_ENABLED = "userDefinedLibraryEnabled";
     private static final String USER_DEFINED_LIBRARY_PATH = "userDefinedLibraryPath";
     private static final String USER_DEFINED_LIBRARY_PATHS = "userDefinedLibraryPaths";
@@ -143,6 +150,42 @@ public class XQueryDataSourceConfigurationTest {
         String xml = serializeToXml(dataSourceConfiguration);
 
         assertThat(the(xml), hasXPath(CONFIG_ATTRIBUTE_XPATH + PASSWORD_FIELD, equalTo(PASSWORD)));
+    }
+
+    @Test
+    public void shouldPersistMlDebugEnabled() throws Exception {
+        dataSourceConfiguration.MLDEBUGGER_CONFIG_ENABLED = true;
+
+        String xml = serializeToXml (dataSourceConfiguration);
+
+        assertThat (the(xml), hasXPath (CONFIG_ATTRIBUTE_XPATH + ML_DEBUGGER_ENABLED_FIELD, equalTo (TRUE.toString())));
+    }
+
+    @Test
+    public void shouldPersistMlDebuggerPort() throws Exception {
+        dataSourceConfiguration.MLDEBUGGER_CONFIG_PORT = MLDB_PORT;
+
+        String xml = serializeToXml (dataSourceConfiguration);
+
+        assertThat (the(xml), hasXPath (CONFIG_ATTRIBUTE_XPATH + ML_DEBUGGER_PORT_FIELD, equalTo (MLDB_PORT)));
+    }
+
+    @Test
+    public void shouldPersistMlDebuggerUsername() throws Exception {
+        dataSourceConfiguration.MLDEBUGGER_CONFIG_USER = MLDB_USER;
+
+        String xml = serializeToXml (dataSourceConfiguration);
+
+        assertThat (the(xml), hasXPath (CONFIG_ATTRIBUTE_XPATH + ML_DEBUGGER_USER_FIELD, equalTo (MLDB_USER)));
+    }
+
+    @Test
+    public void shouldPersistMlDebuggerPassword() throws Exception {
+        dataSourceConfiguration.MLDEBUGGER_CONFIG_PASSWORD = MLDB_PASSWORD;
+
+        String xml = serializeToXml (dataSourceConfiguration);
+
+        assertThat (the(xml), hasXPath (CONFIG_ATTRIBUTE_XPATH + ML_DEBUGGER_PASSWORD_FIELD, equalTo (MLDB_PASSWORD)));
     }
 
     @Test

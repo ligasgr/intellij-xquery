@@ -53,6 +53,16 @@ public class XQueryDataSourceConfiguration implements Cloneable {
     public String PASSWORD = EMPTY;
     @Attribute("userDefinedLibraryEnabled")
     public boolean USER_DEFINED_LIBRARY_ENABLED;
+
+    @Attribute("mlDebuggerEnabled")
+    public boolean MLDEBUGGER_CONFIG_ENABLED;
+    @Attribute("mlDebuggerPort")
+    public String MLDEBUGGER_CONFIG_PORT;
+    @Attribute("mlDebuggerUser")
+    public String MLDEBUGGER_CONFIG_USER;
+    @Attribute("mlDebuggerPassword")
+    public String MLDEBUGGER_CONFIG_PASSWORD;
+
     @Attribute("databaseName")
     public String DATABASE_NAME = EMPTY;
     @Attribute("default")
@@ -96,6 +106,10 @@ public class XQueryDataSourceConfiguration implements Cloneable {
         if (USER_DEFINED_LIBRARY_PATHS != null ? ! USER_DEFINED_LIBRARY_PATHS.equals(that.USER_DEFINED_LIBRARY_PATHS)
                 : that.USER_DEFINED_LIBRARY_PATHS != null)
             return false;
+        if (MLDEBUGGER_CONFIG_ENABLED != that.MLDEBUGGER_CONFIG_ENABLED) return false;
+        if (MLDEBUGGER_CONFIG_PORT != that.MLDEBUGGER_CONFIG_PORT) return false;
+        if (MLDEBUGGER_CONFIG_USER != that.MLDEBUGGER_CONFIG_USER) return false;
+        if (MLDEBUGGER_CONFIG_PASSWORD != that.MLDEBUGGER_CONFIG_PASSWORD) return false;
 
         return true;
     }
@@ -114,6 +128,10 @@ public class XQueryDataSourceConfiguration implements Cloneable {
         result = 31 * result + (DATABASE_NAME != null ? DATABASE_NAME.hashCode() : 0);
         result = 31 * result + (DEFAULT ? 1 : 0);
         result = 31 * result + (USER_DEFINED_LIBRARY_PATHS != null ? USER_DEFINED_LIBRARY_PATHS.hashCode() : 0);
+        result = 31 * result + (MLDEBUGGER_CONFIG_ENABLED ? 1 : 0);
+        result = 31 * result + (MLDEBUGGER_CONFIG_PORT != null ? MLDEBUGGER_CONFIG_PORT.hashCode() : 0);
+        result = 31 * result + (MLDEBUGGER_CONFIG_USER != null ? MLDEBUGGER_CONFIG_USER.hashCode() : 0);
+        result = 31 * result + (MLDEBUGGER_CONFIG_PASSWORD != null ? MLDEBUGGER_CONFIG_PASSWORD.hashCode() : 0);
         return result;
     }
 }

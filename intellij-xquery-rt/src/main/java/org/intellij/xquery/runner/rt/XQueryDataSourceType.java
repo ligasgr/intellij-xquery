@@ -47,7 +47,7 @@ public enum XQueryDataSourceType {
     SEDNA("Sedna", false, true, asList("sedna-xqj-1.0.0.jar"), false, SednaXQDataSourceFactory.class),
     ZORBA("Zorba", false, false, asList("zorba_xqj.jar", "zorba_api.jar"), false, ZorbaXQDataSourceFactory.class),
     SAXON_NATIVE("Saxon (native)", true, false, asList("saxon9he.jar"), SaxonRunnerAppFactory.class, true),
-    MARKLOGIC_NATIVE("MarkLogic (native)", false, true, asList("marklogic-xcc-8.0.5.jar"), MarklogicRunnerAppFactory.class, false),
+    MARKLOGIC_NATIVE("MarkLogic (native)", false, true, asList("marklogic-xcc-8.0.5.jar"), MarklogicRunnerAppFactory.class, true),
     EXIST_NATIVE("eXist (native)", false, true, asList("commons-codec-1.10.jar"), ExistRunnerAppFactory.class, false),
     BASEX_NATIVE("BaseX (native)", false, true, asList("basex-8.4.3.jar"), BaseXRunnerAppFactory.class, false),
     BASEX_NATIVE_LOCAL("BaseX (native embedded)", false, false, asList("basex-8.4.3.jar"), BaseXLocalRunnerAppFactory.class, false)
