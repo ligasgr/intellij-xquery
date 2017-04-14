@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2017 OverStory Ltd <copyright@overstory.co.uk> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,9 +33,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 /**
- * User: ligasgr
- * Date: 21/11/13
- * Time: 21:59
+ * User: ron
  */
 public class DataSourceAccessorMLTest
 {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2017 OverStory Ltd <copyright@overstory.co.uk> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,9 +39,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 /**
- * User: ligasgr
- * Date: 26/10/13
- * Time: 20:56
+ * User: ron
  */
 public class MarkLogicDebuggerSettingsPanelGuiTest extends BaseGuiTest {
 
