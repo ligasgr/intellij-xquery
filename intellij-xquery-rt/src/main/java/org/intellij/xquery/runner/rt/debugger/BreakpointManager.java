@@ -70,6 +70,11 @@ public class BreakpointManager {
         setBreakpoint(breakpoint, breakpoint.getBreakpointId());
     }
 
+    public Map<Integer, Map<String, Breakpoint>> allBreakpoints()
+    {
+        return breakpoints;
+    }
+
     private Breakpoint setBreakpoint(Breakpoint breakpoint, String breakpointId) {
         String uri = normalizeUri(breakpoint.getFileURL().get());
         Integer line = breakpoint.getLineNumber().get();
