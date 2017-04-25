@@ -19,13 +19,8 @@ package org.intellij.xquery.runner.rt.debugger.marklogic;
 
 import com.codnos.dbgp.api.*;
 import com.marklogic.xcc.ContentSource;
-import com.marklogic.xcc.Request;
 import com.marklogic.xcc.Session;
-import com.marklogic.xcc.ValueFactory;
-import com.marklogic.xcc.exceptions.XQueryException;
-import com.marklogic.xcc.types.ValueType;
-import com.marklogic.xcc.types.XName;
-import com.marklogic.xcc.types.XdmVariable;
+import com.marklogic.xcc.exceptions.RequestException;
 import org.intellij.xquery.runner.rt.XQueryRunConfig;
 import org.intellij.xquery.runner.rt.debugger.BreakpointManager;
 import org.intellij.xquery.runner.rt.debugger.DebugFrame;
@@ -35,6 +30,7 @@ import org.intellij.xquery.runner.rt.vendor.marklogic.MarklogicRunnerApp;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -47,17 +43,19 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 	private final Thread applicationThread;
 	private final Object theLock = new Object();
 	private final int mlDebuggerPort;
-	private final List<DebugFrame> visibleDebugFrames = new LinkedList<>();
-	private final List<DebugFrame> allFrames = new LinkedList<>();
+	private final List<DebugFrame> stackFrames = new LinkedList<>();
 	private final BreakpointManager breakpointManager = new BreakpointManager();
 	private final List<StatusChangeHandler> statusChangeHandlers = new ArrayList<>();
 	private final AtomicBoolean shouldBreak = new AtomicBoolean (false);
+	private final String sessionId = "" + new Random(System.currentTimeMillis()).nextLong();
+	private String initalFile;
 	private volatile Status status = Status.STARTING;
 	private boolean steppingOver = false;
 	private boolean steppingInto = false;
 	private boolean steppingOut = false;
 	private int stackDepthAtSteppingStart = 0;
-	private String debuggerRequestId;
+	private MarkLogicDebugConnector debugConnector;
+	private BigInteger debuggerRequestId = BigInteger.ZERO;
 
 	public MarkLogicDebuggerApp (XQueryRunConfig config, PrintStream output)
 	{
@@ -76,10 +74,12 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 			dbg:eval with code as xs:string extern variable ==> $requestId
 				request is on Task Server, suspended
 			For each breakpoint
-				call dbg:line ($requestId, $moduleUri, $line
+				call dbg:line ($requestId, $moduleUri, $line) to get expression id
+				call dbg:break ($requestId, $expressionId) to set breakpoint
+					(some breakpoints may not have an expression, literals are not expressions)
 
 		End
-			dbg:detach or dbg:finish
+			xdmp:cancel
 
 
 
@@ -124,8 +124,8 @@ log ("MarkLogicDebuggerApp.getAppId called");
 	@Override
 	public String getSession()
 	{
-log ("MarkLogicDebuggerApp.getSession called");
-		return "";
+log ("MarkLogicDebuggerApp.getSession called: " + sessionId);
+		return sessionId;
 	}
 
 	@Override
@@ -152,8 +152,10 @@ log ("MarkLogicDebuggerApp.getProtocolVersion called");
 	@Override
 	public String getInitialFileUri()
 	{
-log ("MarkLogicDebuggerApp.getInitialFileUri called: " + new File (config.getMainFile()).toURI().toString());
-		return new File (config.getMainFile()).toURI().toString();
+		initalFile = new File (config.getMainFile()).toURI().toString();
+
+log ("MarkLogicDebuggerApp.getInitialFileUri called: " + initalFile);
+		return initalFile;
 	}
 
 	@Override
@@ -166,8 +168,10 @@ log ("MarkLogicDebuggerApp.run called");
 
 		if (status == Status.STARTING) {
 			startApplicationRunInSeparateThread();
+log ("MarkLogicDebuggerApp.run thread started");
 		} else {
 			resume();
+log ("MarkLogicDebuggerApp.run resumed");
 		}
 	}
 
@@ -176,7 +180,7 @@ log ("MarkLogicDebuggerApp.run called");
 	{
 log ("MarkLogicDebuggerApp.stepOver called");
 		steppingOver = true;
-		stackDepthAtSteppingStart = visibleDebugFrames.size();
+		stackDepthAtSteppingStart = stackFrames.size();
 		resume();
 	}
 
@@ -185,7 +189,7 @@ log ("MarkLogicDebuggerApp.stepOver called");
 	{
 log ("MarkLogicDebuggerApp.stepInto called");
 		steppingInto = true;
-		stackDepthAtSteppingStart = visibleDebugFrames.size();
+		stackDepthAtSteppingStart = stackFrames.size();
 		resume();
 	}
 
@@ -194,7 +198,7 @@ log ("MarkLogicDebuggerApp.stepInto called");
 	{
 log ("MarkLogicDebuggerApp.stepOut called");
 		steppingOut = true;
-		stackDepthAtSteppingStart = visibleDebugFrames.size();
+		stackDepthAtSteppingStart = stackFrames.size();
 		resume();
 	}
 
@@ -246,13 +250,6 @@ log ("MarkLogicDebuggerApp.registerStatusChangeHandler called");
 	}
 
 	@Override
-	public int getStackDepth()
-	{
-log ("MarkLogicDebuggerApp.getStackDepth called");
-		return visibleDebugFrames.size();
-	}
-
-	@Override
 	public Status getStatus()
 	{
 log ("MarkLogicDebuggerApp.getStatus called");
@@ -274,10 +271,36 @@ log ("MarkLogicDebuggerApp.breakNow called");
 	}
 
 	@Override
+	public int getStackDepth()
+	{
+		log ("MarkLogicDebuggerApp.getStackDepth called");
+
+		stackFrames.clear();
+		stackFrames.addAll (debugConnector.requestStackFrames (debuggerRequestId));
+
+		log ("MarkLogicDebuggerApp.getStackDepth = " + stackFrames.size());
+		return stackFrames.size();
+	}
+
+	@Override
+	public StackFrame getFrame (int i)
+	{
+log ("MarkLogicDebuggerApp.getFrame: " + i + ", frame: " + stackFrames.get (i));
+		return stackFrames.size() > 0 ? convertToStackFrame (stackFrames.get (i)) : null;
+	}
+
+	@Override
+	public Collection<PropertyValue> getVariables (int i)
+	{
+log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.get (i).getVariables());
+		return stackFrames.size() > 0 ? convertToPropertyValues (stackFrames.get (i).getVariables()) : Collections.emptyList();
+	}
+
+	@Override
 	public Optional<PropertyValue> eval (int depth, String expression)
 	{
-log ("MarkLogicDebuggerApp.eval called: depth=" + depth + ", expr: " + expression);
-		DebugFrame debugFrame = visibleDebugFrames.get (depth);
+		log ("MarkLogicDebuggerApp.eval called: depth=" + depth + ", expr: " + expression);
+		DebugFrame debugFrame = stackFrames.get (depth);
 
 		if (debugFrame != null) {
 			Optional<Variable> result = debugFrame.eval (expression);
@@ -290,86 +313,97 @@ log ("MarkLogicDebuggerApp.eval called: depth=" + depth + ", expr: " + expressio
 		return Optional.empty();
 	}
 
-	@Override
-	public StackFrame getFrame (int i)
-	{
-log ("MarkLogicDebuggerApp.getFrame: " + i);
-		return visibleDebugFrames.size() > 0 ? convertToStackFrame (visibleDebugFrames.get (i)) : null;
-	}
-
-	@Override
-	public Collection<PropertyValue> getVariables (int i)
-	{
-log ("MarkLogicDebuggerApp.getVariables: " + i);
-		return visibleDebugFrames.size() > 0 ? convertToPropertyValues (visibleDebugFrames.get (i).getVariables()) : Collections.emptyList();
-	}
-
 	// -----------------------------------------------------------------------
 
 	private void runDebuggerApp() throws Exception
 	{
 		log ("MarkLogicDebuggerApp.runDebuggerApp called");
+		String query = readFile (config.getMainFile());
 		ContentSource contentSource = getContentSource();
 		Session session = contentSource.newSession();
-		String query = readFile (config.getMainFile());
-		Request request = prepareDebugEvalRequest (session, query);
+		boolean running = true;
+
+		debugConnector = new MarkLogicDebugConnector (config, session);
 
 		try {
-			log ("MarkLogicDebuggerApp.runDebuggerApp submitting debug request to MarkLogic");
-			debuggerRequestId = session.submitRequest (request).asString();
-			log ("MarkLogicDebuggerApp.runDebuggerApp back from call, requestId: " + debuggerRequestId);
+			debugConnector.clearStoppedRequests();
 
-			setMlBreakPoints();
+			debuggerRequestId = debugConnector.submitEvalForDebug (query, new HashMap());
+
+			debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
+
+			debugConnector.resumeRequest (debuggerRequestId);
+
+			log ("runDebuggerApp: entering eternal loop");
+
+			while (running) {
+				Map<String,String> mlReqStatus = debugConnector.getRequestStatus (debuggerRequestId);
+				log ("runDebuggerApp: top of loop: " + mlReqStatus.get ("req-status"));
+
+				// ToDo: Check for "finished" state?
+				if (mlReqStatus.get ("id") == null) {
+					log ("runDebuggerApp: request not active, stopping: " + debuggerRequestId);
+					break;
+				}
+
+				log ("runDebuggerApp: switch(status): " + status);
+				switch (status) {
+				case BREAK:
+					// ToDo: Wait for lock here?  Sense resume from db UI?
+
+					if ("running".equals (mlReqStatus.get ("req-status"))) {
+						resume();
+						break;
+					}
+
+					Thread.sleep (2000);
+
+					break;
+				case RUNNING:
+					log ("RUNNING: req-status=" + mlReqStatus.get ("req-status") + ", debug-status=" + mlReqStatus.get ("debug-status") + ", where=" + mlReqStatus.get ("where-stopped"));
+
+					if ("stopped".equals (mlReqStatus.get ("req-status"))) {
+						changeToBreak();
+						break;
+					}
+
+					BigInteger reqId = debugConnector.waitForStateChange (debuggerRequestId, 30);
+
+					if (reqId == null) {
+						System.err.println ("runDebuggerApp: Timeout waiting for ML request to break/finish, stopping");
+						running = false;
+					}
+					break;
+				case STARTING:
+					log ("runDebuggerApp: In STARTING state, sleeping for 200 ms");
+					Thread.sleep (200);
+					break;
+				case STOPPING:
+					log ("runDebuggerApp: status = STOPPING");
+					break;
+				case STOPPED:
+					log ("runDebuggerApp: status = STOPPED");
+					break;
+				default:
+					log ("runDebuggerApp: Impossible debug status, stopping: " + status);
+				}
+
+				if ( ! running) log ("running = false, breaking from main loop");
+			}
+		} catch (RequestException e) {
+			System.err.println ("Exception talking to MarkLogic, stopping: " + e);
+		} catch (DebuggerStoppedException e) {
+			System.err.println ("Exception, debugger has stopped: " + e);
 		} catch (Exception e) {
-			System.err.println (e.toString());
-		}
-	}
-
-	private static final String DBG_EVAL_REQUEST =
-		"xquery version '1.0-ml';" +
-		"declare variable $__query__ external;" +
-		"declare variable $__variables__ external;" +
-		"declare function local:gen-vars() {" +
-		"    () " +
-		"};" +
-		"dbg:eval ($__query__, local:gen-vars())";
-
-	private static final XdmVariable DBG_REQUEST_VAR = ValueFactory.newVariable (new XName ("__query__"), ValueFactory.newValue (ValueType.XS_STRING, DBG_EVAL_REQUEST));
-
-	public Request prepareDebugEvalRequest (Session session, String query)
-	{
-		Request request = session.newAdhocQuery (DBG_EVAL_REQUEST);
-
-		request.setVariable (DBG_REQUEST_VAR);
-		request.setNewVariable ("__variables__", ValueType.XS_STRING, generateVarsXml());
-
-		return request;
-	}
-
-	private String generateVarsXml()
-	{
-		return "<variables/>";
-	}
-
-	private void setMlBreakPoints()
-	{
-		Map<Integer, Map<String, Breakpoint>> breakPoints = breakpointManager.allBreakpoints();
-
-		for (Integer bpId : breakPoints.keySet()) {
-			Map<String, Breakpoint> bpMap = breakPoints.get (bpId);
-
-			log ("setMlBreakPoints: id=" + bpId);
-
-			for (String mapId : bpMap.keySet()) {
-				Breakpoint bp = bpMap.get (mapId);
-
-				log ("  Breakpoint: id: " + bp.getBreakpointId() + ", type: " + bp.getType() +
-					", function: " + bp.getFunction() + ", line: " + bp.getLineNumber() + ", expr: " + bp.getExpression());
+			System.err.println ("Unexpected exception, stopping: " + e);
+		} finally {
+			try {
+				debugConnector.clearStoppedRequests();
+			} catch (RequestException e) {
+				System.err.println ("Problem clearing stopped requests: " + e);
 			}
 		}
 	}
-
-	// --------------------------------------------------------------------------
 
 	private Runnable getApplicationRunnable()
 	{
@@ -381,7 +415,7 @@ log ("MarkLogicDebuggerApp.getVariables: " + i);
 
 				try {
 					synchronized (theLock) {
-						log ("changing status to running");
+						log ("getApplicationRunnable: changing status to running");
 						changeState (Status.RUNNING);
 					}
 
@@ -432,32 +466,32 @@ log ("MarkLogicDebuggerApp.getVariables: " + i);
 		notifyStateChange (previous, status);
 	}
 
-//	private void changeToBreak() throws DebuggerStoppedException
-//	{
-//		try {
-//			synchronized (theLock) {
-//				steppingOver = false;
-//				steppingInto = false;
-//				steppingOut = false;
-//				log ("changeToBreak in status=" + status);
-//				log ("suspended");
-//				changeState (Status.BREAK);
-//
-//				log ("starting to wait");
-//				do {
-//					log ("waiting until not suspended");
-//					theLock.wait();
-//				} while (status == Status.BREAK);
-//				log ("not suspended anymore=" + status);
-//
-//				if (status == Status.STOPPED) {
-//					throw new DebuggerStoppedException();
-//				}
-//			}
-//		} catch (InterruptedException e) {
-//			throw new DebuggerStoppedException();
-//		}
-//	}
+	private void changeToBreak() throws DebuggerStoppedException
+	{
+		try {
+			synchronized (theLock) {
+				steppingOver = false;
+				steppingInto = false;
+				steppingOut = false;
+				log ("changeToBreak in status=" + status);
+				log ("suspended");
+				changeState (Status.BREAK);
+
+				log ("starting to wait");
+				do {
+					log ("waiting until not suspended");
+					theLock.wait();
+				} while (status == Status.BREAK);
+				log ("not suspended anymore=" + status);
+
+				if (status == Status.STOPPED) {
+					throw new DebuggerStoppedException();
+				}
+			}
+		} catch (InterruptedException e) {
+			throw new DebuggerStoppedException();
+		}
+	}
 
 	private void resume() throws DebuggerStoppedException
 	{
@@ -472,6 +506,14 @@ log ("MarkLogicDebuggerApp.getVariables: " + i);
 
 			log ("changing status to running");
 			changeState (Status.RUNNING);
+
+			try {
+				debugConnector.resumeRequest (debuggerRequestId);
+			} catch (RequestException e) {
+				log ("resume(): caught XCC exception: " + e);
+				throw new RuntimeException (e);
+			}
+
 			log ("status running");
 		}
 	}
@@ -499,11 +541,12 @@ log ("MarkLogicDebuggerApp.getVariables: " + i);
 	private void notifyStateChange (Status previous, Status current)
 	{
 		log ("changing status from " + previous + " to " + current);
-		List<StatusChangeHandler> handlersToRemove = new ArrayList<StatusChangeHandler>();
+		List<StatusChangeHandler> handlersToRemove = new ArrayList<>();
+
 		synchronized (statusChangeHandlers) {
 			for (StatusChangeHandler StatusChangeHandler : statusChangeHandlers) {
 				if (StatusChangeHandler.applicableFor (previous, current)) {
-					log ("status change handler " + StatusChangeHandler + " is applicable");
+					log ("status change handler " + StatusChangeHandler + " is applicable for " + previous + " ==> " + current);
 					StatusChangeHandler.statusChanged (previous, current);
 					handlersToRemove.add (StatusChangeHandler);
 				}
@@ -521,8 +564,10 @@ log ("MarkLogicDebuggerApp.getVariables: " + i);
 		Collection<PropertyValue> result = new ArrayList<> (variables.size());
 
 		for (Variable variable : variables) {
+			log ("  variable: " + variable.name + ", value: " + variable.value + ", type: " + variable.type);
 			result.add (convertToPropertyValue (variable));
 		}
+
 		return result;
 	}
 

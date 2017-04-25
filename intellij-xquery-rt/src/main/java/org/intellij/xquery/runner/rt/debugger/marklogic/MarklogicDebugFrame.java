@@ -27,19 +27,11 @@ import static org.intellij.xquery.runner.rt.debugger.LogUtil.log;
 
 public class MarklogicDebugFrame implements DebugFrame
 {
-    private final int lineNumber;
-    private final String uri;
-    private final String functionName;
-    private final MarklogicExpressionEvaluator evaluator;
-
-    public MarklogicDebugFrame (String functionName)
-    {
-        lineNumber = 1; // FixMe
-        uri = null; // FixMe
-        this.functionName = functionName;
-        evaluator = new MarklogicExpressionEvaluator();
-        log ("uri=" + uri + " lineNumber=" + lineNumber);
-    }
+    private int lineNumber;
+    private String uri;
+    private String functionName;
+    private List<Variable> variables;
+    private MarklogicExpressionEvaluator evaluator;
 
     @Override
     public int getLineNumber()
@@ -68,7 +60,7 @@ public class MarklogicDebugFrame implements DebugFrame
     @Override
     public List<Variable> getVariables()
     {
-        return new ArrayList<>();
+        return variables;
     }
 
     @Override
@@ -76,7 +68,7 @@ public class MarklogicDebugFrame implements DebugFrame
         return "MarklogicDebugFrame{" +
                 "lineNumber=" + lineNumber +
                 ", uri='" + uri + '\'' +
-                ", functionName='" + functionName + '\'' +
+                ", functionName='" + functionName + "', vars=" + variables +
                 '}';
     }
 }
