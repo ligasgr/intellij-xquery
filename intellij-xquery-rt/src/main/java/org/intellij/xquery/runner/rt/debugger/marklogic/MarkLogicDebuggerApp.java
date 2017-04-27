@@ -53,7 +53,7 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 	private boolean steppingOver = false;
 	private boolean steppingInto = false;
 	private boolean steppingOut = false;
-	private int stackDepthAtSteppingStart = 0;
+//	private int stackDepthAtSteppingStart = 0;
 	private MarkLogicDebugConnector debugConnector;
 	private BigInteger debuggerRequestId = BigInteger.ZERO;
 
@@ -159,17 +159,15 @@ log ("MarkLogicDebuggerApp.getInitialFileUri called: " + initalFile);
 	}
 
 	@Override
-	public void run() throws Exception
+	public void run() throws RequestException
 	{
 log ("MarkLogicDebuggerApp.run called");
-		steppingOver = false;
-		steppingInto = false;
-		steppingOut = false;
 
 		if (status == Status.STARTING) {
 			startApplicationRunInSeparateThread();
 log ("MarkLogicDebuggerApp.run thread started");
 		} else {
+			debugConnector.continueRequest (debuggerRequestId);
 			resume();
 log ("MarkLogicDebuggerApp.run resumed");
 		}
@@ -179,8 +177,12 @@ log ("MarkLogicDebuggerApp.run resumed");
 	public void stepOver()
 	{
 log ("MarkLogicDebuggerApp.stepOver called");
-		steppingOver = true;
-		stackDepthAtSteppingStart = stackFrames.size();
+		try {
+			debugConnector.stepOverExpression (debuggerRequestId);
+		} catch (RequestException e) {
+			abort (e);
+		}
+
 		resume();
 	}
 
@@ -188,8 +190,12 @@ log ("MarkLogicDebuggerApp.stepOver called");
 	public void stepInto()
 	{
 log ("MarkLogicDebuggerApp.stepInto called");
-		steppingInto = true;
-		stackDepthAtSteppingStart = stackFrames.size();
+		try {
+			debugConnector.stepIntoExpression (debuggerRequestId);
+		} catch (RequestException e) {
+			abort (e);
+		}
+
 		resume();
 	}
 
@@ -197,8 +203,11 @@ log ("MarkLogicDebuggerApp.stepInto called");
 	public void stepOut()
 	{
 log ("MarkLogicDebuggerApp.stepOut called");
-		steppingOut = true;
-		stackDepthAtSteppingStart = stackFrames.size();
+		try {
+			debugConnector.stepOutOfExpression (debuggerRequestId);
+		} catch (RequestException e) {
+			abort (e);
+		}
 		resume();
 	}
 
@@ -209,7 +218,7 @@ log ("MarkLogicDebuggerApp.breakpointSet called, breakpoint: " + printBreakpoint
 		return breakpointManager.setBreakpoint (breakpoint);
 	}
 
-	private String printBreakpoint (Breakpoint breakpoint)
+	private static String printBreakpoint (Breakpoint breakpoint)
 	{
 		return "Breakpoint, type: " + breakpoint.getType() + ", function: " + breakpoint.getFunction() +
 			", expr: " + breakpoint.getExpression() + ", line: " + breakpoint.getLineNumber() +
@@ -315,13 +324,21 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 
 	// -----------------------------------------------------------------------
 
+	private boolean running = true;
+	private Exception thrownException = null;
+
+	private void abort (Exception e)
+	{
+		running = false;
+		thrownException = e;
+	}
+
 	private void runDebuggerApp() throws Exception
 	{
 		log ("MarkLogicDebuggerApp.runDebuggerApp called");
 		String query = readFile (config.getMainFile());
 		ContentSource contentSource = getContentSource();
 		Session session = contentSource.newSession();
-		boolean running = true;
 
 		debugConnector = new MarkLogicDebugConnector (config, session);
 
@@ -332,9 +349,12 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 
 			debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
 
-			debugConnector.resumeRequest (debuggerRequestId);
+			debugConnector.runToNextBreakPoint (debuggerRequestId);
 
 			log ("runDebuggerApp: entering eternal loop");
+
+			running = true;
+			thrownException = null;
 
 			while (running) {
 				Map<String,String> mlReqStatus = debugConnector.getRequestStatus (debuggerRequestId);
@@ -389,6 +409,10 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 				}
 
 				if ( ! running) log ("running = false, breaking from main loop");
+				if (thrownException != null) {
+					log ("Abort due to Exception: " + thrownException);
+					throw thrownException;
+				}
 			}
 		} catch (RequestException e) {
 			System.err.println ("Exception talking to MarkLogic, stopping: " + e);
@@ -507,12 +531,12 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 			log ("changing status to running");
 			changeState (Status.RUNNING);
 
-			try {
-				debugConnector.resumeRequest (debuggerRequestId);
-			} catch (RequestException e) {
-				log ("resume(): caught XCC exception: " + e);
-				throw new RuntimeException (e);
-			}
+//			try {
+//				debugConnector.runToNextBreakPoint (debuggerRequestId);
+//			} catch (RequestException e) {
+//				log ("resume(): caught XCC exception: " + e);
+//				throw new RuntimeException (e);
+//			}
 
 			log ("status running");
 		}

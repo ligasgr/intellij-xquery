@@ -102,6 +102,25 @@ class MarkLogicDebugConnector
 
 	// ---------------------------------------------------
 
+	private static final String GET_REQUEST_VALUE = 'request-value.xqy'
+
+
+	String requestValue (BigInteger requestId, String expr)
+	{
+log ("MarkLogicXdmpDebugger.requestValue: ${expr}" )
+		requestValueAndType (requestId, expr) [0]
+	}
+
+	List<String> requestValueAndType (BigInteger requestId, String expr)
+	{
+log ("MarkLogicXdmpDebugger.requestValueAndType: ${expr}" )
+		ResultSequence rs = evalRequest (xfile (GET_REQUEST_VALUE), [id: requestId, expr: expr])
+
+		[rs.itemAt (0).asString(), rs.itemAt (1).asString()]
+	}
+
+	// ---------------------------------------------------
+
 	private static final String CLEAR_STOPPED_REQ = 'clear-stopped.xqy'
 
 	void clearStoppedRequests() throws RequestException
@@ -110,12 +129,52 @@ log ("MarkLogicXdmpDebugger.clearStoppedRequests")
 		evalRequest (xfile (CLEAR_STOPPED_REQ))
 	}
 
-	private static final String RESUME_REQ = 'resume-stopped.xqy'
+	// ---------------------------------------------------
 
-	void resumeRequest (BigInteger requestId) throws RequestException
+	private static final String RESUME_REQ = 'resume-request.xqy'
+
+	void continueRequest (BigInteger requestId) throws RequestException
 	{
-log ("MarkLogicXdmpDebugger.resumeRequest")
+log ("MarkLogicXdmpDebugger.continueRequest")
 		evalRequest (xfile (RESUME_REQ), [id: requestId])
+	}
+
+	private static final String RUN_TO_NEXT_BP = 'run-to-next-breakpoint.xqy'
+
+	void runToNextBreakPoint (BigInteger requestId) throws RequestException
+	{
+		log ("MarkLogicXdmpDebugger.runToNextBreakPoint")
+		evalRequest (xfile (RUN_TO_NEXT_BP), [id: requestId])
+	}
+
+	// ---------------------------------------------------
+
+	private static final String STEP_OVER = 'step-over-expr.xqy'
+
+	void stepOverExpression (BigInteger requestId) throws RequestException
+	{
+log ("MarkLogicXdmpDebugger.stepOverExpression")
+		evalRequest (xfile (STEP_OVER), [id: requestId])
+	}
+
+	// ---------------------------------------------------
+
+	private static final String STEP_INTO = 'step-into-expr.xqy'
+
+	void stepIntoExpression (BigInteger requestId) throws RequestException
+	{
+log ("MarkLogicXdmpDebugger.stepIntoExpression")
+		evalRequest (xfile (STEP_INTO), [id: requestId])
+	}
+
+	// ---------------------------------------------------
+
+	private static final String STEP_OUT = 'step-out-of-expr.xqy'
+
+	void stepOutOfExpression (BigInteger requestId) throws RequestException
+	{
+log ("MarkLogicXdmpDebugger.stepOutOfExpression")
+		evalRequest (xfile (STEP_OUT), [id: requestId])
 	}
 
 	// ---------------------------------------------------
@@ -147,7 +206,7 @@ log ("MarkLogicXdmpDebugger.setMlBreakPoints, requestId: " + requestId)
 //		String functionName = bp.getFunction().get();
 log ("MarkLogicXdmpDebugger.setMlBreakPoint called")
 
-		BigInteger exprId = firstExprOnLine (requestId, file, line)
+		BigInteger exprId = exprForLine (requestId, file, line)
 
 		if (exprId == null) {
 			System.err.println ("Cannot set ML breakpoint, no expression found on line " + line)
@@ -162,16 +221,16 @@ log ("MarkLogicXdmpDebugger.setMlBreakPoint breakpoint set, line: " + line + ", 
 
 	private static final String EXPRS_REQ = 'get-expresisons.xqy'
 
-	private BigInteger firstExprOnLine (BigInteger requestId, String file, Integer line) throws RequestException
+	private BigInteger exprForLine (BigInteger requestId, String file, Integer line) throws RequestException
 	{
 		ResultSequence rs = evalRequest (xfile (EXPRS_REQ), [id: requestId, uri: '', line: line.toString()])
-		BigInteger expr = getSingleBigIntResult (rs)
+		BigInteger expr = getSingleBigIntResult (rs, rs.size() - 1)
 
 		if (expr == null) {
-log ("MarkLogicXdmpDebugger.firstExprOnLine returning null")
+log ("MarkLogicXdmpDebugger.exprForLine returning null")
 			return null
 		} else {
-log ("MarkLogicXdmpDebugger.firstExprOnLine " + expr)
+log ("MarkLogicXdmpDebugger.exprForLine " + expr)
 			return expr
 		}
 	}
@@ -234,7 +293,7 @@ log ("MarkLogicXdmpDebugger.firstExprOnLine " + expr)
 				lineNumber: Integer.parseInt (frame.line.text()),
 				functionName: functionName (frame.operation.text()),
 				uri: (frame.uri.text() != '') ?: initialFile,
-				variables: frameVariables (frame)
+				variables: frameVariables (requestId, frame)
 			)
 
 			log ("requestStackFrames: frame: ${debugFrames.last()}")
@@ -255,24 +314,24 @@ log ("MarkLogicXdmpDebugger.firstExprOnLine " + expr)
 		}
 	}
 
-	private static List<Variable> frameVariables (GPathResult frame)
+	private List<Variable> frameVariables (BigInteger requestId, GPathResult frame)
 	{
 		List<Variable> variables = []
 
 		log ("frameVariables: Doing external-variables")
 		frame.'external-variables'.'external-variable'.each { GPathResult variable ->
 			String name = variableName (variable.name.text(), variable.'@xmlns'.text(), variable.prefix.text())
-			// ToDo: fetch values from ML
-//			String value = variable.value.text()
-			variables << new Variable (name, 'item()*', null, 'external')
+			String qname = variableName (variable.name.text(), null, variable.prefix.text())
+			List<String> valAndType = requestValueAndType (requestId, qname)
+			variables << new Variable (name, valAndType [1], valAndType [0], 'external')
 		}
 
 		log ("frameVariables: Doing global-variables")
 		frame.'global-variables'.'global-variable'.each { GPathResult variable ->
 			String name = variableName (variable.name.text(), variable.'@xmlns'.text(), variable.prefix.text())
-			// ToDo: fetch values from ML
-//			String value = variable.value.text()
-			variables << new Variable (name, 'item()*', null, 'global')
+			String qname = variableName (variable.name.text(), null, variable.prefix.text())
+			List<String> valAndType = requestValueAndType (requestId, qname)
+			variables << new Variable (name, valAndType [1], valAndType [0], 'global')
 		}
 
 		log ("frameVariables: Doing regular variables")
@@ -293,18 +352,27 @@ log ("MarkLogicXdmpDebugger.firstExprOnLine " + expr)
 		"${n}\$${p}${name}"
 	}
 
-	private static final String datePatternString = '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
-	private static final String timePatternString = '[0-2][0-9]:[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?'
+	private static final String datePatternString = '[0-9][0-9][0-9][0-9]\\-[0-9][0-9]\\-[0-9][0-9]'
+	private static final String timePatternString = '[0-2][0-9]:[0-5][0-9]:[0-5][0-9](\\.[0-9]+.*)?'
 	private static final Pattern datePattern = Pattern.compile (datePatternString)
 	private static final Pattern dateTimePattern = Pattern.compile ("${datePatternString}T${timePatternString}")
+	private static final Pattern booleanPattern = Pattern.compile ('fn:true\\(\\)|fn:false\\(\\)')
 
-	// ToDo: Should lookup the type from the parsed source
 	private static String guessVarType (String value)
 	{
-		if ((value == null) || (value.length() == 0)) return '()'
+		if ((value == null) || (value.length() == 0) || (value == '()')) return 'empty-sequence()'
 
-		if (value.matches (dateTimePattern)) return 'xs:dateTime'
-		if (value.matches (datePattern)) return 'xs:date'
+		if (value.startsWith ('xs:')) return value.substring (0, value.indexOf ('('))
+		if (value.startsWith ('(')) return 'sequence'
+		if (value.startsWith ('<!--')) return 'comment()'
+		if (value.startsWith ('<?')) return 'processing-instruction()'
+		if (value.startsWith ('<')) return 'element()'
+		if (value.startsWith ('document{')) return 'document-node()'
+		if (value.startsWith ('text{')) return 'text()'
+		if (value.startsWith ('attribute{')) return 'attribute()'
+//		if (value.matches (dateTimePattern)) return 'xs:dateTime'
+//		if (value.matches (datePattern)) return 'xs:date'
+		if (value.matches (booleanPattern)) return 'xs:boolean'
 
 		try { Long.parseLong (value); return 'xs:integer' } catch (Exception e) { /* nothing*/ }
 		try { Double.parseDouble (value); return 'xs:decimal' } catch (Exception e) { /* nothing*/ }
@@ -314,11 +382,11 @@ log ("MarkLogicXdmpDebugger.firstExprOnLine " + expr)
 
 	// ---------------------------------------------------
 
-	private static BigInteger getSingleBigIntResult (ResultSequence rs)
+	private static BigInteger getSingleBigIntResult (ResultSequence rs, int index = 0)
 	{
 		if (rs.size() == 0) return null
 
-		ResultItem ri = rs.resultItemAt (0)
+		ResultItem ri = rs.resultItemAt (index)
 
 		if (ri.getItemType() != ValueType.XS_INTEGER) return null
 
