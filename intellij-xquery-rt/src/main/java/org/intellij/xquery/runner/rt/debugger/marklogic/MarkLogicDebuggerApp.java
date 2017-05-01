@@ -48,13 +48,10 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 	private final List<StatusChangeHandler> statusChangeHandlers = new ArrayList<>();
 	private final AtomicBoolean shouldBreak = new AtomicBoolean (false);
 	private final String sessionId = "" + new Random(System.currentTimeMillis()).nextLong();
-	private String initalFile;
 	private volatile Status status = Status.STARTING;
+	private boolean runOut = false;
 	private boolean steppingOver = false;
-	private boolean steppingInto = false;
-	private boolean steppingOut = false;
-//	private int stackDepthAtSteppingStart = 0;
-	private MarkLogicDebugConnector debugConnector;
+	private MarkLogicDebugConnector debugConnector = null;
 	private BigInteger debuggerRequestId = BigInteger.ZERO;
 
 	public MarkLogicDebuggerApp (XQueryRunConfig config, PrintStream output)
@@ -152,7 +149,7 @@ log ("MarkLogicDebuggerApp.getProtocolVersion called");
 	@Override
 	public String getInitialFileUri()
 	{
-		initalFile = new File (config.getMainFile()).toURI().toString();
+		String initalFile = new File (config.getMainFile()).toURI().toString();
 
 log ("MarkLogicDebuggerApp.getInitialFileUri called: " + initalFile);
 		return initalFile;
@@ -167,9 +164,24 @@ log ("MarkLogicDebuggerApp.run called");
 			startApplicationRunInSeparateThread();
 log ("MarkLogicDebuggerApp.run thread started");
 		} else {
+			runOut = true;
 			debugConnector.continueRequest (debuggerRequestId);
 			resume();
 log ("MarkLogicDebuggerApp.run resumed");
+		}
+	}
+
+	@Override
+	public boolean breakNow()
+	{
+log ("MarkLogicDebuggerApp.breakNow called");
+		synchronized (theLock) {
+			if (status == Status.STOPPED || status == Status.STOPPING) {
+				return false;
+			} else {
+				shouldBreak.set (true);
+				return true;
+			}
 		}
 	}
 
@@ -178,6 +190,8 @@ log ("MarkLogicDebuggerApp.run resumed");
 	{
 log ("MarkLogicDebuggerApp.stepOver called");
 		try {
+			runOut = true;
+			steppingOver = true;
 			debugConnector.stepOverExpression (debuggerRequestId);
 		} catch (RequestException e) {
 			abort (e);
@@ -191,6 +205,7 @@ log ("MarkLogicDebuggerApp.stepOver called");
 	{
 log ("MarkLogicDebuggerApp.stepInto called");
 		try {
+			runOut = false;
 			debugConnector.stepIntoExpression (debuggerRequestId);
 		} catch (RequestException e) {
 			abort (e);
@@ -204,7 +219,13 @@ log ("MarkLogicDebuggerApp.stepInto called");
 	{
 log ("MarkLogicDebuggerApp.stepOut called");
 		try {
-			debugConnector.stepOutOfExpression (debuggerRequestId);
+			if (refreshStackFrames().size() == 0) {
+				runOut = true;
+				debugConnector.stepOutOfExpression (debuggerRequestId);
+			} else {
+				runOut = false;
+				debugConnector.stepOutOfFunction (debuggerRequestId, stackFrames.get (0).getFunctionName());
+			}
 		} catch (RequestException e) {
 			abort (e);
 		}
@@ -215,7 +236,10 @@ log ("MarkLogicDebuggerApp.stepOut called");
 	public Breakpoint breakpointSet (Breakpoint breakpoint)
 	{
 log ("MarkLogicDebuggerApp.breakpointSet called, breakpoint: " + printBreakpoint (breakpoint));
-		return breakpointManager.setBreakpoint (breakpoint);
+		Breakpoint bp = breakpointManager.setBreakpoint (breakpoint);
+//		debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
+//
+		return bp;
 	}
 
 	private static String printBreakpoint (Breakpoint breakpoint)
@@ -266,29 +290,14 @@ log ("MarkLogicDebuggerApp.getStatus called");
 	}
 
 	@Override
-	public boolean breakNow()
-	{
-log ("MarkLogicDebuggerApp.breakNow called");
-		synchronized (theLock) {
-			if (status == Status.STOPPED || status == Status.STOPPING) {
-				return false;
-			} else {
-				shouldBreak.set (true);
-				return true;
-			}
-		}
-	}
-
-	@Override
 	public int getStackDepth()
 	{
 		log ("MarkLogicDebuggerApp.getStackDepth called");
 
-		stackFrames.clear();
-		stackFrames.addAll (debugConnector.requestStackFrames (debuggerRequestId));
+		List<DebugFrame> stack = refreshStackFrames();
 
-		log ("MarkLogicDebuggerApp.getStackDepth = " + stackFrames.size());
-		return stackFrames.size();
+		log ("MarkLogicDebuggerApp.getStackDepth = " + stack.size());
+		return stack.size();
 	}
 
 	@Override
@@ -333,6 +342,7 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 		thrownException = e;
 	}
 
+	@SuppressWarnings ("OverlyComplexMethod")
 	private void runDebuggerApp() throws Exception
 	{
 		log ("MarkLogicDebuggerApp.runDebuggerApp called");
@@ -358,20 +368,21 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 
 			while (running) {
 				Map<String,String> mlReqStatus = debugConnector.getRequestStatus (debuggerRequestId);
+				String reqStatus = mlReqStatus.get ("req-status");
+				String whereStopped = mlReqStatus.get ("where-stopped");
+
 				log ("runDebuggerApp: top of loop: " + mlReqStatus.get ("req-status"));
 
-				// ToDo: Check for "finished" state?
 				if (mlReqStatus.get ("id") == null) {
 					log ("runDebuggerApp: request not active, stopping: " + debuggerRequestId);
 					break;
 				}
 
-				log ("runDebuggerApp: switch(status): " + status);
+				log ("runDebuggerApp: switch(status): " + status + ", xml: " + mlReqStatus.get ("xml"));
+
 				switch (status) {
 				case BREAK:
-					// ToDo: Wait for lock here?  Sense resume from db UI?
-
-					if ("running".equals (mlReqStatus.get ("req-status"))) {
+					if ("running".equals (reqStatus)) {
 						resume();
 						break;
 					}
@@ -379,12 +390,22 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 					Thread.sleep (2000);
 
 					break;
-				case RUNNING:
-					log ("RUNNING: req-status=" + mlReqStatus.get ("req-status") + ", debug-status=" + mlReqStatus.get ("debug-status") + ", where=" + mlReqStatus.get ("where-stopped"));
 
-					if ("stopped".equals (mlReqStatus.get ("req-status"))) {
-						changeToBreak();
-						break;
+				case RUNNING:
+					log ("RUNNING: req-status=" + reqStatus + ", debug-status=" + mlReqStatus.get ("debug-status") + ", where=" + whereStopped);
+
+					if ("stopped".equals (reqStatus)) {
+						if ( ! (runOut && "end".equals (whereStopped))) {
+							changeToBreak();
+							break;
+						}
+					}
+
+					if (steppingOver) {
+						steppingOver = false;
+						debugConnector.stepOverExpression (debuggerRequestId);
+					} else {
+						debugConnector.continueRequest (debuggerRequestId);
 					}
 
 					BigInteger reqId = debugConnector.waitForStateChange (debuggerRequestId, 30);
@@ -393,17 +414,22 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 						System.err.println ("runDebuggerApp: Timeout waiting for ML request to break/finish, stopping");
 						running = false;
 					}
+
 					break;
+
 				case STARTING:
 					log ("runDebuggerApp: In STARTING state, sleeping for 200 ms");
 					Thread.sleep (200);
 					break;
+
 				case STOPPING:
 					log ("runDebuggerApp: status = STOPPING");
 					break;
+
 				case STOPPED:
 					log ("runDebuggerApp: status = STOPPED");
 					break;
+
 				default:
 					log ("runDebuggerApp: Impossible debug status, stopping: " + status);
 				}
@@ -422,6 +448,7 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 			System.err.println ("Unexpected exception, stopping: " + e);
 		} finally {
 			try {
+				log ("clearing any stopped requests");
 				debugConnector.clearStoppedRequests();
 			} catch (RequestException e) {
 				System.err.println ("Problem clearing stopped requests: " + e);
@@ -449,7 +476,7 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 
 					log ("ran the app");
 					changeToStopped();
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					log ("got exception: " + e);
 					e.printStackTrace();
 					changeToStopped();
@@ -481,6 +508,14 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 
 	// -----------------------------------------------------------------------
 
+	private List<DebugFrame> refreshStackFrames()
+	{
+		stackFrames.clear();
+		stackFrames.addAll (debugConnector.requestStackFrames (debuggerRequestId));
+
+		return stackFrames;
+	}
+
 	private void changeState (Status newState)
 	{
 		log ("Changing state: " + status + " -> " + newState);
@@ -494,18 +529,18 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 	{
 		try {
 			synchronized (theLock) {
-				steppingOver = false;
-				steppingInto = false;
-				steppingOut = false;
+				steppingOver = runOut = false;
 				log ("changeToBreak in status=" + status);
 				log ("suspended");
 				changeState (Status.BREAK);
 
 				log ("starting to wait");
+
 				do {
 					log ("waiting until not suspended");
 					theLock.wait();
 				} while (status == Status.BREAK);
+
 				log ("not suspended anymore=" + status);
 
 				if (status == Status.STOPPED) {
@@ -520,6 +555,7 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 	private void resume() throws DebuggerStoppedException
 	{
 		log ("resume()");
+
 		synchronized (theLock) {
 			log ("resume=" + status);
 			if (status == Status.STOPPED) {
@@ -588,7 +624,7 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 		Collection<PropertyValue> result = new ArrayList<> (variables.size());
 
 		for (Variable variable : variables) {
-			log ("  variable: " + variable.name + ", value: " + variable.value + ", type: " + variable.type);
+//			log ("  variable: " + variable.name + ", value: " + variable.value + ", type: " + variable.type);
 			result.add (convertToPropertyValue (variable));
 		}
 

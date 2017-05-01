@@ -56,17 +56,13 @@ class MarkLogicDebugConnector
 
 	private ResultSequence evalRequest (String query, Map<String,Object> args = [:]) throws RequestException
 	{
-//log ("MarkLogicXdmpDebugger.evalRequest, query: " + query);
+//log ("MarkLogicDebugConnector.evalRequest, query: " + query);
 		Request request = session.newAdhocQuery (query)
 
-//		for (String name : args.keySet()) {
 		args.each { String name, Object value ->
 			String strValue = (value == null) ? "" : value.toString()
 
-//log ("    arg, name: " + name + ", value: " + args.get (name));
-
 			if (value instanceof BigInteger) {
-//					request.setNewVariable (new XName (name), ValueFactory.newXSInteger ((BigInteger) value))
 				request.setNewVariable (name, ValueType.XS_INTEGER, value)
 			} else if ((value instanceof Long) || (value instanceof Integer)) {
 				request.setNewVariable (name, ValueType.XS_INTEGER, Long.parseLong (strValue))
@@ -84,12 +80,12 @@ class MarkLogicDebugConnector
 
 	BigInteger submitEvalForDebug (String query, Map<String,Object> args) throws Exception
 	{
-		log ("MarkLogicXdmpDebugger.submitEvalForDebug submitting debug request to MarkLogic")
+		log ("MarkLogicDebugConnector.submitEvalForDebug submitting debug request to MarkLogic")
 
 		ResultSequence rs = evalRequest (xfile (DBG_EVAL_REQUEST), [__query__: query, __variables__: generateVarsXml (args)])
 		BigInteger requestId = getSingleBigIntResult (rs)
 
-		log ("MarkLogicXdmpDebugger.submitEvalForDebug back from call, requestId: " + requestId)
+		log ("MarkLogicDebugConnector.submitEvalForDebug back from call, requestId: " + requestId)
 
 		return requestId
 	}
@@ -107,13 +103,13 @@ class MarkLogicDebugConnector
 
 	String requestValue (BigInteger requestId, String expr)
 	{
-log ("MarkLogicXdmpDebugger.requestValue: ${expr}" )
+//log ("MarkLogicDebugConnector.requestValue: ${expr}" )
 		requestValueAndType (requestId, expr) [0]
 	}
 
 	List<String> requestValueAndType (BigInteger requestId, String expr)
 	{
-log ("MarkLogicXdmpDebugger.requestValueAndType: ${expr}" )
+//log ("MarkLogicDebugConnector.requestValueAndType: ${expr}" )
 		ResultSequence rs = evalRequest (xfile (GET_REQUEST_VALUE), [id: requestId, expr: expr])
 
 		[rs.itemAt (0).asString(), rs.itemAt (1).asString()]
@@ -125,7 +121,7 @@ log ("MarkLogicXdmpDebugger.requestValueAndType: ${expr}" )
 
 	void clearStoppedRequests() throws RequestException
 	{
-log ("MarkLogicXdmpDebugger.clearStoppedRequests")
+log ("MarkLogicDebugConnector.clearStoppedRequests")
 		evalRequest (xfile (CLEAR_STOPPED_REQ))
 	}
 
@@ -135,7 +131,7 @@ log ("MarkLogicXdmpDebugger.clearStoppedRequests")
 
 	void continueRequest (BigInteger requestId) throws RequestException
 	{
-log ("MarkLogicXdmpDebugger.continueRequest")
+log ("MarkLogicDebugConnector.continueRequest")
 		evalRequest (xfile (RESUME_REQ), [id: requestId])
 	}
 
@@ -143,7 +139,7 @@ log ("MarkLogicXdmpDebugger.continueRequest")
 
 	void runToNextBreakPoint (BigInteger requestId) throws RequestException
 	{
-		log ("MarkLogicXdmpDebugger.runToNextBreakPoint")
+		log ("MarkLogicDebugConnector.runToNextBreakPoint")
 		evalRequest (xfile (RUN_TO_NEXT_BP), [id: requestId])
 	}
 
@@ -153,7 +149,7 @@ log ("MarkLogicXdmpDebugger.continueRequest")
 
 	void stepOverExpression (BigInteger requestId) throws RequestException
 	{
-log ("MarkLogicXdmpDebugger.stepOverExpression")
+log ("MarkLogicDebugConnector.stepOverExpression")
 		evalRequest (xfile (STEP_OVER), [id: requestId])
 	}
 
@@ -163,7 +159,7 @@ log ("MarkLogicXdmpDebugger.stepOverExpression")
 
 	void stepIntoExpression (BigInteger requestId) throws RequestException
 	{
-log ("MarkLogicXdmpDebugger.stepIntoExpression")
+log ("MarkLogicDebugConnector.stepIntoExpression")
 		evalRequest (xfile (STEP_INTO), [id: requestId])
 	}
 
@@ -173,15 +169,22 @@ log ("MarkLogicXdmpDebugger.stepIntoExpression")
 
 	void stepOutOfExpression (BigInteger requestId) throws RequestException
 	{
-log ("MarkLogicXdmpDebugger.stepOutOfExpression")
-		evalRequest (xfile (STEP_OUT), [id: requestId])
+log ("MarkLogicDebugConnector.stepOutOfExpression")
+		evalRequest (xfile (STEP_OUT), [id: requestId, function: ''])
+	}
+
+
+	void stepOutOfFunction (BigInteger requestId, String functionName) throws RequestException
+	{
+log ("MarkLogicDebugConnector.stepOutOfFunction: function=" + functionName)
+		evalRequest (xfile (STEP_OUT), [id: requestId, function: functionName])
 	}
 
 	// ---------------------------------------------------
 
 	void setMlBreakPoints (BigInteger requestId, BreakpointManager breakpointManager) throws RequestException
 	{
-log ("MarkLogicXdmpDebugger.setMlBreakPoints, requestId: " + requestId)
+log ("MarkLogicDebugConnector.setMlBreakPoints, requestId: " + requestId)
 
 		Map<Integer, Map<String, Breakpoint>> breakPoints = breakpointManager.allBreakpoints()
 
@@ -204,16 +207,16 @@ log ("MarkLogicXdmpDebugger.setMlBreakPoints, requestId: " + requestId)
 		String file = bp.getFileURL().get()
 		Integer line = bp.getLineNumber().get()
 //		String functionName = bp.getFunction().get();
-log ("MarkLogicXdmpDebugger.setMlBreakPoint called")
+log ("MarkLogicDebugConnector.setMlBreakPoint called")
 
 		BigInteger exprId = exprForLine (requestId, file, line)
 
 		if (exprId == null) {
 			System.err.println ("Cannot set ML breakpoint, no expression found on line " + line)
 		} else {
-log ("MarkLogicXdmpDebugger.setMlBreakPoint setting breakpoint, line: " + line + ", file: " + file + ", reqId: " + requestId + ", expr: " + exprId)
+log ("MarkLogicDebugConnector.setMlBreakPoint setting breakpoint, line: " + line + ", file: " + file + ", reqId: " + requestId + ", expr: " + exprId)
 			evalRequest (xfile (SET_BP_REQ), [id: requestId, exprid: exprId])
-log ("MarkLogicXdmpDebugger.setMlBreakPoint breakpoint set, line: " + line + ", file: " + file + ", reqId: " + requestId + ", expr: " + exprId)
+log ("MarkLogicDebugConnector.setMlBreakPoint breakpoint set, line: " + line + ", file: " + file + ", reqId: " + requestId + ", expr: " + exprId)
 		}
 	}
 
@@ -227,10 +230,10 @@ log ("MarkLogicXdmpDebugger.setMlBreakPoint breakpoint set, line: " + line + ", 
 		BigInteger expr = getSingleBigIntResult (rs, rs.size() - 1)
 
 		if (expr == null) {
-log ("MarkLogicXdmpDebugger.exprForLine returning null")
+log ("MarkLogicDebugConnector.exprForLine returning null")
 			return null
 		} else {
-log ("MarkLogicXdmpDebugger.exprForLine " + expr)
+log ("MarkLogicDebugConnector.exprForLine " + expr)
 			return expr
 		}
 	}
@@ -245,10 +248,10 @@ log ("MarkLogicXdmpDebugger.exprForLine " + expr)
 		BigInteger expr = getSingleBigIntResult (rs)
 
 		if (expr == null) {
-			log ("MarkLogicXdmpDebugger.waitForStateChange returning null")
+			log ("MarkLogicDebugConnector.waitForStateChange returning null")
 			return null;
 		} else {
-			log ("MarkLogicXdmpDebugger.waitForStateChange " + expr)
+			log ("MarkLogicDebugConnector.waitForStateChange " + expr)
 			return expr;
 		}
 	}
@@ -268,7 +271,7 @@ log ("MarkLogicXdmpDebugger.exprForLine " + expr)
 		if (rs.size() > 3) stat ['debug-status'] = rs.itemAt (3).asString()
 		if (rs.size() > 4) stat ['where-stopped'] = rs.itemAt (4).asString()
 
-//		log ("MarkLogicXdmpDebugger.getRequestStatus returning: " + stat);
+//		log ("MarkLogicDebugConnector.getRequestStatus returning: " + stat);
 
 		return stat
 	}
@@ -280,11 +283,11 @@ log ("MarkLogicXdmpDebugger.exprForLine " + expr)
 	List<DebugFrame> requestStackFrames (BigInteger requestId)
 	{
 		ResultSequence rs = evalRequest (xfile (GET_REQ_STACK), [id: requestId])
-		log ("requestStackFrames (raw): ${rs.asString()}")
+//		log ("requestStackFrames (raw): ${rs.asString()}")
 		GPathResult stack = new XmlSlurper (false, true).parseText (rs.asString()).declareNamespace ([d: 'http://marklogic.com/xdmp/debug'])
 		List<DebugFrame> debugFrames = []
 
-		log ("requestStackFrames: ${stack}")
+//		log ("requestStackFrames: ${stack}")
 
 //		debugFrames << new MarklogicDebugFrame (lineNumber: stack.line.text(), uri: stack.uri.text())
 
@@ -296,10 +299,10 @@ log ("MarkLogicXdmpDebugger.exprForLine " + expr)
 				variables: frameVariables (requestId, frame)
 			)
 
-			log ("requestStackFrames: frame: ${debugFrames.last()}")
+//			log ("requestStackFrames: frame: ${debugFrames.last()}")
 		}
 
-		log ("returning requestStackFrames: size=${debugFrames.size()}")
+//		log ("returning requestStackFrames: size=${debugFrames.size()}")
 		debugFrames
 	}
 
@@ -318,7 +321,7 @@ log ("MarkLogicXdmpDebugger.exprForLine " + expr)
 	{
 		List<Variable> variables = []
 
-		log ("frameVariables: Doing external-variables")
+//		log ("frameVariables: Doing external-variables")
 		frame.'external-variables'.'external-variable'.each { GPathResult variable ->
 			String name = variableName (variable.name.text(), variable.'@xmlns'.text(), variable.prefix.text())
 			String qname = variableName (variable.name.text(), null, variable.prefix.text())
@@ -326,7 +329,7 @@ log ("MarkLogicXdmpDebugger.exprForLine " + expr)
 			variables << new Variable (name, valAndType [1], valAndType [0], 'external')
 		}
 
-		log ("frameVariables: Doing global-variables")
+//		log ("frameVariables: Doing global-variables")
 		frame.'global-variables'.'global-variable'.each { GPathResult variable ->
 			String name = variableName (variable.name.text(), variable.'@xmlns'.text(), variable.prefix.text())
 			String qname = variableName (variable.name.text(), null, variable.prefix.text())
@@ -334,7 +337,7 @@ log ("MarkLogicXdmpDebugger.exprForLine " + expr)
 			variables << new Variable (name, valAndType [1], valAndType [0], 'global')
 		}
 
-		log ("frameVariables: Doing regular variables")
+//		log ("frameVariables: Doing regular variables")
 		frame.variables.variable.each { GPathResult variable ->
 			String name = variableName (variable.name.text(), variable.'@xmlns'.text(), variable.prefix.text())
 			String value = variable.value.text()

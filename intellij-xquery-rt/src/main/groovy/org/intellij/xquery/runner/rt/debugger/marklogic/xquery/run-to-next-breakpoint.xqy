@@ -22,6 +22,19 @@
 
 xquery version '1.0-ml';
 
+declare namespace d='http://marklogic.com/xdmp/debug';
+
 declare variable $id external;
 
-dbg:continue ($id)
+let $status := dbg:status ($id)
+let $req-status := $status/d:request/d:request-status/fn:string()
+let $where := $status/d:request/d:where-stopped/fn:string()
+
+return
+if ($req-status = 'stopped')
+then
+	if ($where = 'begin')
+	then dbg:finish ($id)
+	else dbg:continue ($id)
+else ()
+
