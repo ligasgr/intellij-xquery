@@ -237,23 +237,20 @@ log ("MarkLogicDebuggerApp.stepOut called");
 	{
 log ("MarkLogicDebuggerApp.breakpointSet called, breakpoint: " + printBreakpoint (breakpoint));
 		Breakpoint bp = breakpointManager.setBreakpoint (breakpoint);
-//		debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
-//
-		return bp;
-	}
+		if (debugConnector != null) debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
 
-	private static String printBreakpoint (Breakpoint breakpoint)
-	{
-		return "Breakpoint, type: " + breakpoint.getType() + ", function: " + breakpoint.getFunction() +
-			", expr: " + breakpoint.getExpression() + ", line: " + breakpoint.getLineNumber() +
-			", enabled: " + breakpoint.isEnabled() + ", file: " + breakpoint.getFileURL();
+		return bp;
 	}
 
 	@Override
 	public Optional<Breakpoint> breakpointRemove (String breakpointId)
 	{
 log ("MarkLogicDebuggerApp.breakpointRemove called, breakpointId: " + breakpointId);
-		return breakpointManager.removeBreakpoint (breakpointId);
+		Optional<Breakpoint> bp = breakpointManager.removeBreakpoint (breakpointId);
+
+		if (debugConnector != null) debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
+
+		return bp;
 	}
 
 	@Override
@@ -271,6 +268,7 @@ log ("MarkLogicDebuggerApp.breakpointUpdate called, breakpointId: " + breakpoint
 		Breakpoint updatedBreakpoint = breakpointToUpdate.update (breakpointUpdateData);
 
 		breakpointManager.updateBreakpoint (updatedBreakpoint);
+		if (debugConnector != null) debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
 	}
 
 	@Override
@@ -370,15 +368,16 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 				Map<String,String> mlReqStatus = debugConnector.getRequestStatus (debuggerRequestId);
 				String reqStatus = mlReqStatus.get ("req-status");
 				String whereStopped = mlReqStatus.get ("where-stopped");
+				String exprId = mlReqStatus.get ("expr-id");
 
-				log ("runDebuggerApp: top of loop: " + mlReqStatus.get ("req-status"));
+				log ("runDebuggerApp: top of loop: " + reqStatus);
 
 				if (mlReqStatus.get ("id") == null) {
 					log ("runDebuggerApp: request not active, stopping: " + debuggerRequestId);
 					break;
 				}
 
-				log ("runDebuggerApp: switch(status): " + status + ", xml: " + mlReqStatus.get ("xml"));
+				log ("runDebuggerApp: switch(status): status: " + status + ", expr: " + exprId + ", where: " + whereStopped);
 
 				switch (status) {
 				case BREAK:
@@ -392,7 +391,7 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 					break;
 
 				case RUNNING:
-					log ("RUNNING: req-status=" + reqStatus + ", debug-status=" + mlReqStatus.get ("debug-status") + ", where=" + whereStopped);
+					log ("RUNNING: req-status=" + reqStatus + ", expr: " + exprId + ", where: " + whereStopped);
 
 					if ("stopped".equals (reqStatus)) {
 						if ( ! (runOut && "end".equals (whereStopped))) {
@@ -514,6 +513,13 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 		stackFrames.addAll (debugConnector.requestStackFrames (debuggerRequestId));
 
 		return stackFrames;
+	}
+
+	private static String printBreakpoint (Breakpoint breakpoint)
+	{
+		return "Breakpoint, type: " + breakpoint.getType() + ", function: " + breakpoint.getFunction() +
+			", expr: " + breakpoint.getExpression() + ", line: " + breakpoint.getLineNumber() +
+			", enabled: " + breakpoint.isEnabled() + ", file: " + breakpoint.getFileURL();
 	}
 
 	private void changeState (Status newState)

@@ -100,7 +100,6 @@ class MarkLogicDebugConnector
 
 	private static final String GET_REQUEST_VALUE = 'request-value.xqy'
 
-
 	String requestValue (BigInteger requestId, String expr)
 	{
 //log ("MarkLogicDebugConnector.requestValue: ${expr}" )
@@ -127,7 +126,7 @@ log ("MarkLogicDebugConnector.clearStoppedRequests")
 
 	// ---------------------------------------------------
 
-	private static final String RESUME_REQ = 'resume-request.xqy'
+	private static final String RESUME_REQ = 'resume-stopped.xqy'
 
 	void continueRequest (BigInteger requestId) throws RequestException
 	{
@@ -182,9 +181,15 @@ log ("MarkLogicDebugConnector.stepOutOfFunction: function=" + functionName)
 
 	// ---------------------------------------------------
 
-	void setMlBreakPoints (BigInteger requestId, BreakpointManager breakpointManager) throws RequestException
+	private static final String SET_BP_REQ = 'setup-breakpoint.xqy'
+	private static final String CLEAR_BPS_REQ = 'clear-all-breakpoints.xqy'
+
+
+	void setMlBreakPoints (BigInteger requestId, BreakpointManager breakpointManager)
 	{
 log ("MarkLogicDebugConnector.setMlBreakPoints, requestId: " + requestId)
+
+		evalRequest (xfile (CLEAR_BPS_REQ), [id: requestId])
 
 		Map<Integer, Map<String, Breakpoint>> breakPoints = breakpointManager.allBreakpoints()
 
@@ -200,9 +205,7 @@ log ("MarkLogicDebugConnector.setMlBreakPoints, requestId: " + requestId)
 		}
 	}
 
-	private static final String SET_BP_REQ = 'setup-breakpoint.xqy'
-
-	private void setMlBreakPoint (BigInteger requestId, Breakpoint bp) throws RequestException
+	private void setMlBreakPoint (BigInteger requestId, Breakpoint bp)
 	{
 		String file = bp.getFileURL().get()
 		Integer line = bp.getLineNumber().get()
@@ -252,7 +255,7 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 			return null;
 		} else {
 			log ("MarkLogicDebugConnector.waitForStateChange " + expr)
-			return expr;
+			return expr
 		}
 	}
 
@@ -270,6 +273,7 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 		if (rs.size() > 2) stat ['req-status'] = rs.itemAt (2).asString()
 		if (rs.size() > 3) stat ['debug-status'] = rs.itemAt (3).asString()
 		if (rs.size() > 4) stat ['where-stopped'] = rs.itemAt (4).asString()
+		if (rs.size() > 5) stat ['expr-id'] = rs.itemAt (5).asString()
 
 //		log ("MarkLogicDebugConnector.getRequestStatus returning: " + stat);
 
@@ -286,10 +290,6 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 //		log ("requestStackFrames (raw): ${rs.asString()}")
 		GPathResult stack = new XmlSlurper (false, true).parseText (rs.asString()).declareNamespace ([d: 'http://marklogic.com/xdmp/debug'])
 		List<DebugFrame> debugFrames = []
-
-//		log ("requestStackFrames: ${stack}")
-
-//		debugFrames << new MarklogicDebugFrame (lineNumber: stack.line.text(), uri: stack.uri.text())
 
 		stack.frame.each { GPathResult frame ->
 			debugFrames << new MarklogicDebugFrame (
@@ -321,7 +321,6 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 	{
 		List<Variable> variables = []
 
-//		log ("frameVariables: Doing external-variables")
 		frame.'external-variables'.'external-variable'.each { GPathResult variable ->
 			String name = variableName (variable.name.text(), variable.'@xmlns'.text(), variable.prefix.text())
 			String qname = variableName (variable.name.text(), null, variable.prefix.text())
@@ -329,7 +328,6 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 			variables << new Variable (name, valAndType [1], valAndType [0], 'external')
 		}
 
-//		log ("frameVariables: Doing global-variables")
 		frame.'global-variables'.'global-variable'.each { GPathResult variable ->
 			String name = variableName (variable.name.text(), variable.'@xmlns'.text(), variable.prefix.text())
 			String qname = variableName (variable.name.text(), null, variable.prefix.text())
@@ -337,7 +335,6 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 			variables << new Variable (name, valAndType [1], valAndType [0], 'global')
 		}
 
-//		log ("frameVariables: Doing regular variables")
 		frame.variables.variable.each { GPathResult variable ->
 			String name = variableName (variable.name.text(), variable.'@xmlns'.text(), variable.prefix.text())
 			String value = variable.value.text()
@@ -373,8 +370,6 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 		if (value.startsWith ('document{')) return 'document-node()'
 		if (value.startsWith ('text{')) return 'text()'
 		if (value.startsWith ('attribute{')) return 'attribute()'
-//		if (value.matches (dateTimePattern)) return 'xs:dateTime'
-//		if (value.matches (datePattern)) return 'xs:date'
 		if (value.matches (booleanPattern)) return 'xs:boolean'
 
 		try { Long.parseLong (value); return 'xs:integer' } catch (Exception e) { /* nothing*/ }
