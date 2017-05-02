@@ -21,25 +21,26 @@
 :)
 
 xquery version '1.0-ml';
+
+declare namespace d='http://marklogic.com/xdmp/debug';
+
 declare variable $__query__ external;
 declare variable $__variables__ external;
 
-declare function local:value ($var as element()) as xs:untypedAtomic
-{
-    switch ($var/type)
-    case 'xs:integer' return xs:integer ($var/data)
-    case 'xs:int' return xs:int ($var/data)
-    case 'xs:unsignedInt' return xs:unsignedInt ($var/data)
-    case 'xs:unsignedLong' return xs:unsignedLong ($var/data)
-    case 'xs:unsignedShort' return xs:unsignedShort ($var/data)
-    case 'xs:decimal' return xs:decimal ($var/data)
-    default return $var/fn:string()
-};
-
 declare function local:gen-vars() as item()* {
-    for $var in xdmp:unquote ($__variables__)/variable
+    for $var in xdmp:unquote ($__variables__)/variables/variable
     let $qname := fn:QName ($var/@ns/fn:data(), $var/@name)
-    return ($qname, local:value ($var))
+    return ($qname, $var/fn:data())
 };
 
-dbg:eval ($__query__, local:gen-vars())
+declare variable $vars := local:gen-vars();
+
+let $id := dbg:eval ($__query__, $vars)
+let $status := dbg:status ($id)
+let $_ := xdmp:log ($status)
+return
+    if ($status/d:request/error:error/error:format-string/fn:string())
+    then fn:error (xs:QName ($status/d:request/error:error/error:name/fn:string()), $status/d:request/error:error/error:format-string/fn:string())
+    else $id
+
+

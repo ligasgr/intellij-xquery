@@ -23,7 +23,9 @@ import com.marklogic.xcc.exceptions.RequestException
 import com.marklogic.xcc.types.ValueType
 import com.marklogic.xcc.types.XSInteger
 import groovy.util.slurpersupport.GPathResult
+import groovy.xml.StreamingMarkupBuilder
 import org.intellij.xquery.runner.rt.XQueryRunConfig
+import org.intellij.xquery.runner.rt.XQueryRunnerVariable
 import org.intellij.xquery.runner.rt.debugger.BreakpointManager
 import org.intellij.xquery.runner.rt.debugger.DebugFrame
 import org.intellij.xquery.runner.rt.debugger.Variable
@@ -78,11 +80,11 @@ class MarkLogicDebugConnector
 
 	private static final String DBG_EVAL_REQUEST = 'dbg-eval-request.xqy'
 
-	BigInteger submitEvalForDebug (String query, Map<String,Object> args) throws Exception
+	BigInteger submitEvalForDebug (String query, List<XQueryRunnerVariable> vars) throws Exception
 	{
 		log ("MarkLogicDebugConnector.submitEvalForDebug submitting debug request to MarkLogic")
 
-		ResultSequence rs = evalRequest (xfile (DBG_EVAL_REQUEST), [__query__: query, __variables__: generateVarsXml (args)])
+		ResultSequence rs = evalRequest (xfile (DBG_EVAL_REQUEST), [__query__: query, __variables__: generateVarsXml (vars)])
 		BigInteger requestId = getSingleBigIntResult (rs)
 
 		log ("MarkLogicDebugConnector.submitEvalForDebug back from call, requestId: " + requestId)
@@ -90,10 +92,22 @@ class MarkLogicDebugConnector
 		return requestId
 	}
 
-	// ToDo: Finish this
-	private static String generateVarsXml (Map<String,Object> args)
+	private static String generateVarsXml (List<XQueryRunnerVariable> vars)
 	{
-		return "<variables/>"
+		def builder = new StreamingMarkupBuilder()
+
+		def xml = builder.bind {
+			mkp.declareNamespace ([xsi: 'http://www.w3.org/2001/XMLSchema-instance', xs: 'http://www.w3.org/2001/XMLSchema'])
+			'variables' {
+				vars.each { XQueryRunnerVariable var ->
+					if (var.ACTIVE) {
+						'variable' (name: var.NAME, ns: var.NAMESPACE, 'xsi:type': var.TYPE, var.VALUE)
+					}
+				}
+			}
+		}
+
+		return xml.toString()
 	}
 
 	// ---------------------------------------------------
@@ -274,6 +288,7 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 		if (rs.size() > 3) stat ['debug-status'] = rs.itemAt (3).asString()
 		if (rs.size() > 4) stat ['where-stopped'] = rs.itemAt (4).asString()
 		if (rs.size() > 5) stat ['expr-id'] = rs.itemAt (5).asString()
+		if (rs.size() > 6) stat ['error-msg'] = rs.itemAt (6).asString()
 
 //		log ("MarkLogicDebugConnector.getRequestStatus returning: " + stat);
 
@@ -287,7 +302,6 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 	List<DebugFrame> requestStackFrames (BigInteger requestId)
 	{
 		ResultSequence rs = evalRequest (xfile (GET_REQ_STACK), [id: requestId])
-//		log ("requestStackFrames (raw): ${rs.asString()}")
 		GPathResult stack = new XmlSlurper (false, true).parseText (rs.asString()).declareNamespace ([d: 'http://marklogic.com/xdmp/debug'])
 		List<DebugFrame> debugFrames = []
 
@@ -298,11 +312,8 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 				uri: (frame.uri.text() != '') ?: initialFile,
 				variables: frameVariables (requestId, frame)
 			)
-
-//			log ("requestStackFrames: frame: ${debugFrames.last()}")
 		}
 
-//		log ("returning requestStackFrames: size=${debugFrames.size()}")
 		debugFrames
 	}
 

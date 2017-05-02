@@ -34,5 +34,6 @@ return
 	$status/d:request[1]/d:request-status/fn:string(),
 	$status/d:request[1]/d:debugging-status/fn:string(),
 	$status/d:request[1]/d:where-stopped/fn:string(),
-	$status/d:request[1]/d:expr-id/fn:string()
+	$status/d:request[1]/d:expr-id/fn:string(),
+	$status/d:request[1]/error:error/error:format-string/fn:string()
 )

@@ -353,10 +353,11 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 		try {
 			debugConnector.clearStoppedRequests();
 
-			debuggerRequestId = debugConnector.submitEvalForDebug (query, new HashMap());
+			debuggerRequestId = debugConnector.submitEvalForDebug (query, config.getVariables());
 
 			debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
 
+			log ("runDebuggerApp: starting suspended request");
 			debugConnector.runToNextBreakPoint (debuggerRequestId);
 
 			log ("runDebuggerApp: entering eternal loop");
@@ -369,11 +370,17 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 				String reqStatus = mlReqStatus.get ("req-status");
 				String whereStopped = mlReqStatus.get ("where-stopped");
 				String exprId = mlReqStatus.get ("expr-id");
+				String errorMsg = mlReqStatus.get ("error-msg");
 
 				log ("runDebuggerApp: top of loop: " + reqStatus);
 
 				if (mlReqStatus.get ("id") == null) {
 					log ("runDebuggerApp: request not active, stopping: " + debuggerRequestId);
+					break;
+				}
+
+				if ((errorMsg != null) && (errorMsg.length() > 0)) {
+					System.err.println (errorMsg);
 					break;
 				}
 
@@ -430,7 +437,7 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 					break;
 
 				default:
-					log ("runDebuggerApp: Impossible debug status, stopping: " + status);
+					log ("runDebuggerApp: Impossible debug status, stopping: " + mlReqStatus.get ("xml"));
 				}
 
 				if ( ! running) log ("running = false, breaking from main loop");
