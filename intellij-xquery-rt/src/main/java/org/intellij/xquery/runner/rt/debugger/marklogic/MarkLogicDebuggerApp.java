@@ -21,6 +21,7 @@ import com.codnos.dbgp.api.*;
 import com.marklogic.xcc.ContentSource;
 import com.marklogic.xcc.Session;
 import com.marklogic.xcc.exceptions.RequestException;
+import com.marklogic.xcc.exceptions.XQueryException;
 import org.intellij.xquery.runner.rt.XQueryRunConfig;
 import org.intellij.xquery.runner.rt.debugger.BreakpointManager;
 import org.intellij.xquery.runner.rt.debugger.DebugFrame;
@@ -407,6 +408,8 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 						}
 					}
 
+					log ("Continuing");
+
 					if (steppingOver) {
 						steppingOver = false;
 						debugConnector.stepOverExpression (debuggerRequestId);
@@ -414,7 +417,11 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 						debugConnector.continueRequest (debuggerRequestId);
 					}
 
+					debugConnector.getRequestStatus (debuggerRequestId);	// trigger deferred exception
+
 					BigInteger reqId = debugConnector.waitForStateChange (debuggerRequestId, 30);
+
+					debugConnector.getRequestStatus (debuggerRequestId);	// trigger deferred exception
 
 					if (reqId == null) {
 						System.err.println ("runDebuggerApp: Timeout waiting for ML request to break/finish, stopping");
@@ -446,10 +453,12 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 					throw thrownException;
 				}
 			}
+		} catch (DeferredXqueryException|XQueryException e) {
+			System.err.println ("XQuery execution exception, stopping: " + e);
 		} catch (RequestException e) {
 			System.err.println ("Exception talking to MarkLogic, stopping: " + e);
 		} catch (DebuggerStoppedException e) {
-			System.err.println ("Exception, debugger has stopped: " + e);
+			System.err.println ("Debugger has unexpectedly stopped: " + e);
 		} catch (Exception e) {
 			System.err.println ("Unexpected exception, stopping: " + e);
 		} finally {

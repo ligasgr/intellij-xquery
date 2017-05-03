@@ -89,6 +89,11 @@ class MarkLogicDebugConnector
 
 		log ("MarkLogicDebugConnector.submitEvalForDebug back from call, requestId: " + requestId)
 
+		// This is unnecessary, but will trigger an undefined external var exception
+		// if any are missing.  Need to do this now, because dbg:value() will hang if
+		// the request encounters an XQuery error later.
+		requestStackFrames (requestId)
+
 		return requestId
 	}
 
@@ -114,16 +119,15 @@ class MarkLogicDebugConnector
 
 	private static final String GET_REQUEST_VALUE = 'request-value.xqy'
 
-	String requestValue (BigInteger requestId, String expr)
+	String requestValue (BigInteger requestId, String expr) throws RequestException
 	{
-//log ("MarkLogicDebugConnector.requestValue: ${expr}" )
 		requestValueAndType (requestId, expr) [0]
 	}
 
-	List<String> requestValueAndType (BigInteger requestId, String expr)
+	List<String> requestValueAndType (BigInteger requestId, String expr) throws RequestException
 	{
-//log ("MarkLogicDebugConnector.requestValueAndType: ${expr}" )
 		ResultSequence rs = evalRequest (xfile (GET_REQUEST_VALUE), [id: requestId, expr: expr])
+//		log ("MarkLogicDebugConnector.requestValueAndType: ${expr}, value: ${rs.asString()}" )
 
 		[rs.itemAt (0).asString(), rs.itemAt (1).asString()]
 	}
@@ -290,7 +294,9 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 		if (rs.size() > 5) stat ['expr-id'] = rs.itemAt (5).asString()
 		if (rs.size() > 6) stat ['error-msg'] = rs.itemAt (6).asString()
 
-//		log ("MarkLogicDebugConnector.getRequestStatus returning: " + stat);
+//		log ("MarkLogicDebugConnector.getRequestStatus returning: " + stat)
+
+		if (stat ['error-msg']) throw new DeferredXqueryException (stat)
 
 		return stat
 	}
@@ -301,6 +307,8 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 
 	List<DebugFrame> requestStackFrames (BigInteger requestId)
 	{
+//		log ("MarkLogicDebugConnector.requestStackFrames called")
+
 		ResultSequence rs = evalRequest (xfile (GET_REQ_STACK), [id: requestId])
 		GPathResult stack = new XmlSlurper (false, true).parseText (rs.asString()).declareNamespace ([d: 'http://marklogic.com/xdmp/debug'])
 		List<DebugFrame> debugFrames = []
@@ -309,11 +317,12 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 			debugFrames << new MarklogicDebugFrame (
 				lineNumber: Integer.parseInt (frame.line.text()),
 				functionName: functionName (frame.operation.text()),
-				uri: (frame.uri.text() != '') ?: initialFile,
+				uri: (frame.uri.text()) ?: initialFile,
 				variables: frameVariables (requestId, frame)
 			)
 		}
 
+//		log ("MarkLogicDebugConnector.requestStackFrames returning: ${debugFrames}")
 		debugFrames
 	}
 
@@ -328,7 +337,7 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 		}
 	}
 
-	private List<Variable> frameVariables (BigInteger requestId, GPathResult frame)
+	private List<Variable> frameVariables (BigInteger requestId, GPathResult frame) throws RequestException
 	{
 		List<Variable> variables = []
 
