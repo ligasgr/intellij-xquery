@@ -40,7 +40,7 @@
         </constraints>
         <properties>
           <componentClass value="javax.swing.JTextField"/>
-          <text value="Debugger User"/>
+          <text value="Debugger User (same as above if empty)"/>
           <toolTipText value="The username to connect with for the debugger connection"/>
         </properties>
       </component>

@@ -20,12 +20,19 @@ package org.intellij.xquery.runner.rt.vendor.marklogic;
 import org.intellij.xquery.runner.rt.RunnerApp;
 import org.intellij.xquery.runner.rt.RunnerAppFactory;
 import org.intellij.xquery.runner.rt.XQueryRunConfig;
+import org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicDebuggerApp;
 
 import java.io.PrintStream;
 
-public class MarklogicRunnerAppFactory implements RunnerAppFactory {
+public class MarklogicRunnerAppFactory implements RunnerAppFactory
+{
     @Override
-    public RunnerApp getInstance(XQueryRunConfig config, PrintStream output) throws Exception {
-        return new MarklogicRunnerApp(config, output);
+    public RunnerApp getInstance (XQueryRunConfig config, PrintStream output) throws Exception
+    {
+        if (config.isDebugEnabled()) {
+            return new MarkLogicDebuggerApp (config, output);
+        } else {
+            return new MarklogicRunnerApp (config, output);
+        }
     }
 }

@@ -62,7 +62,7 @@ public class MarkLogicDebuggerSettingsPanel
 
 	public void init (XQueryDataSourceConfiguration cfg, DataSourceConfigurationAggregatingPanel aggregatingPanel, ConfigurationChangeListener listener)
 	{
-		mainPanel.setVisible (cfg.TYPE.isDebugSupported());
+		mainPanel.setVisible (cfg.TYPE.isSecondaryDebugPortSupported());
 		mlDebuggerEnabled.setSelected (cfg.MLDEBUGGER_CONFIG_ENABLED);
 		mlDebuggerPort.getComponent().setText (cfg.MLDEBUGGER_CONFIG_PORT);
 		mlDebuggerUser.getComponent().setText (cfg.MLDEBUGGER_CONFIG_USER);

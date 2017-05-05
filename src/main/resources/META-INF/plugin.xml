@@ -15,32 +15,25 @@
   ~ limitations under the License.
   -->
 
-<idea-plugin url="http://ligasgr.github.io/intellij-xquery/" version="2">
+<idea-plugin url="https://github.com/overstory/marklogic-intellij-plugin" version="2">
     <id>org.intellij.xquery</id>
-    <name>XQuery Support</name>
-    <version>3.3.0</version>
-    <vendor email="ligasgr@gmail.com" url="http://grzegorzligas.blogspot.com/">Grzegorz Ligas</vendor>
+    <name>XQuery Support + MarkLogic Debugger</name>
+    <version>1.0.0-SNAPSHOT</version>
+    <vendor email="ron@overstory.co.uk" url="http://overstory.co.uk/">OverStory Ltd</vendor>
 
-    <description>Provides support for XQuery language in version 3.0 and 3.1</description>
+    <description>
+        Provides XQuery 3.0 language support, with MarkLogic documentation and debugger extensions.
+        Forked from XQuery Language Support plugin by Grzegorz Ligas (http://ligasgr.github.io/intellij-xquery/)
+        MarkLogic extensions added by Ron Hitchens of OverStory Ltd (http://overstory.co.uk/)
+    </description>
 
     <change-notes>
         <![CDATA[
-            Please check new <a href="https://github.com/ligasgr/intellij-xquery/wiki">documentation page</a> with the list of <a href="https://github.com/ligasgr/intellij-xquery/wiki/Features">features</a> and <a href="https://github.com/ligasgr/intellij-xquery/wiki/Shortcuts">useful shortcuts</a> applicable to the plugin.
-            Please participate in the <a href="https://surveyplanet.com/58eb596fa7034015766faef7">SURVEY</a> to make the plugin even better!
-            <p>3.3.0:</p>
-            <ul>
-                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/211" rel="nofollow">#211</a> - Update to Idea 2017.1 by <a href="https://github.com/lagivan">Ivan Lagunov</a>.</li>
-                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/156" rel="nofollow">#156</a> - XQuery 3.1 support.</li>
-                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/183" rel="nofollow">#183</a> - XML element not highlighted when entering an element node before `()`.</li>
-                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/198" rel="nofollow">#198</a> - Valid expressions of the form `... < (...)` are reported as errors.</li>
-                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/204" rel="nofollow">#204</a> - Order by modifier warning when followed by where.</li>
-                    <li>Multi-word keyword completion and Grammar-Kit upgrade.</li>
-            </ul>
-
+            This section intentionally left blank, for now.
         ]]>
     </change-notes>
 
-    <idea-version since-build="163.7743" until-build="171.*"/>
+    <idea-version since-build="163.7743"/>
 
     <depends>com.intellij.modules.lang</depends>
 
@@ -122,6 +115,12 @@
                 text="XQuery File" description="Create new XQuery file">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </action>
+        <!--
+        <action id="XQuery.DocLookup" class="org.intellij.xquery.documentation.DocLookupMenu"
+                text="XQuery Function Docs" description="Lookup XQuery function documentation">
+            <add-to-group group-id="HelpMenu" anchor="last"/>
+        </action>
+        -->
     </actions>
 
     <application-components>

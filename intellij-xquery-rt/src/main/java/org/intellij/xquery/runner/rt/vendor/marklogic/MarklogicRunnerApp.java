@@ -23,6 +23,7 @@ import com.marklogic.xcc.Request;
 import com.marklogic.xcc.ResultSequence;
 import com.marklogic.xcc.Session;
 import com.marklogic.xcc.ValueFactory;
+import com.marklogic.xcc.exceptions.XQueryException;
 import com.marklogic.xcc.types.ValueType;
 import com.marklogic.xcc.types.XName;
 import com.marklogic.xcc.types.XdmValue;
@@ -36,41 +37,59 @@ import java.net.URI;
 
 import static org.intellij.xquery.runner.rt.FileUtil.readFile;
 
-public class MarklogicRunnerApp implements RunnerApp {
-    public static final String XCC_CONNECTION_URI_TEMPLATE = "xcc://%s:%s@%s:%s/%s";
-    private final XQueryRunConfig config;
-    private final PrintStream output;
-    private final MarklogicTypeMapper typeMapper = new MarklogicTypeMapper();
+public class MarklogicRunnerApp implements RunnerApp
+{
+	public static final String XCC_CONNECTION_URI_TEMPLATE = "xcc://%s:%s@%s:%s/%s";
+	protected final XQueryRunConfig config;
+	protected final PrintStream output;
+	private final MarklogicTypeMapper typeMapper = new MarklogicTypeMapper();
 
-    public MarklogicRunnerApp(XQueryRunConfig config, PrintStream output) {
-        this.config = config;
-        this.output = output;
-    }
+	public MarklogicRunnerApp (XQueryRunConfig config, PrintStream output)
+	{
+		this.config = config;
+		this.output = output;
+	}
 
-    @Override
-    public void runApp() throws Exception {
-        URI uri = new URI(String.format(XCC_CONNECTION_URI_TEMPLATE, config.getUsername(), config.getPassword(), config.getHost(), config.getPort(), config.getDatabaseName()));
-        ContentSource contentSource = ContentSourceFactory.newContentSource(uri);
-        try (Session session = contentSource.newSession()) {
-            Request request = session.newAdhocQuery(readFile(config.getMainFile()));
-            for (XQueryRunnerVariable variable : config.getVariables()) {
-                if (variable.ACTIVE) {
-                    request.setNewVariable(getName(variable.NAME, variable.NAMESPACE), getXdmValue(variable.TYPE,
-                            variable.VALUE));
-                }
-            }
-            ResultSequence rs = session.submitRequest(request);
-            output.println(rs.asString());
-        }
-    }
+	@Override
+	public void runApp() throws Exception
+	{
+		ContentSource contentSource = getContentSource();
 
-    private XdmValue getXdmValue(String type, String value) {
-        XQueryItemType itemType = XQueryItemType.valueFor(type);
-        ValueType xdmType = typeMapper.getType(itemType);
-        return ValueFactory.newValue(xdmType, value);
-    }
+		try (Session session = contentSource.newSession()) {
+			Request request = session.newAdhocQuery (readFile (config.getMainFile()));
 
-    private XName getName(String name, String namespace) {
-        return new XName(namespace, name);
-    }
+			setRequestVariables (request);
+
+			output.println (session.submitRequest (request));
+		} catch (XQueryException e) {
+			System.err.println (e.toString());
+		}
+	}
+
+	protected ContentSource getContentSource() throws Exception
+	{
+		URI uri = new URI (String.format (XCC_CONNECTION_URI_TEMPLATE, config.getUsername(), config.getPassword(), config.getHost(), config.getPort(), config.getDatabaseName()));
+		return ContentSourceFactory.newContentSource (uri);
+	}
+
+	protected void setRequestVariables (Request request)
+	{
+		for (XQueryRunnerVariable variable : config.getVariables()) {
+			if (variable.ACTIVE) {
+				request.setNewVariable (getName (variable.NAME, variable.NAMESPACE), getXdmValue (variable.TYPE, variable.VALUE));
+			}
+		}
+	}
+
+	private XdmValue getXdmValue (String type, String value)
+	{
+		XQueryItemType itemType = XQueryItemType.valueFor (type);
+		ValueType xdmType = typeMapper.getType (itemType);
+		return ValueFactory.newValue (xdmType, value);
+	}
+
+	private static XName getName (String name, String namespace)
+	{
+		return new XName (namespace, name);
+	}
 }
