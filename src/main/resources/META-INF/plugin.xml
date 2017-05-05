@@ -18,22 +18,29 @@
 <idea-plugin url="http://ligasgr.github.io/intellij-xquery/" version="2">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
-    <version>3.3.0-SNAPSHOT</version>
+    <version>3.3.0</version>
     <vendor email="ligasgr@gmail.com" url="http://grzegorzligas.blogspot.com/">Grzegorz Ligas</vendor>
 
-    <description>Provides support for XQuery language in version 3.0</description>
+    <description>Provides support for XQuery language in version 3.0 and 3.1</description>
 
     <change-notes>
         <![CDATA[
             Please check new <a href="https://github.com/ligasgr/intellij-xquery/wiki">documentation page</a> with the list of <a href="https://github.com/ligasgr/intellij-xquery/wiki/Features">features</a> and <a href="https://github.com/ligasgr/intellij-xquery/wiki/Shortcuts">useful shortcuts</a> applicable to the plugin.
-            <p>3.3.0-SNAPSHOT:</p>
+            Please participate in the <a href="https://surveyplanet.com/58eb596fa7034015766faef7">SURVEY</a> to make the plugin even better!
+            <p>3.3.0:</p>
             <ul>
+                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/211" rel="nofollow">#211</a> - Update to Idea 2017.1 by <a href="https://github.com/lagivan">Ivan Lagunov</a>.</li>
+                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/156" rel="nofollow">#156</a> - XQuery 3.1 support.</li>
+                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/183" rel="nofollow">#183</a> - XML element not highlighted when entering an element node before `()`.</li>
+                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/198" rel="nofollow">#198</a> - Valid expressions of the form `... < (...)` are reported as errors.</li>
+                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/204" rel="nofollow">#204</a> - Order by modifier warning when followed by where.</li>
+                    <li>Multi-word keyword completion and Grammar-Kit upgrade.</li>
             </ul>
 
         ]]>
     </change-notes>
 
-    <idea-version since-build="163.7743" until-build="163.*"/>
+    <idea-version since-build="163.7743" until-build="171.*"/>
 
     <depends>com.intellij.modules.lang</depends>
 
@@ -98,7 +105,7 @@
 
         <codeInsight.parameterInfo language="XQuery" implementationClass="org.intellij.xquery.completion.function.parameters.XQueryParameterInfoHandler" />
         <lang.documentationProvider language="XQuery" implementationClass="org.intellij.xquery.documentation.XQueryDocumentationProvider"/>
-        <projectConfigurable instance="org.intellij.xquery.settings.XQueryConfigurable"/>
+        <projectConfigurable instance="org.intellij.xquery.settings.XQueryConfigurable" groupId="language"/>
         <projectService serviceImplementation="org.intellij.xquery.settings.XQuerySettings"/>
         <createFromTemplateHandler order="first" implementation="org.intellij.xquery.actions.XQueryCreateFromTemplateHandler"/>
 
@@ -106,7 +113,7 @@
         <programRunner implementation="org.intellij.xquery.debugger.XQueryDebuggerRunner"/>
         <configurationType implementation="org.intellij.xquery.runner.XQueryRunConfigurationType"/>
         <runConfigurationProducer implementation="org.intellij.xquery.runner.XQueryRunConfigurationProducer"/>
-        <applicationConfigurable instance="org.intellij.xquery.runner.state.datasources.XQueryDataSourcesConfigurable"/>
+        <applicationConfigurable instance="org.intellij.xquery.runner.state.datasources.XQueryDataSourcesConfigurable" groupId="language"/>
         <xdebugger.breakpointType implementation="org.intellij.xquery.debugger.XQueryBreakpointType"/>
     </extensions>
 

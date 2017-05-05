@@ -1,5 +1,5 @@
 # IntelliJ XQuery Support plugin
-Provides support for [XQuery](http://www.w3schools.com/xquery/) language in version 3.0 in [IntelliJ IDEA](http://www.jetbrains.com/idea/)
+Provides support for [XQuery](http://www.w3schools.com/xquery/) language in version 3.0 and 3.1 in [IntelliJ IDEA](http://www.jetbrains.com/idea/)
 
 [Main page](http://overstory.github.io/marklogic-intellij-plugin/) - For any details around plugin please visit this page
 
