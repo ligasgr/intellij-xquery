@@ -44,6 +44,7 @@ import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.intellij.xquery.runner.ui.run.RunConfigurationJavaTab;
+import org.intellij.xquery.runner.ui.run.main.MarkLogicRunMode;
 import org.intellij.xquery.runner.ui.run.main.RunConfigurationMainTab;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -79,6 +80,13 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
     private String contextItemType;
     private XmlConfigurationAccessor xmlConfigurationAccessor;
     private VariablesAccessor variablesAccessor;
+
+    public MarkLogicRunMode MlDebuggerRunMode = MarkLogicRunMode.ADHOC;
+    public String MlDebuggerAppserverRoot = "";
+    public String MlDebuggerSecondaryPort;
+    public String MlDebuggerSecondaryUser;
+    public String MlDebuggerSecondaryPassword;
+
 
     public XQueryRunConfiguration(String name, XQueryRunConfigurationModule configurationModule,
                                   ConfigurationFactory factory) {
@@ -180,6 +188,56 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
 
     public void setMainFileName(String mainFileName) {
         this.mainFileName = mainFileName;
+    }
+
+    public MarkLogicRunMode getMlDebuggerRunMode()
+    {
+        return (MlDebuggerRunMode == null) ? MarkLogicRunMode.ADHOC : MlDebuggerRunMode;
+    }
+
+    public void setMlDebuggerRunMode (MarkLogicRunMode mlDebuggerRunMode)
+    {
+        MlDebuggerRunMode = mlDebuggerRunMode;
+    }
+
+    public String getMlDebuggerAppserverRoot()
+    {
+        return MlDebuggerAppserverRoot;
+    }
+
+    public void setMlDebuggerAppserverRoot (String mlDebuggerAppserverRoot)
+    {
+        MlDebuggerAppserverRoot = mlDebuggerAppserverRoot;
+    }
+
+    public String getMlDebuggerSecondaryPort()
+    {
+        return MlDebuggerSecondaryPort;
+    }
+
+    public void setMlDebuggerSecondaryPort (String mlDebuggerSecondaryPort)
+    {
+        MlDebuggerSecondaryPort = mlDebuggerSecondaryPort;
+    }
+
+    public String getMlDebuggerSecondaryUser()
+    {
+        return MlDebuggerSecondaryUser;
+    }
+
+    public void setMlDebuggerSecondaryUser (String mlDebuggerSecondaryUser)
+    {
+        MlDebuggerSecondaryUser = mlDebuggerSecondaryUser;
+    }
+
+    public String getMlDebuggerSecondaryPassword ()
+    {
+        return MlDebuggerSecondaryPassword;
+    }
+
+    public void setMlDebuggerSecondaryPassword (String mlDebuggerSecondaryPassword)
+    {
+        MlDebuggerSecondaryPassword = mlDebuggerSecondaryPassword;
     }
 
     public boolean isContextItemEnabled() {

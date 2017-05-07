@@ -25,6 +25,7 @@ import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import static org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings.getInstance;
@@ -66,6 +67,11 @@ public class DataSourceSelector {
                 }
             }
         });
+    }
+
+    public void setChangeListener (ActionListener changeListener)
+    {
+        dataSourceList.addActionListener (changeListener);
     }
 
     public void applyTo(final XQueryRunConfiguration configuration) {

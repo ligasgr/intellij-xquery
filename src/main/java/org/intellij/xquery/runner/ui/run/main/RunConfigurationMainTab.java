@@ -22,6 +22,8 @@ import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.PanelWithAnchor;
 import com.intellij.util.ui.UIUtil;
+import org.intellij.xquery.runner.rt.XQueryDataSourceType;
+import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.intellij.xquery.runner.ui.run.main.datasource.DataSourcePanel;
 import org.intellij.xquery.runner.ui.run.main.module.ModuleSelectionPanel;
@@ -30,8 +32,9 @@ import org.intellij.xquery.runner.ui.run.main.variables.VariablesPanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * User: ligasgr
@@ -47,10 +50,14 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
     private final Project project;
     private JComponent anchor;
     private JPanel editor;
+    private MarkLogicRunModeConfigPanel mlRunMode;
+    private MyActionListener myActionListener = new MyActionListener();
 
     public RunConfigurationMainTab(final Project project) {
         this.project = project;
         anchor = UIUtil.mergeComponentsWithAnchor(moduleSelectionPanel, contextItemPanel, variablesPanel, dataSourcePanel);
+
+        dataSourcePanel.setDataSourceSelectListener (myActionListener);
     }
 
     @Override
@@ -64,11 +71,13 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
         contextItemPanel.setAnchor(anchor);
         variablesPanel.setAnchor(anchor);
         dataSourcePanel.setAnchor(anchor);
+        mlRunMode.setAnchor (anchor);
     }
 
     @Override
     protected void resetEditorFrom(XQueryRunConfiguration configuration) {
         moduleSelectionPanel.init(configuration);
+        mlRunMode.init (configuration);
         variablesPanel.init(configuration);
         contextItemPanel.init(configuration);
         dataSourcePanel.init(configuration);
@@ -77,6 +86,7 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
     @Override
     protected void applyEditorTo(XQueryRunConfiguration configuration) throws ConfigurationException {
         moduleSelectionPanel.applyChanges(configuration);
+        mlRunMode.applyChanges (configuration);
         variablesPanel.applyChanges(configuration);
         contextItemPanel.applyChanges(configuration);
         dataSourcePanel.applyChanges(configuration);
@@ -95,5 +105,25 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
     private void createUIComponents() {
         contextItemPanel = new ContextItemPanel(project);
         moduleSelectionPanel = new ModuleSelectionPanel(project);
+    }
+
+    // ------------------------------------------------------------------------
+
+    private class MyActionListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed (ActionEvent e)
+        {
+            @SuppressWarnings ("unchecked")
+            JComboBox<XQueryDataSourceConfiguration> combo = (JComboBox<XQueryDataSourceConfiguration>) e.getSource();
+            @SuppressWarnings ("CastToConcreteClass")
+            XQueryDataSourceConfiguration dataSourceConfiguration = (XQueryDataSourceConfiguration) combo.getSelectedItem();
+
+            if (dataSourceConfiguration != null) {
+                XQueryDataSourceType dsType = dataSourceConfiguration.TYPE;
+
+                mlRunMode.getMainPanel().setVisible ((dsType != null) && dsType.isSecondaryDebugPortSupported());
+            }
+        }
     }
 }

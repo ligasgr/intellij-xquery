@@ -17,6 +17,7 @@
 
 package org.intellij.xquery.runner.state.run;
 
+import org.intellij.xquery.runner.ui.run.main.MarkLogicRunMode;
 import org.jdom.CDATA;
 import org.jdom.Element;
 
@@ -54,6 +55,12 @@ public class XmlConfigurationAccessor {
         runConfiguration.setContextItemFile(configuration.getAttributeValue("contextItemFile"));
         runConfiguration.setContextItemType(configuration.getAttributeValue("contextItemType"));
         runConfiguration.setDataSourceName(configuration.getAttributeValue("dataSourceName"));
+
+        runConfiguration.setMlDebuggerRunMode (MarkLogicRunMode.forName (configuration.getAttributeValue ("mlDebuggerRunMode")));
+        runConfiguration.setMlDebuggerAppserverRoot (configuration.getAttributeValue ("mlDebuggerAppserverRoot"));
+        runConfiguration.setMlDebuggerSecondaryPort (configuration.getAttributeValue ("mlDebuggerSecondaryPort"));
+        runConfiguration.setMlDebuggerSecondaryUser (configuration.getAttributeValue ("mlDebuggerSecondaryUser"));
+        runConfiguration.setMlDebuggerSecondaryPassword (configuration.getAttributeValue ("mlDebuggerSecondaryPassword"));
     }
 
     public void writeConfiguration(XQueryRunConfiguration runConfiguration, Element element) {
@@ -85,6 +92,20 @@ public class XmlConfigurationAccessor {
             }
             if (runConfiguration.getDataSourceName() != null) {
                 configuration.setAttribute("dataSourceName", runConfiguration.getDataSourceName());
+            }
+
+            configuration.setAttribute ("mlDebuggerRunMode", runConfiguration.getMlDebuggerRunMode().toString());
+            if (runConfiguration.getMlDebuggerAppserverRoot() != null) {
+                configuration.setAttribute ("mlDebuggerAppserverRoot", runConfiguration.getMlDebuggerAppserverRoot());
+            }
+            if (runConfiguration.getMlDebuggerSecondaryPort() != null) {
+                configuration.setAttribute ("mlDebuggerSecondaryPort", runConfiguration.getMlDebuggerSecondaryPort());
+            }
+            if (runConfiguration.getMlDebuggerSecondaryUser() != null) {
+                configuration.setAttribute ("mlDebuggerSecondaryUser", runConfiguration.getMlDebuggerSecondaryUser());
+            }
+            if (runConfiguration.getMlDebuggerSecondaryPassword() != null) {
+                configuration.setAttribute ("mlDebuggerSecondaryPassword", runConfiguration.getMlDebuggerSecondaryPassword());
             }
         }
 }
