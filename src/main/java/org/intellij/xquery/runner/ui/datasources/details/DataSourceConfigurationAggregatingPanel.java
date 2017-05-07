@@ -34,7 +34,6 @@ public class DataSourceConfigurationAggregatingPanel {
     private ConfigurationFilePanel configurationFilePanel;
     private ConnectionParametersPanel connectionParametersPanel;
     private UserDefinedLibraryPanel userDefinedLibraryPanel;
-    private MarkLogicDebuggerSettingsPanel mlDebuggerSettingsPanel;
     private XQueryDataSourceType dataSourceType;
 
     public DataSourceConfigurationAggregatingPanel(final XQueryDataSourceConfiguration dataSourceConfiguration,
@@ -43,7 +42,6 @@ public class DataSourceConfigurationAggregatingPanel {
         initNameAndDefaultButtonPanel(dataSourceConfiguration, configurationChangeListener);
         initConfigurationFilePanel(dataSourceConfiguration, configurationChangeListener);
         initConnectionParametersPanel(dataSourceConfiguration, configurationChangeListener);
-        initMLConnectionParametersPanel(dataSourceConfiguration, configurationChangeListener);
         initUserDefinedLibraryPanel(dataSourceConfiguration, configurationChangeListener);
     }
 
@@ -57,7 +55,6 @@ public class DataSourceConfigurationAggregatingPanel {
         nameAndDefaultButtonPanel.updateConfigurationWithChanges(currentConfiguration);
         configurationFilePanel.updateConfigurationWithChanges(currentConfiguration);
         connectionParametersPanel.updateConfigurationWithChanges(currentConfiguration);
-        mlDebuggerSettingsPanel.updateConfigurationWithChanges(currentConfiguration);
         userDefinedLibraryPanel.updateConfigurationWithChanges(currentConfiguration);
         return currentConfiguration;
     }
@@ -75,11 +72,6 @@ public class DataSourceConfigurationAggregatingPanel {
     private void initConnectionParametersPanel(XQueryDataSourceConfiguration cfg,
                                                ConfigurationChangeListener changeListener) {
         connectionParametersPanel.init(cfg, this, changeListener);
-    }
-
-    private void initMLConnectionParametersPanel (XQueryDataSourceConfiguration cfg, ConfigurationChangeListener changeListener)
-    {
-        mlDebuggerSettingsPanel.init (cfg, this, changeListener);
     }
 
     private void initUserDefinedLibraryPanel(XQueryDataSourceConfiguration cfg,

@@ -59,10 +59,6 @@ public class DataSourceAccessorMLTest
         ds.PORT = "port";
         ds.USERNAME = "user";
         ds.PASSWORD = "pass";
-        ds.MLDEBUGGER_CONFIG_ENABLED = true;
-        ds.MLDEBUGGER_CONFIG_PORT = "8424";
-        ds.MLDEBUGGER_CONFIG_USER = "porkypig";
-        ds.MLDEBUGGER_CONFIG_PASSWORD = "habidahabida";
         ds.USER_DEFINED_LIBRARY_ENABLED = true;
         ds.DATABASE_NAME = "dbName";
         ds.DEFAULT = true;
@@ -86,10 +82,6 @@ public class DataSourceAccessorMLTest
         assertThat(dataSourceElement.getAttributeValue("port"), is(ds.PORT));
         assertThat(dataSourceElement.getAttributeValue("username"), is(ds.USERNAME));
         assertThat(dataSourceElement.getAttributeValue("password"), is(ds.PASSWORD));
-        assertThat(dataSourceElement.getAttributeValue("mlDebuggerEnabled"), is(Boolean.toString(ds.MLDEBUGGER_CONFIG_ENABLED)));
-        assertThat(dataSourceElement.getAttributeValue("mlDebuggerPort"), is(ds.MLDEBUGGER_CONFIG_PORT));
-        assertThat(dataSourceElement.getAttributeValue("mlDebuggerUser"), is(ds.MLDEBUGGER_CONFIG_USER));
-        assertThat(dataSourceElement.getAttributeValue("mlDebuggerPassword"), is(ds.MLDEBUGGER_CONFIG_PASSWORD));
         assertThat(dataSourceElement.getAttributeValue("userDefinedLibraryEnabled"), is(Boolean.toString(ds.USER_DEFINED_LIBRARY_ENABLED)));
         assertThat(dataSourceElement.getAttributeValue("databaseName"), is(ds.DATABASE_NAME));
         assertThat(dataSourceElement.getAttributeValue("default"), is(Boolean.toString(ds.DEFAULT)));

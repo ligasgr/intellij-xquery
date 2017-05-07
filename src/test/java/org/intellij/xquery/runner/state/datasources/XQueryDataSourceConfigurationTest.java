@@ -153,42 +153,6 @@ public class XQueryDataSourceConfigurationTest {
     }
 
     @Test
-    public void shouldPersistMlDebugEnabled() throws Exception {
-        dataSourceConfiguration.MLDEBUGGER_CONFIG_ENABLED = true;
-
-        String xml = serializeToXml (dataSourceConfiguration);
-
-        assertThat (the(xml), hasXPath (CONFIG_ATTRIBUTE_XPATH + ML_DEBUGGER_ENABLED_FIELD, equalTo (TRUE.toString())));
-    }
-
-    @Test
-    public void shouldPersistMlDebuggerPort() throws Exception {
-        dataSourceConfiguration.MLDEBUGGER_CONFIG_PORT = MLDB_PORT;
-
-        String xml = serializeToXml (dataSourceConfiguration);
-
-        assertThat (the(xml), hasXPath (CONFIG_ATTRIBUTE_XPATH + ML_DEBUGGER_PORT_FIELD, equalTo (MLDB_PORT)));
-    }
-
-    @Test
-    public void shouldPersistMlDebuggerUsername() throws Exception {
-        dataSourceConfiguration.MLDEBUGGER_CONFIG_USER = MLDB_USER;
-
-        String xml = serializeToXml (dataSourceConfiguration);
-
-        assertThat (the(xml), hasXPath (CONFIG_ATTRIBUTE_XPATH + ML_DEBUGGER_USER_FIELD, equalTo (MLDB_USER)));
-    }
-
-    @Test
-    public void shouldPersistMlDebuggerPassword() throws Exception {
-        dataSourceConfiguration.MLDEBUGGER_CONFIG_PASSWORD = MLDB_PASSWORD;
-
-        String xml = serializeToXml (dataSourceConfiguration);
-
-        assertThat (the(xml), hasXPath (CONFIG_ATTRIBUTE_XPATH + ML_DEBUGGER_PASSWORD_FIELD, equalTo (MLDB_PASSWORD)));
-    }
-
-    @Test
     public void shouldPersistUserDefinedLibraryActivity() throws Exception {
         dataSourceConfiguration.USER_DEFINED_LIBRARY_ENABLED = true;
 
