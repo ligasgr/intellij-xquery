@@ -31,6 +31,7 @@ import org.intellij.xquery.runner.rt.RunnerApp;
 import org.intellij.xquery.runner.rt.XQueryItemType;
 import org.intellij.xquery.runner.rt.XQueryRunConfig;
 import org.intellij.xquery.runner.rt.XQueryRunnerVariable;
+import org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicRunMode;
 
 import java.io.PrintStream;
 import java.net.URI;
@@ -56,11 +57,17 @@ public class MarklogicRunnerApp implements RunnerApp
 		ContentSource contentSource = getContentSource();
 
 		try (Session session = contentSource.newSession()) {
-			Request request = session.newAdhocQuery (readFile (config.getMainFile()));
+			Request request;
+
+			if (config.getMlDebugRunMode () == MarkLogicRunMode.INVOKE) {
+				request = session.newModuleInvoke (config.getMainFile().substring (config.getMlDebugAppserverRoot().length()));
+			} else {
+				request = session.newAdhocQuery (readFile (config.getMainFile()));
+			}
 
 			setRequestVariables (request);
 
-			output.println (session.submitRequest (request));
+			output.println (session.submitRequest (request).asString());
 		} catch (XQueryException e) {
 			System.err.println (e.toString());
 		}

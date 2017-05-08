@@ -17,7 +17,7 @@
 
 package org.intellij.xquery.runner.state.run;
 
-import org.intellij.xquery.runner.ui.run.main.MarkLogicRunMode;
+import org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicRunMode;
 import org.jdom.CDATA;
 import org.jdom.Element;
 

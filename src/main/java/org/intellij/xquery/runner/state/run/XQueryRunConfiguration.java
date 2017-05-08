@@ -44,7 +44,7 @@ import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.intellij.xquery.runner.ui.run.RunConfigurationJavaTab;
-import org.intellij.xquery.runner.ui.run.main.MarkLogicRunMode;
+import org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicRunMode;
 import org.intellij.xquery.runner.ui.run.main.RunConfigurationMainTab;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;

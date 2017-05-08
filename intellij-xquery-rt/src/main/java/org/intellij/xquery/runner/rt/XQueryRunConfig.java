@@ -17,6 +17,7 @@
 
 package org.intellij.xquery.runner.rt;
 
+import org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicRunMode;
 import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -42,7 +43,8 @@ public class XQueryRunConfig
 	private final XPathExpression portExpression;
 	private final XPathExpression usernameExpression;
 	private final XPathExpression passwordExpression;
-	private final XPathExpression mlDebugConfigExpression;
+	private final XPathExpression mlDebugRunModeExpression;
+	private final XPathExpression mlDebugAppserverRootExpression;
 	private final XPathExpression mlDebugPortExpression;
 	private final XPathExpression mlDebugUserExpression;
 	private final XPathExpression mlDebugPaswordExpression;
@@ -56,8 +58,8 @@ public class XQueryRunConfig
 	public XQueryRunConfig (String xml) throws Exception
 	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance ();
-		document = factory.newDocumentBuilder ().parse (new ByteArrayInputStream (xml.getBytes()));
-		XPath xPath = XPathFactory.newInstance ().newXPath ();
+		document = factory.newDocumentBuilder().parse (new ByteArrayInputStream (xml.getBytes()));
+		XPath xPath = XPathFactory.newInstance().newXPath();
 
 		mainFileExpression = xPath.compile (xqCfgAttrXPath ("mainFileName"));
 		contextItemEnabledExpression = xPath.compile (xqCfgAttrXPath ("contextItemEnabled"));
@@ -71,10 +73,11 @@ public class XQueryRunConfig
 		usernameExpression = xPath.compile (xqRunnerAttrXPath ("username"));
 		passwordExpression = xPath.compile (xqRunnerAttrXPath ("password"));
 
-		mlDebugConfigExpression = xPath.compile (xqRunnerAttrXPath ("mlDebuggerEnabled"));
-		mlDebugPortExpression = xPath.compile (xqRunnerAttrXPath ("mlDebuggerPort"));
-		mlDebugUserExpression = xPath.compile (xqRunnerAttrXPath ("mlDebuggerUser"));
-		mlDebugPaswordExpression = xPath.compile (xqRunnerAttrXPath ("mlDebuggerPassword"));
+		mlDebugRunModeExpression = xPath.compile (xqCfgAttrXPath ("mlDebuggerRunMode"));
+		mlDebugAppserverRootExpression = xPath.compile (xqCfgAttrXPath ("mlDebuggerAppserverRoot"));
+		mlDebugPortExpression = xPath.compile (xqCfgAttrXPath ("mlDebuggerSecondaryPort"));
+		mlDebugUserExpression = xPath.compile (xqCfgAttrXPath ("mlDebuggerSecondaryUser"));
+		mlDebugPaswordExpression = xPath.compile (xqCfgAttrXPath ("mlDebuggerSecondaryPassword"));
 
 		configFileEnabledExpression = xPath.compile (xqRunnerAttrXPath ("configEnabled"));
 		configFileExpression = xPath.compile (xqRunnerAttrXPath ("configFile"));
@@ -162,9 +165,14 @@ public class XQueryRunConfig
 		return getExpressionValue (passwordExpression);
 	}
 
-	public boolean isMlDebuggerEnabled()
+	public MarkLogicRunMode getMlDebugRunMode()
 	{
-		return Boolean.parseBoolean (getExpressionValue (mlDebugConfigExpression));
+		return MarkLogicRunMode.forName (getExpressionValue (mlDebugRunModeExpression));
+	}
+
+	public String getMlDebugAppserverRoot()
+	{
+		return getExpressionValue (mlDebugAppserverRootExpression);
 	}
 
 	public String getMlDebugPort()

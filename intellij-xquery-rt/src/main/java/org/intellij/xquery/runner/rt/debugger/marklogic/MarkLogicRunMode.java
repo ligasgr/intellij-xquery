@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.intellij.xquery.runner.ui.run.main;
+package org.intellij.xquery.runner.rt.debugger.marklogic;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +47,7 @@ public enum MarkLogicRunMode
 
 	public static MarkLogicRunMode forName (String name)
 	{
-		if (name == null) return ADHOC;
+		if ((name == null) || (name.length() == 0)) return ADHOC;
 
 		return nameToEnum.get (name);
 	}

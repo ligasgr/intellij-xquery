@@ -22,11 +22,12 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.ui.PanelWithAnchor;
 import com.intellij.ui.components.JBRadioButton;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
+import org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicRunMode;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.jetbrains.annotations.Nullable;
 
 import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.*;
-import static org.intellij.xquery.runner.ui.run.main.MarkLogicRunMode.*;
+import static org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicRunMode.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -72,9 +73,11 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 		invokeModule.setEnabled (true);
 		invokeModule.addActionListener (radioButtonListener);
 
-		grabAppserver.setEnabled (true);
+		// ToDo
+		grabAppserver.setEnabled (false);
 		grabAppserver.addActionListener (radioButtonListener);
 
+		// ToDo
 		grabRunning.setEnabled (false);
 		grabRunning.addActionListener (radioButtonListener);
 

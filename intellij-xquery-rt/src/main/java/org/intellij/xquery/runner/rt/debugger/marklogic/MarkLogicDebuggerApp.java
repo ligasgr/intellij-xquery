@@ -43,7 +43,6 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 {
 	private final Thread applicationThread;
 	private final Object theLock = new Object();
-	private final int mlDebuggerPort;
 	private final List<DebugFrame> stackFrames = new LinkedList<>();
 	private final BreakpointManager breakpointManager = new BreakpointManager();
 	private final List<StatusChangeHandler> statusChangeHandlers = new ArrayList<>();
@@ -59,7 +58,6 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 	{
 		super (config, output);
 
-		mlDebuggerPort = Integer.parseInt (config.getMlDebugPort());
 		applicationThread = new Thread (getApplicationRunnable());
 	}
 
@@ -102,7 +100,7 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 	@Override
 	public void runApp() throws Exception
 	{
-log ("MarkLogicDebuggerApp.runApp called: mlDebuggerPort=" + mlDebuggerPort);
+log ("MarkLogicDebuggerApp.runApp called");
 		int debugPort = Integer.parseInt (config.getDebugPort());
 
 		DBGpEngine dbgpEngine = engine().withPort (debugPort).withDebuggerEngine (this).build();
@@ -344,8 +342,8 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 	@SuppressWarnings ("OverlyComplexMethod")
 	private void runDebuggerApp() throws Exception
 	{
-		log ("MarkLogicDebuggerApp.runDebuggerApp called");
-		String query = readFile (config.getMainFile());
+		log ("MarkLogicDebuggerApp.runDebuggerApp called: runMode=" + config.getMlDebugRunMode().toString() + ", appserver root: " + config.getMlDebugAppserverRoot() + ", DSName: " + config.getDataSourceType());
+
 		ContentSource contentSource = getContentSource();
 		Session session = contentSource.newSession();
 
@@ -354,7 +352,7 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 		try {
 			debugConnector.clearStoppedRequests();
 
-			debuggerRequestId = debugConnector.submitEvalForDebug (query, config.getVariables());
+			debuggerRequestId = debugConnector.submitRequestForDebug();
 
 			debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
 

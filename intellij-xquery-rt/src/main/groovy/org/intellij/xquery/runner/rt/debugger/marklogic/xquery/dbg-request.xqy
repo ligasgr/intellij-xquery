@@ -24,20 +24,28 @@ xquery version '1.0-ml';
 
 declare namespace d='http://marklogic.com/xdmp/debug';
 
-declare variable $__query__ external;
-declare variable $__variables__ external;
+declare variable $mode external;
+declare variable $root external;
+declare variable $argument external;
+declare variable $variables external;
+(: ToDo: handle options :)
 
 declare function local:gen-vars() as item()* {
-    for $var in xdmp:unquote ($__variables__)/variables/variable
+    for $var in xdmp:unquote ($variables)/variables/variable
     let $qname := fn:QName ($var/@ns/fn:data(), $var/@name)
     return ($qname, $var/fn:data())
 };
 
 declare variable $vars := local:gen-vars();
 
-let $id := dbg:eval ($__query__, $vars)
+let $id :=
+    switch ($mode)
+    case 'adhoc' return dbg:eval ($argument, $vars)
+    case 'invoke' return dbg:invoke ($argument, $vars)
+    default return fn:error (xs:QName ("dbg:bad-run-mode"), "Unexpected MarkLogic Debugger Run Mode: " || $mode)
+
 let $status := dbg:status ($id)
-let $_ := xdmp:log ($status)
+(:let $_ := xdmp:log ($status):)
 return
     if ($status/d:request/error:error/error:format-string/fn:string())
     then fn:error (xs:QName ($status/d:request/error:error/error:name/fn:string()), $status/d:request/error:error/error:format-string/fn:string())
