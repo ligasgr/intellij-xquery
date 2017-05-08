@@ -374,21 +374,21 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 		List<Variable> variables = []
 
 		frame.'external-variables'.'external-variable'.each { GPathResult variable ->
-			String name = variableName (variable.name.text(), variable.'@xmlns'.text(), variable.prefix.text())
+			String name = variableName (variable.name.text(), variable.name.nodeIterator().next().namespaceURI(), variable.prefix.text())
 			String qname = variableName (variable.name.text(), null, variable.prefix.text())
-			List<String> valAndType = requestValueAndType (requestId, qname)
+			List<String> valAndType = variableValue (variable.value.text(), requestId, qname)
 			variables << new Variable (name, valAndType [1], valAndType [0], 'external')
 		}
 
 		frame.'global-variables'.'global-variable'.each { GPathResult variable ->
-			String name = variableName (variable.name.text(), variable.'@xmlns'.text(), variable.prefix.text())
+			String name = variableName (variable.name.text(), variable.name.nodeIterator().next().namespaceURI(), variable.prefix.text())
 			String qname = variableName (variable.name.text(), null, variable.prefix.text())
-			List<String> valAndType = requestValueAndType (requestId, qname)
+			List<String> valAndType = variableValue (variable.value.text(), requestId, qname)
 			variables << new Variable (name, valAndType [1], valAndType [0], 'global')
 		}
 
 		frame.variables.variable.each { GPathResult variable ->
-			String name = variableName (variable.name.text(), variable.'@xmlns'.text(), variable.prefix.text())
+			String name = variableName (variable.name.text(), variable.name.nodeIterator().next().namespaceURI(), variable.prefix.text())
 			String value = variable.value.text()
 			variables << new Variable (name, guessVarType (value), value)
 		}
@@ -399,9 +399,18 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 	private static String variableName (String name, String ns, String prefix)
 	{
 		String p = (prefix) ? "${prefix}:" : ''
-		String n = (ns) ? "{${ns}}" : ''
+		String n = (ns) ? "{${ns}} " : ''
 
 		"${n}\$${p}${name}"
+	}
+
+	private List<String> variableValue (String value, BigInteger requestId, String qname)
+	{
+		if (value) {
+			[value, guessVarType (value)]
+		} else {
+			requestValueAndType (requestId, qname)
+		}
 	}
 
 	private static final String datePatternString = '[0-9][0-9][0-9][0-9]\\-[0-9][0-9]\\-[0-9][0-9]'
