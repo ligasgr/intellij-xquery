@@ -34,6 +34,6 @@ public class MarklogicExpressionEvaluator
 	}
 
 	public Optional<Variable> eval (String expressionString) {
-		return null;
+		return Optional.empty();
 	}
 }

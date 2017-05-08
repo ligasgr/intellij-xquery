@@ -249,7 +249,6 @@ log ("MarkLogicDebugConnector.setMlBreakPoint called")
 		} else {
 log ("MarkLogicDebugConnector.setMlBreakPoint setting breakpoint, line: " + line + ", file: " + file + ", reqId: " + requestId + ", expr: " + exprId)
 			evalRequest (xfile (SET_BP_REQ), [id: requestId, exprid: exprId])
-log ("MarkLogicDebugConnector.setMlBreakPoint breakpoint set, line: " + line + ", file: " + file + ", reqId: " + requestId + ", expr: " + exprId)
 		}
 	}
 
@@ -265,7 +264,7 @@ log ("MarkLogicDebugConnector.setMlBreakPoint breakpoint set, line: " + line + "
 			rs = evalRequest (xfile (EXPRS_REQ), [id: requestId, uri: mlFileUri (file), line: line.toString()])
 		} catch (XQueryException e) {
 			if ('DBG-MODULEDNE'.equals (e.getCode())) {
-				log ("Ignoring DBG-MODULEDNE, assuming breakpoint not in scope")
+				log ("Ignoring DBG-MODULEDNE, assuming breakpoint not in scope for request")
 				return null
 			} else {
 				throw e
@@ -318,8 +317,6 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 		if (rs.size() > 5) stat ['expr-id'] = rs.itemAt (5).asString()
 		if (rs.size() > 6) stat ['error-msg'] = rs.itemAt (6).asString()
 
-//		log ("MarkLogicDebugConnector.getRequestStatus returning: " + stat)
-
 		if (stat ['error-msg']) throw new DeferredXqueryException (stat)
 
 		return stat
@@ -339,6 +336,8 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 
 		stack.frame.each { GPathResult frame ->
 			debugFrames << new MarklogicDebugFrame (
+				connector: this,
+				requestId: requestId,
 				lineNumber: Integer.parseInt (frame.line.text()),
 				functionName: functionName (frame.operation.text()),
 				uri: fileUri (frame),
