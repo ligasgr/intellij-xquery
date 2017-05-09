@@ -17,13 +17,18 @@
 
 
 
-apply plugin: 'java'
+apply plugin: 'groovy'  // Groovy plugin extends Java plugin
 apply plugin: 'idea'
 apply from: 'idea.gradle'
 
 sourceCompatibility = 1.8
 
 sourceSets {
+    // This is necessary to make Java and Groovy compile happily together.  The Groovy compiler will compile .java files, but not vice-versa
+    main {
+        java { srcDirs = [] }
+        groovy { srcDirs = ["src/main/java"] }
+    }
     testFunctional {
         compileClasspath = sourceSets.main.output + configurations.testRuntime
         runtimeClasspath = output + sourceSets.main.output + configurations.testRuntime
