@@ -19,6 +19,8 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply from: 'idea.gradle'
 
+project.ext.pluginName = 'marklogic-intellij-plugin'
+
 sourceCompatibility = 1.8
 
 // Update this path to point to your IDEA installation
@@ -229,7 +231,7 @@ task dist(type: Zip) {
         include 'CONTRIBUTORS'
         into('intellij-xquery')
     }
-    archiveName 'intellij-xquery.zip'
+    archiveName "${project.ext.pluginName}.zip"
 }
 
 task compileForms(dependsOn: ':classes') << {

@@ -25,9 +25,14 @@ sourceCompatibility = 1.8
 
 sourceSets {
     // This is necessary to make Java and Groovy compile happily together.  The Groovy compiler will compile .java files, but not vice-versa
+    // The Groovy compile task apparently does not include resource files in the source tree, so add a rule to pick them up too
     main {
         java { srcDirs = [] }
         groovy { srcDirs = ["src/main/java"] }
+        resources {
+            srcDirs = ['src/main/java', 'src/main/resources']
+            exclude '**/*.(java|groovy)'
+        }
     }
     testFunctional {
         compileClasspath = sourceSets.main.output + configurations.testRuntime

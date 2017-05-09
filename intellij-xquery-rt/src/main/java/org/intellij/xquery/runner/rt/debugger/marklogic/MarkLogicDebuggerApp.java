@@ -267,14 +267,14 @@ log ("MarkLogicDebuggerApp.getStatus called");
 	@Override
 	public StackFrame getFrame (int i)
 	{
-log ("MarkLogicDebuggerApp.getFrame: " + i + ", frame: " + stackFrames.get (i));
+//log ("MarkLogicDebuggerApp.getFrame: " + i + ", frame: " + stackFrames.get (i));
 		return stackFrames.size() > 0 ? convertToStackFrame (stackFrames.get (i)) : null;
 	}
 
 	@Override
 	public Collection<PropertyValue> getVariables (int i)
 	{
-log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.get (i).getVariables());
+//log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.get (i).getVariables());
 		return stackFrames.size() > 0 ? convertToPropertyValues (stackFrames.get (i).getVariables()) : Collections.emptyList();
 	}
 
@@ -282,6 +282,7 @@ log ("MarkLogicDebuggerApp.getVariables: frame=" + i + ", vars=" + stackFrames.g
 	public Optional<PropertyValue> eval (int depth, String expression)
 	{
 		log ("MarkLogicDebuggerApp.eval called: depth=" + depth + ", expr: " + expression);
+
 		DebugFrame debugFrame = stackFrames.get (depth);
 
 		if (debugFrame != null) {
