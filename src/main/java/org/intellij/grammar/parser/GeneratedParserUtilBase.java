@@ -525,11 +525,13 @@ public class GeneratedParserUtilBase {
         state.hooks = Hooks.concat(hook, param, state.level, state.hooks);
     }
 
+    @SafeVarargs
     public static <T> void register_hook_(PsiBuilder builder, Hook<T[]> hook, T... param) {
         ErrorState state = ErrorState.get(builder);
         state.hooks = Hooks.concat(hook, param, state.level, state.hooks);
     }
 
+    @SuppressWarnings ("unchecked")
     private static void run_hooks_impl_(PsiBuilder builder, ErrorState state, @Nullable IElementType elementType) {
         if (state.hooks == null) return;
         PsiBuilder.Marker marker = elementType == null ? null : (PsiBuilder.Marker)builder.getLatestDoneMarker();

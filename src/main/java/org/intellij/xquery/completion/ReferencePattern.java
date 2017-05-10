@@ -35,8 +35,8 @@ class ReferencePattern extends PsiElementPattern<PsiElement, ReferencePattern> {
         super(PsiElement.class);
     }
 
-    public ReferencePattern withReferenceOfAnyOfTypes(
-            final Class<? extends PsiReference>... referenceClasses) {
+    @SafeVarargs
+    public final ReferencePattern withReferenceOfAnyOfTypes (final Class<? extends PsiReference>... referenceClasses) {
         return with(new PatternCondition<PsiElement>("withReference") {
             @Override
             public boolean accepts(@NotNull final PsiElement t, final ProcessingContext context) {

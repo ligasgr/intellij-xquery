@@ -36,6 +36,7 @@ public class XQueryPsiElementImpl extends ASTWrapperPsiElement implements XQuery
         super(node);
     }
 
+    @SuppressWarnings ("unchecked")
     @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state,
                                        PsiElement lastParent, @NotNull PsiElement place) {

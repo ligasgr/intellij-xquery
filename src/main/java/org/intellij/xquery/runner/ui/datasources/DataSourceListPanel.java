@@ -85,6 +85,7 @@ public class DataSourceListPanel extends JPanel {
         setFirstPositionAsSelectedIfExists();
     }
 
+    @SuppressWarnings ("unchecked")
     private JBList prepareDataSourcesList(DefaultListModel dataSourcesListModel) {
         final JBList dataSourcesList = new JBList(dataSourcesListModel);
         dataSourcesList.getEmptyText().setText("No data sources defined");
@@ -112,6 +113,7 @@ public class DataSourceListPanel extends JPanel {
                 }).disableUpDownActions().setToolbarPosition(ActionToolbarPosition.TOP);
     }
 
+    @SuppressWarnings ("unchecked")
     protected void updateCurrentlySelectedItemWithData(XQueryDataSourceConfiguration currentConfigurationState) {
         int index = dataSourceList.getSelectedIndex();
         dataSourcesListModel.setElementAt(currentConfigurationState, index);
@@ -157,6 +159,7 @@ public class DataSourceListPanel extends JPanel {
         addNewDataSourceConfigurationToModelAndSelectIt(newItem);
     }
 
+    @SuppressWarnings ("unchecked")
     private void addNewDataSourceConfigurationToModelAndSelectIt(XQueryDataSourceConfiguration newItem) {
         dataSourcesListModel.addElement(newItem);
         dataSourceList.clearSelection();
@@ -174,6 +177,7 @@ public class DataSourceListPanel extends JPanel {
         }
     }
 
+    @SuppressWarnings ("unchecked")
     private void addConfigurationCloneToModel(XQueryDataSourceConfiguration configuration) {
         try {
             dataSourcesListModel.addElement(configuration.clone());
