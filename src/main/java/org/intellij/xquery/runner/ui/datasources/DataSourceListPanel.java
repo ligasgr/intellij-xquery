@@ -20,11 +20,7 @@ package org.intellij.xquery.runner.ui.datasources;
 import com.intellij.openapi.actionSystem.ActionToolbarPosition;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
-import com.intellij.ui.AnActionButton;
-import com.intellij.ui.AnActionButtonRunnable;
-import com.intellij.ui.ListScrollingUtil;
-import com.intellij.ui.ListUtil;
-import com.intellij.ui.ToolbarDecorator;
+import com.intellij.ui.*;
 import com.intellij.ui.components.JBList;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
@@ -37,8 +33,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -163,7 +157,7 @@ public class DataSourceListPanel extends JPanel {
     private void addNewDataSourceConfigurationToModelAndSelectIt(XQueryDataSourceConfiguration newItem) {
         dataSourcesListModel.addElement(newItem);
         dataSourceList.clearSelection();
-        ListScrollingUtil.selectItem(dataSourceList, newItem);
+        ScrollingUtil.selectItem(dataSourceList, newItem);
     }
 
     private void clearDataSourcesListModel() {
