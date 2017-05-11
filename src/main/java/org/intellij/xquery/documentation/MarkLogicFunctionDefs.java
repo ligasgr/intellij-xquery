@@ -49,7 +49,6 @@ public class MarkLogicFunctionDefs
 
 	// ------------------------------------------------------------
 
-	private static final String ML_CATEGORIES_PATH = "documentation/marklogic-function-categories.xml";
 	private static final String ML_FUNCTIONS_PATH = "documentation/marklogic-functions.xml";
 
 	private final SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -120,6 +119,7 @@ public class MarkLogicFunctionDefs
 
 	public static class Function
 	{
+		private final String docsSource;
 		private final List<Parameter> parameters = new ArrayList<>();
 		private final List<Example> examples = new ArrayList<>();
 		private final List<String> seeAlsos = new ArrayList<>();
@@ -138,7 +138,7 @@ public class MarkLogicFunctionDefs
 		private String privilege = null;
 		private int minParamCount = 0;
 
-		public Function (String prefix, String localName, String fullName, boolean priv, boolean hidden, String returnType, Category category)
+		public Function (String docsSource, String prefix, String localName, String fullName, boolean priv, boolean hidden, String returnType, Category category)
 		{
 			this.prefix = prefix;
 			this.localName = localName;
@@ -147,6 +147,7 @@ public class MarkLogicFunctionDefs
 			this.hidden = hidden;
 			this.returnType = returnType;
 			this.category = category;
+			this.docsSource = docsSource;
 		}
 
 		void addParam (Parameter param)
@@ -323,6 +324,12 @@ public class MarkLogicFunctionDefs
 				}
 			}
 
+			if (docsSource != null) {
+				sb.append ("<br/><h1>Documentation Source</h1>");
+
+				sb.append ("<blockquote>").append (docsSource).append ("</blockquote>");
+			}
+
 			sb.append ("</div>");
 
 			return sb.toString();
@@ -427,6 +434,7 @@ public class MarkLogicFunctionDefs
 		private final Map<String,Function> functionMap;
 		private final Map<String,Category> categoryMap;
 
+		private String docsSource = null;
 		private Function func;
 		private Parameter param;
 		private Example example;
@@ -445,7 +453,7 @@ public class MarkLogicFunctionDefs
 			switch (qname) {
 			case "apidoc:function":
 				text.setLength (0);
-				func = new Function (attributes.getValue ("lib"),
+				func = new Function (docsSource, attributes.getValue ("lib"),
 					attributes.getValue ("name"),
 					(attributes.getValue ("fullname") == null) ? (attributes.getValue ("lib") + ":" + attributes.getValue ("name")) : attributes.getValue ("fullname"),
 					false,
@@ -470,6 +478,8 @@ public class MarkLogicFunctionDefs
 				categoryMap.put (attributes.getValue ("name"), new Category (attributes.getValue ("name"), attributes.getValue ("bucket"), attributes.getValue ("count")));
 				break;
 			case "apidoc:apidocs":
+				docsSource = attributes.getValue ("docs-source");
+				break;
 			case "apidoc:categories":
 			case "apidoc:functions":
 			case "apidoc:params":

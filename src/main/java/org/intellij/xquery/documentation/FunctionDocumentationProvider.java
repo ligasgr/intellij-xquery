@@ -42,7 +42,12 @@ public class FunctionDocumentationProvider implements PsiBasedDocumentationProvi
 
         if (func != null) return func.docAsHtml();
 
+        func = functionDefs.getFunction ("fn:" + functionName.getLocalNameText());
+
+        if (func != null) return func.docAsHtml();
+
         XQueryFunctionDecl elementToProduceDescription = getElementToProduceDescription(functionName);
+
         if (elementToProduceDescription != null) {
             return wrapWithHtmlAndStyle(getDocFromFunctionDeclaration(functionName, elementToProduceDescription).getText());
         } else {

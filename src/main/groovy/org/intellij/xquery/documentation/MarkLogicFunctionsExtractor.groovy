@@ -44,7 +44,7 @@ class MarkLogicFunctionsExtractor
 	List<GPathResult> functions = []
 	Map<String,String> categoryMap = [:]
 
-	public static void main (String[] args)
+	static void main (String[] args)
 	{
 		if (args.length != 2) {
 			println "Usage: <input docs zip file> <output XML file>"
@@ -90,7 +90,7 @@ class MarkLogicFunctionsExtractor
 
 		def xml = builder.bind {
 			mkp.declareNamespace ([apidoc: 'http://marklogic.com/xdmp/apidoc', xhtml: 'http://www.w3.org/1999/xhtml'])
-			delegate.'apidoc:apidocs' {
+			delegate.'apidoc:apidocs' ('docs-source': inputZipPath.substring (inputZipPath.lastIndexOf ('/') + 1)) {
 				mkp.yield ('\n')
 
 				delegate.'apidoc:categories' {

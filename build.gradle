@@ -36,7 +36,7 @@ else
 project.ext.ideaInstallationSource = 'https://download.jetbrains.com/idea/ideaIC-2017.1.tar.gz'
 project.ext.ideaArchiveFileName = project.ext.ideaInstallationSource.substring(project.ext.ideaInstallationSource.lastIndexOf('/'))
 
-project.ext.mlDocumentationSource = 'https://docs.marklogic.com/MarkLogic_8_pubs.zip'
+project.ext.mlDocumentationSource = 'https://docs.marklogic.com/MarkLogic_9_pubs.zip'
 project.ext.mlDocsDir = 'build/mldocs'
 project.ext.mlDocsArchiveFileName = project.ext.mlDocumentationSource.substring (project.ext.mlDocumentationSource.lastIndexOf('/'))
 
