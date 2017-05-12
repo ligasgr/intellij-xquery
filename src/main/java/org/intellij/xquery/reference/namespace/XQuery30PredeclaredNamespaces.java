@@ -23,10 +23,11 @@ public class XQuery30PredeclaredNamespaces extends PredeclaredNamespaces {
     public static final Namespace FN = ns("fn", "http://www.w3.org/2005/xpath-functions");
     public static final Namespace MATH = ns("math", "http://www.w3.org/2005/xpath-functions/math");
     public static final Namespace XMLNS = ns("xmlns", "");
+    public static final Namespace XS = ns("xs", "http://www.w3.org/2001/XMLSchema");
 
     {
         prefixToNamespaceMap.put("xml", Pair.create("http://www.w3.org/XML/1998/namespace", true));
-        prefixToNamespaceMap.put("xs", Pair.create("http://www.w3.org/2001/XMLSchema", true));
+        prefixToNamespaceMap.put(XS.getPrefix(), Pair.create(XS.getNamespace(), true));
         prefixToNamespaceMap.put("xsi", Pair.create("http://www.w3.org/2001/XMLSchema-instance", true));
         prefixToNamespaceMap.put(FN.getPrefix(), Pair.create(FN.getNamespace(), true));
         prefixToNamespaceMap.put(MATH.getPrefix(), Pair.create(MATH.getNamespace(), true));
