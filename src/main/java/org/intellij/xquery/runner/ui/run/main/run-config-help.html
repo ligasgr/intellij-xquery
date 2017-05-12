@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright 2017 OverStory Ltd <copyright@overstory.co.uk> and other contributors
+  ~ (see the CONTRIBUTORS file).
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>MarkLogic Run Config Help</title>
+	</head>
+	<body>
+		<h2>MarkLogic Run/Debug Modes</h2>
+		<p>
+			The radio buttons here select the mode by which XQuery should be executed on MarkLogic.
+			There are four modes, the first two of which apply to both Run and Debug.  The second two
+			only apply to debugging.
+		</p>
+		<p>
+			These modes are:
+		</p>
+		<p></p>
+
+		<h3>Ad Hoc (eval)</h3>
+			<p>
+				The content of the selected file, which must be a main module, will be sent to MarkLogic
+				and executed as an Ad Hoc query using <code>dbg:eval</code>.  External variables may be passed to the query.
+				Library modules may only be imported if they exist in the path of the appserver (the module's effective path
+				will be the appserver root).  Library modules in the IntelliJ workspace will not automatically be visible at runtime.
+			</p>
+			<p>
+				This mode runs requests on the TaskServer rather than the configured appserver.  This means that
+				no output will ever be produced.  This is necessary to be able to run and debug a request from the
+				appserver.  If you need to see the output as well as debug, user the Capture Appserver mode.
+			</p>
+			<p>
+				Requests running on the TaskServer will also not be able to see any HTTP request values.  This will ony be
+				possible with the Capture Appserver mode.  The same applies to Invoke mode.
+			</p>
+			<p></p>
+
+		<h3>Invoke</h3>
+			<p>
+				The selected module will be invoked by URI, determined by the selected XQuery file.  The
+				content of the selected file will <i>not</i> be sent to MarkLogic.  The module will be invoked
+				by name via the appservers root path.
+			</p>
+			<p>
+				This option only works properly if MarkLogic's appserver is configured
+				to have its root point at a directory within the IntelliJ workspace.  By telling the MarkLogic
+				plugin where the appserver root is, it can adjust the relative paths so that the IntelliJ
+				can see the source when stopped at a breakpoint.
+			</p>
+			<p>
+				This mode runs requests on the Task Server rather than the configured appserver.  This means that
+				no output will ever be produced.  This is necessary to be able to run and debug a request from the
+				same appserver.  If you need to see the output as well as debug a request, user the Capture Appserver mode.
+			</p>
+			<p></p>
+
+		<h3>Capture AppServer</h3>
+			<p>
+				Not yet implemented.
+			</p>
+
+			<p>
+				This mode "grabs" the primary appserver (defined in the Data Sources window activated by the "Configure" button).
+				It then invokes the selected XQuery module on that appserver, which will immediately halt and wait in the debugger.
+				Commands to manipulate the debugged process are issued on the secondary port, with the optional alternate credentials.
+				Running this way allows the query output to be returned.  The Ad Hoc and Invoke modes never produce any output.
+			</p>
+
+			<p>
+				Note however that because of the way requests run on MarkLogic, any output produced will only be sent when the
+				query requests completes without error.  To see information as the request is stepped through the debugger,
+				consider using <code>xdmp:log</code> calls.
+			</p>
+
+			<p>
+				It is also possible to capture the appserver and then wait for a request to be initiated on it by
+				other means (such as via a REST request).  Any such request will stop at the first expression and wait
+				for the debugger.
+			</p>
+			<p></p>
+
+		<h3>Debug Running Request</h3>
+			<p>
+				Not yet implemented.
+			</p>
+			<p>
+				This mode will provide a means by which a running request may be attached to and stepped with the debugger.
+				To work successfully, the appserver root path must be set properly, as for Invoke mode.  It is possible to debug code running from
+				a Modules Database, but a corresponding source tree must be in this project's workspace with the path of the
+				code at the appserver root configured here.  When the debugger stops, if it does not find the corresponding
+				source file then it will not work properly.
+			</p>
+			<p>
+				Most requests on MarkLogic run very quickly.  This mode will primarily be useful for diagnosing requests that
+				have gotten stuck or are running away.
+			</p>
+			<p></p>
+
+		<p>&copy; 2017 <a href="http://overstory.co.uk">OverStory Ltd</a></p>
+	</body>
+</html>

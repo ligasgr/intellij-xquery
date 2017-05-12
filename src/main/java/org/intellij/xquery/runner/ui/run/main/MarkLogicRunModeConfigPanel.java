@@ -61,6 +61,7 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 	private LabeledComponent<JTextField> mlDebuggerPort;
 	private LabeledComponent<JTextField> mlDebuggerUser;
 	private LabeledComponent<JPasswordField> mlDebuggerPassword;
+	private JButton helpButton;
 
 	public MarkLogicRunModeConfigPanel()
 	{
@@ -88,6 +89,10 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 		buttonGroup.add (invokeModule);
 		buttonGroup.add (grabAppserver);
 		buttonGroup.add (grabRunning);
+
+		helpButton.addActionListener (getHelpButtonListener());
+		helpButton.putClientProperty("JButton.buttonType", "help");
+		helpButton.setText("");
 
 		mainPanel.setVisible (false);
 	}
@@ -136,6 +141,20 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 	public void setAnchor (@Nullable JComponent anchor)
 	{
 		this.anchor = anchor;
+	}
+
+	// ---------------------------------------------------
+
+	private ActionListener getHelpButtonListener()
+	{
+		return new ActionListener()
+		{
+			@Override
+			public void actionPerformed (ActionEvent e)
+			{
+				new RunConfigHelpDialog (getMainPanel()).show();
+			}
+		};
 	}
 
 	// ---------------------------------------------------

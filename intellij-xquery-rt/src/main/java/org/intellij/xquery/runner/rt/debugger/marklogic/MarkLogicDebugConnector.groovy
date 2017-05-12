@@ -462,11 +462,16 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 	// ---------------------------------------------------
 
 	private static String SLASH = File.separator
-	private String XPACKAGE = "${getClass().package.name.replace ('.', SLASH)}${SLASH}xquery${SLASH}"
 
 	private String xfile (String name)
 	{
-		getClass().classLoader.getResource ("${XPACKAGE}${name}").text
+		resourceFileText ("${getClass().package.name}.xquery", name)
+	}
+
+	// FixMe: Move this somewhere more generic
+	static String resourceFileText (String packageName, String filename)
+	{
+		MarkLogicDebugConnector.classLoader.getResource ("${packageName.replace ('.', SLASH)}${SLASH}${filename}").text
 	}
 
 	// ---------------------------------------------------
