@@ -115,12 +115,15 @@
                 text="XQuery File" description="Create new XQuery file">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </action>
-        <!--
-        <action id="XQuery.DocLookup" class="org.intellij.xquery.documentation.DocLookupMenu"
-                text="XQuery Function Docs" description="Lookup XQuery function documentation">
-            <add-to-group group-id="HelpMenu" anchor="last"/>
-        </action>
-        -->
+        <group id="MarkLogicGroup" text="MarkLogic" description="MarkLogic Stuff">
+            <add-to-group group-id="MainMenu" anchor="after" relative-to-action="RunMenu"/>
+            <action id="FunctionDocsLookup"  text="XQuery Function Docs" description="Lookup XQuery function documentation" class="org.intellij.xquery.documentation.DocLookupMenu"/>
+            <action id="PluginHelp" text="Plugin Help" description="Plugin Help Topics" class="org.intellij.xquery.documentation.PluginHelpAction"/>
+            <separator/>
+            <action id="MLDocs9" text="MarkLogic 9 Online Docs" description="http://docs.marklogic.com/9.0" class="org.intellij.xquery.documentation.OnlineDocsMenu"/>
+            <action id="MLDocs8" text="MarkLogic 8 Online Docs" description="http://docs.marklogic.com/8.0" class="org.intellij.xquery.documentation.OnlineDocsMenu"/>
+            <action id="MLDocs7" text="MarkLogic 7 Online Docs" description="http://docs.marklogic.com/7.0" class="org.intellij.xquery.documentation.OnlineDocsMenu"/>
+        </group>
     </actions>
 
     <application-components>

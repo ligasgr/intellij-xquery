@@ -34,7 +34,7 @@ public class RunConfigHelpDialog extends DialogWrapper
 {
 	private static final String TITLE = "MarkLogic Run Config Help";
 
-	RunConfigHelpDialog (Component parent)
+	public RunConfigHelpDialog (Component parent)
 	{
 		super (parent, false);
 
