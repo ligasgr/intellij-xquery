@@ -51,6 +51,10 @@ public class UnusedNamespaceDeclarationInspectionTest extends BaseFunctionalTest
         executeInspectionTest();
     }
 
+    public void testNamespaceDeclarationUsedByXsQNameArgument() {
+        executeInspectionTest();
+    }
+
     public void testRemoveUnusedNamespaceDeclarationQuickFix() {
         final String testName = getTestName();
 
