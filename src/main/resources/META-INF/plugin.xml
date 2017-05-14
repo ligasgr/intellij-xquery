@@ -116,7 +116,7 @@
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </action>
         <group id="MarkLogicGroup" text="MarkLogic" description="MarkLogic Stuff">
-            <add-to-group group-id="MainMenu" anchor="after" relative-to-action="RunMenu"/>
+            <add-to-group group-id="MainMenu" anchor="after" relative-to-action="WindowMenu"/>
             <action id="FunctionDocsLookup"  text="XQuery Function Docs" description="Lookup XQuery function documentation" class="org.intellij.xquery.documentation.DocLookupMenu"/>
             <action id="PluginHelp" text="Plugin Help" description="Plugin Help Topics" class="org.intellij.xquery.documentation.PluginHelpAction"/>
             <separator/>
