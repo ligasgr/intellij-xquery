@@ -17,12 +17,7 @@
 
 package org.intellij.xquery.runner.rt.vendor.marklogic;
 
-import com.marklogic.xcc.ContentSource;
-import com.marklogic.xcc.ContentSourceFactory;
-import com.marklogic.xcc.Request;
-import com.marklogic.xcc.ResultSequence;
-import com.marklogic.xcc.Session;
-import com.marklogic.xcc.ValueFactory;
+import com.marklogic.xcc.*;
 import com.marklogic.xcc.exceptions.XQueryException;
 import com.marklogic.xcc.types.ValueType;
 import com.marklogic.xcc.types.XName;
@@ -67,7 +62,14 @@ public class MarklogicRunnerApp implements RunnerApp
 
 			setRequestVariables (request);
 
-			output.println (session.submitRequest (request).asString());
+			ResultSequence rs = session.submitRequest (request);
+
+			for (ResultItem item : rs.toResultItemArray()) {
+				output.print (item.getItem().getItemType().toString());
+				output.print (" ");
+				for (int i = 0; i < 50; i++) output.print ("\u2014"); output.println ("");
+				output.println (item.asString());
+			}
 		} catch (XQueryException e) {
 			System.err.println (e.toString());
 		}
