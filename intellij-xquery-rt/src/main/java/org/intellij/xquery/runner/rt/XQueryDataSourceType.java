@@ -38,8 +38,9 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 public enum XQueryDataSourceType {
-    SAXON("Saxon", true, false, asList("saxon9he.jar", "saxon9-xqj.jar"), true, SaxonXQDataSourceFactory.class),
+    MARKLOGIC_NATIVE("MarkLogic (native)", false, true, asList("marklogic-xcc-9.0.1.jar", "groovy-all-2.4.6.jar"), MarklogicRunnerAppFactory.class, true, true),
     MARKLOGIC("MarkLogic", false, true, asList("marklogic-xqj-1.0.0.jar", "groovy-all-2.4.6.jar"), false, MarklogicXQDataSourceFactory.class),
+    SAXON("Saxon", true, false, asList("saxon9he.jar", "saxon9-xqj.jar"), true, SaxonXQDataSourceFactory.class),
     EXIST("eXist", false, true, asList("exist-xqj-1.0.1.jar"), false, ExistXQDataSourceFactory.class),
     BASEX("BaseX", false, true, asList("basex-xqj-1.6.0.jar"), false, BaseXXQDataSourceFactory.class),
     BASEX_LOCAL("BaseX (embedded)", false, false, asList("basex-xqj-1.6.0.jar", "basex-8.4.3.jar"), false,
@@ -47,7 +48,6 @@ public enum XQueryDataSourceType {
     SEDNA("Sedna", false, true, asList("sedna-xqj-1.0.0.jar"), false, SednaXQDataSourceFactory.class),
     ZORBA("Zorba", false, false, asList("zorba_xqj.jar", "zorba_api.jar"), false, ZorbaXQDataSourceFactory.class),
     SAXON_NATIVE("Saxon (native)", true, false, asList("saxon9he.jar"), SaxonRunnerAppFactory.class, true),
-    MARKLOGIC_NATIVE("MarkLogic (native)", false, true, asList("marklogic-xcc-8.0.5.jar", "groovy-all-2.4.6.jar"), MarklogicRunnerAppFactory.class, true, true),
     EXIST_NATIVE("eXist (native)", false, true, asList("commons-codec-1.10.jar"), ExistRunnerAppFactory.class, false),
     BASEX_NATIVE("BaseX (native)", false, true, asList("basex-8.4.3.jar"), BaseXRunnerAppFactory.class, false),
     BASEX_NATIVE_LOCAL("BaseX (native embedded)", false, false, asList("basex-8.4.3.jar"), BaseXLocalRunnerAppFactory.class, false);

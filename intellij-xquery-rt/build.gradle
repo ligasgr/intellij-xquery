@@ -56,7 +56,7 @@ dependencies {
     compile fileTree(dir: 'lib', include: '*.jar')
     compile('com.codnos:dbgp-interfaces:1.0.0')
     compile 'commons-codec:commons-codec:1.10'
-    compile 'com.marklogic:marklogic-xcc:8.0.5'
+    compile 'com.marklogic:marklogic-xcc:9.0.1'
     testCompile 'junit:junit-dep:4.10'
     testCompile 'org.mockito:mockito-all:1.9.5'
     testCompile('org.hamcrest:hamcrest-library:1.1') {
