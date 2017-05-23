@@ -62,14 +62,7 @@ public class MarklogicRunnerApp implements RunnerApp
 
 			setRequestVariables (request);
 
-			ResultSequence rs = session.submitRequest (request);
-
-			for (ResultItem item : rs.toResultItemArray()) {
-				output.print (item.getItem().getItemType().toString());
-				output.print (" ");
-				for (int i = 0; i < 50; i++) output.print ("\u2014"); output.println ("");
-				output.println (item.asString());
-			}
+			new MarkLogicResultFormatter (session.submitRequest (request)).outputAsString (output);
 		} catch (XQueryException e) {
 			System.err.println (e.toString());
 		}
