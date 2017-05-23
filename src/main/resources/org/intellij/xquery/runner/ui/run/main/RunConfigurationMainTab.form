@@ -1,47 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="org.intellij.xquery.runner.ui.run.main.RunConfigurationMainTab">
-  <grid id="27dc6" binding="editor" layout-manager="GridLayoutManager" row-count="6" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="editor" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="641" height="469"/>
+      <xy x="20" y="20" width="753" height="469"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
       <vspacer id="ab8c0">
         <constraints>
-          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
-      <component id="54d02" class="org.intellij.xquery.runner.ui.run.main.variables.VariablesPanel" binding="variablesPanel">
+      <scrollpane id="16ef6" class="com.intellij.ui.components.JBScrollPane" binding="scrollPane">
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
-      </component>
-      <component id="ad22a" class="org.intellij.xquery.runner.ui.run.main.variables.ContextItemPanel" binding="contextItemPanel" custom-create="true">
-        <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="f4bff" class="org.intellij.xquery.runner.ui.run.main.datasource.DataSourcePanel" binding="dataSourcePanel">
-        <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="43be9" class="org.intellij.xquery.runner.ui.run.main.module.ModuleSelectionPanel" binding="moduleSelectionPanel" custom-create="true">
-        <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-      </component>
-      <nested-form id="408cf" form-file="org/intellij/xquery/runner/ui/run/main/MarkLogicRunModeConfigPanel.form" binding="mlRunMode">
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="1" use-parent-layout="false"/>
-        </constraints>
-      </nested-form>
+        <border type="empty"/>
+        <children>
+          <grid id="1f58" class="com.intellij.ui.components.JBPanel" binding="jbpanel" layout-manager="GridLayoutManager" row-count="6" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="5" left="0" bottom="0" right="10"/>
+            <constraints/>
+            <properties/>
+            <border type="empty"/>
+            <children>
+              <component id="43be9" class="org.intellij.xquery.runner.ui.run.main.module.ModuleSelectionPanel" binding="moduleSelectionPanel" custom-create="true">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+              </component>
+              <nested-form id="408cf" form-file="org/intellij/xquery/runner/ui/run/main/MarkLogicRunModeConfigPanel.form" binding="mlRunMode">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="1" use-parent-layout="false"/>
+                </constraints>
+              </nested-form>
+              <component id="54d02" class="org.intellij.xquery.runner.ui.run.main.variables.VariablesPanel" binding="variablesPanel">
+                <constraints>
+                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="ad22a" class="org.intellij.xquery.runner.ui.run.main.variables.ContextItemPanel" binding="contextItemPanel" custom-create="true">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="f4bff" class="org.intellij.xquery.runner.ui.run.main.datasource.DataSourcePanel" binding="dataSourcePanel">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </scrollpane>
     </children>
   </grid>
 </form>

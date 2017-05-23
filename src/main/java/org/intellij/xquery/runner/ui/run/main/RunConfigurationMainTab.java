@@ -21,6 +21,8 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.PanelWithAnchor;
+import com.intellij.ui.components.JBPanel;
+import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.UIUtil;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
@@ -51,6 +53,8 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
     private JComponent anchor;
     private JPanel editor;
     private MarkLogicRunModeConfigPanel mlRunMode;
+    private JBPanel jbpanel;
+    private JBScrollPane scrollPane;
     private MyActionListener myActionListener = new MyActionListener();
 
     public RunConfigurationMainTab(final Project project) {
