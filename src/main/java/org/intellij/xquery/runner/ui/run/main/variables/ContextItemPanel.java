@@ -126,14 +126,14 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         buttonGroup.add(fileRadioButton);
         setLayout(new MigLayout("ins 0, gap 5, fill, flowx"));
         add(contextItemEnabled, "shrinkx, top");
-        add(contextItemOptionsPanel, "growx, pushx");
+        add(contextItemOptionsPanel, "growx, pushx, hidemode 2");
         contextItemTypeField.getComponent().setName(CONTEXT_ITEM_TYPE);
         contextItemTypeField.getComponent().setModel(typesModel);
-        contextItemOptionsPanel.add(contextItemTypeField, "growx, pushx, wrap, span 2");
-        contextItemOptionsPanel.add(editorRadioButton);
-        contextItemOptionsPanel.add(contextItemEditorContent, "growx, pushx, wrap");
-        contextItemOptionsPanel.add(fileRadioButton);
-        contextItemOptionsPanel.add(contextItemPathField, "growx, pushx");
+        contextItemOptionsPanel.add(contextItemTypeField, "growx, pushx, wrap, span 2, hidemode 2");
+        contextItemOptionsPanel.add(editorRadioButton, "hidemode 2");
+        contextItemOptionsPanel.add(contextItemEditorContent, "growx, pushx, wrap, hidemode 2");
+        contextItemOptionsPanel.add(fileRadioButton, "hidemode 2");
+        contextItemOptionsPanel.add(contextItemPathField, "growx, pushx, hidemode 2");
         contextItemEnabledChanged();
         contextItemSourceChanged();
         populateTypesList();
@@ -171,7 +171,8 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
 
     private void contextItemEnabledChanged() {
         final boolean pathEnabled = isContextItemEnabled();
-        GuiUtils.enableChildren(contextItemOptionsPanel, pathEnabled);
+        GuiUtils.enableChildren (contextItemOptionsPanel, pathEnabled);
+        GuiUtils.showComponents (pathEnabled, contextItemTypeField, editorRadioButton, fileRadioButton, contextItemTypeField, contextItemOptionsPanel);
         contextItemSourceChanged();
     }
 
