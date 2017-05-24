@@ -36,7 +36,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.codnos.dbgp.api.DBGpFactory.engine;
-import static org.intellij.xquery.runner.rt.FileUtil.readFile;
 import static org.intellij.xquery.runner.rt.debugger.LogUtil.log;
 
 public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements DebuggerEngine

@@ -55,9 +55,6 @@ class MarkLogicResultFormatter
 		case 'document-node()':
 			prettyPrintXml (item.asString(), true)
 			break
-		case 'attribute()':
-			"@${item.asString()}"
-			break
 		default:
 			item.asString()
 		}
