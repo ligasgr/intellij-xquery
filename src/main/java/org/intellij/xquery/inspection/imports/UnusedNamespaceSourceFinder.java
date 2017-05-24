@@ -19,6 +19,7 @@ package org.intellij.xquery.inspection.imports;
 
 import org.intellij.xquery.inspection.FunctionNamespacesExtractor;
 import org.intellij.xquery.inspection.PrefixExtractor;
+import org.intellij.xquery.inspection.QNameConstructorNamespacesExtractor;
 import org.intellij.xquery.inspection.VariableNamespacesExtractor;
 import org.intellij.xquery.inspection.XmlNamespacesExtractor;
 import org.intellij.xquery.psi.XQueryFile;
@@ -35,6 +36,7 @@ public abstract class UnusedNamespaceSourceFinder<T extends XQueryNamespaceSourc
     private final FunctionNamespacesExtractor functionNamespacesExtractor = new FunctionNamespacesExtractor();
     private final VariableNamespacesExtractor variableNamespacesExtractor = new VariableNamespacesExtractor();
     private final PrefixExtractor prefixExtractor = new PrefixExtractor();
+    private final QNameConstructorNamespacesExtractor qnameConstructorNamespacesExtractor = new QNameConstructorNamespacesExtractor();
     private final XmlNamespacesExtractor xmlNamespacesExtractor = new XmlNamespacesExtractor();
 
     public Collection<T> getUnusedNamespaceSources(XQueryFile xQueryFile) {
@@ -66,6 +68,7 @@ public abstract class UnusedNamespaceSourceFinder<T extends XQueryNamespaceSourc
         namespaces.addAll(functionNamespacesExtractor.getNamespacesUsedByFunctions(xQueryFile));
         namespaces.addAll(variableNamespacesExtractor.getNamespacesUsedByVariables(xQueryFile));
         namespaces.addAll(prefixExtractor.getNamespacesUsedByPrefixes(xQueryFile));
+        namespaces.addAll(qnameConstructorNamespacesExtractor.getNamespacesUsedByQNameConstructors(xQueryFile));
         namespaces.addAll(xmlNamespacesExtractor.getNamespacesUsedByXml(xQueryFile));
         return namespaces;
     }

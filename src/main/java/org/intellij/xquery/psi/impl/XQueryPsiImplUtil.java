@@ -175,7 +175,7 @@ public class XQueryPsiImplUtil {
         return null;
     }
 
-    private static String stripApostrophes(String text) {
+    public static String stripApostrophes(String text) {
         return text.replaceAll("\"", "").replaceAll("'", "");
     }
 
