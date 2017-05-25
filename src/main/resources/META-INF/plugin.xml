@@ -19,7 +19,7 @@
     <id>org.intellij.xquery.marklogic</id>
     <name>XQuery Support + MarkLogic Debugger</name>
     <version>1.0.0-SNAPSHOT</version>
-    <vendor email="ron@overstory.co.uk" url="http://overstory.co.uk/">OverStory Ltd</vendor>
+    <vendor email="ron@overstory.co.uk" url="http://overstory.co.uk/" logo="icons/overstory16x16.png">OverStory Ltd</vendor>
 
     <description>
         Provides XQuery 3.0 language support, with MarkLogic documentation and debugger extensions.
@@ -36,6 +36,10 @@
     <idea-version since-build="163.7743"/>
 
     <depends>com.intellij.modules.lang</depends>
+
+<!--  ToDo
+    <helpset file="xquery-help.jar" path="/Help.hs"/>
+-->
 
     <extensions defaultExtensionNs="com.intellij">
         <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
