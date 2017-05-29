@@ -57,9 +57,6 @@ public class XQueryDataSourceConfigurationTest {
     private static final String USERNAME_FIELD = "username";
     private static final String PASSWORD_FIELD = "password";
     private static final String ML_DEBUGGER_ENABLED_FIELD = "mlDebuggerEnabled";
-    private static final String ML_DEBUGGER_PORT_FIELD = "mlDebuggerPort";
-    private static final String ML_DEBUGGER_USER_FIELD = "mlDebuggerUser";
-    private static final String ML_DEBUGGER_PASSWORD_FIELD = "mlDebuggerPassword";
     private static final String USER_DEFINED_LIBRARY_ENABLED = "userDefinedLibraryEnabled";
     private static final String USER_DEFINED_LIBRARY_PATH = "userDefinedLibraryPath";
     private static final String USER_DEFINED_LIBRARY_PATHS = "userDefinedLibraryPaths";

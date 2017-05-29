@@ -45,9 +45,8 @@ public class XQueryRunConfig
 	private final XPathExpression passwordExpression;
 	private final XPathExpression mlDebugRunModeExpression;
 	private final XPathExpression mlDebugAppserverRootExpression;
-	private final XPathExpression mlDebugPortExpression;
-	private final XPathExpression mlDebugUserExpression;
-	private final XPathExpression mlDebugPaswordExpression;
+	private final XPathExpression mlDebugAppserverExpression;
+	private final XPathExpression mlCaptureTimeoutSecsExpression;
 	private final XPathExpression configFileEnabledExpression;
 	private final XPathExpression configFileExpression;
 	private final XPathExpression databaseNameExpression;
@@ -75,9 +74,8 @@ public class XQueryRunConfig
 
 		mlDebugRunModeExpression = xPath.compile (xqCfgAttrXPath ("mlDebuggerRunMode"));
 		mlDebugAppserverRootExpression = xPath.compile (xqCfgAttrXPath ("mlDebuggerAppserverRoot"));
-		mlDebugPortExpression = xPath.compile (xqCfgAttrXPath ("mlDebuggerSecondaryPort"));
-		mlDebugUserExpression = xPath.compile (xqCfgAttrXPath ("mlDebuggerSecondaryUser"));
-		mlDebugPaswordExpression = xPath.compile (xqCfgAttrXPath ("mlDebuggerSecondaryPassword"));
+		mlDebugAppserverExpression = xPath.compile (xqCfgAttrXPath ("mlDebugAppserver"));
+		mlCaptureTimeoutSecsExpression = xPath.compile (xqCfgAttrXPath ("mlCaptureTimeoutSecs"));
 
 		configFileEnabledExpression = xPath.compile (xqRunnerAttrXPath ("configEnabled"));
 		configFileExpression = xPath.compile (xqRunnerAttrXPath ("configFile"));
@@ -175,31 +173,14 @@ public class XQueryRunConfig
 		return getExpressionValue (mlDebugAppserverRootExpression);
 	}
 
-	public String getMlDebugPort()
+	public String getMlDebugAppserver()
 	{
-		return getExpressionValue (mlDebugPortExpression);
+		return getExpressionValue (mlDebugAppserverExpression);
 	}
 
-	public String getMlDebugUser()
+	public String getMlCaptureTimeoutSecs()
 	{
-		String value = getExpressionValue (mlDebugUserExpression);
-
-		if ((value == null) || (value.length() == 0)) {
-			return getUsername();
-		}
-
-		return value;
-	}
-
-	public String getMlDebugPassword()
-	{
-		String value = getExpressionValue (mlDebugPaswordExpression);
-
-		if ((value == null) || (value.length() == 0)) {
-			return getUsername();
-		}
-
-		return value;
+		return getExpressionValue (mlCaptureTimeoutSecsExpression);
 	}
 
 	public boolean isConfigFileEnabled()

@@ -38,8 +38,8 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 public enum XQueryDataSourceType {
-    MARKLOGIC_NATIVE("MarkLogic (native)", false, true, asList("marklogic-xcc-9.0.1.jar", "groovy-all-2.4.6.jar"), MarklogicRunnerAppFactory.class, true, true),
-    MARKLOGIC("MarkLogic", false, true, asList("marklogic-xqj-1.0.0.jar", "groovy-all-2.4.6.jar"), false, MarklogicXQDataSourceFactory.class),
+    MARKLOGIC_NATIVE("MarkLogic (XCC)", false, true, asList("marklogic-xcc-9.0.1.jar", "groovy-all-2.4.6.jar"), MarklogicRunnerAppFactory.class, true, true),
+    MARKLOGIC("MarkLogic (XQJ)", false, true, asList("marklogic-xqj-1.0.0.jar", "groovy-all-2.4.6.jar"), false, MarklogicXQDataSourceFactory.class),
     SAXON("Saxon", true, false, asList("saxon9he.jar", "saxon9-xqj.jar"), true, SaxonXQDataSourceFactory.class),
     EXIST("eXist", false, true, asList("exist-xqj-1.0.1.jar"), false, ExistXQDataSourceFactory.class),
     BASEX("BaseX", false, true, asList("basex-xqj-1.6.0.jar"), false, BaseXXQDataSourceFactory.class),
@@ -57,15 +57,15 @@ public enum XQueryDataSourceType {
     private final Class<? extends XQDataSourceFactory> xqDataSourceFactoryClass;
     private final Class<? extends RunnerAppFactory> runnerAppFactoryClass;
     private final boolean debugSupported;
-    private final boolean secondaryDebugPortSupported;
+    private final boolean marklogicDebugSupported;
     private final String presentableName;
     private final boolean configFileSupported;
     private final boolean connectionPropertiesSupported;
 
     XQueryDataSourceType (String presentableName, boolean configFileSupported, boolean connectionPropertiesSupported, List<String> classpathEntries,
-            Class<? extends RunnerAppFactory> runnerAppFactoryClass, boolean debugSupported, boolean secondaryDebugPortSupported)
+            Class<? extends RunnerAppFactory> runnerAppFactoryClass, boolean debugSupported, boolean marklogicDebugSupported)
     {
-        this (presentableName, configFileSupported, connectionPropertiesSupported, classpathEntries, true, null, runnerAppFactoryClass, debugSupported, secondaryDebugPortSupported);
+        this (presentableName, configFileSupported, connectionPropertiesSupported, classpathEntries, true, null, runnerAppFactoryClass, debugSupported, marklogicDebugSupported);
     }
 
     XQueryDataSourceType(String presentableName, boolean configFileSupported,
@@ -91,7 +91,7 @@ public enum XQueryDataSourceType {
                          Class<? extends XQDataSourceFactory> xqDataSourceFactoryClass,
                          Class<? extends RunnerAppFactory> runnerAppFactoryClass,
                          boolean debugSupported,
-                         boolean secondaryDebugPortSupported) {
+                         boolean marklogicDebugSupported) {
         this.presentableName = presentableName;
         this.configFileSupported = configFileSupported;
         this.connectionPropertiesSupported = connectionPropertiesSupported;
@@ -100,7 +100,7 @@ public enum XQueryDataSourceType {
         this.xqDataSourceFactoryClass = xqDataSourceFactoryClass;
         this.runnerAppFactoryClass = runnerAppFactoryClass;
         this.debugSupported = debugSupported;
-        this.secondaryDebugPortSupported = secondaryDebugPortSupported;
+        this.marklogicDebugSupported = marklogicDebugSupported;
     }
 
     public static XQueryDataSourceType getForName(String name) {
@@ -148,7 +148,7 @@ public enum XQueryDataSourceType {
         return debugSupported;
     }
 
-    public boolean isSecondaryDebugPortSupported() {
-        return secondaryDebugPortSupported;
+    public boolean isMarklogicDebugSupported() {
+        return marklogicDebugSupported;
     }
 }

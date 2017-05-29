@@ -55,13 +55,12 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 	private TextFieldWithBrowseButton appserverRoot;
 	private JLabel label;
 	private JLabel appserverRootLabel;
-	private JLabel secondaryPortLabel;
+	private JLabel debugAppserverLabel;
 	private JPanel appserverRootPanel;
-	private JPanel secondaryPortPanel;
-	private LabeledComponent<JTextField> mlDebuggerPort;
-	private LabeledComponent<JTextField> mlDebuggerUser;
-	private LabeledComponent<JPasswordField> mlDebuggerPassword;
+	private JPanel debugAppserverPanel;
+	private LabeledComponent<JTextField> mlDebugAppserver;
 	private JButton helpButton;
+	private LabeledComponent<JTextField> mlCaptureTimeoutSecs;
 
 	public MarkLogicRunModeConfigPanel()
 	{
@@ -74,8 +73,7 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 		invokeModule.setEnabled (true);
 		invokeModule.addActionListener (radioButtonListener);
 
-		// ToDo
-		grabAppserver.setEnabled (false);
+		grabAppserver.setEnabled (true);
 		grabAppserver.addActionListener (radioButtonListener);
 
 		// ToDo
@@ -83,7 +81,7 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 		grabRunning.addActionListener (radioButtonListener);
 
 		appserverRootPanel.setVisible (false);
-		secondaryPortPanel.setVisible (false);
+		debugAppserverPanel.setVisible (false);
 
 		buttonGroup.add (adHocEval);
 		buttonGroup.add (invokeModule);
@@ -101,27 +99,20 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 	{
 		applyMode (cfg.getMlDebuggerRunMode());
 		appserverRoot.setText (cfg.getMlDebuggerAppserverRoot());
-		mlDebuggerPort.getComponent().setText (cfg.getMlDebuggerSecondaryPort());
-		mlDebuggerUser.getComponent().setText (cfg.getMlDebuggerSecondaryUser());
-		mlDebuggerPassword.getComponent().setText (cfg.getMlDebuggerSecondaryPassword());
+		mlDebugAppserver.getComponent().setText (cfg.getMlDebugAppserver());
+		mlCaptureTimeoutSecs.getComponent().setText (cfg.getMlCaptureTimeoutSecs());
 
 		XQueryDataSourceType dsType = cfg.getDataSourceType();
 
-		mainPanel.setVisible ((dsType != null) && dsType.isSecondaryDebugPortSupported());
+		mainPanel.setVisible ((dsType != null) && dsType.isMarklogicDebugSupported ());
 	}
 
 	public void applyChanges(XQueryRunConfiguration cfg)
 	{
 		cfg.setMlDebuggerRunMode (runMode);
 		cfg.setMlDebuggerAppserverRoot (appserverRoot.getText());
-		cfg.setMlDebuggerSecondaryPort (mlDebuggerPort.getComponent().getText());
-		cfg.setMlDebuggerSecondaryUser (mlDebuggerUser.getComponent().getText());
-		cfg.setMlDebuggerSecondaryPassword (mlDebuggerPassword.getComponent().getText());
-	}
-
-	public String getAppserverRoot()
-	{
-		return appserverRoot.getText();
+		cfg.setMlDebugAppserver (mlDebugAppserver.getComponent().getText());
+		cfg.setMlCaptureTimeoutSecs (mlCaptureTimeoutSecs.getComponent().getText());
 	}
 
 	public JPanel getMainPanel()
@@ -166,25 +157,25 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 		if (mode == ADHOC) {
 			buttonGroup.setSelected (adHocEval.getModel(), true);
 			appserverRootPanel.setVisible (false);
-			secondaryPortPanel.setVisible (false);
+			debugAppserverPanel.setVisible (false);
 		}
 
 		if (mode == INVOKE) {
 			buttonGroup.setSelected (invokeModule.getModel(), true);
 			appserverRootPanel.setVisible (true);
-			secondaryPortPanel.setVisible (false);
+			debugAppserverPanel.setVisible (false);
 		}
 
-		if (mode == GRAB_APPSERVER) {
+		if (mode == CAPTURE_APPSERVER) {
 			buttonGroup.setSelected (grabAppserver.getModel(), true);
 			appserverRootPanel.setVisible (true);
-			secondaryPortPanel.setVisible (true);
+			debugAppserverPanel.setVisible (true);
 		}
 
-		if (mode == GRAB_RUNNING) {
+		if (mode == DEBUG_RUNNING) {
 			buttonGroup.setSelected (grabRunning.getModel(), true);
 			appserverRootPanel.setVisible (true);
-			secondaryPortPanel.setVisible (true);
+			debugAppserverPanel.setVisible (true);
 		}
 	}
 
@@ -201,9 +192,9 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 			} else if (button == invokeModule) {
 				mode = INVOKE;
 			} else if (button == grabAppserver) {
-				mode = GRAB_APPSERVER;
+				mode = CAPTURE_APPSERVER;
 			} else if (button == grabRunning) {
-				mode = GRAB_RUNNING;
+				mode = DEBUG_RUNNING;
 			} else {
 				mode = ADHOC;
 				System.err.println ("RadioButtonListener: IMPOSSIBLE BUTTON SOURCE: " + e.getSource());

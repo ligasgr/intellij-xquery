@@ -46,6 +46,7 @@ import static org.intellij.xquery.runner.rt.debugger.LogUtil.log
 @SuppressWarnings ("PublicMethodNotExposedInInterface")
 class MarkLogicDebugConnector
 {
+	private static final int DEFAULT_CAPTURE_TIMEOUT = 120
 	protected final XQueryRunConfig config
 	private final Session session
 
@@ -87,21 +88,86 @@ class MarkLogicDebugConnector
 		List<XQueryRunnerVariable> vars = config.getVariables()
 		MarkLogicRunMode runMode = config.getMlDebugRunMode()
 		String appserverRootPath = config.getMlDebugAppserverRoot()
-		String argument = (runMode == ADHOC) ? readFile (uri) : mlFileUri (uri)
+		int connectTimeout = toInt (config.mlCaptureTimeoutSecs, DEFAULT_CAPTURE_TIMEOUT)
+		BigInteger appserverId
+		String appserverName = ""
+		String argument
+
+		switch (runMode) {
+		case ADHOC:
+			argument = readFile (uri)
+			break
+		case INVOKE:
+			argument = mlFileUri (uri)
+			break
+		case CAPTURE_APPSERVER:
+			appserverId = capturedAppserverId
+			appserverName = getAppserverName (appserverId)
+			argument = appserverId.toString()
+			println "Attaching to appserver ${appserverName} for debugging, waiting for up to ${connectTimeout} seconds..."
+			break
+		default:
+			throw new RuntimeException ("ACK! Unrecognized Run Mode: ${runMode}")
+		}
 
 		log ("MarkLogicDebugConnector.submitRequestForDebug submitting debug request to MarkLogic: runMode: ${runMode}, appserverRoot: ${appserverRootPath}, uri: ${mlFileUri (uri)}")
 
-		ResultSequence rs = evalRequest (xfile (DBG_REQUEST), [mode: runMode.toString(), root: appserverRootPath, argument: argument, variables: generateVarsXml (vars)])
+		ResultSequence rs = evalRequest (xfile (DBG_REQUEST), [mode: runMode.toString(), root: appserverRootPath, argument: argument, variables: generateVarsXml (vars), 'connect-timeout': connectTimeout])
 		BigInteger requestId = getSingleBigIntResult (rs)
+
+		if (requestId == null) {
+			throw new RuntimeException ("Cannot start request for debugging in '${runMode}' run mode")
+		}
 
 		log ("MarkLogicDebugConnector.submitRequestForDebug back from call, requestId: " + requestId)
 
 		// This is unnecessary, but will trigger an undefined external var exception
-		// if any are missing.  Need to do this now, because dbg:value() will hang if
+		// if any are undefined.  Need to do this first, because dbg:value() will hang if
 		// the request encounters an XQuery error later.
 		requestStackFrames (requestId)
 
+		log ("MarkLogicDebugConnector.submitRequestForDebug: returning")
+
+		if (runMode == CAPTURE_APPSERVER) {
+			println "Successfully attached to appserver '${appserverName}', debugging started"
+		}
+
 		return requestId
+	}
+
+	private int toInt (String value, int defaultValue)
+	{
+		try {
+			Integer.parseInt (value)
+		} catch (Exception e) {
+			defaultValue
+		}
+	}
+
+	private static final String GET_APPSERVER_ID = 'get-appserver-id.xqy'
+
+	private BigInteger getCapturedAppserverId()
+	{
+		String appserver = config.mlDebugAppserver
+
+		if ((appserver == null) || appserver.length() == 0) return 0
+
+		ResultSequence rs = evalRequest (xfile (GET_APPSERVER_ID), [appserver: appserver])
+
+		getSingleBigIntResult (rs)
+	}
+
+	private static final String GET_APPSERVER_NAME = 'get-appserver-name.xqy'
+
+	private String getAppserverName (BigInteger id)
+	{
+		ResultSequence rs = evalRequest (xfile (GET_APPSERVER_NAME), [id: id])
+
+		if (rs.size() > 0) {
+			rs.itemAt (0).asString()
+		} else {
+			null
+		}
 	}
 
 	private static String generateVarsXml (List<XQueryRunnerVariable> vars)
@@ -135,12 +201,11 @@ class MarkLogicDebugConnector
 	{
 		try {
 			ResultSequence rs = evalRequest (xfile (GET_REQUEST_VALUE), [id: requestId, expr: expr])
-//		log ("MarkLogicDebugConnector.requestValueAndType: ${expr}, value: ${rs.asString()}" )
 
 			[rs.itemAt (0).asString(), rs.itemAt (1).asString()]
 		} catch (Exception e) {
-			log ("Cannot obtain value for '${expr}': ${e}")
-			['(cannot obtain value)', '(unknown)']
+			log ("Cannot obtain value for '${expr}' from request '${requestId}': ${e.message}")
+			throw e
 		}
 	}
 
@@ -151,7 +216,18 @@ class MarkLogicDebugConnector
 	void clearStoppedRequests() throws RequestException
 	{
 log ("MarkLogicDebugConnector.clearStoppedRequests")
-		evalRequest (xfile (CLEAR_STOPPED_REQ))
+
+		try {
+			evalRequest (xfile (CLEAR_STOPPED_REQ), ['captured-appserver-id': capturedAppserverId])
+		} catch (Exception e) {
+			log ("MarkLogicDebugConnector.clearStoppedRequests: Caught exception on first attempt, trying again: " + e)
+
+			try {
+				evalRequest (xfile (CLEAR_STOPPED_REQ))
+			} catch (Exception ex) {
+				log ("MarkLogicDebugConnector.clearStoppedRequests: Caught exception on second attempt, stopping attempt to clear stopped requests: " + ex)
+			}
+		}
 	}
 
 	// ---------------------------------------------------
@@ -328,7 +404,7 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 
 	List<DebugFrame> requestStackFrames (BigInteger requestId)
 	{
-//		log ("MarkLogicDebugConnector.requestStackFrames called")
+		log ("MarkLogicDebugConnector.requestStackFrames called")
 
 		ResultSequence rs = evalRequest (xfile (GET_REQ_STACK), [id: requestId])
 		GPathResult stack = new XmlSlurper (false, true).parseText (rs.asString()).declareNamespace ([d: 'http://marklogic.com/xdmp/debug'])
@@ -345,7 +421,6 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 			)
 		}
 
-//		log ("MarkLogicDebugConnector.requestStackFrames returning: ${debugFrames}")
 		debugFrames
 	}
 
@@ -404,10 +479,10 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 		"${n}\$${p}${name}"
 	}
 
-	private List<String> variableValue (String value, BigInteger requestId, String qname)
+	private List<String> variableValue (String givenValue, BigInteger requestId, String qname)
 	{
-		if (value) {
-			[value, guessVarType (value)]
+		if (givenValue) {
+			[givenValue, guessVarType (givenValue)]
 		} else {
 			requestValueAndType (requestId, qname)
 		}

@@ -1,3 +1,5 @@
+xquery version "1.0-ml";
+
 (: Copyright 2017 OverStory Ltd <copyright@overstory.co.uk> and other contributors
 * (see the CONTRIBUTORS file).
 *
@@ -16,21 +18,12 @@
 
 (:~
 : User: ron
-: Date: 4/23/17
-: Time: 3:09 PM
+: Date: 5/28/17
+: Time: 6:29 PM
+: To change this template use File | Settings | File Templates.
 :)
 
-xquery version '1.0-ml';
+declare variable $id external;
 
-declare variable $captured-appserver-id as xs:unsignedLong? external;
+xdmp:server-name ($id)
 
-for $req in dbg:stopped()
-return (
-	xdmp:request-cancel (xdmp:host(), if ($captured-appserver-id) then $captured-appserver-id else xdmp:server ('TaskServer'), $req),
-	dbg:status ($req)	(: This clears deferred error status for the canceled request :)
-)
-,
-
-if ($captured-appserver-id = dbg:connected())
-then dbg:disconnect ($captured-appserver-id)
-else ()

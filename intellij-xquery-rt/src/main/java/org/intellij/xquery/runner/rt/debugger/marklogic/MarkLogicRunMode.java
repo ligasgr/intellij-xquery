@@ -28,7 +28,7 @@ import java.util.Map;
  */
 public enum MarkLogicRunMode
 {
-	ADHOC ("adhoc"), INVOKE ("invoke"), GRAB_APPSERVER ("grab_appserver"), GRAB_RUNNING ("grab_running");
+	ADHOC ("AdHoc"), INVOKE ("Invoke"), CAPTURE_APPSERVER ("Capture Appserver"), DEBUG_RUNNING ("Debug Running");
 
 	private final String name;
 	private static final Map<String,MarkLogicRunMode> nameToEnum = new HashMap<>();
@@ -36,8 +36,8 @@ public enum MarkLogicRunMode
 	static {
 		nameToEnum.put ("adhoc", ADHOC);
 		nameToEnum.put ("invoke", INVOKE);
-		nameToEnum.put ("grab_appserver", GRAB_APPSERVER);
-		nameToEnum.put ("grab_running", GRAB_RUNNING);
+		nameToEnum.put ("capture appserver", CAPTURE_APPSERVER);
+		nameToEnum.put ("debug running", DEBUG_RUNNING);
 	}
 
 	MarkLogicRunMode (String name)
@@ -49,7 +49,7 @@ public enum MarkLogicRunMode
 	{
 		if ((name == null) || (name.length() == 0)) return ADHOC;
 
-		return nameToEnum.get (name);
+		return nameToEnum.get (name.toLowerCase());
 	}
 
 	@Override

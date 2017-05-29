@@ -58,9 +58,8 @@ public class XmlConfigurationAccessor {
 
         runConfiguration.setMlDebuggerRunMode (MarkLogicRunMode.forName (configuration.getAttributeValue ("mlDebuggerRunMode")));
         runConfiguration.setMlDebuggerAppserverRoot (configuration.getAttributeValue ("mlDebuggerAppserverRoot"));
-        runConfiguration.setMlDebuggerSecondaryPort (configuration.getAttributeValue ("mlDebuggerSecondaryPort"));
-        runConfiguration.setMlDebuggerSecondaryUser (configuration.getAttributeValue ("mlDebuggerSecondaryUser"));
-        runConfiguration.setMlDebuggerSecondaryPassword (configuration.getAttributeValue ("mlDebuggerSecondaryPassword"));
+        runConfiguration.setMlDebugAppserver (configuration.getAttributeValue ("mlDebugAppserver"));
+        runConfiguration.setMlCaptureTimeoutSecs (configuration.getAttributeValue ("mlCaptureTimeoutSecs"));
     }
 
     public void writeConfiguration(XQueryRunConfiguration runConfiguration, Element element) {
@@ -98,14 +97,11 @@ public class XmlConfigurationAccessor {
             if (runConfiguration.getMlDebuggerAppserverRoot() != null) {
                 configuration.setAttribute ("mlDebuggerAppserverRoot", runConfiguration.getMlDebuggerAppserverRoot());
             }
-            if (runConfiguration.getMlDebuggerSecondaryPort() != null) {
-                configuration.setAttribute ("mlDebuggerSecondaryPort", runConfiguration.getMlDebuggerSecondaryPort());
+            if (runConfiguration.getMlDebugAppserver() != null) {
+                configuration.setAttribute ("mlDebugAppserver", runConfiguration.getMlDebugAppserver());
             }
-            if (runConfiguration.getMlDebuggerSecondaryUser() != null) {
-                configuration.setAttribute ("mlDebuggerSecondaryUser", runConfiguration.getMlDebuggerSecondaryUser());
-            }
-            if (runConfiguration.getMlDebuggerSecondaryPassword() != null) {
-                configuration.setAttribute ("mlDebuggerSecondaryPassword", runConfiguration.getMlDebuggerSecondaryPassword());
+            if (runConfiguration.getMlCaptureTimeoutSecs() != null) {
+                configuration.setAttribute ("mlCaptureTimeoutSecs", runConfiguration.getMlCaptureTimeoutSecs());
             }
         }
 }

@@ -21,6 +21,7 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.PanelWithAnchor;
+import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.UIUtil;
@@ -55,6 +56,7 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
     private MarkLogicRunModeConfigPanel mlRunMode;
     private JBPanel jbpanel;
     private JBScrollPane scrollPane;
+    private JBLabel javaModuleWarn;
     private MyActionListener myActionListener = new MyActionListener();
 
     public RunConfigurationMainTab(final Project project) {
@@ -85,6 +87,7 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
         variablesPanel.init(configuration);
         contextItemPanel.init(configuration);
         dataSourcePanel.init(configuration);
+        javaModuleWarn.setVisible (configuration.getConfigurationModule().getModule() == null);
     }
 
     @Override
@@ -126,7 +129,7 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
             if (dataSourceConfiguration != null) {
                 XQueryDataSourceType dsType = dataSourceConfiguration.TYPE;
 
-                mlRunMode.getMainPanel().setVisible ((dsType != null) && dsType.isSecondaryDebugPortSupported());
+                mlRunMode.getMainPanel().setVisible ((dsType != null) && dsType.isMarklogicDebugSupported ());
             }
         }
     }

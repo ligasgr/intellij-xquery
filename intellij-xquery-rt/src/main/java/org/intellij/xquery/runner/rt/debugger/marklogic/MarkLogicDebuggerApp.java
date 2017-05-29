@@ -28,6 +28,7 @@ import org.intellij.xquery.runner.rt.debugger.DebugFrame;
 import org.intellij.xquery.runner.rt.debugger.DebuggerStoppedException;
 import org.intellij.xquery.runner.rt.debugger.Variable;
 import org.intellij.xquery.runner.rt.vendor.marklogic.MarklogicRunnerApp;
+import static org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicRunMode.*;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -38,6 +39,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.codnos.dbgp.api.DBGpFactory.engine;
 import static org.intellij.xquery.runner.rt.debugger.LogUtil.log;
 
+@SuppressWarnings ("Duplicates")
 public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements DebuggerEngine
 {
 	private final Thread applicationThread;
@@ -202,6 +204,7 @@ log ("MarkLogicDebuggerApp.stepOut called");
 	{
 log ("MarkLogicDebuggerApp.breakpointSet called, breakpoint: " + printBreakpoint (breakpoint));
 		Breakpoint bp = breakpointManager.setBreakpoint (breakpoint);
+
 		if (debugConnector != null) debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
 
 		return bp;
@@ -313,6 +316,7 @@ log ("MarkLogicDebuggerApp.getStatus called");
 
 		ContentSource contentSource = getContentSource();
 		Session session = contentSource.newSession();
+		MarkLogicRunMode runMode = config.getMlDebugRunMode();
 
 		debugConnector = new MarkLogicDebugConnector (config, session);
 
@@ -323,8 +327,10 @@ log ("MarkLogicDebuggerApp.getStatus called");
 
 			debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
 
-			log ("runDebuggerApp: starting suspended request");
-			debugConnector.runToNextBreakPoint (debuggerRequestId);
+			if ((runMode == ADHOC) || (runMode == INVOKE)) {
+				log ("runDebuggerApp: starting suspended request");
+				debugConnector.runToNextBreakPoint (debuggerRequestId);
+			}
 
 			log ("runDebuggerApp: entering eternal loop");
 
@@ -414,12 +420,21 @@ log ("MarkLogicDebuggerApp.getStatus called");
 
 				if ( ! running) log ("running = false, breaking from main loop");
 				if (thrownException != null) {
-					log ("Abort due to Exception: " + thrownException);
+					System.err.println ("Abort due to deferred Exception: " + thrownException);
 					throw thrownException;
 				}
 			}
-		} catch (DeferredXqueryException|XQueryException e) {
-			System.err.println ("XQuery execution exception, stopping: " + e);
+		} catch (DeferredXqueryException e) {
+			System.err.println ("XQuery execution exception getting status, stopping: " + e);
+		} catch (XQueryException e) {
+			// This is a bit of hackery because the XQueryException parsing code is broken in XCC.  The W3CCode value is overridden by the name of the last variable in scope.
+			String timeoutError = "dbg:await-request-timeout";
+			String [] data = e.getData();
+			if ((timeoutError.equals (e.getW3CCode())) || ((data.length > 0) && timeoutError.equals (data [0]))) {
+				System.err.println (e.getMessage());
+			} else {
+				System.err.println ("XQuery execution exception, stopping: " + e);
+			}
 		} catch (RequestException e) {
 			System.err.println ("Exception talking to MarkLogic, stopping: " + e);
 		} catch (DebuggerStoppedException e) {
@@ -456,7 +471,7 @@ log ("MarkLogicDebuggerApp.getStatus called");
 					log ("ran the app");
 					changeToStopped();
 				} catch (Throwable e) {
-					log ("got exception: " + e);
+					System.err.println ("Exception running debugger: " + e);
 					e.printStackTrace();
 					changeToStopped();
 				}
@@ -544,6 +559,7 @@ log ("MarkLogicDebuggerApp.getStatus called");
 
 		synchronized (theLock) {
 			log ("resume=" + status);
+
 			if (status == Status.STOPPED) {
 				throw new DebuggerStoppedException();
 			} else if (status != Status.BREAK) {
@@ -551,14 +567,8 @@ log ("MarkLogicDebuggerApp.getStatus called");
 			}
 
 			log ("changing status to running");
-			changeState (Status.RUNNING);
 
-//			try {
-//				debugConnector.runToNextBreakPoint (debuggerRequestId);
-//			} catch (RequestException e) {
-//				log ("resume(): caught XCC exception: " + e);
-//				throw new RuntimeException (e);
-//			}
+			changeState (Status.RUNNING);
 
 			log ("status running");
 		}
@@ -567,11 +577,15 @@ log ("MarkLogicDebuggerApp.getStatus called");
 	private void changeToStopped()
 	{
 		assert Thread.currentThread() == applicationThread;
+
 		log ("changeToStopped()");
+
 		synchronized (theLock) {
 			log ("about to stop");
+
 			changeState (Status.STOPPING);
 			changeState (Status.STOPPED);
+
 			log ("stopped");
 		}
 	}

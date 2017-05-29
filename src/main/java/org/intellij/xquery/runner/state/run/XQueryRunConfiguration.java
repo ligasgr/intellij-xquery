@@ -83,9 +83,8 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
 
     public MarkLogicRunMode MlDebuggerRunMode = MarkLogicRunMode.ADHOC;
     public String MlDebuggerAppserverRoot = "";
-    public String MlDebuggerSecondaryPort;
-    public String MlDebuggerSecondaryUser;
-    public String MlDebuggerSecondaryPassword;
+    public String MlDebugAppserver;
+    public String MlCaptureTimeoutSecs;
 
 
     public XQueryRunConfiguration(String name, XQueryRunConfigurationModule configurationModule,
@@ -210,34 +209,24 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
         MlDebuggerAppserverRoot = mlDebuggerAppserverRoot;
     }
 
-    public String getMlDebuggerSecondaryPort()
+    public String getMlDebugAppserver()
     {
-        return MlDebuggerSecondaryPort;
+        return MlDebugAppserver;
     }
 
-    public void setMlDebuggerSecondaryPort (String mlDebuggerSecondaryPort)
+    public String getMlCaptureTimeoutSecs()
     {
-        MlDebuggerSecondaryPort = mlDebuggerSecondaryPort;
+        return MlCaptureTimeoutSecs;
     }
 
-    public String getMlDebuggerSecondaryUser()
+    public void setMlDebugAppserver (String mlDebugAppserver)
     {
-        return MlDebuggerSecondaryUser;
+        MlDebugAppserver = mlDebugAppserver;
     }
 
-    public void setMlDebuggerSecondaryUser (String mlDebuggerSecondaryUser)
+    public void setMlCaptureTimeoutSecs (String mlCaptureTimeoutSecs)
     {
-        MlDebuggerSecondaryUser = mlDebuggerSecondaryUser;
-    }
-
-    public String getMlDebuggerSecondaryPassword ()
-    {
-        return MlDebuggerSecondaryPassword;
-    }
-
-    public void setMlDebuggerSecondaryPassword (String mlDebuggerSecondaryPassword)
-    {
-        MlDebuggerSecondaryPassword = mlDebuggerSecondaryPassword;
+        MlCaptureTimeoutSecs = mlCaptureTimeoutSecs;
     }
 
     public boolean isContextItemEnabled() {

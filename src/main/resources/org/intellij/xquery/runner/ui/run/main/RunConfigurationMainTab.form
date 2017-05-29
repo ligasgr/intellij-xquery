@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="org.intellij.xquery.runner.ui.run.main.RunConfigurationMainTab">
-  <grid id="27dc6" binding="editor" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="editor" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="20" y="20" width="753" height="469"/>
@@ -10,12 +10,12 @@
     <children>
       <vspacer id="ab8c0">
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
       <scrollpane id="16ef6" class="com.intellij.ui.components.JBScrollPane" binding="scrollPane">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="empty"/>
@@ -59,6 +59,19 @@
           </grid>
         </children>
       </scrollpane>
+      <component id="6f630" class="com.intellij.ui.components.JBLabel" binding="javaModuleWarn">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <fontColor value="NORMAL"/>
+          <foreground color="-4456415"/>
+          <horizontalAlignment value="0"/>
+          <horizontalTextPosition value="0"/>
+          <text value="Please select &quot;Use classpath of module&quot; on the Java Confuration tab"/>
+          <toolTipText value="A Java module classpath setting is required to run the Java connector that communicates with MarkLogic to control the debugger"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>
