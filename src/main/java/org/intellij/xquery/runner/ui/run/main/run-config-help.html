@@ -72,28 +72,39 @@
 
 		<h3>Capture AppServer</h3>
 			<p>
-				Not yet implemented.
+				This run mode "grabs" an appserver (specified either by name, appserver id or port number).  It then waits for the
+				next request to start on that appserver.  When it does, the request will be halted for debugging just before
+				the first expression.  If no expression starts on the captured appserver within the timeout period (configurable
+				in seconds, default 120) then the debugger will quit and release the appserver.
 			</p>
 
 			<p>
-				This mode "grabs" the primary appserver (defined in the Data Sources window activated by the "Configure" button).
-				It then invokes the selected XQuery module on that appserver, which will immediately halt and wait in the debugger.
-				Commands to manipulate the debugged process are issued on the secondary port, with the optional alternate credentials.
-				Running this way allows the query output to be returned.  The Ad Hoc and Invoke modes never produce any output.
-			</p>
-
-			<p>
+				Any output created will be sent to the captured app server, not the debugging run window.
 				Note however that because of the way requests run on MarkLogic, any output produced will only be sent when the
-				query requests completes without error.  To see information as the request is stepped through the debugger,
-				consider using <code>xdmp:log</code> calls.
+				query request completes without error.  To see information as the request is stepped through the debugger,
+				consider using <code>xdmp:log</code> calls and tailing the MarkLogic server ErrorLog.txt.
 			</p>
 
 			<p>
-				It is also possible to capture the appserver and then wait for a request to be initiated on it by
-				other means (such as via a REST request).  Any such request will stop at the first expression and wait
-				for the debugger.
+				This run mode is useful for debugging code "in-situ", running in its native environment, rather than on the Task Server.
+				In some cases, such as when the code being debugged depends on HTTP parameters, this is the only way to debug the code.
+				It is useful for tracing REST endpoints, for example.  It can also capture XCC requests from Java/.Net applications.
 			</p>
-			<p></p>
+
+			<p>
+				To use this mode and run the code from IntelliJ create two Run Configurations. One with a
+				DataSource to run the XQuery code on the desired appserver, the other to capture that appserver (configured to
+				run on a different DataSource port).  Run the second (Capture Appserver) configuration in Debug mode and wait for
+				it to say that it's waiting.
+				Then run the first one (using Run mode) to start the request.  The debugger tab should pop to the front when the new
+				request starts and you can step it from there.  Any output produced by the request will go to the Run tab.
+			</p>
+			<p>
+				<b>Note:</b> It is important that the appserver referenced in the DataSource (not the one to be captured) be configured
+				so that its appserver root points to the code being debugged, and that the Appserver Root path be set properly in the
+				run configuration so that IntelliJ's filesystem paths can be mapped from MarkLogic's appserver-relative paths.  If IntelliJ
+				cannot find the source file on disk, then the debug runner will hang when a breakpoint is reached.
+			</p>
 
 		<h3>Debug Running Request</h3>
 			<p>
