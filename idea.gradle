@@ -67,6 +67,7 @@ private void prepareJdk(it) {
     prm.@'project-jdk-name' = project.ext.ideaSdkName
     prm.@'project-jdk-type' = 'IDEA JDK'
     prm.attributes().remove('assert-jdk-15')
+    prm.output.@url = 'file://$PROJECT_DIR$/build/classes'
 }
 
 // --- changes to idea plugin ---

@@ -24,9 +24,11 @@ xquery version '1.0-ml';
 
 declare variable $captured-appserver-id as xs:unsignedLong? external;
 
-for $req in dbg:stopped()
+declare variable $appserver-id := if ($captured-appserver-id) then $captured-appserver-id else xdmp:server ('TaskServer');
+
+for $req in dbg:stopped ($appserver-id)
 return (
-	xdmp:request-cancel (xdmp:host(), if ($captured-appserver-id) then $captured-appserver-id else xdmp:server ('TaskServer'), $req),
+	xdmp:request-cancel (xdmp:host(), $appserver-id, $req),
 	dbg:status ($req)	(: This clears deferred error status for the canceled request :)
 )
 ,

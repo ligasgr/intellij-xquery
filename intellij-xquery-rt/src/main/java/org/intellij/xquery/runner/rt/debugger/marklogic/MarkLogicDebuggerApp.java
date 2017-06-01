@@ -35,13 +35,15 @@ import java.io.PrintStream;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import static com.codnos.dbgp.api.DBGpFactory.engine;
-import static org.intellij.xquery.runner.rt.debugger.LogUtil.log;
 
 @SuppressWarnings ("Duplicates")
 public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements DebuggerEngine
 {
+	private final Logger logger = LoggerFactory.getLogger (getClass());
 	private final Thread applicationThread;
 	private final Object theLock = new Object();
 	private final List<DebugFrame> stackFrames = new LinkedList<>();
@@ -68,7 +70,7 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 	@Override
 	public void runApp() throws Exception
 	{
-log ("MarkLogicDebuggerApp.runApp called");
+		logger.debug ("runApp called");
 		int debugPort = Integer.parseInt (config.getDebugPort());
 
 		DBGpEngine dbgpEngine = engine().withPort (debugPort).withDebuggerEngine (this).build();
@@ -81,35 +83,35 @@ log ("MarkLogicDebuggerApp.runApp called");
 	@Override
 	public String getAppId()
 	{
-log ("MarkLogicDebuggerApp.getAppId called");
+		logger.trace ("getAppId called");
 		return "MarklogicDebuggerEngine";
 	}
 
 	@Override
 	public String getSession()
 	{
-log ("MarkLogicDebuggerApp.getSession called: " + sessionId);
+		logger.trace ("getSession called: " + sessionId);
 		return sessionId;
 	}
 
 	@Override
 	public String getIdeKey()
 	{
-log ("MarkLogicDebuggerApp.getIdeKey called");
+		logger.trace ("getIdeKey called");
 		return "";
 	}
 
 	@Override
 	public String getLanguage()
 	{
-log ("MarkLogicDebuggerApp.getLanguage called");
+		logger.trace ("getLanguage called");
 		return "XQuery";
 	}
 
 	@Override
 	public String getProtocolVersion()
 	{
-log ("MarkLogicDebuggerApp.getProtocolVersion called");
+		logger.trace ("getProtocolVersion called");
 		return "1.0";
 	}
 
@@ -118,30 +120,30 @@ log ("MarkLogicDebuggerApp.getProtocolVersion called");
 	{
 		String initalFile = new File (config.getMainFile()).toURI().toString();
 
-log ("MarkLogicDebuggerApp.getInitialFileUri called: " + initalFile);
+		logger.trace ("getInitialFileUri called: " + initalFile);
 		return initalFile;
 	}
 
 	@Override
 	public void run() throws RequestException
 	{
-log ("MarkLogicDebuggerApp.run called");
+		logger.debug ("run called");
 
 		if (status == Status.STARTING) {
 			startApplicationRunInSeparateThread();
-log ("MarkLogicDebuggerApp.run thread started");
+			logger.debug ("run thread started");
 		} else {
 			runOut = true;
 			debugConnector.continueRequest (debuggerRequestId);
 			resume();
-log ("MarkLogicDebuggerApp.run resumed");
+			logger.debug ("run resumed");
 		}
 	}
 
 	@Override
 	public boolean breakNow()
 	{
-log ("MarkLogicDebuggerApp.breakNow called");
+		logger.debug ("breakNow called");
 		synchronized (theLock) {
 			if (status == Status.STOPPED || status == Status.STOPPING) {
 				return false;
@@ -155,7 +157,7 @@ log ("MarkLogicDebuggerApp.breakNow called");
 	@Override
 	public void stepOver()
 	{
-log ("MarkLogicDebuggerApp.stepOver called");
+		logger.debug ("stepOver called");
 		try {
 			runOut = true;
 			steppingOver = true;
@@ -170,7 +172,7 @@ log ("MarkLogicDebuggerApp.stepOver called");
 	@Override
 	public void stepInto()
 	{
-log ("MarkLogicDebuggerApp.stepInto called");
+		logger.debug ("stepInto called");
 		try {
 			runOut = false;
 			debugConnector.stepIntoExpression (debuggerRequestId);
@@ -184,7 +186,7 @@ log ("MarkLogicDebuggerApp.stepInto called");
 	@Override
 	public void stepOut()
 	{
-log ("MarkLogicDebuggerApp.stepOut called");
+		logger.debug ("stepOut called");
 		try {
 			if (refreshStackFrames().size() == 0) {
 				runOut = true;
@@ -202,7 +204,7 @@ log ("MarkLogicDebuggerApp.stepOut called");
 	@Override
 	public Breakpoint breakpointSet (Breakpoint breakpoint)
 	{
-log ("MarkLogicDebuggerApp.breakpointSet called, breakpoint: " + printBreakpoint (breakpoint));
+		logger.debug ("breakpointSet called, breakpoint: " + printBreakpoint (breakpoint));
 		Breakpoint bp = breakpointManager.setBreakpoint (breakpoint);
 
 		if (debugConnector != null) debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
@@ -213,7 +215,7 @@ log ("MarkLogicDebuggerApp.breakpointSet called, breakpoint: " + printBreakpoint
 	@Override
 	public Optional<Breakpoint> breakpointRemove (String breakpointId)
 	{
-log ("MarkLogicDebuggerApp.breakpointRemove called, breakpointId: " + breakpointId);
+		logger.debug ("breakpointRemove called, breakpointId: " + breakpointId);
 		Optional<Breakpoint> bp = breakpointManager.removeBreakpoint (breakpointId);
 
 		if (debugConnector != null) debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
@@ -224,14 +226,14 @@ log ("MarkLogicDebuggerApp.breakpointRemove called, breakpointId: " + breakpoint
 	@Override
 	public Breakpoint breakpointGet (String breakpointId)
 	{
-log ("MarkLogicDebuggerApp.breakpointGet called, breakpointId: " + breakpointId);
+		logger.debug ("breakpointGet called, breakpointId: " + breakpointId);
 		return breakpointManager.getBreakpoint (breakpointId);
 	}
 
 	@Override
 	public void breakpointUpdate (String breakpointId, BreakpointUpdateData breakpointUpdateData)
 	{
-log ("MarkLogicDebuggerApp.breakpointUpdate called, breakpointId: " + breakpointId);
+		logger.debug ("breakpointUpdate called, breakpointId: " + breakpointId);
 		Breakpoint breakpointToUpdate = breakpointManager.getBreakpoint (breakpointId);
 		Breakpoint updatedBreakpoint = breakpointToUpdate.update (breakpointUpdateData);
 
@@ -242,7 +244,8 @@ log ("MarkLogicDebuggerApp.breakpointUpdate called, breakpointId: " + breakpoint
 	@Override
 	public void registerStatusChangeHandler (StatusChangeHandler StatusChangeHandler)
 	{
-log ("MarkLogicDebuggerApp.registerStatusChangeHandler called");
+		logger.trace ("registerStatusChangeHandler called");
+
 		synchronized (statusChangeHandlers) {
 			statusChangeHandlers.add (StatusChangeHandler);
 		}
@@ -251,18 +254,18 @@ log ("MarkLogicDebuggerApp.registerStatusChangeHandler called");
 	@Override
 	public Status getStatus()
 	{
-log ("MarkLogicDebuggerApp.getStatus called");
+		logger.trace ("getStatus called");
 		return status;
 	}
 
 	@Override
 	public int getStackDepth()
 	{
-		log ("MarkLogicDebuggerApp.getStackDepth called");
+		logger.trace ("getStackDepth called");
 
 		List<DebugFrame> stack = refreshStackFrames();
 
-		log ("MarkLogicDebuggerApp.getStackDepth = " + stack.size());
+		logger.trace ("getStackDepth = " + stack.size());
 		return stack.size();
 	}
 
@@ -283,7 +286,7 @@ log ("MarkLogicDebuggerApp.getStatus called");
 	@Override
 	public Optional<PropertyValue> eval (int depth, String expression)
 	{
-		log ("MarkLogicDebuggerApp.eval called: depth=" + depth + ", expr: " + expression);
+		logger.debug ("eval called: depth=" + depth + ", expr: " + expression);
 
 		DebugFrame debugFrame = stackFrames.get (depth);
 
@@ -312,7 +315,7 @@ log ("MarkLogicDebuggerApp.getStatus called");
 	@SuppressWarnings ("OverlyComplexMethod")
 	private void runDebuggerApp() throws Exception
 	{
-		log ("MarkLogicDebuggerApp.runDebuggerApp called: runMode=" + config.getMlDebugRunMode().toString() + ", appserver root: " + config.getMlDebugAppserverRoot() + ", DSName: " + config.getDataSourceType());
+		logger.debug ("runDebuggerApp called: runMode=" + config.getMlDebugRunMode().toString() + ", appserver root: " + config.getMlDebugAppserverRoot() + ", DSName: " + config.getDataSourceType());
 
 		ContentSource contentSource = getContentSource();
 		Session session = contentSource.newSession();
@@ -328,11 +331,11 @@ log ("MarkLogicDebuggerApp.getStatus called");
 			debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
 
 			if ((runMode == ADHOC) || (runMode == INVOKE)) {
-				log ("runDebuggerApp: starting suspended request");
+				logger.trace ("runDebuggerApp: starting suspended request");
 				debugConnector.runToNextBreakPoint (debuggerRequestId);
 			}
 
-			log ("runDebuggerApp: entering eternal loop");
+			logger.debug ("runDebuggerApp: entering eternal loop");
 
 			running = true;
 			thrownException = null;
@@ -344,10 +347,10 @@ log ("MarkLogicDebuggerApp.getStatus called");
 				String exprId = mlReqStatus.get ("expr-id");
 				String errorMsg = mlReqStatus.get ("error-msg");
 
-				log ("runDebuggerApp: top of loop: " + reqStatus);
+				logger.trace ("runDebuggerApp: top of loop: " + reqStatus);
 
 				if (mlReqStatus.get ("id") == null) {
-					log ("runDebuggerApp: request not active, stopping: " + debuggerRequestId);
+					logger.debug ("runDebuggerApp: request not active, stopping: " + debuggerRequestId);
 					break;
 				}
 
@@ -356,7 +359,7 @@ log ("MarkLogicDebuggerApp.getStatus called");
 					break;
 				}
 
-				log ("runDebuggerApp: switch(status): status: " + status + ", expr: " + exprId + ", where: " + whereStopped);
+				logger.trace ("runDebuggerApp: switch(status): status: " + status + ", expr: " + exprId + ", where: " + whereStopped);
 
 				switch (status) {
 				case BREAK:
@@ -370,7 +373,7 @@ log ("MarkLogicDebuggerApp.getStatus called");
 					break;
 
 				case RUNNING:
-					log ("RUNNING: req-status=" + reqStatus + ", expr: " + exprId + ", where: " + whereStopped);
+					logger.debug ("RUNNING: req-status=" + reqStatus + ", expr: " + exprId + ", where: " + whereStopped);
 
 					if ("stopped".equals (reqStatus)) {
 						if ( ! (runOut && "end".equals (whereStopped))) {
@@ -379,7 +382,7 @@ log ("MarkLogicDebuggerApp.getStatus called");
 						}
 					}
 
-					log ("Continuing");
+					logger.debug ("Continuing");
 
 					if (steppingOver) {
 						steppingOver = false;
@@ -402,51 +405,51 @@ log ("MarkLogicDebuggerApp.getStatus called");
 					break;
 
 				case STARTING:
-					log ("runDebuggerApp: In STARTING state, sleeping for 200 ms");
+					logger.debug ("runDebuggerApp: In STARTING state, sleeping for 200 ms");
 					Thread.sleep (200);
 					break;
 
 				case STOPPING:
-					log ("runDebuggerApp: status = STOPPING");
+					logger.debug ("runDebuggerApp: status = STOPPING");
 					break;
 
 				case STOPPED:
-					log ("runDebuggerApp: status = STOPPED");
+					logger.debug ("runDebuggerApp: status = STOPPED");
 					break;
 
 				default:
-					log ("runDebuggerApp: Impossible debug status, stopping: " + mlReqStatus.get ("xml"));
+					logger.error ("runDebuggerApp: Impossible debug status, stopping: " + mlReqStatus.get ("xml"));
 				}
 
-				if ( ! running) log ("running = false, breaking from main loop");
+				if ( ! running) logger.debug ("running = false, breaking from main loop");
 				if (thrownException != null) {
-					System.err.println ("Abort due to deferred Exception: " + thrownException);
+					logger.error ("Abort due to deferred Exception: " + thrownException);
 					throw thrownException;
 				}
 			}
 		} catch (DeferredXqueryException e) {
-			System.err.println ("XQuery execution exception getting status, stopping: " + e);
+			logger.error ("XQuery execution exception getting status, stopping: " + e);
 		} catch (XQueryException e) {
 			// This is a bit of hackery because the XQueryException parsing code is broken in XCC.  The W3CCode value is overridden by the name of the last variable in scope.
 			String timeoutError = "dbg:await-request-timeout";
 			String [] data = e.getData();
 			if ((timeoutError.equals (e.getW3CCode())) || ((data.length > 0) && timeoutError.equals (data [0]))) {
-				System.err.println (e.getMessage());
+				logger.error (e.getMessage());
 			} else {
-				System.err.println ("XQuery execution exception, stopping: " + e);
+				logger.error ("XQuery execution exception, stopping: " + e, e);
 			}
 		} catch (RequestException e) {
-			System.err.println ("Exception talking to MarkLogic, stopping: " + e);
+			logger.error ("Exception talking to MarkLogic, stopping: " + e);
 		} catch (DebuggerStoppedException e) {
-			System.err.println ("Debugger has unexpectedly stopped: " + e);
+			logger.error ("Debugger has unexpectedly stopped: " + e);
 		} catch (Exception e) {
-			System.err.println ("Unexpected exception, stopping: " + e);
+			logger.error ("Unexpected exception, stopping: " + e);
 		} finally {
 			try {
-				log ("clearing any stopped requests");
+				logger.debug ("clearing any stopped requests");
 				debugConnector.clearStoppedRequests();
 			} catch (RequestException e) {
-				System.err.println ("Problem clearing stopped requests: " + e);
+				logger.error ("Problem clearing stopped requests: " + e);
 			}
 		}
 	}
@@ -457,18 +460,18 @@ log ("MarkLogicDebuggerApp.getStatus called");
 		{
 			public void run()
 			{
-				log ("app.run()");
+				logger.debug ("app.run()");
 
 				try {
 					synchronized (theLock) {
-						log ("getApplicationRunnable: changing status to running");
+						logger.debug ("getApplicationRunnable: changing status to running");
 						changeState (Status.RUNNING);
 					}
 
-					log ("running the app");
+					logger.debug ("running the app");
 					runDebuggerApp();
 
-					log ("ran the app");
+					logger.debug ("ran the app");
 					changeToStopped();
 				} catch (Throwable e) {
 					System.err.println ("Exception running debugger: " + e);
@@ -483,17 +486,17 @@ log ("MarkLogicDebuggerApp.getStatus called");
 	{
 		assert status == Status.STARTING : "Already started";
 
-		log ("start()");
+		logger.debug ("start()");
 		applicationThread.start();
 
 		try {
 			synchronized (theLock) {
 				while (status == Status.STARTING) {
-					log ("waiting for start");
+					logger.debug ("waiting for start");
 					theLock.wait();
 				}
 
-				log ("not waiting anymore for start");
+				logger.debug ("not waiting anymore for start");
 			}
 		} catch (InterruptedException e) {
 			// Nothing?
@@ -519,7 +522,7 @@ log ("MarkLogicDebuggerApp.getStatus called");
 
 	private void changeState (Status newState)
 	{
-		log ("Changing state: " + status + " -> " + newState);
+		logger.trace ("Changing state: " + status + " -> " + newState);
 		Status previous = status;
 		status = newState;
 		theLock.notifyAll();
@@ -531,18 +534,17 @@ log ("MarkLogicDebuggerApp.getStatus called");
 		try {
 			synchronized (theLock) {
 				steppingOver = runOut = false;
-				log ("changeToBreak in status=" + status);
-				log ("suspended");
+				logger.debug ("changeToBreak in status=" + status + ", suspended");
 				changeState (Status.BREAK);
 
-				log ("starting to wait");
+				logger.trace ("starting to wait");
 
 				do {
-					log ("waiting until not suspended");
+					logger.trace ("waiting until not suspended");
 					theLock.wait();
 				} while (status == Status.BREAK);
 
-				log ("not suspended anymore=" + status);
+				logger.trace ("not suspended anymore=" + status);
 
 				if (status == Status.STOPPED) {
 					throw new DebuggerStoppedException();
@@ -555,10 +557,10 @@ log ("MarkLogicDebuggerApp.getStatus called");
 
 	private void resume() throws DebuggerStoppedException
 	{
-		log ("resume()");
+		logger.trace ("resume()");
 
 		synchronized (theLock) {
-			log ("resume=" + status);
+			logger.trace ("resume=" + status);
 
 			if (status == Status.STOPPED) {
 				throw new DebuggerStoppedException();
@@ -566,11 +568,11 @@ log ("MarkLogicDebuggerApp.getStatus called");
 				throw new IllegalStateException();
 			}
 
-			log ("changing status to running");
+			logger.trace ("changing status to running");
 
 			changeState (Status.RUNNING);
 
-			log ("status running");
+			logger.trace ("status running");
 		}
 	}
 
@@ -578,27 +580,27 @@ log ("MarkLogicDebuggerApp.getStatus called");
 	{
 		assert Thread.currentThread() == applicationThread;
 
-		log ("changeToStopped()");
+		logger.debug ("changeToStopped()");
 
 		synchronized (theLock) {
-			log ("about to stop");
+			logger.trace ("about to stop");
 
 			changeState (Status.STOPPING);
 			changeState (Status.STOPPED);
 
-			log ("stopped");
+			logger.trace ("stopped");
 		}
 	}
 
 	private void notifyStateChange (Status previous, Status current)
 	{
-		log ("changing status from " + previous + " to " + current);
+		logger.debug ("changing status from " + previous + " to " + current);
 		List<StatusChangeHandler> handlersToRemove = new ArrayList<>();
 
 		synchronized (statusChangeHandlers) {
 			for (StatusChangeHandler StatusChangeHandler : statusChangeHandlers) {
 				if (StatusChangeHandler.applicableFor (previous, current)) {
-					log ("status change handler " + StatusChangeHandler + " is applicable for " + previous + " ==> " + current);
+					logger.trace ("status change handler " + StatusChangeHandler + " is applicable for " + previous + " ==> " + current);
 					StatusChangeHandler.statusChanged (previous, current);
 					handlersToRemove.add (StatusChangeHandler);
 				}

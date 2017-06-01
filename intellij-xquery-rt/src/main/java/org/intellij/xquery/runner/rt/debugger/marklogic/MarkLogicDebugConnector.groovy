@@ -23,6 +23,7 @@ import com.marklogic.xcc.exceptions.RequestException
 import com.marklogic.xcc.exceptions.XQueryException
 import com.marklogic.xcc.types.ValueType
 import com.marklogic.xcc.types.XSInteger
+import groovy.util.logging.Slf4j
 import groovy.util.slurpersupport.GPathResult
 import groovy.xml.StreamingMarkupBuilder
 import org.intellij.xquery.runner.rt.XQueryRunConfig
@@ -35,7 +36,6 @@ import static org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicRunMode.
 import java.util.regex.Pattern
 
 import static org.intellij.xquery.runner.rt.FileUtil.readFile
-import static org.intellij.xquery.runner.rt.debugger.LogUtil.log
 
 /**
  * Created by IntelliJ IDEA.
@@ -44,6 +44,7 @@ import static org.intellij.xquery.runner.rt.debugger.LogUtil.log
  * Time: 12:13 AM
  */
 @SuppressWarnings ("PublicMethodNotExposedInInterface")
+@Slf4j
 class MarkLogicDebugConnector
 {
 	private static final int DEFAULT_CAPTURE_TIMEOUT = 120
@@ -60,7 +61,7 @@ class MarkLogicDebugConnector
 
 	private ResultSequence evalRequest (String query, Map<String,Object> args = [:]) throws RequestException
 	{
-//log ("MarkLogicDebugConnector.evalRequest, query: " + query);
+		log.trace ("evalRequest, query: " + query)
 		Request request = session.newAdhocQuery (query)
 
 		args.each { String name, Object value ->
@@ -110,23 +111,24 @@ class MarkLogicDebugConnector
 			throw new RuntimeException ("ACK! Unrecognized Run Mode: ${runMode}")
 		}
 
-		log ("MarkLogicDebugConnector.submitRequestForDebug submitting debug request to MarkLogic: runMode: ${runMode}, appserverRoot: ${appserverRootPath}, uri: ${mlFileUri (uri)}")
+		log.debug ("submitRequestForDebug submitting debug request to MarkLogic: runMode: ${runMode}, appserverRoot: ${appserverRootPath}, uri: ${mlFileUri (uri)}")
 
 		ResultSequence rs = evalRequest (xfile (DBG_REQUEST), [mode: runMode.toString(), root: appserverRootPath, argument: argument, variables: generateVarsXml (vars), 'connect-timeout': connectTimeout])
 		BigInteger requestId = getSingleBigIntResult (rs)
 
 		if (requestId == null) {
+			log.error ('submitRequestForDebug: requestId is null')
 			throw new RuntimeException ("Cannot start request for debugging in '${runMode}' run mode")
 		}
 
-		log ("MarkLogicDebugConnector.submitRequestForDebug back from call, requestId: " + requestId)
+		log.trace ("submitRequestForDebug back from call, requestId: " + requestId)
 
 		// This is unnecessary, but will trigger an undefined external var exception
 		// if any are undefined.  Need to do this first, because dbg:value() will hang if
 		// the request encounters an XQuery error later.
 		requestStackFrames (requestId)
 
-		log ("MarkLogicDebugConnector.submitRequestForDebug: returning")
+		log.trace ("submitRequestForDebug: returning")
 
 		if (runMode == CAPTURE_APPSERVER) {
 			println "Successfully attached to appserver '${appserverName}', debugging started"
@@ -204,7 +206,7 @@ class MarkLogicDebugConnector
 
 			[rs.itemAt (0).asString(), rs.itemAt (1).asString()]
 		} catch (Exception e) {
-			log ("Cannot obtain value for '${expr}' from request '${requestId}': ${e.message}")
+			log.debug ("Cannot obtain value for '${expr}' from request '${requestId}': ${e.message}")
 			throw e
 		}
 	}
@@ -215,17 +217,19 @@ class MarkLogicDebugConnector
 
 	void clearStoppedRequests() throws RequestException
 	{
-log ("MarkLogicDebugConnector.clearStoppedRequests")
+		log.debug ("clearStoppedRequests")
+
+		BigInteger serverId = (config.mlDebugRunMode == CAPTURE_APPSERVER) ? capturedAppserverId : BigInteger.ZERO
 
 		try {
-			evalRequest (xfile (CLEAR_STOPPED_REQ), ['captured-appserver-id': capturedAppserverId])
+			evalRequest (xfile (CLEAR_STOPPED_REQ), ['captured-appserver-id': serverId])
 		} catch (Exception e) {
-			log ("MarkLogicDebugConnector.clearStoppedRequests: Caught exception on first attempt, trying again: " + e)
+			log.debug ("clearStoppedRequests: Caught exception on first attempt, trying again: " + e)
 
 			try {
 				evalRequest (xfile (CLEAR_STOPPED_REQ))
 			} catch (Exception ex) {
-				log ("MarkLogicDebugConnector.clearStoppedRequests: Caught exception on second attempt, stopping attempt to clear stopped requests: " + ex)
+				log.warn ("clearStoppedRequests: Caught exception on second attempt, stopping attempt to clear stopped requests: " + ex)
 			}
 		}
 	}
@@ -236,7 +240,7 @@ log ("MarkLogicDebugConnector.clearStoppedRequests")
 
 	void continueRequest (BigInteger requestId) throws RequestException
 	{
-log ("MarkLogicDebugConnector.continueRequest")
+		log.trace ("continueRequest")
 		evalRequest (xfile (RESUME_REQ), [id: requestId])
 	}
 
@@ -244,7 +248,7 @@ log ("MarkLogicDebugConnector.continueRequest")
 
 	void runToNextBreakPoint (BigInteger requestId) throws RequestException
 	{
-		log ("MarkLogicDebugConnector.runToNextBreakPoint")
+		log.trace ("runToNextBreakPoint")
 		evalRequest (xfile (RUN_TO_NEXT_BP), [id: requestId])
 	}
 
@@ -254,7 +258,7 @@ log ("MarkLogicDebugConnector.continueRequest")
 
 	void stepOverExpression (BigInteger requestId) throws RequestException
 	{
-log ("MarkLogicDebugConnector.stepOverExpression")
+		log.trace ("stepOverExpression")
 		evalRequest (xfile (STEP_OVER), [id: requestId])
 	}
 
@@ -264,7 +268,7 @@ log ("MarkLogicDebugConnector.stepOverExpression")
 
 	void stepIntoExpression (BigInteger requestId) throws RequestException
 	{
-log ("MarkLogicDebugConnector.stepIntoExpression")
+		log.trace ("stepIntoExpression")
 		evalRequest (xfile (STEP_INTO), [id: requestId])
 	}
 
@@ -274,14 +278,14 @@ log ("MarkLogicDebugConnector.stepIntoExpression")
 
 	void stepOutOfExpression (BigInteger requestId) throws RequestException
 	{
-log ("MarkLogicDebugConnector.stepOutOfExpression")
+		log.trace ("stepOutOfExpression")
 		evalRequest (xfile (STEP_OUT), [id: requestId, function: ''])
 	}
 
 
 	void stepOutOfFunction (BigInteger requestId, String functionName) throws RequestException
 	{
-log ("MarkLogicDebugConnector.stepOutOfFunction: function=" + functionName)
+		log.trace ("stepOutOfFunction: function=" + functionName)
 		evalRequest (xfile (STEP_OUT), [id: requestId, function: functionName])
 	}
 
@@ -293,17 +297,17 @@ log ("MarkLogicDebugConnector.stepOutOfFunction: function=" + functionName)
 
 	void setMlBreakPoints (BigInteger requestId, BreakpointManager breakpointManager)
 	{
-log ("MarkLogicDebugConnector.setMlBreakPoints, requestId: " + requestId)
+		log.debug ("setMlBreakPoints, requestId: " + requestId)
 
 		evalRequest (xfile (CLEAR_BPS_REQ), [id: requestId])
 
 		Map<Integer, Map<String, Breakpoint>> breakPoints = breakpointManager.allBreakpoints()
 
 		breakPoints.each { Integer bpId, Map<String, Breakpoint> bpMap ->
-			log ("setMlBreakPoints: id=" + bpId)
+			log.debug ("setMlBreakPoints: id=" + bpId)
 
 			bpMap.each { String mapId, Breakpoint bp ->
-				log ("  Breakpoint: id: " + bp.getBreakpointId() + ", type: " + bp.getType() +
+				log.debug ("  Breakpoint: id: " + bp.getBreakpointId() + ", type: " + bp.getType() +
 					", function: " + bp.getFunction() + ", line: " + bp.getLineNumber() + ", expr: " + bp.getExpression())
 
 				setMlBreakPoint (requestId, bp)
@@ -316,14 +320,14 @@ log ("MarkLogicDebugConnector.setMlBreakPoints, requestId: " + requestId)
 		String file = bp.getFileURL().get()
 		Integer line = bp.getLineNumber().get()
 //		String functionName = bp.getFunction().get();
-log ("MarkLogicDebugConnector.setMlBreakPoint called")
+		log.trace ("setMlBreakPoint called")
 
 		BigInteger exprId = exprForLine (requestId, file, line)
 
 		if (exprId == null) {
-			System.err.println ("Cannot set ML breakpoint, no expression found on line ${line} in file '${file}' (may be out of scope)")
+			log.warn ("Cannot set ML breakpoint, no expression found on line ${line} in file '${file}' (may be out of scope)")
 		} else {
-log ("MarkLogicDebugConnector.setMlBreakPoint setting breakpoint, line: " + line + ", file: " + file + ", reqId: " + requestId + ", expr: " + exprId)
+			log.trace ("setMlBreakPoint setting breakpoint, line: " + line + ", file: " + file + ", reqId: " + requestId + ", expr: " + exprId)
 			evalRequest (xfile (SET_BP_REQ), [id: requestId, exprid: exprId])
 		}
 	}
@@ -340,7 +344,7 @@ log ("MarkLogicDebugConnector.setMlBreakPoint setting breakpoint, line: " + line
 			rs = evalRequest (xfile (EXPRS_REQ), [id: requestId, uri: mlFileUri (file), line: line.toString()])
 		} catch (XQueryException e) {
 			if ('DBG-MODULEDNE'.equals (e.getCode())) {
-				log ("Ignoring DBG-MODULEDNE, assuming breakpoint not in scope for request")
+				log.debug ("Ignoring DBG-MODULEDNE, assuming breakpoint not in scope for request")
 				return null
 			} else {
 				throw e
@@ -350,10 +354,10 @@ log ("MarkLogicDebugConnector.setMlBreakPoint setting breakpoint, line: " + line
 		BigInteger expr = getSingleBigIntResult (rs, rs.size() - 1)
 
 		if (expr == null) {
-log ("MarkLogicDebugConnector.exprForLine returning null")
+			log.debug ("exprForLine returning null")
 			return null
 		} else {
-log ("MarkLogicDebugConnector.exprForLine " + expr)
+			log.debug ("exprForLine " + expr)
 			return expr
 		}
 	}
@@ -368,10 +372,10 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 		BigInteger expr = getSingleBigIntResult (rs)
 
 		if (expr == null) {
-			log ("MarkLogicDebugConnector.waitForStateChange returning null")
-			return null;
+			log.trace ("waitForStateChange returning null")
+			return null
 		} else {
-			log ("MarkLogicDebugConnector.waitForStateChange " + expr)
+			log.trace ("waitForStateChange " + expr)
 			return expr
 		}
 	}
@@ -404,7 +408,7 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 
 	List<DebugFrame> requestStackFrames (BigInteger requestId)
 	{
-		log ("MarkLogicDebugConnector.requestStackFrames called")
+		log.trace ("requestStackFrames called")
 
 		ResultSequence rs = evalRequest (xfile (GET_REQ_STACK), [id: requestId])
 		GPathResult stack = new XmlSlurper (false, true).parseText (rs.asString()).declareNamespace ([d: 'http://marklogic.com/xdmp/debug'])
@@ -428,7 +432,7 @@ log ("MarkLogicDebugConnector.exprForLine " + expr)
 	{
 		if ( ! frame.uri.text()) return new File (config.getMainFile()).toURI().toString()
 
-		log ("MarkLogicDebugConnector.fileUri: ${config.mlDebugAppserverRoot + frame.uri.text()}")
+		log.debug ("fileUri: ${config.mlDebugAppserverRoot + frame.uri.text()}")
 
 		config.mlDebugAppserverRoot + frame.uri.text()
 	}

@@ -18,6 +18,8 @@
 package org.intellij.xquery.runner.rt.debugger;
 
 import com.codnos.dbgp.api.Breakpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URI;
@@ -31,6 +33,7 @@ import static com.codnos.dbgp.api.Breakpoint.aCopyOf;
 import static org.intellij.xquery.runner.rt.debugger.LogUtil.log;
 
 public class BreakpointManager {
+    private static final Logger logger = LoggerFactory.getLogger (BreakpointManager.class);
     private final Map<Integer, Map<String, Breakpoint>> breakpoints = new HashMap<>();
     private final Map<String, Breakpoint> breakpointIdToBreakpoints = new HashMap<>();
 
@@ -78,7 +81,7 @@ public class BreakpointManager {
     private Breakpoint setBreakpoint(Breakpoint breakpoint, String breakpointId) {
         String uri = normalizeUri(breakpoint.getFileURL().get());
         Integer line = breakpoint.getLineNumber().get();
-        log("setting breakpoint " + uri + " " + line);
+        logger.debug ("setting breakpoint " + uri + " " + line);
         final Map<String, Breakpoint> s = breakpoints.get(line);
         final Breakpoint breakpointThatWasSet = aCopyOf(breakpoint).withFileUri(uri).withBreakpointId(breakpointId).build();
         if (s == null) {
@@ -101,7 +104,7 @@ public class BreakpointManager {
                 return new URI(uri).normalize().toASCIIString();
             }
         } catch (URISyntaxException e) {
-            log("Failed to parse <" + uri + ">: " + e);
+            logger.error ("Failed to parse <" + uri + ">: " + e);
             return uri;
         }
     }

@@ -22,8 +22,6 @@ sdk/
 
 z
 zz
-z.xml
-zz.xml
-groovy-all-2.4.6-javadoc.jar
-groovy-all-2.4.6-sources.jar
+z.*
+zz.*
 marklogic-intellij-plugin.zip

@@ -54,8 +54,11 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'lib', include: '*.jar')
-    compile('com.codnos:dbgp-interfaces:1.0.0')
+    compile 'org.codehaus.groovy:groovy-all:2.4.6'	// If you change this, change the jar named in org.intellij.xquery.runner.rt.XQueryDataSourceType
+    compile 'com.codnos:dbgp-interfaces:1.0.0'
     compile 'commons-codec:commons-codec:1.10'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'org.slf4j:slf4j-log4j12:1.7.25'
     compile 'com.marklogic:marklogic-xcc:9.0.1'
     testCompile 'junit:junit-dep:4.10'
     testCompile 'org.mockito:mockito-all:1.9.5'
