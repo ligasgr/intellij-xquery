@@ -22,6 +22,7 @@
 // --- changes to idea plugin ---
 idea {
     module {
+        sourceDirs += file ('src/main/groovy')
         testSourceDirs += file('src/testFunctional/java')
         testSourceDirs += file('src/testFunctional/resources')
     }
