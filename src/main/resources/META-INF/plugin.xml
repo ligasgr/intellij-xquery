@@ -18,8 +18,8 @@
 <idea-plugin url="https://github.com/overstory/marklogic-intellij-plugin" version="2">
     <id>org.intellij.xquery.marklogic</id>
     <name>XQuery Support + MarkLogic Debugger</name>
-    <version>1.0.0-SNAPSHOT</version>
-    <vendor email="ron@overstory.co.uk" url="http://overstory.co.uk/" logo="icons/overstory16x16.png">OverStory Ltd</vendor>
+    <version>0.9.0-BETA</version>
+    <vendor email="ron@overstory.co.uk" url="http://overstory.co.uk/" logo="icons/overstory16x16.png">OverStory Ltd in association with MarkLogic</vendor>
 
     <description>
         Provides XQuery 3.0 language support, with MarkLogic documentation and debugger extensions.
@@ -29,7 +29,17 @@
 
     <change-notes>
         <![CDATA[
-            This plugin is pre-release and still under active development.
+            This is a Beta pre-release of the MarkLogic IntelliJ XQuery plugin.  As an XQuery editor plugin
+            it is quite stable.  It is forked from, and currently up to date with, the XQuery Language Support
+            created by Grzegorz Ligas (http://ligasgr.github.io/intellij-xquery/).
+
+            The MarkLogic debugger extensions have been added on this fork and while they seem to be working correctly
+            they have not been thoroughly tested yet.  If you use this plugin, please report any bugs via the Issues
+            section of the GitHub project (https://github.com/overstory/marklogic-intellij-plugin/issues).
+
+            If you wish to get involved in code development for this plugin, please contact Ron Hitchens (ron@overstory.co.uk).
+            Planned features are, for the most part, recorded in the Issues for the project.
+            Please also see the Wiki at https://github.com/overstory/marklogic-intellij-plugin/wiki/OverStory-Wiki-for-MarkLogic-XQuery-Langauage-Plugin-for-IntelliJ
         ]]>
     </change-notes>
 
@@ -117,12 +127,15 @@
     <actions>
         <group id="XQuery.MarkLogicGroup" text="MarkLogic" description="MarkLogic Menus">
             <add-to-group group-id="MainMenu" anchor="before" relative-to-action="HelpMenu"/>
-            <action id="XQuery.FunctionDocsLookup" text="XQuery Function Docs" description="Lookup XQuery function documentation" class="org.intellij.xquery.documentation.DocLookupMenu"/>
-            <action id="XQuery.MLPluginHelp" text="MarkLogic XQuery Plugin Help" description="http://github.com/overstory/marklogic-intellij-plugin" class="org.intellij.xquery.documentation.OnlineDocsMenu"/>
+            <!--<action id="XQuery.FunctionDocsLookup" text="XQuery Function Doc Lookup" description="Lookup XQuery function documentation locally" class="org.intellij.xquery.documentation.DocLookupMenu"/>-->
+            <action id="XQuery.MLPluginHelp" text="MarkLogic XQuery Plugin Wiki" description="https://github.com/overstory/marklogic-intellij-plugin/wiki/OverStory-Wiki-for-MarkLogic-XQuery-Langauage-Plugin-for-IntelliJ" class="org.intellij.xquery.documentation.OnlineDocsMenu"/>
             <separator/>
             <action id="XQuery.MLDocs9" text="MarkLogic 9 Online Docs" description="http://docs.marklogic.com/9.0" class="org.intellij.xquery.documentation.OnlineDocsMenu"/>
             <action id="XQuery.MLDocs8" text="MarkLogic 8 Online Docs" description="http://docs.marklogic.com/8.0" class="org.intellij.xquery.documentation.OnlineDocsMenu"/>
             <action id="XQuery.MLDocs7" text="MarkLogic 7 Online Docs" description="http://docs.marklogic.com/7.0" class="org.intellij.xquery.documentation.OnlineDocsMenu"/>
+            <separator/>
+            <action id="XQuery.PluginGitHub" text="GitHub Project" description="https://github.com/overstory/marklogic-intellij-plugin" class="org.intellij.xquery.documentation.OnlineDocsMenu"/>
+            <action id="XQuery.OverStory" text="OverStory" icon="org.intellij.xquery.icons.XQueryIcons.OVERSTORY_ICON_16x16" description="http://overstory.co.uk" class="org.intellij.xquery.documentation.OnlineDocsMenu"/>
         </group>
         <action id="XQuery.NewXQueryFile" class="org.intellij.xquery.actions.CreateXQueryFileAction" text="XQuery File" description="Create new XQuery file">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>

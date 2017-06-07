@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
+apply plugin: 'groovy'  // Groovy plugin extends Java plugin
 apply plugin: 'idea'
 apply from: 'idea.gradle'
 
@@ -219,17 +219,17 @@ class DownloadTask extends DefaultTask {
 
 task dist(type: Zip) {
     from(jar.outputs.files) {
-        into('intellij-xquery/lib')
+        into("${project.ext.pluginName}/lib")
     }
     from(configurations.runtime) {
-        into('intellij-xquery/lib')
+        into("${project.ext.pluginName}/lib")
     }
     from(projectDir) {
         include 'licenses/**'
         include 'NOTICE'
         include 'LICENSE'
         include 'CONTRIBUTORS'
-        into('intellij-xquery')
+        into(project.ext.pluginName)
     }
     archiveName "${project.ext.pluginName}.zip"
 }
@@ -241,4 +241,8 @@ task compileForms(dependsOn: ':classes') << {
 
 jar {
     it.dependsOn compileForms
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5'
 }
