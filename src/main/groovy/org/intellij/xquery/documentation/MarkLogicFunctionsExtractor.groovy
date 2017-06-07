@@ -40,10 +40,6 @@ import java.util.zip.ZipFile
  */
 class MarkLogicFunctionsExtractor
 {
-	List<GPathResult> modules = []
-	List<GPathResult> functions = []
-	Map<String,String> categoryMap = [:]
-
 	static void main (String[] args)
 	{
 		if (args.length != 2) {
@@ -55,6 +51,9 @@ class MarkLogicFunctionsExtractor
 
 	void run (String inputZipPath, String outputXmlPath)
 	{
+		List<GPathResult> functions = []
+		Map<String,String> categoryMap = [:]
+
 		ZipFile zipFile = new ZipFile (inputZipPath);
 
 		zipFile.entries ().each { ZipEntry entry ->
@@ -66,7 +65,13 @@ class MarkLogicFunctionsExtractor
 
 				if (xml.name() == 'module') {
 					xml.'apidoc:function'.each {
-						functions << it
+						GPathResult function = filterForXquery (it)
+
+						if (function == null) {
+							return
+						}
+
+						functions << function
 
 						String category = it.'@category'.toString()
 						Map<String,String> props = categoryMap.get (category)
@@ -122,5 +127,18 @@ class MarkLogicFunctionsExtractor
 		writer << xml.toString()
 
 		writer.close()
+	}
+
+	// This closure deletes elements from the given tree, it does not copy and transform
+	def filterForXquery = { GPathResult element ->
+		if (element.'@class'.text() && (element.'@class'.text() != 'xquery')) {
+			element.replaceNode { /* empty */ }
+			null
+		} else {
+			element.children().each { GPathResult it ->
+				filterForXquery (it)
+			}
+			element
+		}
 	}
 }

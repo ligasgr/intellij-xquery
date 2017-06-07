@@ -206,9 +206,9 @@ public class MarkLogicFunctionDefs
 			for (Parameter param : getParameters ()) {
 				if (sb.length() > 1) sb.append (", ");
 
-				if (param.isOptional()) sb.append ("[");
+				if (param.isOptional()) sb.append ('[');
 
-				sb.append ("$").append (param.getName());
+				sb.append ('$').append (param.getName());
 
 				String type = param.getType();
 
@@ -216,10 +216,10 @@ public class MarkLogicFunctionDefs
 					sb.append (" as ").append (type);
 				}
 
-				if (param.isOptional()) sb.append ("]");
+				if (param.isOptional()) sb.append (']');
 			}
 
-			sb.append (")");
+			sb.append (')');
 
 			return sb.toString();
 		}
@@ -240,7 +240,7 @@ public class MarkLogicFunctionDefs
 			sb.append ("<blockquote><b>").append (fullName).append ("</b> (");
 
 			if (parameters.size() == 0) {
-				sb.append (")");
+				sb.append (')');
 			} else {
 				sb.append ("<blockquote>");
 
@@ -249,10 +249,10 @@ public class MarkLogicFunctionDefs
 				for (Parameter param : parameters) {
 					boolean isOptional = param.isOptional();
 					if (first) first = false; else sb.append (",<br/>\n");
-					if (isOptional) sb.append ("[");
+					if (isOptional) sb.append ('[');
 					sb.append ("<b>$").append (param.getName()).append ("</b>");
 					sb.append (" as ").append (param.getType());
-					if (isOptional) sb.append ("]");
+					if (isOptional) sb.append (']');
 				}
 
 				sb.append ("</blockquote>)");
@@ -446,7 +446,7 @@ public class MarkLogicFunctionDefs
 			this.categoryMap = categoryMap;
 		}
 
-		// ToDo [Rh]: Need to properly parse this XML into a DOM rather than faffing about with brain-damaged SAX parsing.  Does not currently filter out class="javascript" markup.  I should re-write this in Groovy.
+		// ToDo [Rh]: Need to properly parse this XML into a DOM rather than faffing about with brain-damaged SAX parsing.  I should re-write this in Groovy.
 		@Override
 		public void startElement (String namespaceName, String localName, String qname, Attributes attributes) throws SAXException
 		{
@@ -455,7 +455,7 @@ public class MarkLogicFunctionDefs
 				text.setLength (0);
 				func = new Function (docsSource, attributes.getValue ("lib"),
 					attributes.getValue ("name"),
-					(attributes.getValue ("fullname") == null) ? (attributes.getValue ("lib") + ":" + attributes.getValue ("name")) : attributes.getValue ("fullname"),
+					(attributes.getValue ("fullname") == null) ? (attributes.getValue ("lib") + ':' + attributes.getValue ("name")) : attributes.getValue ("fullname"),
 					false,
 					Boolean.valueOf (attributes.getValue ("hidden")),
 					"item()*",
@@ -498,17 +498,17 @@ public class MarkLogicFunctionDefs
 				break;
 			default:
 				String lName = qname.substring (qname.indexOf (':') + 1);
-				text.append ("<").append (lName);
+				text.append ('<').append (lName);
 
 				for (int i = 0; i < attributes.getLength(); i++) {
 					String attrName = attributes.getQName (i);
 
 					if ( ! attrName.startsWith ("xmlns")) {
-						text.append (" ").append (attributes.getQName (i)).append ("=\"").append (attributes.getValue (i)).append ("\"");
+						text.append (' ').append (attributes.getQName (i)).append ("=\"").append (attributes.getValue (i)).append ('"');
 					}
 				}
 
-				text.append (">");
+				text.append ('>');
 			}
 		}
 
@@ -569,7 +569,12 @@ public class MarkLogicFunctionDefs
 		@Override
 		public void characters (char[] chars, int start, int length) throws SAXException
 		{
-			text.append (chars, start, length);
+			text.append (escapeMarkup (new String (chars, start, length)));
+		}
+
+		private static String escapeMarkup (String s)
+		{
+			return s.replace ("&", "&amp;").replace ("<", "&lt;").replace (">", "&gt;");
 		}
 	}
 }
