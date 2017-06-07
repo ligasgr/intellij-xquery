@@ -27,7 +27,7 @@
 	</appender>
 
 	<logger name="org.intellij.xquery.runner" additivity="false">
-		<level value ="debug" />
+		<level value ="info" />
 		<appender-ref ref="console" />
 	</logger>
 	<logger name="io.netty" additivity="false">
