@@ -17,6 +17,7 @@
 
 package org.intellij.xquery.documentation
 
+import com.intellij.icons.AllIcons
 import com.intellij.ide.browsers.BrowserLauncherAppless
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -27,8 +28,14 @@ import com.intellij.openapi.actionSystem.AnActionEvent
  * Date: 4/12/17
  * Time: 12:38 AM
  */
-class OnlineDocsMenu extends AnAction
+class WebReferenceAction extends AnAction
 {
+	WebReferenceAction()
+	{
+		super (AllIcons.General.Web)
+
+	}
+
 	@Override
 	void actionPerformed (AnActionEvent anActionEvent)
 	{
