@@ -563,21 +563,18 @@ public class XQueryDocumentationProviderTest extends BaseFunctionalTestCase {
     }
 
     public void testBuiltInFunctionReference() throws Exception {
-        doTestGenerateFunctionDoc(WRAPPER_START +
-                "<dl><dt class=\"label\">Summary</dt> <dd> <p>Returns the <code>xs:boolean</code> value " +
-                "<code>true</code>.</p> </dd> <dt class=\"label\">Signature</dt> <dd> <div class=\"exampleInner\"> " +
-                "<div class=\"proto\"><code class= \"function\">fn:true</code>()<code class= \"as\">&#160;as&#160;" +
-                "</code><code class= \"return-type\">xs:boolean</code></div> </div> </dd> <dt " +
-                "class=\"label\">Properties</dt> <dd> <p>This function is <a title=\"deterministic\" " +
-                "class=\"termref\" href= \"#dt-deterministic\"><span class= \"arrow\">·</span>deterministic<span " +
-                "class=\"arrow\">·</span></a>, <a title=\"context-independent\" class=\"termref\" href= " +
-                "\"#dt-context-independent\"><span class= \"arrow\">·</span>context-independent<span class= " +
-                "\"arrow\">·</span></a>, and <a title=\"focus-dependent\" class= \"termref\" " +
-                "href=\"#dt-focus-independent\"><span class= \"arrow\">·</span>focus-independent<span class= " +
-                "\"arrow\">·</span></a>.</p> </dd> <dt class=\"label\">Rules</dt> <dd> <p>The result is equivalent to" +
-                " <code>xs:boolean(\"1\")</code>.</p> </dd> <dt class=\"label\">Examples</dt> <dd> <p>The expression " +
-                "<code>fn:true()</code> returns <code>xs:boolean(1)</code>.</p> </dd> </dl>" +
-                WRAPPER_END,
+        doTestGenerateFunctionDoc(
+                        "<div><h1>W3C-Standard Functions / BooleanBuiltins (2 functions)</h1>\n" +
+                        "<blockquote><b>fn:true</b> () as xs:boolean</blockquote>\n" +
+                        "<br/><h1>Summary</h1><blockquote>\n" +
+                        "  Returns the <code>xs:boolean</code>  value <code>true</code> .\n" +
+                        "  Equivalent to <code>xs:boolean(\"1\")</code> .\n" +
+                        "</blockquote><br/><h1>Examples</h1><blockquote><code><pre><pre xml:space=\"preserve\">\n" +
+                        "fn:true()\n" +
+                        "\n" +
+                        "=&gt; true\n" +
+                        "</pre> </pre></code></blockquote>\n" +
+                        "<br/><h1>Documentation Source</h1><blockquote>MarkLogic_9_pubs.zip</blockquote></div>" ,
                 "fn:<caret>true()");
     }
 
@@ -607,23 +604,17 @@ public class XQueryDocumentationProviderTest extends BaseFunctionalTestCase {
         XQueryFlavour previous = settings.getFlavour();
         settings.setFlavour(XQueryFlavour.STANDARD_31);
         try {
-            doTestGenerateFunctionDoc(WRAPPER_START +
-                            "<dl> <dt class=\"label\">Summary</dt> <dd> <p>Returns the <code>xs:boolean</code> value " +
-                            "<code>true</code>. </p> </dd> <dt class=\"label\">Signature</dt> <dd> <div class=\"proto\">" +
-                            "<code class=\"function\">fn:true</code>()<code class=\"as\">&nbsp;as&nbsp;</code>" +
-                            "<code class=\"return-type\">xs:boolean</code></div> </dd> <dt class=\"label\">Properties</dt>" +
-                            " <dd> <p>This function is <a title=\"deterministic\" class=\"termref\" " +
-                            "href=\"https://www.w3.org/TR/xpath-functions-31/#dt-deterministic\"><span class=\"arrow\">·" +
-                            "</span>deterministic<span class=\"arrow\">·</span></a>, <a title=\"context-independent\"" +
-                            " class=\"termref\" href=\"https://www.w3.org/TR/xpath-functions-31/#dt-context-independent\">" +
-                            "<span class=\"arrow\">·</span>context-independent<span class=\"arrow\">·</span></a>, and " +
-                            "<a title=\"focus-dependent\" class=\"termref\" " +
-                            "href=\"https://www.w3.org/TR/xpath-functions-31/#dt-focus-independent\"><span class=\"arrow\">·" +
-                            "</span>focus-independent<span class=\"arrow\">·</span></a>. </p> </dd> " +
-                            "<dt class=\"label\">Rules</dt> <dd> <p>The result is equivalent to <code>xs:boolean(\"1\")</code>. " +
-                            "</p> </dd> <dt class=\"label\">Examples</dt> <dd> <div class=\"example\"> " +
-                            "<p>The expression <code>fn:true()</code> returns <code>xs:boolean(1)</code>. </p> </div> </dd> </dl>" +
-                            WRAPPER_END,
+            doTestGenerateFunctionDoc(
+                    "<div><h1>W3C-Standard Functions / BooleanBuiltins (2 functions)</h1>\n" +
+                            "<blockquote><b>fn:true</b> () as xs:boolean</blockquote>\n" +
+                            "<br/><h1>Summary</h1><blockquote>\n" +
+                            "  Returns the <code>xs:boolean</code>  value <code>true</code> .\n" +
+                            "  Equivalent to <code>xs:boolean(\"1\")</code> .\n" +
+                            "</blockquote><br/><h1>Examples</h1><blockquote><code><pre><pre xml:space=\"preserve\">\n" +
+                            "fn:true()\n\n" +
+                            "=&gt; true\n" +
+                            "</pre> </pre></code></blockquote>\n" +
+                            "<br/><h1>Documentation Source</h1><blockquote>MarkLogic_9_pubs.zip</blockquote></div>" ,
                     "fn:<caret>true()");
         } finally {
             settings.setFlavour(previous);
