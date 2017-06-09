@@ -85,10 +85,6 @@ public class DataSourceAccessorTest {
         assertThat(dataSourceElement.getAttributeValue("port"), is(ds.PORT));
         assertThat(dataSourceElement.getAttributeValue("username"), is(ds.USERNAME));
         assertThat(dataSourceElement.getAttributeValue("password"), is(ds.PASSWORD));
-        assertThat(dataSourceElement.getAttributeValue("mlDebuggerEnabled"), is("false"));
-        assertThat(dataSourceElement.getAttributeValue("mlDebuggerPort"), nullValue());
-        assertThat(dataSourceElement.getAttributeValue("mlDebuggerUser"), nullValue());
-        assertThat(dataSourceElement.getAttributeValue("mlDebuggerPassword"), nullValue());
         assertThat(dataSourceElement.getAttributeValue("userDefinedLibraryEnabled"), is(Boolean.toString(ds.USER_DEFINED_LIBRARY_ENABLED)));
         assertThat(dataSourceElement.getAttributeValue("databaseName"), is(ds.DATABASE_NAME));
         assertThat(dataSourceElement.getAttributeValue("default"), is(Boolean.toString(ds.DEFAULT)));
