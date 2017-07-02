@@ -53,6 +53,7 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.encoding.EncodingProjectManager;
+import com.intellij.util.PathsList;
 import com.intellij.util.text.VersionComparatorUtil;
 import org.intellij.xquery.runner.state.run.DataSourceAccessor;
 import org.intellij.xquery.runner.state.run.VariablesAccessor;
@@ -65,10 +66,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class XQueryRunProfileState extends CommandLineState {
     private XQueryRunConfiguration configuration;
@@ -103,7 +101,26 @@ public class XQueryRunProfileState extends CommandLineState {
     private SimpleJavaParameters createJavaParameters() throws ExecutionException {
         final SimpleJavaParameters parameters = prepareRunnerParameters();
         configureJreRelatedParameters(parameters);
+        tidyGroovyClassPath (parameters);
         return parameters;
+    }
+
+    // Groovy gets upset if more than one version is in the classpath
+    // If the Groovy lib is already in the classpath, use that one and don't add the plugin's one
+    private void tidyGroovyClassPath (SimpleJavaParameters parameters)
+    {
+        PathsList classPath = parameters.getClassPath();
+        String prevGroovyPath = null;
+
+        for (String path : classPath.getPathList()) {
+            if (path.contains ("groovy-all-")) {
+                if (prevGroovyPath != null) {
+                    classPath.remove (prevGroovyPath);
+                }
+
+                prevGroovyPath = path;
+            }
+        }
     }
 
     private void configureJreRelatedParameters(SimpleJavaParameters parameters) throws CantRunException {
