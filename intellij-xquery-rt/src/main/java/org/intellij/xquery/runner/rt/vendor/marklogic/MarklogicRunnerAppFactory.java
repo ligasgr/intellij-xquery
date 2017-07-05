@@ -17,22 +17,56 @@
 
 package org.intellij.xquery.runner.rt.vendor.marklogic;
 
+import com.marklogic.xcc.ContentSource;
 import org.intellij.xquery.runner.rt.RunnerApp;
 import org.intellij.xquery.runner.rt.RunnerAppFactory;
 import org.intellij.xquery.runner.rt.XQueryRunConfig;
+import org.intellij.xquery.runner.rt.debugger.DebuggerCleanupFactory;
+import org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicDebugConnector;
 import org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicDebuggerApp;
 
 import java.io.PrintStream;
 
-public class MarklogicRunnerAppFactory implements RunnerAppFactory
+public class MarklogicRunnerAppFactory implements RunnerAppFactory, DebuggerCleanupFactory
 {
-    @Override
-    public RunnerApp getInstance (XQueryRunConfig config, PrintStream output) throws Exception
-    {
-        if (config.isDebugEnabled()) {
-            return new MarkLogicDebuggerApp (config, output);
-        } else {
-            return new MarklogicRunnerApp (config, output);
-        }
-    }
+	@Override
+	public RunnerApp getInstance (XQueryRunConfig config, PrintStream output) throws Exception
+	{
+		if (config.isDebugEnabled()) {
+			return new MarkLogicDebuggerApp (config, output);
+		} else {
+			return new MarklogicRunnerApp (config, output);
+		}
+	}
+
+	@Override
+	public Runnable getDebuggerCleanupRunnable (XQueryRunConfig config)
+	{
+		return new MarkLogicDebuggerCleanup (config);
+	}
+
+	private static class MarkLogicDebuggerCleanup implements Runnable
+	{
+		private final XQueryRunConfig config;
+
+		public MarkLogicDebuggerCleanup (XQueryRunConfig config)
+		{
+			this.config = config;
+		}
+
+		@Override
+		public void run()
+		{
+			try {
+				ContentSource source = MarklogicRunnerApp.getContentSource (config);
+
+				MarkLogicDebugConnector connector = new MarkLogicDebugConnector (config, source.newSession());
+
+				connector.clearStoppedRequests();
+			} catch (Exception e) {
+				System.out.println ("MarkLogicDebuggerCleanup: unexpected Exception cleaning up: " + e);
+				e.printStackTrace();
+			}
+		}
+	}
 }

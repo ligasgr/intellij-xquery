@@ -317,7 +317,7 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 	{
 		logger.debug ("runDebuggerApp called: runMode=" + config.getMlDebugRunMode().toString() + ", appserver root: " + config.getMlDebugAppserverRoot() + ", DSName: " + config.getDataSourceType());
 
-		ContentSource contentSource = getContentSource();
+		ContentSource contentSource = getContentSource (config);
 		Session session = contentSource.newSession();
 		MarkLogicRunMode runMode = config.getMlDebugRunMode();
 

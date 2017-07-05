@@ -82,6 +82,12 @@ public class XQueryRunProfileState extends CommandLineState {
         this.port = port;
     }
 
+
+    public XQueryRunConfiguration getXQueryRunConfiguration()
+    {
+        return configuration;
+    }
+
     @NotNull
     @Override
     protected ProcessHandler startProcess() throws ExecutionException {
@@ -177,7 +183,7 @@ public class XQueryRunProfileState extends CommandLineState {
         return parameters;
     }
 
-    private File getSerializedConfig(XQueryRunConfiguration configuration, boolean isDebugging, int port) {
+    public File getSerializedConfig (XQueryRunConfiguration configuration, boolean isDebugging, int port) {
         try {
             File serializedConfig = File.createTempFile("xquery-run", ".xml");
             XmlConfigurationAccessor xmlConfigurationAccessor = new XmlConfigurationAccessor();

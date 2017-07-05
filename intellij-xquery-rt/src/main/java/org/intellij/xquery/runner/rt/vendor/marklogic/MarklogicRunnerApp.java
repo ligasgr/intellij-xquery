@@ -50,7 +50,7 @@ public class MarklogicRunnerApp implements RunnerApp
 	@Override
 	public void runApp() throws Exception
 	{
-		ContentSource contentSource = getContentSource();
+		ContentSource contentSource = getContentSource (config);
 
 		try (Session session = contentSource.newSession()) {
 			Request request;
@@ -77,9 +77,10 @@ public class MarklogicRunnerApp implements RunnerApp
 		}
 	}
 
-	protected ContentSource getContentSource() throws Exception
+	public static ContentSource getContentSource (XQueryRunConfig config) throws Exception
 	{
 		URI uri = new URI (String.format (XCC_CONNECTION_URI_TEMPLATE, config.getUsername(), config.getPassword(), config.getHost(), config.getPort(), config.getDatabaseName()));
+
 		return ContentSourceFactory.newContentSource (uri);
 	}
 
