@@ -54,7 +54,7 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'lib', include: '*.jar')
-    compile 'org.codehaus.groovy:groovy-all:2.4.6'	// If you change this, change the jar named in org.intellij.xquery.runner.rt.XQueryDataSourceType
+    compile 'org.codehaus.groovy:groovy-all:2.4.6'
     compile 'com.codnos:dbgp-interfaces:1.0.0'
     compile 'commons-codec:commons-codec:1.10'
     compile 'org.slf4j:slf4j-api:1.7.25'
