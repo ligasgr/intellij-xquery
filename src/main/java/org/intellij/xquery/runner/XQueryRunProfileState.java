@@ -107,24 +107,31 @@ public class XQueryRunProfileState extends CommandLineState {
     private SimpleJavaParameters createJavaParameters() throws ExecutionException {
         final SimpleJavaParameters parameters = prepareRunnerParameters();
         configureJreRelatedParameters(parameters);
-        tidyGroovyClassPath (parameters);
+        tidyClassPath (parameters);
         return parameters;
     }
 
+    private static final Set<String> libsToCheck = new HashSet<> (Arrays.asList ("groovy-all-", "slf4j-api-", "slf4j-log4j12-", "log4j-"));
+
     // Groovy gets upset if more than one version is in the classpath
     // If the Groovy lib is already in the classpath, use that one and don't add the plugin's one
-    private void tidyGroovyClassPath (SimpleJavaParameters parameters)
+    // Same treatment for Log4J and SLF4J libraries, keep the last ones seen)
+    private void tidyClassPath (SimpleJavaParameters parameters)
     {
         PathsList classPath = parameters.getClassPath();
-        String prevGroovyPath = null;
+        Map<String,String> libsSeen = new HashMap<>();
 
         for (String path : classPath.getPathList()) {
-            if (path.contains ("groovy-all-")) {
-                if (prevGroovyPath != null) {
-                    classPath.remove (prevGroovyPath);
-                }
+            for (String lib : libsToCheck) {
+                if (path.contains (lib)) {
+                    String prevLib = libsSeen.get (lib);
 
-                prevGroovyPath = path;
+                    if (prevLib != null) {
+                        classPath.remove (prevLib);
+                    }
+
+                    libsSeen.put (lib, path);
+                }
             }
         }
     }
