@@ -17,6 +17,7 @@
 
 package org.intellij.xquery.runner.ui.run.main;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.ui.PanelWithAnchor;
@@ -46,6 +47,7 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 
 	private MarkLogicRunMode runMode = ADHOC;
 	private JComponent anchor;
+	private Project project;
 
 	private JPanel mainPanel;
 	private JBRadioButton adHocEval;
@@ -64,7 +66,9 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 
 	public MarkLogicRunModeConfigPanel()
 	{
-		appserverRoot.addBrowseFolderListener("Choose Appserver Root Directory", null, null, createSingleFolderDescriptor());
+		appserverRoot.addBrowseFolderListener("Choose Appserver Root Directory",
+			"Local directory that corresponds to MarkLogic's appserver root", project, createSingleFolderDescriptor());
+
 		appserverRoot.getTextField().setName ("appserverRoot");
 
 		adHocEval.setEnabled (true);
@@ -105,6 +109,8 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 		XQueryDataSourceType dsType = cfg.getDataSourceType();
 
 		mainPanel.setVisible ((dsType != null) && dsType.isMarklogicDebugSupported ());
+
+		project = cfg.getProject();
 	}
 
 	public void applyChanges(XQueryRunConfiguration cfg)
