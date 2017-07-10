@@ -17,6 +17,7 @@
 
 package org.intellij.xquery.runner.ui.run.main;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicDebugConnector;
 import org.jetbrains.annotations.Nullable;
@@ -38,6 +39,18 @@ public class RunConfigHelpDialog extends DialogWrapper
 	{
 		super (parent, false);
 
+		initDialog();
+	}
+
+	public RunConfigHelpDialog (Project project)
+	{
+		super (project);
+
+		initDialog();
+	}
+
+	private void initDialog()
+	{
 		setOKActionEnabled (true);
 		setOKButtonText ("Dismiss");
 		setTitle (TITLE);

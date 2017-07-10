@@ -139,6 +139,7 @@
         <group id="XQuery.MarkLogicGroup" text="MarkLogic" description="MarkLogic Menus">
             <add-to-group group-id="MainMenu" anchor="before" relative-to-action="HelpMenu"/>
             <action id="XQuery.MLPluginHelp" text="MarkLogic XQuery Plugin Wiki" description="https://github.com/overstory/marklogic-intellij-plugin/wiki" class="org.intellij.xquery.documentation.WebReferenceAction"/>
+            <action id="XQuery.MLPluginRunModesHelp" text="MarkLogic Debugger Run Modes Help" description="Description of MarkLogic Debugger Run Modes" class="org.intellij.xquery.documentation.PluginHelpAction"/>
             <separator/>
             <action id="XQuery.MLDocs9" text="MarkLogic 9 Online Docs" icon="AllIcons.Toolwindows.Documentation" description="http://docs.marklogic.com/9.0" class="org.intellij.xquery.documentation.WebReferenceAction"/>
             <action id="XQuery.MLDocs8" text="MarkLogic 8 Online Docs" icon="AllIcons.Toolwindows.Documentation" description="http://docs.marklogic.com/8.0" class="org.intellij.xquery.documentation.WebReferenceAction"/>

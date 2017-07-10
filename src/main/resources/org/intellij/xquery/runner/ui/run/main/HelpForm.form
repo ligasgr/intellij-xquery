@@ -12,7 +12,7 @@
         <properties>
           <maximumSize width="1000" height="1000"/>
           <name value="scrollBar"/>
-          <preferredSize width="400" height="500"/>
+          <preferredSize width="600" height="800"/>
           <verticalScrollBarPolicy value="20"/>
         </properties>
         <border type="etched" title="Help Is Here"/>

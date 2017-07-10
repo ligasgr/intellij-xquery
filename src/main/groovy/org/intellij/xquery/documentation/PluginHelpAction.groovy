@@ -17,12 +17,10 @@
 
 package org.intellij.xquery.documentation
 
+import com.intellij.icons.AllIcons
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import org.intellij.xquery.runner.ui.run.main.RunConfigHelpDialog
-
-import javax.swing.JFrame
-import java.awt.Dimension
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,23 +30,18 @@ import java.awt.Dimension
  */
 class PluginHelpAction extends AnAction
 {
+	PluginHelpAction()
+	{
+		super (AllIcons.Toolwindows.ToolWindowDebugger)
+	}
+
 	@Override
 	void actionPerformed (AnActionEvent anActionEvent)
 	{
 		try {
-			// FixMe: Do this better
-			JFrame frame = new JFrame("HtmlEditorKit Test")
-
-			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE)
-
-			frame.setSize (new Dimension(300,500))
-
-			frame.setLocationRelativeTo (null)
-			frame.setVisible (true)
-
-			new RunConfigHelpDialog (frame).show()
+			new RunConfigHelpDialog (anActionEvent.project).show()
 		} catch (Exception e) {
-			e.printStackTrace ()
+			e.printStackTrace()
 		}
 	}
 }

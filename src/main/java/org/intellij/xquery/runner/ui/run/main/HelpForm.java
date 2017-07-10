@@ -57,6 +57,7 @@ public class HelpForm
 	public void setText (String text)
 	{
 		body.setText (text);
+		body.setCaretPosition (0);
 	}
 
 	public void setCss (String css)
