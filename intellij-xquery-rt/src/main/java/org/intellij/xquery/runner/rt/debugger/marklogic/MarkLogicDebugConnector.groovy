@@ -105,7 +105,7 @@ class MarkLogicDebugConnector
 			appserverId = capturedAppserverId
 			appserverName = getAppserverName (appserverId)
 			argument = appserverId.toString()
-			println "Attaching to appserver ${appserverName} for debugging, waiting for up to ${connectTimeout} seconds..."
+			log.info "Attaching to appserver ${appserverName} for debugging, waiting for up to ${connectTimeout} seconds..."
 			break
 		default:
 			throw new RuntimeException ("ACK! Unrecognized Run Mode: ${runMode}")
@@ -131,7 +131,7 @@ class MarkLogicDebugConnector
 		log.trace ("submitRequestForDebug: returning")
 
 		if (runMode == CAPTURE_APPSERVER) {
-			println "Successfully attached to appserver '${appserverName}', debugging started"
+			log.info "Successfully attached to appserver '${appserverName}', debugging started"
 		}
 
 		return requestId

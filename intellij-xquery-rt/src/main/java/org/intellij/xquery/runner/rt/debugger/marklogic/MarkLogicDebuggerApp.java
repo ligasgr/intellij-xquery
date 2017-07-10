@@ -355,7 +355,7 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 				}
 
 				if ((errorMsg != null) && (errorMsg.length() > 0)) {
-					System.err.println (errorMsg);
+					logger.error (errorMsg);
 					break;
 				}
 
@@ -398,7 +398,7 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 					debugConnector.getRequestStatus (debuggerRequestId);	// trigger deferred exception
 
 					if (reqId == null) {
-						System.err.println ("runDebuggerApp: Timeout waiting for ML request to break/finish, stopping");
+						logger.error ("runDebuggerApp: Timeout waiting for ML request to break/finish, stopping");
 						running = false;
 					}
 
@@ -474,7 +474,7 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 					logger.debug ("ran the app");
 					changeToStopped();
 				} catch (Throwable e) {
-					System.err.println ("Exception running debugger: " + e);
+					logger.error ("Exception running debugger: " + e);
 					e.printStackTrace();
 					changeToStopped();
 				}
