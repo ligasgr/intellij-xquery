@@ -47,8 +47,15 @@ configurations {
 
 sourceSets {
     main {
-        java {
-            srcDirs 'gen'
+        java { srcDirs = [] }
+        groovy { srcDirs = ['src/main/java', 'src/main/groovy', 'gen'] }
+        resources {
+            srcDirs = ['src/main/java', 'src/main/groovy', 'src/main/resources']
+            exclude '**/*.java'
+            exclude '**/*.groovy'
+            exclude '**/*.form'
+            exclude '**/*.flex'
+            exclude '**/*.bnf'
         }
         compileClasspath += configurations.provided
         test.compileClasspath += configurations.provided

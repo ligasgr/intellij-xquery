@@ -31,7 +31,10 @@ sourceSets {
         groovy { srcDirs = ["src/main/java"] }
         resources {
             srcDirs = ['src/main/java', 'src/main/resources']
-            exclude '**/*.(java|groovy)'
+            exclude '**/*.java'
+            exclude '**/*.groovy'
+            exclude '**/z.*'
+            exclude '**/zz.*'
         }
     }
     testFunctional {
