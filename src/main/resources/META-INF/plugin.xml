@@ -18,7 +18,7 @@
 <idea-plugin url="https://github.com/overstory/marklogic-intellij-plugin" version="2">
     <id>org.intellij.xquery.marklogic</id>
     <name>XQuery Support + MarkLogic Debugger</name>
-    <version>0.9.0-BETA</version>
+    <version>0.9.1-BETA</version>
     <vendor email="ron@overstory.co.uk" url="http://overstory.co.uk/">OverStory Ltd in association with MarkLogic</vendor>
 
     <description>
@@ -36,8 +36,16 @@
 
     <change-notes>
         <![CDATA[
+            <h3>Changes in 0.9.1-beta:</h3>
+            <ul>
+                <li>Issue #41: Avoid Groovy runtime version clash when the project also uses Groovy.  Use the one in the project module.  Add Log4J and SLF4J libraries to classpath</li>
+                <li>Issue #42: Add cleanup hook when a debugged process exits, to release stopped requests or captured appservers on Marklogic.</li>
+                <li>Add top-level menu item to display Run Mode help info</li>
+            </ul>
+
+            <h3>Notes</h3>
             <p>
-            This is a Beta pre-release of the MarkLogic IntelliJ XQuery plugin.  As an XQuery editor plugin
+            This is a Beta pre-release of the MarkLogic IntelliJ XQuery plugin.  As an XQuery editor
             it is quite stable.  It is forked from, and currently up to date with, the XQuery Language Support
             created by Grzegorz Ligas.
             </p>
