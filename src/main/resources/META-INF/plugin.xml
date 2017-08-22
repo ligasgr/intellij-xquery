@@ -40,7 +40,7 @@
         ]]>
     </change-notes>
 
-    <idea-version since-build="163.7743" until-build="171.*"/>
+    <idea-version since-build="163.7743" until-build="172.*"/>
 
     <depends>com.intellij.modules.lang</depends>
 
