@@ -23,13 +23,13 @@ import com.marklogic.xcc.exceptions.RequestException
 import com.marklogic.xcc.exceptions.XQueryException
 import com.marklogic.xcc.types.ValueType
 import com.marklogic.xcc.types.XSInteger
-import groovy.util.logging.Slf4j
 import groovy.util.slurpersupport.GPathResult
 import groovy.xml.StreamingMarkupBuilder
 import org.intellij.xquery.runner.rt.XQueryRunConfig
 import org.intellij.xquery.runner.rt.XQueryRunnerVariable
 import org.intellij.xquery.runner.rt.debugger.BreakpointManager
 import org.intellij.xquery.runner.rt.debugger.DebugFrame
+import org.intellij.xquery.runner.rt.debugger.LogUtil
 import org.intellij.xquery.runner.rt.debugger.Variable
 import static org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicRunMode.*
 
@@ -44,9 +44,9 @@ import static org.intellij.xquery.runner.rt.FileUtil.readFile
  * Time: 12:13 AM
  */
 @SuppressWarnings ("PublicMethodNotExposedInInterface")
-@Slf4j
 class MarkLogicDebugConnector
 {
+	private final LogUtil log = new LogUtil();
 	private static final int DEFAULT_CAPTURE_TIMEOUT = 120
 	protected final XQueryRunConfig config
 	private final Session session

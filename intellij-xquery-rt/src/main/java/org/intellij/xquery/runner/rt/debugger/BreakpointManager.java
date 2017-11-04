@@ -18,8 +18,6 @@
 package org.intellij.xquery.runner.rt.debugger;
 
 import com.codnos.dbgp.api.Breakpoint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URI;
@@ -30,10 +28,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.codnos.dbgp.api.Breakpoint.aCopyOf;
-import static org.intellij.xquery.runner.rt.debugger.LogUtil.log;
 
 public class BreakpointManager {
-    private static final Logger logger = LoggerFactory.getLogger (BreakpointManager.class);
+    private static final LogUtil logger = new LogUtil();
     private final Map<Integer, Map<String, Breakpoint>> breakpoints = new HashMap<>();
     private final Map<String, Breakpoint> breakpointIdToBreakpoints = new HashMap<>();
 

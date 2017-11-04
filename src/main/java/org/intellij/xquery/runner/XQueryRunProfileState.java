@@ -111,11 +111,10 @@ public class XQueryRunProfileState extends CommandLineState {
         return parameters;
     }
 
-    private static final Set<String> libsToCheck = new HashSet<> (Arrays.asList ("groovy-all-", "slf4j-api-", "slf4j-log4j12-", "log4j-"));
+    private static final Set<String> libsToCheck = new HashSet<> (Arrays.asList ("groovy-all-"));
 
     // Groovy gets upset if more than one version is in the classpath
     // If the Groovy lib is already in the classpath, use that one and don't add the plugin's one
-    // Same treatment for Log4J and SLF4J libraries, keep the last ones seen)
     private void tidyClassPath (SimpleJavaParameters parameters)
     {
         PathsList classPath = parameters.getClassPath();

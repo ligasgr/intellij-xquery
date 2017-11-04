@@ -35,15 +35,14 @@ import java.io.PrintStream;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import org.intellij.xquery.runner.rt.debugger.LogUtil;
 
 import static com.codnos.dbgp.api.DBGpFactory.engine;
 
 @SuppressWarnings ("Duplicates")
 public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements DebuggerEngine
 {
-	private final Logger logger = LoggerFactory.getLogger (getClass());
+	private final LogUtil logger = new LogUtil();
 	private final Thread applicationThread;
 	private final Object theLock = new Object();
 	private final List<DebugFrame> stackFrames = new LinkedList<>();
