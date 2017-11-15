@@ -45,6 +45,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.jayway.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.containsString;
@@ -57,10 +58,11 @@ import static org.junit.Assert.assertThat;
 
 public class SaxonDebuggerAppTest {
     private static final int DEBUGGER_PORT = 9000;
+    private final AtomicInteger debuggerPort = new AtomicInteger(DEBUGGER_PORT);
     private final StringOutputStream outputStream = new StringOutputStream();
     private final PrintStream printStream = new PrintStream(outputStream);
     private final SpyDebuggerIde spyDebuggerIde = new SpyDebuggerIde();
-    private final DBGpIde dbGpIde = DBGpFactory.ide().withPort(DEBUGGER_PORT).withDebuggerIde(spyDebuggerIde).build();
+    private final DBGpIde dbGpIde = DBGpFactory.ide().withPort(debuggerPort.get()).withDebuggerIde(spyDebuggerIde).build();
 
     @Before
     public void setUp() throws Exception {
@@ -71,6 +73,7 @@ public class SaxonDebuggerAppTest {
     @After
     public void tearDown() throws Exception {
         dbGpIde.stopListening();
+        debuggerPort.incrementAndGet();
     }
 
     @Test
@@ -1054,7 +1057,7 @@ public class SaxonDebuggerAppTest {
                 .withTypeName(SAXON_NATIVE.toString())
                 .withMainFileName(xqueryMainFile.getAbsolutePath())
                 .withDebug(true)
-                .withDebugPort(String.valueOf(DEBUGGER_PORT))
+                .withDebugPort(String.valueOf(debuggerPort.get()))
                 .build();
     }
 
