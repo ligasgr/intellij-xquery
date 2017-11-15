@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,17 +21,8 @@ import com.intellij.find.findUsages.FindUsagesHandler;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * User: ligasgr
- * Date: 08/07/13
- * Time: 01:17
- */
 public class XQueryFindUsagesHandler extends FindUsagesHandler {
     public XQueryFindUsagesHandler(PsiElement element) {
         super(element);
-    }
-
-    protected boolean isSearchForTextOccurencesAvailable(@NotNull PsiElement psiElement, boolean isSingleFile) {
-        return true;
     }
 }
