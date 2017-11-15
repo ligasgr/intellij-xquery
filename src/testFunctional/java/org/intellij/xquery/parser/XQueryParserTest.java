@@ -202,4 +202,12 @@ public class XQueryParserTest extends BaseParserTest {
     public void testStringConstructor() {
         doTest(true);
     }
+
+    public void testUnaryLookup() {
+        doTest(true);
+    }
+
+    public void testArgumentPlaceholder() {
+        doTest(true);
+    }
 }

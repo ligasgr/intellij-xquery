@@ -504,7 +504,7 @@ OrderedExpr ::= "ordered" EnclosedExpression {pin=2}
 UnorderedExpr ::= "unordered" EnclosedExpression {pin=2}
 FunctionCall ::= FunctionName ArgumentList {methods=[getReference getArity]} /* xgc: reserved-function-names */
  /* gn: parens */
-Argument ::= ExprSingle | ArgumentPlaceholder
+Argument ::=  ArgumentPlaceholder | ExprSingle
 ArgumentPlaceholder ::= "?"
 NodeConstructor ::= DirectConstructor
  | ComputedConstructor
