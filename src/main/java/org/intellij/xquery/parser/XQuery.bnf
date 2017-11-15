@@ -479,7 +479,7 @@ ArgumentList ::= "(" (Argument OptionalArgumentAfterComma*)? ")" {pin=1}
 private OptionalArgumentAfterComma ::= "," Argument {pin=1}
 PredicateList ::= Predicate*
 Predicate ::= "[" Expr "]"
-Lookup   ::=   "?" KeySpecifier
+Lookup   ::=   "?" KeySpecifier {pin=2}
 KeySpecifier   ::=   NCName | IntegerLiteral | ParenthesizedExpr | "*"
 ArrowFunctionSpecifier   ::=   FunctionName | VarRef | ParenthesizedExpr
 PrimaryExpr ::= Literal
@@ -504,7 +504,7 @@ OrderedExpr ::= "ordered" EnclosedExpression {pin=2}
 UnorderedExpr ::= "unordered" EnclosedExpression {pin=2}
 FunctionCall ::= FunctionName ArgumentList {methods=[getReference getArity]} /* xgc: reserved-function-names */
  /* gn: parens */
-Argument ::=  ArgumentPlaceholder | ExprSingle
+Argument ::=  ExprSingle | ArgumentPlaceholder
 ArgumentPlaceholder ::= "?"
 NodeConstructor ::= DirectConstructor
  | ComputedConstructor
@@ -589,7 +589,7 @@ StringConstructor   ::=   "``[" StringConstructorContent "]``"  {pin=1}/* ws: ex
 StringConstructorContent   ::=   StringConstructorChars (StringConstructorInterpolation StringConstructorChars)*/* ws: explicit */
 StringConstructorChars   ::=   Char* /* ws: explicit */
 StringConstructorInterpolation   ::=   "`{" Expr? "}`" {pin=1}
-UnaryLookup   ::=   "?" KeySpecifier {pin=1}
+UnaryLookup   ::=   "?" KeySpecifier {pin=2}
 SingleType ::= SimpleTypeName "?"?
 TypeDeclaration ::= "as" SequenceType
 SequenceType ::= ("empty-sequence" "(" ")")

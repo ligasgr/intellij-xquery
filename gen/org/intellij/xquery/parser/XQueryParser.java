@@ -1227,13 +1227,13 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ArgumentPlaceholder | ExprSingle
+  // ExprSingle | ArgumentPlaceholder
   public static boolean Argument(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Argument")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, ARGUMENT, "<argument>");
-    r = ArgumentPlaceholder(b, l + 1);
-    if (!r) r = ExprSingle(b, l + 1);
+    r = ExprSingle(b, l + 1);
+    if (!r) r = ArgumentPlaceholder(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -7598,13 +7598,12 @@ public class XQueryParser implements PsiParser, LightPsiParser {
   public static boolean UnaryLookup(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UnaryLookup")) return false;
     if (!nextTokenIs(b, QUESTIONMARK)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, UNARY_LOOKUP, null);
+    boolean r;
+    Marker m = enter_section_(b);
     r = consumeToken(b, QUESTIONMARK);
-    p = r; // pin = 1
     r = r && KeySpecifier(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    exit_section_(b, m, UNARY_LOOKUP, r);
+    return r;
   }
 
   /* ********************************************************** */

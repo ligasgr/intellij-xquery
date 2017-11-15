@@ -210,4 +210,8 @@ public class XQueryParserTest extends BaseParserTest {
     public void testArgumentPlaceholder() {
         doTest(true);
     }
+
+    public void testUnaryLookupAsArgument() {
+        doTest(true);
+    }
 }
