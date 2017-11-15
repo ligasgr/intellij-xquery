@@ -1095,7 +1095,7 @@ public class SaxonDebuggerAppTest {
         } finally {
             serverSocket.close();
         }
-        Thread.sleep(200L);
+        Thread.sleep(1000L);
 
         return var2;
     }
