@@ -1077,7 +1077,7 @@ public class SaxonDebuggerAppTest {
         }
     }
 
-    public static int findAvailableSocketPort() throws IOException {
+    public static int findAvailableSocketPort() throws IOException, InterruptedException {
         ServerSocket serverSocket = new ServerSocket(0);
 
         int var2;
@@ -1095,11 +1095,12 @@ public class SaxonDebuggerAppTest {
         } finally {
             serverSocket.close();
         }
+        Thread.sleep(200L);
 
         return var2;
     }
 
-    public static int tryToFindAvailableSocketPort(int defaultPort) {
+    public static int tryToFindAvailableSocketPort(int defaultPort) throws InterruptedException {
         try {
             return findAvailableSocketPort();
         } catch (IOException e) {
@@ -1107,7 +1108,7 @@ public class SaxonDebuggerAppTest {
         }
     }
 
-    public static int tryToFindAvailableSocketPort() {
+    public static int tryToFindAvailableSocketPort() throws InterruptedException {
         return tryToFindAvailableSocketPort(-1);
     }
 }
