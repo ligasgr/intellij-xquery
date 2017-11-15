@@ -36,9 +36,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
-import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -58,17 +56,16 @@ import static org.intellij.xquery.runner.rt.XQueryRunConfigBuilder.runConfig;
 import static org.junit.Assert.assertThat;
 
 public class SaxonDebuggerAppTest {
+    private static final int DEBUGGER_PORT = 9000;
     private final StringOutputStream outputStream = new StringOutputStream();
     private final PrintStream printStream = new PrintStream(outputStream);
     private final SpyDebuggerIde spyDebuggerIde = new SpyDebuggerIde();
-    private int debuggerPort;
-    private DBGpIde dbGpIde;
+    private final DBGpIde dbGpIde = DBGpFactory.ide().withPort(DEBUGGER_PORT).withDebuggerIde(spyDebuggerIde).build();
 
     @Before
     public void setUp() throws Exception {
-        debuggerPort = tryToFindAvailableSocketPort();
-        dbGpIde = DBGpFactory.ide().withPort(debuggerPort).withDebuggerIde(spyDebuggerIde).build();
         dbGpIde.startListening();
+        await().until(dbGpIde::isConnected);
         spyDebuggerIde.currentStatus = Status.STARTING;
     }
 
@@ -1058,7 +1055,7 @@ public class SaxonDebuggerAppTest {
                 .withTypeName(SAXON_NATIVE.toString())
                 .withMainFileName(xqueryMainFile.getAbsolutePath())
                 .withDebug(true)
-                .withDebugPort(String.valueOf(debuggerPort))
+                .withDebugPort(String.valueOf(DEBUGGER_PORT))
                 .build();
     }
 
@@ -1075,40 +1072,5 @@ public class SaxonDebuggerAppTest {
         public void onStatus(Status status, DBGpIde dbgpIde) {
             currentStatus = status;
         }
-    }
-
-    public static int findAvailableSocketPort() throws IOException, InterruptedException {
-        ServerSocket serverSocket = new ServerSocket(0);
-
-        int var2;
-        try {
-            int port = serverSocket.getLocalPort();
-            synchronized(serverSocket) {
-                try {
-                    serverSocket.wait(1L);
-                } catch (InterruptedException e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-
-            var2 = port;
-        } finally {
-            serverSocket.close();
-        }
-        Thread.sleep(1000L);
-
-        return var2;
-    }
-
-    public static int tryToFindAvailableSocketPort(int defaultPort) throws InterruptedException {
-        try {
-            return findAvailableSocketPort();
-        } catch (IOException e) {
-            return defaultPort;
-        }
-    }
-
-    public static int tryToFindAvailableSocketPort() throws InterruptedException {
-        return tryToFindAvailableSocketPort(-1);
     }
 }
