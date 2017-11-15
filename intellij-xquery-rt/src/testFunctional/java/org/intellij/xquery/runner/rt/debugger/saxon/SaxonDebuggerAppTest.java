@@ -36,7 +36,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -45,7 +47,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.jayway.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.containsString;
@@ -57,15 +58,16 @@ import static org.intellij.xquery.runner.rt.XQueryRunConfigBuilder.runConfig;
 import static org.junit.Assert.assertThat;
 
 public class SaxonDebuggerAppTest {
-    private static final int DEBUGGER_PORT = 9000;
-    private final AtomicInteger debuggerPort = new AtomicInteger(DEBUGGER_PORT);
     private final StringOutputStream outputStream = new StringOutputStream();
     private final PrintStream printStream = new PrintStream(outputStream);
     private final SpyDebuggerIde spyDebuggerIde = new SpyDebuggerIde();
-    private final DBGpIde dbGpIde = DBGpFactory.ide().withPort(debuggerPort.get()).withDebuggerIde(spyDebuggerIde).build();
+    private int debuggerPort;
+    private DBGpIde dbGpIde;
 
     @Before
     public void setUp() throws Exception {
+        debuggerPort = tryToFindAvailableSocketPort();
+        dbGpIde = DBGpFactory.ide().withPort(debuggerPort).withDebuggerIde(spyDebuggerIde).build();
         dbGpIde.startListening();
         spyDebuggerIde.currentStatus = Status.STARTING;
     }
@@ -73,7 +75,6 @@ public class SaxonDebuggerAppTest {
     @After
     public void tearDown() throws Exception {
         dbGpIde.stopListening();
-        debuggerPort.incrementAndGet();
     }
 
     @Test
@@ -1057,7 +1058,7 @@ public class SaxonDebuggerAppTest {
                 .withTypeName(SAXON_NATIVE.toString())
                 .withMainFileName(xqueryMainFile.getAbsolutePath())
                 .withDebug(true)
-                .withDebugPort(String.valueOf(debuggerPort.get()))
+                .withDebugPort(String.valueOf(debuggerPort))
                 .build();
     }
 
@@ -1074,5 +1075,39 @@ public class SaxonDebuggerAppTest {
         public void onStatus(Status status, DBGpIde dbgpIde) {
             currentStatus = status;
         }
+    }
+
+    public static int findAvailableSocketPort() throws IOException {
+        ServerSocket serverSocket = new ServerSocket(0);
+
+        int var2;
+        try {
+            int port = serverSocket.getLocalPort();
+            synchronized(serverSocket) {
+                try {
+                    serverSocket.wait(1L);
+                } catch (InterruptedException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+
+            var2 = port;
+        } finally {
+            serverSocket.close();
+        }
+
+        return var2;
+    }
+
+    public static int tryToFindAvailableSocketPort(int defaultPort) {
+        try {
+            return findAvailableSocketPort();
+        } catch (IOException e) {
+            return defaultPort;
+        }
+    }
+
+    public static int tryToFindAvailableSocketPort() {
+        return tryToFindAvailableSocketPort(-1);
     }
 }
