@@ -97,10 +97,4 @@ public class FakeUpdateParameterInfoContext implements UpdateParameterInfoContex
     public Editor getEditor() {
         return editor;
     }
-
-    @Override
-    public Object getHighlightedParameter ()
-    {
-        return null;  // FIXME: auto-generated
-    }
 }
