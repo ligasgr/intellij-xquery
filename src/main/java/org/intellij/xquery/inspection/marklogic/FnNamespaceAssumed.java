@@ -53,13 +53,6 @@ public class FnNamespaceAssumed extends LocalInspectionTool
 		return true;
 	}
 
-	@Nullable
-	@Override
-	public String getStaticDescription()
-	{
-		return "This function call invokes a builtin without explicitly naming the fn: namespace.  This could be silently overridden by a local function of the same name";
-	}
-
 	// ----------------------------------------------------------------------
 
 	private static final AddFnPrefixQuickFix fixer = new AddFnPrefixQuickFix (ADD_FN_PREFIX);
