@@ -552,9 +552,10 @@ public class XQueryFile extends PsiFileBase {
 
     public boolean isBuiltInFunction(XQueryFunctionName functionName) {
         String name = functionName.getLocalNameText();
-        String prefix = functionName.getPrefixText();
+        String pre = functionName.getPrefixText();
+        String prefix = ((pre == null) && versionIsMarklogicSpecific()) ? "fn" : pre;
         String namespace = mapFunctionPrefixToNamespace(prefix);
-        return isBuiltInFunction(namespace, name);
+        return isBuiltInFunction (namespace, name);
     }
 
     public Collection<BuiltInFunctionSignature> getFunctionsSignatures(String namespace, String name) {

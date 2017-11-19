@@ -132,6 +132,9 @@
         <localInspection enabledByDefault="true" shortName="MarklogicExtendedSyntax" groupName="XQuery"
                          displayName="MarkLogic extended syntax"
                          implementationClass="org.intellij.xquery.inspection.marklogic.MarklogicExtendedSyntaxInspection"/>
+        <localInspection enabledByDefault="true" shortName="FnNamespaceAssumed" groupName="XQuery"
+                         displayName="The fn: namespace is assumed"
+                         implementationClass="org.intellij.xquery.inspection.marklogic.FnNamespaceAssumed"/>
 
         <codeInsight.parameterInfo language="XQuery" implementationClass="org.intellij.xquery.completion.function.parameters.XQueryParameterInfoHandler" />
         <lang.documentationProvider language="XQuery" implementationClass="org.intellij.xquery.documentation.XQueryDocumentationProvider"/>
