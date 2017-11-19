@@ -18,7 +18,7 @@
 <idea-plugin url="https://github.com/overstory/marklogic-intellij-plugin" version="2">
     <id>org.intellij.xquery.marklogic</id>
     <name>XQuery Support + MarkLogic Debugger</name>
-    <version>0.9.2-BETA</version>
+    <version>0.9.3-BETA</version>
     <vendor email="ron@overstory.co.uk" url="http://overstory.co.uk/">OverStory Ltd in association with MarkLogic</vendor>
 
     <description>
@@ -66,7 +66,7 @@
         ]]>
     </change-notes>
 
-    <idea-version since-build="163.7743"/>
+    <idea-version since-build="172.3317.76"/>
 
     <depends>com.intellij.modules.lang</depends>
 

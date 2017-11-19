@@ -65,6 +65,7 @@ public class SaxonDebuggerAppTest {
     @Before
     public void setUp() throws Exception {
         dbGpIde.startListening();
+        await().until(dbGpIde::isConnected);
         spyDebuggerIde.currentStatus = Status.STARTING;
     }
 

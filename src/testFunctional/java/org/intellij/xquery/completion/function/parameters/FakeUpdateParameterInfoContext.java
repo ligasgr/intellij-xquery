@@ -33,6 +33,7 @@ public class FakeUpdateParameterInfoContext implements UpdateParameterInfoContex
     private final PsiFile file;
     private PsiElement parameterOwner;
     private int currentParameter;
+    private Object highlightedParameter;
 
     public FakeUpdateParameterInfoContext(Editor editor, PsiFile file) {
         this.editor = editor;
@@ -51,6 +52,11 @@ public class FakeUpdateParameterInfoContext implements UpdateParameterInfoContex
     }
 
     public void setHighlightedParameter(Object parameter) {
+        this.highlightedParameter = parameter;
+    }
+
+    public Object getHighlightedParameter() {
+        return highlightedParameter;
     }
 
     public void setCurrentParameter(int index) {
