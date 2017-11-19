@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 
 public interface XQueryUnaryLookup extends XQueryPsiElement {
 
-  @Nullable
+  @NotNull
   XQueryKeySpecifier getKeySpecifier();
 
 }

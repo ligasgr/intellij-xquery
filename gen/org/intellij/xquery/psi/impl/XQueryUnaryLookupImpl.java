@@ -43,9 +43,9 @@ public class XQueryUnaryLookupImpl extends XQueryPsiElementImpl implements XQuer
   }
 
   @Override
-  @Nullable
+  @NotNull
   public XQueryKeySpecifier getKeySpecifier() {
-    return findChildByClass(XQueryKeySpecifier.class);
+    return findNotNullChildByClass(XQueryKeySpecifier.class);
   }
 
 }

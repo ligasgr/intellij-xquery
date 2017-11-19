@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,11 +26,6 @@ import java.util.Collection;
 
 import static org.intellij.xquery.Assertions.assertChildOf;
 
-/**
- * User: ligasgr
- * Date: 04/07/13
- * Time: 13:46
- */
 public class XQueryFindUsageProviderTest extends BaseFunctionalTestCase {
 
     private final XQueryFindUsageProvider provider = new XQueryFindUsageProvider();
@@ -107,9 +102,7 @@ public class XQueryFindUsageProviderTest extends BaseFunctionalTestCase {
     public void testFindVariableTextUsages() {
         Collection<UsageInfo> foundUsages = myFixture.testFindUsages("VariableReferencedInText.xq", "Text.txt");
 
-        assertEquals(1, foundUsages.size());
-        UsageInfo usageInfo = foundUsages.iterator().next();
-        assertEquals("Text.txt", usageInfo.getElement().getContainingFile().getName());
+        assertEquals(0, foundUsages.size());
     }
 
     public void testVariableUsagesDescription() {
