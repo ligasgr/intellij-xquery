@@ -18,7 +18,7 @@
 <idea-plugin url="https://github.com/overstory/marklogic-intellij-plugin" version="2">
     <id>org.intellij.xquery.marklogic</id>
     <name>XQuery Support + MarkLogic Debugger</name>
-    <version>0.9.3-BETA</version>
+    <version>0.9.4-BETA</version>
     <vendor email="ron@overstory.co.uk" url="http://overstory.co.uk/">OverStory Ltd in association with MarkLogic</vendor>
 
     <description>
@@ -36,7 +36,14 @@
 
     <change-notes>
         <![CDATA[
-            <h3>Changes in 0.9.2-beta:</h3>
+            <h3>Changes in 0.9.4-beta:</h3>
+            <ul>
+                <li>Eliminate issues with SLF4J/Log4J conflicts</li>
+                <li>Update for latest IntelliJ release</li>
+                <li>Add inspection for defaulted fn: namespace on function calls</li>
+                <li>Merge upstream changes from 3.3.1+ of <a href="http://ligasgr.github.io/intellij-xquery/">Grzegorz's code</a></li>
+            </ul>
+            <h3>Changes in 0.9.3-beta:</h3>
             <ul>
                 <li>Fix packaging bug that left some help files out of the distribution</li>
             </ul>
