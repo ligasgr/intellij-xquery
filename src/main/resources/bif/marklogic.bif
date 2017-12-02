@@ -904,19 +904,19 @@ cdict#dictionary-delete#1#$lang as xs:string#empty-sequence()
 cdict#dictionary-read#1#$lang as xs:string#element(cdict:dictionary)?
 cdict#dictionary-write#2#$lang as xs:string, $dict as element(cdict:dictionary)#empty-sequence()
 cdict#get-languages#0##xs:string*
-cpf#check-transition#2#$docid as xs:string, $transition as element(*, p:transition)?# xs:boolean 
-cpf#document-get-error#1#$doc as xs:string# node()? 
+cpf#check-transition#2#$docid as xs:string, $transition as element(*, p:transition)?# xs:boolean
+cpf#document-get-error#1#$doc as xs:string# node()?
 cpf#document-get-last-updated#1#$doc as xs:string# xs:dateTime?
 cpf#document-get-processing-status#1#$doc as xs:string# xs:string?
-cpf#document-get-state#1#$doc as xs:string# xs:anyURI? 
-cpf#document-set-error#2#$doc as xs:string, $error as node()?# empty-sequence() 
-cpf#document-set-last-updated#2#$doc as xs:string, $last-updated as xs:dateTime# empty-sequence() 
-cpf#document-set-processing-status#2#$doc as xs:string, $processing-status as xs:string# empty-sequence() 
-cpf#document-set-state#2#$doc as xs:string, $state as xs:anyURI# empty-sequence() 
-cpf#failure#4#$docid as xs:string, $transition as element(*, p:transition)?, $exception as node()?, $override-state as xs:anyURI?# empty-sequence() 
-cpf#success#3#$docid as xs:string, $transition as element(*, p:transition)?, $override-state as xs:anyURI?# empty-sequence() 
-css#convert#2#$css as xs:string, $options as element()?# element(css:styles)? 
-css#get#1#$doc as xs:string# xs:string 
+cpf#document-get-state#1#$doc as xs:string# xs:anyURI?
+cpf#document-set-error#2#$doc as xs:string, $error as node()?# empty-sequence()
+cpf#document-set-last-updated#2#$doc as xs:string, $last-updated as xs:dateTime# empty-sequence()
+cpf#document-set-processing-status#2#$doc as xs:string, $processing-status as xs:string# empty-sequence()
+cpf#document-set-state#2#$doc as xs:string, $state as xs:anyURI# empty-sequence()
+cpf#failure#4#$docid as xs:string, $transition as element(*, p:transition)?, $exception as node()?, $override-state as xs:anyURI?# empty-sequence()
+cpf#success#3#$docid as xs:string, $transition as element(*, p:transition)?, $override-state as xs:anyURI?# empty-sequence()
+css#convert#2#$css as xs:string, $options as element()?# element(css:styles)?
+css#get#1#$doc as xs:string# xs:string
 cts#aggregate#7#$native-plugin as xs:string, $aggregate-name as xs:string, $range-indexes as cts:reference*, $argument as item()*, $options as xs:string*, $query as cts:query?, $forest-ids as xs:unsignedLong*#item()*
 cts#and-not-query#2#$positive-query as cts:query, $negative-query as cts:query#cts:and-not-query
 cts#and-not-query-negative-query#1#$query as cts:and-not-query#cts:query
@@ -1275,11 +1275,11 @@ cts#word-query-options#1#$query as cts:word-query#xs:string*
 cts#word-query-text#1#$query as cts:word-query#xs:string*
 cts#word-query-weight#1#$query as cts:word-query#xs:double
 cts#words#5#$start as xs:string?, $options as xs:string*, $query as cts:query?, $quality-weight as xs:double?, $forest-ids as xs:unsignedLong*#xs:string*
-cvt#basename#1#$uri as xs:string# xs:string 
-cvt#basepath#1#$uri as xs:string# xs:string 
-cvt#destination-uri#2#$uri as xs:string, $extension as xs:string# xs:string 
-cvt#part-uri#2#$uri as xs:string, $part as xs:string# xs:string 
-cvt#save-converted-documents#5#$source-uri as xs:string, $destination-uri as xs:string, $manifest as element(), $docs as document-node()*, $destination-collections as xs:string*# empty-sequence() 
+cvt#basename#1#$uri as xs:string# xs:string
+cvt#basepath#1#$uri as xs:string# xs:string
+cvt#destination-uri#2#$uri as xs:string, $extension as xs:string# xs:string
+cvt#part-uri#2#$uri as xs:string, $part as xs:string# xs:string
+cvt#save-converted-documents#5#$source-uri as xs:string, $destination-uri as xs:string, $manifest as element(), $docs as document-node()*, $destination-collections as xs:string*# empty-sequence()
 dbg#attach#1#$request-id as xs:unsignedLong#empty-sequence()
 dbg#attached#1#$server as xs:unsignedLong#xs:unsignedLong*
 dbg#break#2#$request as xs:unsignedLong, $expression as xs:unsignedLong#empty-sequence()
@@ -1305,7 +1305,7 @@ dbg#stop#0##empty-sequence()
 dbg#stopped#1#$server as xs:unsignedLong#xs:unsignedLong*
 dbg#value#2#$request as xs:unsignedLong, $expr as xs:string#item()*
 dbg#wait#2#$request-id as xs:unsignedLong*, $timeout as xs:unsignedLong#xs:unsignedLong?
-dbk#convert#2#$doc as node()?, $options as element()?# node()* 
+dbk#convert#2#$doc as node()?, $options as element()?# node()*
 dls#as-of-query#1#$when as xs:dateTime#cts:properties-fragment-query
 dls#author-query#1#$author as xs:unsignedLong#cts:properties-fragment-query
 dls#break-checkout#2#$uri as xs:string, $deep as xs:boolean#empty-sequence()
@@ -1355,30 +1355,30 @@ dls#retention-rule-remove#1#$names as xs:string*#empty-sequence()
 dls#retention-rules#1#$names as xs:string*#element(dls:retention-rule)*
 dls#set-upgrade-status#1#$promote as xs:boolean#element(dls:upgrade-status)
 dls#start-upgrade#0##empty-sequence()
-dls#validate-all-documents#1#$verbose as xs:boolean#element(dls:validation-results) 
-dom#add-permissions#2#$domain-name as xs:string, $permissions as item()*# empty-sequence() 
-dom#add-pipeline#2#$domain-name as xs:string, $pipeline-id as xs:unsignedLong# empty-sequence() 
-dom#collection#0## xs:string 
+dls#validate-all-documents#1#$verbose as xs:boolean#element(dls:validation-results)
+dom#add-permissions#2#$domain-name as xs:string, $permissions as item()*# empty-sequence()
+dom#add-pipeline#2#$domain-name as xs:string, $pipeline-id as xs:unsignedLong# empty-sequence()
+dom#collection#0## xs:string
 dom#configuration-create#4#$restart-user as xs:string, $evaluation-context as element(dom:evaluation-context), $default-domain as xs:unsignedLong, $permissions as element(sec:permission)*#xs:unsignedLong
 dom#configuration-get#0##element(dom:configuration)
 dom#configuration-set-default-domain#1#$domain-id as xs:unsignedLong#empty-sequence()
 dom#configuration-set-evaluation-context#1#$context as element(dom:evaluation-context)#empty-sequence()
 dom#configuration-set-permissions#1#$permissions as item()*#empty-sequence()
 dom#configuration-set-restart-user#1#$restart-user as xs:string#empty-sequence()
-dom#create#6#$name as xs:string, $description as xs:string, $scope as element(dom:domain-scope), $context as element(dom:evaluation-context), $pipelines as xs:unsignedLong*, $permissions as item()*# xs:unsignedLong 
-dom#domain-scope#3#$document-scope as xs:string, $uri as xs:string, $depth as xs:string?# element(dom:domain-scope) 
-dom#domains#0## element(dom:domain)* 
-dom#evaluation-context#2#$database as xs:unsignedLong, $root as xs:string# element(dom:evaluation-context) 
-dom#get#1#$domain-name as xs:string# element(dom:domain) 
-dom#remove#1#$domain-name as xs:string# empty-sequence() 
-dom#remove-permissions#2#$domain-name as xs:string, $permissions as item()*# empty-sequence() 
-dom#remove-pipeline#2#$domain-name as xs:string, $pipeline-id as xs:unsignedLong# empty-sequence() 
-dom#set-description#2#$domain-name as xs:string, $description as xs:string# empty-sequence() 
-dom#set-domain-scope#2#$domain-name as xs:string, $scope as element(dom:domain-scope)# empty-sequence() 
-dom#set-evaluation-context#2#$domain-name as xs:string, $context as element(dom:evaluation-context)# empty-sequence() 
-dom#set-name#2#$domain-name as xs:string, $new-name as xs:string# empty-sequence() 
-dom#set-permissions#2#$domain-name as xs:string, $permissions as item()*# empty-sequence() 
-dom#set-pipelines#2#$domain-name as xs:string, $pipelines as xs:unsignedLong*# empty-sequence() 
+dom#create#6#$name as xs:string, $description as xs:string, $scope as element(dom:domain-scope), $context as element(dom:evaluation-context), $pipelines as xs:unsignedLong*, $permissions as item()*# xs:unsignedLong
+dom#domain-scope#3#$document-scope as xs:string, $uri as xs:string, $depth as xs:string?# element(dom:domain-scope)
+dom#domains#0## element(dom:domain)*
+dom#evaluation-context#2#$database as xs:unsignedLong, $root as xs:string# element(dom:evaluation-context)
+dom#get#1#$domain-name as xs:string# element(dom:domain)
+dom#remove#1#$domain-name as xs:string# empty-sequence()
+dom#remove-permissions#2#$domain-name as xs:string, $permissions as item()*# empty-sequence()
+dom#remove-pipeline#2#$domain-name as xs:string, $pipeline-id as xs:unsignedLong# empty-sequence()
+dom#set-description#2#$domain-name as xs:string, $description as xs:string# empty-sequence()
+dom#set-domain-scope#2#$domain-name as xs:string, $scope as element(dom:domain-scope)# empty-sequence()
+dom#set-evaluation-context#2#$domain-name as xs:string, $context as element(dom:evaluation-context)# empty-sequence()
+dom#set-name#2#$domain-name as xs:string, $new-name as xs:string# empty-sequence()
+dom#set-permissions#2#$domain-name as xs:string, $permissions as item()*# empty-sequence()
+dom#set-pipelines#2#$domain-name as xs:string, $pipelines as xs:unsignedLong*# empty-sequence()
 ec2#add-snapshot-create-volume-permission-groups#5#$access-key as xs:string, $secret-key as xs:string, $ec2-region as xs:string, $snapshot-ids as xs:string*, $user-groups as xs:string*#node()
 ec2#add-snapshot-create-volume-permission-users#5#$access-key as xs:string, $secret-key as xs:string, $ec2-region as xs:string, $snapshot-ids as xs:string*, $user-ids as xs:string*#node()
 ec2#allocate-address#3#$access-key as xs:string, $secret-key as xs:string, $ec2-region as xs:string#node()
@@ -1443,7 +1443,7 @@ ec2#start-instances#4#$access-key as xs:string, $secret-key as xs:string, $ec2-r
 ec2#stop-instances#5#$access-key as xs:string, $secret-key as xs:string, $ec2-region as xs:string, $instance-ids as xs:string+, $force as xs:boolean#node()
 ec2#terminate-instances#4#$access-key as xs:string, $secret-key as xs:string, $ec2-region as xs:string, $instance-ids as xs:string+#node()
 ec2#unmonitor-instances#4#$access-key as xs:string, $secret-key as xs:string, $ec2-region as xs:string, $instance-ids as xs:string+#node()
-excel#clean#2#$uri as xs:string, $doc as node()?# node()? 
+excel#clean#2#$uri as xs:string, $doc as node()?# node()?
 exsl#node-set#1#$value as item()*#node()*
 exsl#object-type#1#$value as item()*#xs:string
 flexrep#apply#2#$update as element(flexrep:update), $content as document-node()?#empty-sequence()
@@ -1678,32 +1678,32 @@ fn#year-from-date#1#$arg as xs:date?#xs:integer?
 fn#year-from-dateTime#1#$arg as xs:dateTime?#xs:integer?
 fn#years-from-duration#1#$arg as xs:duration?#xs:integer?
 fn#zero-or-one#1#$arg as item()*#item()?
-geo#box#1#$box as node()# cts:box 
-geo#circle#2#$radius as xs:double, $center as node()# cts:circle 
-geo#complex-polygon#1#$complex-polygon as node()# cts:complex-polygon 
-geo#geospatial-query#3#$regions as cts:region*, $options as xs:string*, $weight as xs:double?# cts:query 
-geo#geospatial-query-from-elements#3#$regions as element()*, $options as xs:string*, $weight as xs:double?# cts:query 
+geo#box#1#$box as node()# cts:box
+geo#circle#2#$radius as xs:double, $center as node()# cts:circle
+geo#complex-polygon#1#$complex-polygon as node()# cts:complex-polygon
+geo#geospatial-query#3#$regions as cts:region*, $options as xs:string*, $weight as xs:double?# cts:query
+geo#geospatial-query-from-elements#3#$regions as element()*, $options as xs:string*, $weight as xs:double?# cts:query
 geo#geospatial-query-from-nodes#0## cts:query
 geo#interior-polygon#1#$polygon as node()# cts:polygon*
-geo#linestring#1#$linestring as node()# cts:linestring 
-geo#point#1#$point as node()# cts:point 
-geo#polygon#1#$polygon-or-points as node()+# cts:polygon 
-geojson#box#1#$box as object-node()# cts:box 
-geojson#circle#2#$radius as xs:double, $center as object-node()# cts:circle 
-geojson#complex-polygon#1#$complex-polygon as node()# cts:complex-polygon 
+geo#linestring#1#$linestring as node()# cts:linestring
+geo#point#1#$point as node()# cts:point
+geo#polygon#1#$polygon-or-points as node()+# cts:polygon
+geojson#box#1#$box as object-node()# cts:box
+geojson#circle#2#$radius as xs:double, $center as object-node()# cts:circle
+geojson#complex-polygon#1#$complex-polygon as node()# cts:complex-polygon
 geojson#geospatial-query#3#$regions as cts:region*, $options as xs:string*, $weight as xs:double?#cts:query
-geojson#geospatial-query-from-nodes#3#$regions as node()*, $options as xs:string*, $weight as xs:double?# cts:query 
-geojson#interior-polygon#1#$polygon as object-node()# cts:polygon* 
-geojson#linestring#1#$linestring as object-node()# cts:linestring 
-geojson#multi-linestring#1#$multi-linestring as object-node()# cts:linestring* 
-geojson#multi-point#1#$multi-point as object-node()# cts:point* 
-geojson#point#1#$point as object-node()# cts:point 
-geojson#polygon#1#$polygon-or-points as object-node()+# cts:polygon 
-georss#circle#2#$radius as xs:double, $center as element(georss:point)# cts:circle 
-georss#complex-polygon#1#$complex-polygon as node()# cts:complex-polygon 
-georss#geospatial-query#3#$regions as cts:region*, $options as xs:string*, $weight as xs:double?# cts:query 
-georss#linestring#1#$linestring as element(georss:line)# cts:linestring 
-georss#point#1#$point as element(georss:point)# cts:point 
+geojson#geospatial-query-from-nodes#3#$regions as node()*, $options as xs:string*, $weight as xs:double?# cts:query
+geojson#interior-polygon#1#$polygon as object-node()# cts:polygon*
+geojson#linestring#1#$linestring as object-node()# cts:linestring
+geojson#multi-linestring#1#$multi-linestring as object-node()# cts:linestring*
+geojson#multi-point#1#$multi-point as object-node()# cts:point*
+geojson#point#1#$point as object-node()# cts:point
+geojson#polygon#1#$polygon-or-points as object-node()+# cts:polygon
+georss#circle#2#$radius as xs:double, $center as element(georss:point)# cts:circle
+georss#complex-polygon#1#$complex-polygon as node()# cts:complex-polygon
+georss#geospatial-query#3#$regions as cts:region*, $options as xs:string*, $weight as xs:double?# cts:query
+georss#linestring#1#$linestring as element(georss:line)# cts:linestring
+georss#point#1#$point as element(georss:point)# cts:point
 georss#polygon#1#$polygon-or-points as element()+#cts:polygon
 gml#box#1#$box as element(gml:Envelope)#cts:box
 gml#circle#2#$radius as xs:double, $center as element(gml:Point)#cts:circle
@@ -1712,7 +1712,7 @@ gml#geospatial-query#3#$regions as cts:region*, $options as xs:string*, $weight 
 gml#geospatial-query-from-elements#3#$regions as element()*, $options as xs:string*, $weight as xs:double?#cts:query
 gml#interior-polygon#1#$polygon as element(gml:Polygon)#cts:polygon*
 gml#linestring#1#$linestring as element(gml:LineString)#cts:linestring
-gml#point#1#$point as element(gml:Point)# cts:point 
+gml#point#1#$point as element(gml:Point)# cts:point
 gml#polygon#1#$polygon-or-points as element()+#cts:polygon
 hadoop#get-splits#3#$nsbindings as xs:string*, $doc-selector as xs:string, $query as xs:string#item()*
 info#database-create#7#$database-name as xs:string, $forests-per-host as xs:positiveInteger?, $group as xs:string?, $data-directory as xs:string?, $security-db as xs:string?, $schemas-db as xs:string?, $triggers-db as xs:string?#xs:unsignedLong
@@ -1757,8 +1757,10 @@ json#array#1#$array as element(json:array)#json:array
 json#array-pop#1#$array as json:array#item()*
 json#array-push#2#$array as json:array, $item as item()*#empty-sequence()
 json#array-resize#3#$array as json:array, $newSize as xs:unsignedLong, $zero as item()?#empty-sequence()
+json#array-set-javascript-by-ref#2#$array as json:array, $key as xs:boolean*#empty-sequence()
 json#array-size#1#$array as json:array?#xs:unsignedLong?
 json#array-values#2#$array as json:array, $flatten as xs:boolean?#item()*
+json#array-with#2#$array as json:array, $item as item()*#json:array
 json#check-config#1#$config as map:map#element(json:report)*
 json#config#1#$strategy as xs:string#map:map
 json#null#0##empty-sequence()
@@ -1771,21 +1773,21 @@ json#transform-from-json#2#$json as item(), $config as map:map#item()*
 json#transform-to-json#2#$node as node(), $config as map:map#document-node()?
 json#transform-to-json-object#2#$node as node(), $config as map:map#item()*
 json#transform-to-json-xml#2#$node as node(), $config as map:map#element()
-kml#box#1#$envelope as element(kml:LatLongBox)# cts:box 
-kml#circle#2#$radius as xs:double, $center as element()# cts:circle 
-kml#complex-polygon#1#$complex-polygon as node()# cts:complex-polygon 
-kml#geospatial-query#3#$regions as cts:region*, $options as xs:string*, $weight as xs:double?# cts:query 
-kml#geospatial-query-from-elements#3#$regions as element()*, $options as xs:string*, $weight as xs:double?# cts:query 
-kml#interior-polygon#1#$points as element(kml:Polygon)# cts:polygon* 
-kml#linestring#1#$linestring as element(kml:LineString)# cts:linestring 
-kml#point#1#$point as element()# cts:point 
-kml#polygon#1#$polygon-or-points as element()+# cts:polygon 
-lnk#create#5#$from as xs:string, $to as xs:string, $role as xs:string, $rev-role as xs:string, $strength as xs:string# empty-sequence() 
-lnk#from#1#$from as xs:string# element(lnk:link)* 
-lnk#get#2#$from as xs:string, $to as xs:string# element(lnk:link)? 
-lnk#insert#1#$link as element(lnk:link)# empty-sequence() 
-lnk#remove#2#$from as xs:string, $to as xs:string# element(lnk:link) 
-lnk#to#1#$to as xs:string# element(lnk:link)* 
+kml#box#1#$envelope as element(kml:LatLongBox)# cts:box
+kml#circle#2#$radius as xs:double, $center as element()# cts:circle
+kml#complex-polygon#1#$complex-polygon as node()# cts:complex-polygon
+kml#geospatial-query#3#$regions as cts:region*, $options as xs:string*, $weight as xs:double?# cts:query
+kml#geospatial-query-from-elements#3#$regions as element()*, $options as xs:string*, $weight as xs:double?# cts:query
+kml#interior-polygon#1#$points as element(kml:Polygon)# cts:polygon*
+kml#linestring#1#$linestring as element(kml:LineString)# cts:linestring
+kml#point#1#$point as element()# cts:point
+kml#polygon#1#$polygon-or-points as element()+# cts:polygon
+lnk#create#5#$from as xs:string, $to as xs:string, $role as xs:string, $rev-role as xs:string, $strength as xs:string# empty-sequence()
+lnk#from#1#$from as xs:string# element(lnk:link)*
+lnk#get#2#$from as xs:string, $to as xs:string# element(lnk:link)?
+lnk#insert#1#$link as element(lnk:link)# empty-sequence()
+lnk#remove#2#$from as xs:string, $to as xs:string# element(lnk:link)
+lnk#to#1#$to as xs:string# element(lnk:link)*
 map#clear#1#$map as map:map#empty-sequence()
 map#contains#2#$map as map:map, $key as xs:string#xs:boolean
 map#count#1#$map as map:map#xs:unsignedInt
@@ -1796,6 +1798,8 @@ map#keys#1#$map as map:map#xs:string*
 map#map#1#$map as element(map:map)#map:map
 map#new#1#$maps as map:map*#map:map
 map#put#3#$map as map:map, $key as xs:string, $value as item()*#empty-sequence()
+map#set-javascript-by-ref#2#$map as map:map, $key as xs:boolean#empty-sequence()
+map#with#3#$map as map:map, $key as xs:string, $value as item()*#map:map()
 math#acos#1#$x as xs:double#xs:double
 math#asin#1#$x as xs:double#xs:double
 math#atan#1#$x as xs:double#xs:double
@@ -1839,32 +1843,32 @@ math#tanh#1#$x as xs:double#xs:double
 math#trunc#2#$arg as numeric?, $n as xs:integer#numeric?
 math#variance#1#$arg as xs:double*#xs:double?
 math#variance-p#1#$arg as xs:double*#xs:double?
-mcgm#circle#2#$radius as xs:double, $center as element(Dot)# cts:circle 
-mcgm#geospatial-query#3#$regions as cts:region*, $options as xs:string*, $weight as xs:double?# cts:query 
-mcgm#geospatial-query-from-elements#3#$regions as element(Dot)*, $options as xs:string*, $weight as xs:double?# cts:query 
-mcgm#point#1#$point as element(Dot)# cts:point 
-mcgm#polygon#1#$vertices as element(Dot)*# cts:polygon 
+mcgm#circle#2#$radius as xs:double, $center as element(Dot)# cts:circle
+mcgm#geospatial-query#3#$regions as cts:region*, $options as xs:string*, $weight as xs:double?# cts:query
+mcgm#geospatial-query-from-elements#3#$regions as element(Dot)*, $options as xs:string*, $weight as xs:double?# cts:query
+mcgm#point#1#$point as element(Dot)# cts:point
+mcgm#polygon#1#$vertices as element(Dot)*# cts:polygon
 msword#clean#2#$uri as xs:string, $doc as node()?#node()
 ooxml#package-parts#1#$package as node()#node()*
 ooxml#package-parts-insert#7#$directory as xs:string?, $package-uris as xs:string*, $package-parts as node()*, $permissions as item()*, $collections as xs:string*, $quality as xs:int?, $forest-ids as xs:unsignedLong*#empty-sequence()
 ooxml#package-uris#1#$package as node()#xs:string*
 ooxml#runs-merge#1#$nodes as node()*#node()*
-p#action#3#$module as xs:string, $description as xs:string?, $options as element()?# element(p:action) 
+p#action#3#$module as xs:string, $description as xs:string?, $options as element()?# element(p:action)
 p#collection#0##xs:string
-p#condition#3#$module as xs:string, $description as xs:string?, $options as element()?# element(p:condition) 
-p#create#6#$name as xs:string, $description as xs:string, $success-action as element(p:action)?, $failure-action as element(p:action)?, $status-transitions as element(p:status-transition)*, $state-transitions as element(p:state-transition)*# xs:unsignedLong 
-p#execute#3#$condition as element(p:condition)?, $action as element(p:action)?, $description as xs:string?# element(p:execute) 
-p#get#1#$pipeline-name as xs:string# element(p:pipeline) 
-p#get-by-id#1#$pipeline-id as xs:unsignedLong# element(p:pipeline) 
-p#insert#1#$pipeline-node as node()# xs:unsignedLong 
-p#pipelines#0## element(p:pipeline)* 
-p#remove#1#$pipeline-name as xs:string# empty-sequence() 
-p#state-transition#7#$state as xs:anyURI, $description as xs:string, $on-success as xs:anyURI?, $on-failure as xs:anyURI?, $priority as xs:unsignedLong?, $default-action as element(p:action)?, $rules as element(p:execute)*# element(p:state-transition) 
-p#status-transition#7#$status as xs:string, $description as xs:string, $on-success as xs:anyURI?, $on-failure as xs:anyURI?, $priority as xs:unsignedLong?, $default-action as element(p:action)?, $rules as element(p:execute)*# element(p:status-transition) 
-pdf#clean#2#$doc as node()?, $toc as element()?# node()? 
-pdf#get-toc#1#$uri as xs:string# element()? 
-pdf#insert-toc-headers#2#$doc as node()?, $toc as element()?# node()? 
-pdf#make-toc#1#$toc as element()?# element()? 
+p#condition#3#$module as xs:string, $description as xs:string?, $options as element()?# element(p:condition)
+p#create#6#$name as xs:string, $description as xs:string, $success-action as element(p:action)?, $failure-action as element(p:action)?, $status-transitions as element(p:status-transition)*, $state-transitions as element(p:state-transition)*# xs:unsignedLong
+p#execute#3#$condition as element(p:condition)?, $action as element(p:action)?, $description as xs:string?# element(p:execute)
+p#get#1#$pipeline-name as xs:string# element(p:pipeline)
+p#get-by-id#1#$pipeline-id as xs:unsignedLong# element(p:pipeline)
+p#insert#1#$pipeline-node as node()# xs:unsignedLong
+p#pipelines#0## element(p:pipeline)*
+p#remove#1#$pipeline-name as xs:string# empty-sequence()
+p#state-transition#7#$state as xs:anyURI, $description as xs:string, $on-success as xs:anyURI?, $on-failure as xs:anyURI?, $priority as xs:unsignedLong?, $default-action as element(p:action)?, $rules as element(p:execute)*# element(p:state-transition)
+p#status-transition#7#$status as xs:string, $description as xs:string, $on-success as xs:anyURI?, $on-failure as xs:anyURI?, $priority as xs:unsignedLong?, $default-action as element(p:action)?, $rules as element(p:execute)*# element(p:status-transition)
+pdf#clean#2#$doc as node()?, $toc as element()?# node()?
+pdf#get-toc#1#$uri as xs:string# element()?
+pdf#insert-toc-headers#2#$doc as node()?, $toc as element()?# node()?
+pdf#make-toc#1#$toc as element()?# element()?
 pkg#create#2#$pkgname as xs:string, $pkgbody as node()#empty-sequence()
 pkg#database-configuration#1#$database as xs:string#element(db:package-database)
 pkg#delete#1#$pkgname as xs:string#empty-sequence()
@@ -1993,25 +1997,25 @@ search#suggest#6#$qtext as xs:string+, $options as element(search:options)?, $li
 search#unparse#1#$qtree as element()#xs:string+
 search#values#7#$spec-name as xs:string, $options as element(search:options), $query as element(search:query)?, $limit as xs:unsignedLong?, $start as xs:anyAtomicType?, $page-start as xs:unsignedLong?, $page-length as xs:unsignedLong?#element(search:values-response)
 sec#amp-add-roles#5#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong, $role-names as xs:string*#empty-sequence()
-sec#amp-doc-collections#0## xs:string* 
-sec#amp-doc-permissions#0##element(sec:permission)* 
+sec#amp-doc-collections#0## xs:string*
+sec#amp-doc-permissions#0##element(sec:permission)*
 sec#amp-exists#4#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong#xs:boolean
-sec#amp-get-roles#4#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong#xs:string* 
+sec#amp-get-roles#4#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong#xs:string*
 sec#amp-remove-roles#5#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong, $role-names as xs:string*#empty-sequence()
 sec#amp-set-roles#5#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong, $role-names as xs:string*#empty-sequence()
 sec#amps-change-modules-database#2#$old-db as xs:unsignedLong, $new-db as xs:unsignedLong#xs:unsignedLong*
-sec#amps-collection#0##xs:string 
+sec#amps-collection#0##xs:string
 sec#check-admin#0##empty-sequence()
 sec#collection-add-permissions#2#$uri as xs:string, $permissions as element(sec:permission)*#empty-sequence()
-sec#collection-get-permissions#1#$uri as xs:string#element(sec:permission)* 
+sec#collection-get-permissions#1#$uri as xs:string#element(sec:permission)*
 sec#collection-remove-permissions#2#$uri as xs:string, $permissions as element(sec:permission)*#empty-sequence()
 sec#collection-set-permissions#2#$uri as xs:string, $permissions as element(sec:permission)*#empty-sequence()
-sec#collections-collection#0##xs:string 
+sec#collections-collection#0##xs:string
 sec#compartment-get-roles#1#$compartment-name as xs:string#element(sec:role)*
-sec#create-amp#5#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong, $role-names as xs:string*#xs:unsignedLong 
+sec#create-amp#5#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong, $role-names as xs:string*#xs:unsignedLong
 sec#create-external-security#11#$external-security-name as xs:string, $description as xs:string, $authentication as xs:string, $cache-timeout as xs:unsignedInt, $authorization as xs:string, $ldap-server-uri as xs:string, $ldap-base as xs:string, $ldap-attribute as xs:string, $ldap-default-user as xs:string, $ldap-password as xs:string, $ldap-bind-method as xs:string#xs:unsignedLong
-sec#create-privilege#4#$privilege-name as xs:string, $action as xs:string, $kind as xs:string, $role-names as xs:string*#xs:unsignedLong 
-sec#create-role#7#$role-name as xs:string, $description as xs:string?, $role-names as xs:string*, $permissions as element(sec:permission)*, $collections as xs:string*, $compartment as xs:string?, $external-names as xs:string*#xs:unsignedLong 
+sec#create-privilege#4#$privilege-name as xs:string, $action as xs:string, $kind as xs:string, $role-names as xs:string*#xs:unsignedLong
+sec#create-role#7#$role-name as xs:string, $description as xs:string?, $role-names as xs:string*, $permissions as element(sec:permission)*, $collections as xs:string*, $compartment as xs:string?, $external-names as xs:string*#xs:unsignedLong
 sec#create-user#7#$user-name as xs:string, $description as xs:string?, $password as xs:string, $role-names as xs:string*, $permissions as element(sec:permission)*, $collections as xs:string*, $external-names as xs:string*#xs:unsignedLong
 sec#create-user-with-role#7#$user-name as xs:string, $description as xs:string?, $password as xs:string, $role-names as xs:string*, $permissions as element(sec:permission)*, $collections as xs:string*, $external-names as xs:string*#xs:unsignedLong
 sec#credentials-get-aws#0##xs:string*
@@ -2040,24 +2044,24 @@ sec#external-security-set-ldap-default-user#2#$external-security-name as xs:stri
 sec#external-security-set-ldap-password#2#$external-security-name as xs:string, $ldap-password as xs:string#empty-sequence()
 sec#external-security-set-ldap-server-uri#2#$external-security-name as xs:string, $ldap-server-uri as xs:string#empty-sequence()
 sec#external-security-set-name#2#$external-security-name as xs:string, $new-external-security-name as xs:string#empty-sequence()
-sec#get-amp#4#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong#element(sec:amp)? 
-sec#get-collection#1#$uri as xs:string#element(sec:collection) 
+sec#get-amp#4#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong#element(sec:amp)?
+sec#get-collection#1#$uri as xs:string#element(sec:collection)
 sec#get-compartments#0##xs:string*
-sec#get-distinct-permissions#2#$input-perms as element(sec:permission)*, $output-perms as element(sec:permission)*#element(sec:permission)* 
-sec#get-privilege#2#$action as xs:string, $kind as xs:string#element(sec:privilege)? 
+sec#get-distinct-permissions#2#$input-perms as element(sec:permission)*, $output-perms as element(sec:permission)*#element(sec:permission)*
+sec#get-privilege#2#$action as xs:string, $kind as xs:string#element(sec:privilege)?
 sec#get-role-ids#1#$role-names as xs:string*# element(sec:role-id)*
-sec#get-role-names#1#$role-ids as xs:unsignedLong*# element(sec:role-name)* 
-sec#get-user-names#1#$user-ids as xs:unsignedLong*# element(sec:user-name)* 
-sec#priv-doc-collections#0## xs:string* 
-sec#priv-doc-permissions#0##element(sec:permission)* 
+sec#get-role-names#1#$role-ids as xs:unsignedLong*# element(sec:role-name)*
+sec#get-user-names#1#$user-ids as xs:unsignedLong*# element(sec:user-name)*
+sec#priv-doc-collections#0## xs:string*
+sec#priv-doc-permissions#0##element(sec:permission)*
 sec#privilege-add-roles#3#$action as xs:string, $kind as xs:string, $role-names as xs:string*#empty-sequence()
 sec#privilege-exists#2#$action as xs:string, $kind as xs:string#xs:boolean
-sec#privilege-get-roles#2#$action as xs:string, $kind as xs:string#xs:string* 
+sec#privilege-get-roles#2#$action as xs:string, $kind as xs:string#xs:string*
 sec#privilege-remove-roles#3#$action as xs:string, $kind as xs:string, $role-names as xs:string*#empty-sequence()
 sec#privilege-set-name#3#$action as xs:string, $kind as xs:string, $new-privilege-name as xs:string#empty-sequence()
 sec#privilege-set-roles#3#$action as xs:string, $kind as xs:string, $role-names as xs:string*#empty-sequence()
-sec#privileges-collection#0## xs:string 
-sec#protect-collection#2#$uri as xs:string, $permissions as element(sec:permission)*#xs:unsignedLong 
+sec#privileges-collection#0## xs:string
+sec#protect-collection#2#$uri as xs:string, $permissions as element(sec:permission)*#xs:unsignedLong
 sec#remove-amp#4#$namespace as xs:string, $local-name as xs:string, $document-uri as xs:string, $database as xs:unsignedLong#empty-sequence()
 sec#remove-external-security#1#$external-security-name as xs:string#empty-sequence()
 sec#remove-privilege#2#$action as xs:string, $kind as xs:string#empty-sequence()
@@ -2068,15 +2072,15 @@ sec#remove-role-from-roles#1#$role-name as xs:string#empty-sequence()
 sec#remove-role-from-users#1#$role-name as xs:string#empty-sequence()
 sec#remove-user#1#$user-name as xs:string#empty-sequence()
 sec#role-add-roles#2#$role-name as xs:string, $new-roles as xs:string*#empty-sequence()
-sec#role-doc-collections#0## xs:string* 
-sec#role-doc-permissions#0##element(sec:permission)* 
+sec#role-doc-collections#0## xs:string*
+sec#role-doc-permissions#0##element(sec:permission)*
 sec#role-exists#1#$role-name as xs:string#xs:boolean
 sec#role-get-compartment#1#$role-name as xs:string#xs:string?
-sec#role-get-default-collections#1#$role-name as xs:string#xs:string* 
-sec#role-get-default-permissions#1#$role-name as xs:string#element(sec:permission)* 
-sec#role-get-description#1#$role-name as xs:string# xs:string 
+sec#role-get-default-collections#1#$role-name as xs:string#xs:string*
+sec#role-get-default-permissions#1#$role-name as xs:string#element(sec:permission)*
+sec#role-get-description#1#$role-name as xs:string# xs:string
 sec#role-get-external-names#1#$role-name as xs:string#xs:string*
-sec#role-get-roles#1#$role-name as xs:string#xs:string* 
+sec#role-get-roles#1#$role-name as xs:string#xs:string*
 sec#role-privileges#1#$role-name as xs:string# element(sec:privilege)*
 sec#role-remove-roles#2#$role-name as xs:string, $role-names as xs:string*#empty-sequence()
 sec#role-set-default-collections#2#$role-name as xs:string, $collections as xs:string*#empty-sequence()
@@ -2085,25 +2089,25 @@ sec#role-set-description#2#$role-name as xs:string, $description as xs:string#em
 sec#role-set-external-names#2#$role-name as xs:string, $external-name as xs:string*#empty-sequence()
 sec#role-set-name#2#$role-name as xs:string, $new-role-name as xs:string#empty-sequence()
 sec#role-set-roles#2#$role-name as xs:string, $role-names as xs:string*#empty-sequence()
-sec#roles-collection#0##xs:string 
-sec#security-collection#0##xs:string 
-sec#security-installed#0##xs:boolean 
-sec#security-namespace#0##xs:string 
+sec#roles-collection#0##xs:string
+sec#security-collection#0##xs:string
+sec#security-installed#0##xs:boolean
+sec#security-namespace#0##xs:string
 sec#security-version#0##xs:double
 sec#set-realm#1#$realm as xs:string#empty-sequence()
 sec#uid-for-name#1#$name as xs:string#xs:unsignedLong*
 sec#unprotect-collection#1#$uri as xs:string#empty-sequence()
 sec#user-add-roles#2#$user-name as xs:string, $role-names as xs:string*#empty-sequence()
-sec#user-doc-collections#0##xs:string* 
-sec#user-doc-permissions#0##element(sec:permission)* 
+sec#user-doc-collections#0##xs:string*
+sec#user-doc-permissions#0##element(sec:permission)*
 sec#user-exists#1#$user-name as xs:string#xs:boolean
-sec#user-get-default-collections#1#$user-name as xs:string#xs:string* 
-sec#user-get-default-permissions#1#$user-name as xs:string#element(sec:permission)* 
-sec#user-get-description#1#$user-name as xs:string#xs:string 
+sec#user-get-default-collections#1#$user-name as xs:string#xs:string*
+sec#user-get-default-permissions#1#$user-name as xs:string#element(sec:permission)*
+sec#user-get-description#1#$user-name as xs:string#xs:string
 sec#user-get-external-names#1#$user-name as xs:string#xs:string*
 sec#user-get-password-extra#1#$user-name as xs:string#element(sec:password-extra)?
 sec#user-get-roles#1#$user-name as xs:string# xs:string*
-sec#user-privileges#1#$user-name as xs:string#element(sec:privilege)* 
+sec#user-privileges#1#$user-name as xs:string#element(sec:privilege)*
 sec#user-remove-roles#2#$user-name as xs:string, $role-names as xs:string*#empty-sequence()
 sec#user-set-default-collections#2#$user-name as xs:string, $collections as xs:string*#empty-sequence()
 sec#user-set-default-permissions#2#$user-name as xs:string, $permissions as element(sec:permission)*#empty-sequence()
@@ -2113,7 +2117,7 @@ sec#user-set-name#3#$user-name as xs:string, $new-user-name as xs:string, $passw
 sec#user-set-password#2#$user-name as xs:string, $password as xs:string#empty-sequence()
 sec#user-set-password-extra#2#$user-name as xs:string, $extra as element(sec:password-extra)#empty-sequence()
 sec#user-set-roles#2#$user-name as xs:string, $role-names as xs:string*#empty-sequence()
-sec#users-collection#0##xs:string 
+sec#users-collection#0##xs:string
 sec#validate-permissions#1#$permissions as element(sec:permission)*#node()*
 sem#binding#1#$map as element(json:object)#sem:binding
 sem#bnode#1#$value as xs:anyAtomicType#sem:blank
@@ -2170,14 +2174,14 @@ sem#unknown#2#$string as xs:string, $datatype as sem:iri#sem:unknown
 sem#unknown-datatype#1#$val as sem:unknown#sem:iri
 sem#uuid#0##sem:iri
 sem#uuid-string#0##xs:string
-spell#add-word#2#$uri as xs:string, $word as xs:string# empty-sequence() 
+spell#add-word#2#$uri as xs:string, $word as xs:string# empty-sequence()
 spell#double-metaphone#1#$word as xs:string#xs:string*
-spell#insert#2#$uri as xs:string, $dict as element(spell:dictionary)# empty-sequence() 
+spell#insert#2#$uri as xs:string, $dict as element(spell:dictionary)# empty-sequence()
 spell#is-correct#2#$uri as xs:string*, $word as xs:string#xs:boolean
 spell#levenshtein-distance#2#$str1 as xs:string, $str2 as xs:string#xs:integer
-spell#load#2#$path as xs:string, $uri as xs:string# empty-sequence() 
+spell#load#2#$path as xs:string, $uri as xs:string# empty-sequence()
 spell#make-dictionary#1#$words as xs:string*#element(spell:dictionary)
-spell#remove-word#2#$uri as xs:string, $word as xs:string# empty-sequence() 
+spell#remove-word#2#$uri as xs:string, $word as xs:string# empty-sequence()
 spell#romanize#1#$string as xs:string#xs:string
 spell#suggest#3#$uri as xs:string*, $word as xs:string, $options as (element()|map:map)?#xs:string*
 spell#suggest-detailed#3#$dictionary_uris as xs:string*, $word as xs:string, $options as (element()|map:map)?#element(spell:suggestion)*
@@ -2206,16 +2210,16 @@ temporal#set-lsqt-automation#4#$temporal-collection as xs:string, $on as xs:bool
 temporal#set-use-lsqt#2#$temporal-collection as xs:string, $on as xs:boolean#empty-sequence()
 temporal#statement-get-system-time#0##empty-sequence()
 temporal#statement-set-system-time#1#$system-time as xs:dateTime#empty-sequence()
-thsr#add-synonym#2#$entry as element(thsr:entry), $synonym as element(thsr:synonym)# empty-sequence() 
-thsr#expand#5#$query as cts:query, $entries as element(thsr:entry)*, $new-weight as xs:double?, $min-weight as xs:double?, $filter as node()*#cts:query 
-thsr#insert#2#$uri as xs:string, $thsr as element(thsr:thesaurus)# empty-sequence() 
-thsr#load#2#$path as xs:string, $uri as xs:string# empty-sequence() 
+thsr#add-synonym#2#$entry as element(thsr:entry), $synonym as element(thsr:synonym)# empty-sequence()
+thsr#expand#5#$query as cts:query, $entries as element(thsr:entry)*, $new-weight as xs:double?, $min-weight as xs:double?, $filter as node()*#cts:query
+thsr#insert#2#$uri as xs:string, $thsr as element(thsr:thesaurus)# empty-sequence()
+thsr#load#2#$path as xs:string, $uri as xs:string# empty-sequence()
 thsr#lookup#2#$uri as xs:string*, $term as xs:string#element(thsr:entry)*
 thsr#query-lookup#2#$uri as xs:string*, $query as cts:query#element(thsr:entry)*
-thsr#remove-entry#2#$uri as xs:string*, $entry as element(thsr:entry)# empty-sequence() 
-thsr#remove-synonym#2#$entry as element(thsr:entry), $synonym as element(thsr:synonym)# empty-sequence() 
-thsr#remove-term#2#$uri as xs:string*, $term as xs:string# empty-sequence() 
-thsr#set-entry#2#$uri as xs:string, $entry as element(thsr:entry)# empty-sequence() 
+thsr#remove-entry#2#$uri as xs:string*, $entry as element(thsr:entry)# empty-sequence()
+thsr#remove-synonym#2#$entry as element(thsr:entry), $synonym as element(thsr:synonym)# empty-sequence()
+thsr#remove-term#2#$uri as xs:string*, $term as xs:string# empty-sequence()
+thsr#set-entry#2#$uri as xs:string, $entry as element(thsr:entry)# empty-sequence()
 tieredstorage#database-create-sub-database#3#$dbid as xs:unsignedLong, $database-name as xs:string, $kind as xs:string#empty-sequence()
 tieredstorage#database-create-super-database#2#$database-id as xs:unsignedLong, $database-name as xs:string#empty-sequence()
 tieredstorage#database-delete-sub-database#2#$database-id as xs:unsignedLong, $delete-dbid as xs:unsignedLong#empty-sequence()
@@ -2650,9 +2654,9 @@ xdmp#yearday-from-date#1#$arg as xs:date?#xs:integer?
 xdmp#zip-create#4#$manifest as node(), $manifest as Array|Node, $nodes as node()+, $nodes as Array|ValueIterator#binary()
 xdmp#zip-get#3#$zipfile as binary(), $name as xs:string, $options as (element()|map:map)?#node()+
 xdmp#zip-manifest#1#$zipfile as binary()#element()
-xhtml#add-lists#1#$doc as node()?# node()? 
-xhtml#clean#1#$doc as node()?# node()? 
-xhtml#restructure#1#$doc as node()?# node()? 
+xhtml#add-lists#1#$doc as node()?# node()?
+xhtml#clean#1#$doc as node()?# node()?
+xhtml#restructure#1#$doc as node()?# node()?
 xinc#link-expand#2#$context as node(), $ref as element(xi:include)#node()*
 xinc#link-references#1#$node as node()#xs:string*
 xinc#node-expand#1#$node as node()#node()
