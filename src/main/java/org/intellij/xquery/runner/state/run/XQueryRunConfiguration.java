@@ -36,6 +36,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.options.SettingsEditorGroup;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import org.intellij.xquery.runner.XQueryRunConfigurationType;
@@ -119,11 +120,13 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
     }
 
     @Override
-    public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-        SettingsEditorGroup<XQueryRunConfiguration> group = new SettingsEditorGroup<XQueryRunConfiguration>();
-        group.addEditor("Configuration", new RunConfigurationMainTab(getProject()));
-        group.addEditor("Java Configuration", new RunConfigurationJavaTab(getProject()));
-        group.addEditor("Logs", new LogConfigurationPanel<XQueryRunConfiguration>());
+    public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
+    {
+        SettingsEditorGroup<XQueryRunConfiguration> group = new SettingsEditorGroup<>();
+        Project project = getProject();
+        group.addEditor("Configuration", new RunConfigurationMainTab(project));
+        group.addEditor("Java Configuration", new RunConfigurationJavaTab(project));
+        group.addEditor("Logs", new LogConfigurationPanel<>());
         return group;
     }
 

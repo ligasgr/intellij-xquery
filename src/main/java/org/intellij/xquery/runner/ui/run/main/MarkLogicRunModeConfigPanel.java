@@ -66,11 +66,6 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 
 	public MarkLogicRunModeConfigPanel()
 	{
-		appserverRoot.addBrowseFolderListener("Choose Appserver Root Directory",
-			"Local directory that corresponds to MarkLogic's appserver root", project, createSingleFolderDescriptor());
-
-		appserverRoot.getTextField().setName ("appserverRoot");
-
 		adHocEval.setEnabled (true);
 		adHocEval.addActionListener (radioButtonListener);
 
@@ -111,6 +106,11 @@ public class MarkLogicRunModeConfigPanel implements PanelWithAnchor
 		mainPanel.setVisible ((dsType != null) && dsType.isMarklogicDebugSupported ());
 
 		project = cfg.getProject();
+
+		appserverRoot.addBrowseFolderListener("Choose Appserver Root Directory",
+			"Local directory that corresponds to MarkLogic's appserver root", project, createSingleFolderDescriptor());
+
+		appserverRoot.getTextField().setName ("appserverRoot");
 	}
 
 	public void applyChanges(XQueryRunConfiguration cfg)

@@ -57,12 +57,13 @@ public class RunConfigurationMainTab extends SettingsEditor<XQueryRunConfigurati
     private JBPanel jbpanel;
     private JBScrollPane scrollPane;
     private JBLabel javaModuleWarn;
-    private MyActionListener myActionListener = new MyActionListener();
+    private MyActionListener myActionListener;
 
     public RunConfigurationMainTab(final Project project) {
         this.project = project;
         anchor = UIUtil.mergeComponentsWithAnchor(moduleSelectionPanel, contextItemPanel, variablesPanel, dataSourcePanel);
 
+        myActionListener = new MyActionListener();  // This needs to be here in the constructor rather than a var init, otherwise the implicit form initialization will not work correctly.
         dataSourcePanel.setDataSourceSelectListener (myActionListener);
     }
 

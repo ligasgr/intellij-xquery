@@ -38,12 +38,12 @@ import java.io.File;
 public class ModuleSelector extends ComponentWithBrowseButton<EditorTextField> implements TextAccessor {
 
     public ModuleSelector(Project project) {
-        super(createEditorTextField(project), null);
-        addBrowseFolderListener(project);
+        super (createEditorTextField (project), null);
+        addBrowseFolderListener (project);
     }
 
     protected void addBrowseFolderListener(Project project) {
-        addBrowseFolderListener("Choose module", null, project, getDescriptor(), getTextComponentAccessor());
+        addBrowseFolderListener ("Choose module", "Select Main Module", project, getDescriptor(), getTextComponentAccessor());
     }
 
     @Override

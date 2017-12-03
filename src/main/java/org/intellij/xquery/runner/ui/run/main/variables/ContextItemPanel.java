@@ -97,7 +97,7 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         contextItemEditorContent.setButtonIcon(AllIcons.Actions.ShowViewer);
         contextItemPathField = new TextFieldWithBrowseButton();
         contextItemPathField.getTextField().setName(FILE_PATH);
-        addPathFieldButtonListener();
+        addPathFieldButtonListener (project);
         contextItemTypeField = new LabeledComponent<JComboBox>();
         contextItemTypeField.setText("&Type");
         contextItemTypeField.setLabelLocation("West");
@@ -140,8 +140,9 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         new ComboboxSpeedSearch(contextItemTypeField.getComponent());
     }
 
-    protected void addPathFieldButtonListener() {
-        contextItemPathField.addBrowseFolderListener("Choose file", null, null,
+    protected void addPathFieldButtonListener (Project project)
+    {
+        contextItemPathField.addBrowseFolderListener("Choose file", "XQuery file", project,
                 FileChooserDescriptorFactory.createSingleFileOrFolderDescriptor());
     }
 
