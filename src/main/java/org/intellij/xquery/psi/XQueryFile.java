@@ -51,10 +51,13 @@ import static org.intellij.xquery.psi.XQueryUtil.getReferencesToExistingFilesInI
 import static org.intellij.xquery.reference.namespace.XQuery30PredeclaredNamespaces.FN;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrApos;
 
-public class XQueryFile extends PsiFileBase {
+public class XQueryFile extends PsiFileBase
+{
+    FileViewProvider viewProvider;
 
     public XQueryFile(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, XQueryLanguage.INSTANCE);
+        this.viewProvider = viewProvider;
     }
 
     @NotNull
@@ -65,7 +68,7 @@ public class XQueryFile extends PsiFileBase {
 
     @Override
     public String toString() {
-        return "XQuery File";
+        return (viewProvider == null) ? "XQuery File" : viewProvider.getVirtualFile().getName();
     }
 
     @Override
@@ -301,8 +304,7 @@ public class XQueryFile extends PsiFileBase {
     }
 
     private Collection<XQueryFunctionDecl> calcFunctionDeclarations() {
-        Collection<XQueryFunctionDecl> functionDeclarations = PsiTreeUtil.findChildrenOfType(this,
-                XQueryFunctionDecl.class);
+        Collection<XQueryFunctionDecl> functionDeclarations = PsiTreeUtil.findChildrenOfType(this, XQueryFunctionDecl.class);
         return functionDeclarations;
     }
 

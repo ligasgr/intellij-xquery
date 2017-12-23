@@ -21,10 +21,8 @@ package org.intellij.xquery.psi.impl;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
 public class XQueryArgumentListImpl extends XQueryPsiElementImpl implements XQueryArgumentList {
@@ -48,4 +46,15 @@ public class XQueryArgumentListImpl extends XQueryPsiElementImpl implements XQue
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryArgument.class);
   }
 
+  @Override
+  public String toString()
+  {
+    StringBuilder sb = new StringBuilder();
+
+    getArgumentList().forEach (arg -> sb.append (arg.getExprSingle().getText()).append (", "));
+
+    if (sb.length() > 1) sb.setLength (sb.length() - 2);
+
+    return sb.toString();
+  }
 }

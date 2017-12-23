@@ -21,10 +21,8 @@ package org.intellij.xquery.psi.impl;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import static org.intellij.xquery.psi.XQueryTypes.*;
 import org.intellij.xquery.psi.*;
 
 public class XQueryParamListImpl extends XQueryPsiElementImpl implements XQueryParamList {
@@ -48,4 +46,15 @@ public class XQueryParamListImpl extends XQueryPsiElementImpl implements XQueryP
     return PsiTreeUtil.getChildrenOfTypeAsList(this, XQueryParam.class);
   }
 
+  @Override
+  public String toString()
+  {
+    StringBuffer sb = new StringBuffer();
+
+    getParamList().forEach (param -> sb.append (param.getVarName()).append (", "));
+
+    if (sb.length() > 1) sb.setLength (sb.length() - 2);
+
+    return sb.toString();
+  }
 }
