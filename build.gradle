@@ -26,6 +26,7 @@ sourceCompatibility = 1.8
 // Update this path to point to your IDEA installation
 project.ext.userDefinedInstallationPath = ''
 project.ext.sdkDir = 'sdk'
+//project.ext.sdkVersion = '173.3942.27'
 project.ext.sdkVersion = '172.4574.11'
 project.ext.ideaSdk = 'idea-IC-' + project.ext.sdkVersion
 project.ext.ideaSdkName = 'IDEA IC-' + project.ext.sdkVersion
@@ -33,6 +34,7 @@ if (project.ext.userDefinedInstallationPath)
     project.ext.ideaInstallationPath = project.ext.userDefinedInstallationPath
 else
     project.ext.ideaInstallationPath = project.ext.sdkDir + "/" + project.ext.ideaSdk
+//project.ext.ideaInstallationSource = 'https://download.jetbrains.com/idea/ideaIC-2017.3.1.tar.gz'
 project.ext.ideaInstallationSource = 'https://download.jetbrains.com/idea/ideaIC-2017.2.6.tar.gz'
 project.ext.ideaArchiveFileName = project.ext.ideaInstallationSource.substring(project.ext.ideaInstallationSource.lastIndexOf('/'))
 
@@ -153,10 +155,12 @@ task downloadSdk(type: DownloadTask) {
     target = file(project.ext.sdkDir + '/' + project.ext.ideaArchiveFileName)
 }
 
-task unzipSdk << {
-    copy {
-        from tarTree(resources.gzip(project.ext.sdkDir + '/' + project.ext.ideaArchiveFileName))
-        into file('sdk/')
+task unzipSdk {
+    doLast {
+        copy {
+	    from tarTree(resources.gzip(project.ext.sdkDir + '/' + project.ext.ideaArchiveFileName))
+	    into file('sdk/')
+	}
     }
 }
 
@@ -168,45 +172,47 @@ task downloadMlDocs (type: DownloadTask) {
 }
 
 
-task changelog << {
-    def calculatedFrom = project.hasProperty("versionFrom") ? versionFrom + '..' : ''
-    def calculatedTo = project.hasProperty("versionTo") ? versionTo: 'HEAD'
-    new ByteArrayOutputStream().withStream { os ->
-        def result = exec {
-            executable 'git'
-            args = ['--no-pager', 'log', '--pretty="%s"', "$calculatedFrom$calculatedTo"]
-            standardOutput = os
-        }
-        def gitLog = os.toString().split('\n').collect {it.replaceAll('^\"|\"$', "");}
-        def twoParts = gitLog.split { logEntry -> logEntry.startsWith("Issue #") || logEntry.startsWith("Closes #")}
-        def issueRelatedEntries = twoParts.get(0)
-        def pattern = java.util.regex.Pattern.compile('(Issue|Closes) #([0-9]+)(.*)')
-        println 'Issue related:'
-        println '<ul>'
-        issueRelatedEntries.each {
-            def matcher = pattern.matcher(it)
-            if (matcher.matches()) {
-                def issueNumber = matcher.group(2)
-                def rest = matcher.group(3)
-                println(
-                        '\t' +
-                        '<li>' +
-                                'Issue ' +
-                                '<a href="https://github.com/ligasgr/intellij-xquery/issues/' + issueNumber + '" rel="nofollow">' +
-                                '#' + issueNumber +
-                                '</a>' +
-                                rest +
-                        '</li>'
-                )
-            } else {
-                println it
-            }
-        }
-        println '</ul>'
-        println()
-        def unrelatedEntries = twoParts.get(1)
-        println 'Unrelated:'
-        unrelatedEntries.each {println(it)}
+task changelog {
+    doLast {
+        def calculatedFrom = project.hasProperty("versionFrom") ? versionFrom + '..' : ''
+        def calculatedTo = project.hasProperty("versionTo") ? versionTo: 'HEAD'
+        new ByteArrayOutputStream().withStream { os ->
+	    def result = exec {
+		executable 'git'
+		args = ['--no-pager', 'log', '--pretty="%s"', "$calculatedFrom$calculatedTo"]
+		standardOutput = os
+	    }
+	    def gitLog = os.toString().split('\n').collect {it.replaceAll('^\"|\"$', "");}
+	    def twoParts = gitLog.split { logEntry -> logEntry.startsWith("Issue #") || logEntry.startsWith("Closes #")}
+	    def issueRelatedEntries = twoParts.get(0)
+	    def pattern = java.util.regex.Pattern.compile('(Issue|Closes) #([0-9]+)(.*)')
+	    println 'Issue related:'
+	    println '<ul>'
+	    issueRelatedEntries.each {
+		def matcher = pattern.matcher(it)
+		if (matcher.matches()) {
+		    def issueNumber = matcher.group(2)
+		    def rest = matcher.group(3)
+		    println(
+			    '\t' +
+			    '<li>' +
+				    'Issue ' +
+				    '<a href="https://github.com/ligasgr/intellij-xquery/issues/' + issueNumber + '" rel="nofollow">' +
+				    '#' + issueNumber +
+				    '</a>' +
+				    rest +
+			    '</li>'
+		    )
+		} else {
+		    println it
+		}
+	    }
+	    println '</ul>'
+	    println()
+	    def unrelatedEntries = twoParts.get(1)
+	    println 'Unrelated:'
+	    unrelatedEntries.each {println(it)}
+	}
     }
 }
 
@@ -241,9 +247,11 @@ task dist(type: Zip) {
     archiveName "${project.ext.pluginName}.zip"
 }
 
-task compileForms(dependsOn: ':classes') << {
-    ant.taskdef(name: 'javac2', classname: 'com.intellij.ant.Javac2', classpath: configurations.provided.asPath)
-    ant.javac2(destdir: sourceSets.main.output.classesDir, srcdir: 'src/main/java;gen;src/main/resources', classpath: (configurations.provided + configurations.compile).asPath, debug: 'on', nowarn: 'on')
+task compileForms(dependsOn: ':classes') {
+    doLast {
+        ant.taskdef(name: 'javac2', classname: 'com.intellij.ant.Javac2', classpath: configurations.provided.asPath)
+        ant.javac2(destdir: sourceSets.main.output.classesDir, srcdir: 'src/main/java;gen;src/main/resources', classpath: (configurations.provided + configurations.compile).asPath, debug: 'on', nowarn: 'on')
+    }
 }
 
 jar {
@@ -251,5 +259,5 @@ jar {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
+    gradleVersion = '4.4.1'
 }
