@@ -38,6 +38,8 @@
         <![CDATA[
             <h3>Changes in 0.9.4-beta:</h3>
             <ul>
+                <li>Default file dialogs to project dir</li>
+                <li>Add a few missing MarkLogic builtins to the list of known functions</li>
                 <li>Eliminate issues with SLF4J/Log4J conflicts</li>
                 <li>Update for latest IntelliJ release</li>
                 <li>Add inspection for defaulted fn: namespace on function calls</li>
