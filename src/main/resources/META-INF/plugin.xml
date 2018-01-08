@@ -171,7 +171,7 @@
             <separator/>
             <action id="XQuery.PluginGitHub" text="GitHub Project" description="https://github.com/overstory/marklogic-intellij-plugin" class="org.intellij.xquery.documentation.WebReferenceAction"/>
             <action id="XQuery.OverStory" text="OverStory" description="http://overstory.co.uk" class="org.intellij.xquery.documentation.WebReferenceAction"/>
-            <!--<action id="XQuery.FunctionDocsLookup" text="XQuery Function Doc Lookup" description="Lookup XQuery function documentation locally" class="org.intellij.xquery.documentation.DocLookupMenu"/>-->
+            <action id="XQuery.FunctionDocsLookup" text="XQuery Function Doc Lookup" description="Lookup XQuery function documentation locally" class="org.intellij.xquery.documentation.DocLookupMenu" popup="true"/>
         </group>
         <action id="XQuery.NewXQueryFile" class="org.intellij.xquery.actions.CreateXQueryFileAction" text="XQuery File" description="Create new XQuery file">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>

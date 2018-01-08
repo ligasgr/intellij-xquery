@@ -18,6 +18,8 @@
 
 package org.intellij.xquery.documentation;
 
+import com.intellij.util.containers.OrderedSet;
+import org.jetbrains.annotations.NotNull;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -53,7 +55,7 @@ public class MarkLogicFunctionDefs
 
 	private final SAXParserFactory spf = SAXParserFactory.newInstance();
 	private final Map<String,Category> categoryMap = new HashMap<>();
-	private final List<Function> functions = new ArrayList<>();
+	private final List<Function> functions;
 	private final Map<String, Function> functionMap = new HashMap<>();
 
 	// ------------------------------------------------------------
@@ -89,17 +91,19 @@ public class MarkLogicFunctionDefs
 
 	private MarkLogicFunctionDefs()
 	{
-		loadFunctions (ML_FUNCTIONS_PATH);
+		functions = loadFunctions (ML_FUNCTIONS_PATH);
 	}
 
-	private void loadFunctions (String path)
+	private List<Function> loadFunctions (String path)
 	{
+		List<Function> functions = new OrderedSet<>();
+
 		try {
 			InputStream is = getClass().getClassLoader().getResourceAsStream (path);
 
 			if (is == null) {
 				log ("FunctionDefs.loadFunctions: could not load: " + path);
-				return;
+				return functions;
 			}
 
 			FunctionDefFunctionParser parser = new FunctionDefFunctionParser (functions, functionMap, categoryMap);
@@ -112,12 +116,19 @@ public class MarkLogicFunctionDefs
 			log ("Problem loading functions XML from '" + path + "': " + e);
 			e.printStackTrace();
 		}
+
+		if (functions.size() > 0) {
+			Collections.sort (functions);
+			return functions;
+		} else {
+			return functions;
+		}
 	}
 
 	// ------------------------------------------------------------
 	// ------------------------------------------------------------
 
-	public static class Function
+	public static class Function implements Comparable<Function>
 	{
 		private final String docsSource;
 		private final List<Parameter> parameters = new ArrayList<>();
@@ -203,7 +214,7 @@ public class MarkLogicFunctionDefs
 		{
 			StringBuilder sb = new StringBuilder("(");
 
-			for (Parameter param : getParameters ()) {
+			for (Parameter param : getParameters()) {
 				if (sb.length() > 1) sb.append (", ");
 
 				if (param.isOptional()) sb.append ('[');
@@ -333,6 +344,18 @@ public class MarkLogicFunctionDefs
 			sb.append ("</div>");
 
 			return sb.toString();
+		}
+
+		@Override
+		public int compareTo (@NotNull Function o)
+		{
+			return fullName.compareTo (o.fullName);
+		}
+
+		@Override
+		public String toString()
+		{
+			return fullName;
 		}
 	}
 
