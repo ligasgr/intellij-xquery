@@ -26,16 +26,14 @@ sourceCompatibility = 1.8
 // Update this path to point to your IDEA installation
 project.ext.userDefinedInstallationPath = ''
 project.ext.sdkDir = 'sdk'
-//project.ext.sdkVersion = '173.3942.27'
-project.ext.sdkVersion = '172.4574.11'
+project.ext.sdkVersion = '173.4548.28'
 project.ext.ideaSdk = 'idea-IC-' + project.ext.sdkVersion
 project.ext.ideaSdkName = 'IDEA IC-' + project.ext.sdkVersion
 if (project.ext.userDefinedInstallationPath)
     project.ext.ideaInstallationPath = project.ext.userDefinedInstallationPath
 else
     project.ext.ideaInstallationPath = project.ext.sdkDir + "/" + project.ext.ideaSdk
-//project.ext.ideaInstallationSource = 'https://download.jetbrains.com/idea/ideaIC-2017.3.1.tar.gz'
-project.ext.ideaInstallationSource = 'https://download.jetbrains.com/idea/ideaIC-2017.2.6.tar.gz'
+project.ext.ideaInstallationSource = 'https://download.jetbrains.com/idea/ideaIC-2017.3.4.tar.gz'
 project.ext.ideaArchiveFileName = project.ext.ideaInstallationSource.substring(project.ext.ideaInstallationSource.lastIndexOf('/'))
 
 project.ext.mlDocumentationSource = 'https://docs.marklogic.com/MarkLogic_9_pubs.zip'
@@ -49,8 +47,8 @@ configurations {
 
 sourceSets {
     main {
-        java { srcDirs = [] }
-        groovy { srcDirs = ['src/main/java', 'src/main/groovy', 'gen'] }
+        java { srcDirs = ['src/main/java', 'gen'] }
+        groovy { srcDirs = ['src/main/groovy'] }
         resources {
             srcDirs = ['src/main/java', 'src/main/groovy', 'src/main/resources']
             exclude '**/*.java'
@@ -96,9 +94,6 @@ dependencies {
 
     provided fileTree(dir: project.ext.ideaInstallationPath + '/lib', include: '*.jar')
     provided files("${System.properties['java.home']}/../lib/tools.jar")
-    compile('com.codnos:dbgp-interfaces:1.0.0') {
-        ext.transitive = false
-    }
     testCompile 'org.mockito:mockito-all:1.9.5'
     testCompile('org.hamcrest:hamcrest-library:1.1') {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
@@ -250,7 +245,8 @@ task dist(type: Zip) {
 task compileForms(dependsOn: ':classes') {
     doLast {
         ant.taskdef(name: 'javac2', classname: 'com.intellij.ant.Javac2', classpath: configurations.provided.asPath)
-        ant.javac2(destdir: sourceSets.main.output.classesDir, srcdir: 'src/main/java;gen;src/main/resources', classpath: (configurations.provided + configurations.compile).asPath, debug: 'on', nowarn: 'on')
+    	ant.mkdir (dir: sourceSets.main.output.classesDir)
+        ant.javac2(destdir: sourceSets.main.output.classesDir, srcdir: 'src/main/java:src/main/groovy;gen;src/main/resources', includeantruntime: true, classpath: (configurations.provided + configurations.compile).asPath, debug: 'on', nowarn: 'on')
     }
 }
 

@@ -97,4 +97,23 @@ public class FakeUpdateParameterInfoContext implements UpdateParameterInfoContex
     public Editor getEditor() {
         return editor;
     }
+
+    private boolean preservedOnHintHidden = false;
+    @Override
+    public boolean isPreservedOnHintHidden ()
+    {
+        return preservedOnHintHidden;
+    }
+
+    @Override
+    public void setPreservedOnHintHidden (boolean b)
+    {
+        preservedOnHintHidden = b;
+    }
+
+    @Override
+    public boolean isInnermostContext()
+    {
+        return false;
+    }
 }
