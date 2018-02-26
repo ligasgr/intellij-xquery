@@ -37,12 +37,21 @@ class MarkLogicResultFormatter
 
 	void outputAsString (PrintStream output)
 	{
-		rs.toResultItemArray().eachWithIndex { ResultItem item, int index ->
-			String suffix = " ${index}: ${item.itemType}"
+		switch (rs.size()) {
+		case 0:
+			output.println ('(empty)')
+			break
+		case 1:
+			output.println (formattedValue (rs.resultItemAt (0)))
+			break;
+		default:
+			rs.toResultItemArray().eachWithIndex { ResultItem item, int index ->
+				String suffix = " ${index}: ${item.itemType}"
 
-			output.print (separator (100 - suffix.length()))
-			output.println (suffix)
-			output.println (formattedValue (item))
+				output.print (separator (100 - suffix.length()))
+				output.println (suffix)
+				output.println (formattedValue (item))
+			}
 		}
 	}
 

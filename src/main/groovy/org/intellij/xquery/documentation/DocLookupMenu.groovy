@@ -66,7 +66,7 @@ class DocLookupMenu extends ComboBoxAction
 			}
 		}
 
-		new PopupChooserBuilder (list).setTitle ('Start typing name of function')
+		new PopupChooserBuilder (list).setTitle ('Start typing the name of a MarkLogic function')
 			.setMovable (true)
 			.setItemChoosenCallback (new Runnable() {
 				void run()
