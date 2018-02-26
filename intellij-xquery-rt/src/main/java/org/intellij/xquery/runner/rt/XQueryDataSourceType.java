@@ -38,7 +38,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 public enum XQueryDataSourceType {
-    MARKLOGIC_NATIVE("MarkLogic (XCC)", false, true, asList("marklogic-xcc-9.0.1.jar", "groovy-all-2\\..+\\.jar"), MarklogicRunnerAppFactory.class, true, true),
+    MARKLOGIC_NATIVE("MarkLogic (XCC)", false, true, asList("marklogic-xcc-.+.jar", "groovy-all-2\\..+\\.jar"), MarklogicRunnerAppFactory.class, true, true),
     MARKLOGIC("MarkLogic (XQJ)", false, true, asList("marklogic-xqj-1.0.0.jar", "groovy-all-2\\..+.jar"), false, MarklogicXQDataSourceFactory.class),
     SAXON("Saxon", true, false, asList("saxon9he.jar", "saxon9-xqj.jar"), true, SaxonXQDataSourceFactory.class),
     EXIST("eXist", false, true, asList("exist-xqj-1.0.1.jar"), false, ExistXQDataSourceFactory.class),
