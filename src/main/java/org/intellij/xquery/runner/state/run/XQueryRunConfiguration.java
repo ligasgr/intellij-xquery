@@ -149,7 +149,7 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
         variablesValidator.validate(variables);
         contextItemValidator.validate(contextItemEnabled, contextItemType, contextItemFromEditorEnabled,
                 contextItemText, contextItemType);
-        dataSourceValidator.validate(dataSourceName);
+        dataSourceValidator.validate (getDataSourcesSettings(), dataSourceName);
     }
 
     public void readExternal(final Element element) throws InvalidDataException {
@@ -362,12 +362,15 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
         this.passParentEnvs = passParentEnvs;
     }
 
-    public XQueryDataSourceType getDataSourceType() {
-        if (dataSourceName != null) {
-            XQueryDataSourceConfiguration dataSourceConfiguration = getDataSourcesSettings()
-                    .getDataSourceConfigurationForName(dataSourceName);
-            return dataSourceConfiguration.TYPE;
-        } else {
+    public XQueryDataSourceType getDataSourceType()
+    {
+        if (dataSourceName == null) {
+            return null;
+        }
+
+        try {
+            return getDataSourcesSettings().getDataSourceConfigurationForName (dataSourceName).TYPE;
+        } catch (Exception e) {
             return null;
         }
     }

@@ -19,6 +19,7 @@ package org.intellij.xquery.runner.state.run;
 
 import com.intellij.execution.configurations.RuntimeConfigurationError;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
+import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.junit.Test;
 
 import static org.fest.assertions.Fail.fail;
@@ -38,7 +39,7 @@ public class DataSourceValidatorTest {
     @Test
     public void shouldThrowAnExceptionIfDataSourceNameNotSet() {
         try {
-            validator.validate(null);
+            validator.validate (XQueryDataSourcesSettings.getInstance(), null);
             fail();
         } catch (RuntimeConfigurationException e) {
             assertThat(e.getMessage(), is(DATA_SOURCE_MISSING_MESSAGE));
@@ -47,6 +48,6 @@ public class DataSourceValidatorTest {
 
     @Test
     public void shouldDoNothingIfDataSourceNameSet() throws RuntimeConfigurationError {
-        validator.validate("any");
+        validator.validate (XQueryDataSourcesSettings.getInstance(), "any");
     }
 }
