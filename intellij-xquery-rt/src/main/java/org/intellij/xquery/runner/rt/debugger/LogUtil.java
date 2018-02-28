@@ -54,9 +54,10 @@ public class LogUtil
 		}
 	}
 
+	@SuppressWarnings ("UseOfSystemOutOrSystemErr")
 	public static void log (int level, String msg, Throwable t)
 	{
-		if (LOGGING && (level <= logLevel)) {
+		if ((LOGGING && (level <= logLevel)) || (level >= ERROR)) {
 			StringBuilder sb = new StringBuilder();
 			SimpleDateFormat sdf = new SimpleDateFormat ("HH:mm:ss.SSS ");
 
