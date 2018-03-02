@@ -18,7 +18,7 @@
 <idea-plugin url="https://github.com/overstory/marklogic-intellij-plugin" version="2">
     <id>org.intellij.xquery.marklogic</id>
     <name>XQuery Support + MarkLogic Debugger</name>
-    <version>0.9.4-BETA</version>
+    <version>1.0</version>
     <vendor email="ron@overstory.co.uk" url="http://overstory.co.uk/">OverStory Ltd in association with MarkLogic</vendor>
 
     <description>
@@ -38,12 +38,16 @@
         <![CDATA[
             <h3>Changes in 1.0:</h3>
             <ul>
-                <li>Remove beta designation, call it 1.0</li>
+                <li>Remove beta designation</li>
+                <li>Require minimum IntelliJ build of 173.3727.127 due to conflicting Groovy runtime versions</li>
+                <li>Refresh MarkLogic function docs</li>
+                <li>Handle Run Configurations that reference non-existent Data Sources</li>
+                <li>Always log errors, to show certain XQuery syntax problems when under debug</li>
                 <li>Add MarkLogic menu item to look up XQuery function docs by name</li>
-                <li>File dialogs default to project dir</li>
+                <li>File dialogs now default to the project dir</li>
                 <li>Add a few missing MarkLogic builtins to the list of known functions</li>
                 <li>Eliminate issues with SLF4J/Log4J conflicts</li>
-                <li>Update for latest IntelliJ release</li>
+                <li>Update for latest IntelliJ release (2017.3.4)</li>
                 <li>Add inspection for defaulted fn: namespace on function calls</li>
                 <li>Merge upstream changes from 3.3.1+ of <a href="http://ligasgr.github.io/intellij-xquery/">Grzegorz's code</a></li>
             </ul>
@@ -77,7 +81,7 @@
         ]]>
     </change-notes>
 
-    <idea-version since-build="172.4574.11"/>
+    <idea-version since-build="173.3727.127"/>
 
     <depends>com.intellij.modules.lang</depends>
 
