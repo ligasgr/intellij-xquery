@@ -11,4 +11,4 @@ branches:
   only:
     - master
 notifications:
-    slack: overstory:EXOfUx93B59RgElP7DEQeJTA
+    slack: 'overstory:EXOfUx93B59RgElP7DEQeJTA#marklogic-debugger'
