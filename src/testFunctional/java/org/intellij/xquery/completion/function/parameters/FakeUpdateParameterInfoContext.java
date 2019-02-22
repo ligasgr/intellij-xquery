@@ -34,6 +34,7 @@ public class FakeUpdateParameterInfoContext implements UpdateParameterInfoContex
     private PsiElement parameterOwner;
     private int currentParameter;
     private Object highlightedParameter;
+    private boolean preservedOnHintHidden;
 
     public FakeUpdateParameterInfoContext(Editor editor, PsiFile file) {
         this.editor = editor;
@@ -96,5 +97,17 @@ public class FakeUpdateParameterInfoContext implements UpdateParameterInfoContex
 
     public Editor getEditor() {
         return editor;
+    }
+
+    public boolean isInnermostContext() {
+        return false;
+    }
+
+    public boolean isPreservedOnHintHidden() {
+        return preservedOnHintHidden;
+    }
+
+    public void setPreservedOnHintHidden(boolean preservedOnHintHidden) {
+        this.preservedOnHintHidden = preservedOnHintHidden;
     }
 }
