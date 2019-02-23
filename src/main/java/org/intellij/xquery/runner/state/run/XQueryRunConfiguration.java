@@ -54,7 +54,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunConfigurationModule> implements
+public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunConfigurationModule, Element> implements
         CommonProgramRunConfigurationParameters, RunConfigurationWithSuppressedDefaultDebugAction {
     public static final String RUNNER_CLASS = "org.intellij.xquery.runner.rt.XQueryRunnerApp";
     private final VariablesValidator variablesValidator;

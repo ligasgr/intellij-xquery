@@ -33,9 +33,7 @@ import org.jetbrains.annotations.Nullable;
 
 
 @State(name = "XQuerySettings", storages = {
-        @Storage(id = "xqueryInProjectFile", file = StoragePathMacros.PROJECT_FILE),
-        @Storage(id = "xqueryInDirectory", file = StoragePathMacros.PROJECT_CONFIG_DIR + "/xquery.xml",
-                scheme = StorageScheme.DIRECTORY_BASED)
+        @Storage(value = "xquery.xml", scheme = StorageScheme.DIRECTORY_BASED)
 })
 public class XQuerySettings implements PersistentStateComponent<XQuerySettings>, ModificationTracker {
 

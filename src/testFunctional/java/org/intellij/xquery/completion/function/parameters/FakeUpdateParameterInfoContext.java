@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ package org.intellij.xquery.completion.function.parameters;
 import com.intellij.lang.parameterInfo.UpdateParameterInfoContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.UserDataHolderEx;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 
@@ -101,6 +102,16 @@ public class FakeUpdateParameterInfoContext implements UpdateParameterInfoContex
 
     public boolean isInnermostContext() {
         return false;
+    }
+
+    @Override
+    public boolean isSingleParameterInfo() {
+        return false;
+    }
+
+    @Override
+    public UserDataHolderEx getCustomContext() {
+        return null;
     }
 
     public boolean isPreservedOnHintHidden() {
