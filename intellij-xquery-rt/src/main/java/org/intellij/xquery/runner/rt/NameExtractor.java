@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@ package org.intellij.xquery.runner.rt;
 
 import javax.xml.namespace.QName;
 
-import static javax.xml.XMLConstants.NULL_NS_URI;
+import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
 
 /**
  * User: ligasgr
@@ -45,7 +45,7 @@ public class NameExtractor {
             }
         }
         if (namespacePrefix != null) {
-            return new QName(NULL_NS_URI, localPart, namespacePrefix);
+            return new QName(DEFAULT_NS_PREFIX, localPart, namespacePrefix);
         } else {
             return new QName(localPart);
         }

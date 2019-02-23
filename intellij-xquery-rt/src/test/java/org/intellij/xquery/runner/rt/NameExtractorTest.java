@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@ import org.junit.Test;
 import javax.xml.namespace.QName;
 
 import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
-import static javax.xml.XMLConstants.NULL_NS_URI;
+import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -53,7 +53,7 @@ public class NameExtractorTest {
         QName result = extractor.getName(LOCAL_PART, null);
 
         assertThat(result.getLocalPart(), is(LOCAL_PART));
-        assertThat(result.getNamespaceURI(), is(NULL_NS_URI));
+        assertThat(result.getNamespaceURI(), is(DEFAULT_NS_PREFIX));
         assertThat(result.getPrefix(), is(DEFAULT_NS_PREFIX));
     }
 
@@ -62,25 +62,25 @@ public class NameExtractorTest {
         QName result = extractor.getName(PREFIX + SEPARATOR + LOCAL_PART, null);
 
         assertThat(result.getLocalPart(), is(LOCAL_PART));
-        assertThat(result.getNamespaceURI(), is(NULL_NS_URI));
+        assertThat(result.getNamespaceURI(), is(DEFAULT_NS_PREFIX));
         assertThat(result.getPrefix(), is(PREFIX));
     }
 
     @Test
     public void shouldReturnQNameWithLocalPartAndEmptyNamespace() {
-        QName result = extractor.getName(LOCAL_PART, NULL_NS_URI);
+        QName result = extractor.getName(LOCAL_PART, DEFAULT_NS_PREFIX);
 
         assertThat(result.getLocalPart(), is(LOCAL_PART));
-        assertThat(result.getNamespaceURI(), is(NULL_NS_URI));
+        assertThat(result.getNamespaceURI(), is(DEFAULT_NS_PREFIX));
         assertThat(result.getPrefix(), is(DEFAULT_NS_PREFIX));
     }
 
     @Test
     public void shouldReturnQNameWithLocalPartAndPrefixAndEmptyNamespace() {
-        QName result = extractor.getName(PREFIX + SEPARATOR + LOCAL_PART, NULL_NS_URI);
+        QName result = extractor.getName(PREFIX + SEPARATOR + LOCAL_PART, DEFAULT_NS_PREFIX);
 
         assertThat(result.getLocalPart(), is(LOCAL_PART));
-        assertThat(result.getNamespaceURI(), is(NULL_NS_URI));
+        assertThat(result.getNamespaceURI(), is(DEFAULT_NS_PREFIX));
         assertThat(result.getPrefix(), is(PREFIX));
     }
 
