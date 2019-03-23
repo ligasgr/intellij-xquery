@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 
 package org.intellij.xquery.runner.rt.xqj;
 
+import org.basex.BaseXClient;
 import org.basex.BaseXServer;
 import org.intellij.xquery.runner.rt.RunnerAppTest;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
@@ -41,6 +42,7 @@ public class BaseXRunnerAppTest extends RunnerAppTest {
     @BeforeClass
     public static void startServer() throws Exception {
         server = new BaseXServer();
+        new BaseXClient(new String[] {"-U", "admin", "-P", "admin", "-c", "CREATE DB test"});
     }
 
     @AfterClass
@@ -72,6 +74,7 @@ public class BaseXRunnerAppTest extends RunnerAppTest {
                 .withTypeName(getDataSourceType())
                 .withMainFileName(xqueryMainFile.getAbsolutePath())
                 .withConnectionData("localhost", "1984", "admin", "admin")
+                .withDatabase("test")
                 .build();
     }
 
@@ -83,6 +86,7 @@ public class BaseXRunnerAppTest extends RunnerAppTest {
                 .withContextItemType(contextItemType)
                 .withContextItemValue(contextItemValue)
                 .withConnectionData("localhost", "1984", "admin", "admin")
+                .withDatabase("test")
                 .build();
     }
 
@@ -92,6 +96,7 @@ public class BaseXRunnerAppTest extends RunnerAppTest {
                 .withMainFileName(xqueryMainFile.getAbsolutePath())
                 .withVariable("v", value, type)
                 .withConnectionData("localhost", "1984", "admin", "admin")
+                .withDatabase("test")
                 .build();
     }
 }
