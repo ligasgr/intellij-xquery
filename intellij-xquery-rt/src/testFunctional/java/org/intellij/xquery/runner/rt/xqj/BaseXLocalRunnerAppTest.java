@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@ package org.intellij.xquery.runner.rt.xqj;
 
 import org.intellij.xquery.runner.rt.RunnerAppTest;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
+import org.junit.Ignore;
 import org.junit.experimental.theories.DataPoints;
 
 import static org.intellij.xquery.runner.rt.XQueryItemType.TEXT;
@@ -29,6 +30,7 @@ import static org.intellij.xquery.runner.rt.XQueryItemType.XS_NORMALIZED_STRING;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_TOKEN;
 import static org.intellij.xquery.runner.rt.XQueryItemType.XS_UNTYPED_ATOMIC;
 
+@Ignore("fails when multiple xqj drivers on the classpath and the order is mixed - lang_en.txt from other driver used")
 public class BaseXLocalRunnerAppTest extends RunnerAppTest {
 
     @DataPoints
