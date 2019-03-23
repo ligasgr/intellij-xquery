@@ -115,7 +115,7 @@ public class XQueryRunConfigBuilder {
 
     private String databaseName() {
         if (databaseName != null) {
-            return "databaseName=\"" + databaseName + "\"";
+            return " databaseName=\"" + databaseName + "\"";
         }
         return "";
     }
