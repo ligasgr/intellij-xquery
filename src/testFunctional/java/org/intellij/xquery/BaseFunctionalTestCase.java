@@ -37,7 +37,7 @@ import static org.intellij.xquery.XQueryFileType.DEFAULT_EXTENSION_WITH_DOT;
 public abstract class BaseFunctionalTestCase extends TestCase {
 
     public BaseFunctionalTestCase() {
-        System.setProperty(PlatformUtils.PLATFORM_PREFIX_KEY, PlatformUtils.PYCHARM_PREFIX);
+        System.setProperty(PlatformUtils.PLATFORM_PREFIX_KEY, PlatformUtils.IDEA_CE_PREFIX);
     }
 
     protected CodeInsightTestFixture myFixture;
@@ -97,8 +97,8 @@ public abstract class BaseFunctionalTestCase extends TestCase {
         final IdeaProjectTestFixture fixture = fixtureBuilder.getFixture();
         myFixture = IdeaTestFixtureFactory.getFixtureFactory().createCodeInsightFixture(fixture, new LightTempDirTestFixtureImpl(true));
 
-        myFixture.setUp();
         myFixture.setTestDataPath(getTestDataPath());
+        myFixture.setUp();
     }
 
     protected String getTestDataPath() {

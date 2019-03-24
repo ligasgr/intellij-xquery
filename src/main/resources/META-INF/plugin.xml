@@ -15,10 +15,10 @@
   ~ limitations under the License.
   -->
 
-<idea-plugin url="http://ligasgr.github.io/intellij-xquery/" version="2">
+<idea-plugin url="http://ligasgr.github.io/intellij-xquery/">
     <id>org.intellij.xquery</id>
     <name>XQuery Support</name>
-    <version>3.3.2</version>
+    <version>3.3.3</version>
     <vendor email="ligasgr@gmail.com" url="http://grzegorzligas.blogspot.com/">Grzegorz Ligas</vendor>
 
     <description>Provides support for XQuery language in version 3.0 and 3.1</description>
@@ -26,15 +26,15 @@
     <change-notes>
         <![CDATA[
             Please check new <a href="https://github.com/ligasgr/intellij-xquery/wiki">documentation page</a> with the list of <a href="https://github.com/ligasgr/intellij-xquery/wiki/Features">features</a> and <a href="https://github.com/ligasgr/intellij-xquery/wiki/Shortcuts">useful shortcuts</a> applicable to the plugin.
-            <p>3.3.2:</p>
+            <p>3.3.3:</p>
             <ul>
-                    <li>Issue <a href="https://github.com/ligasgr/intellij-xquery/issues/230" rel="nofollow">#229</a> - Update plugin to support IntelliJ 17.3 by <a href="https://github.com/charlessimpson">Charles Simpson</a>.</li>
+                    <li>Update plugin to support IntelliJ 19.1</li>
 </ul>
 
         ]]>
     </change-notes>
 
-    <idea-version since-build="183.5429.30" until-build="183.*"/>
+    <idea-version since-build="191.6183.62" until-build="191.*"/>
 
     <depends>com.intellij.modules.lang</depends>
 

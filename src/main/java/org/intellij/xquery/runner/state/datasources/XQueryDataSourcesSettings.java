@@ -17,6 +17,7 @@
 
 package org.intellij.xquery.runner.state.datasources;
 
+import com.intellij.configurationStore.DirectoryBasedStorage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.components.*;
@@ -102,7 +103,7 @@ public class XQueryDataSourcesSettings implements PersistentStateComponent<XQuer
                 return dataSourceConfiguration;
             }
         }
-        throw new RuntimeException(NO_DATA_SOURCE_FOUND_FOR_NAME_MESSAGE + name);
+        return null;
     }
 
     public XQueryDataSourceConfiguration getDefaultDataSourceConfiguration() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,20 +92,15 @@ public class XQueryDataSourcesSettingsTest {
     }
 
     @Test
-    public void shouldThrowAnExceptionWhenConfigNotFoundByNameWhenListEmpty() {
-        exception.expect(RuntimeException.class);
-        exception.expectMessage(NO_DATA_SOURCE_FOUND_FOR_NAME_MESSAGE);
-
-        dataSourcesSettings.getDataSourceConfigurationForName(CONFIG_NAME);
+    public void shouldReturnNullWhenConfigListWasEmpty() {
+        assertThat(dataSourcesSettings.getDataSourceConfigurationForName(CONFIG_NAME), is(nullValue()));
     }
 
     @Test
-    public void shouldThrowAnExceptionWhenConfigNotFoundByNameWhenNotInList() {
-        exception.expect(RuntimeException.class);
-        exception.expectMessage(NO_DATA_SOURCE_FOUND_FOR_NAME_MESSAGE);
+    public void shouldReturnNullWhenConfigNotFoundByNameWhenNotInList() {
         dataSourcesSettings.setDataSourceConfigurations(asList(dataSourceConfiguration));
 
-        dataSourcesSettings.getDataSourceConfigurationForName("another");
+        assertThat(dataSourcesSettings.getDataSourceConfigurationForName("another"), is(nullValue()));
     }
 
     @Test

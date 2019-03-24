@@ -316,7 +316,11 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
         if (dataSourceName != null) {
             XQueryDataSourceConfiguration dataSourceConfiguration = getDataSourcesSettings()
                     .getDataSourceConfigurationForName(dataSourceName);
-            return dataSourceConfiguration.TYPE;
+            if (dataSourceConfiguration != null) {
+                return dataSourceConfiguration.TYPE;
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
