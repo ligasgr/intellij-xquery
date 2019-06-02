@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ package org.intellij.xquery.completion.function.parameters;
 import com.intellij.lang.parameterInfo.UpdateParameterInfoContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.UserDataHolderEx;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 
@@ -34,6 +35,7 @@ public class FakeUpdateParameterInfoContext implements UpdateParameterInfoContex
     private PsiElement parameterOwner;
     private int currentParameter;
     private Object highlightedParameter;
+    private boolean preservedOnHintHidden;
 
     public FakeUpdateParameterInfoContext(Editor editor, PsiFile file) {
         this.editor = editor;
@@ -98,22 +100,25 @@ public class FakeUpdateParameterInfoContext implements UpdateParameterInfoContex
         return editor;
     }
 
-    private boolean preservedOnHintHidden = false;
+    public boolean isInnermostContext() {
+        return false;
+    }
+
     @Override
-    public boolean isPreservedOnHintHidden ()
-    {
+    public boolean isSingleParameterInfo() {
+        return false;
+    }
+
+    @Override
+    public UserDataHolderEx getCustomContext() {
+        return null;
+    }
+
+    public boolean isPreservedOnHintHidden() {
         return preservedOnHintHidden;
     }
 
-    @Override
-    public void setPreservedOnHintHidden (boolean b)
-    {
-        preservedOnHintHidden = b;
-    }
-
-    @Override
-    public boolean isInnermostContext()
-    {
-        return false;
+    public void setPreservedOnHintHidden(boolean preservedOnHintHidden) {
+        this.preservedOnHintHidden = preservedOnHintHidden;
     }
 }

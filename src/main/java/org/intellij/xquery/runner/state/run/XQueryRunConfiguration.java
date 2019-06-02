@@ -56,7 +56,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunConfigurationModule> implements
+public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunConfigurationModule, Element> implements
         CommonProgramRunConfigurationParameters, RunConfigurationWithSuppressedDefaultDebugAction {
     public static final String RUNNER_CLASS = "org.intellij.xquery.runner.rt.XQueryRunnerApp";
     private final VariablesValidator variablesValidator;
@@ -362,15 +362,16 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
         this.passParentEnvs = passParentEnvs;
     }
 
-    public XQueryDataSourceType getDataSourceType()
-    {
-        if (dataSourceName == null) {
-            return null;
-        }
-
-        try {
-            return getDataSourcesSettings().getDataSourceConfigurationForName (dataSourceName).TYPE;
-        } catch (Exception e) {
+    public XQueryDataSourceType getDataSourceType() {
+        if (dataSourceName != null) {
+            XQueryDataSourceConfiguration dataSourceConfiguration = getDataSourcesSettings()
+                    .getDataSourceConfigurationForName(dataSourceName);
+            if (dataSourceConfiguration != null) {
+                return dataSourceConfiguration.TYPE;
+            } else {
+                return null;
+            }
+        } else {
             return null;
         }
     }

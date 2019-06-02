@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,8 +34,10 @@ public class DataSourceAccessor {
         if (dataSourceName != null) {
             XQueryDataSourceConfiguration dataSourceConfiguration = getDataSourcesSettings()
                     .getDataSourceConfigurationForName(dataSourceName);
-            Element dataSourceElement = XmlSerializer.serialize(dataSourceConfiguration);
-            xmlRootElement.addContent(dataSourceElement);
+            if (dataSourceConfiguration != null) {
+                Element dataSourceElement = XmlSerializer.serialize(dataSourceConfiguration);
+                xmlRootElement.addContent(dataSourceElement);
+            }
         }
     }
 

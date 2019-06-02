@@ -61,12 +61,12 @@ dependencies {
     compile ('io.netty:netty-all:4.1.13.Final') {
 	    force = true
     }
-    compile 'org.codehaus.groovy:groovy-all:2.4.12'
+    compile 'org.codehaus.groovy:groovy-all:2.4.15'
     compile('com.codnos:dbgp-interfaces:1.0.0') {
         ext.transitive = false
     }
     compile 'commons-codec:commons-codec:1.10'
-    compile 'com.marklogic:marklogic-xcc:9.0.4'
+    compile 'com.marklogic:marklogic-xcc:9.0.9'
     testCompile 'junit:junit-dep:4.10'
     testCompile 'org.mockito:mockito-all:1.9.5'
     testCompile('org.hamcrest:hamcrest-library:1.1') {

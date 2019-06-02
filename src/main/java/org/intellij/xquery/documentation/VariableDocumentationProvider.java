@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@ import org.intellij.xquery.psi.XQueryWindowClause;
 import org.intellij.xquery.util.StringUtils;
 
 import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
-import static javax.xml.XMLConstants.NULL_NS_URI;
+import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
 import static org.intellij.xquery.documentation.DocumentationStylist.wrapWithHtmlAndStyle;
 import static org.intellij.xquery.util.StringUtils.normalizeWhitespaces;
 import static org.intellij.xquery.util.StringUtils.removeQuotOrAposIfNeeded;
@@ -61,7 +61,7 @@ public class VariableDocumentationProvider implements PsiBasedDocumentationProvi
         XQueryFile xqueryFile = (XQueryFile) varName.getContainingFile();
         String prefix = varName.getPrefix() != null ? varName.getPrefix().getText() : null;
         String mappedNamespace = xqueryFile.mapVariablePrefixToNamespace(prefix);
-        String namespace = removeQuotOrAposIfNeeded(mappedNamespace != null ? mappedNamespace : NULL_NS_URI);
+        String namespace = removeQuotOrAposIfNeeded(mappedNamespace != null ? mappedNamespace : DEFAULT_NS_PREFIX);
         String description = getDescription(elementToProduceDescription);
         String xqDocDescription = XQDocDescriptionExtractor.getXQDocDescription(elementToProduceDescription);
 

@@ -25,7 +25,7 @@ import org.intellij.xquery.psi.XQueryFunctionInvocation;
 import org.intellij.xquery.psi.XQueryFunctionName;
 
 import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
-import static javax.xml.XMLConstants.NULL_NS_URI;
+import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
 import static org.intellij.xquery.documentation.DocumentationStylist.FUNCTION_END;
 import static org.intellij.xquery.documentation.DocumentationStylist.FUNCTION_START;
 import static org.intellij.xquery.documentation.DocumentationStylist.wrapWithHtmlAndStyle;
@@ -77,7 +77,7 @@ public class FunctionDocumentationProvider implements PsiBasedDocumentationProvi
         XQueryFile xqueryFile = (XQueryFile) functionName.getContainingFile();
         String prefix = functionName.getPrefix() != null ? functionName.getPrefix().getText() : null;
         String mappedNamespace = xqueryFile.mapFunctionPrefixToNamespace(prefix);
-        String namespace = removeQuotOrAposIfNeeded(mappedNamespace != null ? mappedNamespace : NULL_NS_URI);
+        String namespace = removeQuotOrAposIfNeeded(mappedNamespace != null ? mappedNamespace : DEFAULT_NS_PREFIX);
         String description = getSignature(elementToProduceDescription);
         String xqDocDescription = XQDocDescriptionExtractor.getXQDocDescription(elementToProduceDescription);
 

@@ -15,10 +15,10 @@
   ~ limitations under the License.
   -->
 
-<idea-plugin url="https://github.com/overstory/marklogic-intellij-plugin" version="2">
+<idea-plugin url="https://github.com/overstory/marklogic-intellij-plugin">
     <id>org.intellij.xquery.marklogic</id>
     <name>XQuery Support + MarkLogic Debugger</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <vendor email="ron@overstory.co.uk" url="http://overstory.co.uk/">OverStory Ltd in association with MarkLogic</vendor>
 
     <description>
@@ -36,6 +36,11 @@
 
     <change-notes>
         <![CDATA[
+            <h3>Changes in 1.1:</h3>
+            <ul>
+                <li>Update plugin to support IntelliJ 19.1</li>
+                <li>FINISH ME</li>
+            </ul>
             <h3>Changes in 1.0:</h3>
             <ul>
                 <li>Remove beta designation</li>
@@ -90,7 +95,6 @@
 -->
 
     <extensions defaultExtensionNs="com.intellij">
-        <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
         <fileTypeFactory implementation="org.intellij.xquery.XQueryFileTypeFactory"/>
         <lang.parserDefinition language="XQuery" implementationClass="org.intellij.xquery.parser.XQueryParserDefinition"/>
         <lang.syntaxHighlighterFactory language="XQuery" implementationClass="org.intellij.xquery.highlighting.XQuerySyntaxHighlighterFactory"/>

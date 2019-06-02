@@ -444,7 +444,7 @@ public class XQueryFile extends PsiFileBase
                 && getModuleDeclaration().getURILiteral() != null) {
             return removeQuotOrApos(getModuleDeclaration().getURILiteral().getText());
         }
-        return XMLConstants.NULL_NS_URI;
+        return XMLConstants.DEFAULT_NS_PREFIX;
     }
 
     public String mapVariablePrefixToNamespace(String prefix) {

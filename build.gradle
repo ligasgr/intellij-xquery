@@ -26,14 +26,14 @@ sourceCompatibility = 1.8
 // Update this path to point to your IDEA installation
 project.ext.userDefinedInstallationPath = ''
 project.ext.sdkDir = 'sdk'
-project.ext.sdkVersion = '173.4548.28'
+project.ext.sdkVersion = '191.6183.62'
 project.ext.ideaSdk = 'idea-IC-' + project.ext.sdkVersion
 project.ext.ideaSdkName = 'IDEA IC-' + project.ext.sdkVersion
 if (project.ext.userDefinedInstallationPath)
     project.ext.ideaInstallationPath = project.ext.userDefinedInstallationPath
 else
     project.ext.ideaInstallationPath = project.ext.sdkDir + "/" + project.ext.ideaSdk
-project.ext.ideaInstallationSource = 'https://download.jetbrains.com/idea/ideaIC-2017.3.4.tar.gz'
+project.ext.ideaInstallationSource = 'https://download.jetbrains.com/idea/ideaIC-2019.1.3.tar.gz'
 project.ext.ideaArchiveFileName = project.ext.ideaInstallationSource.substring(project.ext.ideaInstallationSource.lastIndexOf('/'))
 
 project.ext.mlDocumentationSource = 'https://docs.marklogic.com/MarkLogic_9_pubs.zip'

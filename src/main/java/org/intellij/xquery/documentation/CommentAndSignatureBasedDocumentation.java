@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
 
 package org.intellij.xquery.documentation;
 
-import static javax.xml.XMLConstants.NULL_NS_URI;
+import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
 import static org.intellij.xquery.documentation.DocumentationStylist.HTML_BR;
 
 /**
@@ -45,7 +45,7 @@ public class CommentAndSignatureBasedDocumentation {
 
     public String getText() {
         return (getLink(fullFilePath, displayedFileName) + HTML_BR) +
-                (NULL_NS_URI.equals(namespace) ? "" : NAMESPACE_LABEL + namespace + HTML_BR) +
+                (DEFAULT_NS_PREFIX.equals(namespace) ? "" : NAMESPACE_LABEL + namespace + HTML_BR) +
                 declarationDescription +
                 (xqDocDescription != null ? xqDocDescription : "");
     }

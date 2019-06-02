@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 
 package org.intellij.xquery.runner.state.datasources;
 
+import com.intellij.configurationStore.DirectoryBasedStorage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.components.*;
@@ -35,8 +36,7 @@ import java.util.List;
  * Date: 02/10/13
  * Time: 14:09
  */
-@State(name = "XQueryDataSourcesSettings", storages = {@Storage(id = "xqueryDataSources",
-        file = StoragePathMacros.APP_CONFIG + "/xquery.xml")})
+@State(name = "XQueryDataSourcesSettings", storages = {@Storage("xquery.xml")})
 public class XQueryDataSourcesSettings implements PersistentStateComponent<XQueryDataSourcesSettings>,
         ExportableApplicationComponent {
 
@@ -103,7 +103,7 @@ public class XQueryDataSourcesSettings implements PersistentStateComponent<XQuer
                 return dataSourceConfiguration;
             }
         }
-        throw new RuntimeException(NO_DATA_SOURCE_FOUND_FOR_NAME_MESSAGE + name);
+        return null;
     }
 
     public XQueryDataSourceConfiguration getDefaultDataSourceConfiguration() {

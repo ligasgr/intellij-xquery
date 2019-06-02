@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
+ * Copyright 2013-2017 Grzegorz Ligas <ligasgr@gmail.com> and other contributors
  * (see the CONTRIBUTORS file).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,12 +23,12 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiManager;
 import com.intellij.testFramework.EdtTestUtil;
-import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
 import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
 import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;
+import com.intellij.util.PlatformUtils;
 import junit.framework.TestCase;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +37,7 @@ import static org.intellij.xquery.XQueryFileType.DEFAULT_EXTENSION_WITH_DOT;
 public abstract class BaseFunctionalTestCase extends TestCase {
 
     public BaseFunctionalTestCase() {
-        PlatformTestCase.initPlatformPrefix("not_existing_class", "PlatformLangXml");
+        System.setProperty(PlatformUtils.PLATFORM_PREFIX_KEY, PlatformUtils.IDEA_CE_PREFIX);
     }
 
     protected CodeInsightTestFixture myFixture;
@@ -97,8 +97,8 @@ public abstract class BaseFunctionalTestCase extends TestCase {
         final IdeaProjectTestFixture fixture = fixtureBuilder.getFixture();
         myFixture = IdeaTestFixtureFactory.getFixtureFactory().createCodeInsightFixture(fixture, new LightTempDirTestFixtureImpl(true));
 
-        myFixture.setUp();
         myFixture.setTestDataPath(getTestDataPath());
+        myFixture.setUp();
     }
 
     protected String getTestDataPath() {
