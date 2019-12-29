@@ -1,0 +1,1 @@
+xdmp#document-insert#7#$uri as xs:string, $root as node(), [$permissions as element(sec:permission)*], [$collections as xs:string*], [$quality as xs:int?], [$forest-ids as xs:unsignedLong*]#empty-sequence()

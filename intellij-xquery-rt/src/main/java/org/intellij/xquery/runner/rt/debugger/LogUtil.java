@@ -26,20 +26,20 @@ public class LogUtil
 {
 	public static int TRACE = 0;
 	public static int DEBUG = 1;
-	public static int WARN = 2;
-	public static int INFO = 3;
+	public static int INFO = 2;
+	public static int WARN = 3;
 	public static int ERROR = 4;
 
 	private static int logLevel = INFO;
-	private static String logLevelName = "info";
+	private static String defaultLogLevelName = "info";
 
 	private static final Map<String,Integer> nameToLevelMap = new HashMap<>();
 	private static final Map<Integer,String> levelToNameMap = new HashMap<>();
 	static {
-		nameToLevelMap.put ("trace", INFO);	levelToNameMap.put (INFO, "info");
+		nameToLevelMap.put ("trace", TRACE);	levelToNameMap.put (TRACE, "trace");
 		nameToLevelMap.put ("debug", DEBUG);	levelToNameMap.put (DEBUG, "debug");
-		nameToLevelMap.put ("warn", WARN);	levelToNameMap.put (WARN, "warn");
 		nameToLevelMap.put ("info", INFO);	levelToNameMap.put (INFO, "info");
+		nameToLevelMap.put ("warn", WARN);	levelToNameMap.put (WARN, "warn");
 		nameToLevelMap.put ("error", ERROR);	levelToNameMap.put (ERROR, "error");
 	}
 
@@ -48,7 +48,7 @@ public class LogUtil
 	public LogUtil()
 	{
 		try {
-			setLogLevel (System.getProperty ("xquery.debugger.logging.level", "info"));
+			setLogLevel (System.getProperty ("xquery.debugger.logging.level", defaultLogLevelName));
 		} catch (Exception e) {
 			setLogLevel ("info");
 		}
@@ -57,7 +57,7 @@ public class LogUtil
 	@SuppressWarnings ("UseOfSystemOutOrSystemErr")
 	public static void log (int level, String msg, Throwable t)
 	{
-		if ((LOGGING && (level <= logLevel)) || (level >= ERROR)) {
+		if ((LOGGING && (logLevel <= level)) || (level >= ERROR)) {
 			StringBuilder sb = new StringBuilder();
 			SimpleDateFormat sdf = new SimpleDateFormat ("HH:mm:ss.SSS ");
 
@@ -88,6 +88,7 @@ public class LogUtil
 		if (intLevel == null) throw new IllegalArgumentException ("Do not recognize logging level '" + level + "'");
 
 		logLevel = intLevel;
+
 	}
 
 	public void trace (String message)

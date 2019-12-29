@@ -715,8 +715,8 @@ public class XQueryPsiImplUtil {
                 String elementName = functionName.getLocalNameText();
                 String anotherName = anotherFunctionName.getLocalNameText();
                 return elementFile.equals(anotherFile)
-                        && elementNamespace.equals(anotherNamespace)
-                        && elementName != null && elementName.equals(anotherName);
+                        && ((elementNamespace != null) && elementNamespace.equals(anotherNamespace))
+                        && ((elementName != null) && elementName.equals(anotherName));
             }
         }
         return false;

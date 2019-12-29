@@ -38,8 +38,8 @@
         <![CDATA[
             <h3>Changes in 1.1:</h3>
             <ul>
-                <li>Update plugin to support IntelliJ 19.1</li>
-                <li>FINISH ME</li>
+                <li>Update plugin to support IntelliJ 2019.3</li>
+                <li>Online docs updated to MarkLogic 10, as well as builtin functions defeintions updated to match</li>
             </ul>
             <h3>Changes in 1.0:</h3>
             <ul>
@@ -86,7 +86,7 @@
         ]]>
     </change-notes>
 
-    <idea-version since-build="173.3727.127"/>
+    <idea-version since-build="193.5233.102"/>
 
     <depends>com.intellij.modules.lang</depends>
 
@@ -175,9 +175,10 @@
             <action id="XQuery.FunctionDocsLookup" text="XQuery Function Doc Lookup" icon="AllIcons.Toolwindows.ToolWindowFind" description="Lookup XQuery function documentation locally" class="org.intellij.xquery.documentation.DocLookupMenu" popup="true">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift control D" />
             </action>
-            <action id="XQuery.MLDocs9" text="MarkLogic 9 Online Docs" icon="AllIcons.Toolwindows.Documentation" description="http://docs.marklogic.com/9.0" class="org.intellij.xquery.documentation.WebReferenceAction">
+            <action id="XQuery.MLDocs10" text="MarkLogic 10 Online Docs" icon="AllIcons.Toolwindows.Documentation" description="http://docs.marklogic.com/10.0" class="org.intellij.xquery.documentation.WebReferenceAction">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift control alt D" />
             </action>
+            <action id="XQuery.MLDocs9" text="MarkLogic 9 Online Docs" icon="AllIcons.Toolwindows.Documentation" description="http://docs.marklogic.com/9.0" class="org.intellij.xquery.documentation.WebReferenceAction"/>
             <action id="XQuery.MLDocs8" text="MarkLogic 8 Online Docs" icon="AllIcons.Toolwindows.Documentation" description="http://docs.marklogic.com/8.0" class="org.intellij.xquery.documentation.WebReferenceAction"/>
             <action id="XQuery.MLDocs7" text="MarkLogic 7 Online Docs" icon="AllIcons.Toolwindows.Documentation" description="http://docs.marklogic.com/7.0" class="org.intellij.xquery.documentation.WebReferenceAction"/>
             <separator/>

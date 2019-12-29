@@ -480,7 +480,17 @@ public class MarkLogicFunctionDefs
 					attributes.getValue ("name"),
 					(attributes.getValue ("fullname") == null) ? (attributes.getValue ("lib") + ':' + attributes.getValue ("name")) : attributes.getValue ("fullname"),
 					false,
-					Boolean.valueOf (attributes.getValue ("hidden")),
+					Boolean.parseBoolean (attributes.getValue ("hidden")),
+					"item()*",
+					categoryMap.get (attributes.getValue ("category")));
+				break;
+			case "apidoc:method":
+				text.setLength (0);
+				func = new Function (docsSource, attributes.getValue ("object"),
+					attributes.getValue ("name"),
+					(attributes.getValue ("fullname") == null) ? (attributes.getValue ("object") + ':' + attributes.getValue ("name")) : attributes.getValue ("fullname"),
+					false,
+					Boolean.parseBoolean (attributes.getValue ("hidden")),
 					"item()*",
 					categoryMap.get (attributes.getValue ("category")));
 				break;
@@ -547,6 +557,7 @@ public class MarkLogicFunctionDefs
 			case "apidoc:response":
 				break;
 			case "apidoc:function":
+			case "apidoc:method":
 				functions.add (func);
 
 				if ( ! func.isHidden()) {

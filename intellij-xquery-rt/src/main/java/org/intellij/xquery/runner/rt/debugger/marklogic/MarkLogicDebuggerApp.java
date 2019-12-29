@@ -206,6 +206,7 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 		logger.debug ("breakpointSet called, breakpoint: " + printBreakpoint (breakpoint));
 		Breakpoint bp = breakpointManager.setBreakpoint (breakpoint);
 
+		logger.debug ("debugConnector: " + debugConnector);
 		if (debugConnector != null) debugConnector.setMlBreakPoints (debuggerRequestId, breakpointManager);
 
 		return bp;

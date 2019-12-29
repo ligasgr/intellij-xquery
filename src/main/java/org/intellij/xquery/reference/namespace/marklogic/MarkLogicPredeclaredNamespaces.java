@@ -38,6 +38,8 @@ public class MarkLogicPredeclaredNamespaces extends XQuery30PredeclaredNamespace
             "xdmp",
             "prof",
             "rdf",
+            "cntk",
+            "w3c-err",
             "sc"
     );
 
@@ -62,6 +64,8 @@ public class MarkLogicPredeclaredNamespaces extends XQuery30PredeclaredNamespace
         prefixToNamespaceMap.put("geo", Pair.create("http://marklogic.com/geospatial", false));
         prefixToNamespaceMap.put("geojson", Pair.create("http://marklogic.com/geospatial/geojson", false));
         prefixToNamespaceMap.put("georss", Pair.create("http://www.georss.org/georss", false));
+        prefixToNamespaceMap.put("geogml", Pair.create("http://marklogic.com/geospatial/gml", false));
+        prefixToNamespaceMap.put("geokml", Pair.create("http://marklogic.com/geospatial/kml", false));
         prefixToNamespaceMap.put("gml", Pair.create("http://www.opengis.net/gml", false));
         prefixToNamespaceMap.put("hadoop", Pair.create("http://marklogic.com/xdmp/hadoop", false));
         prefixToNamespaceMap.put("infodev", Pair.create("http://marklogic.com/appservices/infostudio/dev", false));
@@ -95,8 +99,18 @@ public class MarkLogicPredeclaredNamespaces extends XQuery30PredeclaredNamespace
         prefixToNamespaceMap.put("xhtml", Pair.create("http://marklogic.com/cpf/xhtml", false));
         prefixToNamespaceMap.put("xinc", Pair.create("http://marklogic.com/xinclude", false));
         prefixToNamespaceMap.put("xp", Pair.create("http://marklogic.com/xinclude/xpointer", false));
+        prefixToNamespaceMap.put("clang", Pair.create("http://marklogic.com/xdmp/custom-language", false));
+        prefixToNamespaceMap.put("op", Pair.create("http://marklogic.com/optic", false));
+        prefixToNamespaceMap.put("cma", Pair.create("http://marklogic.com/manage/config", false));
+        prefixToNamespaceMap.put("cntk", Pair.create("http://marklogic.com/cntk", false));
+        prefixToNamespaceMap.put("entity", Pair.create("http://marklogic.com/entity", false));
+        prefixToNamespaceMap.put("es", Pair.create("http://marklogic.com/entity-services", false));
+        prefixToNamespaceMap.put("rdt", Pair.create("http://marklogic.com/xdmp/redaction", false));
+        prefixToNamespaceMap.put("schematron", Pair.create("http://marklogic.com/xdmp/schematron", false));
+        prefixToNamespaceMap.put("sql", Pair.create("http://marklogic.com/xdmp/sql", false));
+        prefixToNamespaceMap.put("tde", Pair.create("http://marklogic.com/xdmp/tde", false));
+        prefixToNamespaceMap.put("w3c-err", Pair.create("http://www.w3.org/2005/xqt-errors", false));
     }
-
 
     public Map<String, String> getPrefixToNamespaceMap(XQueryFile xQueryFile) {
         Map<String, String> defaultMap = super.getPrefixToNamespaceMap(xQueryFile);

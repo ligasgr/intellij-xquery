@@ -60,7 +60,7 @@ private void prepareCopyright(it) {
     copyright.appendNode('option', ['name': 'notice', 'value': project.file('NOTICE').text])
     copyright.appendNode('option', ['name': 'keyword', 'value': 'Copyright'])
     copyright.appendNode('option', ['name': 'allowReplaceKeyword', 'value': ''])
-    copyright.appendNode('option', ['name': 'myName', 'value': 'apache'])
+    copyright.appendNode('option', ['name': 'myName', 'value': 'overstory'])
     copyright.appendNode('option', ['name': 'myLocal', 'value': 'true'])
 }
 
