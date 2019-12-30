@@ -182,8 +182,8 @@
             <action id="XQuery.MLDocs8" text="MarkLogic 8 Online Docs" icon="AllIcons.Toolwindows.Documentation" description="http://docs.marklogic.com/8.0" class="org.intellij.xquery.documentation.WebReferenceAction"/>
             <action id="XQuery.MLDocs7" text="MarkLogic 7 Online Docs" icon="AllIcons.Toolwindows.Documentation" description="http://docs.marklogic.com/7.0" class="org.intellij.xquery.documentation.WebReferenceAction"/>
             <separator/>
-            <action id="XQuery.MLPluginHelp" text="MarkLogic XQuery Plugin Wiki" description="https://github.com/overstory/marklogic-intellij-plugin/wiki" class="org.intellij.xquery.documentation.WebReferenceAction"/>
             <action id="XQuery.MLPluginRunModesHelp" text="MarkLogic Debugger Run Modes Help" description="Description of MarkLogic Debugger Run Modes" class="org.intellij.xquery.documentation.PluginHelpAction"/>
+            <action id="XQuery.MLPluginHelp" text="MarkLogic XQuery Plugin Wiki" description="https://github.com/overstory/marklogic-intellij-plugin/wiki" class="org.intellij.xquery.documentation.WebReferenceAction"/>
             <separator/>
             <action id="XQuery.PluginGitHub" text="GitHub Project" description="https://github.com/overstory/marklogic-intellij-plugin" class="org.intellij.xquery.documentation.WebReferenceAction"/>
             <action id="XQuery.OverStory" text="OverStory" description="http://overstory.co.uk" class="org.intellij.xquery.documentation.WebReferenceAction"/>

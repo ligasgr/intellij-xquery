@@ -17,7 +17,6 @@
 
 package org.intellij.xquery.runner.ui.run.main.variables;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
@@ -33,6 +32,8 @@ import com.intellij.ui.PanelWithAnchor;
 import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.components.JBCheckBox;
 import net.miginfocom.swing.MigLayout;
+
+import org.intellij.xquery.icons.XQueryIcons;
 import org.intellij.xquery.runner.rt.XQueryItemType;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.jetbrains.annotations.Nullable;
@@ -94,7 +95,7 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         contextItemEditorField = new EditorTextField("", project, StdFileTypes.PLAIN_TEXT);
         contextItemEditorContent = new MyEditorTextFieldWithBrowseButton(project, contextItemEditorField);
         contextItemEditorContent.getChildComponent().setName(EDITOR_CONTENT);
-        contextItemEditorContent.setButtonIcon(AllIcons.Actions.ShowViewer);
+        contextItemEditorContent.setButtonIcon(XQueryIcons.ShowViewer);
         contextItemPathField = new TextFieldWithBrowseButton();
         contextItemPathField.getTextField().setName(FILE_PATH);
         addPathFieldButtonListener (project);
