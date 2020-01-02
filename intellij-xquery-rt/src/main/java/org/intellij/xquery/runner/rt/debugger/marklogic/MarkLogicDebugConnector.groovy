@@ -495,7 +495,7 @@ class MarkLogicDebugConnector
 	private static final String datePatternString = '[0-9][0-9][0-9][0-9]\\-[0-9][0-9]\\-[0-9][0-9]'
 	private static final String timePatternString = '[0-2][0-9]:[0-5][0-9]:[0-5][0-9](\\.[0-9]+.*)?'
 	private static final Pattern datePattern = Pattern.compile (datePatternString)
-	private static final Pattern dateTimePattern = Pattern.compile ("${datePatternString}T${timePatternString}")
+	private static final Pattern dateTimePattern = Pattern.compile ("${datePatternString}T${timePatternString}".toString())
 	private static final Pattern booleanPattern = Pattern.compile ('fn:true\\(\\)|fn:false\\(\\)')
 
 	private static String guessVarType (String value)
@@ -550,7 +550,21 @@ class MarkLogicDebugConnector
 	// FixMe: Move this somewhere more generic
 	static String resourceFileText (String packageName, String filename)
 	{
-		MarkLogicDebugConnector.classLoader.getResource ("${packageName.replace ('.', SLASH)}${SLASH}${filename}").text
+		String path = "${packageName.replace ('.', SLASH)}${SLASH}${filename}"
+
+		try {
+			URL resource = MarkLogicDebugConnector.classLoader.getResource (path)
+
+			if (resource == null) {
+				throw new RuntimeException ("Cannot find resource at '${path}'".toString())
+			}
+
+			resource.text
+		} catch (RuntimeException e) {
+			throw e
+		} catch (Exception e) {
+			throw new RuntimeException ("Cannot get content of resource at '${path}' ${e.toString()}".toString())
+		}
 	}
 
 	// ---------------------------------------------------

@@ -58,15 +58,16 @@ repositories {
 dependencies {
     compile fileTree(dir: 'lib', include: '*.jar')
     // This should match the netty version in the IntelliJ SDK, the Codnos debugger library has a hard dependency on a very old version of netty
-    compile ('io.netty:netty-all:4.1.13.Final') {
+    compile ('io.netty:netty-all:4.1.41.Final') {
 	    force = true
     }
     compile 'org.codehaus.groovy:groovy-all:2.4.17'
     compile('com.codnos:dbgp-interfaces:1.0.0') {
+        exclude group: 'io.netty', module: 'netty-all'
         ext.transitive = false
     }
     compile 'commons-codec:commons-codec:1.10'
-    compile 'com.marklogic:marklogic-xcc:9.0.9'
+    compile 'com.marklogic:marklogic-xcc:10.0.2'
     testCompile 'junit:junit-dep:4.10'
     testCompile 'org.mockito:mockito-all:1.9.5'
     testCompile('org.hamcrest:hamcrest-library:1.1') {

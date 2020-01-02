@@ -26,9 +26,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+// See: https://docs.marklogic.com/guide/xquery/namespaces#id_21104
+
 public class MarkLogicPredeclaredNamespaces extends XQuery30PredeclaredNamespaces {
     private static final Set<String> AVAILABLE_BY_DEFAULT_IN_MARK_LOGIC_EXTENDED_SYNTAX = ContainerUtil.set(
             "cts",
+            "dav",
+            "dir",
             "dbg",
             "exsl",
             "map",
@@ -37,16 +41,20 @@ public class MarkLogicPredeclaredNamespaces extends XQuery30PredeclaredNamespace
             "spell",
             "xdmp",
             "prof",
+            "prop",
             "rdf",
             "cntk",
-            "w3c-err",
+            "error",
+            "sec",
+            "json",	// Not documented as implicitly defined, but seems to be anyway
             "sc"
     );
 
     {
         prefixToNamespaceMap.put("cts", Pair.create("http://marklogic.com/cts", false));
+        prefixToNamespaceMap.put("dav", Pair.create("DAV:", false));
+        prefixToNamespaceMap.put("dir", Pair.create("http://marklogic.com/xdmp/directory", false));
         prefixToNamespaceMap.put("exsl", Pair.create("http://exslt.org/common", false));
-        prefixToNamespaceMap.put("spell", Pair.create("http://marklogic.com/xdmp/spell", false));
         prefixToNamespaceMap.put("xdmp", Pair.create("http://marklogic.com/xdmp", false));
         prefixToNamespaceMap.put("admin", Pair.create("http://marklogic.com/xdmp/admin", false));
         prefixToNamespaceMap.put("alert", Pair.create("http://marklogic.com/xdmp/alert", false));
@@ -73,7 +81,7 @@ public class MarkLogicPredeclaredNamespaces extends XQuery30PredeclaredNamespace
         prefixToNamespaceMap.put("json", Pair.create("http://marklogic.com/xdmp/json", false));
         prefixToNamespaceMap.put("kml", Pair.create("http://earth.google.com/kml/2.0", false));
         prefixToNamespaceMap.put("lnk", Pair.create("http://marklogic.com/cpf/links", false));
-        prefixToNamespaceMap.put("map", Pair.create("http://marklogic.com/xdmp/map", false));
+        prefixToNamespaceMap.put("map", Pair.create("http://marklogic.com/xdmp/map", false));	// Overrides XQuery 3.x definition
         prefixToNamespaceMap.put("mcgm", Pair.create("http://marklogic.com/geospatial/mcgm", false));
         prefixToNamespaceMap.put("msword", Pair.create("http://marklogic.com/cpf/msword", false));
         prefixToNamespaceMap.put("ooxml", Pair.create("http://marklogic.com/openxml", false));
@@ -109,7 +117,10 @@ public class MarkLogicPredeclaredNamespaces extends XQuery30PredeclaredNamespace
         prefixToNamespaceMap.put("schematron", Pair.create("http://marklogic.com/xdmp/schematron", false));
         prefixToNamespaceMap.put("sql", Pair.create("http://marklogic.com/xdmp/sql", false));
         prefixToNamespaceMap.put("tde", Pair.create("http://marklogic.com/xdmp/tde", false));
-        prefixToNamespaceMap.put("w3c-err", Pair.create("http://www.w3.org/2005/xqt-errors", false));
+        prefixToNamespaceMap.put("error", Pair.create("http://marklogic.com/xdmp/error", false));
+        prefixToNamespaceMap.put("xqterr", Pair.create("http://www.w3.org/2005/xqt-errors", false));	// Alias of err: from XQuery 3.0
+        prefixToNamespaceMap.put("prop", Pair.create("http://marklogic.com/xdmp/property", false));
+        prefixToNamespaceMap.put("xmlns", Pair.create("http://www.w3.org/2000/xmlns/", false));		// Overrides XQuery 3.0 value
     }
 
     public Map<String, String> getPrefixToNamespaceMap(XQueryFile xQueryFile) {
@@ -121,7 +132,7 @@ public class MarkLogicPredeclaredNamespaces extends XQuery30PredeclaredNamespace
     }
 
     protected Map<String, String> getAvailableByDefaultInMarkLogicExtendedSyntax(Map<String, String> defaultMap) {
-        Map<String, String> result = new HashMap<String, String>(defaultMap);
+        Map<String, String> result = new HashMap<>(defaultMap);
         for (Map.Entry<String, Pair<String, Boolean>> entry : prefixToNamespaceMap.entrySet()) {
             if (AVAILABLE_BY_DEFAULT_IN_MARK_LOGIC_EXTENDED_SYNTAX.contains(entry.getKey())) {
                 result.put(entry.getKey(), entry.getValue().first);
