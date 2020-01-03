@@ -23,7 +23,7 @@
 
     <description>
         <![CDATA[
-            <h2>XQuery 3.0/3.1 Language Support, with MarkLogic Debugger</h2>
+            <h2>XQuery 3.0/3.1 and MarkLogic 1.0-ml Language Support, with MarkLogic Debugger</h2>
             <p>
             Forked from <a href="http://ligasgr.github.io/intellij-xquery/">XQuery Language Support</a> plugin by Grzegorz Ligas.
             MarkLogic extensions added by <a href="mailto:ron@overstory.co.uk">Ron Hitchens</a> of <a href="http://overstory.co.uk/">OverStory Ltd</a>.
@@ -38,8 +38,14 @@
         <![CDATA[
             <h3>Changes in 1.1:</h3>
             <ul>
-                <li>Update plugin to support IntelliJ 2019.3</li>
-                <li>Online docs updated to MarkLogic 10, as well as builtin functions defeintions updated to match</li>
+                <li>Require minimum IntelliJ version 2019.3</li>
+                <li>In-IDE MarkLogic docs regenerated from MarkLogic 10 docs zip</li>
+                <li>Builtin functions definitions regenerated to match</li>
+                <li>Updated set of predeclared namespaces to match MarkLogic docs</li>
+                <li>Recognize XQuery 3.1 implicit variables in catch clause</li>
+                <li>Eliminate reference to deprecated icon per JetBrains notice</li>
+                <li>Tidy up Ad Hoc debug runner so that ML appserver root need not match IntelliJ file path</li>
+                <li>Fix various small bugs and issues</li>
             </ul>
             <h3>Changes in 1.0:</h3>
             <ul>
