@@ -82,7 +82,7 @@ public class BreakpointManager {
         final Map<String, Breakpoint> s = breakpoints.get(line);
         final Breakpoint breakpointThatWasSet = aCopyOf(breakpoint).withFileUri(uri).withBreakpointId(breakpointId).build();
         if (s == null) {
-            final HashMap<String, Breakpoint> map = new HashMap<String, Breakpoint>();
+            final HashMap<String, Breakpoint> map = new HashMap<>();
             map.put(uri, breakpointThatWasSet);
             breakpoints.put(line, map);
         } else {

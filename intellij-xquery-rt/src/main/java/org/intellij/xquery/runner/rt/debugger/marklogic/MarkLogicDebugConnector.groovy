@@ -121,14 +121,14 @@ class MarkLogicDebugConnector
 			throw new RuntimeException ("Cannot start request for debugging in '${runMode}' run mode")
 		}
 
-		log.trace ("submitRequestForDebug back from call, requestId: " + requestId)
+		log.trace ("submitRequestForDebug back from call, requestId: ${requestId}")
 
 		// This is unnecessary, but will trigger an undefined external var exception
 		// if any are undefined.  Need to do this first, because dbg:value() will hang if
 		// the request encounters an XQuery error later.
 		requestStackFrames (requestId)
 
-		log.trace ("submitRequestForDebug: returning")
+		log.trace ("submitRequestForDebug: returning, requestId: ${requestId}")
 
 		if (runMode == CAPTURE_APPSERVER) {
 			log.info "Successfully attached to appserver '${appserverName}', debugging started"
@@ -297,6 +297,9 @@ class MarkLogicDebugConnector
 
 	void setMlBreakPoints (BigInteger requestId, BreakpointManager breakpointManager)
 	{
+		MarkLogicRunMode runMode = config.getMlDebugRunMode()
+		String mainFile = config.mainFile
+
 		log.debug ("setMlBreakPoints, requestId: " + requestId)
 
 		evalRequest (xfile (CLEAR_BPS_REQ), [id: requestId])
@@ -304,13 +307,19 @@ class MarkLogicDebugConnector
 		Map<Integer, Map<String, Breakpoint>> breakPoints = breakpointManager.allBreakpoints()
 
 		breakPoints.each { Integer bpId, Map<String, Breakpoint> bpMap ->
-			log.debug ("setMlBreakPoints: id=" + bpId)
+			log.debug (" setMlBreakPoints: id=" + bpId)
 
 			bpMap.each { String mapId, Breakpoint bp ->
-				log.debug ("  Breakpoint: id: " + bp.getBreakpointId() + ", type: " + bp.getType() +
-					", function: " + bp.getFunction() + ", line: " + bp.getLineNumber() + ", expr: " + bp.getExpression())
+				String file = bp.fileURL.orElse ('file:') - 'file:'
+				if ((runMode == ADHOC) && ( ! file.equals (mainFile))) {
+					// If running Ad Hoc, it doesn't make sense to set breakpoints in any files other than the one being eval'ed
+					log.debug ("  Skipping out-of-scope breakpoint ${bp.getBreakpointId()} in ${file}")
+				} else {
+					log.debug ("  Setting breakpoint: id: " + bp.getBreakpointId() + ", type: " + bp.getType() +
+						", function: " + bp.getFunction() + ", line: " + bp.getLineNumber() + ", expr: " + bp.getExpression())
 
-				setMlBreakPoint (requestId, bp)
+					setMlBreakPoint (requestId, bp)
+				}
 			}
 		}
 	}
@@ -320,7 +329,7 @@ class MarkLogicDebugConnector
 		String file = bp.getFileURL().get()
 		Integer line = bp.getLineNumber().get()
 //		String functionName = bp.getFunction().get();
-		log.trace ("setMlBreakPoint called")
+		log.info ("setMlBreakPoint called, reqId: ${requestId}, line: ${line}, file: ${file}")
 
 		BigInteger exprId = exprForLine (requestId, file, line)
 
@@ -338,13 +347,21 @@ class MarkLogicDebugConnector
 
 	private BigInteger exprForLine (BigInteger requestId, String file, Integer line) throws RequestException
 	{
+		MarkLogicRunMode runMode = config.getMlDebugRunMode()
+		String uri = (runMode == ADHOC) ? '' : mlFileUri (file)
+
 		ResultSequence rs
 
+		log.debug ("exprForLine reqId: ${requestId}, line: ${line}, file: ${file}")
+
 		try {
-			rs = evalRequest (xfile (EXPRS_REQ), [id: requestId, uri: mlFileUri (file), line: line.toString()])
+			rs = evalRequest (xfile (EXPRS_REQ), [id: requestId, uri: uri, line: line.toString()])
 		} catch (XQueryException e) {
 			if ('DBG-MODULEDNE'.equals (e.getCode())) {
 				log.debug ("Ignoring DBG-MODULEDNE, assuming breakpoint not in scope for request")
+				return null
+			} else if ((runMode == ADHOC) && 'DBG-LINE'.equals (e.getCode())) {
+				log.debug ("Ignoring DBG-LINE, assuming eval request or concurrent edit")
 				return null
 			} else {
 				throw e

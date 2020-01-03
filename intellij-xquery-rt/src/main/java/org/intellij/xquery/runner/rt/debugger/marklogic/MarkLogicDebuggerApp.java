@@ -61,6 +61,8 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 		super (config, output);
 
 		applicationThread = new Thread (getApplicationRunnable());
+
+		applicationThread.setName ("MarkLogicDebuggerThread");
 	}
 
 	// --------------------------------------------------------
@@ -473,6 +475,7 @@ public class MarkLogicDebuggerApp extends MarklogicRunnerApp implements Debugger
 
 					logger.debug ("ran the app");
 					changeToStopped();
+					logger.debug ("exiting Runnable");
 				} catch (Throwable e) {
 					logger.error ("Exception running debugger: " + e);
 					e.printStackTrace();
