@@ -46,7 +46,7 @@
                 <li>Eliminate reference to deprecated icon per JetBrains notice</li>
                 <li>Tidy up Ad Hoc debug runner so that MarkLogic appserver root need not match IntelliJ file path</li>
                 <li>Fix various bugs and issues</li>
-                <li>See <a href=https://github.com/overstory/marklogic-intellij-plugin/wiki/Resolving-Imported-MarkLogic-Modules">tip for resolving imported MarkLogic modules</a></li>
+                <li>See <a href="https://github.com/overstory/marklogic-intellij-plugin/wiki/Resolving-Imported-MarkLogic-Modules">tip for resolving imported MarkLogic modules</a></li>
             </ul>
             <h3>Changes in 1.0:</h3>
             <ul>
