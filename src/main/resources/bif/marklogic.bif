@@ -193,7 +193,7 @@ admin#cluster-get-keystore-backup-option#1#$config as element(configuration)#xs:
 admin#cluster-get-keystore-host-name#1#$config as element(configuration)#xs:string
 admin#cluster-get-keystore-host-names#1#$config as element(configuration)#xs:string*
 admin#cluster-get-keystore-kmip-CA-path#1#$config as element(configuration)#xs:string
-admin#cluster-get-keystore-kmip-certificate-path#2#$config as element(configuration), $value as xs:string#xs:string
+admin#cluster-get-keystore-kmip-certificate-path#1#$config as element(configuration)#xs:string
 admin#cluster-get-keystore-kmip-key-path#1#$config as element(configuration)#xs:string
 admin#cluster-get-keystore-kms-type#1#$config as element(configuration)#xs:string
 admin#cluster-get-keystore-port#1#$config as element(configuration)#xs:unsignedLong
@@ -1296,10 +1296,10 @@ cntk#sin#2#$operand as cntk:variable, [$name as xs:string]#cntk:function
 cntk#sinh#2#$operand as cntk:variable, [$name as xs:string]#cntk:function
 cntk#slice#5#$operand as cntk:variable, $axis as xs:axis*, $begin-index as xs:integer*, $end-index as xs:integer*, $name as xs:string#cntk:function
 cntk#slice-with-strides#6#$x as cntk:variable, $axis as xs:axis*, $begin-index as xs:integer*, $end-index as xs:integer*, $strides as xs:integer*, $name as xs:string#cntk:function
-cntk#soft-plus#2#$x as cntk:variable, $name as xs:string#cntk:function
-cntk#soft-sign#2#$x as cntk:variable, $name as xs:string#cntk:function
 cntk#softmax#2#$operand as cntk:variable, [$name as xs:string]#cntk:function
 cntk#softmax-on-axis#3#$x as cntk:variable, $axis as cntk:axis, $name as xs:string#cntk:function
+cntk#softplus#2#$x as cntk:variable, $name as xs:string#cntk:function
+cntk#softsign#2#$x as cntk:variable, $name as xs:string#cntk:function
 cntk#space-to-depth#3#$operand as cntk:variable, $block-size as xs:unsignedLong, $name as xs:string#cntk:function
 cntk#splice#3#$inputs as cntk:variable*, $axis as cntk:axis, $name as xs:string#cntk:function
 cntk#sqrt#2#$operand as cntk:variable, [$name as xs:string]#cntk:function
@@ -1542,6 +1542,7 @@ cts#entity#4#$id as xs:string, $normalizedText as xs:string, $text as xs:string,
 cts#entity-dictionary#2#$entities as cts:entity*, [$options as xs:string*]#cts:entity-dictionary
 cts#entity-dictionary-parse#1#$uri as xs:string#cts:entity-dictionary
 cts#entity-dictionary-parse#2#$contents as xs:string*, [$options as xs:string*]#cts:entity-dictionary
+cts#entity-highlight#2#$node as node(), $expr as item()*#node()
 cts#false-query#0##cts:or-query
 cts#field-range-query#5#$field-name as xs:string*, $operator as xs:string, $value as xs:anyAtomicType*, [$options as xs:string*], [$weight as xs:double?]#cts:field-range-query
 cts#field-range-query-field-name#1#$query as cts:field-range-query#xs:string*
@@ -2543,6 +2544,18 @@ op#xml-element#3#$name as item(), [$attributes as map:map*], [$content as item()
 op#xml-pi#2#$name as item(), $value as item()#map:map
 op#xml-text#1#$content as item()#map:map
 op#xpath#2#$column as item(), $path as xs:string#map:map
+ort#run#3#$session as node, $inputs as node, [$options as map:map]#map:map
+ort#session#2#$model as node, [$options as map:map]#ort:session
+ort#session-input-count#1#$session as ort:session#xs:unsignedLong
+ort#session-input-name#2#$session as ort:session, $index as xs:unsignedLong#xs:string
+ort#session-input-type#2#$session as ort:session, $index as xs:unsignedLong#map:map
+ort#session-output-count#1#$session as ort:session#xs:unsignedLong
+ort#session-output-name#2#$session as ort:session, $index as xs:unsignedLong#xs:string
+ort#session-output-type#2#$session as ort:session, $index as xs:unsignedLong#map:map
+ort#value#3#$data as xs:numeric*, $shape as xs:long*, $type as xs:string#ort:value
+ort#value-get-array#1#$value as ort:value#xs:numeric*
+ort#value-get-shape#1#$value as ort:value#xs:long*
+ort#value-get-type#1#$value as ort:value#xs:string
 p#action#3#$module as xs:string, $description as xs:string?, $options as element()?#element(p:action)
 p#collection#0##xs:string
 p#condition#3#$module as xs:string, $description as xs:string?, $options as element()?#element(p:condition)
@@ -3116,7 +3129,7 @@ trgr#trigger-set-name#2#$trigger-name as xs:string, $new-trigger-name as xs:stri
 trgr#trigger-set-permissions#2#$trigger-name as xs:string, $permissions as item()*#empty-sequence()
 trgr#trigger-set-recursive#2#$trigger-name as xs:string, $recursive as xs:boolean#empty-sequence()
 trgr#trigger-set-task-priority#2#$trigger-name as xs:string, $task-priority as xs:string#empty-sequence()
-trgr#triggers-change-modules-database#2#$old-db as xs:unsignedLong, $new-db as xs:unsignedLong#empty-sequence()
+trgr#triggers-change-modules-database#2#$old-db as xs:anyAtomicType, $new-db as xs:anyAtomicType#empty-sequence()
 trgr#triggers-collection#0##xs:string
 trgr#triggers-namespace#0##xs:string
 trgr#triggers-uri#0##xs:string
@@ -3197,6 +3210,7 @@ xdmp#can-grant-roles#1#$roles as xs:string*#empty-sequence()
 xdmp#castable-as#3#$namespace-uri as xs:string, $local-name as xs:string, $item as item()?#xs:boolean
 xdmp#cluster#1#[$name as xs:string]#xs:unsignedLong
 xdmp#cluster-effective-version#0##xs:unsingedLong
+xdmp#cluster-fedramp#0##xs:boolean
 xdmp#cluster-name#1#[$id as xs:unsignedLong]#xs:string
 xdmp#cluster-version-at-least#1#$version as xs:unsignedInt#xs:boolean
 xdmp#collation-canonical-uri#1#$collation-uri as xs:string#xs:string
@@ -3421,6 +3435,8 @@ xdmp#javascript-eval#3#$javascript as xs:string, [$vars as item()* | map:map], [
 xdmp#json-pointer#2#$node as node(), $path as xs:string#node()?
 xdmp#json-validate#3#$node as node(), $schema as xs:string, $options as xs:string*#node()
 xdmp#json-validate-node#3#$node as node(), $schema as node(), $options as xs:string*#node()
+xdmp#json-validate-report#3#$node as node(), $schema as xs:string, $options as xs:string*#element(xdmp:validation-errors)
+xdmp#json-validate-report-node#3#$node as node(), $schema as node(), $options as xs:string*#element(xdmp:validation-errors)
 xdmp#key-from-QName#1#$name as xs:QName#xs:string
 xdmp#keystore-export#2#$passphrase as xs:string, $filepath as xs:string#xs:boolean
 xdmp#keystore-import#2#$passphrase as xs:string, $filepath as xs:string#xs:boolean
@@ -3533,6 +3549,7 @@ xdmp#server-modules-database#1#$id as xs:unsignedLong#xs:unsignedLong?
 xdmp#server-name#1#$id as xs:unsignedLong#xs:string
 xdmp#server-port#1#$id as xs:unsignedLong#xs:unsignedInt?
 xdmp#server-root#1#$id as xs:unsignedLong#xs:string?
+xdmp#server-session-timeout#1#$id as xs:unsignedLong#xs:unsignedInt?
 xdmp#server-ssl-certificate-template#1#$id as xs:unsignedLong#xs:unsignedLong?
 xdmp#server-status#2#$host-id as xs:unsignedLong, $server-id as xs:unsignedLong*#element(server-status)*
 xdmp#servers#0##xs:unsignedLong*

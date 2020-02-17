@@ -39,13 +39,14 @@
             <h3>Changes in 1.1:</h3>
             <ul>
                 <li>Require minimum IntelliJ version 2019.3</li>
-                <li>In-IDE MarkLogic docs regenerated from MarkLogic 10 docs zip</li>
-                <li>Builtin functions definitions regenerated to match</li>
+                <li>In-IDE MarkLogic docs regenerated from MarkLogic 10.0-3 docs zip</li>
+                <li>Builtin function definitions regenerated to match docs</li>
                 <li>Updated set of predeclared namespaces to match MarkLogic docs</li>
                 <li>Recognize XQuery 3.1 implicit variables in catch clause</li>
                 <li>Eliminate reference to deprecated icon per JetBrains notice</li>
-                <li>Tidy up Ad Hoc debug runner so that ML appserver root need not match IntelliJ file path</li>
-                <li>Fix various small bugs and issues</li>
+                <li>Tidy up Ad Hoc debug runner so that MarkLogic appserver root need not match IntelliJ file path</li>
+                <li>Fix various bugs and issues</li>
+                <li>See <a href=https://github.com/overstory/marklogic-intellij-plugin/wiki/Resolving-Imported-MarkLogic-Modules">tip for resolving imported MarkLogic modules</a></li>
             </ul>
             <h3>Changes in 1.0:</h3>
             <ul>
@@ -62,32 +63,16 @@
                 <li>Add inspection for defaulted fn: namespace on function calls</li>
                 <li>Merge upstream changes from 3.3.1+ of <a href="http://ligasgr.github.io/intellij-xquery/">Grzegorz's code</a></li>
             </ul>
-            <h3>Changes in 0.9.3-beta:</h3>
-            <ul>
-                <li>Fix packaging bug that left some help files out of the distribution</li>
-            </ul>
-            <h3>Changes in 0.9.1-beta:</h3>
-            <ul>
-                <li>Issue #41: Avoid Groovy runtime version clash when the project also uses Groovy.  Use the one in the project module.  Add Log4J and SLF4J libraries to classpath</li>
-                <li>Issue #42: Add cleanup hook when a debugged process exits, to release stopped requests or captured appservers on Marklogic.</li>
-                <li>Add top-level menu item to display Run Mode help info</li>
-            </ul>
 
             <h3>Notes</h3>
             <p>
-            This is a Beta pre-release of the MarkLogic IntelliJ XQuery plugin.  As an XQuery editor
-            it is quite stable.  It is forked from, and currently up to date with, the XQuery Language Support
-            created by Grzegorz Ligas.
-            </p>
-            <p>
-            The MarkLogic debugger extensions have been added on this fork and while they seem to be working correctly
-            they have not been thoroughly tested yet.  If you use this plugin, please report any bugs via the
+            Please report any bugs you find via the
             <a href="https://github.com/overstory/marklogic-intellij-plugin/issues">Issues
-            section</a> of the GitHub project.
+            section</a> of the GitHub project for this plugin.
             </p>
             <p>
-            If you wish to get involved in code development for this plugin, please contact Ron Hitchens (<a href="mailto:ron@overstory.co.uk">ron@overstory.co.uk</a>).
-            Planned features are, for the most part, recorded in the Issues for the GitHub project.
+            If you wish to get involved in code development, please contact Ron Hitchens (<a href="mailto:ron@overstory.co.uk">ron@overstory.co.uk</a>).
+            Planned features and open bugs are recorded as Issues on the GitHub project.
             </p>
         ]]>
     </change-notes>
