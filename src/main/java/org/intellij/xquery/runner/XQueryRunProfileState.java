@@ -62,6 +62,7 @@ import org.intellij.xquery.runner.state.run.XQueryRunConfigurationSerializer;
 import org.intellij.xquery.runner.state.run.XmlConfigurationAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.jps.model.java.JdkVersionDetector;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -237,7 +238,8 @@ public class XQueryRunProfileState extends CommandLineState {
                             throw new CantRunException(ExecutionBundle.message("main.class.is.not.specified.error.message"));
                         }
 
-                        return JdkUtil.setupJVMCommandLine(exePath, javaParameters, forceDynamicClasspath);
+                        javaParameters.setUseDynamicClasspath (forceDynamicClasspath);
+                        return JdkUtil.setupJVMCommandLine (javaParameters);
                     } catch (CantRunException e) {
                         throw new RuntimeException(e);
                     }
@@ -356,8 +358,11 @@ public class XQueryRunProfileState extends CommandLineState {
             throw new CantRunException(ExecutionBundle.message("jre.path.is.not.valid.jre.home.error.message", jreHome));
         }
 
-        final String versionString = SdkVersionUtil.detectJdkVersion(jreHome);
+        final JdkVersionDetector.JdkVersionInfo info = SdkVersionUtil.getJdkVersionInfo (jreHome);
+        final String versionString = (info != null) ? JdkVersionDetector.formatVersionString (info.version) : null;
+
         final Sdk jdk = new SimpleJavaSdkType().createJdk(versionString != null ? versionString : "", jreHome);
+
         if (jdk == null) throw CantRunException.noJdkConfigured();
         return jdk;
     }

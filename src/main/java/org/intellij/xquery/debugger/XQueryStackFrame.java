@@ -78,7 +78,7 @@ public class XQueryStackFrame extends XStackFrame {
             component.append(":" + (lineNumber) +", ", SimpleTextAttributes.REGULAR_ATTRIBUTES);
             component.append(position.getFile().getName(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
             component.append(" (" + position.getFile().getPath() + ")", SimpleTextAttributes.GRAYED_ATTRIBUTES);
-            component.setIcon(AllIcons.Debugger.StackFrame);
+            component.setIcon(AllIcons.Debugger.Frame);
         } else {
             component.append(XDebuggerBundle.message("invalid.frame", new Object[0]), SimpleTextAttributes.ERROR_ATTRIBUTES);
         }
