@@ -19,3 +19,11 @@ Set variables in build.gradle: project.ext.sdkVersion, project.ext.ideaInstallat
 In File > Project Structure > Platform Settings > SDKs add IntelliJ Platform Plugin SDK
 Select the downloaded SDK
 In Project Settings > Project set newly created plugin SDK as Project SDK
+
+
+Running the JetBrains Plugin Verifier
+
+See this page to get/update the verifier: https://github.com/JetBrains/intellij-plugin-verifier
+
+Download the Jar file
+Build the plugin and run the verifier on it: ./gradlew -jar verifier-all.jar check-plugin <path-to-plugin-zip-file.zip> <path-to-unpacked-SDK>
