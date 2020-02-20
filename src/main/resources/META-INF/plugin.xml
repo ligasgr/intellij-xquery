@@ -36,6 +36,10 @@
 
     <change-notes>
         <![CDATA[
+            <h3>Changes in 1.1.1:</h3>
+            <ul>
+                <li>Bug #61: add ort: to list of predefined MarkLogic namespaces</li>
+            </ul>
             <h3>Changes in 1.1:</h3>
             <ul>
                 <li>Require minimum IntelliJ version 2019.3</li>

@@ -40,8 +40,15 @@ public abstract class PredeclaredNamespaces {
         return prefixToNamespaceMap.containsKey(namespacePrefix);
     }
 
-    public String getNamespaceForPrefix(String prefix) {
-        return prefixToNamespaceMap.get(prefix).first;
+    public String getNamespaceForPrefix(String prefix)
+    {
+	    Pair<String, Boolean> ns = prefixToNamespaceMap.get(prefix);
+
+	    if (ns == null) {
+		    throw new NullPointerException ("Internal config error: getNamespaceForPrefix() '" + prefix + "' not found in pre-declared list");
+	    }
+
+	    return ns.first;
     }
 
     public Map<String, String> getPrefixToNamespaceMap(XQueryFile unused) {

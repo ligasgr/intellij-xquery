@@ -114,6 +114,7 @@ public class MarkLogicPredeclaredNamespaces extends XQuery30PredeclaredNamespace
         prefixToNamespaceMap.put("entity", Pair.create("http://marklogic.com/entity", false));
         prefixToNamespaceMap.put("es", Pair.create("http://marklogic.com/entity-services", false));
         prefixToNamespaceMap.put("rdt", Pair.create("http://marklogic.com/xdmp/redaction", false));
+        prefixToNamespaceMap.put("ort", Pair.create("http://marklogic.com/onnxruntime", false));
         prefixToNamespaceMap.put("schematron", Pair.create("http://marklogic.com/xdmp/schematron", false));
         prefixToNamespaceMap.put("sql", Pair.create("http://marklogic.com/xdmp/sql", false));
         prefixToNamespaceMap.put("tde", Pair.create("http://marklogic.com/xdmp/tde", false));
