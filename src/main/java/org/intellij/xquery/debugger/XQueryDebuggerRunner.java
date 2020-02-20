@@ -34,68 +34,121 @@ import com.intellij.xdebugger.XDebugProcessStarter;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebuggerManager;
 import org.intellij.xquery.runner.XQueryRunProfileState;
+import org.intellij.xquery.runner.rt.FileUtil;
+import org.intellij.xquery.runner.rt.RunnerAppFactory;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
+import org.intellij.xquery.runner.rt.XQueryRunConfig;
+import org.intellij.xquery.runner.rt.debugger.DebuggerCleanupFactory;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+
 import static com.codnos.dbgp.api.DBGpFactory.ide;
 
-public class XQueryDebuggerRunner extends DefaultProgramRunner {
-    private static final String XQUERY_RUNNER_ID = "XQueryDebuggerRunner";
+public class XQueryDebuggerRunner extends DefaultProgramRunner
+{
+	private static final String XQUERY_RUNNER_ID = "XQueryDebuggerRunner";
 
-    @NotNull
-    @Override
-    public String getRunnerId() {
-        return XQUERY_RUNNER_ID;
-    }
+	@NotNull
+	@Override
+	public String getRunnerId()
+	{
+		return XQUERY_RUNNER_ID;
+	}
 
-    @Override
-    public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
-        return DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof XQueryRunConfiguration && isDebugSupportedFor((XQueryRunConfiguration) profile);
-    }
+	@Override
+	public boolean canRun (@NotNull String executorId, @NotNull RunProfile profile)
+	{
+		return DefaultDebugExecutor.EXECUTOR_ID.equals (executorId) && profile instanceof XQueryRunConfiguration && isDebugSupportedFor ((XQueryRunConfiguration) profile);
+	}
 
-    private boolean isDebugSupportedFor(XQueryRunConfiguration profile) {
-        XQueryDataSourceType dataSourceType = profile.getDataSourceType();
-        return dataSourceType != null && dataSourceType.isDebugSupported();
-    }
+	private boolean isDebugSupportedFor (XQueryRunConfiguration profile)
+	{
+		XQueryDataSourceType dataSourceType = profile.getDataSourceType();
+		return dataSourceType != null && dataSourceType.isDebugSupported();
+	}
 
-    @Override
-    protected RunContentDescriptor doExecute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env) throws ExecutionException {
-        return createContentDescriptor(state, env);
-    }
+	@Override
+	protected RunContentDescriptor doExecute (@NotNull RunProfileState state, @NotNull ExecutionEnvironment env) throws ExecutionException
+	{
+		return createContentDescriptor (state, env);
+	}
 
 
-    private RunContentDescriptor createContentDescriptor(final RunProfileState runProfileState,
-                                                         final ExecutionEnvironment environment) throws ExecutionException {
-        XDebuggerManager debuggerManager = XDebuggerManager.getInstance(environment.getProject());
-        XDebugProcessStarter processStarter = getProcessStarter(runProfileState, environment);
-        final XDebugSession debugSession = debuggerManager.startSession(environment, processStarter);
-        return debugSession.getRunContentDescriptor();
-    }
+	private RunContentDescriptor createContentDescriptor (final RunProfileState runProfileState, final ExecutionEnvironment environment) throws ExecutionException
+	{
+		XDebuggerManager debuggerManager = XDebuggerManager.getInstance (environment.getProject());
+		XDebugProcessStarter processStarter = getProcessStarter (runProfileState, environment);
+		final XDebugSession debugSession = debuggerManager.startSession (environment, processStarter);
+		return debugSession.getRunContentDescriptor();
+	}
 
-    private int getAvailablePort() {
-        return NetUtils.tryToFindAvailableSocketPort(9000);
-    }
+	private int getAvailablePort()
+	{
+		return NetUtils.tryToFindAvailableSocketPort (9000);
+	}
 
-    private XDebugProcessStarter getProcessStarter(final RunProfileState runProfileState, final ExecutionEnvironment
-            executionEnvironment) throws ExecutionException {
-        int port = getAvailablePort();
-        ((XQueryRunProfileState) runProfileState).setPort(port);
-        return new XDebugProcessStarter() {
-            @NotNull
-            public XDebugProcess start(@NotNull final XDebugSession session) throws ExecutionException {
-                final ExecutionResult result = runProfileState.execute(executionEnvironment.getExecutor(), XQueryDebuggerRunner.this);
-                XQueryDebugProcess.XQueryDebuggerIde debuggerIde = new XQueryDebugProcess.XQueryDebuggerIde(session, result.getProcessHandler());
-                final DBGpIde dbgpIde = ide().withPort(port).withDebuggerIde(debuggerIde).build();
-                dbgpIde.startListening();
-                result.getProcessHandler().addProcessListener(new ProcessAdapter() {
-                    @Override
-                    public void processTerminated(ProcessEvent event) {
-                        dbgpIde.stopListening();
-                    }
-                });
-                return new XQueryDebugProcess(session, result, dbgpIde);
-            }
-        };
-    }
+	private XDebugProcessStarter getProcessStarter (final RunProfileState runProfileState, final ExecutionEnvironment executionEnvironment) throws ExecutionException
+	{
+		int port = getAvailablePort();
+		((XQueryRunProfileState) runProfileState).setPort (port);
+
+		return new XDebugProcessStarter()
+		{
+			@NotNull
+			public XDebugProcess start (@NotNull final XDebugSession session) throws ExecutionException
+			{
+				final ExecutionResult result = runProfileState.execute (executionEnvironment.getExecutor(), XQueryDebuggerRunner.this);
+
+				XQueryDebugProcess.XQueryDebuggerIde debuggerIde = new XQueryDebugProcess.XQueryDebuggerIde (session, result.getProcessHandler());
+
+				final DBGpIde dbgpIde = ide().withPort (port).withDebuggerIde (debuggerIde).build();
+
+				dbgpIde.startListening();
+
+				result.getProcessHandler().addProcessListener (new ProcessAdapter()
+				{
+					@Override
+					public void processTerminated (ProcessEvent event)
+					{
+						dbgpIde.stopListening();
+
+						cleanupDebuggerState (runProfileState, port);
+					}
+				});
+
+				return new XQueryDebugProcess (session, result, dbgpIde);
+			}
+		};
+	}
+
+	private void cleanupDebuggerState (RunProfileState runProfileState, int port)
+	{
+		try {
+			if ( ! (runProfileState instanceof XQueryRunProfileState)) {
+				return;
+			}
+
+			XQueryRunProfileState xQueryRunProfileState = (XQueryRunProfileState) runProfileState;
+			XQueryRunConfiguration xQueryRunConfiguration = xQueryRunProfileState.getXQueryRunConfiguration();
+			RunnerAppFactory factory = xQueryRunConfiguration.getDataSourceType().getRunnerAppFactoryClass().newInstance();
+
+			if ( ! (factory instanceof DebuggerCleanupFactory)) {
+				return;
+			}
+
+			File tmpConfigFile = xQueryRunProfileState.getSerializedConfig (xQueryRunConfiguration, true, port);
+			XQueryRunConfig config = new XQueryRunConfig (FileUtil.readFile (tmpConfigFile.getAbsolutePath()));
+
+			tmpConfigFile.delete();
+
+			Thread thread = new Thread (((DebuggerCleanupFactory) factory).getDebuggerCleanupRunnable (config));
+
+			thread.setDaemon (true);
+			thread.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

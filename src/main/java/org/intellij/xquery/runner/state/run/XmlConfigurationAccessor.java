@@ -17,6 +17,7 @@
 
 package org.intellij.xquery.runner.state.run;
 
+import org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicRunMode;
 import org.jdom.CDATA;
 import org.jdom.Element;
 
@@ -54,6 +55,11 @@ public class XmlConfigurationAccessor {
         runConfiguration.setContextItemFile(configuration.getAttributeValue("contextItemFile"));
         runConfiguration.setContextItemType(configuration.getAttributeValue("contextItemType"));
         runConfiguration.setDataSourceName(configuration.getAttributeValue("dataSourceName"));
+
+        runConfiguration.setMlDebuggerRunMode (MarkLogicRunMode.forName (configuration.getAttributeValue ("mlDebuggerRunMode")));
+        runConfiguration.setMlDebuggerAppserverRoot (configuration.getAttributeValue ("mlDebuggerAppserverRoot"));
+        runConfiguration.setMlDebugAppserver (configuration.getAttributeValue ("mlDebugAppserver"));
+        runConfiguration.setMlCaptureTimeoutSecs (configuration.getAttributeValue ("mlCaptureTimeoutSecs"));
     }
 
     public void writeConfiguration(XQueryRunConfiguration runConfiguration, Element element) {
@@ -85,6 +91,17 @@ public class XmlConfigurationAccessor {
             }
             if (runConfiguration.getDataSourceName() != null) {
                 configuration.setAttribute("dataSourceName", runConfiguration.getDataSourceName());
+            }
+
+            configuration.setAttribute ("mlDebuggerRunMode", runConfiguration.getMlDebuggerRunMode().toString());
+            if (runConfiguration.getMlDebuggerAppserverRoot() != null) {
+                configuration.setAttribute ("mlDebuggerAppserverRoot", runConfiguration.getMlDebuggerAppserverRoot());
+            }
+            if (runConfiguration.getMlDebugAppserver() != null) {
+                configuration.setAttribute ("mlDebugAppserver", runConfiguration.getMlDebugAppserver());
+            }
+            if (runConfiguration.getMlCaptureTimeoutSecs() != null) {
+                configuration.setAttribute ("mlCaptureTimeoutSecs", runConfiguration.getMlCaptureTimeoutSecs());
             }
         }
 }

@@ -26,6 +26,8 @@
 // --- changes to idea plugin ---
 idea {
     module {
+        sourceDirs += file ('gen')
+        sourceDirs += file ('src/main/groovy')
         testSourceDirs += file('src/testFunctional/java')
         testSourceDirs += file('src/testGui/java')
         testSourceDirs += file('src/testPerformance/java')
@@ -58,7 +60,7 @@ private void prepareCopyright(it) {
     copyright.appendNode('option', ['name': 'notice', 'value': project.file('NOTICE').text])
     copyright.appendNode('option', ['name': 'keyword', 'value': 'Copyright'])
     copyright.appendNode('option', ['name': 'allowReplaceKeyword', 'value': ''])
-    copyright.appendNode('option', ['name': 'myName', 'value': 'apache'])
+    copyright.appendNode('option', ['name': 'myName', 'value': 'overstory'])
     copyright.appendNode('option', ['name': 'myLocal', 'value': 'true'])
 }
 
@@ -67,6 +69,7 @@ private void prepareJdk(it) {
     prm.@'project-jdk-name' = project.ext.ideaSdkName
     prm.@'project-jdk-type' = 'IDEA JDK'
     prm.attributes().remove('assert-jdk-15')
+    prm.output.@url = 'file://$PROJECT_DIR$/build/classes'
 }
 
 // --- changes to idea plugin ---

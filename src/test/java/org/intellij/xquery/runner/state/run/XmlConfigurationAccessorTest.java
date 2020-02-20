@@ -17,6 +17,7 @@
 
 package org.intellij.xquery.runner.state.run;
 
+import org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicRunMode;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +46,7 @@ public class XmlConfigurationAccessorTest {
         originalConfiguration = mock(XQueryRunConfiguration.class);
         readConfiguration = mock(XQueryRunConfiguration.class);
         accessor = new XmlConfigurationAccessor();
+        given(originalConfiguration.getMlDebuggerRunMode()).willReturn(MarkLogicRunMode.ADHOC);
     }
 
     @Test

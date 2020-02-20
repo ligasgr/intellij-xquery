@@ -103,7 +103,9 @@ public abstract class XQueryPrefixReference<T extends XQueryPsiElement> extends 
         if (namespaceDeclarations.size() > 0) {
             List<ResolveResult> results = new ArrayList<ResolveResult>();
             for (XQueryNamespaceDecl namespaceDeclaration : namespaceDeclarations) {
-                if (myElement.getText().equals(namespaceDeclaration.getNamespacePrefix().getText())) {
+                XQueryNamespacePrefix nsdPrefix = namespaceDeclaration.getNamespacePrefix();
+
+                if ((nsdPrefix != null) && myElement.getText().equals(nsdPrefix.getText())) {
                     results.add(new PsiElementResolveResult(namespaceDeclaration.getNamespacePrefix()));
                 }
             }

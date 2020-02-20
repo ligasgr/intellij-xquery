@@ -45,6 +45,7 @@ public class RunConfigurationJavaTab extends SettingsEditor<XQueryRunConfigurati
     private AlternativeJREPanel alternativeJrePanel;
     private JComponent anchor;
 
+    @SuppressWarnings ("unchecked")
     public RunConfigurationJavaTab(final Project project) {
         moduleSelector = new ConfigurationModuleSelector(project, moduleSelectorComponent.getComponent());
         commonJavaParametersPanel.setModuleContext(moduleSelector.getModule());

@@ -83,6 +83,11 @@ public class DataSourcePanel extends JPanel implements PanelWithAnchor {
         this.anchor = anchor;
     }
 
+    public void setDataSourceSelectListener (ActionListener listener)
+    {
+        dataSourceSelector.setChangeListener (listener);
+    }
+
     protected DataSourceSelector getDataSourceSelector() {
         return new DataSourceSelector(dataSourceSelectorComponent.getComponent());
     }

@@ -19,3 +19,12 @@ sdk/
 .shelf/
 
 .DS_Store
+
+z
+zz
+z.*
+zz.*
+MarkLogic_*_pubs.zip
+marklogic-intellij-plugin.zip
+verifier
+atlassian-ide-plugin.xml

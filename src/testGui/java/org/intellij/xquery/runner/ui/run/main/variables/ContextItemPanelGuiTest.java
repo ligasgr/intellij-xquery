@@ -237,7 +237,7 @@ public class ContextItemPanelGuiTest extends BaseGuiTest {
             super(project);
         }
         @Override
-        protected void addPathFieldButtonListener() {
+        protected void addPathFieldButtonListener (Project project) {
             contextItemPathField.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

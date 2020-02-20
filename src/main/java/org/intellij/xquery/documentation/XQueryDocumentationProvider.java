@@ -44,6 +44,7 @@ public class XQueryDocumentationProvider extends AbstractDocumentationProvider {
         return super.getDocumentationElementForLookupItem(psiManager, object, element);
     }
 
+    @SuppressWarnings ("unchecked")
     @Override
     public String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {
         PsiBasedDocumentationProvider documentationProvider = getDocumentationProvider(element);

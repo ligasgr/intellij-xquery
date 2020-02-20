@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright 2017 OverStory Ltd <copyright@overstory.co.uk> and other contributors
+  ~ (see the CONTRIBUTORS file).
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>MarkLogic Run Config Help</title>
+	</head>
+	<body>
+		<h2>MarkLogic Run/Debug Modes</h2>
+		<p>
+			The radio buttons on the Edit Configurations dialog select the mode by which XQuery will be executed on MarkLogic.
+			There are four modes, the first two of which apply to both Run and Debug.  The second two
+			only apply to debugging.
+		</p>
+		<p>
+			These modes are:
+		</p>
+		<p></p>
+
+		<h3>Ad Hoc (eval)</h3>
+			<p>
+				The content of the selected XQuery file, which must be a main module, will be sent to MarkLogic
+				and executed as an Ad Hoc query using <code>dbg:eval</code>.  External variables may be passed to the query.
+				Library modules may only be imported if they exist in the path of the appserver (the module's effective path
+				will be the appserver root).  Library modules in the IntelliJ workspace may not be visible at runtime.
+			</p>
+			<p>
+				This mode runs requests on the TaskServer rather than the configured appserver.
+				The appserver is used by the debugger to control the submitted request as it runs on the TaskServer
+				This means that no output will ever be produced by the request because there is no path to return the
+				requests' output to the debugger output window (the future variable mechanism as with <code>xdmp:spawn</code> is not available when debugging).
+				If you need to see the output of a debugged process, use the Capture Appserver mode.
+			</p>
+			<p>
+				Requests running on the TaskServer will also not be able to see any HTTP request values.
+				The only way to pass HTTP request variables to a debugged request is by using the Capture Appserver mode.
+				The same applies to Invoke Mode.
+			</p>
+			<p></p>
+
+		<h3>Invoke</h3>
+			<p>
+				The selected module will be invoked by URI, as determined by the selected XQuery file.  The
+				content of the selected file will <i>not</i> be sent to MarkLogic.  The module will be invoked
+				by name via the appservers root path on MarkLogic.
+			</p>
+			<p>
+				This option only works properly if MarkLogic's appserver is configured
+				to have its root point at a filesystem directory within the IntelliJ workspace.  By telling the MarkLogic
+				plugin where the appserver root is, it can adjust the relative paths so that the IntelliJ
+				can see the source when stopped at a breakpoint.  Use the dialog to select the local directory
+				that corresponds to the configured appserver root in MarkLogic.
+			</p>
+			<p>
+				Note: It is possible to use this run mode with code in a Modules database or an unreadable filesystem
+				location (such as MarkLogic running on a remote system).  But in that case an identical copy of the
+				code must be placed in the local IntelliJ workspace.  MarkLogic reports filenames and line numbers and
+				these must match what IntelliJ sees.
+			</p>
+			<p>
+				This mode runs requests on the Task Server rather than the configured appserver.  This means that
+				no output will ever be produced.  This is necessary to be able to run and debug a request from a
+				single appserver.  If you need to see the output of a debugged request, user the Capture Appserver mode.
+			</p>
+			<p></p>
+
+		<h3>Capture Appserver</h3>
+			<p>
+				This run mode "grabs" an appserver (specified by name, appserver ID, or port number).  It then waits for the
+				next request to start on that appserver.  When one does, the request will be halted for debugging just before
+				the first expression.  If no request starts on the captured appserver within the timeout period (configurable
+				in seconds, default 120) then the debug session will abort and release the appserver.
+			</p>
+			<p>
+				Note: Because of the way expressions are mapped to source lines in the MarkLogic API, "just before the first expression"
+				may seem like a nonsensical location when it displays the initial debug cursor.  This is normal (see the Wiki for more info),
+				just click Step Into to execute the first expression.
+			</p>
+
+			<p>
+				Any output created will be sent to the captured app server, not the IntelliJ debugger run window.
+				Note however that because of the way requests run on MarkLogic, any output produced will only be seen when the
+				full request completes without error.  To see information as the request is stepped through the debugger,
+				consider using <code>xdmp:log</code> calls and tailing the MarkLogic server <code>ErrorLog.txt</code>code> log file.
+			</p>
+
+			<p>
+				This run mode is useful for debugging code "in-situ", running in its native environment, rather than on the Task Server.
+				In some cases, such as when the code being debugged depends on HTTP parameters, this is the only way to debug the code without modification.
+				It is useful for tracing requests to REST endpoints, for example.  It can also capture XCC requests from Java/.Net applications.
+			</p>
+
+			<p>
+				This run mode involves two appservers.  The one that you configure here with the Capture Appserver run mode is
+				the primary appserver that the debugger will use to communicate with MarkLogic.  This is the one that will grab
+				another appserver, identified in the Run Configuration.  This is <b>not</b> the one that the request to be debugged
+				will run on.
+			</p>
+
+			<p>
+				The second appserver is the one that will captured and run the request to be debugged.  That appserver need not be defined here as
+				another Run Configuration (although it can be).  The primary appserver will capture the second appserver when the
+				next request starts on it.  That request can be started in any usual way, such as by an HTTP/REST request, an XCC
+				request, etc.  The most common method is to use a command line tool like curl or wget, or a GUI REST client like POSTMan or similar.
+			</p>
+
+			<p>
+				<b>Note:</b> It is important that the primary appserver be configured
+				so that its root points to the code to be debugged (eg, matches the root of the appserver being captured),
+				and that the Appserver Root path be set properly in the run configuration so that IntelliJ's filesystem paths can be mapped correctly.
+				When the debugger hits a breakpoint, it returns edit control to IntelliJ with a reference to a file and line number.
+				If IntelliJ cannot find the referenced source file on disk, then the debug runner will hang when a breakpoint is reached.
+				The "Appserver Root" setting lets the plugin map the path from MarkLogic's view to IntelliJ's view.
+			</p>
+		<p></p>
+
+		<h3>Grab and Debug a Running Request</h3>
+			<p>
+				Not yet implemented.
+			</p>
+			<p>
+				This mode will provide a means by which a running request may be attached to and stepped with the debugger.
+				To work successfully, the appserver root path must be set properly, as for Invoke mode.  It is possible to debug code running from
+				a Modules Database, but a corresponding source tree must be in this project's workspace with the path of the
+				code at the appserver root configured here.  When the debugger stops, if it does not find the corresponding
+				source file then it hang and the request may need to be resumed of killed by hand..
+			</p>
+			<p>
+				Most requests on MarkLogic run very quickly.  This mode will primarily be useful for diagnosing requests that
+				have gotten stuck or are running away.
+			</p>
+			<p></p>
+
+		<p>&copy; 2017 <a href="http://overstory.co.uk">OverStory Ltd</a></p>
+	</body>
+</html>

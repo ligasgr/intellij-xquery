@@ -75,7 +75,11 @@ public class AbstractBuiltInFunctionTable implements BuiltInFunctionTable {
     protected void loadBifFile(String filePath) {
         InputStream resource = AbstractBuiltInFunctionTable.class.getResourceAsStream(filePath);
         List<String> lines = getAllLines(resource);
-        for (String line : lines) {
+        for (String l : lines) {
+            String line = l.trim();
+
+            if (line.length() == 0) continue;
+
             String[] elements = line.split(SEPARATOR);
             String prefix = elements[0];
             String name = elements[1];

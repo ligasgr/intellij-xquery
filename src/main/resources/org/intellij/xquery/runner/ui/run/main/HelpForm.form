@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="org.intellij.xquery.runner.ui.run.main.HelpForm">
+  <grid id="27dc6" binding="mainPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <scrollpane id="5a667" binding="scrollPane">
+        <constraints border-constraint="Center"/>
+        <properties>
+          <maximumSize width="1000" height="1000"/>
+          <name value="scrollBar"/>
+          <preferredSize width="600" height="800"/>
+          <verticalScrollBarPolicy value="20"/>
+        </properties>
+        <border type="etched" title="Help Is Here"/>
+        <children>
+          <component id="ac533" class="javax.swing.JEditorPane" binding="body">
+            <constraints/>
+            <properties>
+              <contentType value="text/html"/>
+              <editable value="false"/>
+              <font name="Helvetica" size="16"/>
+              <margin top="5" left="10" bottom="5" right="10"/>
+            </properties>
+            <clientProperties>
+              <JEditorPane.honorDisplayProperties class="java.lang.Boolean" value="true"/>
+            </clientProperties>
+          </component>
+        </children>
+      </scrollpane>
+    </children>
+  </grid>
+</form>

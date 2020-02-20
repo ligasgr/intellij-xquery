@@ -18,19 +18,26 @@
 package org.intellij.xquery.runner.state.run;
 
 import com.intellij.execution.configurations.RuntimeConfigurationError;
+import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 
 /**
  * User: ligasgr
  * Date: 18/11/13
  * Time: 13:36
  */
-public class DataSourceValidator {
+public class DataSourceValidator
+{
 
-    public static final String DATA_SOURCE_MISSING_MESSAGE = "Data source not specified";
+	public static final String DATA_SOURCE_MISSING_MESSAGE = "Data source not specified";
 
-    public void validate(String dataSourceName) throws RuntimeConfigurationError {
-        if (dataSourceName == null) {
-            throw new RuntimeConfigurationError(DATA_SOURCE_MISSING_MESSAGE);
-        }
-    }
+	public void validate (XQueryDataSourcesSettings settings, String dataSourceName)
+		throws RuntimeConfigurationError
+	{
+		if (dataSourceName == null) {
+			throw new RuntimeConfigurationError (DATA_SOURCE_MISSING_MESSAGE);
+		}
+
+		// Throws an exception if a datasource with the given name is not configured
+		settings.getDataSourceConfigurationForName (dataSourceName);
+	}
 }

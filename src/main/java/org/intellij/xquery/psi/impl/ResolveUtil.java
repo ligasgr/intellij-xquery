@@ -24,6 +24,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.xquery.psi.XQueryPsiElement;
 
 public class ResolveUtil {
+    @SafeVarargs
     public static <T extends XQueryPsiElement> boolean processChildren(PsiElement element, PsiScopeProcessor processor,
             ResolveState substitutor, PsiElement lastParent, PsiElement place, Class<T>... childClassesToSkip) {
         PsiElement run = lastParent == null ? element.getLastChild() : lastParent.getPrevSibling();
@@ -38,6 +39,7 @@ public class ResolveUtil {
         return true;
     }
 
+    @SafeVarargs
     private static <T extends XQueryPsiElement>  boolean isAnyOf(PsiElement run, Class<T>... classes) {
         for (Class<T> aClass : classes) {
             if (aClass.isAssignableFrom(run.getClass())) {

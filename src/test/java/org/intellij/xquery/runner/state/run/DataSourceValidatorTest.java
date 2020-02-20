@@ -19,12 +19,19 @@ package org.intellij.xquery.runner.state.run;
 
 import com.intellij.execution.configurations.RuntimeConfigurationError;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
+import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
+import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.junit.Test;
+
 
 import static org.fest.assertions.Fail.fail;
 import static org.hamcrest.Matchers.is;
 import static org.intellij.xquery.runner.state.run.DataSourceValidator.DATA_SOURCE_MISSING_MESSAGE;
 import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+
 
 /**
  * User: ligasgr
@@ -37,8 +44,11 @@ public class DataSourceValidatorTest {
 
     @Test
     public void shouldThrowAnExceptionIfDataSourceNameNotSet() {
+        XQueryDataSourcesSettings settings = mock (XQueryDataSourcesSettings.class);
+        given (settings.getDataSourceConfigurationForName (null)).willThrow (new RuntimeException (XQueryDataSourcesSettings.NO_DATA_SOURCE_FOUND_FOR_NAME_MESSAGE + "null"));
+
         try {
-            validator.validate(null);
+            validator.validate (settings, null);
             fail();
         } catch (RuntimeConfigurationException e) {
             assertThat(e.getMessage(), is(DATA_SOURCE_MISSING_MESSAGE));
@@ -47,6 +57,10 @@ public class DataSourceValidatorTest {
 
     @Test
     public void shouldDoNothingIfDataSourceNameSet() throws RuntimeConfigurationError {
-        validator.validate("any");
+        XQueryDataSourceConfiguration config = mock (XQueryDataSourceConfiguration.class);
+        XQueryDataSourcesSettings settings = mock (XQueryDataSourcesSettings.class);
+        given (settings.getDataSourceConfigurationForName (anyString())).willReturn (config);
+
+        validator.validate (settings, "any");
     }
 }

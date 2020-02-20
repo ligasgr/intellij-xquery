@@ -29,8 +29,11 @@ import javax.swing.Icon;
  * Date: 10/02/13
  * Time: 18:14
  */
-public class XQueryIcons {
-    public static final Icon FILE = IconLoader.getIcon("/icons/xq.png");
+public class XQueryIcons
+{
+    public static final Icon FILE = IconLoader.getIcon("/icons/filexq.png");
+    public static final Icon OVERSTORY_ICON_16x16 = IconLoader.getIcon("/icons/overstory16x16.png");
+    public static final Icon ShowViewer = IconLoader.getIcon("/icons/actions/showViewer.png");
     public static final Icon FUNCTION_ICON = AllIcons.Nodes.Method;
     public static final Icon VARIABLE_ICON = AllIcons.Nodes.Variable;
 

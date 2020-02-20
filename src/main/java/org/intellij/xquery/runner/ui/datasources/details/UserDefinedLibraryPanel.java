@@ -53,12 +53,12 @@ public class UserDefinedLibraryPanel {
     private JPanel mainPanel;
     private JBCheckBox userDefinedLibraryEnabled;
     private JPanel pathsPanel;
-    private DefaultListModel pathListModel;
-    private JBList pathList;
+    private DefaultListModel<String> pathListModel;
+    private JBList<String> pathList;
     private final ToolbarDecorator toolbarDecorator;
 
     public UserDefinedLibraryPanel() {
-        pathListModel = new DefaultListModel();
+        pathListModel = new DefaultListModel<>();
         pathList = preparePathList(pathListModel);
         toolbarDecorator = prepareToolbarDecorator(pathList);
         pathsPanel.add(toolbarDecorator.createPanel());
@@ -76,7 +76,7 @@ public class UserDefinedLibraryPanel {
     public List<String> getUserDefinedLibraryPaths() {
         List<String> currentPaths = new ArrayList<String>();
         for (int i = 0; i < pathListModel.getSize(); i++) {
-            currentPaths.add(((String) pathListModel.getElementAt(i)));
+            currentPaths.add((pathListModel.getElementAt(i)));
         }
         return currentPaths;
     }
@@ -93,7 +93,7 @@ public class UserDefinedLibraryPanel {
         return userDefinedLibraryEnabled.isSelected();
     }
 
-    private ToolbarDecorator prepareToolbarDecorator(final JBList pathList) {
+    private ToolbarDecorator prepareToolbarDecorator(final JBList<String> pathList) {
         return ToolbarDecorator.createDecorator(pathList)
                 .setAddAction(new AnActionButtonRunnable() {
                     @Override
@@ -125,14 +125,16 @@ public class UserDefinedLibraryPanel {
         FileChooser.chooseFiles(descriptor, null, null, consumer);
     }
 
+    @SuppressWarnings ("unchecked")
     public void onFileChosen(VirtualFile chosenFile) {
         pathListModel.addElement(chosenFile.getPresentableUrl());
     }
 
-    public JBList getPathList() {
+    public JBList<String> getPathList() {
         return pathList;
     }
 
+    @SuppressWarnings ("unchecked")
     private void populatePathList(List<String> userDefinedLibraryPaths) {
         pathListModel.removeAllElements();
         for (String userDefinedLibraryPath : userDefinedLibraryPaths) {
@@ -144,13 +146,13 @@ public class UserDefinedLibraryPanel {
         pathList.setEnabled(userDefinedLibraryEnabled.isSelected());
     }
 
-    private JBList preparePathList(DefaultListModel pathListModel) {
-        final JBList pathList = new JBList(pathListModel);
-        pathList.getEmptyText().setText("No classpath entries defined");
-        pathList.setDragEnabled(false);
-        pathList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        pathList.setName(PATH_LIST_NAME);
-        return pathList;
+    private JBList<String> preparePathList(DefaultListModel<String> pathListModelParam) {
+        final JBList<String> pathListLocal = new JBList<> (pathListModelParam);
+        pathListLocal.getEmptyText().setText("No classpath entries defined");
+        pathListLocal.setDragEnabled(false);
+        pathListLocal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        pathListLocal.setName(PATH_LIST_NAME);
+        return pathListLocal;
     }
 
     private ActionListener getUserDefinedLibraryEnabledListener() {

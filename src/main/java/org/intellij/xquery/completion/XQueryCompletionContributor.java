@@ -86,6 +86,7 @@ public class XQueryCompletionContributor extends CompletionContributor {
                 });
     }
 
+    @SuppressWarnings ("unchecked")
     private void extendForVariablesAndFunctions() {
         extend(CompletionType.BASIC, referencePattern(XQueryTypes.NCNAME).withReferenceOfAnyOfTypes
                         (XQueryFunctionReference.class),
@@ -103,6 +104,7 @@ public class XQueryCompletionContributor extends CompletionContributor {
                 });
     }
 
+        @SuppressWarnings ("unchecked")
     private void extendForVariablesOnly() {
         extend(CompletionType.BASIC, referencePattern(XQueryTypes.NCNAME).withReferenceOfAnyOfTypes
                         (XQueryVariableReference.class),

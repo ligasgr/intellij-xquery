@@ -57,6 +57,7 @@ public class VariableDialog {
         }
     });
 
+    @SuppressWarnings ("unchecked")
     public VariableDialog() {
         panel.setName(DIALOG_PANEL);
         name.getComponent().setName(NAME);

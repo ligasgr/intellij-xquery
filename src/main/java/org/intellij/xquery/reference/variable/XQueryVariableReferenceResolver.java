@@ -18,11 +18,15 @@
 package org.intellij.xquery.reference.variable;
 
 import com.intellij.openapi.util.Condition;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.ResolveResult;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
+
+import org.intellij.xquery.XQueryFlavour;
 import org.intellij.xquery.model.XQueryQName;
+import org.intellij.xquery.model.XQueryQNameBuilder;
 import org.intellij.xquery.psi.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,17 +46,18 @@ public class XQueryVariableReferenceResolver {
     private final String checkedNamespacePrefix;
     private List<XQueryVarName> matchingVariableNames;
     private XQueryVarRef myElement;
+    private static final String errNamespace = XQueryFlavour.MARKLOGIC.getBifTable().predeclaredNamespaces().getNamespaceForPrefix ("err");
+    private static final List<XQueryQName<XQueryVarName>> implicitCatchVars = new ArrayList<>();
 
     public XQueryVariableReferenceResolver(XQueryVarRef myElement) {
         this.myElement = myElement;
-        checkedNamespacePrefix = myElement.getVarName().getPrefix() != null ? myElement.getVarName()
-                .getPrefix().getText() : null;
+        checkedNamespacePrefix = myElement.getVarName().getPrefix() != null ? myElement.getVarName().getPrefix().getText() : null;
     }
 
     @NotNull
     public ResolveResult[] getResolutionResults() {
         XQueryFile file = (XQueryFile) myElement.getContainingFile();
-        matchingVariableNames = new ArrayList<XQueryVarName>();
+        matchingVariableNames = new ArrayList<>();
         addReferencesFromLocalScopes();
         if (matchingVariableNames.size() > 0) {
             return convertToResolveResults(matchingVariableNames);
@@ -65,8 +70,32 @@ public class XQueryVariableReferenceResolver {
     private void addReferencesFromLocalScopes() {
         VariableReferenceScopeProcessor processor = new VariableReferenceScopeProcessor(myElement);
         PsiTreeUtil.treeWalkUp(processor, myElement, null, ResolveState.initial());
-        if (processor.getResult() != null)
-            matchingVariableNames.add(processor.getResult());
+        if (processor.getResult() == null) {
+        	addReferencesFromCatchClause();
+	} else {
+		matchingVariableNames.add (processor.getResult());
+	}
+    }
+
+    private void addReferencesFromCatchClause()
+    {
+	XQueryQName<XQueryVarName> qname = XQueryQNameBuilder.aXQueryQName (myElement.getVarName()).build();
+
+	for (XQueryQName<XQueryVarName> q : implicitCatchVars) {
+		if (q.equals (qname) && hasCatchClauseAncester()) {
+			matchingVariableNames.add (myElement.getVarName());
+			return;
+		}
+	}
+    }
+
+    private boolean hasCatchClauseAncester()
+    {
+	for (PsiElement element = myElement.getContext(); element != null; element = element.getContext()) {
+		if (element instanceof XQueryCatchClause) return true;
+	}
+
+	return false;
     }
 
     private void addVariableDeclarationReferencesFromFile(XQueryFile file, String checkedNamespace) {
@@ -124,4 +153,14 @@ public class XQueryVariableReferenceResolver {
     private boolean variableDeclarationWithValidName(XQueryVarDecl varDecl) {
         return varDecl.getVarName() != null && varDecl.getVarName().getTextLength() > 0;
     }
+
+	static {
+		implicitCatchVars.add (new XQueryQName<> ("err", "value", errNamespace, null));
+		implicitCatchVars.add (new XQueryQName<> ("err", "code", errNamespace, null));
+		implicitCatchVars.add (new XQueryQName<> ("err", "description", errNamespace, null));
+		implicitCatchVars.add (new XQueryQName<> ("err", "module", errNamespace, null));
+		implicitCatchVars.add (new XQueryQName<> ("err", "line-number", errNamespace, null));
+		implicitCatchVars.add (new XQueryQName<> ("err", "column-number", errNamespace, null));
+		implicitCatchVars.add (new XQueryQName<> ("err", "additional", errNamespace, null));
+	}
 }

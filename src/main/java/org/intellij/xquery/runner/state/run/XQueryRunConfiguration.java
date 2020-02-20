@@ -36,6 +36,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.options.SettingsEditorGroup;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import org.intellij.xquery.runner.XQueryRunConfigurationType;
@@ -44,6 +45,7 @@ import org.intellij.xquery.runner.rt.XQueryDataSourceType;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourceConfiguration;
 import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.intellij.xquery.runner.ui.run.RunConfigurationJavaTab;
+import org.intellij.xquery.runner.rt.debugger.marklogic.MarkLogicRunMode;
 import org.intellij.xquery.runner.ui.run.main.RunConfigurationMainTab;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -80,6 +82,12 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
     private XmlConfigurationAccessor xmlConfigurationAccessor;
     private VariablesAccessor variablesAccessor;
 
+    public MarkLogicRunMode MlDebuggerRunMode = MarkLogicRunMode.ADHOC;
+    public String MlDebuggerAppserverRoot = "";
+    public String MlDebugAppserver;
+    public String MlCaptureTimeoutSecs;
+
+
     public XQueryRunConfiguration(String name, XQueryRunConfigurationModule configurationModule,
                                   ConfigurationFactory factory) {
         this(name, configurationModule, factory, new VariablesValidator(), new ContextItemValidator(),
@@ -112,11 +120,13 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
     }
 
     @Override
-    public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-        SettingsEditorGroup<XQueryRunConfiguration> group = new SettingsEditorGroup<XQueryRunConfiguration>();
-        group.addEditor("Configuration", new RunConfigurationMainTab(getProject()));
-        group.addEditor("Java Configuration", new RunConfigurationJavaTab(getProject()));
-        group.addEditor("Logs", new LogConfigurationPanel<XQueryRunConfiguration>());
+    public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
+    {
+        SettingsEditorGroup<XQueryRunConfiguration> group = new SettingsEditorGroup<>();
+        Project project = getProject();
+        group.addEditor("Configuration", new RunConfigurationMainTab(project));
+        group.addEditor("Java Configuration", new RunConfigurationJavaTab(project));
+        group.addEditor("Logs", new LogConfigurationPanel<>());
         return group;
     }
 
@@ -139,7 +149,7 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
         variablesValidator.validate(variables);
         contextItemValidator.validate(contextItemEnabled, contextItemType, contextItemFromEditorEnabled,
                 contextItemText, contextItemType);
-        dataSourceValidator.validate(dataSourceName);
+        dataSourceValidator.validate (getDataSourcesSettings(), dataSourceName);
     }
 
     public void readExternal(final Element element) throws InvalidDataException {
@@ -180,6 +190,46 @@ public class XQueryRunConfiguration extends ModuleBasedConfiguration<XQueryRunCo
 
     public void setMainFileName(String mainFileName) {
         this.mainFileName = mainFileName;
+    }
+
+    public MarkLogicRunMode getMlDebuggerRunMode()
+    {
+        return (MlDebuggerRunMode == null) ? MarkLogicRunMode.ADHOC : MlDebuggerRunMode;
+    }
+
+    public void setMlDebuggerRunMode (MarkLogicRunMode mlDebuggerRunMode)
+    {
+        MlDebuggerRunMode = mlDebuggerRunMode;
+    }
+
+    public String getMlDebuggerAppserverRoot()
+    {
+        return MlDebuggerAppserverRoot;
+    }
+
+    public void setMlDebuggerAppserverRoot (String mlDebuggerAppserverRoot)
+    {
+        MlDebuggerAppserverRoot = mlDebuggerAppserverRoot;
+    }
+
+    public String getMlDebugAppserver()
+    {
+        return MlDebugAppserver;
+    }
+
+    public String getMlCaptureTimeoutSecs()
+    {
+        return MlCaptureTimeoutSecs;
+    }
+
+    public void setMlDebugAppserver (String mlDebugAppserver)
+    {
+        MlDebugAppserver = mlDebugAppserver;
+    }
+
+    public void setMlCaptureTimeoutSecs (String mlCaptureTimeoutSecs)
+    {
+        MlCaptureTimeoutSecs = mlCaptureTimeoutSecs;
     }
 
     public boolean isContextItemEnabled() {

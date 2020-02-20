@@ -21,10 +21,28 @@ public class Variable {
     public String name;
     public String type;
     public String value;
+    public String scope;
 
-    public Variable(String name, String type, String value) {
+    public Variable (String name, String type, String value)
+    {
+        this (name, type, value, null);
+    }
+
+    public Variable(String name, String type, String value, String scope)
+    {
         this.name = name;
-        this.type = type;
         this.value = value;
+
+        if (scope == null) {
+             this.type = type;
+        } else {
+            this.type = type + ", " + scope;
+        }
+    }
+
+    @Override
+    public String toString ()
+    {
+        return "Variable: name=" + name + ", type=" + type + ", value=" + value;
     }
 }

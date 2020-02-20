@@ -28,9 +28,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.codnos.dbgp.api.Breakpoint.aCopyOf;
-import static org.intellij.xquery.runner.rt.debugger.LogUtil.log;
 
 public class BreakpointManager {
+    private static final LogUtil logger = new LogUtil();
     private final Map<Integer, Map<String, Breakpoint>> breakpoints = new HashMap<>();
     private final Map<String, Breakpoint> breakpointIdToBreakpoints = new HashMap<>();
 
@@ -70,14 +70,19 @@ public class BreakpointManager {
         setBreakpoint(breakpoint, breakpoint.getBreakpointId());
     }
 
+    public Map<Integer, Map<String, Breakpoint>> allBreakpoints()
+    {
+        return breakpoints;
+    }
+
     private Breakpoint setBreakpoint(Breakpoint breakpoint, String breakpointId) {
         String uri = normalizeUri(breakpoint.getFileURL().get());
         Integer line = breakpoint.getLineNumber().get();
-        log("setting breakpoint " + uri + " " + line);
+        logger.debug ("setting breakpoint " + uri + " " + line);
         final Map<String, Breakpoint> s = breakpoints.get(line);
         final Breakpoint breakpointThatWasSet = aCopyOf(breakpoint).withFileUri(uri).withBreakpointId(breakpointId).build();
         if (s == null) {
-            final HashMap<String, Breakpoint> map = new HashMap<String, Breakpoint>();
+            final HashMap<String, Breakpoint> map = new HashMap<>();
             map.put(uri, breakpointThatWasSet);
             breakpoints.put(line, map);
         } else {
@@ -96,7 +101,7 @@ public class BreakpointManager {
                 return new URI(uri).normalize().toASCIIString();
             }
         } catch (URISyntaxException e) {
-            log("Failed to parse <" + uri + ">: " + e);
+            logger.error ("Failed to parse <" + uri + ">: " + e);
             return uri;
         }
     }

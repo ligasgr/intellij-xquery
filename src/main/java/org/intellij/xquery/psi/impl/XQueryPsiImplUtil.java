@@ -715,8 +715,8 @@ public class XQueryPsiImplUtil {
                 String elementName = functionName.getLocalNameText();
                 String anotherName = anotherFunctionName.getLocalNameText();
                 return elementFile.equals(anotherFile)
-                        && elementNamespace.equals(anotherNamespace)
-                        && elementName != null && elementName.equals(anotherName);
+                        && ((elementNamespace != null) && elementNamespace.equals(anotherNamespace))
+                        && ((elementName != null) && elementName.equals(anotherName));
             }
         }
         return false;
@@ -737,6 +737,7 @@ public class XQueryPsiImplUtil {
         return null;
     }
 
+    @SafeVarargs
     private static <T extends XQueryPsiElement, U extends XQueryPsiElement>boolean processChildrenIfPlaceIsNotPartOfSameBinding(T module,
             @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent,
             @NotNull PsiElement place, Class<T> bindingClass, Class<U>... childClassesToSkip) {

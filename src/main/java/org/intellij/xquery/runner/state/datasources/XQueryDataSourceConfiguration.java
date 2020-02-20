@@ -21,7 +21,6 @@ import com.intellij.util.xmlb.annotations.AbstractCollection;
 import com.intellij.util.xmlb.annotations.Attribute;
 import com.intellij.util.xmlb.annotations.Tag;
 import org.intellij.xquery.runner.rt.XQueryDataSourceType;
-import org.intellij.xquery.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

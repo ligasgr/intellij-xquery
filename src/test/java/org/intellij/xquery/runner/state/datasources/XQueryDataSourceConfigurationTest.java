@@ -42,6 +42,9 @@ public class XQueryDataSourceConfigurationTest {
     private static final String NAME_FIELD = "name";
     private static final String PASSWORD = "password";
     private static final String USER = "user";
+    private static final String MLDB_USER = "mlfoobar";
+    private static final String MLDB_PASSWORD = "Shhhh!";
+    private static final String MLDB_PORT = "7654";
     private static final String PORT = "1234";
     private static final String NAME = "name";
     private static final String HOST = "localhost";
@@ -53,6 +56,7 @@ public class XQueryDataSourceConfigurationTest {
     private static final String PORT_FIELD = "port";
     private static final String USERNAME_FIELD = "username";
     private static final String PASSWORD_FIELD = "password";
+    private static final String ML_DEBUGGER_ENABLED_FIELD = "mlDebuggerEnabled";
     private static final String USER_DEFINED_LIBRARY_ENABLED = "userDefinedLibraryEnabled";
     private static final String USER_DEFINED_LIBRARY_PATH = "userDefinedLibraryPath";
     private static final String USER_DEFINED_LIBRARY_PATHS = "userDefinedLibraryPaths";

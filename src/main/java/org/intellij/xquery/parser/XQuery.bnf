@@ -17,6 +17,7 @@
 
 /*
  * Grammar originally taken from http://www.w3.org/TR/xquery-30/#nt-bnf
+ * See also for MarkLogic extensions: https://github.com/jpcs/xqueryparser.xq/blob/master/lib/XQueryML30.ebnf
  */
 {
   parserClass="org.intellij.xquery.parser.XQueryParser"

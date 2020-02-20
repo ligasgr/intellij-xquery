@@ -352,6 +352,6 @@ public class XQuerySyntaxHighlighter extends SyntaxHighlighterBase {
                 ) {
             return KEYWORDS;
         }
-        return EMPTY;
+        return TextAttributesKey.EMPTY_ARRAY;
     }
 }

@@ -73,4 +73,10 @@ public class XQueryQName<T> {
             return localName;
         }
     }
+
+    @Override
+    public String toString()
+    {
+        return getTextRepresentation();
+    }
 }

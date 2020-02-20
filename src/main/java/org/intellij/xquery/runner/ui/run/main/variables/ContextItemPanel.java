@@ -17,7 +17,6 @@
 
 package org.intellij.xquery.runner.ui.run.main.variables;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
@@ -33,6 +32,8 @@ import com.intellij.ui.PanelWithAnchor;
 import com.intellij.ui.SortedComboBoxModel;
 import com.intellij.ui.components.JBCheckBox;
 import net.miginfocom.swing.MigLayout;
+
+import org.intellij.xquery.icons.XQueryIcons;
 import org.intellij.xquery.runner.rt.XQueryItemType;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 import org.jetbrains.annotations.Nullable;
@@ -79,6 +80,7 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         }
     });
 
+    @SuppressWarnings ("unchecked")
     public ContextItemPanel(Project project) {
         setName(CONTEXT_ITEM_PANEL);
         contextItemEnabled = new JBCheckBox("Pass context item");
@@ -93,10 +95,10 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         contextItemEditorField = new EditorTextField("", project, StdFileTypes.PLAIN_TEXT);
         contextItemEditorContent = new MyEditorTextFieldWithBrowseButton(project, contextItemEditorField);
         contextItemEditorContent.getChildComponent().setName(EDITOR_CONTENT);
-        contextItemEditorContent.setButtonIcon(AllIcons.Actions.ShowViewer);
+        contextItemEditorContent.setButtonIcon(XQueryIcons.ShowViewer);
         contextItemPathField = new TextFieldWithBrowseButton();
         contextItemPathField.getTextField().setName(FILE_PATH);
-        addPathFieldButtonListener();
+        addPathFieldButtonListener (project);
         contextItemTypeField = new LabeledComponent<JComboBox>();
         contextItemTypeField.setText("&Type");
         contextItemTypeField.setLabelLocation("West");
@@ -125,22 +127,23 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
         buttonGroup.add(fileRadioButton);
         setLayout(new MigLayout("ins 0, gap 5, fill, flowx"));
         add(contextItemEnabled, "shrinkx, top");
-        add(contextItemOptionsPanel, "growx, pushx");
+        add(contextItemOptionsPanel, "growx, pushx, hidemode 2");
         contextItemTypeField.getComponent().setName(CONTEXT_ITEM_TYPE);
         contextItemTypeField.getComponent().setModel(typesModel);
-        contextItemOptionsPanel.add(contextItemTypeField, "growx, pushx, wrap, span 2");
-        contextItemOptionsPanel.add(editorRadioButton);
-        contextItemOptionsPanel.add(contextItemEditorContent, "growx, pushx, wrap");
-        contextItemOptionsPanel.add(fileRadioButton);
-        contextItemOptionsPanel.add(contextItemPathField, "growx, pushx");
+        contextItemOptionsPanel.add(contextItemTypeField, "growx, pushx, wrap, span 2, hidemode 2");
+        contextItemOptionsPanel.add(editorRadioButton, "hidemode 2");
+        contextItemOptionsPanel.add(contextItemEditorContent, "growx, pushx, wrap, hidemode 2");
+        contextItemOptionsPanel.add(fileRadioButton, "hidemode 2");
+        contextItemOptionsPanel.add(contextItemPathField, "growx, pushx, hidemode 2");
         contextItemEnabledChanged();
         contextItemSourceChanged();
         populateTypesList();
         new ComboboxSpeedSearch(contextItemTypeField.getComponent());
     }
 
-    protected void addPathFieldButtonListener() {
-        contextItemPathField.addBrowseFolderListener("Choose file", null, null,
+    protected void addPathFieldButtonListener (Project project)
+    {
+        contextItemPathField.addBrowseFolderListener("Choose file", "XQuery file", project,
                 FileChooserDescriptorFactory.createSingleFileOrFolderDescriptor());
     }
 
@@ -170,7 +173,8 @@ public class ContextItemPanel extends JPanel implements PanelWithAnchor {
 
     private void contextItemEnabledChanged() {
         final boolean pathEnabled = isContextItemEnabled();
-        GuiUtils.enableChildren(contextItemOptionsPanel, pathEnabled);
+        GuiUtils.enableChildren (contextItemOptionsPanel, pathEnabled);
+        GuiUtils.showComponents (pathEnabled, contextItemTypeField, editorRadioButton, fileRadioButton, contextItemTypeField, contextItemOptionsPanel);
         contextItemSourceChanged();
     }
 

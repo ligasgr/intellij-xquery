@@ -25,6 +25,7 @@ import org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings;
 import org.intellij.xquery.runner.state.run.XQueryRunConfiguration;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import static org.intellij.xquery.runner.state.datasources.XQueryDataSourcesSettings.getInstance;
@@ -39,6 +40,7 @@ public class DataSourceSelector {
     private final JComboBox dataSourceList;
     private ComboBoxCollectionListModel dataSourcesModel = new ComboBoxCollectionListModel();
 
+    @SuppressWarnings ("unchecked")
     public DataSourceSelector(JComboBox dataSourceList) {
         this.dataSourceList = dataSourceList;
         new ComboboxSpeedSearch(this.dataSourceList) {
@@ -64,6 +66,11 @@ public class DataSourceSelector {
                 }
             }
         });
+    }
+
+    public void setChangeListener (ActionListener changeListener)
+    {
+        dataSourceList.addActionListener (changeListener);
     }
 
     public void applyTo(final XQueryRunConfiguration configuration) {

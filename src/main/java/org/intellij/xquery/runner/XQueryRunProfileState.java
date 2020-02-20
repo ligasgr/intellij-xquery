@@ -53,6 +53,7 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.encoding.EncodingProjectManager;
+import com.intellij.util.PathsList;
 import com.intellij.util.text.VersionComparatorUtil;
 import org.intellij.xquery.runner.state.run.DataSourceAccessor;
 import org.intellij.xquery.runner.state.run.VariablesAccessor;
@@ -61,14 +62,12 @@ import org.intellij.xquery.runner.state.run.XQueryRunConfigurationSerializer;
 import org.intellij.xquery.runner.state.run.XmlConfigurationAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.jps.model.java.JdkVersionDetector;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class XQueryRunProfileState extends CommandLineState {
     private XQueryRunConfiguration configuration;
@@ -82,6 +81,12 @@ public class XQueryRunProfileState extends CommandLineState {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+
+    public XQueryRunConfiguration getXQueryRunConfiguration()
+    {
+        return configuration;
     }
 
     @NotNull
@@ -103,7 +108,32 @@ public class XQueryRunProfileState extends CommandLineState {
     private SimpleJavaParameters createJavaParameters() throws ExecutionException {
         final SimpleJavaParameters parameters = prepareRunnerParameters();
         configureJreRelatedParameters(parameters);
+        tidyClassPath (parameters);
         return parameters;
+    }
+
+    private static final Set<String> libsToCheck = new HashSet<> (Arrays.asList ("groovy-all-"));
+
+    // Groovy gets upset if more than one version is in the classpath
+    // If the Groovy lib is already in the classpath, use that one and don't add the plugin's one
+    private void tidyClassPath (SimpleJavaParameters parameters)
+    {
+        PathsList classPath = parameters.getClassPath();
+        Map<String,String> libsSeen = new HashMap<>();
+
+        for (String path : classPath.getPathList()) {
+            for (String lib : libsToCheck) {
+                if (path.contains (lib)) {
+                    String prevLib = libsSeen.get (lib);
+
+                    if (prevLib != null) {
+                        classPath.remove (prevLib);
+                    }
+
+                    libsSeen.put (lib, path);
+                }
+            }
+        }
     }
 
     private void configureJreRelatedParameters(SimpleJavaParameters parameters) throws CantRunException {
@@ -160,7 +190,7 @@ public class XQueryRunProfileState extends CommandLineState {
         return parameters;
     }
 
-    private File getSerializedConfig(XQueryRunConfiguration configuration, boolean isDebugging, int port) {
+    public File getSerializedConfig (XQueryRunConfiguration configuration, boolean isDebugging, int port) {
         try {
             File serializedConfig = File.createTempFile("xquery-run", ".xml");
             XmlConfigurationAccessor xmlConfigurationAccessor = new XmlConfigurationAccessor();
@@ -208,7 +238,8 @@ public class XQueryRunProfileState extends CommandLineState {
                             throw new CantRunException(ExecutionBundle.message("main.class.is.not.specified.error.message"));
                         }
 
-                        return JdkUtil.setupJVMCommandLine(exePath, javaParameters, forceDynamicClasspath);
+                        javaParameters.setUseDynamicClasspath (forceDynamicClasspath);
+                        return JdkUtil.setupJVMCommandLine (javaParameters);
                     } catch (CantRunException e) {
                         throw new RuntimeException(e);
                     }
@@ -327,8 +358,11 @@ public class XQueryRunProfileState extends CommandLineState {
             throw new CantRunException(ExecutionBundle.message("jre.path.is.not.valid.jre.home.error.message", jreHome));
         }
 
-        final String versionString = SdkVersionUtil.detectJdkVersion(jreHome);
+        final JdkVersionDetector.JdkVersionInfo info = SdkVersionUtil.getJdkVersionInfo (jreHome);
+        final String versionString = (info != null) ? JdkVersionDetector.formatVersionString (info.version) : null;
+
         final Sdk jdk = new SimpleJavaSdkType().createJdk(versionString != null ? versionString : "", jreHome);
+
         if (jdk == null) throw CantRunException.noJdkConfigured();
         return jdk;
     }

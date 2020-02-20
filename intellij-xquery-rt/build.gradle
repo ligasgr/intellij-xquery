@@ -17,13 +17,26 @@
 
 
 
-apply plugin: 'java'
+apply plugin: 'groovy'  // Groovy plugin extends Java plugin
 apply plugin: 'idea'
 apply from: 'idea.gradle'
 
 sourceCompatibility = 1.8
 
 sourceSets {
+    // This is necessary to make Java and Groovy compile happily together.  The Groovy compiler will compile .java files, but not vice-versa
+    // The Groovy compile task apparently does not include resource files in the source tree, so add a rule to pick them up too
+    main {
+        java { srcDirs = [] }
+        groovy { srcDirs = ["src/main/java"] }
+        resources {
+            srcDirs = ['src/main/java', 'src/main/resources']
+            exclude '**/*.java'
+            exclude '**/*.groovy'
+            exclude '**/z.*'
+            exclude '**/zz.*'
+        }
+    }
     testFunctional {
         compileClasspath = sourceSets.main.output + configurations.testRuntime
         runtimeClasspath = output + sourceSets.main.output + configurations.testRuntime
@@ -44,9 +57,17 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'lib', include: '*.jar')
-    compile('com.codnos:dbgp-interfaces:1.0.0')
+    // This should match the netty version in the IntelliJ SDK, the Codnos debugger library has a hard dependency on a very old version of netty
+    compile ('io.netty:netty-all:4.1.41.Final') {
+	    force = true
+    }
+    compile 'org.codehaus.groovy:groovy-all:2.4.17'
+    compile('com.codnos:dbgp-interfaces:1.0.0') {
+        exclude group: 'io.netty', module: 'netty-all'
+        ext.transitive = false
+    }
     compile 'commons-codec:commons-codec:1.10'
-    compile 'com.marklogic:marklogic-xcc:8.0.5'
+    compile 'com.marklogic:marklogic-xcc:10.0.2'
     testCompile 'junit:junit-dep:4.10'
     testCompile 'org.mockito:mockito-all:1.9.5'
     testCompile('org.hamcrest:hamcrest-library:1.1') {
